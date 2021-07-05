@@ -1,0 +1,1750 @@
+.backgroudImage {
+    position: relative !important;
+    z-index: 0 !important;
+    height: 100%;
+    width: 100%;
+  }
+  
+  .searchParking {
+    position: relative !important;
+    z-index: 1 !important;
+    height: 200px;
+    width: 100px;
+    background-color: aqua;
+  }
+  .searchParking2 {
+    position: absolute !important;
+    z-index: 3 !important;
+    height: 200px;
+    width: 100px;
+    background-color: aqua;
+  }
+  
+  .searchFilter{
+    padding:24px;
+    height: 420px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 16px;
+  }
+  
+  .filterTitle {
+    letter-spacing: 0.25px;
+    font-size: 20px;
+    line-height: 24px;
+    color: #fff;
+    font-weight: 700;
+  }
+  
+  .dateFilter1 {
+    cursor: pointer;
+    width: auto;
+    height: 48px;
+    background-color: #fff;
+    border-radius: 10px 0px 0px 10px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 24px;
+    text-align: center;
+    letter-spacing: 0.1px;
+    color: #A2A4AA;
+  }
+  
+  .dateFilter1::after {
+    content: '';
+    display: block;
+    margin: 0px auto;
+    width: 0;
+    height: 3px;
+    transition: width .3s;
+    border-radius: 8px 8px 0px 0px;
+    margin-top: 3.3%;
+    background-image: linear-gradient(90deg, #0013D4 0%, #00F9B8 100%);
+  }
+  
+  .dateFilter1:hover::after {
+    width: 90%;
+    transition: width .3s;
+  }
+  
+  .dateFilter2 {
+    cursor: pointer;
+    width: auto;
+    height: 48px;
+    background-color: #fff;
+    border-radius: 10px 0px 0px 10px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 24px;
+    text-align: center;
+    letter-spacing: 0.1px;
+    color: #A2A4AA;
+  }
+  
+  .dateFilter2::after {
+    content: '';
+    display: block;
+    margin: 0px auto;
+    width: 0;
+    height: 3px;
+    transition: width .3s;
+    background-image: linear-gradient(90deg, #0013D4 0%, #00F9B8 100%);
+    border-radius: 8px 8px 0px 0px;
+    margin-top: 3.3%;
+  }
+  
+  .dateFilter2:hover::after {
+    width: 90%;
+    transition: width .3s;
+  }
+  
+  
+  .dateFilter2 {
+    cursor: pointer;
+    width: auto;
+    height: 48px;
+    background-color: #fff;
+    border-radius: 0px 10px 10px 0px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 24px;
+    /* identical to box height, or 171% */
+  
+    text-align: center;
+    letter-spacing: 0.1px;
+  
+    /* Text Color / Medium Emphasis */
+  
+    color: #A2A4AA;
+  }
+  
+  .active {
+    color: #0013D4;
+  }
+  
+  .active::after{
+    content: '';
+    display: block;
+    margin: 0px auto;
+    width: 90%;
+    height: 3px;
+    transition: width .3s;
+    background-image: linear-gradient(90deg, #0013D4 0%, #00F9B8 100%);
+    border-radius: 8px 8px 0px 0px;
+    margin-top: 3.3%;
+  }
+  
+  .filterActiveLine {
+    position: relative;
+    height: 2px;
+    left: 24px;
+    right: 24px;
+    bottom: 2px;
+    width: 197px;
+    display: block !important;
+    
+    /* Brand Color/Secondary */
+    
+    background: linear-gradient(90deg, #0013D4 0%, #00F9B8 100%);
+    border-radius: 8px 8px 0px 0px;
+  }
+  
+  /* 
+  .active:hover {
+    color: #00F9B8;
+  }
+  
+  .active::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 3px;
+    transition: width .3s;
+    border-bottom: solid 3px #00F9B8;
+    border-radius: 8px 8px 0px 0px;
+    margin-top: 26px;
+  }
+  
+  .navbarItem:hover::after {
+    width: 100%;
+    transition: width .3s;
+  } */
+  
+  .locationInput {
+    width: 100%;
+    height: 56px;
+    background-color: #fff;
+    border-radius: 12px;
+    outline: none;
+  }
+  
+  .orderType {
+    width: 100%;
+    height: 56px;
+    background-color: #fff;
+    border-radius: 8px;
+  }
+  
+  .searchFilterLabel {
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 16px;
+    /* identical to box height, or 133% */
+  
+    letter-spacing: 0.4px;
+  
+    /* Text Color / Medium Emphasis */
+  
+    color: #A2A4AA;
+    margin-left: 16px;
+  }
+  
+  .filterStartDate {
+    position: static;
+    width: 49%;
+    height: 56px;
+    left: 0px;
+    top: 0px;
+  
+    background: #FFFFFF;
+    border-radius: 8px;
+  
+    /* Inside Auto Layout */
+  
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+  }
+  
+  .filterEndDate {
+    position: static;
+    width: 49%;
+    height: 56px;
+    left: 249px;
+    top: 0px;
+  
+    background: #FFFFFF;
+    border-radius: 8px;
+  
+    /* Inside Auto Layout */
+  
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+  }
+  
+  .searchFilterBtn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 24px;
+    
+    position: static;
+    width: 100%;
+    height: 56px;
+    left: 24px;
+    top: 304px;
+    
+    background: #E3E3E3;
+    border-radius: 8px;
+    
+    /* Inside Auto Layout */
+    
+    flex: none;
+    order: 5;
+    align-self: center;
+    flex-grow: 0;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 24px;
+    /* identical to box height, or 100% */
+  
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.15px;
+  
+    /* Text Color / Disabled */
+  
+    color: #7D8FC0;
+  }
+  
+  .searchFilterBtn:hover {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 24px;
+  
+    position: static;
+    width: 100%;
+    height: 56px;
+    left: 24px;
+    top: 304px;
+  
+    /* Brand Color/Secondary */
+  
+    background: linear-gradient(90deg, #0013D4 0%, #00F9B8 100%);
+    border-radius: 8px;
+  
+    /* Inside Auto Layout */
+  
+    flex: none;
+    order: 5;
+    align-self: center;
+    flex-grow: 0;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 24px;
+    /* identical to box height, or 100% */
+  
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.15px;
+  
+    color: #FFFFFF;
+  }
+  
+  .bodyTitle {
+    width: auto;
+    height: 40px;
+  
+    /* 34px-H4 Headline */
+  
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 34px;
+    line-height: 40px;
+    /* identical to box height, or 118% */
+  
+    text-align: justify;
+    letter-spacing: 0.25px;
+  
+    /* Brand Color/Primary */
+  
+    color: #0013D4;
+  }
+  
+  .bodyText {
+    width: 505px;
+    height: auto;
+  
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    /* or 143% */
+  
+    text-align: justify;
+    letter-spacing: 0.5px;
+  
+    /* Icon Color / Active - focused */
+  
+    color: #35446D;
+  }
+  
+  .bodyBtn {
+    margin-top: 12px;
+    padding: 2px 16px;
+    letter-spacing: 0.25px;
+    font-size: 14px;
+    line-height: 20px;
+    color: #0013d4;
+    border: 0.4px solid #0013d4;
+    border-radius: 16px;
+    width: 120px;
+    height: 24px;
+  }
+  
+  .howToUse {
+    width: 80%;
+    height: auto;
+    margin: 0px auto;
+    
+    /* Brand Color/Secondary */
+    
+    background: linear-gradient(90deg, #0013D4 0%, #00F9B8 100%);
+    border-radius: 100px 0px;
+    margin-top: 70px;
+  }
+  .howToUseTitle {
+    position: relative;
+    height: 40px;
+    width: auto;
+    margin-top: -20px;
+    margin-left: 60px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 34px;
+    line-height: 40px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.25px;
+    color: #FFFFFF;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: #0013d4;
+  }
+  
+  .stepDesc {
+    display: table-row;
+    max-width: inherit;
+    /* width: auto; */
+    height: auto;
+  
+    /* 12px-Caption */
+  
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 16px;
+    /* identical to box height, or 133% */
+  
+    display: flex;
+    align-items: flex-end;
+    letter-spacing: 0.4px;
+  
+    /* Icon Color / White */
+  
+    color: #FFFFFF;
+  }
+  
+  .parking {
+    width: auto;
+    height: 40px;
+    margin-top: 15px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 34px;
+    line-height: 40px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.25px;
+    color: #A2A4AA;
+  }
+  
+  .parkTypes {
+    width: auto;
+    height: 24px;
+    cursor: pointer;
+    
+    /* 14px-Subtitle 2 */
+    
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 24px;
+    /* identical to box height, or 171% */
+    
+    text-align: center;
+    letter-spacing: 0.1px;
+    
+    /* Text Color / Medium Emphasis */
+    
+    color: #A2A4AA;
+    display: inline-block;
+    text-decoration: none;
+    opacity: 0.68;
+  }
+  
+  /* .parkTypes::after {
+    content: '';
+    display: inline-block;;
+    height: 3px;
+    transition: width .3s;
+    border-bottom: 3px solid;
+    border-radius: 8px 8px 0px 0px;
+    background: linear-gradient(90deg, #0013D4 0%, #00F9B8 100%);
+  }
+  
+  .parkTypes:hover::after {
+    width: 100%;
+    transition: width .3s;
+  } */
+  
+  .parkingActiveLine {
+    position: relative;
+    height: 2px;
+    width: 80px;
+    border-radius: 8px 8px 0px 0px;
+    background: linear-gradient(90deg, #0013D4 0%, #00F9B8 100%);
+    bottom: 0px;
+    display: block !important;
+  }
+  
+  .parkTypeActive {
+    color: #0013D4;
+  }
+  
+  .parkTypeLine {
+    width: auto;
+    border: 1px solid #DEE2E9;
+  }
+  
+  .imageArrow {
+    width: 46px;
+    height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #dee2e9;
+    border-radius: 50%;
+    visibility: visible !important;
+    padding: 0;
+    transition: all 0.2s ease;
+    margin-right: 15px;
+    margin-top: 32px;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  }
+  
+  .imageArrow:hover {
+    background: #0013D4;
+  }
+  
+  .imageArrow:hover path {
+    fill: white !important;
+  }
+  
+  .statistics {
+    width: auto;
+    height: 200px;
+    background: linear-gradient(90deg, #0013D4 0%, #00F9B8 100%);
+    border-radius: 100px 0px;
+  }
+  
+  .statisticsText {
+    width: auto;
+    height: 61px;
+  
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 34px;
+    line-height: 40px;
+    /* or 118% */
+  
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.25px;
+  
+    /* Icon Color / White */
+  
+    color: #FFFFFF;
+  }
+  
+  .newNews {
+    width: auto;
+    height: 40px;
+  
+    /* 34px-H4 Headline */
+  
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 34px;
+    line-height: 40px;
+    /* identical to box height, or 118% */
+  
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.25px;
+  
+    /* Icon Color / Active - focused */
+  
+    color: #35446D;
+  }
+  
+  .seeAllNews {
+    width: auto;
+    height: 24px;
+    cursor: pointer;
+  
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    /* or 143% */
+  
+    display: flex;
+    align-items: center;
+    text-align: right;
+    letter-spacing: 0.25px;
+  
+    /* Brand Color/Primary */
+  
+    color: #0013D4;
+  }
+
+
+
+  /* FOOTER CSS */
+
+  .footer1 {
+    width: auto;
+    background: linear-gradient(90deg, #0013D4 0%, #00F9B8 100%);
+  }
+  
+  .footerLogo {
+    padding-top: 31px;
+    padding-left: 48px;
+    width: 40%;
+  }
+  
+  .footerHeadTitle {
+    font-size: 16px;
+    line-height: 28px;
+    font-weight: 700;
+    color: #fff;
+  }
+  
+  .footerTitle {
+    width: auto;
+    height: 20px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    display: block;
+    align-items: center;
+    letter-spacing: 0.25px;
+    color: #FFFFFF;
+  }
+  
+  .footerLitleTitle {
+    width: auto;
+    height: 18px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 18px;
+    display: block;
+    align-items: center;
+    color: #FFFFFF;
+  
+  }
+  .footerEnd {
+    width: auto;
+    background: #DEE2E9;
+  }
+  
+  .footerEndText {
+    width: auto;
+    height: 16px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 16px;
+    display: flex;
+    align-items: flex-end;
+    letter-spacing: 0.4px;
+    color: #35446D;
+    padding: 0px 30px;
+  }
+
+
+  /* END FOOTER CSS */
+
+
+
+  /* NEWS CSS */
+
+  .dateFilter1 {
+    cursor: pointer;
+    width: auto;
+    height: 48px;
+    background-color: #fff;
+  
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 24px;
+    text-align: center;
+    letter-spacing: 0.1px;
+    color: #a2a4aa;
+  }
+  .dateFilter1::after {
+    content: "";
+    display: block;
+    margin: auto;
+    width: 0;
+    height: 13px;
+    transition: width 0.3s;
+  
+    margin-top: -28px;
+    background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
+  }
+  
+  .dateFilter1:hover::after {
+    width: 90%;
+    height: 30px;
+    transition: width 0.3s;
+  }
+  
+  .dateFilter2 {
+    cursor: pointer;
+    width: auto;
+    height: 48px;
+    background-color: #fff;
+  
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 24px;
+    text-align: center;
+    letter-spacing: 0.1px;
+    color: #a2a4aa;
+  }
+  .dateFilter2::after {
+    content: "";
+    display: block;
+    margin: auto;
+    width: 0;
+    height: 13px;
+    transition: width 0.3s;
+  
+    margin-top: -28px;
+    background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
+  }
+  
+  .dateFilter2:hover::after {
+    width: 90%;
+    height: 30px;
+    transition: width 0.3s;
+  }
+  .dateFilter3 {
+    cursor: pointer;
+    width: auto;
+    height: 48px;
+    background-color: #fff;
+  
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 24px;
+    text-align: center;
+    letter-spacing: 0.1px;
+    color: #a2a4aa;
+  }
+  .dateFilter3::after {
+    content: "";
+    display: block;
+    margin: auto;
+    width: 0;
+    height: 13px;
+    transition: width 0.3s;
+  
+    margin-top: -28px;
+    background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
+  }
+  
+  .dateFilter3:hover::after {
+    width: 90%;
+    height: 30px;
+    transition: width 0.3s;
+  }
+  .dateFilter4 {
+    cursor: pointer;
+    width: auto;
+    height: 48px;
+    background-color: #fff;
+  
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 24px;
+    text-align: center;
+    letter-spacing: 0.1px;
+    color: #a2a4aa;
+  }
+  .dateFilter4::after {
+    content: "";
+    display: block;
+    margin: auto;
+    width: 0;
+    height: 13px;
+    transition: width 0.3s;
+  
+    margin-top: -28px;
+    background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
+  }
+  
+  .dateFilter4:hover::after {
+    width: 90%;
+    height: 30px;
+    transition: width 0.3s;
+  }
+  .dateFilter5 {
+    cursor: pointer;
+    width: auto;
+    height: 48px;
+    background-color: #fff;
+  
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 24px;
+    text-align: center;
+    letter-spacing: 0.1px;
+    color: #a2a4aa;
+  }
+  .dateFilter5::after {
+    content: "";
+    display: block;
+    margin: auto;
+    width: 0;
+    height: 13px;
+    transition: width 0.3s;
+  
+    margin-top: -28px;
+    background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
+  }
+  
+  .dateFilter5:hover::after {
+    width: 90%;
+    height: 30px;
+    transition: width 0.3s;
+  }
+  .dateFilter6 {
+    cursor: pointer;
+    width: auto;
+    height: 48px;
+    background-color: #fff;
+  
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 24px;
+    text-align: center;
+    letter-spacing: 0.1px;
+    color: #a2a4aa;
+  }
+  .dateFilter6::after {
+    content: "";
+    display: block;
+    margin: auto;
+    width: 0;
+    height: 13px;
+    transition: width 0.3s;
+  
+    margin-top: -28px;
+    background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
+  }
+  
+  .dateFilter6:hover::after {
+    width: 90%;
+    height: 30px;
+    transition: width 0.3s;
+  }
+  .dateFilter7 {
+    cursor: pointer;
+    width: auto;
+    height: 48px;
+    background-color: #fff;
+  
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 24px;
+    text-align: center;
+    letter-spacing: 0.1px;
+    color: #a2a4aa;
+  }
+  .dateFilter7::after {
+    content: "";
+    display: block;
+    margin: auto;
+    width: 0;
+    height: 13px;
+    transition: width 0.3s;
+  
+    margin-top: -28px;
+    background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
+  }
+  
+  .dateFilter7:hover::after {
+    width: 90%;
+    height: 30px;
+    transition: width 0.3s;
+  }
+  
+  .active {
+    color: #0013d4;
+  }
+  
+  .active::after {
+    content: "";
+    display: block;
+    margin: 0px auto;
+    width: 90%;
+    height: 30px;
+    margin-top: -28px;
+    transition: width 0.3s;
+    background-image: linear-gradient(90deg, #293df8 0%, #00f9b8 100%);
+  }
+  
+  .filterActiveLine {
+    position: relative;
+    height: 22px;
+    left: 24px;
+    margin-top: -24[];
+    right: 24px;
+    bottom: 2px;
+    width: 197px;
+    display: block !important;
+  
+    /* Brand Color/Secondary */
+  
+    background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
+  }
+  
+  .Information {
+    background: url("/medee1.png");
+    height: 450px;
+  }
+  .Information1 {
+    background-image: url("/medee2.png");
+    height: 350px;
+    background-size: cover;
+  }
+  .Information2 {
+    background-image: url("/medee3.png");
+    height: 350px;
+    background-size: cover;
+  }
+  .Information3 {
+    background-image: url("/medee4.png");
+    height: 350px;
+    background-size: cover;
+  }
+  
+  .Information4 {
+    background-image: url("/medee6.png");
+    height: 350px;
+    background-size: cover;
+  }
+  .Information6 {
+    background-image: url("/medee7.png");
+    height: 450px;
+    background-size: cover;
+  }
+  
+  .backgroundInformation {
+    height: 650px;
+  }
+  /* END NEWS CSS */
+  
+
+  /* PARK CSS */
+  .parkImage {
+    border-radius: 24px;
+    z-index: -1;
+  }
+  
+  .parkImageTitle {
+    width: auto;
+    height: 28px;
+  
+    /* Button small */
+  
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 14px;
+    /* or 100% */
+  
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.15px;
+  
+    /* Icon Color / White */
+  
+    color: #FFFFFF;
+  }
+  
+  .parkImageNumber {
+    width: 28px;
+    height: 16px;
+    margin-left: 5%;
+  
+    /* 12px-Caption */
+  
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.4px;
+  
+    /* Icon Color / White */
+  
+    color: #FFFFFF;
+  }
+  
+  .searchPark {
+    padding: 0px 4px;
+    width: auto;
+    height: 20px;
+  
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 10px;
+    line-height: 16px;
+    /* identical to box height, or 160% */
+  
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.4px;
+    background: linear-gradient(90deg, #0013D4 0%, #00F9B8 100%);
+    border-radius: 24px;
+  
+    /* Icon Color / White */
+  
+    color: #FFFFFF;
+  
+  }
+
+  /* END PARK CSS */
+
+
+  /* ABOUT CSS */
+  .background {
+    width: 100%;
+    height: auto;
+    background-size: "cover";
+    /* background: url("../public/about\ back.png"); */
+  }
+  .aboutus {
+    /* Бидний тухай */
+    width: 256px;
+    height: 28px;
+  
+    top: 892px;
+  
+    /* 24px-H5 Headline */
+  
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 24px;
+    line-height: 28px;
+    /* identical to box height, or 117% */
+    display: flex;
+    align-items: center;
+    text-align: center;
+  
+    /* Brand Color/Primary */
+  
+    color: #0013d4;
+  }
+  
+  .line {
+    width: 1140.01px;
+    top: 932px;
+    /* Stroke Color / Disabled */
+    border: 1px solid #7e9ccf;
+  }
+  
+  .box {
+    width: 1045px;
+    height: 480px;
+    top: 956px;
+  }
+  
+  .description {
+    width: 505px;
+  
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+  
+    /* or 100% */
+  
+    text-align: justify;
+    letter-spacing: 0.25px;
+    /* Icon Color / Active - focused */
+  
+    color: #35446d;
+  }
+  .Ourteam {
+    /* Бидний тухай */
+    width: 156px;
+    height: 28px;
+  
+    top: 892px;
+  
+    /* 24px-H5 Headline */
+  
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 24px;
+    line-height: 28px;
+    /* identical to box height, or 117% */
+    display: flex;
+    align-items: center;
+    text-align: center;
+  
+    /* Brand Color/Primary */
+  
+    color: #0013d4;
+  }
+  .lineTeam {
+    width: 1140.01px;
+    height: auto;
+  
+    /* Brand Color/Primary */
+    border: 1px solid #0013d4;
+  }
+  
+  .linked {
+    width: 48px;
+    height: 48px;
+    left: 372px;
+    top: 6px;
+  }
+  
+  .JoinMe {
+    /* Бидэнтэй нэгдэх */
+  
+    width: 190px;
+    height: 28px;
+    left: 163.01px;
+    top: 3264px;
+  
+    /* 24px-H5 Headline */
+  
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 24px;
+    line-height: 28px;
+    /* identical to box height, or 117% */
+  
+    display: flex;
+    align-items: center;
+    text-align: center;
+  
+    /* Brand Color/Primary */
+  
+    color: #0013d4;
+  }
+  .lineTeam1 {
+    width: 1140.01px;
+    height: 0px;
+    left: 150px;
+    top: 3304px;
+  
+    /* Brand Color/Primary */
+  
+    border: 1px solid #0013d4;
+  }
+  .box2 {
+    width: 1045px;
+    height: 480px;
+    left: 180px;
+    top: 3328px;
+  }
+  .buttonJoin {
+    width: 100px;
+    height: 24px;
+    left: 0px;
+    top: 196px;
+  
+    /* Brand Color/Primary */
+  
+    border: 0.4px solid #0013d4;
+    box-sizing: border-box;
+    border-radius: 16px;
+  }
+  .textJoin {
+    /* Удирдлага төвт бус ЧӨЛӨӨТ ХАМТЫН АЖИЛЛАГААГ ЭРХЭМЛЭГЧ Зөвхөн өөрөөрөө байх ТАНЫГ Л БИД ХАЙЖ БАЙНА */
+  
+    width: 505px;
+    height: 100px;
+    left: 0px;
+    top: 160px;
+  
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 20px;
+    /* or 100% */
+  
+    display: flex;
+    align-items: center;
+    text-align: justify;
+    letter-spacing: 0.25px;
+  
+    /* Icon Color / Active - unfocused */
+  
+    color: #647189;
+  }
+  .image33 {
+    width: 400px;
+    height: 480px;
+    left: 645px;
+    top: 0px;
+  
+    /* background: url("../public/image\ 33.png"); */
+  }
+
+/* END ABOUT CSS   */
+
+/* DRIVER CSS */
+.driver {
+  width: 100%;
+  height: auto;
+  left: 0px;
+}
+
+/* ТА ХААНА Ч ХЭЗЭЭ Ч ӨӨРТ ТОХИРОХ АВТО ЗОГСООЛЫГ ЗАХИАЛАХ БОЛОМЖТОЙ */
+
+.textInfoTitle {
+  width: 691px;
+  height: 28px;
+  top: 720px;
+
+  /* 16px-Body 1 */
+
+  font-family: Helvetica;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 28px;
+  /* identical to box height, or 175% */
+
+  text-align: justify;
+  letter-spacing: 0.444444px;
+
+  /* Brand Color/Primary */
+
+  color: #0013d4;
+}
+.textInfoDesc {
+  height: 80px;
+  margin-right: 260px;
+
+  font-family: Helvetica;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 20px;
+  /* or 143% */
+
+  text-align: justify;
+  letter-spacing: 0.5px;
+
+  /* Text Color / High Emphasis */
+
+  color: #141a29;
+}
+
+.howToUse {
+  width: 80%;
+  height: auto;
+  align-self: center;
+  align-content: center;
+  /* Background Color / Gray */
+  background: #dbe2e7;
+}
+.howToUseTitle {
+  position: relative;
+  width: 568px;
+  height: 40px;
+
+  top: 36px;
+
+  /* 34px-H4 Headline */
+
+  font-family: Helvetica;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 34px;
+  line-height: 40px;
+  /* identical to box height, or 118% */
+
+  display: flex;
+  align-items: center;
+  text-align: center;
+  letter-spacing: 0.25px;
+
+  /* Icon Color / Active - focused */
+
+  color: #35446d;
+}
+
+.stepDesc {
+  /* Алхам 1 | БҮРТГҮҮЛЭХ эсвэл НЭВТРЭХ */
+
+  display: table-row;
+  max-width: inherit;
+  /* width: auto; */
+  height: auto;
+
+  /* 12px-Caption */
+
+  font-family: Helvetica;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 16px;
+  /* identical to box height, or 133% */
+
+  display: flex;
+  align-items: flex-end;
+  letter-spacing: 0.4px;
+
+  /* Icon Color / White */
+
+  color: #ffffff;
+
+  /* Brand Color/Primary */
+
+  color: #0013d4;
+}
+
+/* END DRIVER CSS */
+
+
+/* NEWS CSS  */
+
+.dateFilter1 {
+  cursor: pointer;
+  width: auto;
+  height: 48px;
+  background-color: #fff;
+
+  font-family: Helvetica;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 24px;
+  text-align: center;
+  letter-spacing: 0.1px;
+  color: #a2a4aa;
+}
+.dateFilter1::after {
+  content: "";
+  display: block;
+  margin: auto;
+  width: 0;
+  height: 13px;
+  transition: width 0.3s;
+
+  margin-top: -28px;
+  background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
+}
+
+.dateFilter1:hover::after {
+  width: 90%;
+  height: 30px;
+  transition: width 0.3s;
+}
+
+.dateFilter2 {
+  cursor: pointer;
+  width: auto;
+  height: 48px;
+  background-color: #fff;
+
+  font-family: Helvetica;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 24px;
+  text-align: center;
+  letter-spacing: 0.1px;
+  color: #a2a4aa;
+}
+.dateFilter2::after {
+  content: "";
+  display: block;
+  margin: auto;
+  width: 0;
+  height: 13px;
+  transition: width 0.3s;
+
+  margin-top: -28px;
+  background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
+}
+
+.dateFilter2:hover::after {
+  width: 90%;
+  height: 30px;
+  transition: width 0.3s;
+}
+.dateFilter3 {
+  cursor: pointer;
+  width: auto;
+  height: 48px;
+  background-color: #fff;
+
+  font-family: Helvetica;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 24px;
+  text-align: center;
+  letter-spacing: 0.1px;
+  color: #a2a4aa;
+}
+.dateFilter3::after {
+  content: "";
+  display: block;
+  margin: auto;
+  width: 0;
+  height: 13px;
+  transition: width 0.3s;
+
+  margin-top: -28px;
+  background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
+}
+
+.dateFilter3:hover::after {
+  width: 90%;
+  height: 30px;
+  transition: width 0.3s;
+}
+.dateFilter4 {
+  cursor: pointer;
+  width: auto;
+  height: 48px;
+  background-color: #fff;
+
+  font-family: Helvetica;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 24px;
+  text-align: center;
+  letter-spacing: 0.1px;
+  color: #a2a4aa;
+}
+.dateFilter4::after {
+  content: "";
+  display: block;
+  margin: auto;
+  width: 0;
+  height: 13px;
+  transition: width 0.3s;
+
+  margin-top: -28px;
+  background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
+}
+
+.dateFilter4:hover::after {
+  width: 90%;
+  height: 30px;
+  transition: width 0.3s;
+}
+.dateFilter5 {
+  cursor: pointer;
+  width: auto;
+  height: 48px;
+  background-color: #fff;
+
+  font-family: Helvetica;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 24px;
+  text-align: center;
+  letter-spacing: 0.1px;
+  color: #a2a4aa;
+}
+.dateFilter5::after {
+  content: "";
+  display: block;
+  margin: auto;
+  width: 0;
+  height: 13px;
+  transition: width 0.3s;
+
+  margin-top: -28px;
+  background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
+}
+
+.dateFilter5:hover::after {
+  width: 90%;
+  height: 30px;
+  transition: width 0.3s;
+}
+.dateFilter6 {
+  cursor: pointer;
+  width: auto;
+  height: 48px;
+  background-color: #fff;
+
+  font-family: Helvetica;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 24px;
+  text-align: center;
+  letter-spacing: 0.1px;
+  color: #a2a4aa;
+}
+.dateFilter6::after {
+  content: "";
+  display: block;
+  margin: auto;
+  width: 0;
+  height: 13px;
+  transition: width 0.3s;
+
+  margin-top: -28px;
+  background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
+}
+
+.dateFilter6:hover::after {
+  width: 90%;
+  height: 30px;
+  transition: width 0.3s;
+}
+.dateFilter7 {
+  cursor: pointer;
+  width: auto;
+  height: 48px;
+  background-color: #fff;
+
+  font-family: Helvetica;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 24px;
+  text-align: center;
+  letter-spacing: 0.1px;
+  color: #a2a4aa;
+}
+.dateFilter7::after {
+  content: "";
+  display: block;
+  margin: auto;
+  width: 0;
+  height: 13px;
+  transition: width 0.3s;
+
+  margin-top: -28px;
+  background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
+}
+
+.dateFilter7:hover::after {
+  width: 90%;
+  height: 30px;
+  transition: width 0.3s;
+}
+
+.active {
+  color: #0013d4;
+}
+
+.active::after {
+  content: "";
+  display: block;
+  margin: 0px auto;
+  width: 90%;
+  height: 30px;
+  margin-top: -28px;
+  transition: width 0.3s;
+  background-image: linear-gradient(90deg, #293df8 0%, #00f9b8 100%);
+}
+
+.filterActiveLine {
+  position: relative;
+  height: 22px;
+  left: 24px;
+  margin-top: -24[];
+  right: 24px;
+  bottom: 2px;
+  width: 197px;
+  display: block !important;
+
+  /* Brand Color/Secondary */
+
+  background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
+}
+
+.Information {
+  /* background: url("../public//medee1.png"); */
+  height: 450px;
+}
+.Information1 {
+  /* background-image: url("../public/medee2.png"); */
+  height: 350px;
+  background-size: cover;
+}
+.Information2 {
+  /* background-image: url("../public/medee3.png"); */
+  height: 350px;
+  background-size: cover;
+}
+.Information3 {
+  /* background-image: url("../public/medee4.png"); */
+  height: 350px;
+  background-size: cover;
+}
+
+.Information4 {
+  /* background-image: url("../public/medee6.png"); */
+  height: 350px;
+  background-size: cover;
+}
+.Information6 {
+  /* background-image: url("../public/medee7.png"); */
+  height: 450px;
+  background-size: cover;
+}
+
+.backgroundInformation {
+  height: 650px;
+}
+
+/* END NEWS CSS  */
+
+/* SPANCEOWNER CSS  */
+.background {
+  background-size: cover;
+  width: 100%;
+}
+.textInfo {
+  /* ТАНЫ АВТО ЗОГСООЛ НЭМЭЛТ ОРЛОГО ОЛОХ БОЛОМЖ */
+  width: 473px;
+  height: 28px;
+  margin-left: 260px;
+  top: 720px;
+
+  /* 16px-Body 1 */
+
+  font-family: Helvetica;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 28px;
+  /* identical to box height, or 175% */
+
+  text-align: justify;
+  letter-spacing: 0.444444px;
+
+  /* Brand Color/Primary */
+
+  color: #0013d4;
+}
+.textInfoDesc {
+  height: 320px;
+  width: 920px;
+  margin-left: 260px;
+  right: 260px;
+  top: 772px;
+
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 20px;
+  /* or 143% */
+
+  text-align: justify;
+  letter-spacing: 0.25px;
+
+  color: #000000;
+}
+.howToUse {
+  width: 80%;
+  height: auto;
+  align-self: center;
+  align-content: center;
+  /* Background Color / Gray */
+  background: #f8fafc;
+}
+.howToUseTitle {
+  /* Автозогсоолоо хэрхэн бүртгүүлэх вэ ? */
+
+  position: relative;
+  width: 639px;
+  height: 40px;
+
+  top: 36px;
+
+  /* 34px-H4 Headline */
+
+  font-family: Helvetica;
+  font-style: normal;
+  font-weight: normal;
+
+  /* identical to box height, or 118% */
+
+  align-items: center;
+  text-align: center;
+  letter-spacing: 0.25px;
+
+  /* Icon Color / Active - focused */
+
+  color: #35446d;
+}
+
+.stepDesc {
+  /* Алхам 1 | БҮРТГҮҮЛЭХ эсвэл НЭВТРЭХ */
+
+  display: table-row;
+  max-width: inherit;
+  /* width: auto; */
+  height: auto;
+
+  /* 12px-Caption */
+
+  font-family: Helvetica;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 16px;
+  /* identical to box height, or 133% */
+
+  display: flex;
+  align-items: flex-end;
+  letter-spacing: 0.4px;
+
+  /* Icon Color / White */
+
+  color: #ffffff;
+
+  /* Brand Color/Primary */
+
+  color: #0013d4;
+}
+
+/* END SPACEOWNER CSS  */
