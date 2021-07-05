@@ -8,7 +8,6 @@ import { callGet, callPost } from '@api/api';
 import { messageType, defaultMsg } from '@constants/constants';
 import { showMessage } from "@utils/message";
 import Context from '@context/Context';
-import Navbar from "../../components/Navbar"
 import MaskedInput from 'antd-mask-input'
 import Countdown from "react-countdown";
 import OTPInput, { ResendOTP } from "otp-input-react";
@@ -121,9 +120,9 @@ const ForgotPassword = () => {
     const counterOnComplete = () => {
         setHaveCode(false);
     }
-    const getAgainCode = async () => {
+    const getCodeAgain = async () => {
 
-        const result = await callGet(`forgotPassword/sendSms/${value}`);
+        const result = await callGet(`forgotPassword/sendSms/${phoneNumber}`);
         if (result.status === 'failed'){
             showMessage(messageType.FAILED.type, result.error);
             return true;
@@ -251,11 +250,11 @@ const ForgotPassword = () => {
                         <MaskedInput mask="1111" name="verificationCode" />
 
                     </Form.Item>
-                    <div className="getAgainCode">
+                    <div className="getCodeAgain">
 
-                        <Countdown className="getAgainCodeCountDown" renderer={rendererCounter} ref={clockRef} date={Date.now() + 5000} onComplete={counterOnComplete} >
+                        <Countdown className="getCodeAgainCountDown" renderer={rendererCounter} ref={clockRef} date={Date.now() + 30000} onComplete={counterOnComplete} >
                         </Countdown>
-                        <Button className="getAgainCodeButton" icon={<ReloadOutlined />} disabled={havecode} onClick={getAgainCode}>Дахин код авах</Button>
+                        <Button className="getCodeAgainButton" icon={<ReloadOutlined />} disabled={havecode} onClick={getCodeAgain}>Дахин код авах</Button>
                     </div>
 
                 </div>
@@ -364,7 +363,6 @@ const ForgotPassword = () => {
 
     return (
         <div>
-            <Navbar />
             <div className="login">
                 <div className="container mx-auto flex flex-wrap overflow-hidden">
 

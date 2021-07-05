@@ -8,7 +8,6 @@ import { callPost } from '@api/api';
 import { messageType, defaultMsg } from '@constants/constants';
 import { showMessage } from "@utils/message";
 import Context from '@context/Context';
-import Navbar from "../../components/Navbar"
 import MaskedInput from 'antd-mask-input'
 
 const layout = {
@@ -91,9 +90,13 @@ const Login = () => {
 
   }
 
+  const pushrouter = (route) => {
+    // if (router.pathname ==='/login'){
+    // router.push('/'+ route)
+    // }
+  }
   return (
     <div>
-      <Navbar />
       <div className="login">
         <div className="container mx-auto flex flex-wrap overflow-hidden">
 
@@ -208,8 +211,8 @@ const Login = () => {
                   Өдрийн мэнд !
                 </div>
                 <div className="loginAndRegister">
-                  <Button className="loginbutton activebutton" type="text" >Нэвтрэх <div className="activeLine"></div> </Button>
-                  <Button className="registerbutton" type="text">Бүртгүүлэх</Button>
+                  <Button className="loginbutton activebutton"  onClick={() => { console.log(router.push('/login'))}} type="text" >Нэвтрэх <div className="activeLine"></div> </Button>
+                  <Button className="registerbutton" onClick={() => { console.log(router.push('/register'))}}  type="text">Бүртгүүлэх</Button>
                 </div>
                 <div className="inputs">
                   <Form.Item
@@ -221,12 +224,6 @@ const Login = () => {
                       },
                     ]}
                   >
-                    {/* <Input
-                    // prefix={<UserOutlined />}
-                    placeholder="Утасны дугаар"
-                    name="username"
-                  /> */}
-
                     <MaskedInput mask="11111111" name="username" />
                   </Form.Item>
 
@@ -240,7 +237,6 @@ const Login = () => {
                     ]}
                   >
                     <Input.Password
-                      // prefix={<LockOutlined />}
                       placeholder="**************"
                       name="password"
                     />
@@ -248,10 +244,6 @@ const Login = () => {
                 </div>
 
                 <div className="forgotPassword">
-                  {/* <span className="text">
-                    Нууц үг мартсан 
-                  <RightOutlined />
-                  </span> */}
                   <Button type="link" onClick={handleClickForgotPassword}>
                     Нууц үг мартсан <RightOutlined />
                   </Button>
@@ -259,14 +251,6 @@ const Login = () => {
                 </div>
 
                 <Form.Item {...tailLayout} shouldUpdate>
-                  {/* <Button
-                    loading={loading}
-                    type="default"
-                    htmlType="submit"
-                    className="loginBtn"
-                  >
-                    Нэвтрэх
-                  </Button> */}
                   {() => (
                     <Button
                     className="loginBtn"

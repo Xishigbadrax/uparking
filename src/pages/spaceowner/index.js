@@ -1,9 +1,7 @@
 import Footer from "../../components/Footer";
-import Navbar from "../../components/Navbar"
 const SpaceOwner = () => {
   return (
     <div>
-      <Navbar />
       <div className={`background `}>
         <img src="/zogsoolEzemshigch.png" height="600px" width="100%" />
       </div>

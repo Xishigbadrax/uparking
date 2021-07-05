@@ -6,6 +6,7 @@ import { ContextProvider } from '@context/Context';
 import auth from '@utils/auth';
 import Login from './login';
 import { useState , useEffect } from "react";
+import Navbar from '@components/Navbar';
 
 const App = ({ Component, pageProps }) => {
   
@@ -21,6 +22,7 @@ const App = ({ Component, pageProps }) => {
 
   return (
     <ContextProvider>
+      <Navbar></Navbar>
       <Component {...pageProps}/>
       {/* {
         auth.loggedIn()

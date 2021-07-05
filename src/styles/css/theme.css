@@ -61,7 +61,6 @@ body {
   line-height: 1.5715;
   background-color: #fff;
   font-feature-settings: 'tnum';
-  overflow: hidden !important;
 }
 [tabindex='-1']:focus {
   outline: none !important;

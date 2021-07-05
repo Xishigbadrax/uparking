@@ -20,7 +20,6 @@ export const ContextProvider = ({ children }) => {
   }
 
   const setMenuAndPermissions = async () => {
-    console.log('shalgalaa')
 
     if (router.pathname === '/' || 
         router.pathname === '/aboutus' || 
@@ -29,7 +28,6 @@ export const ContextProvider = ({ children }) => {
         router.pathname === '/news'){
       return ;
     }
-    console.log('dawlaa')
     //#region set permission
     const accessToken = Auth.getToken();
     if (accessToken == null || accessToken == 'undefined') {

@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Footer from "../../components/Footer";
-import Navbar from "../../components/Navbar";
 const staff = [
   {
     photo: "/ganbat.png",
@@ -34,10 +33,8 @@ const staff = [
   },
 ];
 const AboutUs = () => {
-  console.log('aboutus')
   return (
     <div>
-    <Navbar />
       <div className="background">
         <img src="/about_back.png" height="600px" width="100%"></img>
       </div>

@@ -1,6 +1,5 @@
 import Footer from "../../components/Footer";
 import InforNavbar from "../../components/InforNavbar";
-import Navbar from "../../components/Navbar"
 const news = [
   {
     id: 0,
@@ -61,7 +60,6 @@ import { Fragment, useEffect, useState } from "react";
 const News = () => {
   return (
     <div>
-      <Navbar />
       <div className="mt-8">
         <InforNavbar />
       </div>

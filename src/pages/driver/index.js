@@ -1,10 +1,8 @@
 import Footer from "../../components/Footer";
-import Navbar from "../../components/Navbar"
 
 const Driver = () => {
   return (
     <div>
-      <Navbar />
       <div className={`driver `}>
         <img src="/driver.png" height="600px" width="100%"></img>
       </div>
