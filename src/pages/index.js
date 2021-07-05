@@ -3,7 +3,6 @@ import Image from 'next/image'
 import { Fragment, useEffect, useState } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
-import Navbar from "../components/Navbar";
 import Link from 'next/link'
 import ParkResult from '../components/ParkResult'
 import News from '../components/News'
@@ -168,7 +167,6 @@ export default function Home() {
   }
   return (
     <div>
-    <Navbar />
       {/* <div className="imageContainer}>
         <Image className="backgroudImage} src='/search1.png' layout='responsive' width={100} height={44} objectPosition='center' />
         <div className="searchParking}>aas</div>

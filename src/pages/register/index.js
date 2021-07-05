@@ -1,9 +1,7 @@
 import { useState, useContext, useEffect, useRef, useHistory } from 'react';
 import { useRouter } from 'next/router';
-import { Form, Input, Button, Modal } from 'antd';
-import { UserOutlined, LockOutlined, RightOutlined, ExclamationCircleOutlined, ReloadOutlined } from '@ant-design/icons';
-import auth_cookie from '@utils/auth';
-import { login } from '@api/auth';
+import { Form, Input, Button, Modal, Checkbox } from 'antd';
+import { ExclamationCircleOutlined, ReloadOutlined } from '@ant-design/icons';
 import { callPost, callGet } from '@api/api';
 import { messageType, defaultMsg } from '@constants/constants';
 import { showMessage } from "@utils/message";
@@ -11,11 +9,25 @@ import Context from '@context/Context';
 import MaskedInput from 'antd-mask-input'
 import Countdown from "react-countdown";
 import renderHTML from 'react-render-html';
-
+import Footer from "../../components/Footer";
+import OTPInput, { ResendOTP } from "otp-input-react";
 const layout = {
     labelCol: {
     },
     wrapperCol: {
+    },
+};
+
+const tailFormItemLayout = {
+    wrapperCol: {
+        xs: {
+            span: 24,
+            offset: 0,
+        },
+        sm: {
+            span: 16,
+            offset: 8,
+        },
     },
 };
 const tailLayout = {
@@ -33,6 +45,7 @@ const Login = () => {
     const [isTransactionCode, setIsTransactionCode] = useState(false);
     const [isPolicy, setIsPolicy] = useState(false);
     const [policyHtml, setPolicyHtml] = useState("");
+    const [OTP, setOTP] = useState('');
     const [havecode, setHaveCode] = useState(true);
     const { state, dispatch, setMenuAndPermissions } = useContext(Context);
     const { auth } = state;
@@ -74,13 +87,13 @@ const Login = () => {
     //step2
     const phoneNumberOK = async (value) => {
         try {
-            // const result = await callGet(`verificationCode/${value}`);
-            // if (result.status === 'failed') {
-            //     showMessage(messageType.FAILED.type, result.error);
-            //     return true;
-            // } else {
-            setIsOneTimePass(true);
-            // }
+            const result = await callGet(`verificationCode/${value}`);
+            if (result.status === 'failed') {
+                showMessage(messageType.FAILED.type, result.error);
+                return true;
+            } else {
+                setIsOneTimePass(true);
+            }
         } catch (e) {
             showMessage(messageType.FAILED.type, 'Баталгаажуулахад алдаа гарлаа');
         }
@@ -88,28 +101,23 @@ const Login = () => {
     const delay = ms => new Promise(res => setTimeout(res, ms));
     // step3
     const onFinishVerfication = async (values) => {
-        // try {
-        // setVerifyCode(values.verificationCode);
-        // const data = {
-        //     "code": values.verificationCode,
-        //     "phoneNumber": phoneNumber
-        // }
-        // const result = await callPost('verifyPhoneNumber', data);
-        // if (result.status === 'failed') {
-        //     showMessage(messageType.FAILED.type, result.error);
-        //     return true;
-        // } else {
+        try {
+            setVerifyCode(values.verificationCode);
+            const data = {
+                "code": values.verificationCode,
+                "phoneNumber": phoneNumber
+            }
+            const result = await callPost('verifyPhoneNumber', data);
+            if (result.status === 'failed') {
+                showMessage(messageType.FAILED.type, result.error);
+                return true;
+            } else {
 
-        getPolicyData();
-
-        // showMessage(messageType.SUCCESS.type, "Бүртгэл амжилттай");
-        // await delay(2000);
-        // router.reload('/register')
-
-        //     }
-        // } catch (e) {
-        //     console.log('verify Хадгалахад алдаа гарлаа')
-        // }
+                getPolicyData();
+            }
+        } catch (e) {
+            console.log('verify Хадгалахад алдаа гарлаа')
+        }
 
     };
     //step4
@@ -143,22 +151,39 @@ const Login = () => {
         try {
             const data =
             {
-                "passwordRepeat": values.confirm,
-                "password": values.password,
+                "transactionPassword": values.OTP,
                 "phoneNumber": phoneNumber
             }
-            const result = await callPost('/register/user', data);
+            const result = await callPost('/register/transactionpass', data);
             if (result.status === 'failed') {
                 showMessage(messageType.FAILED.type, result.error);
                 return true;
             } else {
-
-                showMessage(messageType.SUCCESS.type, "Нууц үг амжилттай солигдлоо. Шинэ нууц үгээ ашиглан нэвтэрнэ үү");
+                showMessage(messageType.SUCCESS.type, "Бүртгэл амжилттай");
+                await delay(2000);
                 router.push('/login');
 
             }
         } catch (e) {
             console.log('Хадгалахад алдаа гарлаа')
+        }
+    }
+    //step6
+    const onFinishPolicy = async (values) => {
+        if (values.agreement) {
+            const data = {
+                "isAccept": values.agreement,
+                "phoneNumber": phoneNumber
+            }
+
+            const result = await callPost('/register/policy', data);
+            if (result.status === 'failed') {
+                showMessage(messageType.FAILED.type, result.error);
+                return true;
+            } else {
+                setIsPolicy(false);
+                setIsTransactionCode(true);
+            }
         }
     }
 
@@ -183,6 +208,10 @@ const Login = () => {
     };
 
     const handleSubmitVerication = (e) => {
+        e.preventDefault();
+    };
+
+    const handleSubmitPolicy = (e) => {
         e.preventDefault();
     };
 
@@ -335,67 +364,33 @@ const Login = () => {
                 onSubmit={handleSubmitTransaction}
             >
                 <div className="welcomeText">
-                    Шинэ нууц үг үүсгэх
+                    Та гүйлгээний нууц үгээ үүсгэнэ үү
                 </div>
                 <div className="inputs">
                     <Form.Item
-                        name="password"
+                        name="OTP"
                         rules={[
                             {
                                 required: true,
-                                message: 'Нууц үгээ оруулна уу!',
+                                message: 'Гүйлгээний нууц үг оруулна уу',
+                                min: 4,
+                                max: 4
+
                             },
                         ]}
-                        hasFeedback
                     >
-                        <Input.Password placeholder="Нууц үг" />
+                        <OTPInput
+                            className="otpNumber"
+                            value={OTP}
+                            onChange={setOTP}
+                            autoFocus
+                            OTPLength={4}
+                            otpType="number"
+                            disabled={false}
+                        />
+
+
                     </Form.Item>
-
-                    <Form.Item
-                        name="confirm"
-                        dependencies={['password']}
-                        hasFeedback
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Нууг үгээ оруулна уу!',
-                            },
-                            ({ getFieldValue }) => ({
-                                validator(_, value) {
-                                    if (!value || getFieldValue('password') === value) {
-                                        return Promise.resolve();
-                                    }
-                                    return Promise.reject(new Error('Ижил биш байна!'));
-                                },
-                            }),
-                        ]}
-                    >
-                        <Input.Password placeholder="Нууц үг давтах" />
-                    </Form.Item>
-                    {/* <Form.Item
-                      name="OTP"
-                      rules={[
-                          {
-                              required: true,
-                              message: 'Гүйлгээний нууц үг оруулна уу',
-                              min: 4,
-                              max: 4
-
-                          },
-                      ]}
-                  >
-                      <OTPInput
-                          className="otpNumber"
-                          value={OTP}
-                          onChange={setOTP}
-                          autoFocus
-                          OTPLength={4}
-                          otpType="number"
-                          disabled={false}
-                      />
-
-
-                  </Form.Item> */}
                 </div>
 
                 <Form.Item {...tailLayout}>
@@ -528,8 +523,58 @@ const Login = () => {
             </div>
 
     } else {
-        maindata = <div>
-            {renderHTML(policyHtml)}
+        maindata =
+            <div>
+                <div className={`background `}>
+                    <img src="/zogsoolEzemshigch.png" height="600px" width="100%" />
+                </div>
+                <div className="container mx-auto">
+
+                    {renderHTML(policyHtml)}
+
+                    <Form
+                        {...layout}
+                        name="basic"
+                        onFinish={onFinishPolicy}
+                        onSubmit={handleSubmitPolicy}
+                    >
+                        <div className="ant-row demo-row" style={{ marginTop: '40px' }}>
+                            <div className="ant-col-12" style={{ textAlign: 'left' }}>
+                                <Form.Item
+                                    name="agreement"
+                                    valuePropName="checked"
+                                    rules={[
+                                        {
+                                            validator: (_, value) =>
+                                                value ? Promise.resolve() : Promise.reject(new Error('Зөвшөөрнө үү')),
+                                        },
+                                    ]}
+                                    {...tailFormItemLayout}
+                                >
+                                    <Checkbox>
+                                        Би зөвшөөрч байна.
+                                    </Checkbox>
+                                </Form.Item>
+                            </div>
+                            <div className="ant-col-12" style={{ textAlign: 'right' }}>
+                                <Form.Item {...tailLayout}>
+                                    <Button
+                                        loading={loading}
+                                        htmlType="submit"
+                                        type="primary"
+                                        size="large"
+                                        className="loginBtn"
+                                    >
+                                        Үргэлжлүүлэх
+                                    </Button>
+                                </Form.Item>
+                            </div>
+                        </div>
+                    </Form>
+                </div>
+                <div className="mt-64">
+                    <Footer />
+                </div>
             </div>
     }
 
