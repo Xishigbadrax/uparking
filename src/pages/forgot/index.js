@@ -10,7 +10,6 @@ import { showMessage } from "@utils/message";
 import Context from '@context/Context';
 import MaskedInput from 'antd-mask-input'
 import Countdown from "react-countdown";
-import OTPInput, { ResendOTP } from "otp-input-react";
 
 
 const layout = {
@@ -318,30 +317,6 @@ const ForgotPassword = () => {
                 >
                     <Input.Password  placeholder="Нууц үг давтах"/>
                 </Form.Item>
-                    {/* <Form.Item
-                        name="OTP"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Гүйлгээний нууц үг оруулна уу',
-                                min: 4,
-                                max: 4
-
-                            },
-                        ]}
-                    >
-                        <OTPInput
-                            className="otpNumber"
-                            value={OTP}
-                            onChange={setOTP}
-                            autoFocus
-                            OTPLength={4}
-                            otpType="number"
-                            disabled={false}
-                        />
-
-
-                    </Form.Item> */}
                 </div>
 
                 <Form.Item {...tailLayout}>
@@ -492,53 +467,6 @@ const ForgotPassword = () => {
                     </div>
 
                 </div>
-
-                {/* <Modal
-                    key="confirm"
-                    visible={modalVisible}
-                    onCancel={() => { setModalVisible(false), form.resetFields() }}
-                    footer={[
-                        <Button key="back" onClick={handleConfirm}>
-                            Үгүй
-                        </Button>,
-                        <Button key="confirmButton" type="primary" onClick={handleConfirm}>
-                            Тийм
-                        </Button>,
-                    ]}
-                >
-                    <Form
-                        key="confirmForm"
-                        form={form}
-                        style={{
-                            width: "328px",
-                            marginLeft: "auto",
-                            marginRight: "auto",
-                        }}
-                    >
-                        <p key="name" style={{ fontSize: "20px" }}>
-                            Баталгаажуулах код оруулна уу
-                        </p>
-                        <Form.Item
-                            name="confirmCode"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Заавал бөглөх талбар.",
-                                },
-                            ]}
-                        >
-                            <Input
-                                key="code"
-                                name="confirmCode"
-                                onChange={(e) => {
-                                    setConfirmCode(e.target.value);
-                                }}
-                                placeholder="Баталгаажуулах код..."
-                                allowClear={true}
-                            />
-                        </Form.Item>
-                    </Form>
-                </Modal> */}
             </div>
         </div>
     );

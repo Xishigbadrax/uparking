@@ -45,7 +45,12 @@ const Login = () => {
         //   showMessage(messageType.FAILED.type, defaultMsg.newDeviceConfirmErrorTxt);
         // } else {
         showMessage(messageType.FAILED.type, defaultMsg.loginErrorTxt);
-      }
+      } 
+      setLoading(false);
+      return;
+    }
+    if (res.data.error === "invalid_grant"){
+      showMessage(messageType.FAILED.type, res.data.error_description);
       setLoading(false);
       return;
     }

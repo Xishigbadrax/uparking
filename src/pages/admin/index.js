@@ -1,18 +1,19 @@
-import MainLayout from "@components/layouts/MainLayout";
 import { useContext, useEffect, useState } from 'react';
 import { apiList, sList } from '@api/api';
-import { Card, Col, Row, Button, DatePicker } from 'antd';
+import { Card, Col, Row, Button, DatePicker, Input, Select } from 'antd';
 import Context from '@context/Context';
-import NumberFormat from 'react-number-format';
 import moment from "moment"
-import { GlobalOutlined, ScheduleOutlined, TableOutlined, TagsOutlined, FileOutlined, CalculatorOutlined } from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
 import dynamic from "next/dynamic";
+import GoogleMapReact from 'google-map-react';
 const IndexPageMoreInfo = dynamic(
   () => import('@components/IndexPageMoreInfo'),
   { ssr: false }
 )
 const { RangePicker } = DatePicker;
+const { Option } = Select;
 const Dashboard = () => {
+  const GOOGLE_API = process.env.NEXT_GOOGLE_API;
   const ctx = useContext(Context);
   const [dashboardData, setDashboardData] = useState({});
   const [seeMore, setSeeMore] = useState(false);
@@ -45,82 +46,64 @@ const Dashboard = () => {
     }
   };
 
+
+  function onChange(value, dateString) {
+    console.log('Selected Time: ', value);
+    console.log('Formatted Selected Time: ', dateString);
+  }
+
+  function onOk(value) {
+    console.log('onOk: ', value);
+  }
+
   return (
-    <div>dasboard</div>
-  //   <MainLayout title="Хяналтын самбар" className="main-content-no-back">
-  //     {ctx.state.permissions.DASHBOARD_CARD && dashboardData &&
-  //       <div className="site-card-wrapper">
-  //         <Row gutter={16}>
-  //           <Col span={24} style={{ overflow: 'hidden ', marginBottom: "20px" }}>
-  //             <RangePicker
-  //               style={{ float: 'right' }}
-  //               size="large"
-  //               placeholder={["2019-05-01", moment(new Date()).format('YYYY-MM-DD')]}
-  //               format={dateFormat}
-  //               onChange={handleDateChange}
-  //               disabledDate={disabledDate}
-  //             />
-  //           </Col>
-  //         </Row>
-  //         <Row gutter={16}>
-  //           <Col span={8} style={{ overflow: 'hidden ' }}>
-  //             <Card title="Хүсэлт гаргасан зээлийн дүн" className="custom-card-third">
-  //               <NumberFormat value={`${dashboardData.req_amt || 0} `} displayType={'text'} thousandSeparator={true} /> ₮
-  //               <CalculatorOutlined className="custom-card-inner-icon" />
-  //             </Card>
-  //           </Col>
-  //           <Col span={8}>
-  //             <Card title="Хүсэлт гаргасан зээлийн тоо" className="custom-card-third">
-  //               <NumberFormat value={dashboardData.req_cnt || 0} displayType={'text'} thousandSeparator={true} />
-  //               <FileOutlined className="custom-card-inner-icon" />
-  //             </Card>
-  //           </Col>
-  //           <Col span={8}>
-  //             <Card title="ЖДХ" className="custom-card">
-  //               {`${dashboardData.avg_rate || 0} %`}
-  //               <GlobalOutlined className="custom-card-inner-icon" />
-  //             </Card>
-  //           </Col>
-  //         </Row>
-  //         <Row gutter={16} style={{ marginTop: 15, marginBottom: 15 }}>
-  //           <Col span={6}>
-  //             <Card title="Олгосон зээлийн дүн" className="custom-card-primary">
-  //               <NumberFormat value={`${dashboardData.issue_amt || 0} `} displayType={'text'} thousandSeparator={true} /> ₮
-  //               <CalculatorOutlined className="custom-card-inner-icon" />
-  //             </Card>
-  //           </Col>
-  //           <Col span={6}>
-  //             <Card title="Нийт олгосон зээл" className="custom-card-second">
-  //               <NumberFormat value={dashboardData.issue_cnt || 0} displayType={'text'} thousandSeparator={true} />
-  //               <TableOutlined className="custom-card-inner-icon" />
-  //             </Card>
-  //           </Col>
-  //           <Col span={6}>
-  //             <Card title="Төлөгдөх ёстой зээл" className="custom-card-primary">
-  //               <NumberFormat value={dashboardData.pay_cnt || 0} displayType={'text'} thousandSeparator={true} />
-  //               <TagsOutlined className="custom-card-inner-icon" />
-  //             </Card>
-  //           </Col>
-  //           <Col span={6}>
-  //             <Card title="Өнөөдөр төлөлт хийх" className="custom-card-second">
-  //               <NumberFormat value={dashboardData.pay_cnt_today || 0} displayType={'text'} thousandSeparator={true} />
-  //               <ScheduleOutlined className="custom-card-inner-icon" />
-  //             </Card>
-  //           </Col>
-  //         </Row>
-  //         {
-  //           seeMore ? <IndexPageMoreInfo startDate={startDate} endDate={endDate} /> : (
-  //             <div style={{ textAlign: "center" }}>
-  //               <Button
-  //                 onClick={() => setSeeMore(true)}
-  //                 style={{ alignSelf: 'center' }}
-  //               >Дэлгэрэнгүй харах</Button>
-  //             </div>
-  //           )
-  //         }
-  //       </div>
-  //     }
-  //   </MainLayout>
+    <div>
+      <Row style={{ padding: '20px' }}>
+        <Col span={8}>
+          <Input placeholder="Хаяг" prefix={<SearchOutlined />} />
+        </Col>
+        <Col span={4}>
+          <Select defaultValue="day" style={{ width: 120 }}>
+            <Option value="day">Өдөр</Option>
+            <Option value="night">Шөнө</Option>
+          </Select>
+        </Col>
+        <Col span={8}>
+          <RangePicker
+            showTime={{ format: 'HH:mm' }}
+            format="YYYY-MM-DD HH:mm"
+            onChange={onChange}
+            onOk={onOk}
+          />
+        </Col>
+        <Col span={4}>
+          <Button
+            htmlType="submit"
+            type="primary"
+            block
+          >
+            Хайх
+          </Button>
+        </Col>
+      </Row>
+      <Row>
+        <Col span={18}>
+          <GoogleMapReact
+          style={{height:"100vh"}}
+            bootstrapURLKeys={{ key:GOOGLE_API }}
+            defaultCenter={{ 
+              lat: 47.91899690115193,
+              lng: 106.91699199253857
+            }}
+            defaultZoom={11}
+          >
+          </GoogleMapReact>
+        </Col>
+        <Col span={6}>
+          list
+        </Col>
+      </Row>
+    </div>
   );
 };
 
