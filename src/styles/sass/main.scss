@@ -104,3 +104,166 @@
     }
 
 }
+
+
+
+
+.profileLayout{
+    margin-top: 25px !important;
+    background:none !important;
+    .sideBar{
+        width: 180px !important;
+        border-radius: 24px !important;
+        background-color: #fff;
+        text-align: center;
+        .ant-avatar{
+            margin-top: 45px;
+            margin-bottom: 8px;
+        }
+        .userName{
+
+            font-style: normal;
+            font-weight: normal;
+            font-size: 16px;
+            line-height: 24px;
+            letter-spacing: 0.15px;
+            color: #0013D4;
+        }
+        .profileMenu{
+            margin-top: 45px;
+            justify-content: center;
+            display: grid;
+            .ant-menu-item{
+                text-align: center;
+                display: grid !important;
+                width: 120px;
+                height: 80px;
+                border-radius: 16px;
+                padding: 0px !important;
+                .anticon{
+                    margin-top: 13px !important;
+                    font-size: 22px;
+                    margin-right: 0px;
+                }
+                .ant-menu-title-content{
+                    font-size: 12px;
+                    line-height: 16px;
+                    letter-spacing: 0.4px;
+                    padding: 0px !important;
+                    margin: 0px !important;
+                }
+            }
+            .ant-menu-item-selected{
+                background: linear-gradient(90deg, #0013D4 0%, #00F9B8 100%);
+                box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+                span{
+                    color: #fff !important;
+                    margin-right: 0px;
+                }
+            }
+            .ant-menu-item-selected::after{
+                display: none !important;
+            }
+        }
+    }
+}
+
+.profileIndex{
+    .ant-card{
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 0px 1px rgba(0, 0, 0, 0.04);
+        border-radius: 24px;
+    }
+    .header{
+        .text{
+
+            font-style: normal;
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 24px;
+            letter-spacing: 0.15px;
+            color: #35446D;
+        }
+        .edit{
+            cursor: pointer;
+        }
+    }
+    .profileForm{
+        margin-top: 64px;
+        .ant-form-item{
+            .ant-form-item-label{
+                label{
+                    font-style: normal;
+                    font-weight: normal;
+                    font-size: 12px !important;
+                    line-height: 24px;
+                    letter-spacing: 0.15px;
+                    color: #7D8FC0;
+                }
+            }
+        }
+    }
+}
+.fullModal{
+    height: 98vh !important;
+    width: 98vw !important;
+    margin: 0 !important;
+    top:0 !important;
+    .ant-modal-content{
+        height: 98vh !important;
+        width: 98vw !important;
+        margin: 0 !important;
+        top:0 !important;
+        .ant-modal-header{
+            width: fit-content;
+            background-color: #0013D4;
+            margin-left: 162px;
+            border-radius: 0px 0px 24px 24px;
+            .ant-modal-title{
+                font-style: normal;
+                font-weight: bold;
+                font-size: 20px;
+                line-height: 24px;
+                letter-spacing: 0.15px;
+                color: #FFFFFF;
+            }
+        }
+        .ant-modal-body{
+            height: calc(98vh - 110px);
+            .titleV{
+                .topV{
+                    font-weight: bold;
+                    font-size: 20px;
+                    line-height: 24px;
+                    color: #0013D4;
+                    margin: 8px 0px;
+                }
+                .bottomV{
+                    font-style: normal;
+                    font-weight: normal;
+                    font-size: 14px;
+                    line-height: 20px;
+                    letter-spacing: 0.25px;
+                    color: #A2A4AA;
+                    margin: 8px 0px;
+                }
+            }
+        }
+        .ant-modal-footer{
+            display: flex !important;
+            justify-content: space-between !important;
+            .ant-btn{    
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                
+                font-style: normal;
+                font-weight: bold;
+                font-size: 14px;
+                line-height: 14px;
+                flex-grow: 0;
+                margin: 0px 0px;
+            }
+        }
+    }
+}
