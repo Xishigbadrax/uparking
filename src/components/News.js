@@ -3,7 +3,7 @@ import Image from "next/image";
 const News = ({ head, image, date, title, titlebold, desc }) => {
   return (
     <div
-      style={{ width: "350px", height: "450px", backgroundColor: "red" }}
+      style={{ width: "350px", height: "450px", backgroundColor: "" }}
       className="flex flex-col sm:mb-10 lg:mr-10 mb-10"
     >
       <div
