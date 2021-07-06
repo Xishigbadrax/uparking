@@ -16,6 +16,7 @@ const Dashboard = () => {
   const GOOGLE_API = process.env.NEXT_GOOGLE_API;
   const ctx = useContext(Context);
   const [dashboardData, setDashboardData] = useState({});
+  const [parkRegModalVisible, setParkRegModalVisible] = useState(true);
   const [seeMore, setSeeMore] = useState(false);
   const [startDate, setStartDate] = useState("2019-05-01");
   const [endDate, setEndtDate] = useState();
