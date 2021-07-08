@@ -59,7 +59,7 @@ body {
   font-family: 'Helvetica Neue', Arial !important;
   font-variant: tabular-nums;
   line-height: 1.5715;
-  background-color: #fff;
+  background-color: #F8FAFC;
   font-feature-settings: 'tnum';
 }
 [tabindex='-1']:focus {

@@ -1,9 +1,17 @@
 import Link from 'next/link';
-import { Menu, Layout } from 'antd';
+import { Menu, Layout, Avatar } from 'antd';
 import { useRouter } from 'next/router';
 import * as AntdIcons from '@ant-design/icons';
 import Context from '@context/Context';
 import { useContext } from 'react';
+import {
+  AppstoreOutlined,
+  UserOutlined,
+  CalendarOutlined,
+  SettingOutlined,
+  QuestionCircleOutlined,
+  LoginOutlined
+} from '@ant-design/icons';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -11,7 +19,7 @@ const { SubMenu } = Menu;
 const Sidebar = () => {
   const router = useRouter();
   const { state, menuOpenKeys, setMenuOpenKeys } = useContext(Context);
-  const { menus } = state; 
+  const { menus } = state;
 
   const getIcon = icon => {
     const AntIcon = AntdIcons[icon];
@@ -64,13 +72,19 @@ const Sidebar = () => {
       return getSubMenuOrItem(item);
     }).filter(item => item);
   };
-  
+
+  const handleClick = () => {
+    console.log('11')
+  }
+
   return (
-    <Sider theme="light">
-      <div className="logo">
+    <Sider theme="light" className={"sideBar"} >
+      <Avatar size={72} icon={<UserOutlined />} />
+      <div className="userName"><span>А.Бат-Эрдэнэ</span></div>
+      {/* <div className="logo">
         <img src="/small_logo.png" alt="logg" className="header-logo" />
-      </div>
-      <Menu
+      </div> */}
+      {/* <Menu
         style={{ borderRight: 'none', margin: '1.8rem 0' }}
         theme="dark"
         mode="inline"
@@ -79,11 +93,36 @@ const Sidebar = () => {
         onOpenChange={(keys) => setMenuOpenKeys(keys)}
       >
         {getNavMenuItems(menus)}
+      </Menu> */}
+      <Menu
+        defaultSelectedKeys={['1']}
+        defaultOpenKeys={['sub1']}
+        mode="inline"
+        inlineCollapsed={true}
+        className={"profileMenu"}
+      >
+        <Menu.Item key="1" icon={<UserOutlined />}>
+          Миний мэдээлэл
+        </Menu.Item>
+        <Menu.Item key="2" icon={<AppstoreOutlined />}>
+          Хянах самбар
+        </Menu.Item>
+        <Menu.Item key="3" icon={<CalendarOutlined />}>
+          Миний захиалга
+        </Menu.Item>
+        <Menu.Item key="4" icon={<SettingOutlined />}>
+          Тохиргоо
+        </Menu.Item>
+        <Menu.Item key="5" icon={<QuestionCircleOutlined />}>
+          Тусламж
+        </Menu.Item>
+        <Menu.Item key="6" icon={<LoginOutlined />}>
+        </Menu.Item>
       </Menu>
     </Sider>
   );
 
-  
+
 };
 
 export default Sidebar;
