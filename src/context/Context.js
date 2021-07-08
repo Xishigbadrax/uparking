@@ -4,6 +4,7 @@ import jwt_decode from 'jwt-decode';
 import Auth from '@utils/auth';
 import { useRouter } from "next/router";
 import { apiList, sList } from "@api/api";
+import { profileMenu } from "@constants/profilemenu";
 
 const Context = createContext();
 
@@ -50,29 +51,31 @@ export const ContextProvider = ({ children }) => {
 
     //#region set menu
     let menuData = [];
+    const data = profileMenu;
     // const data = await sList({ code: apiList.adminMenu });
     // if (data && data.data) {
-    //   const tmpMenus = data.data.sort((a, b) => {
-    //     return a.order - b.order;
-    //   });
+      // const tmpMenus = data.data.sort((a, b) => {
+      //   return a.order - b.order;
+      // });
+      const tmpMenus = data;
 
-    //   let menus = {};
-    //   tmpMenus.map((mnu) => {
-    //     const parentId = mnu.parentId;
-    //     if (parentId !== null) {
-    //       if (menus[parentId]['children'] === undefined) {
-    //         menus[parentId]['children'] = [];
-    //         delete menus[parentId]['link'];
-    //       }
-    //       menus[parentId]['children'].push(mnu);
-    //     } else {
-    //       menus[mnu.id] = mnu;
-    //     }
-    //   });
+      let menus = {};
+      tmpMenus.map((mnu) => {
+        const parentId = mnu.parentId;
+        if (parentId !== null) {
+          if (menus[parentId]['children'] === undefined) {
+            menus[parentId]['children'] = [];
+            delete menus[parentId]['link'];
+          }
+          menus[parentId]['children'].push(mnu);
+        } else {
+          menus[mnu.id] = mnu;
+        }
+      });
 
-    //   menuData = Object.values(menus).sort((a, b) => {
-    //     return a.order - b.order;
-    //   });
+      menuData = Object.values(menus).sort((a, b) => {
+        return a.order - b.order;
+      });
     // }
     
     dispatch({
