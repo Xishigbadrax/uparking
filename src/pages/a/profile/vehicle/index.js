@@ -98,7 +98,6 @@ export default function vehicle() {
       >
         Тухайн хэсэгт зогсоолын байрлал, дугаарлалт харагдаж буй зураг хийхгүй
       </p>
-
       <div className="grid lg:grid-cols-2 sm:grid-cols-1 grid-cols-1  w-2/5 lg:ml-32 sm:ml-16 ml-24 mt-16 ">
         <div className=" grid-cols-1">
           <div className="">
@@ -197,7 +196,7 @@ export default function vehicle() {
           </Link>
         </div>
         <div className="grid-cols-1 grid justify-items-end lg:mr-32 cursor-pointer ">
-          <Link href="/admin/profile/nemelt">
+          <Link href="/a/profile/optional">
             <div
               className={`border rounded lg:w-1/4 sm:w-2/4 md:w-2/4 buttonGo flex px-3 py-3`}
             >

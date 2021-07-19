@@ -4,7 +4,11 @@ import Link from "next/link";
 import ProfileLayout from "@components/layouts/ProfileLayout";
 import { InputNumber, Form, Button, Input, AutoComplete } from "antd";
 import { Steps, message } from "antd";
+import { Row, Col } from "antd";
+import router from "next/router";
+
 const { Step } = Steps;
+
 const steps = [
   {
     title: "Үндсэн мэдээлэл",
@@ -45,58 +49,45 @@ const verify = () => {
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
+
   return (
     <ProfileLayout className="" style={{ width: "100%", height: "100vh" }}>
-      <div className="grid lg:grid-cols-2  grid-cols-1 space-x lg: ml-16 ">
-        <div className="grid-cols-1 p-8 justify-items-center  lg:mt-32 md:mt-16 sm:mt-8 mt-8  sm:ml-8">
-          <div>
-            <img src="/personal.png" />
-          </div>
-        </div>
-        <div>
-          <div className="lg:grid grid-cols-2 sm:grid-cols-1 md:grid-cols-2 grid-cols-1 lg:mt-8 lg:ml-16 w-full">
-            <Steps size="small" style={{ fontSize: "15px" }} current={0}>
-              <Step title="Үндсэн мэдээлэл" style={{ fontSize: "10px" }} />
-              <Step title="Нэмэлт мэдээлэл" style={{ fontSize: "15px" }} />
-            </Steps>
-          </div>
+      <Row className="">
+        <Col span={10} style={{ marginTop: "150px" }} offset={2}>
+          <img src="/personal.png" />
+        </Col>
+        <Col span={10} offset={2}>
+          <Steps size="small" style={{ fontSize: "15px" }} current={0}>
+            <Step title="Үндсэн мэдээлэл" size="middle" />
+            <Step title="Нэмэлт мэдээлэл" />
+          </Steps>
 
           <Form
             {...layout}
-            name="nest-messages"
+            name="n,est-messages"
+            size={[8, 12]}
+            layout="vertical"
             onFinish={onFinish}
             validateMessages={validateMessages}
-            className="lg:ml-16 sm:ml-16 ml-16 w-2/3 px-3 py-3 lg:mt-8 mt-8 ml:mt-4  "
+            offset={4}
+            className="col-4"
+            style={{ marginTop: "50px", marginLeft: "50px" }}
           >
-            <label className="mt-16 text-xs" style={{ fontSize: "15px" }}>
-              Овог
-            </label>
             <Form.Item
               name={["user", "firstName"]}
               rules={[{ required: true, message: "Овгоо оруулна уу" }]}
+              label="Овог"
             >
-              <Input
-                style={{
-                  borderBottom: "2px solid gray",
-                }}
-                className="w-full h-10"
-              />
+              <Input />
             </Form.Item>
-            <label
-              className="text-xs -mt-4"
-              style={{ marginTop: "-10px", fontSize: "15px" }}
-            >
-              Нэр
-            </label>
+
             <Form.Item
+              label="Нэр"
+              style={{ marginTop: "-10px", fontSize: "10px" }}
               name={["user", "lastName"]}
-              className="w-full"
               rules={[{ required: true, message: "Нэрээ оруулна уу" }]}
             >
-              <Input
-                style={{ borderBottom: "2px solid gray" }}
-                className="w-full h-10"
-              />
+              <Input />
             </Form.Item>
             <Form.Item
               name={["user", "registerNumber"]}
@@ -104,24 +95,15 @@ const verify = () => {
                 { required: true, message: "Регистрийн дугаараа оруулна уу?" },
               ]}
             >
-              <Input
-                placeholder="Регистрийн дугаар"
-                style={{ borderBottom: "2px solid gray" }}
-                className="w-full h-10"
-              />
+              <Input placeholder="Регистрийн дугаар" className="w-full h-10" />
             </Form.Item>
-            <Form.Item name={["user"]} className="w-full">
-              <Input
-                placeholder="88101010"
-                style={{ borderBottom: "2px solid gray" }}
-                className="w-full h-10"
-              />
+            <Form.Item name={["user"]}>
+              <Input placeholder="88101010" />
             </Form.Item>
-            <Form.Item name={["user", "email"]} className="w-full">
+            <Form.Item name={["user", "email"]}>
               <Input
                 placeholder="И-мейл"
-                style={{ borderBottom: "2px solid gray" }}
-                className="w-full h-10"
+                style={{ borderBottom: "1px solid gray" }}
               />
             </Form.Item>
             <Form.Item
@@ -151,14 +133,13 @@ const verify = () => {
               </Button>
             </Form.Item>
           </Form>
-        </div>
-      </div>
-
-      <div className="grid-cols-1 lg:-mt-16 sm:mt-2 mt-2 lg:ml-32">
-        <Link href="/admin/profile/nemelt">
-          <button className="" style={{ color: "blue" }}>
+        </Col>
+      </Row>
+      <div className="grid-cols-1 lg:-mt-16 sm:mt-2 mt-2 lg:ml-32 cursor-pointer">
+        <Link href="/a/profile/optional">
+          <Button type="link" color="primary">
             Алгасах
-          </button>
+          </Button>
         </Link>
       </div>
     </ProfileLayout>
