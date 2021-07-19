@@ -4,6 +4,8 @@ import ProfileLayout from "@components/layouts/ProfileLayout";
 import { apiList, callGet } from "@api/api";
 import { Steps } from "antd";
 import Link from "next/link";
+import { Row, Col } from "antd";
+import { Button } from "antd";
 
 const { Step } = Steps;
 
@@ -16,13 +18,13 @@ const nemelt = () => {
   return (
     <div>
       {console.log(vehicles)}
-      <ProfileLayout className="main-content-no-back ">
-        <div className="grid lg:grid-cols-2 sm:grid-cols-1 md: grid-cols-1 -ml-60">
-          <div className="grid-cols-1 mt-32">
+      <ProfileLayout className="" style={{ width: "100%", height: "100vh" }}>
+        <Row>
+          <Col span={10} offset={2} style={{ marginTop: "150px" }}>
             <img src="/Nemelt.png"></img>
-          </div>
-          <div className="grid-cols-1">
-            <div className="lg:grid grid-cols-2 sm:grid-cols-1 md:grid-cols-2 grid-cols-1 lg:mt-8 lg:ml-16 w-full">
+          </Col>
+          <Col span={10} offset={2}>
+            <div className="">
               <Steps
                 size="small"
                 style={{ fontSize: "15px", color: "blue" }}
@@ -35,11 +37,8 @@ const nemelt = () => {
                 <Step title="Нэмэлт мэдээлэл" style={{ fontSize: "15px" }} />
               </Steps>
             </div>
-            <div className="lg:mt-16 sm:mt-8 mt-8 md:mt-8">
-              <div
-                className="text-justify-start lg:w-3/5 sm:w-4/5 md:w-4/5"
-                style={{ color: "grey" }}
-              >
+            <div style={{ marginTop: "140px" }}>
+              <div className="text-justify-start " style={{ color: "grey" }}>
                 Та хаана ч хэзээ ч өөрийн зогсоолд тээврийн хэрэгсэлээ
                 байршуулахыг хүсэж байвал тээврийн хэрэгслийн бүртгэлээ хийнэ
                 үү.
@@ -54,7 +53,11 @@ const nemelt = () => {
                   style={{ backgroundColor: "white", width: "325px" }}
                 >
                   <div class="mt-4 ml-4">
-                    <img src="/directions_car_24px.png"></img>
+                    <img
+                      src="/directions_car_24px.png"
+                      height="20px "
+                      width="20px"
+                    ></img>
                   </div>
                   <div class="ml-4">
                     {/* <div class="text-sm">{item.label}</div> */}
@@ -70,43 +73,38 @@ const nemelt = () => {
                 </div>
               ))}
               <div className="mt-4">
-                <Link href={`/admin/profile/vehicle`}>
+                <Link href={`/a/profile/vehicle`}>
                   <button>
                     <img src="/add.png" />
                   </button>
                 </Link>
               </div>
-              <div
-                className="text-justify-start w-3/5 mt-8"
-                style={{ color: "#666666" }}
-              >
+              <div className="text-justify-start " style={{ color: "#666666" }}>
                 Та өөрийн зогсоолыг илүү үр ашигтайгаар бусдад хуваалцахыг хүсэж
                 байвал авто зогсоолын бүртгэлээ хийнэ үү.
               </div>
               <div style={{ color: "#666666" }}>
                 <b>Авто зогсоол бүртгүүлэх</b>
               </div>
-              <div className="mt-4">
-                <Link href="/zogsool/addZogsool">
+              <div style={{ marginTop: "10px" }}>
+                <Link href="/a/profile/space">
                   <button>
                     <img src="/add.png" />
                   </button>
                 </Link>
               </div>
             </div>
-          </div>
-        </div>
-        <div className=" grid lg:grid-cols-2 grid-cols-2 lg:ml-16 lg:mt-32 mb-8 mr-4 sm:mt-8 sm:ml-16 ml-16 mt-32 sm:mr-8 mr-8 md:">
-          <div className="grid-cols-1 cursor-pointer ">
+          </Col>
+        </Row>
+        <Row style={{ marginTop: "30px" }}>
+          <Col offset={2}>
             <Link href="/nemelt">
               <img src="/Container.png" />
             </Link>
-          </div>
-          <div className="grid-cols-1 grid justify-items-end lg:mr-32 cursor-pointer">
-            <Link href="/admin/profile/nemelt">
-              <div
-                className={`border rounded lg:w-1/4 sm:w-2/4 md:w-2/4 buttonGo flex px-3 py-3`}
-              >
+          </Col>
+          <Col offset={16}>
+            <Link href="/a/profile/optional">
+              <div className={`buttonGo flex`}>
                 <button style={{ paddingLeft: "10px", color: "white" }}>
                   Дуусгах
                 </button>
@@ -115,8 +113,8 @@ const nemelt = () => {
                 </div>
               </div>
             </Link>
-          </div>
-        </div>
+          </Col>
+        </Row>
       </ProfileLayout>
     </div>
   );

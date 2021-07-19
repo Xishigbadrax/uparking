@@ -1713,3 +1713,6 @@
   background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
   border-radius: 8px;
 }
+.addButton {
+  background-image: url("../../../public/add.png");
+}
