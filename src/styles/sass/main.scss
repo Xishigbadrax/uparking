@@ -112,6 +112,7 @@
     margin-top: 25px !important;
     background:none !important;
     .sideBar{
+        overflow: hidden;
         width: 180px !important;
         border-radius: 24px !important;
         background-color: #fff;
@@ -170,6 +171,9 @@
                 display: none !important;
             }
         }
+    }
+    .profileContent{
+        margin-left: 65px;
     }
 }
 
@@ -270,4 +274,191 @@
             }
         }
     }
+}
+
+.profileTab{
+    .ant-tabs-nav{
+        .ant-tabs-nav-wrap{
+            .ant-tabs-nav-list{
+                .ant-tabs-tab{
+                    border-radius: 16px 16px 0px 0px;
+                    padding: 6px 53px;
+                    .ant-tabs-tab-btn{
+                        font-weight: bold;
+                        font-size: 16px;
+                        line-height: 24px;
+
+                        align-items: center;
+                        text-align: center;
+                        letter-spacing: 0.15px;
+                        color: #0013D4;
+                    }
+                }
+                .ant-tabs-tab-active{
+                    background: #0013D4;
+                    .ant-tabs-tab-btn{
+                        color: #FFFFFF;
+                    }
+                }
+            }
+        }
+    }
+    .ant-tabs-content-holder{
+        .status{
+            padding:20px 10px;
+            .totalSpentAmount , .levelAmount{
+                text-align: right;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 48px;
+                line-height: 57px;
+                color: #0013D4;
+                padding-right: 20px;
+            }
+            .totalSpentText, .levelText{
+                text-align: right;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 16px;
+                line-height: 24px;
+                letter-spacing: 0.15px;
+                color: #35446D;
+                padding-right: 20px;
+
+            }
+            .daystatuses{
+                padding-left: 40px;
+                text-align: left;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 14px;
+                line-height: 24px;
+                color: #35446D;
+                margin: 0px 16px;
+            }
+        }
+        .ant-picker-calendar{
+            .ant-picker-panel{
+                .ant-picker-content{
+                    thead{
+                        tr{
+                            th{
+                                padding: 5px 0px;
+                                text-align: center;
+                                text-transform: uppercase;
+                                font-style: normal;
+                                font-weight: 500;
+                                font-size: 12px;
+                                line-height: 16px;
+                                color: #35446D;
+                            }
+                        }
+                    }
+                    .ant-picker-cell{
+                        .ant-picker-cell-inner{
+                            padding:0px;
+                            border:none;
+                            .ant-picker-calendar-date-value{
+                                text-align: center;
+
+                                font-style: normal;
+                                font-weight: normal;
+                                font-size: 12px;
+                                line-height: 16px;
+                                color: #000000;
+                            }
+                            .ant-picker-calendar-date-content{
+                                .events{
+                                    li{
+
+
+                                        background: rgba(0, 249, 184, 0.08);
+                                        border: 1px solid #76E8AA;
+                                        box-sizing: border-box;
+                                        border-radius: 8px;
+                                        text-align: center;
+                                        .eventText{
+                                            font-weight: normal;
+                                            font-size: 10px;
+                                            line-height: 16px;
+                                            color: #76E8AA;
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+                        .ant-picker-calendar-date-today{
+                            border-top: 2px solid #1890ff;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.profileSubTab{
+    .ant-tabs-nav{
+        .ant-tabs-nav-wrap{
+            .ant-tabs-nav-list{
+                .ant-tabs-tab{
+                    border-radius: 16px 16px 0px 0px;
+                    padding: 6px 53px;
+                    .ant-tabs-tab-btn{
+                        font-weight: bold;
+                        font-size: 14px;
+                        line-height: 24px;
+
+                        align-items: center;
+                        text-align: center;
+                        letter-spacing: 0.15px;
+                        color: #A2A4AA;;
+                    }
+                }
+                .ant-tabs-tab-active{
+                    background: none !important;
+                    // padding-bottom:5px;
+                    // background: /* gradient can be an image */
+                    //   linear-gradient(
+                    //     to left, 
+                    //     rgba(92,7,52,1) 0%,
+                    //     rgba(134,29,84,1) 12%,
+                    //     rgba(255,93,177,1) 47%,
+                    //     rgba(83,0,30,1) 100%
+                    //   )
+                    //   left 
+                    //   bottom
+                    //   #fff
+                    //   no-repeat; 
+                    // background-size:100% 5px ;/* if linear-gradient, we need to resize it */
+                    .ant-tabs-tab-btn{
+                        color: #0013D4;
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+
+
+.events {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.events .ant-badge-status {
+  width: 100%;
+  overflow: hidden;
+  font-size: 12px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.notes-month {
+  font-size: 28px;
+  text-align: center;
+}
+.notes-month section {
+  font-size: 28px;
 }
