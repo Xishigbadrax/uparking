@@ -63,7 +63,7 @@ const Profile = () => {
 
     return (
         <ProfileLayout>
-            <Row style={{ marginLeft: "65px" }} className={"profileIndex"}>
+            <Row className={"profileIndex"}>
                 <Col span={12}>
                     <Card>
                         <Row className="header">

@@ -6,6 +6,7 @@ import moment from "moment"
 import { SearchOutlined } from "@ant-design/icons";
 import dynamic from "next/dynamic";
 import GoogleMapReact from 'google-map-react';
+import {dateTimePickerLocale} from "@constants/constants"
 const IndexPageMoreInfo = dynamic(
   () => import('@components/IndexPageMoreInfo'),
   { ssr: false }
@@ -75,6 +76,7 @@ const Dashboard = () => {
             format="YYYY-MM-DD HH:mm"
             onChange={onChange}
             onOk={onOk}
+            locale={dateTimePickerLocale}
           />
         </Col>
         <Col span={4}>

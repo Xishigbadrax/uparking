@@ -19,7 +19,7 @@ const ProfileLayout = ({ children, title, className }) => {
         <Sidebar />
         <Layout style={{background:"none"}}>
           {/* <Header /> */}
-          <Content className={className !== undefined ? className : "main-content"}>
+          <Content className={"profileContent"}>
             {title && <h1 className="main-title">{title}</h1>}
             {children}
           </Content>
