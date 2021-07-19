@@ -18,6 +18,7 @@ import {
   GoogleMap,
   Marker,
 } from "react-google-maps";
+import MainInfo from "../../../components/registerSpace/mainInfo";
 
 const MyMapComponent = withScriptjs(
   withGoogleMap((props) => (
@@ -602,136 +603,9 @@ const Profile = () => {
             ))}
           </Steps>
         </Row>
-        {steps[current].title === "Үндсэн мэдээлэл" && (
-          <div>
-            <Row offset={4}>
-              <p
-                style={{
-                  color: "blue",
-                  fontSize: "20px",
-                  marginTop: "50px",
-                  marginLeft: "100px",
-                }}
-              >
-                <b> Орон сууц хотхоны үндсэн мэдээлэл</b>
-              </p>
-            </Row>
-            <Row>
-              <p
-                style={{
-                  width: "300px",
-                  marginLeft: "100px",
-                  fontSize: "12px",
-                }}
-              >
-                Албан ёсны болон олон нийтийн нэршил болсон нэрийг ашиглана уу!
-              </p>
-            </Row>
-            <Row>
-              <Col span={10}>
-                <Form
-                  labelCol={{ span: 4 }}
-                  layout="horizontal"
-                  style={{ marginLeft: "100px", marginTop: "50px" }}
-                >
-                  <Form.Item span={4}>
-                    <Select onChange={onChangeAimag} placeholder="Хот,Aймаг *">
-                      {aimag.map((item) => (
-                        <Option key={item.value} value={item.value}>
-                          {item.label}
-                        </Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                  <Form.Item span={4}>
-                    <Select onChange={onChangeSum} placeholder="Сум,Дүүрэг *">
-                      {sum.map((item) => (
-                        <Option key={item.value} value={item.value}>
-                          {item.label}
-                        </Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                  <Form.Item span={4}>
-                    <Select onChange={onChangeKhoroo} placeholder="Баг,Хороо">
-                      {khoroo.map((item) => (
-                        <Option key={item.value} value={item.value}>
-                          {item.label}
-                        </Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                  <Form.Item span={4}>
-                    <Select
-                      onChange={onChangeResidence}
-                      placeholder="Байрны нэр"
-                    >
-                      {residence.map((item) => (
-                        <Option key={item.value} value={item.value}>
-                          {item.label}
-                        </Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                  <Form.Item span={4}>
-                    <Select
-                      onChange={onChangeResidenceNumber}
-                      placeholder="Байрны дугаар "
-                    >
-                      {residenceblock.map((item) => (
-                        <Option key={item.value} value={item.value}>
-                          {item.label}
-                        </Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                  <Form.Item span={4}>
-                    <Input
-                      onChange={onChangeDoorNumber}
-                      placeholder="Авто Зогсоолын хаалганы тоо "
-                    ></Input>
-                  </Form.Item>
-                  <Form.Item span={4}>
-                    <Input
-                      onChange={onChangeSpaceNumber}
-                      placeholder="Авто Зогсоолын дугаар "
-                    ></Input>
-                  </Form.Item>
-                </Form>
-                {/* <Form.Item>
-              <Button onClick={onSaved}>za uzii</Button>
-            </Form.Item> */}
-              </Col>
-              <Col offset={2} style={{ width: "800px", height: "600px" }}>
-                <MyMapComponent
-                  isMarkerShown
-                  googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
-                  loadingElement={<div style={{ height: `100%` }} />}
-                  containerElement={<div style={{ height: `400px` }} />}
-                  mapElement={<div style={{ height: `100%` }} />}
-                />
-              </Col>
-            </Row>
-            <Row style={{ marginLeft: "100px" }}>
-              <Col>
-                {current > 0 && (
-                  <Button onClick={goBack} style={{ color: "blue" }}>
-                    Буцах
-                  </Button>
-                )}
-              </Col>
-              <Col offset={16}>
-                {current < steps.length - 1 && (
-                  <Button onClick={onSaved} className="buttonGo">
-                    Үргэлжлүүлэх
-                  </Button>
-                )}
-              </Col>
-            </Row>
-          </div>
-        )}
+        {steps[current].title === "Үндсэн мэдээлэл" && <MainInfo />}
       </Modal>
-      ); }
+      );
     </ProfileLayout>
   );
 };
