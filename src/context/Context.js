@@ -22,26 +22,23 @@ export const ContextProvider = ({ children }) => {
   };
 
   const setMenuAndPermissions = async () => {
-    if (
-      router.pathname === "/" ||
-      router.pathname === "/aboutus" ||
-      router.pathname === "/driver" ||
-      router.pathname === "/spaceowner" ||
-      router.pathname === "/news"
-    ) {
-      return;
-    }
+    // if (
+    //   router.pathname === "/" ||
+    //   router.pathname === "/aboutus" ||
+    //   router.pathname === "/driver" ||
+    //   router.pathname === "/spaceowner" ||
+    //   router.pathname === "/news"
+    // ) {
+    //   return;
+    // }
     // #region set permission
     const accessToken = Auth.getToken();
     if (accessToken == null || accessToken == "undefined") {
-      router.push("/login");
+      router.push("/");
       return;
     }
     const user = jwt_decode(accessToken);
     let permissionList = {};
-    {
-      console.log(user);
-    }
     if (user.authorities !== undefined) {
       user.authorities.map((auths) => {
         permissionList[auths] = auths;

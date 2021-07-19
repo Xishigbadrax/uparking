@@ -196,7 +196,7 @@ export default function vehicle() {
           </Link>
         </div>
         <div className="grid-cols-1 grid justify-items-end lg:mr-32 cursor-pointer ">
-          <Link href="/a/profile/optional">
+          <Link href="/park/profile/optional">
             <div
               className={`border rounded lg:w-1/4 sm:w-2/4 md:w-2/4 buttonGo flex px-3 py-3`}
             >

@@ -87,7 +87,7 @@ const nemelt = () => {
                 <b>Авто зогсоол бүртгүүлэх</b>
               </div>
               <div style={{ marginTop: "10px" }}>
-                <Link href="/a/profile/space">
+                <Link href="/park/profile/space">
                   <button>
                     <img src="/add.png" />
                   </button>
@@ -103,7 +103,7 @@ const nemelt = () => {
             </Link>
           </Col>
           <Col offset={16}>
-            <Link href="/a/profile/optional">
+            <Link href="/park/profile/optional">
               <div className={`buttonGo flex`}>
                 <button style={{ paddingLeft: "10px", color: "white" }}>
                   Дуусгах

@@ -5,7 +5,6 @@ import { ExclamationCircleOutlined, ReloadOutlined } from '@ant-design/icons';
 import { callPost, callGet } from '@api/api';
 import { messageType, defaultMsg } from '@constants/constants';
 import { showMessage } from "@utils/message";
-import Context from '@context/Context';
 import MaskedInput from 'antd-mask-input'
 import Countdown from "react-countdown";
 import renderHTML from 'react-render-html';
@@ -39,7 +38,6 @@ const tailLayout = {
 
 const Login = () => {
     const { confirm } = Modal;
-    const [, forceUpdate] = useState({});
     const [loading, setLoading] = useState(false);
     const [isOneTimePass, setIsOneTimePass] = useState(false);
     const [isTransactionCode, setIsTransactionCode] = useState(false);
@@ -47,8 +45,6 @@ const Login = () => {
     const [policyHtml, setPolicyHtml] = useState("");
     const [OTP, setOTP] = useState('');
     const [havecode, setHaveCode] = useState(true);
-    const { state, dispatch, setMenuAndPermissions } = useContext(Context);
-    const { auth } = state;
     const router = useRouter();
     const [modalVisible, setModalVisible] = useState(false);
     const [confirmCode, setConfirmCode] = useState(null);
@@ -186,14 +182,6 @@ const Login = () => {
             }
         }
     }
-
-
-    useEffect(() => {
-        if (Object.keys(auth).length !== 0) router.push('/admin');
-
-        forceUpdate({});
-
-    }, [auth]);
 
     const handleConfirm = async () => {
         try {

@@ -2,12 +2,9 @@ import { useState, useContext, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { Form, Input, Button, Modal } from 'antd';
 import { UserOutlined, LockOutlined, RightOutlined, ExclamationCircleOutlined, ReloadOutlined } from '@ant-design/icons';
-import auth_cookie from '@utils/auth';
-import { login } from '@api/auth';
 import { callGet, callPost } from '@api/api';
 import { messageType, defaultMsg } from '@constants/constants';
 import { showMessage } from "@utils/message";
-import Context from '@context/Context';
 import MaskedInput from 'antd-mask-input'
 import Countdown from "react-countdown";
 
@@ -37,8 +34,6 @@ const ForgotPassword = () => {
     const [havecode, setHaveCode] = useState(true);
     const [OTP, setOTP] = useState('');
     const [verifyCode, setVerifyCode] = useState('');
-    const { state, dispatch, setMenuAndPermissions } = useContext(Context);
-    const { auth } = state;
     const router = useRouter();
     // const [modalVisible, setModalVisible] = useState(false);
     const [confirmCode, setConfirmCode] = useState(null);
@@ -106,11 +101,6 @@ const ForgotPassword = () => {
 
     };
 
-
-    useEffect(() => {
-        if (Object.keys(auth).length !== 0) router.push('/admin');
-
-    }, [auth]);
 
     // useEffect(() => {
     // }, [counter]);

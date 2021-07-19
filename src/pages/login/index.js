@@ -22,7 +22,6 @@ const tailLayout = {
 };
 
 const Login = () => {
-  const [, forceUpdate] = useState({});
   const [loading, setLoading] = useState(false);
   const { state, dispatch, setMenuAndPermissions } = useContext(Context);
   const { auth } = state;
@@ -37,7 +36,6 @@ const Login = () => {
   const onFinish = async (values) => {
     setLoading(true);
     const res = await login(values);
-    console.log("login res-->", res);
     if (res.response || res.data === undefined) {
       if (res.response.data.error === "unauthorized") {
         //   setModalVisible(true);
@@ -54,6 +52,12 @@ const Login = () => {
       setLoading(false);
       return;
     }
+    dispatch({
+      type: 'AUTH',
+      payload: {
+        user: res.data,
+      },
+    });
 
     showMessage(messageType.SUCCESS.type, defaultMsg.loginSuccessTxt);
     auth_cookie.setToken(res?.data?.access_token, res?.data?.expires_in);
@@ -62,9 +66,9 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (Object.keys(auth).length !== 0) router.push("/admin");
+    console.log(Object.keys(auth).length, 'Object.keys(auth).lengthObject.keys(auth).length')
+    if (Object.keys(auth).length !== 0) router.push("/park");
 
-    forceUpdate({});
   }, [auth]);
 
   const handleConfirm = async () => {
