@@ -12,13 +12,17 @@ import { useEffect, useS } from "react";
 import { Steps } from "antd";
 import { apiList, callGet, callPost } from "@api/api";
 import Link from "next/link";
+import MainInfo from "@components/registerSpace/mainInfo";
+import MainImage from "@components/registerSpace/mainImage";
+import SpaceImage from "@components/registerSpace/spaceImage";
+import SpaceIndicator from "@components/registerSpace/spaceIndicator";
+
 import {
   withScriptjs,
   withGoogleMap,
   GoogleMap,
   Marker,
 } from "react-google-maps";
-import MainInfo from "../../../components/registerSpace/mainInfo";
 
 const MyMapComponent = withScriptjs(
   withGoogleMap((props) => (
@@ -38,39 +42,28 @@ const { Step } = Steps;
 const steps = [
   {
     title: "Үндсэн мэдээлэл",
-    content: "Үндсэн мэдээлэл",
   },
   {
     title: "Үндсэн зураг",
-    content: "Үндсэн зураг",
   },
   {
     title: "Зогсоолын зураг",
-    content: "Зогсоолын зураг",
-  },
-  {
-    title: "Зогсоолын зураг",
-    content: "Зогсоолын зураг",
   },
   {
     title: "Зогсоолын үзүүлэлт",
-    content: "Зогсоолын зураг",
   },
   {
     title: "Үнийн мэдээлэл",
-    content: "Зогсоолын зураг",
   },
   {
     title: "Хөнгөлөлт",
-    content: "Зогсоолын зураг",
   },
   {
     title: "Түрээслэх өдрүүд",
-    content: "Зогсоолын зураг",
   },
 ];
 
-const Profile = () => {
+const Profile = (props) => {
   const [formData, setFormdata] = useState({});
   const [residenceData, setResidenceData] = useState({});
   const [dugaar, setDugaar] = useState();
@@ -603,7 +596,27 @@ const Profile = () => {
             ))}
           </Steps>
         </Row>
-        {steps[current].title === "Үндсэн мэдээлэл" && <MainInfo />}
+        {(steps[current].title === "Үндсэн мэдээлэл" && <MainInfo />) ||
+          (steps[current].title === "Үндсэн зураг" && <MainImage />) ||
+          (steps[current].title === "Зогсоолын зураг" && <SpaceImage />) ||
+          (steps[current].title === "Зогсоолын үзүүлэлт" && <SpaceIndicator />)}
+
+        <Row style={{ marginLeft: "100px" }}>
+          <Col>
+            {current > 0 && (
+              <Button onClick={goBack} style={{ color: "blue" }}>
+                Буцах
+              </Button>
+            )}
+          </Col>
+          <Col offset={20}>
+            {current < steps.length - 1 && (
+              <Button onClick={onSaved} className="buttonGo">
+                Үргэлжлүүлэх
+              </Button>
+            )}
+          </Col>
+        </Row>
       </Modal>
       );
     </ProfileLayout>
