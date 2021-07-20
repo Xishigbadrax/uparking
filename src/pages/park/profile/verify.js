@@ -136,7 +136,7 @@ const verify = () => {
         </Col>
       </Row>
       <div className="grid-cols-1 lg:-mt-16 sm:mt-2 mt-2 lg:ml-32 cursor-pointer">
-        <Link href="/a/profile/optional">
+        <Link href="/park/profile/optional">
           <Button type="link" color="primary">
             Алгасах
           </Button>

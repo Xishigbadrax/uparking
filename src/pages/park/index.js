@@ -26,19 +26,21 @@ const Dashboard = () => {
     return current && current > moment().endOf('day');
   }
   const getData = async (start_date, end_date) => {
+    console.log('dashboard')
     ctx.setIsLoading(true);
     if (ctx.checkPermission("DASHBOARD_CARD")) {
-      const data = await sList({
-        code: apiList.dashboardCard, defaultParams: [{ key: "start_date", value: start_date }, { key: "end_date", value: end_date }]
-      });
-      setDashboardData(data?.data[0]);
+      // const data = await sList({
+      //   code: apiList.dashboardCard, defaultParams: [{ key: "start_date", value: start_date }, { key: "end_date", value: end_date }]
+      // });
+      // const data = [];
+      // setDashboardData(data?.data[0]);
     }
     ctx.setIsLoading(false);
   };
   useEffect(() => {
-    // const today = moment(new Date()).format('YYYY-MM-DD');
-    // setEndtDate(today);
-    // getData(startDate, today);
+    const today = moment(new Date()).format('YYYY-MM-DD');
+    setEndtDate(today);
+    getData(startDate, today);
   }, []);
   const handleDateChange = (value, dateString) => {
     if (dateString) {
