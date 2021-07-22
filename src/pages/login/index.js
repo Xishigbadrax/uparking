@@ -53,7 +53,7 @@ const Login = () => {
       return;
     }
     dispatch({
-      type: 'AUTH',
+      type: "AUTH",
       payload: {
         user: res.data,
       },
@@ -66,9 +66,11 @@ const Login = () => {
   };
 
   useEffect(() => {
-    console.log(Object.keys(auth).length, 'Object.keys(auth).lengthObject.keys(auth).length')
+    console.log(
+      Object.keys(auth).length,
+      "Object.keys(auth).lengthObject.keys(auth).length"
+    );
     if (Object.keys(auth).length !== 0) router.push("/park");
-
   }, [auth]);
 
   const handleConfirm = async () => {

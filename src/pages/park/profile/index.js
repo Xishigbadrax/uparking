@@ -7,11 +7,22 @@ import {
 } from "@ant-design/icons";
 import ProfileLayout from "@components/layouts/ProfileLayout";
 import { Modal, Button, Form, Input, Checkbox, Layout, Select } from "antd";
-import { useContext, useState } from "react";
+import { useContext, useState, useRef } from "react";
 import { useEffect, useS } from "react";
 import { Steps } from "antd";
 import { apiList, callGet, callPost } from "@api/api";
 import Link from "next/link";
+<<<<<<< HEAD
+=======
+import MainInfo from "@components/registerSpace/mainInfo";
+import MainImage from "@components/registerSpace/mainImage";
+import SpaceImage from "@components/registerSpace/spaceImage";
+import SpaceIndicator from "@components/registerSpace/spaceIndicator";
+import PriceInfo from "@components/registerSpace/priceInfo";
+import Discount from "@components/registerSpace/discount";
+import RentDate from "@components/registerSpace/rentDate";
+import Context from "@context/Context";
+>>>>>>> 4dcdc2ac26482134f77c7b107b3bff99f796fb7c
 import {
   withScriptjs,
   withGoogleMap,
@@ -28,7 +39,6 @@ const MyMapComponent = withScriptjs(
     </GoogleMap>
   ))
 );
-
 const { SubMenu } = Menu;
 const { Content } = Layout;
 const { Option } = Select;
@@ -82,20 +92,8 @@ const Profile = () => {
   const [selectedZagwar, setSelectedZagwar] = useState({});
   const [selectedColor, setSelectedColor] = useState({});
   const [vehicles, setVehicles] = useState([]);
-
-  const [aimag, setAimag] = useState([]);
-  const [selectedAimag, setSelectedAimag] = useState({});
-  const [sum, setSum] = useState([]);
-  const [selectedSum, setSelectedSum] = useState({});
-  const [khoroo, setKhoroo] = useState([]);
-  const [selectedKhoroo, setSelectedKhoroo] = useState({});
-  const [residence, setResidence] = useState([]);
-  const [selectedResidence, setSelectedResidence] = useState({});
-  const [residenceblock, setResidenceBlock] = useState([]);
-  const [selectedResidenceBlock, setSelectedResidenceBlock] = useState({});
-  const [DoorNo, setDoorNo] = useState();
-  const [spaceNumber, setSpaceNumber] = useState();
   const [current, setCurrent] = useState(0);
+  const ctx = useContext(Context);
   useEffect(async () => {
     const data = await callGet("/user/vehicle/list");
     setVehicles(data);
@@ -104,10 +102,7 @@ const Profile = () => {
     setUildwer(uildwer);
     const color = await callGet("/user/vehicle/color");
     setColor(color);
-    const aimag = await callGet("/address/aimag");
-    console.log(aimag);
-    setAimag(aimag);
-    setSelectedAimag(aimag);
+
     const space = await callGet("/parkingspace/list");
     setFormdata({ ...formData, rfid: 12 });
   }, []);
@@ -115,41 +110,6 @@ const Profile = () => {
   function classNames(...classes) {
     return classes.filter(Boolean).join("  ");
   }
-
-  useEffect(async () => {
-    const zagwar = await callGet(
-      `/user/vehicle/model?maker=${selectedUildwer.label}`
-    );
-    setZagwar(zagwar);
-  }, [selectedUildwer]);
-
-  useEffect(async () => {
-    const sums = await callGet(`/address/sum/${selectedAimag.value}`);
-    console.log(sums);
-    setSum(sums);
-  }, [selectedAimag]);
-
-  useEffect(async () => {
-    const khoroo = await callGet(`/address/khoroo/${selectedSum.value}`);
-    console.log(khoroo);
-    setKhoroo(khoroo);
-  }, [selectedSum]);
-
-  useEffect(async () => {
-    const residence = await callGet(
-      `/address/residence?districtId=${selectedSum.value}&provinceId=${selectedAimag.value}&sectionId=${selectedKhoroo.value}`
-    );
-    setResidence(residence);
-    console.log("residence--->", residence);
-  }, [selectedKhoroo]);
-
-  useEffect(async () => {
-    const residenceBlock = await callGet(
-      `/address/residenceblock?residenceId=${selectedResidence.value}`
-    );
-    setResidenceBlock(residenceBlock);
-    console.log("residenceBlock--->", residenceBlock);
-  }, [selectedResidence]);
 
   const onChangeUildver = (e) => {
     console.log("i am here-->", e);
@@ -178,6 +138,7 @@ const Profile = () => {
   const [isVehileVisible, setIsVehileVisible] = useState(false);
   const [isParkVisible, setIsParkVisible] = useState(false);
 
+  const [mainData, setMainData] = useState();
   const onFinish = (values) => {
     console.log("Success:", values);
   };
@@ -202,69 +163,12 @@ const Profile = () => {
   const handleCancel = () => {
     setIsVehileVisible(false);
   };
-  const onChangeAimag = (e) => {
-    const aimag1 = aimag.find((item) => item.value === Number(e));
-    setSelectedAimag(aimag1);
-    setResidenceData({ ...residenceData, provinceId: aimag1.value });
-  };
-
-  const onChangeSum = (e) => {
-    const sum1 = sum.find((item) => item.value === Number(e));
-    console.log(sum1);
-    setSelectedSum(sum1);
-    setResidenceData({ ...residenceData, districtId: sum1.value });
-  };
-  const onChangeKhoroo = (e) => {
-    const horoo = khoroo.find((item) => item.value === Number(e));
-    setSelectedKhoroo(horoo);
-    setResidenceData({ ...residenceData, sectionId: horoo.value });
-  };
-  const onChangeResidence = (e) => {
-    const residence1 = residence.find((item) => item.value === Number(e));
-    setSelectedResidence(residence1);
-
-    setResidenceData({
-      ...residenceData,
-      residenceName: residence1.label,
-      residenceId: e,
-    });
-    console.log("nicee");
-  };
-
-  const onChangeResidenceNumber = (e) => {
-    const resiblock = residenceblock.find((item) => item.value === Number(e));
-    setSelectedResidenceBlock(resiblock);
-    setResidenceData({
-      ...residenceData,
-      residenceBlockId: selectedResidenceBlock.value,
-    });
-    setResidenceData({
-      ...residenceData,
-      residenceBlockNumber: selectedResidenceBlock.label,
-      residenceBlockId: e,
-    });
-  };
-  const onChangeDoorNumber = (e) => {
-    console.log(e.target.value);
-    setDoorNo(e.target.value);
-
-    setResidenceData({
-      ...residenceData,
-      parkingGateNumber: e.target.value,
-    });
-  };
-  const onChangeSpaceNumber = (e) => {
-    setSpaceNumber(e.target.value);
-    setResidenceData({
-      ...residenceData,
-      parkingSpaceId: e.target.value,
-    });
-  };
 
   const onSaved = async () => {
-    const res = callPost("/parkingfirst", residenceData);
+    console.log("mainData", mainData);
+    // const res = callPost("/parkingfirst", residenceData);
     setCurrent(current + 1);
-    console.log("success", res);
+    // console.log("success", res);
   };
   const goBack = () => {
     console.log("Bye");
@@ -272,6 +176,9 @@ const Profile = () => {
   };
   const onFinishFailedVehile = (errorInfo) => {
     console.log("Failed:", errorInfo);
+  };
+  const onclickOk = () => {
+    console.log("xaxa");
   };
 
   return (
@@ -444,8 +351,6 @@ const Profile = () => {
           key: "submit",
           htmlType: "submit",
         }}
-        onOk={() => setIsVehileVisible(false)}
-        onCancel={() => setIsVehileVisible(false)}
         width={1000}
         footer={[
           <Button key="back" type="link" onClick={handleCancel}>
@@ -586,8 +491,18 @@ const Profile = () => {
         className="fullModal"
         title="Авто зогсоол"
         centered
+        cancelButtonProps={{ style: { display: "none" } }}
+        okButtonProps={{ style: { display: "none" } }}
         visible={isParkVisible}
-        onOk={() => setIsParkVisible(false)}
+        // footer={[
+        //   <Button key="back" type="link" onClick={goBack}>
+        //     <ArrowLeftOutlined /> Буцах
+        //   </Button>,
+
+        //   <Button key="submit" type="primary" onClick={onSaved}>
+        //     Үргэлжлүүлэх
+        //   </Button>,
+        // ]}
         onCancel={() => setIsParkVisible(false)}
         width={1000}
       >
@@ -602,6 +517,7 @@ const Profile = () => {
             ))}
           </Steps>
         </Row>
+<<<<<<< HEAD
         {steps[current].title === "Үндсэн мэдээлэл" && (
           <div>
             <Row offset={4}>
@@ -730,6 +646,44 @@ const Profile = () => {
             </Row>
           </div>
         )}
+=======
+        {(steps[current].title === "Үндсэн мэдээлэл" && (
+          <MainInfo setMainData={setMainData} />
+        )) ||
+          (steps[current].title === "Үндсэн зураг" && <MainImage />) ||
+          (steps[current].title === "Зогсоолын зураг" && <SpaceImage />) ||
+          (steps[current].title === "Зогсоолын үзүүлэлт" && (
+            <SpaceIndicator />
+          )) ||
+          (steps[current].title === "Үнийн мэдээлэл" && <PriceInfo />) ||
+          (steps[current].title === "Хөнгөлөлт" && <Discount />) ||
+          (steps[current].title === "Түрээслэх өдрүүд" && <RentDate />)}
+
+        <Row style={{ marginLeft: "100px" }}>
+          <Col>
+            {current > 0 && (
+              <Button onClick={goBack} style={{ color: "blue" }}>
+                Буцах
+              </Button>
+            )}
+          </Col>
+          <Col offset={20}>
+            {current < steps.length - 1 && (
+              <Button onClick={onSaved} className="buttonGo">
+                Үргэлжлүүлэх
+              </Button>
+            )}
+            {current === steps.length - 1 && (
+              <Button
+                onClick={() => setIsParkVisible(false)}
+                className="buttonGo"
+              >
+                Дуусгах
+              </Button>
+            )}
+          </Col>
+        </Row>
+>>>>>>> 4dcdc2ac26482134f77c7b107b3bff99f796fb7c
       </Modal>
       ); }
     </ProfileLayout>

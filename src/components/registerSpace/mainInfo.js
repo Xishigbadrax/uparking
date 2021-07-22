@@ -4,6 +4,7 @@ import { useContext, useState } from "react";
 import { useEffect, useS } from "react";
 import { apiList, callGet, callPost } from "@api/api";
 import { Steps } from "antd";
+import Context from "@context/Context";
 
 import {
   withScriptjs,
@@ -60,7 +61,7 @@ const { SubMenu } = Menu;
 const { Content } = Layout;
 const { Option } = Select;
 const { Step } = Steps;
-const mainInfo = () => {
+const mainInfo = (setMainData) => {
   const [residenceData, setResidenceData] = useState({});
 
   const [aimag, setAimag] = useState([]);
@@ -76,63 +77,21 @@ const mainInfo = () => {
   const [DoorNo, setDoorNo] = useState();
   const [spaceNumber, setSpaceNumber] = useState();
   const [current, setCurrent] = useState(0);
+  const ctx = useContext(Context);
   useEffect(async () => {
     const aimag = await callGet("/address/aimag");
     console.log(aimag);
     setAimag(aimag);
     setSelectedAimag(aimag);
   }, []);
-
   function classNames(...classes) {
     return classes.filter(Boolean).join("  ");
   }
-
-  useEffect(async () => {
-    const sums = await callGet(`/address/sum/${selectedAimag.value}`);
-    console.log(sums);
-    setSum(sums);
-  }, [selectedAimag]);
-
-  useEffect(async () => {
-    const khoroo = await callGet(`/address/khoroo/${selectedSum.value}`);
-    console.log(khoroo);
-    setKhoroo(khoroo);
-  }, [selectedSum]);
-
-  useEffect(async () => {
-    const residence = await callGet(
-      `/address/residence?districtId=${selectedSum.value}&provinceId=${selectedAimag.value}&sectionId=${selectedKhoroo.value}`
-    );
-    setResidence(residence);
-    console.log("residence--->", residence);
-  }, [selectedKhoroo]);
-
-  useEffect(async () => {
-    const residenceBlock = await callGet(
-      `/address/residenceblock?residenceId=${selectedResidence.value}`
-    );
-    setResidenceBlock(residenceBlock);
-    console.log("residenceBlock--->", residenceBlock);
-  }, [selectedResidence]);
 
   const [isProfileNotEdit, setIsProfileNotEdit] = useState(true);
   const [isVehileVisible, setIsVehileVisible] = useState(false);
   const [isParkVisible, setIsParkVisible] = useState(false);
 
-  // const onFinish = (values) => {
-  //   console.log("Success:", values);
-  // };
-
-  // const onFinishFailed = (errorInfo) => {
-  //   console.log("Failed:", errorInfo);
-  // };
-  // const clickProfileEdit = () => {
-  //   if (isProfileNotEdit) {
-  //     setIsProfileNotEdit(false);
-  //   } else {
-  //     setIsProfileNotEdit(true);
-  //   }
-  // };
   const handleOk = async () => {
     console.log(formData);
     const res = await callPost("/user/vehicle", formData);
@@ -143,24 +102,35 @@ const mainInfo = () => {
   const handleCancel = () => {
     setIsVehileVisible(false);
   };
-  const onChangeAimag = (e) => {
+  const onChangeAimag = async (e) => {
     const aimag1 = aimag.find((item) => item.value === Number(e));
     setSelectedAimag(aimag1);
     setResidenceData({ ...residenceData, provinceId: aimag1.value });
+    const sums = await callGet(`/address/sum/${aimag1.value}`);
+    console.log(sums);
+    setSum(sums);
   };
 
-  const onChangeSum = (e) => {
+  const onChangeSum = async (e) => {
     const sum1 = sum.find((item) => item.value === Number(e));
     console.log(sum1);
     setSelectedSum(sum1);
     setResidenceData({ ...residenceData, districtId: sum1.value });
+    const khoroo = await callGet(`/address/khoroo/${sum1.value}`);
+    console.log(khoroo);
+    setKhoroo(khoroo);
   };
-  const onChangeKhoroo = (e) => {
+  const onChangeKhoroo = async (e) => {
     const horoo = khoroo.find((item) => item.value === Number(e));
     setSelectedKhoroo(horoo);
     setResidenceData({ ...residenceData, sectionId: horoo.value });
+    const residence = await callGet(
+      `/address/residence?districtId=${selectedSum.value}&provinceId=${selectedAimag.value}&sectionId=${horoo.value}`
+    );
+    setResidence(residence);
+    console.log("residence--->", residence);
   };
-  const onChangeResidence = (e) => {
+  const onChangeResidence = async (e) => {
     const residence1 = residence.find((item) => item.value === Number(e));
     setSelectedResidence(residence1);
 
@@ -170,6 +140,20 @@ const mainInfo = () => {
       residenceId: e,
     });
     console.log("nicee");
+    const residenceBlock = await callGet(
+      `/address/residenceblock?residenceId=${selectedResidence.value}`
+    );
+    setResidenceBlock(residenceBlock);
+    console.log("residenceBlock--->", residenceBlock);
+  };
+  const onChangeInputResidence = (e) => {
+    setResidenceData({ ...residenceData, residenceName: e.target.value });
+  };
+  const onChangeInputResidenceNumber = (e) => {
+    setResidenceData({
+      ...residenceData,
+      residenceBlockNumber: e.target.value,
+    });
   };
 
   const onChangeResidenceNumber = (e) => {
@@ -215,8 +199,13 @@ const mainInfo = () => {
     console.log("Failed:", errorInfo);
   };
 
+  const onFinish = (values) => {
+    console.log(values);
+    setMainData(residenceData);
+    ctx.setMainData(residenceData);
+  };
   return (
-    <div>
+    <div className={`h-5/6`}>
       <Row offset={4}>
         <p
           style={{
@@ -246,8 +235,12 @@ const mainInfo = () => {
             labelCol={{ span: 4 }}
             layout="horizontal"
             style={{ marginLeft: "100px", marginTop: "50px" }}
+            onFinish={onFinish}
           >
-            <Form.Item span={4}>
+            <Form.Item
+              span={4}
+              rules={[{ required: true, message: "Сонгоно уу?" }]}
+            >
               <Select onChange={onChangeAimag} placeholder="Хот,Aймаг *">
                 {aimag.map((item) => (
                   <Option key={item.value} value={item.value}>
@@ -283,6 +276,22 @@ const mainInfo = () => {
                 ))}
               </Select>
             </Form.Item>
+            {selectedResidence.label === "Бусад" && (
+              <div>
+                <Form.Item span={4}>
+                  <Input
+                    placeholder="Байрны нэрээ оруулна уу? "
+                    onChange={onChangeInputResidence}
+                  ></Input>
+                </Form.Item>
+                <Form.Item span={4}>
+                  <Input
+                    placeholder="Байрны дугаар оруулна уу?"
+                    onChange={onChangeInputResidenceNumber}
+                  ></Input>
+                </Form.Item>
+              </div>
+            )}
             <Form.Item span={4}>
               <Select
                 onChange={onChangeResidenceNumber}
@@ -295,6 +304,14 @@ const mainInfo = () => {
                 ))}
               </Select>
             </Form.Item>
+            {selectedResidenceBlock.label === "Бусад" && (
+              <Form.Item span={4}>
+                <Input
+                  placeholder="Байрны дугаар оруулна уу?"
+                  onChange={onChangeInputResidenceNumber}
+                ></Input>
+              </Form.Item>
+            )}
             <Form.Item span={4}>
               <Input
                 onChange={onChangeDoorNumber}
