@@ -18,7 +18,7 @@ export const ContextProvider = ({ children }) => {
 
   const checkPermission = (permission) => {
     // return state.permissions[permission] ? true : false;
-    return true;
+    return false;
   };
 
   const setMenuAndPermissions = async () => {
@@ -33,6 +33,7 @@ export const ContextProvider = ({ children }) => {
     // }
     // #region set permission
     const accessToken = Auth.getToken();
+    console.log(accessToken, "accessTokenaaaaaaa")
     if (accessToken == null || accessToken == "undefined") {
       router.push("/");
       return;

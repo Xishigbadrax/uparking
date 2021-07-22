@@ -2,7 +2,7 @@ const profileMenu = [
   {
     id: 1,
     name: 'Миний мэдээлэл',
-    link: 'a/profile',
+    link: 'park/profile',
     icon: 'UserOutlined',
     parentId: null
 
@@ -10,14 +10,14 @@ const profileMenu = [
   {
     id: 2,
     name: 'Хянах самбар',
-    link: 'a/profile/dashboard',
+    link: 'park/profile/dashboard',
     icon: 'AppstoreOutlined',
     parentId: null
   },
   {
     id: 3,
     name: 'Миний захиалга',
-    link: 'a/profile/order',
+    link: 'park/profile/order',
     icon: 'SettingOutlined',
     parentId: null
 
@@ -25,7 +25,7 @@ const profileMenu = [
   {
     id: 4,
     name: 'Тохиргоо',
-    link: 'a/profile/settings',
+    link: 'park/profile/settings',
     icon: 'SettingOutlined',
     parentId: null
 
@@ -33,7 +33,7 @@ const profileMenu = [
   {
     id: 5,
     name: 'Тусламж',
-    link: 'a/profile/help',
+    link: 'park/profile/help',
     icon: 'QuestionCircleOutlined',
     parentId: null
 

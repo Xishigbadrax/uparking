@@ -25,6 +25,7 @@ const Dashboard = () => {
   const disabledDate = (current) => {
     return current && current > moment().endOf('day');
   }
+  console.log( 'profileeeeeeeeeee')
   const getData = async (start_date, end_date) => {
     console.log('dashboard')
     ctx.setIsLoading(true);
@@ -32,8 +33,8 @@ const Dashboard = () => {
       // const data = await sList({
       //   code: apiList.dashboardCard, defaultParams: [{ key: "start_date", value: start_date }, { key: "end_date", value: end_date }]
       // });
-      // const data = [];
-      // setDashboardData(data?.data[0]);
+      const data = [];
+      setDashboardData(data?.data[0]);
     }
     ctx.setIsLoading(false);
   };
