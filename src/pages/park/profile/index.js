@@ -12,8 +12,6 @@ import { useEffect, useS } from "react";
 import { Steps } from "antd";
 import { apiList, callGet, callPost } from "@api/api";
 import Link from "next/link";
-<<<<<<< HEAD
-=======
 import MainInfo from "@components/registerSpace/mainInfo";
 import MainImage from "@components/registerSpace/mainImage";
 import SpaceImage from "@components/registerSpace/spaceImage";
@@ -22,7 +20,7 @@ import PriceInfo from "@components/registerSpace/priceInfo";
 import Discount from "@components/registerSpace/discount";
 import RentDate from "@components/registerSpace/rentDate";
 import Context from "@context/Context";
->>>>>>> 4dcdc2ac26482134f77c7b107b3bff99f796fb7c
+
 import {
   withScriptjs,
   withGoogleMap,
@@ -103,18 +101,20 @@ const Profile = () => {
     const color = await callGet("/user/vehicle/color");
     setColor(color);
 
-    const space = await callGet("/parkingspace/list");
-    setFormdata({ ...formData, rfid: 12 });
+    // const space = await callGet("/parkingspace/list");
+    setFormdata({ ...formData, rfid: "12" });
   }, []);
 
   function classNames(...classes) {
     return classes.filter(Boolean).join("  ");
   }
 
-  const onChangeUildver = (e) => {
+  const onChangeUildver = async (e) => {
     console.log("i am here-->", e);
     const uildver = uildwer.find((item) => item.value === e);
     setSelectedUildwer(uildver);
+    const model = await callGet(`/user/vehicle/model?maker=${uildver.label}`);
+    setZagwar(model);
     setFormdata({ ...formData, maker: uildver.value });
   };
   const onChangeZagwar = (e) => {
@@ -130,9 +130,9 @@ const Profile = () => {
   };
   const onChangeColor = (e) => {
     console.log(e);
-    const selectColor = e;
+    const selectColor = color.find((item) => item.label === e);
     setSelectedColor(selectColor);
-    setFormdata({ ...formData, color: selectColor });
+    setFormdata({ ...formData, color: selectColor.value });
   };
   const [isProfileNotEdit, setIsProfileNotEdit] = useState(true);
   const [isVehileVisible, setIsVehileVisible] = useState(false);
@@ -342,9 +342,10 @@ const Profile = () => {
         </Col>
       </Row>
       <Modal
-        className="fullModal"
+        className="fullModal "
         title="Тээврийн хэрэгсэл бүртгүүлэх"
         centered
+        style={{ minHeight: "800px", height: "auto" }}
         visible={isVehileVisible}
         okButtonProps={{
           form: "vehile-edit-form",
@@ -517,138 +518,8 @@ const Profile = () => {
             ))}
           </Steps>
         </Row>
-<<<<<<< HEAD
-        {steps[current].title === "Үндсэн мэдээлэл" && (
-          <div>
-            <Row offset={4}>
-              <p
-                style={{
-                  color: "blue",
-                  fontSize: "20px",
-                  marginTop: "50px",
-                  marginLeft: "100px",
-                }}
-              >
-                <b> Орон сууц хотхоны үндсэн мэдээлэл</b>
-              </p>
-            </Row>
-            <Row>
-              <p
-                style={{
-                  width: "300px",
-                  marginLeft: "100px",
-                  fontSize: "12px",
-                }}
-              >
-                Албан ёсны болон олон нийтийн нэршил болсон нэрийг ашиглана уу!
-              </p>
-            </Row>
-            <Row>
-              <Col span={10}>
-                <Form
-                  labelCol={{ span: 4 }}
-                  layout="horizontal"
-                  style={{ marginLeft: "100px", marginTop: "50px" }}
-                >
-                  <Form.Item span={4}>
-                    <Select onChange={onChangeAimag} placeholder="Хот,Aймаг *">
-                      {aimag.map((item) => (
-                        <Option key={item.value} value={item.value}>
-                          {item.label}
-                        </Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                  <Form.Item span={4}>
-                    <Select onChange={onChangeSum} placeholder="Сум,Дүүрэг *">
-                      {sum.map((item) => (
-                        <Option key={item.value} value={item.value}>
-                          {item.label}
-                        </Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                  <Form.Item span={4}>
-                    <Select onChange={onChangeKhoroo} placeholder="Баг,Хороо">
-                      {khoroo.map((item) => (
-                        <Option key={item.value} value={item.value}>
-                          {item.label}
-                        </Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                  <Form.Item span={4}>
-                    <Select
-                      onChange={onChangeResidence}
-                      placeholder="Байрны нэр"
-                    >
-                      {residence.map((item) => (
-                        <Option key={item.value} value={item.value}>
-                          {item.label}
-                        </Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                  <Form.Item span={4}>
-                    <Select
-                      onChange={onChangeResidenceNumber}
-                      placeholder="Байрны дугаар "
-                    >
-                      {residenceblock.map((item) => (
-                        <Option key={item.value} value={item.value}>
-                          {item.label}
-                        </Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                  <Form.Item span={4}>
-                    <Input
-                      onChange={onChangeDoorNumber}
-                      placeholder="Авто Зогсоолын хаалганы тоо "
-                    ></Input>
-                  </Form.Item>
-                  <Form.Item span={4}>
-                    <Input
-                      onChange={onChangeSpaceNumber}
-                      placeholder="Авто Зогсоолын дугаар "
-                    ></Input>
-                  </Form.Item>
-                </Form>
-                {/* <Form.Item>
-              <Button onClick={onSaved}>za uzii</Button>
-            </Form.Item> */}
-              </Col>
-              <Col offset={2} style={{ width: "800px", height: "600px" }}>
-                <MyMapComponent
-                  isMarkerShown
-                  googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
-                  loadingElement={<div style={{ height: `100%` }} />}
-                  containerElement={<div style={{ height: `400px` }} />}
-                  mapElement={<div style={{ height: `100%` }} />}
-                />
-              </Col>
-            </Row>
-            <Row style={{ marginLeft: "100px" }}>
-              <Col>
-                {current > 0 && (
-                  <Button onClick={goBack} style={{ color: "blue" }}>
-                    Буцах
-                  </Button>
-                )}
-              </Col>
-              <Col offset={16}>
-                {current < steps.length - 1 && (
-                  <Button onClick={onSaved} className="buttonGo">
-                    Үргэлжлүүлэх
-                  </Button>
-                )}
-              </Col>
-            </Row>
-          </div>
-        )}
-=======
         {(steps[current].title === "Үндсэн мэдээлэл" && (
-          <MainInfo setMainData={setMainData} />
+          <MainInfo setMainData={setMainData} onChange={onSaved} />
         )) ||
           (steps[current].title === "Үндсэн зураг" && <MainImage />) ||
           (steps[current].title === "Зогсоолын зураг" && <SpaceImage />) ||
@@ -683,9 +554,8 @@ const Profile = () => {
             )}
           </Col>
         </Row>
->>>>>>> 4dcdc2ac26482134f77c7b107b3bff99f796fb7c
       </Modal>
-      ); }
+      );
     </ProfileLayout>
   );
 };

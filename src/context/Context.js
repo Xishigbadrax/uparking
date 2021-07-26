@@ -33,7 +33,7 @@ export const ContextProvider = ({ children }) => {
     // }
     // #region set permission
     const accessToken = Auth.getToken();
-    console.log(accessToken, "accessTokenaaaaaaa")
+    console.log(accessToken, "accessTokenaaaaaaa");
     if (accessToken == null || accessToken == "undefined") {
       router.push("/");
       return;
