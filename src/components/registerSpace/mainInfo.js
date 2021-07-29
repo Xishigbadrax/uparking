@@ -91,17 +91,15 @@ const mainInfo = (props) => {
     console.log(aimag);
     setAimag(aimag);
   }, []);
+
+  useEffect(() => {
+    props.setMainData(residenceData);
+  }, [residenceData]);
+
   function classNames(...classes) {
     return classes.filter(Boolean).join("  ");
   }
 
-  const [isProfileNotEdit, setIsProfileNotEdit] = useState(true);
-  const [isVehileVisible, setIsVehileVisible] = useState(false);
-  const [isParkVisible, setIsParkVisible] = useState(false);
-
-  const handleCancel = () => {
-    setIsVehileVisible(false);
-  };
   const onChangeAimag = async (e) => {
     const aimag1 = aimag.find((item) => item.value === Number(e));
     setSelectedAimag(aimag1);
@@ -154,7 +152,6 @@ const mainInfo = (props) => {
       residenceBlockNumber: e.target.value,
     });
   };
-
   const onChangeResidenceNumber = (e) => {
     const resiblock = residenceblock.find((item) => item.value === Number(e));
     setSelectedResidenceBlock(resiblock);
@@ -171,7 +168,6 @@ const mainInfo = (props) => {
   const onChangeDoorNumber = (e) => {
     console.log(e.target.value);
     setDoorNo(e.target.value);
-
     setResidenceData({
       ...residenceData,
       parkingGateNumber: e.target.value,
@@ -185,24 +181,12 @@ const mainInfo = (props) => {
     });
     console.log(residenceData);
   };
-
-  //   const onSaved = async () => {
-  //     const res = callPost("/parkingfirst", residenceData);
-  //     setCurrent(current + 1);
-  //     console.log("success", res);
-  //   };
-  //   const goBack = () => {
-  //     console.log("Bye");
-  //     setCurrent(current - 1);
-  //   };
   const onFinishFailedVehile = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
-
-  const onFinish = (values) => {
-    console.log(values);
-    props.setMainData(residenceData);
-  };
+  // const onFinish = (values) => {
+  //   console.log(values);
+  // };
   return (
     <div className={`h-5/6`}>
       <Row offset={4}>
@@ -231,13 +215,16 @@ const mainInfo = (props) => {
       <Row>
         <Col span={10}>
           <Form
-            form={form}
             layout="horizontal"
+            form={props.form}
             style={{ marginLeft: "100px", marginTop: "50px" }}
-            onFinish={onFinish}
+            onFinish={props.onFinish}
             onFinishFailed={onFinishFailedVehile}
           >
-            <Form.Item rules={[{ required: true, message: "Choose value" }]}>
+            <Form.Item
+              name="aimag"
+              rules={[{ required: true, message: "Choose value" }]}
+            >
               <Select
                 onChange={onChangeAimag}
                 placeholder="Аймаг хот*"
@@ -252,6 +239,7 @@ const mainInfo = (props) => {
               <Divider />
             </Form.Item>
             <Form.Item
+              name="sum"
               rules={[{ required: true, message: "Choose province " }]}
               style={{ marginTop: "-10px" }}
             >
@@ -265,6 +253,7 @@ const mainInfo = (props) => {
               <Divider />
             </Form.Item>
             <Form.Item
+              name="bag"
               rules={[{ required: true, message: "Choose value" }]}
               style={{ marginTop: "-10px" }}
             >
@@ -278,6 +267,7 @@ const mainInfo = (props) => {
               <Divider />
             </Form.Item>
             <Form.Item
+              name="residenceName"
               rules={[{ required: true, message: "Choose value" }]}
               style={{ marginTop: "-10px" }}
             >
@@ -290,16 +280,20 @@ const mainInfo = (props) => {
               </Select>
               <Divider />
             </Form.Item>
+
             {selectedResidence.label === "Бусад" ? (
               <div>
-                <Form.Item style={{ marginTop: "-10px" }}>
+                <Form.Item name="residenceName" style={{ marginTop: "-10px" }}>
                   <Input
                     onChange={onChangeInputResidence}
                     placeholder="Байрны нэр "
                   />
                   <Divider />
                 </Form.Item>
-                <Form.Item style={{ marginTop: "-10px" }}>
+                <Form.Item
+                  name="residenceNumber"
+                  style={{ marginTop: "-10px" }}
+                >
                   <Input
                     onChange={onChangeInputResidenceNumber}
                     placeholder="Байрны дугаар "
@@ -309,6 +303,7 @@ const mainInfo = (props) => {
               </div>
             ) : (
               <Form.Item
+                name="residenceNumber"
                 rules={[{ required: true, message: "Choose value" }]}
                 style={{ marginTop: "-10px" }}
               >
@@ -326,7 +321,11 @@ const mainInfo = (props) => {
               </Form.Item>
             )}
             {selectedResidenceBlock === "Бусад" && (
-              <Form.Item style={{ marginTop: "-10px" }}>
+              <Form.Item
+                style={{ marginTop: "-10px" }}
+                name="haalgaNumber"
+                rules={[{ required: true, message: "Utgaa oruulna uu?" }]}
+              >
                 <Input
                   placeholder="Авто зогсоолын хаалганы тоо"
                   onChange={onChangeInputResidenceNumber}
@@ -334,14 +333,18 @@ const mainInfo = (props) => {
                 <Divider />
               </Form.Item>
             )}
-            <Form.Item style={{ marginTop: "-10px" }}>
+            <Form.Item
+              style={{ marginTop: "-10px" }}
+              name="DoorNo"
+              rules={[{ required: true, message: "error" }]}
+            >
               <Input
                 placeholder="Авто зогсоолын хаалганы тоо"
                 onChange={onChangeDoorNumber}
               />
               <Divider />
             </Form.Item>
-            <Form.Item>
+            <Form.Item name="spaceNumber ">
               <Input
                 onChange={onChangeSpaceNumber}
                 placeholder="Авто зогсоолын дугаар"
@@ -386,22 +389,6 @@ const mainInfo = (props) => {
           />
         </Col>
       </Row>
-      {/* <Row style={{ marginLeft: "100px" }}>
-        <Col>
-          {current > 0 && (
-            <Button onClick={goBack} style={{ color: "blue" }}>
-              Буцах
-            </Button>
-          )}
-        </Col>
-        <Col offset={16}>
-          {current < steps.length - 1 && (
-            <Button onClick={onSaved} className="buttonGo">
-              Үргэлжлүүлэх
-            </Button>
-          )}
-        </Col>
-      </Row> */}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { Row, Col } from "antd";
+import { Row, Col, Divider } from "antd";
 import { Form, Input } from "antd";
 const discount = () => {
   return (
@@ -32,13 +32,15 @@ const discount = () => {
               <label style={{ fontSize: "12px" }}>
                 7 хоногын захиалга - Хөнгөлөлтийн %
               </label>
-              <Input placeholder="5%"></Input>
+              <Input placeholder="5%" style={{ marginTop: "20px" }}></Input>
+              <Divider />
             </Form.Item>
-            <Form.Item>
+            <Form.Item style={{ marginTop: "20px" }}>
               <label style={{ fontSize: "12px" }}>
                 1 сарын захиалга - Хөнгөлөлтийн %
               </label>
-              <Input placeholder="10%"></Input>
+              <Input placeholder="10%" style={{ marginTop: "20px" }}></Input>
+              <Divider />
             </Form.Item>
           </Form>
         </Col>

@@ -110,6 +110,7 @@ function monthCellRender(value) {
 }
 const rentDate = () => {
   const [filterType, setFilterType] = useState("");
+  const [dayValue, setDayValue] = useState({});
   useEffect(async () => {
     // const timeSplit = await callGet("/parkingspace/timesplit");
     // console.log(timeSplit);
@@ -149,8 +150,8 @@ const rentDate = () => {
               //   }`}
               style={{
                 backgroundColor: "#33FFFC",
-                color: "#0DE306",
-                border: "1px solid #33FFBE",
+                color: "#76E8AA",
+                border: "1px solid #00F9B8",
               }}
             >
               AV
@@ -191,24 +192,40 @@ const rentDate = () => {
                 {item.label}
               </Col>
               <Col span={6} offset={1}>
-                <Select span={6} className={`w-32`}>
+                <select span={6} className={`w-32 DAY `}>
                   {timeSplit.map((item) => (
-                    <Select.Option key={item.id}>{item.name}</Select.Option>
+                    <option key={item.id}>{item.name}</option>
                   ))}
-                </Select>
+                </select>
               </Col>
               <Col span={6} offset={1}>
-                <Select span={6} className={`w-32`}>
+                <select span={6} className={`w-32 DAY`}>
                   {timeSplit.map((item) => (
-                    <Select.Option key={item.id}>{item.name}</Select.Option>
+                    <option key={item.id}>{item.name}</option>
                   ))}
-                </Select>
+                </select>
               </Col>
             </Row>
           ))}
         </Col>
         <Col offset={2}>
-          <div style={{ width: "720px", height: "388px" }}>
+          <div style={{ width: "720px", height: "388px", display: "flex" }}>
+            <div style={{ marginTop: "90px" }}>
+              <p>Өглөө </p>
+              <p>Орой</p>
+              <p>Өглөө </p>
+              <p>Орой</p>
+              <p>Өглөө </p>
+              <p>Орой</p>
+              <p>Өглөө </p>
+              <p>Орой</p>
+              <p>Өглөө </p>
+              <p>Орой</p>
+              <p>Өглөө </p>
+              <p>Орой</p>
+              <p>Өглөө </p>
+              <p>Орой</p>
+            </div>
             <Calendar
               className={`ant-picker-cell ant-picker-cell-in-view`}
               dateCellRender={dateCellRender}

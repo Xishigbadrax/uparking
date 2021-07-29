@@ -1749,6 +1749,11 @@
   .ant-form-item-control-input{
     border-color: #fff;
   }
+  
+   .placeholder {
+    color: red !important;
+  }
+
   .ant-upload.ant-upload-select-picture-card {
     width: 400px;
     height: 200px ;
@@ -1773,4 +1778,18 @@
   }
 .ant-divider-horizontal{
   margin: 10px 0  !important;
+  margin-top: 10px;
+}
+
+.fullModal .ant-modal-content {
+  height: auto !important;
+}
+ .DAY{
+  border: 1px solid black !important;
+  background-color: gray !important;
+  border-radius: 20px !important;
+}
+.ant-form-item-control-input-content{
+   height: 30px;
+   margin-top: 10px;
 }

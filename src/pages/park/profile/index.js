@@ -6,7 +6,16 @@ import {
   ArrowRightOutlined,
 } from "@ant-design/icons";
 import ProfileLayout from "@components/layouts/ProfileLayout";
-import { Modal, Button, Form, Input, Checkbox, Layout, Select } from "antd";
+import {
+  Modal,
+  Button,
+  Form,
+  Input,
+  Checkbox,
+  Layout,
+  Select,
+  Divider,
+} from "antd";
 import { useContext, useState, useRef } from "react";
 import { useEffect, useS } from "react";
 import { Steps } from "antd";
@@ -56,10 +65,6 @@ const steps = [
     content: "Зогсоолын зураг",
   },
   {
-    title: "Зогсоолын зураг",
-    content: "Зогсоолын зураг",
-  },
-  {
     title: "Зогсоолын үзүүлэлт",
     content: "Зогсоолын зураг",
   },
@@ -79,7 +84,7 @@ const steps = [
 
 const Profile = () => {
   const [formData, setFormdata] = useState({});
-  const [residenceData, setResidenceData] = useState({});
+  // const [residenceData, setResidenceData] = useState({});
   const [dugaar, setDugaar] = useState();
   const [space, setSpace] = useState([]);
   const [uildwer, setUildwer] = useState([]);
@@ -91,8 +96,35 @@ const Profile = () => {
   const [selectedColor, setSelectedColor] = useState({});
   const [vehicles, setVehicles] = useState([]);
   const [current, setCurrent] = useState(0);
-  const ctx = useContext(Context);
+  // const ctx = useContext(Context);
+
+  const [residenceData, setResidenceData] = useState({});
+  const [aimag, setAimag] = useState([]);
+  const [selectedAimag, setSelectedAimag] = useState({});
+  const [sum, setSum] = useState([]);
+  const [selectedSum, setSelectedSum] = useState({});
+  const [khoroo, setKhoroo] = useState([]);
+  const [selectedKhoroo, setSelectedKhoroo] = useState({});
+  const [residence, setResidence] = useState([]);
+  const [selectedResidence, setSelectedResidence] = useState({});
+  const [residenceblock, setResidenceBlock] = useState([]);
+  const [selectedResidenceBlock, setSelectedResidenceBlock] = useState({});
+  const [DoorNo, setDoorNo] = useState();
+  const [spaceNumber, setSpaceNumber] = useState();
+  const [isProfileNotEdit, setIsProfileNotEdit] = useState(true);
+  const [isVehileVisible, setIsVehileVisible] = useState(false);
+  const [isParkVisible, setIsParkVisible] = useState(false);
+  const mainInfoRef = useRef(null);
+  const [form] = Form.useForm();
+
+  const onFinish1234 = (values) => {
+    console.log(values);
+  };
+
   useEffect(async () => {
+    const aimag = await callGet("/address/aimag");
+    console.log(aimag);
+    setAimag(aimag);
     const data = await callGet("/user/vehicle/list");
     setVehicles(data);
     const uildwer = await callGet("/user/vehicle/maker");
@@ -100,7 +132,6 @@ const Profile = () => {
     setUildwer(uildwer);
     const color = await callGet("/user/vehicle/color");
     setColor(color);
-
     // const space = await callGet("/parkingspace/list");
     setFormdata({ ...formData, rfid: "12" });
   }, []);
@@ -134,11 +165,8 @@ const Profile = () => {
     setSelectedColor(selectColor);
     setFormdata({ ...formData, color: selectColor.value });
   };
-  const [isProfileNotEdit, setIsProfileNotEdit] = useState(true);
-  const [isVehileVisible, setIsVehileVisible] = useState(false);
-  const [isParkVisible, setIsParkVisible] = useState(false);
 
-  const [mainData, setMainData] = useState();
+  const [mainData, setMainData] = useState(null);
   const onFinish = (values) => {
     console.log("Success:", values);
   };
@@ -164,10 +192,15 @@ const Profile = () => {
     setIsVehileVisible(false);
   };
 
-  const onSaved = async () => {
-    console.log("mainData", mainData);
+  const onClickContinue = async () => {
+    // if (steps === "Үндсэн мэдээлэл") {
+    console.log("mainData11111111111", mainData);
+    console.log(":mainInfoRef", mainInfoRef);
+    console.log(form.validateFields());
+    // }
+    // return;
     // const res = callPost("/parkingfirst", residenceData);
-    setCurrent(current + 1);
+    // setCurrent(current + 1);
     // console.log("success", res);
   };
   const goBack = () => {
@@ -401,6 +434,7 @@ const Profile = () => {
                     ]}
                   >
                     <Input onChange={onChangeDugaar} />
+                    <Divider />
                   </Form.Item>
                   <Form.Item
                     label="Үйлдвэр"
@@ -423,6 +457,7 @@ const Profile = () => {
                         </Option>
                       ))}
                     </Select>
+                    <Divider />
                   </Form.Item>
                   <Form.Item
                     label="Загвар"
@@ -445,6 +480,7 @@ const Profile = () => {
                         </Option>
                       ))}
                     </Select>
+                    <Divider />
                   </Form.Item>
                   <Form.Item
                     label="Өнгө"
@@ -461,18 +497,8 @@ const Profile = () => {
                         <Option value={item.label}>{item.label}</Option>
                       ))}
                     </Select>
+                    <Divider />
                   </Form.Item>
-                  {/* 
-                  <Form.Item
-                    wrapperCol={{
-                      offset: 8,
-                      span: 16,
-                    }}
-                  >
-                    <Button type="primary" htmlType="submit">
-                      Submit
-                    </Button>
-                  </Form.Item> */}
                 </Form>
               </Col>
               <Col span={14}>
@@ -519,7 +545,11 @@ const Profile = () => {
           </Steps>
         </Row>
         {(steps[current].title === "Үндсэн мэдээлэл" && (
-          <MainInfo setMainData={setMainData} onChange={onSaved} />
+          <MainInfo
+            setMainData={setMainData}
+            form={form}
+            onFinish={onFinish1234}
+          />
         )) ||
           (steps[current].title === "Үндсэн зураг" && <MainImage />) ||
           (steps[current].title === "Зогсоолын зураг" && <SpaceImage />) ||
@@ -540,7 +570,7 @@ const Profile = () => {
           </Col>
           <Col offset={20}>
             {current < steps.length - 1 && (
-              <Button onClick={onSaved} className="buttonGo">
+              <Button onClick={onClickContinue} className="buttonGo">
                 Үргэлжлүүлэх
               </Button>
             )}
