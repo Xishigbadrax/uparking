@@ -1,6 +1,6 @@
 import { Col, Row, Input } from "antd";
 import { useEffect, useState } from "react";
-import { useMutate } from "restful-react";
+
 import { Upload, message } from "antd";
 import { Spin } from "antd";
 import { Image } from "next/image";

@@ -117,9 +117,7 @@ const Profile = () => {
   const mainInfoRef = useRef(null);
   const [form] = Form.useForm();
 
-  const onFinish1234 = (values) => {
-    console.log(values);
-  };
+  const onFinish1234 = (values) => {};
 
   useEffect(async () => {
     const aimag = await callGet("/address/aimag");
@@ -139,7 +137,11 @@ const Profile = () => {
   function classNames(...classes) {
     return classes.filter(Boolean).join("  ");
   }
-
+  const onSavedSpaceFormData = async () => {
+    console.log(mainData);
+    const res = await callPost("/parkingfirst", mainData);
+    console.log(res);
+  };
   const onChangeUildver = async (e) => {
     console.log("i am here-->", e);
     const uildver = uildwer.find((item) => item.value === e);
@@ -197,6 +199,9 @@ const Profile = () => {
     console.log("mainData11111111111", mainData);
     console.log(":mainInfoRef", mainInfoRef);
     console.log(form.validateFields());
+    {
+      form.getFieldError() ? null : setCurrent(current + 1);
+    }
     // }
     // return;
     // const res = callPost("/parkingfirst", residenceData);
@@ -213,6 +218,20 @@ const Profile = () => {
   const onclickOk = () => {
     console.log("xaxa");
   };
+  // {
+  //   "districtId": 0,
+  //   "latitude": 0,
+  //   "longitude": 0,
+  //   "parkingGateNumber": "string",
+  //   "parkingSpaceGarageNumber": "string",
+  //   "parkingSpaceId": 0,
+  //   "provinceId": 0,
+  //   "residenceBlockId": 0,
+  //   "residenceBlockNumber": "string",
+  //   "residenceId": 0,
+  //   "residenceName": "string",
+  //   "sectionId": 0
+  // }
 
   return (
     <ProfileLayout>
@@ -575,10 +594,7 @@ const Profile = () => {
               </Button>
             )}
             {current === steps.length - 1 && (
-              <Button
-                onClick={() => setIsParkVisible(false)}
-                className="buttonGo"
-              >
+              <Button onClick={onSavedSpaceFormData} className="buttonGo">
                 Дуусгах
               </Button>
             )}

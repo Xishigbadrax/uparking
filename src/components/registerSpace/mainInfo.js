@@ -70,13 +70,12 @@ const { Content } = Layout;
 const { Option } = Select;
 const { Step } = Steps;
 const mainInfo = (props) => {
-  const [form] = Form.useForm();
   const [InputResidenceData, setInputResidenceData] = useState({});
   const [residenceData, setResidenceData] = useState({});
   const [aimag, setAimag] = useState([]);
-  const [selectedAimag, setSelectedAimag] = useState({});
+  const [provinceId, setSelectedAimag] = useState({});
   const [sum, setSum] = useState([]);
-  const [selectedSum, setSelectedSum] = useState({});
+  const [districtId, setSelectedSum] = useState({});
   const [khoroo, setKhoroo] = useState([]);
   const [selectedKhoroo, setSelectedKhoroo] = useState({});
   const [residence, setResidence] = useState([]);
@@ -103,7 +102,13 @@ const mainInfo = (props) => {
   const onChangeAimag = async (e) => {
     const aimag1 = aimag.find((item) => item.value === Number(e));
     setSelectedAimag(aimag1);
-    setResidenceData({ ...residenceData, provinceId: aimag1.value });
+    setResidenceData({
+      ...residenceData,
+      provinceId: aimag1.value,
+      latitude: 12,
+      longitude: 10293,
+      parkingSpaceGarageNumber: "axaxa",
+    });
     const sums = await callGet(`/address/sum/${aimag1.value}`);
     console.log(sums);
     setSum(sums);
@@ -123,7 +128,7 @@ const mainInfo = (props) => {
     setSelectedKhoroo(horoo);
     setResidenceData({ ...residenceData, sectionId: horoo.value });
     const residence = await callGet(
-      `/address/residence?districtId=${selectedSum.value}&provinceId=${selectedAimag.value}&sectionId=${horoo.value}`
+      `/address/residence?districtId=${districtId.value}&provinceId=${provinceId.value}&sectionId=${horoo.value}`
     );
     setResidence(residence);
     console.log("residence--->", residence);
@@ -161,8 +166,7 @@ const mainInfo = (props) => {
     });
     setResidenceData({
       ...residenceData,
-      residenceBlockNumber: e,
-      residenceBlockId: e,
+      residenceBlockNumber: resiblock.label,
     });
   };
   const onChangeDoorNumber = (e) => {
@@ -213,7 +217,7 @@ const mainInfo = (props) => {
         </p>
       </Row>
       <Row>
-        <Col span={10}>
+        <Col span={9}>
           <Form
             layout="horizontal"
             form={props.form}
@@ -222,13 +226,14 @@ const mainInfo = (props) => {
             onFinishFailed={onFinishFailedVehile}
           >
             <Form.Item
-              name="aimag"
-              rules={[{ required: true, message: "Choose value" }]}
+              name="provinceId"
+              rules={[{ required: true, message: "Аймаг хотоо сонгоно уу?" }]}
+              valuePropName={Select.Option}
             >
               <Select
                 onChange={onChangeAimag}
                 placeholder="Аймаг хот*"
-                bordered="none"
+                name="provinceId"
               >
                 {aimag.map((item) => (
                   <Select.Option key={item.value} value={item.value}>
@@ -239,9 +244,13 @@ const mainInfo = (props) => {
               <Divider />
             </Form.Item>
             <Form.Item
-              name="sum"
-              rules={[{ required: true, message: "Choose province " }]}
-              style={{ marginTop: "-10px" }}
+              name="districtId"
+              rules={[
+                {
+                  required: true,
+                  message: "Сум болон дүүргийн мэдээллээ сонгоно уу ? ",
+                },
+              ]}
             >
               <Select onChange={onChangeSum} placeholder="Сум дүүрэг">
                 {sum.map((item) => (
@@ -253,9 +262,13 @@ const mainInfo = (props) => {
               <Divider />
             </Form.Item>
             <Form.Item
-              name="bag"
-              rules={[{ required: true, message: "Choose value" }]}
-              style={{ marginTop: "-10px" }}
+              name="sectionId"
+              rules={[
+                {
+                  required: true,
+                  message: "Баг хорооны мэдээллээ оруулна уу?",
+                },
+              ]}
             >
               <Select onChange={onChangeKhoroo} placeholder="Баг Хороо">
                 {khoroo.map((item) => (
@@ -269,7 +282,6 @@ const mainInfo = (props) => {
             <Form.Item
               name="residenceName"
               rules={[{ required: true, message: "Choose value" }]}
-              style={{ marginTop: "-10px" }}
             >
               <Select onChange={onChangeResidence} placeholder="Байрны нэр*">
                 {residence.map((item) => (
@@ -290,10 +302,7 @@ const mainInfo = (props) => {
                   />
                   <Divider />
                 </Form.Item>
-                <Form.Item
-                  name="residenceNumber"
-                  style={{ marginTop: "-10px" }}
-                >
+                <Form.Item name="residenceNumber">
                   <Input
                     onChange={onChangeInputResidenceNumber}
                     placeholder="Байрны дугаар "
@@ -305,7 +314,6 @@ const mainInfo = (props) => {
               <Form.Item
                 name="residenceNumber"
                 rules={[{ required: true, message: "Choose value" }]}
-                style={{ marginTop: "-10px" }}
               >
                 <Select
                   placeholder="Байрны дугаар*"
@@ -322,7 +330,6 @@ const mainInfo = (props) => {
             )}
             {selectedResidenceBlock === "Бусад" && (
               <Form.Item
-                style={{ marginTop: "-10px" }}
                 name="haalgaNumber"
                 rules={[{ required: true, message: "Utgaa oruulna uu?" }]}
               >
@@ -334,7 +341,6 @@ const mainInfo = (props) => {
               </Form.Item>
             )}
             <Form.Item
-              style={{ marginTop: "-10px" }}
               name="DoorNo"
               rules={[{ required: true, message: "error" }]}
             >
@@ -353,7 +359,7 @@ const mainInfo = (props) => {
             </Form.Item>
           </Form>
         </Col>
-        <Col offset={2} style={{ width: "800px", height: "600px" }}>
+        <Col offset={2} span={10}>
           <Row style={{ fontSize: "18px" }}>
             Хамгийн нарийвчлалтайгаар авто зогсоолын орох хаалгыг{" "}
             <b>“Google Map” дээр</b> тэмдэглэнэ үү!
