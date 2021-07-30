@@ -441,7 +441,17 @@
 
 }
 
-
+.profileDropdown{
+    color:white;
+    font-size: 20px;
+    padding-top: 18px;
+    svg{
+        font-size: 18px;
+    }
+}
+.profileDropdownPopup{
+    margin-top: 21px;
+}
 
 .events {
   margin: 0;

@@ -5,7 +5,8 @@ const defaultMsg = {
   formErrorTxt: 'Формын утгыг үнэн зөв бөглөнө үү.',
   loginSuccessTxt: 'Амжилттай.',
   loginErrorTxt: 'Нэвтрэх нэр эсвэл нууц үг буруу байна.',
-  newDeviceConfirmErrorTxt: 'Та шинэ төхөөрөмжөөс хандалт хийж байгаа тул баталгаажуулалт хийнэ үү.'
+  newDeviceConfirmErrorTxt: 'Та шинэ төхөөрөмжөөс хандалт хийж байгаа тул баталгаажуулалт хийнэ үү.',
+  dataError: 'Мэдээлэл дуудахад алдаа гарлаа'
 };
 
 const dataType = {

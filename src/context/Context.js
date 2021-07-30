@@ -5,11 +5,14 @@ import Auth from "@utils/auth";
 import { useRouter } from "next/router";
 import { apiList, sList } from "@api/api";
 import { profileMenu } from "@constants/profilemenu";
+import { callGet } from "@api/api";
 
 const Context = createContext();
 
 export const ContextProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [username, setUsername] = useState('');
+  const [userProfileImgPath, setUserProfileImgPath] = useState('');
   const [menuOpenKeys, setMenuOpenKeys] = useState([]);
 
   const initialState = { auth: {}, menus: [], permissions: {} };
@@ -21,6 +24,29 @@ export const ContextProvider = ({ children }) => {
     return false;
   };
 
+  useEffect(() => {
+    const getProfileData = async () => {
+      const token = Auth.getToken() || null;
+      let user = {};
+      if (token !== null) {
+        user = jwt_decode(token);
+        const userdata = await callGet(`/user/${user.user_id}/test`)
+        if (!userdata || userdata === undefined) {
+          showMessage(messageType.FAILED.type, defaultMsg.dataError);
+          return;
+        }
+        if (userdata.lastName !== undefined) {
+          setUsername(userdata.lastName.charAt(0) + ". " + userdata.firstName)
+          setUserProfileImgPath(userdata.imageProfile)
+        }
+      }
+    }
+    getProfileData();
+
+  }, [])
+
+
+
   const setMenuAndPermissions = async () => {
     // if (
     //   router.pathname === "/" ||
@@ -31,24 +57,28 @@ export const ContextProvider = ({ children }) => {
     // ) {
     //   return;
     // }
-    // #region set permission
+
     const accessToken = Auth.getToken();
-    console.log(accessToken, "accessTokenaaaaaaa")
-    if (accessToken == null || accessToken == "undefined") {
-      router.push("/");
-      return;
-    }
-    const user = jwt_decode(accessToken);
+    // let role = "admin";
     let permissionList = {};
-    if (user.authorities !== undefined) {
-      user.authorities.map((auths) => {
-        permissionList[auths] = auths;
-      });
+    if (router.pathname.startsWith("/park")) {
+      if (accessToken == null || accessToken == 'undefined') {
+        router.push('/login');
+        return;
+      } else {
+        const user = jwt_decode(accessToken);
+
+        if (user.authorities !== undefined) {
+          user.authorities.map((auths) => {
+            permissionList[auths] = auths;
+          });
+        }
+      }
     }
 
     dispatch({
-      type: "PERMISSIONS",
-      payload: permissionList,
+      type: 'PERMISSIONS',
+      payload: permissionList
     });
     // #endregion
 
@@ -103,6 +133,8 @@ export const ContextProvider = ({ children }) => {
         dispatch,
         setMenuAndPermissions,
         checkPermission,
+        username,
+        userProfileImgPath
       }}
     >
       {children}
