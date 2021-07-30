@@ -1,14 +1,12 @@
-
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import '~antd/dist/antd.css';
-@import '../fonts/ptsans/ptsans.min.css';
-@import './login.css';
-@import './theme.css';
-@import './custom.css';
-@import './error.css';
-@import './font.css';
-@import './home.css';
+@import "~antd/dist/antd.css";
+@import "../fonts/ptsans/ptsans.min.css";
+@import "./login.css";
+@import "./theme.css";
+@import "./custom.css";
+@import "./error.css";
+@import "./font.css";
+@import "./home.css";

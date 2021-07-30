@@ -6,7 +6,7 @@ import Sidebar from './Sidebar';
 import Context from '@context/Context';
 import { LoadingOutlined } from '@ant-design/icons';
 
-const { Content, Footer } = Layout;
+const { Content } = Layout;
 
 const ProfileLayout = ({ children, title, className }) => {
   const { isLoading, setIsLoading } = useContext(Context);
@@ -14,17 +14,15 @@ const ProfileLayout = ({ children, title, className }) => {
 
   return (
     <Spin indicator={antIcon} tip="Таны хүсэлтийг боловсруулж байна. Түр хүлээнэ үү..." spinning={isLoading}>
-      <Layout>
+      <Layout style={{maxWidth: "1200px", margin: "auto"}} className={"profileLayout"}>
         <LoadingBar color='#109720' progress={isLoading ? 70 : 100} />
         <Sidebar />
-        <Layout>
+        <Layout style={{background:"none"}}>
           {/* <Header /> */}
-          <Content className={className !== undefined ? className : "main-content"}>
+          <Content className={"profileContent"}>
             {title && <h1 className="main-title">{title}</h1>}
             {children}
           </Content>
-          <Footer style={{ textAlign: 'center' }}>
-          </Footer>
         </Layout>
       </Layout>
     </Spin>

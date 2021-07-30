@@ -33,7 +33,7 @@ body {
 .ant-menu.ant-menu-dark,
 .ant-menu-dark .ant-menu-sub,
 .ant-menu.ant-menu-dark .ant-menu-sub {
-  background: #2c2e3e;
+  /* background: #2c2e3e; */
 }
 
 .ant-menu-dark .ant-menu-item,
@@ -70,10 +70,10 @@ body {
 
 .main-content {
   min-height: 80vh;
-  padding: 20px;
+  /* padding: 20px;
   margin: 20px 20px 20px 275px;
   background-color: #fff;
-  border: 1px solid #eadfcc;
+  border: 1px solid #eadfcc; */
 }
 
 .main-content-no-back {

@@ -62,12 +62,11 @@ const callPost = async (command, data) => {
   const result = await baseAxios.post(command, data);
   if (result.status === 403) {
     showMessage(messageType.FAILED.type, result.message);
-    return;
+    return result.message;
   }
-
   if (result.status !== 200 || !result.data) {
     showMessage(messageType.FAILED.type, defaultMsg.error);
-    return;
+    return defaultMsg.error;
   }
 
   const resultData = result.data;
@@ -88,43 +87,7 @@ const callPost = async (command, data) => {
 };
 
 const apiList = {
-  set: "set",
-  dsList: "dsList",
-  adminProfile: "adminProfile",
-  adminMenu: "adminMenu",
-  statAddress: "statAddress",
-  statAge: "statAge",
-  statUsersByYear: "statUsersByYear",
-  statUsersBySeason: "statUsersBySeason",
-  statUsersByMonth: "statUsersByMonth",
-  statUsersByWeek: "statUsersByWeek",
-  statBalance: "statBalance",
-  statBroker: "statBroker",
-  dashboardCard: "dashboardCard",
-  moreUserFileList: "moreUserFileList",
-  formInfo: "/ds/crud/list/config",
-  permission: "permission",
-  permissionSelected: "permissionSelected",
-  rolePermissionCreate: "rolePermissionCreate",
-  reloadPermission: "/ds/crud/reload/permission",
-  changePassword: "/user/change/password",
-  userDepositNotification: "userDepositNotification",
-  userDepositQPayInvoices: "userDepositQpayInvoices",
-  callRegUserInfo:"callRegUserInfo",
-  callCreate:"/call/create",
-  loanInfoReport:"loanInfoReport",
-  configUpdate: "/config/update",
-  loanUserInfo:"loanUserInfo",
-  loanSingle:"/loan/single",
-  loanSavingInfo:"/loan/saving/info",
-  chartUser:"chartUser",
-  chartGender:"chartGender",
-  chartAge:"chartAge",
-  chartBank:"chartBank",
-  chartActiveLoan:"chartActiveLoan",
-  chartAimag:"chartAimag",
-  chartSoum:"chartSoum",
-  chartLoanIssued:"chartLoanIssued",
+  userUpdate: "/user/update",
 };
 
 export { sListInfo, sList, deleteSList, callGet, callPost, execData, apiList };

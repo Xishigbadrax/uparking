@@ -63,10 +63,55 @@ const dateTimePickerLocale = {
     locale: "mn_MN",
     dateTimeFormat: "YYYY-MM-DD HH:mm",
     yearFormat: "YYYY",
-    ok: "Ok"
+    ok: "Ok",
+    rangePlaceholder: ["Эхлэх өдөр", "Дуусах өдөр"]
   },
   dateTimeFormat: "YYYY-MM-DD HH:mm",
 };
+
+
+
+const calendarLocale = {
+  lang: {
+    locale: "mn_MN",
+    placeholder: "Сонгох",
+    rangePlaceholder: ["Эхлэх өдөр", "Дуусах өдөр"],
+    today: "Өнөөдөр",
+    now: "Одоо",
+    backToToday: "Өчигдөррүү буцах",
+    ok: "Тийм",
+    clear: "Цэвэрлэх",
+    month: "Сар",
+    year: "Жил",
+    timeSelect: "Цаг сонгох",
+    dateSelect: "Өдөр сонгох",
+    monthSelect: "Сар сонгох",
+    yearSelect: "Жил сонгох",
+    decadeSelect: "Арванаар сонгох",
+    yearFormat: "YYYY",
+    dateFormat: "M/D/YYYY",
+    dayFormat: "D",
+    dateTimeFormat: "M/D/YYYY HH:mm:ss",
+    monthFormat: "MMMM",
+    monthBeforeYear: true,
+    previousMonth: "Өмнөх сар (PageUp)",
+    nextMonth: "Дараагын сар (PageDown)",
+    previousYear: "Өнгөрсөн жил (Control + left)",
+    nextYear: "Дараагын жил (Control + right)",
+    previousDecade: "Өнгөрсөн арван",
+    nextDecade: "Дараагын арван",
+    previousCentury: "Өмнөх зуун",
+    nextCentury: "Дараагын зуун"
+
+  },
+  timePickerLocale: {
+    placeholder: "Select time"
+  },
+  dateFormat: "YYYY-MM-DD",
+  dateTimeFormat: "YYYY-MM-DD HH:mm:ss",
+  weekFormat: "YYYY-wo",
+  monthFormat: "YYYY-MM"
+}
 
 export {
   defaultMsg,
@@ -75,5 +120,6 @@ export {
   sortType,
   messageType,
   datePickerLocale,
-  dateTimePickerLocale
+  dateTimePickerLocale,
+  calendarLocale
 }

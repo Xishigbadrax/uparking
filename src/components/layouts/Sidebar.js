@@ -1,9 +1,12 @@
 import Link from 'next/link';
-import { Menu, Layout } from 'antd';
+import { Menu, Layout, Avatar } from 'antd';
 import { useRouter } from 'next/router';
 import * as AntdIcons from '@ant-design/icons';
 import Context from '@context/Context';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
+import {
+  UserOutlined,
+} from '@ant-design/icons';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -11,7 +14,9 @@ const { SubMenu } = Menu;
 const Sidebar = () => {
   const router = useRouter();
   const { state, menuOpenKeys, setMenuOpenKeys } = useContext(Context);
-  const { menus } = state; 
+  const [ pathName , setPathName ] = useState("/")
+  const { menus } = state;
+  
 
   const getIcon = icon => {
     const AntIcon = AntdIcons[icon];
@@ -52,7 +57,7 @@ const Sidebar = () => {
       }
       return null;
     } else {
-      return <Menu.Item className={item.link === router.asPath ? "ant-menu-item-selected" : ""} key={item.id} icon={getIcon(item.icon)}>{getMenuItemPath(item)}</Menu.Item>;
+      return <Menu.Item className={item.link === router.asPath ? "ant-menu-item-selected" : ""} key={item.link} icon={getIcon(item.icon)}>{getMenuItemPath(item)}</Menu.Item>;
     }
   };
 
@@ -64,26 +69,29 @@ const Sidebar = () => {
       return getSubMenuOrItem(item);
     }).filter(item => item);
   };
-  
+
   return (
-    <Sider theme="light">
-      <div className="logo">
+    <Sider theme="light" className={"sideBar"} >
+      <Avatar size={72} icon={<UserOutlined />} />
+      <div className="userName"><span>А.Бат-Эрдэнэ</span></div>
+      {/* <div className="logo">
         <img src="/small_logo.png" alt="logg" className="header-logo" />
-      </div>
+      </div> */}
       <Menu
         style={{ borderRight: 'none', margin: '1.8rem 0' }}
-        theme="dark"
         mode="inline"
+        className={"profileMenu"}
         inlineIndent={10}
         openKeys={menuOpenKeys}
         onOpenChange={(keys) => setMenuOpenKeys(keys)}
+        selectedKeys={router.pathname.substring(1)}
       >
         {getNavMenuItems(menus)}
       </Menu>
     </Sider>
   );
 
-  
+
 };
 
 export default Sidebar;
