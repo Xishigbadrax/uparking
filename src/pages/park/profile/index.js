@@ -30,12 +30,12 @@ import Discount from "@components/registerSpace/discount";
 import RentDate from "@components/registerSpace/rentDate";
 import Context from "@context/Context";
 
-import {
-  withScriptjs,
-  withGoogleMap,
-  GoogleMap,
-  Marker,
-} from "react-google-maps";
+// import {
+//   withScriptjs,
+//   withGoogleMap,
+//   GoogleMap,
+//   Marker,
+// } from "react-google-maps";
 
 const { SubMenu } = Menu;
 const { Content } = Layout;
@@ -410,8 +410,8 @@ const Profile = () => {
               <Col span={3} style={{ textAlign: "right" }}></Col>
             </Row>
             <Row style={{ minHeight: "200px", paddingTop: "30px" }}>
-              {space.map(() => {
-                <Col offset={2}>АЗН</Col>;
+              {space.map((item) => {
+                <Col key={item.value} offset={2}>АЗН</Col>;
               })}
             </Row>
             <Row>
@@ -548,7 +548,7 @@ const Profile = () => {
                   >
                     <Select onChange={onChangeColor}>
                       {color.map((item) => (
-                        <Option value={item.label}>{item.label}</Option>
+                        <Option  key={item.value} value={item.label}>{item.label}</Option>
                       ))}
                     </Select>
                     <Divider />

@@ -14,23 +14,23 @@ import { useEffect, useS } from "react";
 import { apiList, callGet, callPost } from "@api/api";
 import { Steps } from "antd";
 
-import {
-  withScriptjs,
-  withGoogleMap,
-  GoogleMap,
-  Marker,
-} from "react-google-maps";
+// import {
+//   withScriptjs,
+//   // withGoogleMap,
+//   GoogleMap,
+//   Marker,
+// } from "react-google-maps";
 import { AntDesignOutlined } from "@ant-design/icons";
 
-const MyMapComponent = withScriptjs(
-  withGoogleMap((props) => (
-    <GoogleMap defaultZoom={8} defaultCenter={{ lat: -34.397, lng: 150.644 }}>
-      {props.isMarkerShown && (
-        <Marker position={{ lat: -34.397, lng: 150.644 }} />
-      )}
-    </GoogleMap>
-  ))
-);
+// const MyMapComponent = withScriptjs(
+//   // withGoogleMap((props) => (
+//   //   <GoogleMap defaultZoom={8} defaultCenter={{ lat: -34.397, lng: 150.644 }}>
+//   //     {props.isMarkerShown && (
+//   //       <Marker position={{ lat: -34.397, lng: 150.644 }} />
+//   //     )}
+//   //   </GoogleMap>
+//   // ))
+// );
 const steps = [
   {
     title: "Үндсэн мэдээлэл",
@@ -382,7 +382,7 @@ const mainInfo = (props) => {
               </div>
             </div>
           </Row>
-          <MyMapComponent
+          {/* <MyMapComponent
             isMarkerShown
             googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
             loadingElement={<div style={{ height: `100%` }} />}
@@ -391,7 +391,7 @@ const mainInfo = (props) => {
             }
             mapElement={<div style={{ height: `100%` }} />}
             style={{ marginTop: "10px" }}
-          />
+          /> */}
         </Col>
       </Row>
     </div>
