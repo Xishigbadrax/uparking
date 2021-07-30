@@ -292,7 +292,6 @@ const mainInfo = (props) => {
               </Select>
               <Divider />
             </Form.Item>
-
             {selectedResidence.label === "Бусад" ? (
               <div>
                 <Form.Item name="residenceName" style={{ marginTop: "-10px" }}>

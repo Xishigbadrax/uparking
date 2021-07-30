@@ -87,20 +87,8 @@ const Profile = () => {
   const [selectedColor, setSelectedColor] = useState({});
   const [vehicles, setVehicles] = useState([]);
 
-  const [aimag, setAimag] = useState([]);
-  const [selectedAimag, setSelectedAimag] = useState({});
-  const [sum, setSum] = useState([]);
-  const [selectedSum, setSelectedSum] = useState({});
-  const [khoroo, setKhoroo] = useState([]);
-  const [selectedKhoroo, setSelectedKhoroo] = useState({});
-  const [residence, setResidence] = useState([]);
-  const [selectedResidence, setSelectedResidence] = useState({});
-  const [residenceblock, setResidenceBlock] = useState([]);
-  const [selectedResidenceBlock, setSelectedResidenceBlock] = useState({});
-  const [DoorNo, setDoorNo] = useState();
-  const [spaceNumber, setSpaceNumber] = useState();
   const [current, setCurrent] = useState(0);
-  // const ctx = useContext(Context);
+  // // const ctx = useContext(Context);
 
   const [residenceData, setResidenceData] = useState({});
   const [aimag, setAimag] = useState([]);
