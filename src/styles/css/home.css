@@ -1726,6 +1726,70 @@
 .ant-picker-cell {
   height: 50px;
 }
-.ant-picker-cell-in-view {
-  height: 50px;
+
+.ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date-content {
+  position: static;
+  width: auto;
+  height: 30px;
+  overflow-y: auto;
+  color: rgba(0, 0, 0, 0.85);
+  line-height: 1.5715;
+  text-align: left;
+  }
+  .ant-modal-content {
+    min-height: 700px;
+    height:auto;
+    width: 1000px;
+    }
+    .ant-row .ant-form-item{
+      border-color: #ffffff
+      ;
+      border-bottom: "1px solid black" 
+  }
+  .ant-form-item-control-input{
+    border-color: #fff;
+  }
+  
+   .placeholder {
+    color: red !important;
+  }
+
+  .ant-upload.ant-upload-select-picture-card {
+    width: 400px;
+    height: 200px ;
+    margin-top: 10px;
+  }
+.ant-upload-select-picture-card{
+  width: 500px;
+}
+.ant-upload{
+    width: 400px;
+  }
+  .anticon .anticon-plus{
+    
+  }
+  .ant-select:not(.ant-select-customize-input) .ant-select-selector{
+    border:none !important;
+    padding: 0 !important;
+  }
+
+  .ant-input{
+      border:none;
+  }
+.ant-divider-horizontal{
+  margin: 10px 0  !important;
+  margin-top: 10px;
+}
+
+.fullModal .ant-modal-content {
+  height: auto !important;
+}
+ .DAY{
+  border: 1px solid black !important;
+  background-color: gray !important;
+  border-radius: 20px !important;
+}
+.ant-form-item-control-input-content{
+   height: 30px;
+   margin-top: 10px;
 }

@@ -1,10 +1,18 @@
 import { Menu, Row, Col, Card, Alert } from "antd";
-import { Modal, Button, Form, Input, Checkbox, Layout, Select } from "antd";
+import {
+  Modal,
+  Button,
+  Form,
+  Input,
+  Checkbox,
+  Layout,
+  Select,
+  Divider,
+} from "antd";
 import { useContext, useState } from "react";
 import { useEffect, useS } from "react";
 import { apiList, callGet, callPost } from "@api/api";
 import { Steps } from "antd";
-import Context from "@context/Context";
 
 import {
   withScriptjs,
@@ -61,9 +69,10 @@ const { SubMenu } = Menu;
 const { Content } = Layout;
 const { Option } = Select;
 const { Step } = Steps;
-const mainInfo = (setMainData) => {
+const mainInfo = (props) => {
+  const [form] = Form.useForm();
+  const [InputResidenceData, setInputResidenceData] = useState({});
   const [residenceData, setResidenceData] = useState({});
-
   const [aimag, setAimag] = useState([]);
   const [selectedAimag, setSelectedAimag] = useState({});
   const [sum, setSum] = useState([]);
@@ -77,31 +86,20 @@ const mainInfo = (setMainData) => {
   const [DoorNo, setDoorNo] = useState();
   const [spaceNumber, setSpaceNumber] = useState();
   const [current, setCurrent] = useState(0);
-  const ctx = useContext(Context);
   useEffect(async () => {
     const aimag = await callGet("/address/aimag");
     console.log(aimag);
     setAimag(aimag);
-    setSelectedAimag(aimag);
   }, []);
+
+  useEffect(() => {
+    props.setMainData(residenceData);
+  }, [residenceData]);
+
   function classNames(...classes) {
     return classes.filter(Boolean).join("  ");
   }
 
-  const [isProfileNotEdit, setIsProfileNotEdit] = useState(true);
-  const [isVehileVisible, setIsVehileVisible] = useState(false);
-  const [isParkVisible, setIsParkVisible] = useState(false);
-
-  const handleOk = async () => {
-    console.log(formData);
-    const res = await callPost("/user/vehicle", formData);
-    console.log("success", res);
-    setIsVehileVisible(false);
-  };
-
-  const handleCancel = () => {
-    setIsVehileVisible(false);
-  };
   const onChangeAimag = async (e) => {
     const aimag1 = aimag.find((item) => item.value === Number(e));
     setSelectedAimag(aimag1);
@@ -133,7 +131,6 @@ const mainInfo = (setMainData) => {
   const onChangeResidence = async (e) => {
     const residence1 = residence.find((item) => item.value === Number(e));
     setSelectedResidence(residence1);
-
     setResidenceData({
       ...residenceData,
       residenceName: residence1.label,
@@ -141,7 +138,7 @@ const mainInfo = (setMainData) => {
     });
     console.log("nicee");
     const residenceBlock = await callGet(
-      `/address/residenceblock?residenceId=${selectedResidence.value}`
+      `/address/residenceblock?residenceId=${e}`
     );
     setResidenceBlock(residenceBlock);
     console.log("residenceBlock--->", residenceBlock);
@@ -155,7 +152,6 @@ const mainInfo = (setMainData) => {
       residenceBlockNumber: e.target.value,
     });
   };
-
   const onChangeResidenceNumber = (e) => {
     const resiblock = residenceblock.find((item) => item.value === Number(e));
     setSelectedResidenceBlock(resiblock);
@@ -165,14 +161,13 @@ const mainInfo = (setMainData) => {
     });
     setResidenceData({
       ...residenceData,
-      residenceBlockNumber: selectedResidenceBlock.label,
+      residenceBlockNumber: e,
       residenceBlockId: e,
     });
   };
   const onChangeDoorNumber = (e) => {
     console.log(e.target.value);
     setDoorNo(e.target.value);
-
     setResidenceData({
       ...residenceData,
       parkingGateNumber: e.target.value,
@@ -184,26 +179,14 @@ const mainInfo = (setMainData) => {
       ...residenceData,
       parkingSpaceId: e.target.value,
     });
+    console.log(residenceData);
   };
-
-  //   const onSaved = async () => {
-  //     const res = callPost("/parkingfirst", residenceData);
-  //     setCurrent(current + 1);
-  //     console.log("success", res);
-  //   };
-  //   const goBack = () => {
-  //     console.log("Bye");
-  //     setCurrent(current - 1);
-  //   };
   const onFinishFailedVehile = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
-
-  const onFinish = (values) => {
-    console.log(values);
-    setMainData(residenceData);
-    ctx.setMainData(residenceData);
-  };
+  // const onFinish = (values) => {
+  //   console.log(values);
+  // };
   return (
     <div className={`h-5/6`}>
       <Row offset={4}>
@@ -232,105 +215,146 @@ const mainInfo = (setMainData) => {
       <Row>
         <Col span={10}>
           <Form
-            labelCol={{ span: 4 }}
             layout="horizontal"
+            form={props.form}
             style={{ marginLeft: "100px", marginTop: "50px" }}
-            onFinish={onFinish}
+            onFinish={props.onFinish}
+            onFinishFailed={onFinishFailedVehile}
           >
             <Form.Item
-              span={4}
-              rules={[{ required: true, message: "Сонгоно уу?" }]}
+              name="aimag"
+              rules={[{ required: true, message: "Choose value" }]}
             >
-              <Select onChange={onChangeAimag} placeholder="Хот,Aймаг *">
+              <Select
+                onChange={onChangeAimag}
+                placeholder="Аймаг хот*"
+                bordered="none"
+              >
                 {aimag.map((item) => (
-                  <Option key={item.value} value={item.value}>
+                  <Select.Option key={item.value} value={item.value}>
                     {item.label}
-                  </Option>
+                  </Select.Option>
                 ))}
               </Select>
+              <Divider />
             </Form.Item>
-            <Form.Item span={4}>
-              <Select onChange={onChangeSum} placeholder="Сум,Дүүрэг *">
+            <Form.Item
+              name="sum"
+              rules={[{ required: true, message: "Choose province " }]}
+              style={{ marginTop: "-10px" }}
+            >
+              <Select onChange={onChangeSum} placeholder="Сум дүүрэг">
                 {sum.map((item) => (
-                  <Option key={item.value} value={item.value}>
+                  <Select.Option key={item.value} value={item.value}>
                     {item.label}
-                  </Option>
+                  </Select.Option>
                 ))}
               </Select>
+              <Divider />
             </Form.Item>
-            <Form.Item span={4}>
-              <Select onChange={onChangeKhoroo} placeholder="Баг,Хороо">
+            <Form.Item
+              name="bag"
+              rules={[{ required: true, message: "Choose value" }]}
+              style={{ marginTop: "-10px" }}
+            >
+              <Select onChange={onChangeKhoroo} placeholder="Баг Хороо">
                 {khoroo.map((item) => (
-                  <Option key={item.value} value={item.value}>
+                  <Select.Option key={item.value} value={item.value}>
                     {item.label}
-                  </Option>
+                  </Select.Option>
                 ))}
               </Select>
+              <Divider />
             </Form.Item>
-            <Form.Item span={4}>
-              <Select onChange={onChangeResidence} placeholder="Байрны нэр">
+            <Form.Item
+              name="residenceName"
+              rules={[{ required: true, message: "Choose value" }]}
+              style={{ marginTop: "-10px" }}
+            >
+              <Select onChange={onChangeResidence} placeholder="Байрны нэр*">
                 {residence.map((item) => (
-                  <Option key={item.value} value={item.value}>
+                  <Select.Option key={item.value} value={item.value}>
                     {item.label}
-                  </Option>
+                  </Select.Option>
                 ))}
               </Select>
+              <Divider />
             </Form.Item>
-            {selectedResidence.label === "Бусад" && (
+
+            {selectedResidence.label === "Бусад" ? (
               <div>
-                <Form.Item span={4}>
+                <Form.Item name="residenceName" style={{ marginTop: "-10px" }}>
                   <Input
-                    placeholder="Байрны нэрээ оруулна уу? "
                     onChange={onChangeInputResidence}
-                  ></Input>
+                    placeholder="Байрны нэр "
+                  />
+                  <Divider />
                 </Form.Item>
-                <Form.Item span={4}>
+                <Form.Item
+                  name="residenceNumber"
+                  style={{ marginTop: "-10px" }}
+                >
                   <Input
-                    placeholder="Байрны дугаар оруулна уу?"
                     onChange={onChangeInputResidenceNumber}
-                  ></Input>
+                    placeholder="Байрны дугаар "
+                  />
+                  <Divider />
                 </Form.Item>
               </div>
-            )}
-            <Form.Item span={4}>
-              <Select
-                onChange={onChangeResidenceNumber}
-                placeholder="Байрны дугаар "
+            ) : (
+              <Form.Item
+                name="residenceNumber"
+                rules={[{ required: true, message: "Choose value" }]}
+                style={{ marginTop: "-10px" }}
               >
-                {residenceblock.map((item) => (
-                  <Option key={item.value} value={item.value}>
-                    {item.label}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
-            {selectedResidenceBlock.label === "Бусад" && (
-              <Form.Item span={4}>
-                <Input
-                  placeholder="Байрны дугаар оруулна уу?"
-                  onChange={onChangeInputResidenceNumber}
-                ></Input>
+                <Select
+                  placeholder="Байрны дугаар*"
+                  onChange={onChangeResidenceNumber}
+                >
+                  {residenceblock.map((item) => (
+                    <Select.Option key={item.value} value={item.value}>
+                      {item.label}
+                    </Select.Option>
+                  ))}
+                </Select>
+                <Divider />
               </Form.Item>
             )}
-            <Form.Item span={4}>
+            {selectedResidenceBlock === "Бусад" && (
+              <Form.Item
+                style={{ marginTop: "-10px" }}
+                name="haalgaNumber"
+                rules={[{ required: true, message: "Utgaa oruulna uu?" }]}
+              >
+                <Input
+                  placeholder="Авто зогсоолын хаалганы тоо"
+                  onChange={onChangeInputResidenceNumber}
+                />
+                <Divider />
+              </Form.Item>
+            )}
+            <Form.Item
+              style={{ marginTop: "-10px" }}
+              name="DoorNo"
+              rules={[{ required: true, message: "error" }]}
+            >
               <Input
+                placeholder="Авто зогсоолын хаалганы тоо"
                 onChange={onChangeDoorNumber}
-                placeholder="Авто Зогсоолын хаалганы тоо "
-              ></Input>
+              />
+              <Divider />
             </Form.Item>
-            <Form.Item span={4}>
+            <Form.Item name="spaceNumber ">
               <Input
                 onChange={onChangeSpaceNumber}
-                placeholder="Авто Зогсоолын дугаар "
-              ></Input>
+                placeholder="Авто зогсоолын дугаар"
+              />
+              <Divider />
             </Form.Item>
           </Form>
-          {/* <Form.Item>
-          <Button onClick={onSaved}>za uzii</Button>
-        </Form.Item> */}
         </Col>
         <Col offset={2} style={{ width: "800px", height: "600px" }}>
-          <Row style={{ fontSize: "12px" }}>
+          <Row style={{ fontSize: "18px" }}>
             Хамгийн нарийвчлалтайгаар авто зогсоолын орох хаалгыг{" "}
             <b>“Google Map” дээр</b> тэмдэглэнэ үү!
           </Row>
@@ -357,27 +381,14 @@ const mainInfo = (setMainData) => {
             isMarkerShown
             googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
             loadingElement={<div style={{ height: `100%` }} />}
-            containerElement={<div style={{ height: `400px` }} />}
+            containerElement={
+              <div style={{ height: `400px`, marginTop: "20px" }} />
+            }
             mapElement={<div style={{ height: `100%` }} />}
+            style={{ marginTop: "10px" }}
           />
         </Col>
       </Row>
-      {/* <Row style={{ marginLeft: "100px" }}>
-        <Col>
-          {current > 0 && (
-            <Button onClick={goBack} style={{ color: "blue" }}>
-              Буцах
-            </Button>
-          )}
-        </Col>
-        <Col offset={16}>
-          {current < steps.length - 1 && (
-            <Button onClick={onSaved} className="buttonGo">
-              Үргэлжлүүлэх
-            </Button>
-          )}
-        </Col>
-      </Row> */}
     </div>
   );
 };

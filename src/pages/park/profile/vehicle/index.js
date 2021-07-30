@@ -19,6 +19,7 @@ export default function vehicle() {
 
   useEffect(async () => {
     const uildwer = await callGet("/user/vehicle/maker");
+    console.log(uildwer);
     setSelectedUildwer(uildwer);
     setUildwer(uildwer);
     const color = await callGet("/user/vehicle/color");

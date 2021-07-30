@@ -1,6 +1,7 @@
 import { PushpinFilled } from "@ant-design/icons";
 import { Menu, Dropdown } from "@headlessui/react";
 import { Row, Col } from "antd";
+import { Divider } from "antd";
 import { Modal, Button, Form, Input, Checkbox, Layout, Select } from "antd";
 import { useEffect, useState } from "react";
 const validateMessages = [{}];
@@ -71,14 +72,17 @@ const spaceIndicator = () => {
     console.log(e);
     console.log(IndicatorData);
     setSpaceSize(e);
-    setIndicatorData({ ...IndicatorData, wad: e });
+    setIndicatorData({ ...IndicatorData, capacityId: e });
   };
   const onChangeSpaceSizeInput = (e) => {
     console.log(e.target.value);
-    setIndicatorData({ ...IndicatorData });
+    setIndicatorData({ ...IndicatorData, capacityId: e.target.value });
   };
   const onChangeCheckBox = (e) => {
     console.log(e);
+  };
+  const onChangeType = (e) => {
+    setIndicatorData({ ...setIndicatorData, typeId: e });
   };
   return (
     <div className={`h-5/6`}>
@@ -102,7 +106,7 @@ const spaceIndicator = () => {
       <Row>
         <Col style={{ marginLeft: "100px" }} span={6}>
           <Form
-            style={{ marginTop: "50px" }}
+            style={{ marginTop: "50px", height: "360px" }}
             labelCol={{ span: 4 }}
             layout="horizontal"
           >
@@ -136,6 +140,7 @@ const spaceIndicator = () => {
                   </Select.Option>
                 ))}
               </Select>
+              <Divider />
             </Form.Item>
             <Form.Item span={4}>
               <Select
@@ -155,6 +160,7 @@ const spaceIndicator = () => {
                   </Select.Option>
                 ))}
               </Select>
+              <Divider />
             </Form.Item>
             <Form.Item span={6}>
               <Select
@@ -175,6 +181,7 @@ const spaceIndicator = () => {
                   </Select.Option>
                 ))}
               </Select>
+              <Divider />
             </Form.Item>
             <Form.Item span={4}>
               <Select
@@ -194,6 +201,7 @@ const spaceIndicator = () => {
                   </Select.Option>
                 ))}
               </Select>
+              <Divider />
             </Form.Item>
 
             {spacesSize === "Бусад" && (
@@ -202,10 +210,11 @@ const spaceIndicator = () => {
                   placeholder="Төрөлөө оруулна уу?"
                   onChange={onChangeSpaceSizeInput}
                 ></Input>
+                <Divider />
               </Form.Item>
             )}
             <Form.Item span={4}>
-              <Select placeholder="Зогсоолын төрөл*">
+              <Select placeholder="Зогсоолын төрөл*" onChange={onChangeType}>
                 {spaceType.map((item) => (
                   <Select.Option key={item.title} value={item.title}>
                     <div style={{ display: "flex" }}>
@@ -219,6 +228,7 @@ const spaceIndicator = () => {
                   </Select.Option>
                 ))}
               </Select>
+              <Divider />
             </Form.Item>
           </Form>
         </Col>
@@ -234,11 +244,13 @@ const spaceIndicator = () => {
             {direction.map((item) => (
               <Row>
                 <Checkbox key={item.title} value={item.title}>
-                  <div style={{ display: "flex" }}>
+                  <div style={{ display: "flex", paddingTop: "10px" }}>
                     <div>
-                      <img src={item.image} height="20px" width="20px"></img>
+                      <img src={item.image} height="30px" width="30px"></img>
                     </div>
-                    <p style={{ fontSize: "12px" }}>{item.title}</p>
+                    <p style={{ fontSize: "19px", marginTop: "5px" }}>
+                      {item.title}
+                    </p>
                   </div>
                 </Checkbox>
               </Row>
@@ -246,9 +258,6 @@ const spaceIndicator = () => {
           </Checkbox.Group>
         </Col>
       </Row>
-      <Row></Row>
-      <Row></Row>
-      <Row></Row>
     </div>
   );
 };
