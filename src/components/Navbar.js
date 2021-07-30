@@ -1,11 +1,32 @@
 import { Disclosure } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import Auth from "@utils/auth";
+import Context from "@context/Context";
+import * as AntdIcons from '@ant-design/icons';
+import { Avatar, Image, Menu, Dropdown } from "antd";
+import { DownOutlined } from '@ant-design/icons';
+
+const IMG_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
 
 export default function Navbar() {
+  const ctx = useContext(Context);
   const router = useRouter();
+
+  const getIcon = icon => {
+    const AntIcon = AntdIcons[icon];
+    return AntIcon ? <AntIcon style={{ fontSize: "21px" }} /> : "";
+  }
+
+  const getProfile = () => {
+    return <div style={{ height: "21px" }}>
+      <Avatar src={IMG_URL + ctx.userProfileImgPath} style={{ marginRight: "10px" }}
+      />
+      {ctx.username}
+    </div>
+  }
 
   const navigation = [
     {
@@ -33,9 +54,43 @@ export default function Navbar() {
       current: router.asPath == "/news",
     },
   ];
+
+  const navigationadmin = [
+    {
+      id: 0,
+      name: "Хэтэвч",
+      href: "/park/wallet",
+      current: router.asPath == "/wallet",
+      icon: "WalletOutlined"
+    },
+    {
+      id: 1,
+      name: "Мэдэгдэл",
+      href: "/park/notification",
+      current: router.asPath == "/notification",
+      icon: "NotificationOutlined"
+    },
+    {
+      id: 2,
+      name: "park",
+      href: "/park/",
+      current: router.asPath == "/profile",
+      icon: ''
+    }
+  ];
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
+  const menu = (
+    <Menu className="profileDropdownPopup">
+      <Menu.Item key="0">
+        <a href="/park/profile">Хувийн мэдээлэл</a>
+      </Menu.Item>
+      <Menu.Divider />
+      <Menu.Item key="3">
+        <a href="/logout">Гарах</a></Menu.Item>
+    </Menu>
+  );
 
   return (
     <Disclosure as="nav" className="bg-navbarColor w-full inset-x-0 top-0">
@@ -79,7 +134,7 @@ export default function Navbar() {
                     <div className="grid px-3" key={item.id}>
                       <Link href={item.href}>
                         <a
-                          style={{ paddingTop: "27px", paddingBottom: "27px" }}
+                          style={{ paddingTop: "29px", paddingBottom: "30px" }}
                           className={`justify-self-center navbarItem ${item.current}`}
                         >
                           {item.name}
@@ -90,19 +145,54 @@ export default function Navbar() {
                 </div>
               </div>
 
-              <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                <Link href="/login">
-                  <button className="navbarBtn">Нэвтрэх</button>
-                </Link>
-                <button 
-                  onClick={() => {
-                    console.log(router.push('/register'))
-                  }}
-                  className={`border rounded-lg py-2.5 px-3 ml-5 navbarBtn`}
-                >
-                  Бүртгүүлэх
-                </button>
-              </div>
+              {(Auth.getToken() == null || Auth.getToken() == undefined) ?
+                <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                  <Link href="/login">
+                    <button className="navbarBtn">Нэвтрэх</button>
+                  </Link>
+                  <button
+                    onClick={() => {
+                      console.log(router.push('/register'))
+                    }}
+                    className={`border rounded-lg py-2.5 px-3 ml-5 navbarBtn`}
+                  >
+                    Бүртгүүлэх
+                  </button>
+                </div>
+
+                :
+                <div style={{ height: "72px" }} className="hidden md:block">
+                  <div className="flex flex-row">
+                    {navigationadmin.map((item) => (
+                      <div className="grid px-3" key={item.id}>
+                        <Link href={item.href}>
+                          <a
+                            style={{ paddingTop: "22px", paddingBottom: "22px" }}
+                            className={`justify-self-center navbarItem ${item.current}`}
+                          >
+                            {(item.id !== 2)
+                              ?
+                              getIcon(item.icon)
+                              :
+                              getProfile()
+                            }
+
+                          </a>
+                        </Link>
+
+
+                      </div>
+                    ))}
+                    <div className="profileDropdown">
+                      <Dropdown placement="bottomRight" overlay={menu} trigger={['click']}>
+                        <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                          <DownOutlined />
+                        </a>
+                      </Dropdown>
+                    </div>
+                  </div>
+                </div>}
+
             </div>
           </div>
 

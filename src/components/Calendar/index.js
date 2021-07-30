@@ -1,4 +1,4 @@
-import React from 'react';
+import {React, useState} from 'react';
 import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
 import { Calendar, Badge } from 'antd';
@@ -64,8 +64,15 @@ const monthCellRender = (value) => {
     </div>
   ) : null;
 }
-
 const CustomCalendar = ({data}) => {
+  console.log(data, 'data')
+
+  // const [calendarData, setCalendarData] = useState([]);
+  // if (data.length> 0){
+  //   console.log(data, 'calendarData')
+  //   setCalendarData(data)
+  //   // setCalendarData(data);
+  // }
     return (
         <Calendar locale={calendarLocale} dateCellRender={dateCellRender} monthCellRender={monthCellRender} />
     )

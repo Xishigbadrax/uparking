@@ -37,15 +37,6 @@ import {
   Marker,
 } from "react-google-maps";
 
-const MyMapComponent = withScriptjs(
-  withGoogleMap((props) => (
-    <GoogleMap defaultZoom={8} defaultCenter={{ lat: -34.397, lng: 150.644 }}>
-      {props.isMarkerShown && (
-        <Marker position={{ lat: -34.397, lng: 150.644 }} />
-      )}
-    </GoogleMap>
-  ))
-);
 const { SubMenu } = Menu;
 const { Content } = Layout;
 const { Option } = Select;
@@ -95,6 +86,19 @@ const Profile = () => {
   const [selectedZagwar, setSelectedZagwar] = useState({});
   const [selectedColor, setSelectedColor] = useState({});
   const [vehicles, setVehicles] = useState([]);
+
+  const [aimag, setAimag] = useState([]);
+  const [selectedAimag, setSelectedAimag] = useState({});
+  const [sum, setSum] = useState([]);
+  const [selectedSum, setSelectedSum] = useState({});
+  const [khoroo, setKhoroo] = useState([]);
+  const [selectedKhoroo, setSelectedKhoroo] = useState({});
+  const [residence, setResidence] = useState([]);
+  const [selectedResidence, setSelectedResidence] = useState({});
+  const [residenceblock, setResidenceBlock] = useState([]);
+  const [selectedResidenceBlock, setSelectedResidenceBlock] = useState({});
+  const [DoorNo, setDoorNo] = useState();
+  const [spaceNumber, setSpaceNumber] = useState();
   const [current, setCurrent] = useState(0);
   // const ctx = useContext(Context);
 
@@ -193,6 +197,64 @@ const Profile = () => {
   const handleCancel = () => {
     setIsVehileVisible(false);
   };
+  const onChangeAimag = (e) => {
+    const aimag1 = aimag.find((item) => item.value === Number(e));
+    setSelectedAimag(aimag1);
+    setResidenceData({ ...residenceData, provinceId: aimag1.value });
+  };
+
+  const onChangeSum = (e) => {
+    const sum1 = sum.find((item) => item.value === Number(e));
+    console.log(sum1);
+    setSelectedSum(sum1);
+    setResidenceData({ ...residenceData, districtId: sum1.value });
+  };
+  const onChangeKhoroo = (e) => {
+    const horoo = khoroo.find((item) => item.value === Number(e));
+    setSelectedKhoroo(horoo);
+    setResidenceData({ ...residenceData, sectionId: horoo.value });
+  };
+  const onChangeResidence = (e) => {
+    const residence1 = residence.find((item) => item.value === Number(e));
+    setSelectedResidence(residence1);
+
+    setResidenceData({
+      ...residenceData,
+      residenceName: residence1.label,
+      residenceId: e,
+    });
+    console.log("nicee");
+  };
+
+  const onChangeResidenceNumber = (e) => {
+    const resiblock = residenceblock.find((item) => item.value === Number(e));
+    setSelectedResidenceBlock(resiblock);
+    setResidenceData({
+      ...residenceData,
+      residenceBlockId: selectedResidenceBlock.value,
+    });
+    setResidenceData({
+      ...residenceData,
+      residenceBlockNumber: selectedResidenceBlock.label,
+      residenceBlockId: e,
+    });
+  };
+  const onChangeDoorNumber = (e) => {
+    console.log(e.target.value);
+    setDoorNo(e.target.value);
+
+    setResidenceData({
+      ...residenceData,
+      parkingGateNumber: e.target.value,
+    });
+  };
+  const onChangeSpaceNumber = (e) => {
+    setSpaceNumber(e.target.value);
+    setResidenceData({
+      ...residenceData,
+      parkingSpaceId: e.target.value,
+    });
+  };
 
   const onClickContinue = async () => {
     // if (steps === "Үндсэн мэдээлэл") {
@@ -215,23 +277,6 @@ const Profile = () => {
   const onFinishFailedVehile = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
-  const onclickOk = () => {
-    console.log("xaxa");
-  };
-  // {
-  //   "districtId": 0,
-  //   "latitude": 0,
-  //   "longitude": 0,
-  //   "parkingGateNumber": "string",
-  //   "parkingSpaceGarageNumber": "string",
-  //   "parkingSpaceId": 0,
-  //   "provinceId": 0,
-  //   "residenceBlockId": 0,
-  //   "residenceBlockNumber": "string",
-  //   "residenceId": 0,
-  //   "residenceName": "string",
-  //   "sectionId": 0
-  // }
 
   return (
     <ProfileLayout>
@@ -404,6 +449,8 @@ const Profile = () => {
           key: "submit",
           htmlType: "submit",
         }}
+        onOk={() => setIsVehileVisible(false)}
+        onCancel={() => setIsVehileVisible(false)}
         width={1000}
         footer={[
           <Button key="back" type="link" onClick={handleCancel}>
@@ -537,18 +584,8 @@ const Profile = () => {
         className="fullModal"
         title="Авто зогсоол"
         centered
-        cancelButtonProps={{ style: { display: "none" } }}
-        okButtonProps={{ style: { display: "none" } }}
         visible={isParkVisible}
-        // footer={[
-        //   <Button key="back" type="link" onClick={goBack}>
-        //     <ArrowLeftOutlined /> Буцах
-        //   </Button>,
-
-        //   <Button key="submit" type="primary" onClick={onSaved}>
-        //     Үргэлжлүүлэх
-        //   </Button>,
-        // ]}
+        onOk={() => setIsParkVisible(false)}
         onCancel={() => setIsParkVisible(false)}
         width={1000}
       >
