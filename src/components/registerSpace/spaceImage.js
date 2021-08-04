@@ -90,7 +90,7 @@ const spaceImage = () => {
           тохиромжтой олоход тохиромжтой зураг хийнэ.
         </p>
       </Row>
-      <Row style={{ marginTop: "50px" }}>
+      <Row style={{ marginTop: "30px" }}>
         <Col offset={4}>
           <p style={{ fontSize: "15px" }}>
             Зогсоолын байршилын зураг (хаалга хэсгээс)

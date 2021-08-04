@@ -49,7 +49,9 @@ const priceInfo = () => {
               <Divider />
             </Form.Item>
             <Form.Item>
-              <label style={{ fontSize: "14px", color: "gray" }}>
+              <label
+                style={{ fontSize: "14px", color: "gray", marginTop: "10px" }}
+              >
                 Зун|04.01-09.31
               </label>
               <Input type="text" onChange={onChangeDayofSummerPrice}></Input>

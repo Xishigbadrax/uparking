@@ -11,8 +11,8 @@ const Context = createContext();
 
 export const ContextProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [username, setUsername] = useState('');
-  const [userProfileImgPath, setUserProfileImgPath] = useState('');
+  const [username, setUsername] = useState("");
+  const [userProfileImgPath, setUserProfileImgPath] = useState("");
   const [menuOpenKeys, setMenuOpenKeys] = useState([]);
 
   const initialState = { auth: {}, menus: [], permissions: {} };
@@ -30,22 +30,19 @@ export const ContextProvider = ({ children }) => {
       let user = {};
       if (token !== null) {
         user = jwt_decode(token);
-        const userdata = await callGet(`/user/${user.user_id}/test`)
+        const userdata = await callGet(`/user/${user.user_id}/test`);
         if (!userdata || userdata === undefined) {
           showMessage(messageType.FAILED.type, defaultMsg.dataError);
           return;
         }
         if (userdata.lastName !== undefined) {
-          setUsername(userdata.lastName.charAt(0) + ". " + userdata.firstName)
-          setUserProfileImgPath(userdata.imageProfile)
+          setUsername(userdata.lastName.charAt(0) + ". " + userdata.firstName);
+          setUserProfileImgPath(userdata.imageProfile);
         }
       }
-    }
+    };
     getProfileData();
-
-  }, [])
-
-
+  }, []);
 
   const setMenuAndPermissions = async () => {
     // if (
@@ -57,17 +54,15 @@ export const ContextProvider = ({ children }) => {
     // ) {
     //   return;
     // }
-
     const accessToken = Auth.getToken();
     // let role = "admin";
     let permissionList = {};
     if (router.pathname.startsWith("/park")) {
-      if (accessToken == null || accessToken == 'undefined') {
-        router.push('/login');
+      if (accessToken == null || accessToken == "undefined") {
+        router.push("/login");
         return;
       } else {
         const user = jwt_decode(accessToken);
-
         if (user.authorities !== undefined) {
           user.authorities.map((auths) => {
             permissionList[auths] = auths;
@@ -75,46 +70,41 @@ export const ContextProvider = ({ children }) => {
         }
       }
     }
-
     dispatch({
-      type: 'PERMISSIONS',
-      payload: permissionList
+      type: "PERMISSIONS",
+      payload: permissionList,
     });
-    // #endregion
-
-    //#region set menu
-    let menuData = [];
-    const data = profileMenu;
-    // const data = await sList({ code: apiList.adminMenu });
-    // if (data && data.data) {
-    // const tmpMenus = data.data.sort((a, b) => {
+    // // #endregion
+    // //#region set menu
+    // let menuData = [];
+    // const data = profileMenu;
+    // // const data = await sList({ code: apiList.adminMenu });
+    // // if (data && data.data) {
+    // // const tmpMenus = data.data.sort((a, b) => {
+    // //   return a.order - b.order;
+    // // });
+    // const tmpMenus = data;
+    // let menus = {};
+    // tmpMenus.map((mnu) => {
+    //   const parentId = mnu.parentId;
+    //   if (parentId !== null) {
+    //     if (menus[parentId]["children"] === undefined) {
+    //       menus[parentId]["children"] = [];
+    //       delete menus[parentId]["link"];
+    //     }
+    //     menus[parentId]["children"].push(mnu);
+    //   } else {
+    //     menus[mnu.id] = mnu;
+    //   }
+    // });
+    // menuData = Object.values(menus).sort((a, b) => {
     //   return a.order - b.order;
     // });
-    const tmpMenus = data;
-
-    let menus = {};
-    tmpMenus.map((mnu) => {
-      const parentId = mnu.parentId;
-      if (parentId !== null) {
-        if (menus[parentId]["children"] === undefined) {
-          menus[parentId]["children"] = [];
-          delete menus[parentId]["link"];
-        }
-        menus[parentId]["children"].push(mnu);
-      } else {
-        menus[mnu.id] = mnu;
-      }
-    });
-
-    menuData = Object.values(menus).sort((a, b) => {
-      return a.order - b.order;
-    });
-    // }
-
-    dispatch({
-      type: "MENUS",
-      payload: menuData,
-    });
+    // // }
+    // dispatch({
+    //   type: "MENUS",
+    //   payload: menuData,
+    // });
     //#endregion
   };
 
@@ -134,7 +124,7 @@ export const ContextProvider = ({ children }) => {
         setMenuAndPermissions,
         checkPermission,
         username,
-        userProfileImgPath
+        userProfileImgPath,
       }}
     >
       {children}

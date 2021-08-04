@@ -246,9 +246,9 @@ const spaceIndicator = () => {
                 <Checkbox key={item.title} value={item.title}>
                   <div style={{ display: "flex", paddingTop: "10px" }}>
                     <div>
-                      <img src={item.image} height="30px" width="30px"></img>
+                      <img src={item.image} height="20px" width="20px"></img>
                     </div>
-                    <p style={{ fontSize: "19px", marginTop: "5px" }}>
+                    <p style={{ fontSize: "16px", marginTop: "5px" }}>
                       {item.title}
                     </p>
                   </div>

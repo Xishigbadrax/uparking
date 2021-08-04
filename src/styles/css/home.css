@@ -1748,6 +1748,7 @@
       border-bottom: "1px solid black" 
   }
   .ant-form-item-control-input{
+    height: 30px;
     border-color: #fff;
   }
   
@@ -1757,8 +1758,8 @@
 
   .ant-upload.ant-upload-select-picture-card {
     width: 400px;
-    height: 200px ;
-    margin-top: 10px;
+    height: 150px ;
+    
   }
 .ant-upload-select-picture-card{
   width: 500px;
@@ -1797,4 +1798,31 @@
 .ant-form-item-explain .ant-form-item-explain-error{
   font-size: 8px;
   margin-top: -5px;
+}
+.ant-picker{
+     border: none;
+     background-color: none;
+}
+.ant-picker::placeholder{
+  color:"black"
+}
+
+.freeTimePick{
+  font-size: 10px !important;
+  width: 90px !important;
+}
+.freeTimePick{
+  font-size: 10px !important;
+  width: 90px !important;
+}
+.ant-rate{
+    
+}
+
+.ant-rate-star .ant-rate-star-full{
+  margin-left: 2px !important;
+}
+
+.ant-drawer-right.ant-drawer-open .ant-drawer-content-wrapper {
+  box-shadow: none;
 }

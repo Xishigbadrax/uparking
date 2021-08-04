@@ -54,7 +54,11 @@ const mainImage = () => {
     if (info.file.status === "done") {
       getBase64(
         info.file.originFileObj,
-        (image2) => (setLoadingDirect(false), setSelectedMainImage(image2))
+        (image2) => (
+          setLoadingDirect(false),
+          setSelectedMainImage(image2),
+          console.log(image2)
+        )
       );
     }
   };
@@ -105,7 +109,7 @@ const mainImage = () => {
           Тухайн хэсэгт зогсоолын байрлал, дугаарлалт харагдаж буй зураг хийхгүй
         </p>
       </Row>
-      <Row style={{ marginTop: "50px" }}>
+      <Row style={{ marginTop: "25px" }}>
         <Col offset={4}>
           <p style={{ fontSize: "15px" }}>Хотхоны ойр орчмын зураг</p>
 
