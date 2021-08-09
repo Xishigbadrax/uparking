@@ -1773,9 +1773,7 @@
 .ant-upload{
     width: 400px;
   }
-  .anticon .anticon-plus{
-    
-  }
+
   .ant-select:not(.ant-select-customize-input) .ant-select-selector{
     border:none !important;
     padding: 0 !important;
@@ -1837,12 +1835,12 @@
 .listImage{
   background: rgba(222, 226, 233, 0.2),
 }
-.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
+/* .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
   color:#0013D4 ;
 }
 .ant-tabs-ink-bar {
   background: linear-gradient(90deg, #0013D4 0%, #00F9B8 100%) !important;
-}
+} */
 .chooseButton{
   margin-top: 20px;
   background: rgba(3, 54, 255, 0.08);
@@ -1853,19 +1851,26 @@
   height: 50px  !important;
 }
 
-.ant-radio-button-wrapper{
+/* .ant-radio-button-wrapper{
   width: 192px;
   height: 56px;
-  /* justify-content: center;
+  justify-content: center;
   align-items: center;
-  align-content: center; */
+  align-content: center;
   margin-left: 5%;
   margin-top: 2%;
+} */
+
+.timePickCalendar tbody tr td{
+  padding: 5px !important;
 }
+/* tbody{
+   height: 400px !important;
+   width: 400px!important;
+   
+} */
 
-
-
-.timePickCalendar tbody tr .ant-picker-cell.ant-picker-cell-in-view {
+ /*.ant-picker-cell.ant-picker-cell-in-view {
   height: 50px !important;
   width: 50px !important;
   background:  #76E8AA ;
@@ -1875,7 +1880,7 @@
 .timePickCalendar .ant-picker-cell.ant-picker-cell-in-view.ant-picker-cell-selected{
   border: 1px  black !important;
   border-radius: 20px !important;
-}
+} */
 .timePickCalendar tbody tr td:first-of-type{
   color: white;
   border-radius: 20px !important;
