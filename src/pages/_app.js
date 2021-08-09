@@ -20,17 +20,16 @@ const App = ({ Component, pageProps, router }) => {
 
   return (
     <ContextProvider>
-      <Navbar/>
-      {router.pathname.startsWith("/park") ?
-        auth.loggedIn()
-          ?
+      <Navbar />
+      {router.pathname.startsWith("/park") ? (
+        auth.loggedIn() ? (
           <Component {...pageProps} />
-          :
+        ) : (
           <Login />
-        :
+        )
+      ) : (
         <Component {...pageProps} />
-
-      }
+      )}
     </ContextProvider>
   );
 };

@@ -44,13 +44,12 @@ export const ContextProvider = ({ children }) => {
     // ) {
     //   return;
     // }
-
     const accessToken = Auth.getToken();
     // let role = "admin";
     let permissionList = {};
     if (router.pathname.startsWith("/park")) {
-      if (accessToken == null || accessToken == 'undefined') {
-        router.push('/login');
+      if (accessToken == null || accessToken == "undefined") {
+        router.push("/login");
         return;
       } else {
         const user = jwt_decode(accessToken);
@@ -63,46 +62,41 @@ export const ContextProvider = ({ children }) => {
         }
       }
     }
-
     dispatch({
-      type: 'PERMISSIONS',
-      payload: permissionList
+      type: "PERMISSIONS",
+      payload: permissionList,
     });
-    // #endregion
-
-    //#region set menu
-    let menuData = [];
-    const data = profileMenu;
-    // const data = await sList({ code: apiList.adminMenu });
-    // if (data && data.data) {
-    // const tmpMenus = data.data.sort((a, b) => {
+    // // #endregion
+    // //#region set menu
+    // let menuData = [];
+    // const data = profileMenu;
+    // // const data = await sList({ code: apiList.adminMenu });
+    // // if (data && data.data) {
+    // // const tmpMenus = data.data.sort((a, b) => {
+    // //   return a.order - b.order;
+    // // });
+    // const tmpMenus = data;
+    // let menus = {};
+    // tmpMenus.map((mnu) => {
+    //   const parentId = mnu.parentId;
+    //   if (parentId !== null) {
+    //     if (menus[parentId]["children"] === undefined) {
+    //       menus[parentId]["children"] = [];
+    //       delete menus[parentId]["link"];
+    //     }
+    //     menus[parentId]["children"].push(mnu);
+    //   } else {
+    //     menus[mnu.id] = mnu;
+    //   }
+    // });
+    // menuData = Object.values(menus).sort((a, b) => {
     //   return a.order - b.order;
     // });
-    const tmpMenus = data;
-
-    let menus = {};
-    tmpMenus.map((mnu) => {
-      const parentId = mnu.parentId;
-      if (parentId !== null) {
-        if (menus[parentId]["children"] === undefined) {
-          menus[parentId]["children"] = [];
-          delete menus[parentId]["link"];
-        }
-        menus[parentId]["children"].push(mnu);
-      } else {
-        menus[mnu.id] = mnu;
-      }
-    });
-
-    menuData = Object.values(menus).sort((a, b) => {
-      return a.order - b.order;
-    });
-    // }
-
-    dispatch({
-      type: "MENUS",
-      payload: menuData,
-    });
+    // // }
+    // dispatch({
+    //   type: "MENUS",
+    //   payload: menuData,
+    // });
     //#endregion
   };
 

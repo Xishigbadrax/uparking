@@ -1713,6 +1713,12 @@
 /*HHM bvrtgeh end*/
 
 /* Go button*/
+.buttonGooo{
+  background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
+  border-radius: 8px;
+  height: 40px !important;
+  width: 100% !important;
+}
 .buttonGo {
   background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
   border-radius: 8px;
@@ -1748,6 +1754,7 @@
       border-bottom: "1px solid black" 
   }
   .ant-form-item-control-input{
+    height: 30px;
     border-color: #fff;
   }
   
@@ -1757,8 +1764,8 @@
 
   .ant-upload.ant-upload-select-picture-card {
     width: 400px;
-    height: 200px ;
-    margin-top: 10px;
+    height: 150px ;
+    
   }
 .ant-upload-select-picture-card{
   width: 500px;
@@ -1797,4 +1804,92 @@
 .ant-form-item-explain .ant-form-item-explain-error{
   font-size: 8px;
   margin-top: -5px;
+}
+.ant-picker{
+     border: none;
+     background-color: none;
+}
+.ant-picker::placeholder{
+  color:"black"
+}
+
+.freeTimePick{
+  font-size: 10px !important;
+}
+
+.ant-rate-star .ant-rate-star-full{
+  margin-left: 2px !important;
+}
+
+.ant-drawer-right.ant-drawer-open .ant-drawer-content-wrapper {
+  box-shadow: none;
+}
+.ant-col .ant-col-3{
+   background-color: #00f9b8;
+}
+.ant-tabs-nav-list{
+   width: 100% !important;
+}
+.ant-tabs-tab{
+  width: 33% !important;
+}
+
+.listImage{
+  background: rgba(222, 226, 233, 0.2),
+}
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
+  color:#0013D4 ;
+}
+.ant-tabs-ink-bar {
+  background: linear-gradient(90deg, #0013D4 0%, #00F9B8 100%) !important;
+}
+.chooseButton{
+  margin-top: 20px;
+  background: rgba(3, 54, 255, 0.08);
+  display: block;
+  
+}
+.searchButton{
+  height: 50px  !important;
+}
+
+.ant-radio-button-wrapper{
+  width: 192px;
+  height: 56px;
+  /* justify-content: center;
+  align-items: center;
+  align-content: center; */
+  margin-left: 5%;
+  margin-top: 2%;
+}
+
+.timePickCalendar tbody tr td{
+  padding: 5px !important;
+}
+tbody{
+   height: 400px !important;
+   width: 400px!important;
+   
+}
+
+.ant-picker-cell.ant-picker-cell-in-view {
+  height: 50px !important;
+  width: 50px !important;
+  background:  #76E8AA ;
+  border-radius: 20px !important;
+  
+}
+.ant-picker-cell.ant-picker-cell-in-view.ant-picker-cell-selected{
+  border: 1px  black !important;
+  border-radius: 20px !important;
+}
+.timePickCalendar tbody tr td:first-of-type{
+  color: white;
+  border-radius: 20px !important;
+  background-color: #141A29;
+}
+.timePickCalendar tbody tr td:last-of-type{
+  border-radius: 20px !important;
+  color: white;
+  background: #141A29;
 }

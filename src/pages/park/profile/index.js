@@ -153,8 +153,8 @@ const Profile = () => {
   }
   const onSavedSpaceFormData = async () => {
     console.log(mainData);
-    const res = await callPost("/parkingfirst", mainData);
-    console.log(res);
+    // const res = await callPost("/parkingfirst", mainData);
+    console.log();
   };
   const onChangeUildver = async (e) => {
     console.log("i am here-->", e);
@@ -183,6 +183,8 @@ const Profile = () => {
   };
 
   const [mainData, setMainData] = useState(null);
+  const [imageData, setImageData] = useState(null);
+  const [spaceData, setSpaceData] = useState(null);
   const onFinish = (values) => {
     console.log("Success:", values);
   };
@@ -272,7 +274,7 @@ const Profile = () => {
     console.log(":mainInfoRef", mainInfoRef);
     console.log(form.validateFields());
     {
-      form.getFieldError() ? null : setCurrent(current + 1);
+      form.getFieldError() ? setCurrent(current + 1) : null;
     }
     // }
     // return;
@@ -437,7 +439,9 @@ const Profile = () => {
             </Row>
             <Row style={{ minHeight: "200px", paddingTop: "30px" }}>
               {space.map((item) => {
-                <Col key={item.value} offset={2}>АЗН</Col>;
+                <Col key={item.value} offset={2}>
+                  АЗН
+                </Col>;
               })}
             </Row>
             <Row>
@@ -574,7 +578,9 @@ const Profile = () => {
                   >
                     <Select onChange={onChangeColor}>
                       {color.map((item) => (
-                        <Option  key={item.value} value={item.label}>{item.label}</Option>
+                        <Option key={item.value} value={item.label}>
+                          {item.label}
+                        </Option>
                       ))}
                     </Select>
                     <Divider />
@@ -599,8 +605,10 @@ const Profile = () => {
         title="Авто зогсоол"
         centered
         visible={isParkVisible}
-        onOk={() => setIsParkVisible(false)}
+        // onOk={() => setIsParkVisible(false)}
         onCancel={() => setIsParkVisible(false)}
+        cancelButtonProps={{ style: { display: "none" } }}
+        okButtonProps={{ style: { display: "none" } }}
         width={1000}
       >
         <Row>
@@ -621,8 +629,12 @@ const Profile = () => {
             onFinish={onFinish1234}
           />
         )) ||
-          (steps[current].title === "Үндсэн зураг" && <MainImage />) ||
-          (steps[current].title === "Зогсоолын зураг" && <SpaceImage />) ||
+          (steps[current].title === "Үндсэн зураг" && (
+            <MainImage setImageData={setImageData} form={form} />
+          )) ||
+          (steps[current].title === "Зогсоолын зураг" && (
+            <SpaceImage setSpaceData={setSpaceData} />
+          )) ||
           (steps[current].title === "Зогсоолын үзүүлэлт" && (
             <SpaceIndicator />
           )) ||
