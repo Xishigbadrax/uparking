@@ -88,7 +88,6 @@ const Profile = () => {
   const [vehicles, setVehicles] = useState([]);
 
   const [current, setCurrent] = useState(0);
-  // // const ctx = useContext(Context);
 
   const [residenceData, setResidenceData] = useState({});
   const [aimag, setAimag] = useState([]);
@@ -108,6 +107,29 @@ const Profile = () => {
   const [isParkVisible, setIsParkVisible] = useState(false);
   const mainInfoRef = useRef(null);
   const [form] = Form.useForm();
+  // const [userform] = Form.useForm();
+  const {userdata} = useContext(Context);
+  const [realData, setRealData] = useState("");
+  // const {userFormData, setUserFormData} = useState({
+  //   lastName: '111',
+  //   firstName: '222',
+  //   registerNumber: '333',
+  //   phoneNumber: '444',
+  //   email:'55',
+  //   fbLink: '6',
+  //   id: '7'
+  // });
+  // useEffect(() => {
+  //   userform.setFieldsValue(userFormData)
+  //  }, [userform, userFormData])
+  useEffect(async () => {
+    if(typeof userdata.firstName != "undefined"){
+      setRealData(userdata)
+    }
+    
+  }, [userdata]);
+
+
 
   const onFinish1234 = (values) => {};
 
@@ -266,6 +288,7 @@ const Profile = () => {
     console.log("Failed:", errorInfo);
   };
 
+  // console.log(userdata.firstName)
   return (
     <ProfileLayout>
       <Row style={{ marginLeft: "65px" }} className={"profileIndex"}>
@@ -287,32 +310,34 @@ const Profile = () => {
                 />
               </Col>
             </Row>
+            {realData != ""?
             <Form
               className="profileForm"
               name="basic"
               labelCol={{ span: 8 }}
               wrapperCol={{ span: 16 }}
-              initialValues={{ remember: true }}
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
+              initialValues={realData}
             >
               <Form.Item
                 label="Овог:"
-                name="surname"
+                name="lastName"
                 rules={[{ required: true, message: "Овог оруулна уу" }]}
+
               >
-                <Input disabled={isProfileNotEdit} />
+                <Input disabled={isProfileNotEdit}  />
               </Form.Item>
               <Form.Item
                 label="Нэр:"
-                name="givenname"
+                name="firstName"
                 rules={[{ required: true, message: "Нэр оруулна уу" }]}
               >
                 <Input disabled={isProfileNotEdit} />
               </Form.Item>
               <Form.Item
                 label="Регистрийн дугаар:"
-                name="register"
+                name="registerNumber"
                 rules={[
                   { required: true, message: "Регистрийн дугаар оруулна уу" },
                 ]}
@@ -321,7 +346,7 @@ const Profile = () => {
               </Form.Item>
               <Form.Item
                 label="Утасны дугаар:"
-                name="phonenumber"
+                name="phoneNumber"
                 rules={[
                   { required: true, message: "Утасны дугаар оруулна уу" },
                 ]}
@@ -337,14 +362,14 @@ const Profile = () => {
               </Form.Item>
               <Form.Item
                 label="Facebook:"
-                name="facebook"
+                name="fbLink"
                 rules={[{ required: false, message: "Facebook оруулна уу" }]}
               >
                 <Input disabled={isProfileNotEdit} />
               </Form.Item>
 
-              <Form.Item label="Хэрэглэгчийн дугаар:" name="usernumber">
-                <Input disabled={true} />
+              <Form.Item label="Хэрэглэгчийн дугаар:" name="id">
+                <Input  disabled={isProfileNotEdit} />
               </Form.Item>
 
               {!isProfileNotEdit && (
@@ -355,7 +380,8 @@ const Profile = () => {
                 </Form.Item>
               )}
             </Form>
-          </Card>
+          :null}
+           </Card>
         </Col>
         <Col span={12} style={{ paddingLeft: "25px" }}>
           <Card>

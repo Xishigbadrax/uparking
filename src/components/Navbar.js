@@ -12,8 +12,17 @@ import { DownOutlined } from '@ant-design/icons';
 const IMG_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
 
 export default function Navbar() {
-  const ctx = useContext(Context);
+  const {userdata} = useContext(Context);
   const router = useRouter();
+  const [userRealData, setUserRealData] = useState("");
+
+
+  useEffect(async () => {
+    if(typeof userdata.firstName != "undefined"){
+      setUserRealData(userdata)
+    }
+    
+  }, [userdata]);
 
   const getIcon = icon => {
     const AntIcon = AntdIcons[icon];
@@ -21,10 +30,11 @@ export default function Navbar() {
   }
 
   const getProfile = () => {
+    if (userRealData === "") return null;
     return <div style={{ height: "21px" }}>
-      <Avatar src={IMG_URL + ctx.userProfileImgPath} style={{ marginRight: "10px" }}
+      <Avatar src={IMG_URL + userRealData.imageProfile} style={{ marginRight: "10px" }}
       />
-      {ctx.username}
+      {userRealData.lastName.charAt(0) + ". " + userRealData.firstName}
     </div>
   }
 

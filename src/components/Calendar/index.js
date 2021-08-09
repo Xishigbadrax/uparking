@@ -10,28 +10,28 @@ moment.updateLocale('mn', {
 
 const getListData = (value) => {
   let listData;
-  switch (value.date()) {
-    case 8:
-      listData = [
-        { id:1, type: 'warning', content: 'Uparking дугаар' },
-        { id:2, type: 'success', content: 'This is usual event.' },
-      ];
-      break;
-    case 10:
-      listData = [
-        { id:3, type: 'warning', content: 'Uparking дугаар' },
-        { id:4, type: 'success', content: 'This is usual event.' },
-        { id:5, type: 'error', content: 'This is error event.' },
-      ];
-      break;
-    case 15:
-      listData = [
-        { id:6, type: 'warning', content: 'Uparking дугаар' },
-        { id:7, type: 'warning', content: 'Uparking дугаар' },
-      ];
-      break;
-    default:
-  }
+  // switch (value.date()) {
+  //   case 8:
+  //     listData = [
+  //       { id:1, type: 'warning', content: 'Uparking дугаар' },
+  //       { id:2, type: 'success', content: 'This is usual event.' },
+  //     ];
+  //     break;
+  //   case 10:
+  //     listData = [
+  //       { id:3, type: 'warning', content: 'Uparking дугаар' },
+  //       { id:4, type: 'success', content: 'This is usual event.' },
+  //       { id:5, type: 'error', content: 'This is error event.' },
+  //     ];
+  //     break;
+  //   case 15:
+  //     listData = [
+  //       { id:6, type: 'warning', content: 'Uparking дугаар' },
+  //       { id:7, type: 'warning', content: 'Uparking дугаар' },
+  //     ];
+  //     break;
+  //   default:
+  // }
   return listData || [];
 }
 
@@ -65,7 +65,6 @@ const monthCellRender = (value) => {
   ) : null;
 }
 const CustomCalendar = ({data}) => {
-  console.log(data, 'data')
 
   // const [calendarData, setCalendarData] = useState([]);
   // if (data.length> 0){

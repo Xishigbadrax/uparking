@@ -3,7 +3,8 @@ import { Menu, Layout, Avatar } from 'antd';
 import { useRouter } from 'next/router';
 import * as AntdIcons from '@ant-design/icons';
 import Context from '@context/Context';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
+const IMG_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
 import {
   UserOutlined,
 } from '@ant-design/icons';
@@ -13,9 +14,18 @@ const { SubMenu } = Menu;
 
 const Sidebar = () => {
   const router = useRouter();
-  const { state, menuOpenKeys, setMenuOpenKeys } = useContext(Context);
+  const { state, menuOpenKeys, setMenuOpenKeys, userdata } = useContext(Context);
   const [ pathName , setPathName ] = useState("/")
   const { menus } = state;
+  const [userRealData, setUserRealData] = useState("");
+
+
+  useEffect(async () => {
+    if(typeof userdata.firstName != "undefined"){
+      setUserRealData(userdata)
+    }
+    
+  }, [userdata]);
   
 
   const getIcon = icon => {
@@ -70,10 +80,17 @@ const Sidebar = () => {
     }).filter(item => item);
   };
 
+  const getProfile = () => {
+    if (userRealData === "") return null;
+    return <div >
+      <Avatar size={72} src={IMG_URL + userRealData.imageProfile}  />
+      <div className="userName"><span>{userRealData.lastName.charAt(0) + ". " + userRealData.firstName}</span></div>
+    </div>
+  }
   return (
     <Sider theme="light" className={"sideBar"} >
-      <Avatar size={72} icon={<UserOutlined />} />
-      <div className="userName"><span>А.Бат-Эрдэнэ</span></div>
+      { getProfile()}
+      
       {/* <div className="logo">
         <img src="/small_logo.png" alt="logg" className="header-logo" />
       </div> */}

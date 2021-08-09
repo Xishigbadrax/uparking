@@ -1,12 +1,65 @@
 import ProfileLayout from "@components/layouts/ProfileLayout";
 import { Tabs } from 'antd';
 import CustomCalendar from "@components/Calendar";
-import { Row, Col, Card } from "antd";
+import { Row, Col, Card, Calendar, Tag } from "antd";
 import { Radar, Bar } from 'react-chartjs-2';
+import { callGet, callPost } from "@api/api";
+import { useContext, useState, useEffect } from "react"
+import Context from '@context/Context';
+import Helper from '@utils/helper';
+import { calendarLocale } from "@constants/constants.js"
+import moment from 'moment';
+import DayNightColumn from "@components/DayNightColumn"
 
 const { TabPane } = Tabs;
 const callback = (key) => {
-    console.log(key);
+    // console.log(key);
+}
+moment.updateLocale('mn', {
+    weekdaysMin: ["Ням", "Даваа", "Мягмар", "Лхагва", "Пүрэв", "Баасан", "Бямба"]
+});
+
+
+// const getListData = (value) => {
+//   let listData;
+//   switch (value.date()) {
+//     case 8:
+//       listData = [
+//         { id:1, type: 'warning', content: 'Uparking дугаар' },
+//         { id:2, type: 'success', content: 'This is usual event.' },
+//       ];
+//       break;
+//     case 10:
+//       listData = [
+//         { id:3, type: 'warning', content: 'Uparking дугаар' },
+//         { id:5, type: 'error', content: 'This is error event.' },
+//       ];
+//       break;
+//     case 15:
+//       listData = [
+//         { id:6, type: 'warning', content: 'Uparking дугаар' },
+//         { id:7, type: 'warning', content: 'Uparking дугаар' },
+//       ];
+//       break;
+//     default:
+//   }
+//   return listData || [];
+// }
+
+const getMonthData = (value) => {
+    if (value.month() === 8) {
+        return 1394;
+    }
+}
+
+const monthCellRender = (value) => {
+    const num = getMonthData(value);
+    return num ? (
+        <div className="notes-month">
+            <section>{num}</section>
+            <span>Backlog number</span>
+        </div>
+    ) : null;
 }
 
 const data = [];
@@ -81,6 +134,72 @@ const options2 = {
 
 
 const Dashboard = () => {
+    const ctx = useContext(Context);
+    const [userData, setuserData] = useState(null);
+    const [markedDate, setmarkedDate] = useState(null);
+    const [calendarData, setCalendarData] = useState([]);
+    useEffect(() => {
+        fetchData();
+    }, []);
+    const fetchData = async () => {
+        ctx.setIsLoading(true);
+        await callGet(`/wallet/user`, null).then((res) => {
+            console.log(res, 'resres')
+            setuserData(res);
+            if (res && res.pendingList && res.pendingList.length > 0) {
+                setCalendarData(res.pendingList);
+                // let acc = {};
+                // let array = [];
+                // res.pendingList.forEach((c) => {
+                //     (acc[c.date] = {
+                //         marked: true,
+                //         selected: true,
+                //         selectedColor: '#0013D4',
+                //         money: c.amount,
+                //     }),
+                //         array.push(acc);
+                // });
+                // setmarkedDate(Object.assign({}, ...array));
+            }
+            ctx.setIsLoading(false);
+        });
+    };
+
+    const getListData = (value) => {
+        let listData = [];
+        if (calendarData.length > 0) {
+            calendarData.forEach(function (element) {
+                var currentMoment = moment(element.date, 'YYYY/MM/DD');
+                if (value.format('YYYY-MM-DD') === currentMoment.format('YYYY-MM-DD')) {
+                    listData.push(element);
+                }
+            });
+        }
+        return listData || [];
+    }
+    const getTagColor = (item) => {
+        if (item.bookingStatus === "CONFIRMED") {
+            if (calendarStatus == 3) {
+                return 'cyan'
+            }
+            return 'green';
+        }
+    }
+
+    const dateCellRender = (value) => {
+        const listData = getListData(value);
+        return (
+            <ul className="events">
+                {listData.map(item => (
+                    <li key={item.date}>
+                        {/* <Badge status={item.type} text={item.content} /> */}
+                        <Tag color="green" className="eventText">{item.amount}</Tag>
+                    </li>
+                ))}
+            </ul>
+        );
+    }
+
 
     return (
         <ProfileLayout>
@@ -89,7 +208,8 @@ const Dashboard = () => {
                     <Row className={"status"}>
                         <Col span={9}>
                             <div className="totalSpentAmount">
-                                <span>140000₮</span>
+                                <span>
+                                    {userData ? Helper.formatValueReverse(userData.totalIncome) : 0}₮</span>
                             </div>
                             <div className="totalSpentText">
                                 <span>Нийт заруулалт</span>
@@ -97,7 +217,7 @@ const Dashboard = () => {
                         </Col>
                         <Col span={8}>
                             <div className="levelAmount">
-                                <span>35%</span>
+                                <span>0%</span>
                             </div>
                             <div className="levelText">
                                 <span>Ашиглалтын түвшин</span>
@@ -105,18 +225,19 @@ const Dashboard = () => {
                         </Col>
                         <Col span={7}>
                             <div className="daystatuses">
-                                <span>Өдөр  2</span>
+                                <span>Өдөр  0</span>
                             </div>
                             <div className="daystatuses">
-                                <span>Шөнө  2</span>
+                                <span>Шөнө  0</span>
                             </div>
                             <div className="daystatuses">
-                                <span>Бүтэн өдөр  2</span>
+                                <span>Бүтэн өдөр  0</span>
                             </div>
 
                         </Col>
                     </Row>
-                    <CustomCalendar data={data} ></CustomCalendar>
+                    {/* <CustomCalendar data={data} ></CustomCalendar> */}
+                    <DayNightColumn />  <Calendar className="customCalendar" locale={calendarLocale} dateCellRender={dateCellRender} monthCellRender={monthCellRender} />
                     <Row>
                         <Col span={12}></Col>
                         <Col span={12}></Col>
@@ -126,7 +247,7 @@ const Dashboard = () => {
                     <Row className={"status"}>
                         <Col span={9}>
                             <div className="totalSpentAmount">
-                                <span>140000₮</span>
+                                <span>0₮</span>
                             </div>
                             <div className="totalSpentText">
                                 <span>Нийт түрээсийн орлого</span>
@@ -134,7 +255,7 @@ const Dashboard = () => {
                         </Col>
                         <Col span={8}>
                             <div className="levelAmount">
-                                <span>35%</span>
+                                <span>0%</span>
                             </div>
                             <div className="levelText">
                                 <span>Ашиглалтын түвшин</span>
@@ -142,13 +263,13 @@ const Dashboard = () => {
                         </Col>
                         <Col span={7}>
                             <div className="daystatuses">
-                                <span>Өдөр  2</span>
+                                <span>Өдөр  0</span>
                             </div>
                             <div className="daystatuses">
-                                <span>Шөнө  2</span>
+                                <span>Шөнө  0</span>
                             </div>
                             <div className="daystatuses">
-                                <span>Бүтэн өдөр  2</span>
+                                <span>Бүтэн өдөр  0</span>
                             </div>
 
                         </Col>

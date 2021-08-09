@@ -1728,10 +1728,10 @@
   height: 50px;
 }
 
+
 .ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date-content {
   position: static;
   width: auto;
-  height: 30px;
   overflow-y: auto;
   color: rgba(0, 0, 0, 0.85);
   line-height: 1.5715;

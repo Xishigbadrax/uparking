@@ -1,5 +1,9 @@
 @import 'button';
 
+body{
+    font-family: Helvetica !important;
+    font-style: normal !important;
+}
 .loginContainer {
     #basic{
         width: 340px;
@@ -372,8 +376,8 @@
                                     li{
 
 
-                                        background: rgba(0, 249, 184, 0.08);
-                                        border: 1px solid #76E8AA;
+                                        // background: rgba(0, 249, 184, 0.08);
+                                        // border: 1px solid #76E8AA;
                                         box-sizing: border-box;
                                         border-radius: 8px;
                                         text-align: center;
@@ -381,7 +385,7 @@
                                             font-weight: normal;
                                             font-size: 10px;
                                             line-height: 16px;
-                                            color: #76E8AA;
+                                            // color: #76E8AA;
                                         }
                                     }
                                 }
@@ -471,4 +475,105 @@
 }
 .notes-month section {
   font-size: 28px;
+}
+
+.daynighttext{  
+    float: left;
+    height: 100%;
+    margin-top: 75px;
+    .item{
+        margin-top: 54px;
+        span{
+            margin-right: 5px;
+        }
+        li{
+            margin-top: 4px;
+            line-height: 1.5;
+        }
+    }
+}
+.calendarViewer{
+    position: absolute !important;
+    margin-top: 20px;
+}
+.calendarListStatus{
+    position: absolute;
+    top: -30px;
+    background: rgba(234, 102, 95, 0.08);
+    border-radius: 8px 8px 0px 0px;
+    padding:4px 8px;
+    left:130px;
+    text-align: center;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+}
+.calendarList{
+    margin-top: 60px !important;
+    .ant-list-items{
+        margin-bottom: 20px;
+        .ant-list-item{
+            position: relative;
+            margin: 54px 15px 0px 15px;
+            box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.15);
+            border-radius: 24px;
+            padding: 20px;
+            .listtitle{
+                font-size: 16px;
+                line-height: 24px;
+                letter-spacing: 0.15px;
+                color: #141A29;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .listdescription{
+                font-size: 10px;
+                line-height: 16px;
+                letter-spacing: 0.4px;
+                color: #35446D;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .listdaynight{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .liststartenddate{
+                font-size: 12px;
+                line-height: 24px;
+                letter-spacing: 0.1px;
+                color: #141A29;
+            }
+            .listpay{
+                .totalprice{
+                    font-size: 16px;
+                    line-height: 24px;
+                    letter-spacing: 0.15px;
+                    color: #141A29;
+                }
+            }
+            .listactions{
+                text-align: right;
+                padding-right: 10px;
+                font-size: 25px;
+                span{
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
+.ant-layout-header{
+    background: none !important;
+}
+.ant-layout-sider{
+    background: none !important;
+}
+.ant-layout{
+    background: none !important;
+}
+.ant-btn-icon-only.ant-btn-lg{
+    font-size: 10px !important;
 }
