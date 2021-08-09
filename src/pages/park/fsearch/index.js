@@ -3,7 +3,11 @@ import { callGet, sList } from "@api/api";
 import { Card, Col, Row, Button, DatePicker, Input, Select, Modal } from "antd";
 import Context from "@context/Context";
 import moment from "moment";
-import { SearchOutlined, DownOutlined } from "@ant-design/icons";
+import {
+  SearchOutlined,
+  DownOutlined,
+  TrademarkOutlined,
+} from "@ant-design/icons";
 import dynamic from "next/dynamic";
 import { Tabs } from "antd";
 import ToFit from "@components/fsearch/toFIt";
@@ -18,13 +22,24 @@ const IndexPageMoreInfo = dynamic(
 );
 const { RangePicker } = DatePicker;
 const { Option } = Select;
+
+const Marker = (props) => {
+  return (
+    <div className="SuperAwesomePin">
+      <TrademarkOutlined />
+    </div>
+  );
+};
+
 const fsearch = () => {
   const GOOGLE_API = process.env.NEXT_GOOGLE_API;
   const ctx = useContext(Context);
   const [dashboardData, setDashboardData] = useState({});
   const [parkRegModalVisible, setParkRegModalVisible] = useState(true);
   const [seeMore, setSeeMore] = useState(false);
-  const [startDate, setStartDate] = useState("2019-05-01");
+  const [longitude, setLongitude] = useState(106.91699199253857);
+  const [latitude, setLatitude] = useState(47.91899690115193);
+  const [startDate, setStartDate] = useState();
   const [address, setAddress] = useState({});
   const [type, setType] = useState({});
   const [endDate, setEndtDate] = useState();
@@ -55,14 +70,17 @@ const fsearch = () => {
     // setEndtDate(today);
     // getData(startDate, today);
   }, []);
-  const handleDateChange = (value, dateString) => {
+  const handleStartDateChange = (value, dateString) => {
     if (dateString) {
-      setStartDate(dateString[0]);
-      setEndtDate(dateString[1]);
+      setStartDate(dateString);
+    }
+  };
+  const handleEndDateChange = (value, dateString) => {
+    if (dateString) {
+      setEndtDate(dateString);
       getData(dateString[0], dateString[1]);
     }
   };
-
   const onChangeAddress = (e) => {
     console.log(e.target.value);
     setInputdata(e.target.value);
@@ -70,20 +88,24 @@ const fsearch = () => {
   const onChangeType = (e) => {
     console.log(e);
     setType(e);
+    console.log(startDate, endDate, type);
+  };
+  const onMapClick = () => {};
+
+  const onSearch = async () => {
+    if (inputData) {
+      const data = await callGet(`/search/keyword/?syllable=${inputData}`);
+      const cutData = data.slice(0, 20);
+      console.log(cutData);
+      setSearchedData(cutData);
+    } else {
+      const data = await callGet(
+        `/search/test/input?keywordId=2&endDate=${endDate}&startDate=${startDate}&keywordId=0`
+      );
+      console.log(data);
+    }
   };
 
-  function onChange(value, dateString) {
-    console.log("Selected Time: ", value);
-    console.log("Formatted Selected Time: ", dateString);
-  }
-  const onSearch = async () => {
-    const data = await callGet(
-      `/search/keyword/?syllable=${inputData}&limit=20&page=2`
-    );
-    const cutData = data.slice(0, 20);
-    console.log(cutData);
-    setSearchedData(cutData);
-  };
   function onOk(value) {
     console.log("onOk: ", value);
   }
@@ -91,32 +113,35 @@ const fsearch = () => {
     console.log(key);
   }
 
-  console.log("what happened-->", searchedData);
   return (
-    <div style={{ height: "100vh" }}>
+    <div style={{ backgroundColor: "#fff" }}>
       <Row style={{ padding: "20px" }}>
-        <Col span={7}>
+        <Col span={9}>
           <Input
+            style={{
+              height: "50px",
+              borderRadius: "15px",
+            }}
             onChange={onChangeAddress}
             placeholder="Хаяг"
             size="large"
-            height="60px"
+            height="70px"
             prefix={<SearchOutlined />}
           />
         </Col>
         <Col
-          span={3.5}
+          span={3}
           style={{
             height: "50px",
             borderRadius: "15px",
-            border: "1px solid gray",
+            marginLeft: "10px",
+            border: "1px solid #DCDCDC",
           }}
-          offset={1}
         >
           <div style={{ marginLeft: "10px", paddingRight: "5px" }}>
             <p style={{ fontSize: "10px" }}>Захиалгын төрөл</p>
             <Select
-              style={{ width: 120 }}
+              style={{ width: "100%" }}
               placeholder="Сонгох"
               onChange={onChangeType}
             >
@@ -126,12 +151,12 @@ const fsearch = () => {
           </div>
         </Col>
         <Col
-          span={3.5}
-          offset={1}
+          span={3}
           style={{
             height: "50px",
             borderRadius: "15px",
-            border: "1px solid gray",
+            marginLeft: "10px",
+            border: "1px solid #DCDCDC",
           }}
         >
           <div style={{ marginLeft: "10px", paddingRight: "5px" }}>
@@ -139,8 +164,8 @@ const fsearch = () => {
               Эхлэх хугацаа сонгох
             </p>
             <DatePicker
-              style={{ width: "185px" }}
-              onChange={onChange}
+              style={{ width: "100%" }}
+              onChange={handleStartDateChange}
               placeholder="Сонгох"
               suffixIcon={
                 <div>
@@ -151,19 +176,19 @@ const fsearch = () => {
           </div>
         </Col>
         <Col
-          offset={1}
-          span={3.5}
+          span={3}
           style={{
             height: "50px",
             borderRadius: "15px",
-            border: "1px solid gray",
+            marginLeft: "10px",
+            border: "1px solid #DCDCDC",
           }}
         >
           <div style={{ paddingRight: "5px", marginLeft: "10px" }}>
             <p style={{ fontSize: "10px" }}>Дуусах хугацаа сонгох</p>
             <DatePicker
-              style={{ width: "185px" }}
-              onChange={onChange}
+              style={{ width: "100%" }}
+              onChange={handleEndDateChange}
               placeholder="Сонгох"
               suffixIcon={
                 <div>
@@ -173,34 +198,48 @@ const fsearch = () => {
             ></DatePicker>
           </div>
         </Col>
-        <Col span={4} offset={1}>
-          <Button htmlType="submit" type="primary" block onClick={onSearch}>
+        <Col
+          span={4}
+          style={{ marginLeft: "10px" }}
+          size="large"
+          className={`searchButton`}
+        >
+          <Button
+            htmlType="submit"
+            size={"large"}
+            type="primary"
+            block
+            onClick={onSearch}
+          >
             Хайх
           </Button>
         </Col>
       </Row>
       <Row>
-        <Col span={17}>
+        <Col span={16}>
           <GoogleMapReact
-            style={{ height: "100vh" }}
+            style={{ height: "700px", width: "892px" }}
             bootstrapURLKeys={{ key: GOOGLE_API }}
             defaultCenter={{
-              lat: 47.91899690115193,
-              lng: 106.91699199253857,
+              lat: latitude,
+              lng: longitude,
             }}
             defaultZoom={11}
-          ></GoogleMapReact>
+            onClick={onMapClick}
+          >
+            <Marker lat={latitude} lng={longitude} />
+          </GoogleMapReact>
         </Col>
-        <Col span={7} offset={0.5}>
-          <Card title="Card title">
+        <Col span={8}>
+          <Card style={{ width: "100%" }}>
             <Tabs defaultActiveKey="1" onChange={callback}>
               <TabPane tab="Тохирох" key="1">
                 <ToFit data={searchedData} />
               </TabPane>
-              <TabPane tab="Хамгийн хямд" key="2">
+              <TabPane tab="Хамгийн хямд" disabled key="2">
                 <Closest />
               </TabPane>
-              <TabPane tab="Хамгийн ойр" key="3">
+              <TabPane tab="Хамгийн ойр" disabled key="3">
                 <Farthest />
               </TabPane>
             </Tabs>
