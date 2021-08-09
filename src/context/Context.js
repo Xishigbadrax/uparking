@@ -24,15 +24,15 @@ export const ContextProvider = ({ children }) => {
   };
 
   const getProfileData = async (user) => {
-      const userdata = await callGet(`/user/${user.user_id}/test`)
-      if (!userdata || userdata === undefined) {
-        showMessage(messageType.FAILED.type, defaultMsg.dataError);
-        return;
-      }
-      if (userdata.lastName !== undefined) {
-        setUserdata(userdata);
-      }
-  }
+    const userdata = await callGet(`/user/${user.user_id}/test`);
+    if (!userdata || userdata === undefined) {
+      showMessage(messageType.FAILED.type, defaultMsg.dataError);
+      return;
+    }
+    if (userdata.lastName !== undefined) {
+      setUserdata(userdata);
+    }
+  };
 
   const setMenuAndPermissions = async () => {
     // if (
@@ -98,6 +98,41 @@ export const ContextProvider = ({ children }) => {
     //   payload: menuData,
     // });
     //#endregion
+
+    let menuData = [];
+    const data = profileMenu;
+    // const data = await sList({ code: apiList.adminMenu });
+    // if (data && data.data) {
+    // const tmpMenus = data.data.sort((a, b) => {
+    //   return a.order - b.order;
+    // });
+    const tmpMenus = data;
+
+    let menus = {};
+    tmpMenus.map((mnu) => {
+      const parentId = mnu.parentId;
+      if (parentId !== null) {
+        if (menus[parentId]["children"] === undefined) {
+          menus[parentId]["children"] = [];
+          delete menus[parentId]["link"];
+        }
+        menus[parentId]["children"].push(mnu);
+      } else {
+        menus[mnu.id] = mnu;
+      }
+    });
+
+    menuData = Object.values(menus).sort((a, b) => {
+      return a.order - b.order;
+    });
+    // }
+
+    dispatch({
+      type: "MENUS",
+      payload: menuData,
+    });
+
+    //#endregion
   };
 
   useEffect(() => {
@@ -115,12 +150,11 @@ export const ContextProvider = ({ children }) => {
         dispatch,
         setMenuAndPermissions,
         checkPermission,
-        userdata
+        userdata,
       }}
     >
       {children}
     </Context.Provider>
   );
 };
-
 export default Context;

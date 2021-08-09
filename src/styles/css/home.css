@@ -1824,9 +1824,9 @@
 .ant-drawer-right.ant-drawer-open .ant-drawer-content-wrapper {
   box-shadow: none;
 }
-.ant-col .ant-col-3{
+/* .ant-col .ant-col-3{
    background-color: #00f9b8;
-}
+} */
 .ant-tabs-nav-list{
    width: 100% !important;
 }
@@ -1863,23 +1863,16 @@
   margin-top: 2%;
 }
 
-.timePickCalendar tbody tr td{
-  padding: 5px !important;
-}
-tbody{
-   height: 400px !important;
-   width: 400px!important;
-   
-}
 
-.ant-picker-cell.ant-picker-cell-in-view {
+
+.timePickCalendar tbody tr .ant-picker-cell.ant-picker-cell-in-view {
   height: 50px !important;
   width: 50px !important;
   background:  #76E8AA ;
   border-radius: 20px !important;
   
 }
-.ant-picker-cell.ant-picker-cell-in-view.ant-picker-cell-selected{
+.timePickCalendar .ant-picker-cell.ant-picker-cell-in-view.ant-picker-cell-selected{
   border: 1px  black !important;
   border-radius: 20px !important;
 }

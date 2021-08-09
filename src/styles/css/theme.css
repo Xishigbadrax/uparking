@@ -7062,7 +7062,7 @@ _:-ms-fullscreen .ant-picker-range-wrapper .ant-picker-year-panel .ant-picker-ce
   color: rgba(0, 0, 0, 0.65);
   background: #fff;
 }
-.ant-drawer-wrapper-body {
+/* .ant-drawer-wrapper-body {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -7099,7 +7099,7 @@ _:-ms-fullscreen .ant-picker-range-wrapper .ant-picker-year-panel .ant-picker-ce
 }
 .ant-drawer .ant-picker-clear {
   background: #fff;
-}
+} */
 @keyframes antdDrawerFadeIn {
   0% {
     opacity: 0;
