@@ -18351,9 +18351,7 @@ span.ant-radio + * {
   color: inherit;
   cursor: pointer;
 }
-.ant-rate-star:not(:last-child) {
-  margin-right: 8px;
-}
+
 .ant-rate-star > div {
   transition: all 0.3s;
 }
@@ -18393,15 +18391,14 @@ span.ant-radio + * {
 }
 .ant-rate-text {
   display: inline-block;
-  margin: 0 8px;
+  margin: 0 2px;
   font-size: 16px;
 }
 .ant-rate-rtl {
   direction: rtl;
 }
 .ant-rate-rtl .ant-rate-star:not(:last-child) {
-  margin-right: 0;
-  margin-left: 8px;
+  
 }
 .ant-rate-rtl .ant-rate-star-first {
   right: 0;

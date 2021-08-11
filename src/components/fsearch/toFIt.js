@@ -25,6 +25,8 @@ const tofit = ({ data }) => {
   const [selectItem, setSelected] = useState();
   const [drawerItem, setDrawerItem] = useState({});
   const [dayOfNumber, setDayofNumber] = useState(0);
+  const [nightOfNumber, setNightOfNumber] = useState(0);
+  const [fullDayNumber, setFullDayNumber] = useState(0);
   const [saleDatas, setSaleData] = useState();
   const [vehicles, setVehiclesData] = useState([]);
   const [chooseTimeVisible, setChooseTimeVisible] = useState(false);
@@ -39,6 +41,8 @@ const tofit = ({ data }) => {
     setSelected(priceData);
     console.log(priceData);
     const saleData = await callGet(`/parkingspace/sale?parkingSpaceId=${id}`);
+    const imageData = await callGet(`/booking/id/test?id=${id}&asWho=1`);
+    console.log(imageData);
     console.log(saleData);
     setSaleData(saleData);
     const vehicle = await callGet(`/user/vehicle/list`);
@@ -72,70 +76,36 @@ const tofit = ({ data }) => {
       {data.map((item) => (
         <div key={item.id}>
           <Card
-            style={{ borderRadius: "20px", marginTop: "10px" }}
+            className={`ResidenceCardList`}
+            style={{
+              height: "200px",
+              width: "500px",
+              borderRadius: "16px",
+              background: "#FFFFFF",
+            }}
             key={item.id}
           >
-            <div style={{ padding: "5px" }}>
-              {/* <Button style={{ marginTop: "-20px" }}>Шууд захиалах</Button> */}
+            <div
+              style={{
+                width: "99px",
+                position: "absolute",
+                marginLeft: "16px",
+                height: "13px",
+              }}
+            >
+              <p style={{ display: "flex", fontSize: "8px" }}>Шууд захиалах</p>
+            </div>
+            <div style={{ marginLeft: "16px", marginTop: "19px" }}>
               <Row>
-                <Col span={12}>
-                  <Image
-                    src="/pexels-photo-3349460 1.png"
-                    height="140px"
-                    width="210px"
-                  ></Image>
-                </Col>
-                <Col span={8} offset={1}>
-                  <p style={{ fontSize: "15px" }}>
-                    <b>
-                      {item.keyword.split(" ")[0]}
-                      {item.keyword.split(" ")[1]}
-                      {item.keyword.split(" ")[2]}
-                    </b>
-                  </p>
-                  <Col>
-                    <Rate style={{ fontSize: "10px" }} defaultValue={3.5} />
-                  </Col>
-
+                <Col>
                   <Row>
-                    <div style={{ display: "flex" }}>
-                      <div>
-                        <Image
-                          src="/directions_car_24px.png"
-                          height="12px"
-                          width="12px"
-                        />
-                      </div>
-                      <p style={{ fontSize: "12px", paddingTop: "2px" }}>
-                        <p style={{ marginLeft: "10px" }}>
-                          112м Байршил ID {item.locationId}
-                        </p>
-                      </p>
-                    </div>
-                    <div style={{ display: "flex" }}>
-                      <div>
-                        <Image
-                          src="/icons/location_on_24px.png"
-                          height="15px"
-                          width="15px"
-                        />
-                      </div>
-                      <Col span={8}>
-                        <p
-                          style={{
-                            fontSize: "12px",
-                            width: "150px",
-                            textAlign: "justify",
-                          }}
-                        >
-                          {item.keyword}
-                        </p>
-                      </Col>
-                    </div>
+                    <Image
+                      src="/pexels-photo-3349460 1.png"
+                      height="140px"
+                      width="209.58px"
+                    ></Image>
                   </Row>
-                </Col>
-                <Row>
-                  <Col span={14}>
+                  <Row>
                     <div style={{ display: "flex " }}>
                       <p style={{ fontSize: "15px", marginLeft: "20px" }}>
                         <b>B1</b>
@@ -182,30 +152,199 @@ const tofit = ({ data }) => {
                         style={{ paddingLeft: "10px" }}
                       />
                     </div>
+                  </Row>
+                </Col>
+                <Col style={{ width: "210px", marginLeft: "10px" }}>
+                  <div
+                    style={{
+                      position: "static",
+                      width: "232px",
+                      height: "24px",
+                      alignItems: "center",
+                      display: "flex",
+                      flexDirection: "row",
+                    }}
+                  >
+                    <p
+                      style={{
+                        fontFamily: "Helvetica",
+                        fontStyle: "normal",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      <b>
+                        {item.keyword.split(" ")[0]}
+                        {item.keyword.split(" ")[1]}
+                        {item.keyword.split(" ")[2]}
+                      </b>
+                    </p>
+                    <div>ad</div>
+                  </div>
+                  <Row>
+                    <Rate
+                      style={{ width: "80px", height: "16px", order: "1" }}
+                      disabled
+                      defaultValue={2}
+                    />
+                  </Row>
+                  <Row>
+                    <div style={{ display: "flex" }}>
+                      <div
+                        style={{
+                          height: "16px",
+                          width: "16px",
+                          marginTop: "10px",
+                        }}
+                      >
+                        <Image
+                          src="/directions_car_24px.png"
+                          height="12px"
+                          width="10.67px"
+                          style={{ marginLeft: "2px" }}
+                        />
+                      </div>
+                      <p
+                        style={{
+                          width: "40px",
+                          height: "16px",
+                          marginTop: "12px",
+                          fontSize: "12px",
+                        }}
+                      >
+                        112м
+                      </p>
+                      <p
+                        style={{
+                          width: "75px",
+                          fontSize: "12px",
+                          textAlign: "center",
+                          marginTop: "12px",
+                          fontStyle: "regular",
+                        }}
+                      >
+                        Байршил ID
+                      </p>
+                      <p
+                        style={{
+                          width: "43px",
+                          fontSize: "12px",
+                          marginTop: "12px",
+                        }}
+                      >
+                        {item.locationId}
+                      </p>
+                    </div>
+                    <div style={{ display: "flex" }}>
+                      <div
+                        style={{
+                          marginTop: "10px",
+                        }}
+                      >
+                        <Image
+                          src="/icons/location_on_24px.png"
+                          height="16px"
+                          width="16px"
+                        />
+                      </div>
+                      <p
+                        style={{
+                          width: "226px",
+                          height: "32px",
+                          fontSize: "12px",
+                          fontStyle: "normal",
+                          alignItems: "center",
+                          textAlign: "justify",
+                          marginTop: "10px",
+                        }}
+                      >
+                        {item.keyword}
+                      </p>
+                    </div>
+                  </Row>
+                  <Row>
+                    <Col
+                      style={{
+                        width: "115px",
+                        height: "32px",
+                        marginTop: "10px",
+                      }}
+                    >
+                      <Button
+                        onClick={() => showTimePickDrawer(item.id)}
+                        className={`freeTimePick`}
+                      >
+                        Сул цаг харах
+                      </Button>
+                    </Col>
+                    <Col
+                      style={{
+                        width: "115px",
+                        height: "32px",
+                        marginTop: "10px",
+                      }}
+                    >
+                      <Button
+                        className={`freeTimePick`}
+                        style={{
+                          color: "blue",
+                        }}
+                        onClick={() => DetailsDrawerOpen(item.id)}
+                      >
+                        Дэлгэрэнгүй
+                      </Button>
+                    </Col>
+                  </Row>
+                </Col>
+                <Row>
+                  <Col span={14}>
+                    {/* <div style={{ display: "flex " }}>
+                      <p style={{ fontSize: "15px", marginLeft: "20px" }}>
+                        <b>B1</b>
+                      </p>
+                      <Image
+                        src="/icons/1) Checkbox.png"
+                        width="20px"
+                        height="20px"
+                        style={{ marginLeft: "10px" }}
+                      />
+                      <Image
+                        src="/icons/temdegleegui.png"
+                        width="20px"
+                        height="10px"
+                        style={{ paddingLeft: "10px" }}
+                      />
+                      <Image
+                        src="/icons/haadag.png"
+                        width="20px"
+                        height="20px"
+                      />
+                      <Image
+                        src="/icons/Small SUV.png"
+                        width="20px"
+                        height="20px"
+                        style={{ paddingLeft: "10px" }}
+                      />
+                      <Image
+                        src="/icons/Up.png"
+                        width="20px"
+                        height="20px"
+                        style={{ paddingLeft: "10px" }}
+                      />
+                      <Image
+                        src="/icons/haadag.png"
+                        width="20px"
+                        height="20px"
+                        style={{ paddingLeft: "10px" }}
+                      />
+                      <Image
+                        src="/keyboard_arrow_down_24px.png"
+                        width="20px"
+                        height="20px"
+                        style={{ paddingLeft: "10px" }}
+                      />
+                    </div> */}
                   </Col>
-                  <Col span={8} offset={2}>
-                    <Row>
-                      <Col span={10}>
-                        <Button
-                          onClick={() => showTimePickDrawer(item.id)}
-                          className={`freeTimePick`}
-                        >
-                          Сул цаг харах
-                        </Button>
-                      </Col>
-                      <Col span={4} offset={10}>
-                        <Button
-                          className={`freeTimePick`}
-                          style={{
-                            color: "blue",
-                          }}
-                          onClick={() => DetailsDrawerOpen(item.id)}
-                        >
-                          Дэлгэрэнгүй
-                        </Button>
-                      </Col>
-                    </Row>
-                  </Col>
+                  <Col span={8} offset={2}></Col>
                 </Row>
               </Row>
             </div>
@@ -362,10 +501,8 @@ const tofit = ({ data }) => {
                         </div>
                       </Row>
                       <Row height=" 24px" style={{ marginTop: "25px" }}>
-                        <p>
-                          <b style={{ color: "#35446D", fontSize: "14px" }}>
-                            Зун цагийн хуваарь /04.01-09.31
-                          </b>
+                        <p style={{ color: "#35446D", fontSize: "14px" }}>
+                          <b>Зун цагийн хуваарь /04.01-09.31</b>
                         </p>
                       </Row>
                       <Row
@@ -380,19 +517,17 @@ const tofit = ({ data }) => {
                         }}
                       >
                         <Col span={6} offset={2}>
-                          <p style={{ color: "#141A29" }}>
-                            <b>
-                              {selectItem === null ? (
-                                selectItem.priceForRenter1
-                              ) : (
-                                <p>dwawd</p>
-                              )}
-                            </b>
-                          </p>
+                          <div style={{ color: "#141A29" }}>
+                            {selectItem === null ? (
+                              selectItem.priceForRenter1
+                            ) : (
+                              <p>awdaw</p>
+                            )}
+                          </div>
                           <p>1 Өдөр</p>
                         </Col>
                         <Col span={6} offset={2}>
-                          <p style={{ color: "#141A29" }}>
+                          <div style={{ color: "#141A29" }}>
                             <b>
                               {selectItem === null ? (
                                 selectItem.priceForRenter2
@@ -400,11 +535,11 @@ const tofit = ({ data }) => {
                                 <p>dwawd</p>
                               )}
                             </b>
-                          </p>
+                          </div>
                           <p>1 Шөнө</p>
                         </Col>
                         <Col span={6} offset={2}>
-                          <p style={{ color: "#141A29" }}>
+                          <div style={{ color: "#141A29" }}>
                             <b>
                               {selectItem === null ? (
                                 selectItem.priceForRenter3
@@ -412,7 +547,7 @@ const tofit = ({ data }) => {
                                 <p>dwawd</p>
                               )}
                             </b>
-                          </p>
+                          </div>
                           <p>Бүтэн өдөр</p>
                         </Col>
                       </Row>
@@ -485,7 +620,7 @@ const tofit = ({ data }) => {
                         <b>Тээврийн хэрэгсэл сонгох</b>
                       </Row>
                       <Row>
-                        <Col>
+                        <Col className={`pickVehicle`}>
                           <Radio.Group
                             buttonStyle="solid"
                             onChange={onChangeChooseVehicle}
@@ -494,7 +629,11 @@ const tofit = ({ data }) => {
                               <Radio.Button
                                 key={item.value}
                                 value={item.value}
-                                style={{ borderRadius: "20px" }}
+                                style={{
+                                  borderRadius: "20px",
+                                  height: "56px",
+                                  width: "192px",
+                                }}
                               >
                                 <div style={{ display: "flex" }}>
                                   <div>
@@ -610,27 +749,33 @@ const tofit = ({ data }) => {
               </Row>
               <div style={{ padding: "10%" }}>
                 <Tabs defaultActiveKey="1">
-                  <TabPane key="1" tab="Өдөр"></TabPane>
-                  <TabPane key="2" tab="Шөнө"></TabPane>
-                  <TabPane key="3" tab="Бүтэн өдөр"></TabPane>
+                  <TabPane key="1" tab="Өдөр">
+                    <Calendar setDayOfNumber={setDayofNumber} tabskey={1} />
+                  </TabPane>
+                  <TabPane key="2" tab="Шөнө">
+                    <Calendar setNightOfNumber={setNightOfNumber} tabskey={2} />
+                  </TabPane>
+                  <TabPane key="3" tab="Бүтэн өдөр">
+                    <Calendar setFullDayNumber={setFullDayNumber} tabskey={3} />
+                  </TabPane>
                 </Tabs>
-                <Calendar setDayOfNumber={setDayofNumber} />
+
                 <Row>
                   <p>
                     <b>Таны сонгосон захиалга </b>
                   </p>
                 </Row>
                 <Row>
-                  <Col>Өдөр</Col>
-                  <Col>2</Col>
+                  <Col span={3}>Өдөр</Col>
+                  <Col span={1}>{dayOfNumber}</Col>
                 </Row>
                 <Row>
-                  <Col>Шөнө</Col>
-                  <Col></Col>
+                  <Col span={3}>Шөнө</Col>
+                  <Col span={1}>{nightOfNumber}</Col>
                 </Row>
                 <Row>
-                  <Col>Бүтэн өдөр</Col>
-                  <Col></Col>
+                  <Col span={3}>Бүтэн өдөр</Col>
+                  <Col span={1}>{fullDayNumber}</Col>
                 </Row>
                 <Divider />
                 <Row>
