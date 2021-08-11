@@ -72,7 +72,6 @@ const Sidebar = () => {
   };
 
   const getNavMenuItems = menusData => {
-    console.log(menusData, 'menusDatamenusData')
     if (!menusData) {
       return [];
     }
