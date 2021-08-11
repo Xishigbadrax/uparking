@@ -399,7 +399,18 @@ const OrderId = () => {
                                     <Col span={24} >
                                         <Tabs defaultActiveKey="1">
                                             <TabPane tab="Хэтэвч" key="1">
-                                                Content of Tab Pane 1
+                                            <div
+            style={{
+                backgroundImage: "url(/images/wallet-background.png",
+                width: "100%",
+                height:[200],
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover"
+            }}
+            >XXX</div>
+                                               
+
+
                                             </TabPane>
                                             <TabPane tab="Дансаар" key="2">
                                                 Content of Tab Pane 2
