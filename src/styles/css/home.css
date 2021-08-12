@@ -1730,11 +1730,11 @@
 .events {
   height: 30px;
 }
-.ant-picker-cell {
+/* .ant-picker-cell {
   height: 50px;
-}
+} */
 
-
+/* 
 .ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date-content {
   position: static;
   width: auto;
@@ -1742,8 +1742,8 @@
   color: rgba(0, 0, 0, 0.85);
   line-height: 1.5715;
   text-align: left;
-  }
-  .ant-modal-content {
+  } */
+  /* .ant-modal-content {
     min-height: 700px;
     height:auto;
     width: 1000px;
@@ -1756,13 +1756,13 @@
   .ant-form-item-control-input{
     height: 30px;
     border-color: #fff;
-  }
+  } */
   
    .placeholder {
     color: red !important;
   }
 
-  .ant-upload.ant-upload-select-picture-card {
+  /* .ant-upload.ant-upload-select-picture-card {
     width: 400px;
     height: 150px ;
     
@@ -1779,15 +1779,15 @@
   .ant-select:not(.ant-select-customize-input) .ant-select-selector{
     border:none !important;
     padding: 0 !important;
-  }
+  } */
 
-  .ant-input{
+  /* .ant-input{
       border:none;
   }
 .ant-divider-horizontal{
   margin: 15px 0  !important;
   margin-top: 5px;
-}
+} */
 
 .fullModal .ant-modal-content {
   height: auto !important;
@@ -1797,7 +1797,7 @@
   background-color: gray !important;
   border-radius: 20px !important;
 }
-.ant-form-item-control-input-content{
+/* .ant-form-item-control-input-content{
    height: 30px;
    margin-top: 10px;
 }
@@ -1811,19 +1811,19 @@
 }
 .ant-picker::placeholder{
   color:"black"
-}
+} */
 
 .freeTimePick{
   font-size: 10px !important;
 }
 
-.ant-rate-star .ant-rate-star-full{
+/* .ant-rate-star .ant-rate-star-full{
   margin-left: 2px !important;
 }
 
 .ant-drawer-right.ant-drawer-open .ant-drawer-content-wrapper {
   box-shadow: none;
-}
+} */
 /* .ant-col .ant-col-3{
    background-color: #00f9b8;
 } */
