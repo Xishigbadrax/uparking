@@ -577,3 +577,47 @@ body{
 .ant-btn-icon-only.ant-btn-lg{
     font-size: 10px !important;
 }
+.customCalendarMini{
+    .ant-picker-calendar-header{
+        float: left;
+        .ant-picker-calendar-mode-switch{
+            display: none;
+        }
+    }
+    .ant-picker-content{
+        thead{
+        text-transform: uppercase;
+        }
+        tbody{
+            tr{
+                td{
+                    align-items: center;
+                    justify-content: center;
+                    .customFullCellRender{
+                        margin-top: 6px !important;
+                        margin: auto;
+                        height: 50px;
+                        width: 50px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 5px;
+                    }
+                    .onclickeddate{
+                        background: rgb(24, 144, 255);
+                        color: white;
+                    }
+                    .onclickeddate:hover{
+                        background: rgba(24, 144, 255, 0.8) !important;
+                    }
+                }
+            }
+        }
+    }
+    .ant-picker-cell:hover:not(.ant-picker-cell-in-view) .ant-picker-cell-inner, .ant-picker-cell:hover:not(.ant-picker-cell-selected):not(.ant-picker-cell-range-start):not(.ant-picker-cell-range-end):not(.ant-picker-cell-range-hover-start):not(.ant-picker-cell-range-hover-end) .ant-picker-cell-inner{
+        background: #f5f5f5;
+    }
+    .ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner::before{
+        border:none !important;
+    }
+}

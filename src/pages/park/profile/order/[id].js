@@ -1,6 +1,6 @@
 import DefaultLayout from "@components/layouts/DefaultLayout";
-import { Layout, Button, Carousel, Image, Row, Col, Divider, Modal } from 'antd';
-import { LeftOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
+import { Layout, Button, Carousel, Image, Row, Col, Divider, Modal, Calendar } from 'antd';
+import { LeftOutlined, DownOutlined, UpOutlined, CodeSandboxCircleFilled } from '@ant-design/icons';
 import { useEffect, useState, useContext } from "react";
 import { callGet } from "@api/api";
 import Context from '@context/Context';
@@ -10,7 +10,11 @@ import Link from "next/link";
 import { Tabs } from 'antd';
 import { calendarLocale } from "@constants/constants.js"
 import moment from 'moment';
-import Calendar from 'react-calendar';
+// import Calendar from 'react-calendar';
+import CustomCalendar from "@components/CustomCalendar"
+moment.updateLocale("mn", {
+    weekdaysMin: ["НЯ", "ДА", "МЯ", "ЛХ", "ПҮ", "БА", "БЯ"],
+});
 
 const { TabPane } = Tabs;
 
@@ -23,7 +27,6 @@ const style = {
     padding: "5px 10px"
 };
 
-
 const OrderId = () => {
     const router = useRouter();
     const ctx = useContext(Context);
@@ -33,8 +36,9 @@ const OrderId = () => {
     const [seemoreUpDownArrow, setSeemoreUpDownArrow] = useState(false);
     const [isModalVisibleCancelOrder, setIsModalVisibleCancelOrder] = useState(false);
     const [isModalVisibleCancelOrderConfirm, setIsModalVisibleCancelOrderConfirm] = useState(false);
-    const [selectedDate, setselectedDate] = useState(null);
-    const [value, onChange] = useState(new Date());
+    const [selectedDate, setselectedDate] = useState([]);
+    const [time, settime] = useState(null);
+    const [value, setValue] = useState(new Date());
 
     useEffect(() => {
         getData();
@@ -103,7 +107,6 @@ const OrderId = () => {
     function handleClickConfirm(value, mode) {
         console.log(value, mode);
     }
-
 
     return (
         <DefaultLayout>
@@ -535,12 +538,7 @@ const OrderId = () => {
                 <div>
                     Цуцлах захиалгын эхлэх өдрийг сонгоно уу
                 </div>
-                {/* <Calendar fullscreen={false} locale={calendarLocale} onPanelChange={onPanelChange} /> */}
-
-                <Calendar
-                    onChange={onChange}
-                    value={value}
-                />
+                <CustomCalendar />
 
                 <div style={{ fontWeight: "bold", fontSize: "14px", color: "#141A29", marginTop: "30px" }}>
                     Таны цуцлах захиалга:
