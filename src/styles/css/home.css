@@ -1815,6 +1815,8 @@
 
 .freeTimePick{
   font-size: 10px !important;
+  background: rgba(3, 54, 255, 0.08);
+border-radius: 8px;
 }
 
 .ant-rate-star .ant-rate-star-full{
@@ -1844,18 +1846,36 @@
   background: linear-gradient(90deg, #0013D4 0%, #00F9B8 100%) !important;
 } */
 .chooseButton{
-  margin-top: 20px;
-  background: rgba(3, 54, 255, 0.08);
-  display: block;
+  display: flex;
+flex-direction: column;
+align-items: center;
+padding: 10px 14px;
+cursor: pointer;
+
+width: 392.4px;
+height: 40px;
+
+
+/* Smooth/1 */
+
+background: rgba(3, 54, 255, 0.08);
+/* Brand Color / Primary */
+
+border: 1px solid #0013D4;
+box-sizing: border-box;
+border-radius: 8px;
   
 }
 .searchButton{
   height: 50px  !important;
 }
-
+.timePickCalendar tbody{
+  padding-left: 10px !important;
+   border-spacing: 10px !important;
+}
  .timePickCalendar tbody tr .ant-picker-cell.ant-picker-cell-in-view {
-  height: 50px !important;
-  width: 50px !important;
+  min-height: 50px !important;
+  max-width: 50px !important;
   background:  #76E8AA ;
   border-radius: 20px !important;
   
@@ -1875,7 +1895,7 @@
   /* border: 1px  black !important;
   border-radius: 20px !important;
   background-color: #00f9b8 !important; */
-  
+  position: none !important;
   background: none  !important;
   color: black !important;
 }
@@ -1907,4 +1927,83 @@
 }
 .ant-rate-star:not(:last-child) {
   margin-right: 0px !important;
+}
+
+.OptionPane .ant-tabs-tab{
+  padding: 0px !important;
+}
+.DetailsPane .ant-tabs-tab{
+  padding: 0px !important;
+}
+.SpaceIcons{
+  background: rgba(222, 226, 233, 0.2);
+border-radius: 24px;
+margin-top: 10px;
+}
+.priceInfoOfOnDay{
+  display: flex;
+flex-direction: column;
+align-items: center;
+padding: 0px;
+width: 44px;
+height: 40px;
+left: calc(50% - 44px/2 + 5px);
+top: calc(50% - 40px/2 + 0.5px);
+}
+.priceInfoOfOneNight{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0px;
+  
+  
+  width: 53px;
+  height: 40px;
+  left: calc(50% - 53px/2 + 5px);
+  top: calc(50% - 40px/2 + 0.5px);
+}
+.priceInfoOfFullDay{
+  display: flex;
+flex-direction: column;
+align-items: center;
+padding: 0px;
+width: 70px;
+height: 40px;
+left: calc(50% - 70px/2 + 5px);
+top: calc(50% - 40px/2 + 0.5px);
+
+  
+}
+
+.OptionPane .ant-tabs-ink-bar .ant-tabs-ink-bar-animated{
+  width: 100px !important;
+  margin-left: 20px !important;
+}
+
+.pickVehicle{
+  width: 192px;
+height: 56px;
+left: 0px;
+top: 0px;
+
+/* Base Color / White */
+
+background: #FFFFFF;
+/* Brand Color / Primary */
+border: 1px solid #0013D4;
+box-sizing: border-box;
+border-radius: 8px;
+}
+.ant-radio-button-wrapper .pickVehicle:hover{
+ background: none !important;
+ color: none !important;
+}
+
+.ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+  background: grey;
+  background-color: none; 
+}
+
+.timePickCalendar tbody tr {
+  margin-top: 20px !important;
 }

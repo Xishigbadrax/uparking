@@ -218,7 +218,7 @@ const fsearch = () => {
       <Row>
         <Col span={16}>
           <GoogleMapReact
-            style={{ height: "700px", width: "892px" }}
+            style={{ height: "828px", width: "892px" }}
             bootstrapURLKeys={{ key: GOOGLE_API }}
             defaultCenter={{
               lat: latitude,
@@ -231,15 +231,59 @@ const fsearch = () => {
           </GoogleMapReact>
         </Col>
         <Col span={8}>
-          <Card style={{ width: "100%" }}>
-            <Tabs defaultActiveKey="1" onChange={callback}>
-              <TabPane tab="Тохирох" key="1">
+          <Card>
+            <Tabs
+              defaultActiveKey="1"
+              onChange={callback}
+              className={`OptionPane`}
+            >
+              <TabPane
+                tab={
+                  <div
+                    style={{
+                      width: "167px",
+                      height: "48px",
+                    }}
+                  >
+                    <p style={{ height: "24px", paddingLeft: "35px" }}>
+                      Тохирох
+                    </p>
+                  </div>
+                }
+                key="1"
+              >
                 <ToFit data={searchedData} />
               </TabPane>
-              <TabPane tab="Хамгийн хямд" disabled key="2">
+              <TabPane
+                tab={
+                  <div
+                    style={{
+                      height: "48px",
+                      width: "166px",
+                    }}
+                  >
+                    <p style={{ height: "24px" }}> Хамгийн хямд</p>
+                  </div>
+                }
+                disabled
+                key="2"
+              >
                 <Closest />
               </TabPane>
-              <TabPane tab="Хамгийн ойр" disabled key="3">
+              <TabPane
+                tab={
+                  <div
+                    style={{
+                      height: "48px",
+                      width: "166px",
+                    }}
+                  >
+                    <p style={{ height: "24px" }}> Хамгийн ойр</p>
+                  </div>
+                }
+                disabled
+                key="3"
+              >
                 <Farthest />
               </TabPane>
             </Tabs>

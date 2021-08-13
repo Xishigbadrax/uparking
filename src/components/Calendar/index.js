@@ -20,7 +20,6 @@ let selectData = [];
 
 const calendar = (props) => {
   const [curr, setCurr] = useState(0);
-  const [day, setDay] = useState(1);
   const [selectedDate, setSelectedDate] = useState([]);
   const [calendarData, setCalendarData] = useState([]);
   const onChangeLeft = () => {};
@@ -30,20 +29,17 @@ const calendar = (props) => {
     let date = moment(e).format("YYYY/MM/DD");
     if (isInArray(calendarData, date)) {
       arrayRemove(calendarData, date);
-      setDay(day - 1);
     } else {
       calendarData.push({ date: date });
-
-      setDay(day + 1);
     }
     setCurr(props.tabskey);
     console.log(curr);
     if (curr === 1) {
-      props.setDayOfNumber(day);
+      props.setDayOfNumber(calendarData.length);
     } else if (curr === 2) {
-      props.setNightOfNumber(day);
+      props.setNightOfNumber(calendarData.length);
     } else if (curr === 3) {
-      props.setFullDayNumber(day);
+      props.setFullDayNumber(calendarData.length);
     }
   };
 
@@ -89,37 +85,38 @@ const calendar = (props) => {
         onSelect={onselect}
         locale={calendarLocale}
         fullscreen={false}
-        headerRender={({ value, type, onChange, onTypeChange }) => {
-          const current = value.clone();
-          const localeData = value.localeData();
-          const year = value.year();
-          const month = [];
-          for (let i = 0; i < 12; i++) {
-            month.push(localeData.months(current));
-          }
-          return (
-            <div style={{ padding: 16 }}>
-              <Row gutter={8}>
-                <Col span={2}>
-                  <LeftOutlined
-                    onClick={onChangeLeft}
-                    style={{ cursor: "pointer" }}
-                  />
-                </Col>
-                <Col span={12}>
-                  {month[current]},{year}
-                </Col>
-                <Col
-                  span={2}
-                  onClick={onClickRight}
-                  style={{ cursor: "pointer" }}
-                >
-                  <RightOutlined />
-                </Col>
-              </Row>
-            </div>
-          );
-        }}
+        style={{}}
+        // headerRender={({ value, type, onChange, onTypeChange }) => {
+        //   const current = value.clone();
+        //   const localeData = value.localeData();
+        //   const year = value.year();
+        //   const month = [];
+        //   for (let i = 0; i < 12; i++) {
+        //     month.push(localeData.months(current));
+        //   }
+        //   return (
+        //     <div style={{ padding: 16 }}>
+        //       <Row gutter={8}>
+        //         <Col span={2}>
+        //           <LeftOutlined
+        //             onClick={onChangeLeft}
+        //             style={{ cursor: "pointer" }}
+        //           />
+        //         </Col>
+        //         <Col span={12}>
+        //           {month[current]},{year}
+        //         </Col>
+        //         <Col
+        //           span={2}
+        //           onClick={onClickRight}
+        //           style={{ cursor: "pointer" }}
+        //         >
+        //           <RightOutlined />
+        //         </Col>
+        //       </Row>
+        //     </div>
+        //   );
+        // }}
         // ref={calendarRef}
         // onPanelChange={onPanelChange}
       />

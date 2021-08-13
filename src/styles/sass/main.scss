@@ -577,7 +577,23 @@ body{
 .ant-btn-icon-only.ant-btn-lg{
     font-size: 10px !important;
 }
-.calendarSelector{
-   
+
+.timePickCalendar{
+    .ant-picker-panel{
+        .ant-picker-body{
+            .ant-picker-content{
+                tbody{
+                    tr{
+                        td{
+    .ant-picker-cell-inner .ant-picker-calendar-date{
   
+          background: #35446D !important;
+          padding: "10px";
+    }
 }
+                    }
+}
+    }
+}
+}}
+
