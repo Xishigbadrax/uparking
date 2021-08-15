@@ -15,12 +15,11 @@ export const AcademicYearEnd = moment(today)
   .month(7)
   .date(18);
 
-  console.log(AcademicYearEnd, 'AcademicYearEndAcademicYearEnd')
+console.log(AcademicYearEnd, 'AcademicYearEndAcademicYearEnd')
 const CustomCalendar = (props) => {
   const [selectedDate, setselectedDate] = useState([]);
   const [selectType, setSelectType] = useState("multi");
   const [value, setValue] = useState(null);
-  const [current, setCurrent] = useState(0);
 
   useEffect(() => {
     if (props.selectType || props.selectType === "single" || props.selectType === "multi") {
@@ -73,19 +72,11 @@ const CustomCalendar = (props) => {
     } else {
       setselectedDate([value]);
     }
-    setCurrent(props.tabskey);
-    console.log(current);
-    if (current === 1) {
-      props.setDayOfNumber(selectedDate.length);
-    } else if (current === 2) {
-      props.setNightOfNumber(selectedDate.length);
-    } else if (current === 3) {
-      props.setFullDayNumber(selectedDate.length);
-    }
+
+
   }
   function disabledDate(current) {
-    console.log(current, 'current')
-    return [moment(current) , moment(current).add(3, 'days')]
+    return [moment(current), moment(current).add(3, 'days')]
     // Can not select days before today and today
     // return current && current < moment().endOf('day');
   }
@@ -166,12 +157,12 @@ const CustomCalendar = (props) => {
         dateFullCellRender={dateFullCellRender}
         className="customCalendarMini"
         onSelect={onSelect}
-        // disabledDate={current => {
-        //   // Dones not log when `validRange` prop is present
-        //   // Remove `validRange` and this will log
-        //   console.log(current);
-        // }}
-        // validRange={[AcademicYearStart, AcademicYearEnd]} 
+      // disabledDate={current => {
+      //   // Dones not log when `validRange` prop is present
+      //   // Remove `validRange` and this will log
+      //   console.log(current);
+      // }}
+      // validRange={[AcademicYearStart, AcademicYearEnd]} 
       />
     </div>
   );

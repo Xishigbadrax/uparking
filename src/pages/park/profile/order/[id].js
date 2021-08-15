@@ -109,6 +109,7 @@ const OrderId = () => {
         console.log(value, mode);
     }
     function getSelectedDate(data){
+        console.log(data, 'datadatadata')
         setFromSelectedDate(data);
     }
 

@@ -1080,8 +1080,6 @@ const tofit = ({ data, lat, lng }) => {
                       }
                     >
                       <Calendar
-                        setDayOfNumber={setDayofNumber}
-                        tabskey={1}
                         className={`timePickCalendar`}
                       />
                     </TabPane>
@@ -1105,8 +1103,7 @@ const tofit = ({ data, lat, lng }) => {
                       }
                     >
                       <Calendar
-                        setNightOfNumber={setNightOfNumber}
-                        tabskey={2}
+                        className={`timePickCalendar`}
                       />
                     </TabPane>
                     <TabPane
@@ -1129,8 +1126,7 @@ const tofit = ({ data, lat, lng }) => {
                       key="3"
                     >
                       <Calendar
-                        setFullDayNumber={setFullDayNumber}
-                        tabskey={3}
+                        className={`timePickCalendar`}
                       />
                     </TabPane>
                   </Tabs>
