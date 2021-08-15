@@ -13,7 +13,7 @@ import { Pagination } from "antd";
 import { Tabs } from "antd";
 import { callGet } from "@api/api";
 import Calendar from "@components/CustomCalendar/index";
-import Item from "antd/lib/list/Item";
+
 const { TabPane } = Tabs;
 
 function callback(key) {
@@ -22,7 +22,6 @@ function callback(key) {
 function onPanelChange(value, mode) {
   console.log(value, mode);
 }
-
 const tofit = ({ data, lat, lng }) => {
   const [PickTimevisible, setPickTimeVisible] = useState(false);
   const [detailVisible, setDetailsVisible] = useState(false);
@@ -45,13 +44,12 @@ const tofit = ({ data, lat, lng }) => {
     const priceData = await callGet(`/parkingspace/price?parkingSpaceId=${id}`);
     console.log("lat----------->", lat);
     const residenceData = await callGet(
-      `/search/input/test?keywordId=${id}&latitude=${47.8781761962291}&longitude=${106.91208177535673}`
+      `/search/input/test?keywordId=${id}&latitude=${lat}&longitude=${lng}`
     );
     console.log(residenceData);
     setSelected(priceData);
     console.log(priceData);
     const saleData = await callGet(`/parkingspace/sale?parkingSpaceId=${id}`);
-    console.log(saleData);
     setSaleData(saleData);
     const vehicle = await callGet(`/user/vehicle/list`);
     setVehiclesData(vehicle);
@@ -79,9 +77,12 @@ const tofit = ({ data, lat, lng }) => {
   };
   const onChange = () => {};
 
-  const getSelectedDate = (data) => {
-    console.log(selectedDayTab, "selectedDayTab");
-    console.log(data, "selected data");
+  const getSelectedDate = async (data) => {
+    console.log(data, "dataaaaaaaa");
+    const alength = data.length;
+    await setDayofNumber(alength);
+    // console.log(selectedDayTab, "selectedDayTab");
+    // console.log(data, "selected data");
   };
 
   const handleClickDayTab = (key) => {
@@ -89,7 +90,7 @@ const tofit = ({ data, lat, lng }) => {
   };
 
   return (
-    <div style={{ overflow: "auto", height: "828px" }}>
+    <div style={{ height: "828px", width: "528px" }}>
       {data.map((item) => (
         <div key={item.id}>
           <Card
@@ -98,7 +99,7 @@ const tofit = ({ data, lat, lng }) => {
               height: "200px",
               width: "500px",
               marginTop: "20px",
-              borderRadius: "16px",
+              borderRadius: "10px",
               background: "#FFFFFF",
             }}
             key={item.id}
@@ -128,7 +129,7 @@ const tofit = ({ data, lat, lng }) => {
             ) : (
               <div></div>
             )}
-            <div style={{ marginLeft: "16px", marginTop: "19px" }}>
+            <div style={{ marginLeft: "10px", marginTop: "19px" }}>
               <Row>
                 <Col>
                   <Row>
@@ -306,31 +307,35 @@ const tofit = ({ data, lat, lng }) => {
                     </div>
                   </Row>
                   <Row>
-                    <Button
-                      style={{
-                        width: "105px",
-                        height: "32px",
-                        fontSize: "11px",
-                        marginTop: "10px",
-                      }}
-                      onClick={() => showTimePickDrawer(item.id)}
-                    >
-                      Сул цаг харах
-                    </Button>
-                    <Button
-                      style={{
-                        color: "blue",
-                        width: "105px",
-                        height: "32px",
-                        marginTop: "10px",
-
-                        fontSize: "11px",
-                      }}
-                      className={`freeTimePick`}
-                      onClick={() => DetailsDrawerOpen(item.id)}
-                    >
-                      Дэлгэрэнгүй
-                    </Button>
+                    <Col span={10}>
+                      <Button
+                        style={{
+                          width: "105px",
+                          height: "32px",
+                          fontSize: "11px",
+                          marginTop: "10px",
+                          borderRadius: "10px",
+                        }}
+                        onClick={() => showTimePickDrawer(item.id)}
+                      >
+                        Сул цаг харах
+                      </Button>
+                    </Col>
+                    <Col span={10} offset={4}>
+                      <Button
+                        style={{
+                          color: "blue",
+                          width: "105px",
+                          height: "32px",
+                          marginTop: "10px",
+                          fontSize: "11px",
+                        }}
+                        className={`freeTimePick`}
+                        onClick={() => DetailsDrawerOpen(item.id)}
+                      >
+                        Дэлгэрэнгүй
+                      </Button>
+                    </Col>
                   </Row>
                 </Col>
                 <Row></Row>
@@ -349,7 +354,7 @@ const tofit = ({ data, lat, lng }) => {
               style={{ position: "absolute" }}
             >
               <div style={{ alignItems: "center" }}>
-                <Row>
+                <Row style={{ height: "20px" }}>
                   <Col offset={22} span={2}>
                     <CloseOutlined
                       onClick={onClose}
@@ -358,12 +363,9 @@ const tofit = ({ data, lat, lng }) => {
                   </Col>
                 </Row>
                 <Row>
-                  <Col
-                    style={{ width: "232px", height: "24px", display: "flex" }}
-                  >
+                  <Col style={{ height: "24px", display: "flex" }} span={22}>
                     <p
                       style={{
-                        width: "210px",
                         fontSize: "20px",
                         color: " #141A29",
                         textAlign: "justify",
@@ -375,12 +377,13 @@ const tofit = ({ data, lat, lng }) => {
                         {drawerItem.keyword.split(" ")[2]}
                       </b>
                     </p>
+                  </Col>
+                  <Col span={1}>
                     <div style={{ height: "15px", width: "15px" }}>
                       <CheckCircleOutlined
                         style={{
                           color: "white",
                           backgroundColor: "green",
-                          borderRadius: "7px",
                           marginLeft: "1.5px",
                         }}
                       />
@@ -394,90 +397,91 @@ const tofit = ({ data, lat, lng }) => {
                   }}
                   defaultValue={3}
                 />
-                <Row
-                  style={{ width: "210px", height: "16px", display: "flex" }}
-                >
-                  <div style={{ display: "flex" }}>
-                    <div
-                      style={{
-                        height: "16px",
-                        width: "16px",
-                        marginTop: "10px",
-                      }}
-                    >
-                      <Image
-                        src="/directions_car_24px.png"
-                        height="12px"
-                        width="10.67px"
-                      />
+                <Row style={{ height: "16px", display: "flex", width: "100%" }}>
+                  <Col span={18} offset={1}>
+                    <div style={{ display: "flex" }}>
+                      <div
+                        style={{
+                          height: "16px",
+                          width: "16px",
+                          marginTop: "10px",
+                        }}
+                      >
+                        <Image
+                          src="/directions_car_24px.png"
+                          height="12px"
+                          width="10.67px"
+                        />
+                      </div>
+                      <p
+                        style={{
+                          width: "40px",
+                          height: "16px",
+                          marginTop: "12px",
+                          marginLeft: "24px",
+                          fontSize: "12px",
+                        }}
+                      >
+                        ● 110m
+                      </p>
+                      <p
+                        style={{
+                          width: "75px",
+                          fontSize: "12px",
+                          textAlign: "center",
+                          marginTop: "12px",
+                          fontStyle: "regular",
+                        }}
+                      >
+                        Байршил ID
+                      </p>
+                      <p
+                        style={{
+                          width: "43px",
+                          fontSize: "12px",
+                          marginTop: "12px",
+                        }}
+                      >
+                        {drawerItem.locationId}
+                      </p>
                     </div>
-                    <p
-                      style={{
-                        width: "40px",
-                        height: "16px",
-                        marginTop: "12px",
-                        marginLeft: "24px",
-                        fontSize: "12px",
-                      }}
-                    >
-                      ● 110m
-                    </p>
-                    <p
-                      style={{
-                        width: "75px",
-                        fontSize: "12px",
-                        textAlign: "center",
-                        marginTop: "12px",
-                        fontStyle: "regular",
-                      }}
-                    >
-                      Байршил ID
-                    </p>
-                    <p
-                      style={{
-                        width: "43px",
-                        fontSize: "12px",
-                        marginTop: "12px",
-                      }}
-                    >
-                      {drawerItem.locationId}
-                    </p>
-                  </div>
+                  </Col>
                 </Row>
                 <Row>
-                  <div style={{ display: "flex", marginTop: "10px" }}>
-                    <div
-                      style={{
-                        height: "16px",
-                        width: "16px",
-                        marginTop: "8px",
-                      }}
-                    >
-                      <Image
-                        src="/icons/location_on_24px.png"
-                        height="12.98px"
-                        width="9.33px"
-                      />
+                  <Col span={18} offset={1}>
+                    <div style={{ display: "flex", marginTop: "10px" }}>
+                      <div
+                        style={{
+                          height: "16px",
+                          width: "16px",
+                          marginTop: "8px",
+                        }}
+                      >
+                        <Image
+                          src="/icons/location_on_24px.png"
+                          height="12.98px"
+                          width="9.33px"
+                        />
+                      </div>
+                      <p
+                        style={{
+                          color: "#35446D",
+                          fontSize: "12px",
+                          marginTop: "10px",
+                          width: "376px",
+                          height: "32px",
+                          marginLeft: "24px",
+                        }}
+                      >
+                        {drawerItem.keyword}
+                      </p>
                     </div>
-                    <p
-                      style={{
-                        color: "#35446D",
-                        fontSize: "12px",
-                        marginTop: "10px",
-                        width: "376px",
-                        height: "32px",
-                        marginLeft: "24px",
-                      }}
-                    >
-                      {drawerItem.keyword}
-                    </p>
-                  </div>
+                  </Col>
                 </Row>
                 <Row>
                   <div
                     className={`DetailsPane`}
                     style={{
-                      width: "450px",
                       height: "48px",
                       marginLeft: "25px",
                       marginTop: "10px",
@@ -486,11 +490,17 @@ const tofit = ({ data, lat, lng }) => {
                     <Tabs
                       defaultActiveKey="1"
                       onChange={callback}
-                      // style={{ width: "100% " }}
+                      style={{ width: "100% " }}
                     >
                       <TabPane
                         tab={
-                          <div style={{ width: "130px", height: "48px" }}>
+                          <div
+                            style={{
+                              width: "33%",
+                              height: "48px",
+                              marginLeft: "10%",
+                            }}
+                          >
                             <p
                               style={{
                                 width: "110px",
@@ -511,74 +521,18 @@ const tofit = ({ data, lat, lng }) => {
                           <div
                             style={{
                               display: "flex ",
-                              marginLeft: "27px",
-                              width: "366px",
+                              marginLeft: "8%",
+                              width: "84%",
                               height: "50px",
                               justifyItems: "center",
                             }}
                             className={`SpaceIcons`}
-                          >
-                            {/* <p
-                              style={{
-                                fontSize: "20px",
-                                marginLeft: "20px",
-                                padding: "10px",
-                              }}
-                            >
-                              <b>B1</b>
-                            </p>
-                            <div style={{ marginLeft: "20px", marginTop: "5px" }}>
-                              <Image
-                                src="/icons/1) Checkbox.png"
-                                width="40px"
-                                height="40px"
-                              />
-                            </div>
-                            <div
-                              style{{ marginLeft: "20px", marginTop: "15px" }}
-                            >
-                              <Image
-                                src="/icons/temdegleegui.png"
-                                width="40px"
-                                height="20px"
-                              />
-                            </div>
-                            <div style={{ marginLeft: "20px", marginTop: "5px" }}>
-                              <Image
-                                src="/icons/haadag.png"
-                                width="40px"
-                                height="40px"
-                              />
-                            </div>
-                            <div style={{ marginLeft: "20px", marginTop: "5px" }}>
-                              <Image
-                                src="/icons/Small SUV.png"
-                                width="40px"
-                                height="40px"
-                              />
-                            </div>
-                            <div
-                              style={{ marginLeft: "20px", marginTop: "15px" }}
-                            >
-                              <Image
-                                src="/icons/Up.png"
-                                width="40px"
-                                height="20px"
-                              />
-                            </div>
-                            <div style={{ marginLeft: "20px", marginTop: "5px" }}>
-                              <Image
-                                src="/keyboard_arrow_down_24px.png"
-                                width="40px"
-                                height="40px"
-                              />
-                            </div> */}
-                          </div>
+                          ></div>
                         </Row>
                         <Row
                           height=" 24px"
                           style={{
-                            width: "392.4px",
+                            width: "3100",
                             marginTop: "10px",
 
                             justifyItems: "center",
@@ -596,274 +550,256 @@ const tofit = ({ data, lat, lng }) => {
                             Зун цагийн хуваарь /04.01-09.31
                           </div>
                         </Row>
-                        <Row>
-                          <div
-                            className={`SpaceIcons`}
+                        <Row
+                          className={`SpaceIcons`}
+                          style={{
+                            height: "50px",
+                            display: "flex",
+                            marginLeft: "8%",
+                            marginTop: "20px",
+                            width: "84%",
+                            height: "50px",
+                            justifyItems: "center",
+                          }}
+                        >
+                          <Col
+                            span={7}
                             style={{
                               height: "50px",
-                              display: "flex",
-                              marginLeft: "27px",
-                              marginTop: "20px",
-                              width: " 366px",
-                              height: "50px",
-                              justifyItems: "center",
+                              alignItems: "center",
                             }}
                           >
-                            <Col
-                              style={{
-                                height: "50px",
-                                width: "122px",
-                                alignItems: "center",
-                              }}
-                            >
-                              <div className={`priceInfoOfOneDay`}>
-                                <div
-                                  style={{
-                                    color: "#141A29",
-                                  }}
-                                >
-                                  {selectItem === null ? (
-                                    <p
-                                      style={{
-                                        fontFamily: "Roboto",
-                                        fontSize: "14px",
-                                        textAlign: "center",
-                                        fontStyle: "normal",
-                                        fontWeight: "700",
-                                      }}
-                                    >
-                                      {selectItem.priceForRenter1}
-                                    </p>
-                                  ) : (
-                                    <p
-                                      style={{
-                                        fontFamily: "Roboto",
-                                        fontSize: "14px",
-                                        textAlign: "center",
-                                        fontStyle: "normal",
-                                        fontWeight: "700",
-                                      }}
-                                    >
-                                      awdaw
-                                    </p>
-                                  )}
-                                </div>
-                                <p
-                                  style={{
-                                    fontStyle: "normal",
-                                    fontSize: "12px",
-                                    textAlign: "center",
-                                    color: "#35446D",
-                                  }}
-                                >
-                                  1 Өдөр
-                                </p>
+                            <div className={`priceInfoOfOneDay`}>
+                              <div
+                                style={{
+                                  color: "#141A29",
+                                }}
+                              >
+                                {selectItem === null ? (
+                                  <p
+                                    style={{
+                                      fontFamily: "Roboto",
+                                      fontSize: "14px",
+                                      textAlign: "center",
+                                      fontStyle: "normal",
+                                      fontWeight: "700",
+                                    }}
+                                  >
+                                    {selectItem.priceForRenter1}
+                                  </p>
+                                ) : (
+                                  <p
+                                    style={{
+                                      fontFamily: "Roboto",
+                                      fontSize: "14px",
+                                      textAlign: "center",
+                                      fontStyle: "normal",
+                                      fontWeight: "700",
+                                    }}
+                                  >
+                                    awdaw
+                                  </p>
+                                )}
                               </div>
-                            </Col>
-                            <Divider
-                              style={{
-                                background: "#0013D4",
-                                width: "2px",
-                                height: "8.33px",
-                                marginTop: "21px",
-                              }}
-                              type="vertical"
-                            />
-                            <Col
-                              style={{
-                                width: "122px",
-                                height: "50px",
-                                alignItems: "center",
-                              }}
-                            >
-                              <div className={`priceInfoOfOneNight`}>
-                                <div style={{ color: "#141A29" }}>
-                                  {selectItem === null ? (
-                                    <p
-                                      style={{
-                                        fontFamily: "Roboto",
-                                        fontSize: "14px",
-                                        textAlign: "center",
-                                        fontStyle: "normal",
-                                        fontWeight: "700",
-                                      }}
-                                    >
-                                      {selectItem.priceForRenter2}
-                                    </p>
-                                  ) : (
-                                    <p
-                                      style={{
-                                        fontFamily: "Roboto",
-                                        fontSize: "14px",
-                                        textAlign: "center",
-                                        fontStyle: "normal",
-                                        fontWeight: "700",
-                                      }}
-                                    >
-                                      dwawd
-                                    </p>
-                                  )}
-                                </div>
-                                <p
-                                  style={{
-                                    fontStyle: "normal",
-                                    fontSize: "12px",
-                                    textAlign: "center",
-                                    height: "16px",
-                                    color: "#35446D",
-                                  }}
-                                >
-                                  1 Шөнө
-                                </p>
+                              <p
+                                style={{
+                                  fontStyle: "normal",
+                                  fontSize: "12px",
+                                  textAlign: "center",
+                                  color: "#35446D",
+                                }}
+                              >
+                                1 Өдөр
+                              </p>
+                            </div>
+                          </Col>
+                          <Divider
+                            style={{
+                              background: "#0013D4",
+                              width: "2px",
+                              height: "8.33px",
+                              marginTop: "21px",
+                            }}
+                            type="vertical"
+                          />
+                          <Col
+                            span={7}
+                            style={{
+                              height: "50px",
+                              alignItems: "center",
+                            }}
+                          >
+                            <div style={{ width: "100%" }}>
+                              <div style={{ color: "#141A29" }}>
+                                {selectItem === null ? (
+                                  <p
+                                    style={{
+                                      marginLeft: "10%",
+                                      width: "80%",
+                                      fontFamily: "Roboto",
+                                      fontSize: "14px",
+                                      textAlign: "center",
+                                      fontStyle: "normal",
+                                      fontWeight: "700",
+                                    }}
+                                  >
+                                    {selectItem.priceForRenter2}
+                                  </p>
+                                ) : (
+                                  <p
+                                    style={{
+                                      marginLeft: "10%",
+                                      width: "80%",
+                                      fontFamily: "Roboto",
+                                      fontSize: "14px",
+                                      textAlign: "center",
+                                      fontStyle: "normal",
+                                      fontWeight: "700",
+                                    }}
+                                  >
+                                    dwawd
+                                  </p>
+                                )}
                               </div>
-                            </Col>
-                            <Divider
-                              style={{
-                                background: "#0013D4",
-                                width: "2px",
-                                height: "8.33px",
-                                marginTop: "21px",
-                              }}
-                              type="vertical"
-                            />
-                            <Col>
-                              <div className={`priceInfoOfFullDay`}>
-                                <div style={{ color: "#141A29" }}>
-                                  {selectItem === null ? (
-                                    <p
-                                      style={{
-                                        fontFamily: "Roboto",
-                                        fontSize: "14px",
-                                        textAlign: "center",
-                                        fontStyle: "normal",
-                                        fontWeight: "700",
-                                      }}
-                                    >
-                                      {selectItem.priceForRenter3}
-                                    </p>
-                                  ) : (
-                                    <p
-                                      style={{
-                                        fontFamily: "Roboto",
-                                        fontSize: "14px",
-                                        textAlign: "center",
-                                        fontStyle: "normal",
-                                        fontWeight: "700",
-                                      }}
-                                    >
-                                      dwawd
-                                    </p>
-                                  )}
-                                </div>
-                                <p
-                                  style={{
-                                    fontStyle: "normal",
-                                    fontSize: "12px",
-                                    textAlign: "center",
-
-                                    height: "16px",
-                                    color: "#35446D",
-                                  }}
-                                >
-                                  Бүтэн өдөр
-                                </p>
+                              <p
+                                style={{
+                                  fontStyle: "normal",
+                                  fontSize: "12px",
+                                  textAlign: "center",
+                                  height: "16px",
+                                  color: "#35446D",
+                                }}
+                              >
+                                1 Шөнө
+                              </p>
+                            </div>
+                          </Col>
+                          <Divider
+                            style={{
+                              background: "#0013D4",
+                              width: "2px",
+                              height: "8.33px",
+                              marginTop: "21px",
+                            }}
+                            type="vertical"
+                          />
+                          <Col span={7}>
+                            <div style={{ width: "100%" }}>
+                              <div style={{ color: "#141A29" }}>
+                                {selectItem === null ? (
+                                  <p
+                                    style={{
+                                      marginLeft: "10%",
+                                      width: "80%",
+                                      fontFamily: "Roboto",
+                                      fontSize: "14px",
+                                      textAlign: "center",
+                                      fontStyle: "normal",
+                                      fontWeight: "700",
+                                    }}
+                                  >
+                                    {selectItem.priceForRenter3}
+                                  </p>
+                                ) : (
+                                  <p
+                                    style={{
+                                      marginLeft: "10%",
+                                      width: "80%",
+                                      fontFamily: "Roboto",
+                                      fontSize: "14px",
+                                      textAlign: "center",
+                                      fontStyle: "normal",
+                                      fontWeight: "700",
+                                    }}
+                                  >
+                                    dwawd
+                                  </p>
+                                )}
                               </div>
-                            </Col>
-                          </div>
+                              <p
+                                style={{
+                                  fontStyle: "normal",
+                                  fontSize: "12px",
+                                  textAlign: "center",
+                                  height: "16px",
+                                  color: "#35446D",
+                                }}
+                              >
+                                Бүтэн өдөр
+                              </p>
+                            </div>
+                          </Col>
                         </Row>
                         {/*Хөнгөлөлтийн хэсэг*/}
                         <Row>
                           <div
                             style={{
-                              width: "392.4px",
-                              height: "80px",
-                              marginTop: "10px",
+                              width: "84px",
+                              height: "24px",
+                              fontSize: "14px",
+                              fontWeight: "bold",
+                              fontStyle: "normal",
+                              color: "#35446D",
                             }}
                           >
-                            <div
-                              style={{
-                                width: "84px",
-                                height: "24px",
-                                fontSize: "14px",
-                                fontWeight: "bold",
-                                fontStyle: "normal",
-                                color: "#35446D",
-                              }}
-                            >
-                              Хөнгөлөлт
-                            </div>
-                            {/* <Row>
-                            <Col span={12} offset={2}>
-                              <p style={{ fontSize: "14px", color: "#35446D" }}>
-                                7 өдөр эсвэл 7 шөнө{" "}
-                              </p>
-                            </Col>
-                            <Col span={2} offset={8}>
-                              aa--{saleDatas}
-                            </Col>
-                          </Row>
-                          <Row>
-                            <Col span={12} offset={2}>
-                              <p style={{ fontSize: "14px", color: "#35446D" }}>
-                                30 өдөр эсвэл 30 шөнө
-                              </p>
-                            </Col>
-                            <Col span={4} offset={1}>
-                              <p>aa--{saleDatas}</p>
-                            </Col>
-                          </Row> */}
-                            {saleDatas === null ? (
-                              <div>utga obsoo bnaa brp</div>
-                            ) : (
-                              <div>
-                                <Row>
-                                  <Col span={12} offset={2}>
-                                    <p
-                                      style={{
-                                        fontSize: "14px",
-                                        color: "#35446D",
-                                      }}
-                                    >
-                                      7 өдөр эсвэл 7 шөнө{" "}
-                                    </p>
-                                  </Col>
-                                  <Col span={2} offset={8}>
-                                    aa--{saleDatas}
-                                  </Col>
-                                </Row>
-                                <Row>
-                                  <Col span={12} offset={2}>
-                                    <p
-                                      style={{
-                                        fontSize: "14px",
-                                        color: "#35446D",
-                                      }}
-                                    >
-                                      30 өдөр эсвэл 30 шөнө
-                                    </p>
-                                  </Col>
-                                  <Col span={2} offset={8}>
-                                    <p>aa--{saleDatas}</p>
-                                  </Col>
-                                </Row>
-                              </div>
-                            )}
-                          </div>
-                        </Row>
-                        <Row>
-                          <div onClick={onclickPick} className={`chooseButton`}>
-                            <p
-                              style={{
-                                alignItems: "center",
-                                width: "116px",
-                                color: "#0013D4",
-                              }}
-                            >
-                              Сул цаг сонгох
-                            </p>
+                            Хөнгөлөлт
                           </div>
                         </Row>
 
+                        {saleDatas === null ? (
+                          <div>utga obsoo bnaa brp</div>
+                        ) : (
+                          <div>
+                            <Row>
+                              <Col span={18} offset={1}>
+                                <p
+                                  style={{
+                                    fontSize: "14px",
+                                    color: "#35446D",
+                                  }}
+                                >
+                                  7 өдөр эсвэл 7 шөнө{" "}
+                                </p>
+                              </Col>
+                              <Col span={2} offset={1}>
+                                aa--{saleDatas}
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col span={18} offset={1}>
+                                <p
+                                  style={{
+                                    fontSize: "14px",
+                                    color: "#35446D",
+                                  }}
+                                >
+                                  30 өдөр эсвэл 30 шөнө
+                                </p>
+                              </Col>
+                              <Col span={2} offset={1}>
+                                <p>aa--{saleDatas}</p>
+                              </Col>
+                            </Row>
+                          </div>
+                        )}
+                        <Row style={{ marginTop: "20px" }}>
+                          <Col span={24}>
+                            <div
+                              onClick={onclickPick}
+                              className={`chooseButton`}
+                            >
+                              <p
+                                style={{
+                                  alignItems: "center",
+                                  width: "116px",
+                                  color: "#0013D4",
+                                }}
+                              >
+                                Сул цаг сонгох
+                              </p>
+                            </div>
+                          </Col>
+                        </Row>
                         <Row
                           style={{
                             fontSize: "14px",
@@ -874,21 +810,18 @@ const tofit = ({ data, lat, lng }) => {
                           <b>Тээврийн хэрэгсэл сонгох</b>
                         </Row>
                         <Row>
-                          <Col>
-                            <Radio.Group
-                              buttonStyle="solid"
-                              onChange={onChangeChooseVehicle}
-                            >
+                          <Radio.Group
+                            buttonStyle="solid"
+                            onChange={onChangeChooseVehicle}
+                          >
+                            <Col span={11}>
                               {vehicles.map((item) => (
                                 <Radio.Button
                                   key={item.value}
                                   value={item.value}
                                   className={`pickVehicle`}
                                 >
-                                  <div
-                                    style={{ display: "flex" }}
-                                    // className={`pickVehicle`}
-                                  >
+                                  <div style={{ display: "flex" }}>
                                     <div
                                       style={{
                                         height: "24px",
@@ -932,8 +865,8 @@ const tofit = ({ data, lat, lng }) => {
                                   </div>
                                 </Radio.Button>
                               ))}
-                            </Radio.Group>
-                          </Col>
+                            </Col>
+                          </Radio.Group>
                         </Row>
                         <Row style={{ marginTop: "10px" }}>
                           <p style={{ color: "#35446D", fontSize: "14px" }}>
@@ -945,18 +878,18 @@ const tofit = ({ data, lat, lng }) => {
                             <Col style={{ fontSize: "12px" }}>Өдөр:</Col>
                             <Col style={{ fontSize: "12px" }}>2</Col>
                           </Row>
-                          <Row>
+                          <Row style={{ marginTop: "5px" }}>
                             <Col style={{ fontSize: "12px" }}>Шөнө:</Col>
                             <Col style={{ fontSize: "12px" }}>2</Col>
                           </Row>
-                          <Row>
+                          <Row style={{ marginTop: "5px" }}>
                             <Col style={{ fontSize: "12px" }}>Бүтэн өдөр:</Col>
                             <Col style={{ fontSize: "12px" }}>0</Col>
                           </Row>
                         </div>
                         <Divider />
                         <Row>
-                          <Col span={20}>
+                          <Col span={22}>
                             <p>
                               <b>Нийт захиалгын төлбөр</b>
                             </p>
@@ -967,15 +900,14 @@ const tofit = ({ data, lat, lng }) => {
                           style={{
                             height: "50px",
                             marginTop: "10px",
-                            width: "392px",
                           }}
                         >
-                          <Col span={11}>
+                          <Col span={12}>
                             <Button className={`buttonGooo`}>
                               Захиалга нэмэх
                             </Button>
                           </Col>
-                          <Col span={11} offset={2}>
+                          <Col span={12}>
                             <Button className={`buttonGooo`}>
                               Төлбөр төлөх
                             </Button>
@@ -984,7 +916,7 @@ const tofit = ({ data, lat, lng }) => {
                       </TabPane>
                       <TabPane
                         tab={
-                          <div style={{ width: "130px", height: "48px" }}>
+                          <div style={{ width: "33%", height: "48px" }}>
                             <p
                               style={{
                                 width: "140px",
@@ -1005,7 +937,7 @@ const tofit = ({ data, lat, lng }) => {
                       </TabPane>
                       <TabPane
                         tab={
-                          <div style={{ width: "130px", height: "48px" }}>
+                          <div style={{ width: "33%", height: "48px" }}>
                             {" "}
                             <p
                               style={{

@@ -25,8 +25,10 @@ const { RangePicker } = DatePicker;
 const { Option } = Select;
 
 const AnyReactComponent = ({ text }) => (
-  <div style={{ height: "20px", width: "50px" }} className={`buttonGo`}>
-    <p>{text}</p>
+  <div className={`locationBackground`}>
+    <p style={{ textAlign: "center", alignItems: "center", fontSize: "16px" }}>
+      <b>{text}</b>
+    </p>
   </div>
 );
 const fsearch = () => {
@@ -163,7 +165,10 @@ const fsearch = () => {
             border: "1px solid #DCDCDC",
           }}
         >
-          <div style={{ marginLeft: "10px", paddingRight: "5px" }}>
+          <div
+            className={`pickType`}
+            style={{ marginLeft: "10px", paddingRight: "5px" }}
+          >
             <p style={{ fontSize: "10px" }}>Захиалгын төрөл</p>
             <Select
               style={{ width: "100%" }}
@@ -184,7 +189,10 @@ const fsearch = () => {
             border: "1px solid #DCDCDC",
           }}
         >
-          <div style={{ marginLeft: "10px", paddingRight: "5px" }}>
+          <div
+            className={`pickType`}
+            style={{ marginLeft: "10px", paddingRight: "5px" }}
+          >
             <p style={{ fontSize: "10px", color: "gray" }}>
               Эхлэх хугацаа сонгох
             </p>
@@ -209,7 +217,10 @@ const fsearch = () => {
             border: "1px solid #DCDCDC",
           }}
         >
-          <div style={{ paddingRight: "5px", marginLeft: "10px" }}>
+          <div
+            className={`pickType`}
+            style={{ paddingRight: "5px", marginLeft: "10px" }}
+          >
             <p style={{ fontSize: "10px" }}>Дуусах хугацаа сонгох</p>
             <DatePicker
               style={{ width: "100%" }}
@@ -223,16 +234,13 @@ const fsearch = () => {
             ></DatePicker>
           </div>
         </Col>
-        <Col
-          span={4}
-          style={{ marginLeft: "10px" }}
-          size="large"
-          className={`searchButton`}
-        >
+        <Col span={4} style={{ marginLeft: "10px" }} size="large">
           <Button
+            style={{ height: "50px" }}
             htmlType="submit"
             size={"large"}
             type="primary"
+            className={`buttonGo`}
             block
             onClick={onSearch}
           >
@@ -241,9 +249,9 @@ const fsearch = () => {
         </Col>
       </Row>
       <Row>
-        <Col span={16}>
+        <Col span={15}>
           <GoogleMapReact
-            style={{ height: "828px", width: "892px" }}
+            style={{ height: "828px" }}
             bootstrapURLKeys={{ key: GOOGLE_API }}
             center={{ lat: latitude, lng: longitude }}
             defaultZoom={16}
@@ -254,26 +262,15 @@ const fsearch = () => {
             ) : null}
             {spaceData.map((item) => (
               <AnyReactComponent
-                style={{ backgroundColor: "white" }}
                 key={item.residenceBlockId}
                 lat={item.latitude}
                 lng={item.longitude}
                 text={item.residenceName}
               />
             ))}
-
-            {/* {Data.features.map((item) => (
-              <Marker
-                position={{
-                  lat: item.geometry.coordinates[1],
-                  lng: item.geometry.coordinates[0],
-                }}
-                key={item.properties.PARK_ID}
-              />
-            ))} */}
           </GoogleMapReact>
         </Col>
-        <Col span={8}>
+        <Col span={9}>
           <Card>
             <Tabs
               defaultActiveKey="1"
@@ -284,7 +281,7 @@ const fsearch = () => {
                 tab={
                   <div
                     style={{
-                      width: "167px",
+                      width: "157px",
                       height: "48px",
                     }}
                   >
@@ -294,6 +291,7 @@ const fsearch = () => {
                   </div>
                 }
                 key="1"
+                style={{ width: "100%" }}
               >
                 <ToFit data={searchedData} lat={latitude} lng={longitude} />
               </TabPane>
@@ -302,7 +300,7 @@ const fsearch = () => {
                   <div
                     style={{
                       height: "48px",
-                      width: "166px",
+                      width: "156px",
                     }}
                   >
                     <p style={{ height: "24px" }}> Хамгийн хямд</p>
@@ -318,7 +316,7 @@ const fsearch = () => {
                   <div
                     style={{
                       height: "48px",
-                      width: "166px",
+                      width: "156px",
                     }}
                   >
                     <p style={{ height: "24px" }}> Хамгийн ойр</p>

@@ -1851,8 +1851,6 @@ flex-direction: column;
 align-items: center;
 padding: 10px 14px;
 cursor: pointer;
-
-width: 392.4px;
 height: 40px;
 
 
@@ -1866,9 +1864,7 @@ box-sizing: border-box;
 border-radius: 8px;
   
 }
-.searchButton{
-  height: 50px  !important;
-}
+
 .timePickCalendar .ant-picker-panel .ant-picker-content {
     width: 450px !important;
     height: 400px !important;
@@ -1907,7 +1903,8 @@ border-radius: 8px;
   background: #141A29 !important;
 }
 .ResidenceCardList .ant-card-body{
-  padding-top: 0px !important
+  padding-top: 0px !important;
+  align-items: center;
 }
 .ResidenceCardList .ant-rate  svg{
  
@@ -1984,7 +1981,7 @@ top: 0px;
 
 background: #FFFFFF;
 /* Brand Color / Primary */
-border: 1px solid #0013D4;
+border: 1px solid #0013D4 !important;
 box-sizing: border-box;
 border-radius: 8px;
 }
@@ -2007,3 +2004,25 @@ border-radius: 8px;
 .timePickCalendar tbody tr td ::before{
   margin-left: 10px;
 }
+.pickType .ant-select:not(.ant-select-customize-input) .ant-select-selector{
+  border: none !important;
+}
+.pickType .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector{
+  border-color: none !important;
+  border-right-width:none !important;
+  box-shadow:none !important;
+}
+.pickType .ant-picker{
+  border: none !important;
+}
+.pickType  .ant-picker-focused {
+  border-color: none !important;
+  box-shadow:none !important;
+  }
+  .locationBackground{
+    background: url("/icons/locationBackground.png") !important;
+    height: 28px;
+    width: 48px;  
+    align-items: center;
+    justify-items: center;
+  }
