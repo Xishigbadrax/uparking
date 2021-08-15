@@ -34,6 +34,7 @@ const tofit = ({ data, lat, lng }) => {
   const [saleDatas, setSaleData] = useState();
   const [vehicles, setVehiclesData] = useState([]);
   const [chooseTimeVisible, setChooseTimeVisible] = useState(false);
+  const [selectedDayTab, setSelectedDayTab] = useState("day");
 
   const DetailsDrawerOpen = async (id) => {
     setDetailsVisible(true);
@@ -77,6 +78,15 @@ const tofit = ({ data, lat, lng }) => {
     setChooseTimeVisible(true);
   };
   const onChange = () => {};
+
+  const getSelectedDate = (data) => {
+    console.log(selectedDayTab, "selectedDayTab");
+    console.log(data, "selected data");
+  };
+
+  const handleClickDayTab = (key) => {
+    setSelectedDayTab(key);
+  };
 
   return (
     <div style={{ overflow: "auto", height: "828px" }}>
@@ -1059,9 +1069,9 @@ const tofit = ({ data, lat, lng }) => {
                 }}
               >
                 <div style={{ marginTop: "30px" }}>
-                  <Tabs defaultActiveKey="1">
+                  <Tabs defaultActiveKey="day" onChange={handleClickDayTab}>
                     <TabPane
-                      key="1"
+                      key="day"
                       tab={
                         <div style={{ width: "120px", height: "32px" }}>
                           <p
@@ -1080,11 +1090,14 @@ const tofit = ({ data, lat, lng }) => {
                       }
                     >
                       <Calendar
+                        type="multi"
+                        selectedDate={[]}
+                        getSelectedDate={getSelectedDate}
                         className={`timePickCalendar`}
                       />
                     </TabPane>
                     <TabPane
-                      key="2"
+                      key="night"
                       tab={
                         <div style={{ width: "150px", height: "32px" }}>
                           <p
@@ -1103,6 +1116,9 @@ const tofit = ({ data, lat, lng }) => {
                       }
                     >
                       <Calendar
+                        type="multi"
+                        selectedDate={[]}
+                        getSelectedDate={getSelectedDate}
                         className={`timePickCalendar`}
                       />
                     </TabPane>
@@ -1123,9 +1139,12 @@ const tofit = ({ data, lat, lng }) => {
                           </p>
                         </div>
                       }
-                      key="3"
+                      key="fullday"
                     >
                       <Calendar
+                        type="multi"
+                        selectedDate={[]}
+                        getSelectedDate={getSelectedDate}
                         className={`timePickCalendar`}
                       />
                     </TabPane>
