@@ -36,7 +36,8 @@ const OrderId = () => {
     const [seemoreUpDownArrow, setSeemoreUpDownArrow] = useState(false);
     const [isModalVisibleCancelOrder, setIsModalVisibleCancelOrder] = useState(false);
     const [isModalVisibleCancelOrderConfirm, setIsModalVisibleCancelOrderConfirm] = useState(false);
-    const [selectedDate, setselectedDate] = useState([]);
+    const [selectedDate, setSelectedDate] = useState([]);
+    const [fromSelectedDate, setFromSelectedDate] = useState([]);
     const [time, settime] = useState(null);
     const [value, setValue] = useState(new Date());
 
@@ -106,6 +107,9 @@ const OrderId = () => {
     }
     function handleClickConfirm(value, mode) {
         console.log(value, mode);
+    }
+    function getSelectedDate(data){
+        setFromSelectedDate(data);
     }
 
     return (
@@ -538,14 +542,14 @@ const OrderId = () => {
                 <div>
                     Цуцлах захиалгын эхлэх өдрийг сонгоно уу
                 </div>
-                <CustomCalendar />
+                <CustomCalendar style={{marginTop:"10px"}}  selectedDate={selectedDate} selectType="single" getSelectedDate={getSelectedDate} />
 
                 <div style={{ fontWeight: "bold", fontSize: "14px", color: "#141A29", marginTop: "30px" }}>
                     Таны цуцлах захиалга:
                 </div>
                 <div>
-                    {selectedDate
-                        ? selectedDate + '-ны ' + time + ' хойшхи захиалга цуцлагдана!'
+                    {fromSelectedDate && fromSelectedDate.length > 0
+                        ? moment(fromSelectedDate[0]).format('YYYY-MM-DD') + '-ны ' + time + ' хойшхи захиалга цуцлагдана!'
                         : null}
                 </div>
                 <Row style={{ fontSize: "14px", color: "#35446D", marginTop: "10px" }}>
