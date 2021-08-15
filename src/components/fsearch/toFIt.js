@@ -12,7 +12,7 @@ import {
 import { Pagination } from "antd";
 import { Tabs } from "antd";
 import { callGet } from "@api/api";
-import Calendar from "@components/Calendar/index";
+import Calendar from "@components/CustomCalendar/index";
 import Item from "antd/lib/list/Item";
 const { TabPane } = Tabs;
 
@@ -23,7 +23,7 @@ function onPanelChange(value, mode) {
   console.log(value, mode);
 }
 
-const tofit = ({ data }) => {
+const tofit = ({ data, lat, lng }) => {
   const [PickTimevisible, setPickTimeVisible] = useState(false);
   const [detailVisible, setDetailsVisible] = useState(false);
   const [selectItem, setSelected] = useState();
@@ -42,11 +42,14 @@ const tofit = ({ data }) => {
     setDrawerItem(selectDataa);
     const a = await callGet(`/search/parkingspace/list/test`);
     const priceData = await callGet(`/parkingspace/price?parkingSpaceId=${id}`);
+    console.log("lat----------->", lat);
+    const residenceData = await callGet(
+      `/search/input/test?keywordId=${id}&latitude=${47.8781761962291}&longitude=${106.91208177535673}`
+    );
+    console.log(residenceData);
     setSelected(priceData);
     console.log(priceData);
     const saleData = await callGet(`/parkingspace/sale?parkingSpaceId=${id}`);
-    const imageData = await callGet(`/booking/id/test?id=${id}&asWho=1`);
-    console.log(imageData);
     console.log(saleData);
     setSaleData(saleData);
     const vehicle = await callGet(`/user/vehicle/list`);
@@ -90,22 +93,31 @@ const tofit = ({ data }) => {
             }}
             key={item.id}
           >
-            <div
-              style={{
-                width: "99px",
-                position: "absolute",
-                marginLeft: "16px",
-                height: "13px",
-                background: "yellow",
-                borderRadius: "0px 0px 4px 4px",
-              }}
-            >
-              <p
-                style={{ display: "flex", fontSize: "8px", marginLeft: "24px" }}
+            {" "}
+            {!item.hourlySearch ? (
+              <div
+                style={{
+                  width: "99px",
+                  position: "absolute",
+                  marginLeft: "16px",
+                  height: "13px",
+                  background: "GREEN",
+                  borderRadius: "0px 0px 4px 4px",
+                }}
               >
-                Шууд захиалах
-              </p>
-            </div>
+                <p
+                  style={{
+                    display: "flex",
+                    fontSize: "8px",
+                    marginLeft: "24px",
+                  }}
+                >
+                  Шууд захиалах
+                </p>
+              </div>
+            ) : (
+              <div></div>
+            )}
             <div style={{ marginLeft: "16px", marginTop: "19px" }}>
               <Row>
                 <Col>
@@ -1067,7 +1079,11 @@ const tofit = ({ data }) => {
                         </div>
                       }
                     >
-                      <Calendar setDayOfNumber={setDayofNumber} tabskey={1} />
+                      <Calendar
+                        setDayOfNumber={setDayofNumber}
+                        tabskey={1}
+                        className={`timePickCalendar`}
+                      />
                     </TabPane>
                     <TabPane
                       key="2"

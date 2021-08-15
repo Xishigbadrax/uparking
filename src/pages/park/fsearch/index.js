@@ -3,6 +3,7 @@ import { callGet, sList } from "@api/api";
 import { Card, Col, Row, Button, DatePicker, Input, Select, Modal } from "antd";
 import Context from "@context/Context";
 import moment from "moment";
+import Data from "../../../data/googlrMapData.json";
 import {
   SearchOutlined,
   DownOutlined,
@@ -23,27 +24,27 @@ const IndexPageMoreInfo = dynamic(
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
-const Marker = (props) => {
-  return (
-    <div className="SuperAwesomePin">
-      <TrademarkOutlined />
-    </div>
-  );
-};
-
+const AnyReactComponent = ({ text }) => (
+  <div style={{ height: "20px", width: "50px" }} className={`buttonGo`}>
+    <p>{text}</p>
+  </div>
+);
 const fsearch = () => {
   const GOOGLE_API = process.env.NEXT_GOOGLE_API;
   const ctx = useContext(Context);
   const [dashboardData, setDashboardData] = useState({});
   const [parkRegModalVisible, setParkRegModalVisible] = useState(true);
   const [seeMore, setSeeMore] = useState(false);
-  const [longitude, setLongitude] = useState(106.91699199253857);
-  const [latitude, setLatitude] = useState(47.91899690115193);
+  const [longitude, setLongitude] = useState(106.905746);
+  const [latitude, setLatitude] = useState(47.886398);
+  const [selectLat, setSelectLate] = useState();
+  const [selectLng, setSelectLng] = useState();
   const [startDate, setStartDate] = useState();
-  const [address, setAddress] = useState({});
+  // const [keywordId, setKeywordId] = useState({});
   const [type, setType] = useState({});
   const [endDate, setEndtDate] = useState();
-  const [residenceData, setResidenceData] = useState([]);
+  const [spaceData, setSpacedata] = useState([]);
+  const [options, setOptions] = useState([]);
   const dateFormat = "YYYY-MM-DD";
   const [inputData, setInputdata] = useState("");
   const [searchedData, setSearchedData] = useState([]);
@@ -81,17 +82,35 @@ const fsearch = () => {
       getData(dateString[0], dateString[1]);
     }
   };
-  const onChangeAddress = (e) => {
+  const onChangeAddress = async (e) => {
     console.log(e.target.value);
     setInputdata(e.target.value);
+    // const listData = await callGet(
+    //   `/search/keyword/?syllable=${e.target.value}`
+    // );
+    filterofSearchData(listData);
+    console.log(options);
   };
   const onChangeType = (e) => {
     console.log(e);
     setType(e);
     console.log(startDate, endDate, type);
   };
-  const onMapClick = () => {};
-
+  const onMapClick = async (e) => {
+    console.log(e);
+    setSelectLate(e.lat);
+    setSelectLng(e.lng);
+    const locations = await callGet(
+      `/search/location/test?latitude=${e.lat}&longitude=${e.lng}`
+    );
+    console.log(locations);
+    setSpacedata(locations);
+  };
+  // const onSearchingList = async (e) => {
+  //   console.log(e);
+  //   const listData = await callGet(`/search/keyword/?syllable=${e}`);
+  //   console.log(listData);
+  // };
   const onSearch = async () => {
     if (inputData) {
       const data = await callGet(`/search/keyword/?syllable=${inputData}`);
@@ -105,7 +124,11 @@ const fsearch = () => {
       console.log(data);
     }
   };
-
+  function filterofSearchData(array) {
+    array.map((item) => {
+      setOptions(...options, item.keyword);
+    });
+  }
   function onOk(value) {
     console.log("onOk: ", value);
   }
@@ -122,7 +145,9 @@ const fsearch = () => {
               height: "50px",
               borderRadius: "15px",
             }}
+            // option={options}
             onChange={onChangeAddress}
+            // onSearch={onSearchingList}
             placeholder="Хаяг"
             size="large"
             height="70px"
@@ -220,14 +245,32 @@ const fsearch = () => {
           <GoogleMapReact
             style={{ height: "828px", width: "892px" }}
             bootstrapURLKeys={{ key: GOOGLE_API }}
-            defaultCenter={{
-              lat: latitude,
-              lng: longitude,
-            }}
-            defaultZoom={11}
+            center={{ lat: latitude, lng: longitude }}
+            defaultZoom={16}
             onClick={onMapClick}
           >
-            <Marker lat={latitude} lng={longitude} />
+            {selectLat & selectLng ? (
+              <AnyReactComponent lat={selectLat} lng={selectLng} text="20p" />
+            ) : null}
+            {spaceData.map((item) => (
+              <AnyReactComponent
+                style={{ backgroundColor: "white" }}
+                key={item.residenceBlockId}
+                lat={item.latitude}
+                lng={item.longitude}
+                text={item.residenceName}
+              />
+            ))}
+
+            {/* {Data.features.map((item) => (
+              <Marker
+                position={{
+                  lat: item.geometry.coordinates[1],
+                  lng: item.geometry.coordinates[0],
+                }}
+                key={item.properties.PARK_ID}
+              />
+            ))} */}
           </GoogleMapReact>
         </Col>
         <Col span={8}>
@@ -252,7 +295,7 @@ const fsearch = () => {
                 }
                 key="1"
               >
-                <ToFit data={searchedData} />
+                <ToFit data={searchedData} lat={latitude} lng={longitude} />
               </TabPane>
               <TabPane
                 tab={

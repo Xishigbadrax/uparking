@@ -13,10 +13,6 @@ import DayNightColumn from "@components/DayNightColumn"
 import { CalendarOutlined, UnorderedListOutlined, ArrowRightOutlined, EyeTwoTone, DeleteTwoTone } from "@ant-design/icons";
 import Helper from '@utils/helper';
 import Link from "next/link";
-moment.updateLocale('mn', {
-    weekdaysMin: ["Ням", "Даваа", "Мягмар", "Лхагва", "Пүрэв", "Баасан", "Бямба"]
-});
-
 const { TabPane } = Tabs;
 const { Option } = Select;
 

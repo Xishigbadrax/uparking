@@ -25,6 +25,7 @@ const calendar = (props) => {
   const onChangeLeft = () => {};
   const onClickRight = () => {};
   const calendarRef = useRef(null);
+  const onselectClass = "onselectDate";
   const onselect = (e) => {
     let date = moment(e).format("YYYY/MM/DD");
     if (isInArray(calendarData, date)) {
@@ -58,9 +59,13 @@ const calendar = (props) => {
   function dateCellRender(value) {
     const listData = getListData(value);
     return (
-      <div className="calendarSelector">
+      <div className="events">
         {listData.map((item) => (
-          <div style={{ border: "solid 1px red" }}></div>
+          <div
+            className={`pickCalendarTime ant-picker-cell-inner ${onselectClass}`}
+          >
+            <div className="ant-picker-calendar-date-value">1</div>
+          </div>
         ))}
       </div>
     );
@@ -85,7 +90,6 @@ const calendar = (props) => {
         onSelect={onselect}
         locale={calendarLocale}
         fullscreen={false}
-        style={{}}
         // headerRender={({ value, type, onChange, onTypeChange }) => {
         //   const current = value.clone();
         //   const localeData = value.localeData();

@@ -1730,11 +1730,11 @@
 .events {
   height: 30px;
 }
-.ant-picker-cell {
+/* .ant-picker-cell {
   height: 50px;
-}
+} */
 
-
+/* 
 .ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date-content {
   position: static;
   width: auto;
@@ -1742,8 +1742,8 @@
   color: rgba(0, 0, 0, 0.85);
   line-height: 1.5715;
   text-align: left;
-  }
-  .ant-modal-content {
+  } */
+  /* .ant-modal-content {
     min-height: 700px;
     height:auto;
     width: 1000px;
@@ -1756,13 +1756,13 @@
   .ant-form-item-control-input{
     height: 30px;
     border-color: #fff;
-  }
+  } */
   
    .placeholder {
     color: red !important;
   }
 
-  .ant-upload.ant-upload-select-picture-card {
+  /* .ant-upload.ant-upload-select-picture-card {
     width: 400px;
     height: 150px ;
     
@@ -1779,15 +1779,15 @@
   .ant-select:not(.ant-select-customize-input) .ant-select-selector{
     border:none !important;
     padding: 0 !important;
-  }
+  } */
 
-  .ant-input{
+  /* .ant-input{
       border:none;
   }
 .ant-divider-horizontal{
   margin: 15px 0  !important;
   margin-top: 5px;
-}
+} */
 
 .fullModal .ant-modal-content {
   height: auto !important;
@@ -1797,7 +1797,7 @@
   background-color: gray !important;
   border-radius: 20px !important;
 }
-.ant-form-item-control-input-content{
+/* .ant-form-item-control-input-content{
    height: 30px;
    margin-top: 10px;
 }
@@ -1811,7 +1811,7 @@
 }
 .ant-picker::placeholder{
   color:"black"
-}
+} */
 
 .freeTimePick{
   font-size: 10px !important;
@@ -1819,13 +1819,13 @@
 border-radius: 8px;
 }
 
-.ant-rate-star .ant-rate-star-full{
+ /* .ant-rate-star .ant-rate-star-full{
   margin-left: 2px !important;
-}
+} */
 
 .ant-drawer-right.ant-drawer-open .ant-drawer-content-wrapper {
   box-shadow: none;
-}
+} 
 /* .ant-col .ant-col-3{
    background-color: #00f9b8;
 } */
@@ -1869,28 +1869,22 @@ border-radius: 8px;
 .searchButton{
   height: 50px  !important;
 }
-.timePickCalendar tbody{
-  padding-left: 10px !important;
-   border-spacing: 10px !important;
+.customCalendarMini .ant-picker-panel .ant-picker-content {
+    width: 450px !important;
+    height: 400px !important;
 }
- .timePickCalendar tbody tr .ant-picker-cell.ant-picker-cell-in-view {
+ .customCalendarMini tbody tr .ant-picker-cell.ant-picker-cell-in-view {
   min-height: 50px !important;
   max-width: 50px !important;
   background:  #76E8AA ;
-  border-radius: 20px !important;
+  border-radius: 10px !important;
+
   
 }
-.timePickCalendar .ant-picker-cell-selected {
+.customCalendarMini .ant-picker-cell-selected {
    background-color: #00f9b8 !important;
 }
-.timePickCalendar .ant-picker-cell-selected .ant-picker-cell-inner{
-  /* border: 1px  black !important;
-  border-radius: 20px !important;
-  background-color: #00f9b8 !important; */
-  
-  background: none  !important;
-  color: black !important;
-}
+
 .timePickCalendar .ant-picker-cell-selected .ant-picker-cell-inner:hover{
   /* border: 1px  black !important;
   border-radius: 20px !important;
@@ -1900,15 +1894,15 @@ border-radius: 8px;
   color: black !important;
 }
 
-.timePickCalendar tbody tr td:first-of-type{
+.customCalendarMini tbody tr td:first-of-type{
   color: white;
-  border-radius: 20px !important;
-  margin-top: 10px !important;
+  border-radius: 10px !important;
+ 
   background-color: #141A29 !important;
 }
-.timePickCalendar tbody tr td:last-of-type{
+.customCalendarMini tbody tr td:last-of-type{
   border-radius: 20px !important;
-  margin: 10px !important;
+  
   color: white;
   background: #141A29 !important;
 }
@@ -2004,6 +1998,12 @@ border-radius: 8px;
   background-color: none; 
 }
 
-.timePickCalendar tbody tr {
-  margin-top: 20px !important;
+.timePickCalendar tbody tr td ::after {
+  margin-right: 20px !important;
+  height: 50px;
+  width: 50px;
+}
+
+.timePickCalendar tbody tr td ::before{
+  margin-left: 10px;
 }

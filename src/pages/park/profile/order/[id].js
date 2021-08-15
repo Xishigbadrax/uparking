@@ -1,6 +1,6 @@
 import DefaultLayout from "@components/layouts/DefaultLayout";
-import { Layout, Button, Carousel, Image, Row, Col, Divider } from 'antd';
-import { LeftOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
+import { Layout, Button, Carousel, Image, Row, Col, Divider, Modal, Calendar } from 'antd';
+import { LeftOutlined, DownOutlined, UpOutlined, CodeSandboxCircleFilled } from '@ant-design/icons';
 import { useEffect, useState, useContext } from "react";
 import { callGet } from "@api/api";
 import Context from '@context/Context';
@@ -8,6 +8,13 @@ import { useRouter } from 'next/router';
 import Helper from '@utils/helper';
 import Link from "next/link";
 import { Tabs } from 'antd';
+import { calendarLocale } from "@constants/constants.js"
+import moment from 'moment';
+// import Calendar from 'react-calendar';
+import CustomCalendar from "@components/CustomCalendar"
+moment.updateLocale("mn", {
+    weekdaysMin: ["НЯ", "ДА", "МЯ", "ЛХ", "ПҮ", "БА", "БЯ"],
+});
 
 const { TabPane } = Tabs;
 
@@ -20,7 +27,6 @@ const style = {
     padding: "5px 10px"
 };
 
-
 const OrderId = () => {
     const router = useRouter();
     const ctx = useContext(Context);
@@ -28,6 +34,11 @@ const OrderId = () => {
     const [images, setImages] = useState([]);
     const [parkingUpDownArrow, setParkingUpDownArrow] = useState(false);
     const [seemoreUpDownArrow, setSeemoreUpDownArrow] = useState(false);
+    const [isModalVisibleCancelOrder, setIsModalVisibleCancelOrder] = useState(false);
+    const [isModalVisibleCancelOrderConfirm, setIsModalVisibleCancelOrderConfirm] = useState(false);
+    const [selectedDate, setselectedDate] = useState([]);
+    const [time, settime] = useState(null);
+    const [value, setValue] = useState(new Date());
 
     useEffect(() => {
         getData();
@@ -65,6 +76,37 @@ const OrderId = () => {
     function callback(key) {
         console.log(key);
     }
+    const handleClickCancelOrder = () => {
+        setIsModalVisibleCancelOrder(true);
+    };
+    const handleClickCancelOrderContinue = () => {
+        setIsModalVisibleCancelOrder(false);
+        setIsModalVisibleCancelOrderConfirm(true);
+    }
+
+    const handleOkCancelOrder = () => {
+        setIsModalVisibleCancelOrder(false);
+    };
+
+    const handleCancelCancelOrder = () => {
+        setIsModalVisibleCancelOrder(false);
+    };
+
+    const handleOkCancelOrderConfirm = () => {
+        setIsModalVisibleCancelOrder(false);
+    };
+
+    const handleCancelCancelOrderConfirm = () => {
+        setIsModalVisibleCancelOrder(false);
+    };
+
+
+    function onPanelChange(value, mode) {
+        console.log(value, mode);
+    }
+    function handleClickConfirm(value, mode) {
+        console.log(value, mode);
+    }
 
     return (
         <DefaultLayout>
@@ -82,6 +124,7 @@ const OrderId = () => {
                                 {images.map((image) => (
                                     <div key={image.id}>
                                         <Image
+                                            preview={false}
                                             width={468}
                                             src={IMG_URL + image.path}
                                         /></div>
@@ -100,22 +143,26 @@ const OrderId = () => {
                     <Sider width={400}>
                         <Tabs defaultActiveKey="1" onChange={callback}>
                             <TabPane tab="Танилцуулга" key="1">
-                                {/* <Row>
-                                    <Col span={12}>Residence</Col>
-                                    <Col span={12} style={{ color: "#0013D4", textAlign: "right", fontWeight: "bold" }}>{!Helper.isNullOrEmpty(orderData.residenceName) ? orderData.residenceName : null}</Col>
-                                </Row>
-                                <Row>
-                                    <Col span={12}>Floor number</Col>
-                                    <Col span={12} style={{ color: "#0013D4", textAlign: "right", fontWeight: "bold" }}>{!Helper.isNullOrEmpty(orderData.floorNumberLabel) ? orderData.floorNumberLabel : null}</Col>
-                                </Row>
-                                <Row>
-                                    <Col span={12}>Garage number</Col>
-                                    <Col span={12} style={{ color: "#0013D4", textAlign: "right", fontWeight: "bold" }}>{!Helper.isNullOrEmpty(orderData.parkingSpaceGarageNumber) ? orderData.parkingSpaceGarageNumber : null}</Col>
-                                </Row>
-                                <Row>
-                                    <Col span={12}>Uparking number</Col>
-                                    <Col span={12} style={{ color: "#0013D4", textAlign: "right", fontWeight: "bold" }}>{!Helper.isNullOrEmpty(orderData.uparkingNumber) ? orderData.uparkingNumber : null}</Col>
-                                </Row> */}
+                                {orderData.bookingStatus === "CONFIRMED" || orderData.bookingStatus === "HISTORY " ?
+                                    <div>
+                                        <Row>
+                                            <Col span={12}>Residence</Col>
+                                            <Col span={12} style={{ color: "#0013D4", textAlign: "right", fontWeight: "bold" }}>{!Helper.isNullOrEmpty(orderData.residenceName) ? orderData.residenceName : null}</Col>
+                                        </Row>
+                                        <Row>
+                                            <Col span={12}>Floor number</Col>
+                                            <Col span={12} style={{ color: "#0013D4", textAlign: "right", fontWeight: "bold" }}>{!Helper.isNullOrEmpty(orderData.floorNumberLabel) ? orderData.floorNumberLabel : null}</Col>
+                                        </Row>
+                                        <Row>
+                                            <Col span={12}>Garage number</Col>
+                                            <Col span={12} style={{ color: "#0013D4", textAlign: "right", fontWeight: "bold" }}>{!Helper.isNullOrEmpty(orderData.parkingSpaceGarageNumber) ? orderData.parkingSpaceGarageNumber : null}</Col>
+                                        </Row>
+                                        <Row>
+                                            <Col span={12}>Uparking number</Col>
+                                            <Col span={12} style={{ color: "#0013D4", textAlign: "right", fontWeight: "bold" }}>{!Helper.isNullOrEmpty(orderData.uparkingNumber) ? orderData.uparkingNumber : null}</Col>
+                                        </Row>
+                                    </div> : null
+                                }
                                 <Row style={{ padding: "20px 10px" }}>
                                     <Col span={24} style={{ background: "rgba(222, 226, 233, 0.2)", borderRadius: "24px", padding: "13px 23px", display: "inline-flex", textAlign: "center", justifyContent: "center" }}>
                                         {orderData && orderData.floorNumber
@@ -270,6 +317,12 @@ const OrderId = () => {
                                         }
                                     </Col>
                                 </Row>
+
+                                <div style={{ margin: "30px 0px" }}>
+                                    <Button type="default" size={"large"} block>
+                                        Зогсоолыг харах
+                                    </Button>
+                                </div>
                                 <Row gutter={16}>
                                     <Col className="gutter-row" span={12} >
                                         <div style={style}>
@@ -385,42 +438,87 @@ const OrderId = () => {
                                         ) : null}
                                     </Col>
                                 </Row>
-                                <Divider />
-                                <Row style={{ marginTop: "30px" }}>
-                                    <Col span={12} style={{ fontWeight: "bold", fontSize: "14px", lineHeight: "24px" }}>
-                                        <div >Нийт захиалгын төлбөр:</div>
-                                    </Col>
-                                    <Col span={12} style={{ fontWeight: "bold", fontSize: "14px", lineHeight: "24px", textAlign: "right", fontSize: "20px" }}>
-                                        {orderData.totalPrice ? Helper.formatValueReverse(orderData.totalPrice) : 0}
-                                        ₮
-                                    </Col>
-                                </Row>
-                                <Row style={{ marginTop: "30px" }}>
-                                    <Col span={24} >
-                                        <Tabs defaultActiveKey="1">
-                                            <TabPane tab="Хэтэвч" key="1">
-                                            <div
-            style={{
-                backgroundImage: "url(/images/wallet-background.png",
-                width: "100%",
-                height:[200],
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "cover"
-            }}
-            >XXX</div>
-                                               
+                                {(() => {
+                                    if (orderData.bookingStatus === "CONFIRMED") {
+                                        return (
+                                            <div style={{ margin: "30px 0px" }}>
+                                                <Button type="danger" size={"large"} block onClick={handleClickCancelOrder}>
+                                                    Захиалга цуцлах
+                                                </Button>
+                                            </div>
+                                        )
+                                    } else if (orderData.bookingStatus === "SAVED") {
+                                        return (
+                                            <div>
+                                                <Divider />
+                                                <Row style={{ marginTop: "30px" }}>
+                                                    <Col span={12} style={{ fontWeight: "bold", fontSize: "14px", lineHeight: "24px" }}>
+                                                        <div >Нийт захиалгын төлбөр:</div>
+                                                    </Col>
+                                                    <Col span={12} style={{ fontWeight: "bold", fontSize: "14px", lineHeight: "24px", textAlign: "right", fontSize: "20px" }}>
+                                                        {orderData.totalPrice ? Helper.formatValueReverse(orderData.totalPrice) : 0}
+                                                        ₮
+                                                    </Col>
+                                                </Row>
+                                                <Row style={{ margin: "30px 0px" }}>
+                                                    <Col span={24} >
+                                                        <Tabs defaultActiveKey="1">
+                                                            <TabPane tab="Хэтэвч" key="1">
+                                                                <div
+                                                                    style={{
+                                                                        backgroundImage: "url(/images/wallet-background.png",
+                                                                        width: "100%",
+                                                                        height: "244px",
+                                                                        backgroundRepeat: "no-repeat",
+                                                                        backgroundSize: "cover"
+                                                                    }}
+                                                                >
+                                                                    <div style={{ padding: "25px" }}>
 
-
-                                            </TabPane>
-                                            <TabPane tab="Дансаар" key="2">
-                                                Content of Tab Pane 2
-                                            </TabPane>
-                                            <TabPane tab="Нэхэмжлэх" key="3">
-                                                Content of Tab Pane 3
-                                            </TabPane>
-                                        </Tabs>
-                                    </Col>
-                                </Row>
+                                                                        <Image
+                                                                            src={'/images/logo-white.png'}
+                                                                            width="94px"
+                                                                        />
+                                                                        <div style={{ marginTop: "50px" }}>
+                                                                            <div style={{ fontSize: "16px", lineHeight: "16px", textAlign: "right", letterSpacing: "0.4px", color: "#FFFFFF" }}>Нийт дүн:</div>
+                                                                            <div style={{ fontSize: "26px", lineHeight: "28px", textAlign: "right", letterSpacing: "0.4px", color: "#FFFFFF" }}>
+                                                                                {orderData.totalPrice ? Helper.formatValueReverse(orderData.totalPrice) : 0}
+                                                                            </div>
+                                                                            <div style={{ fontSize: "16px", lineHeight: "16px", textAlign: "right", letterSpacing: "0.4px", color: "#FFFFFF" }}>Бонус:</div>
+                                                                            <div style={{ fontSize: "26px", lineHeight: "28px", textAlign: "right", letterSpacing: "0.4px", color: "#FFFFFF" }}>
+                                                                                {orderData.totalPrice ? Helper.formatValueReverse(orderData.totalPrice) : 0}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <Row style={{ marginTop: "35px" }}>
+                                                                    <Col span={24}>
+                                                                        <Button type="primary" size={"large"} block>
+                                                                            Төлөх
+                                                                        </Button>
+                                                                    </Col>
+                                                                </Row>
+                                                            </TabPane>
+                                                            <TabPane tab="Дансаар" key="2">
+                                                                Дансаар
+                                                            </TabPane>
+                                                            <TabPane tab="Нэхэмжлэх" key="3">
+                                                                Нэхэмжлэх
+                                                            </TabPane>
+                                                        </Tabs>
+                                                    </Col>
+                                                </Row></div>
+                                        )
+                                    } else if (orderData.bookingStatus === "HISTORY") {
+                                        return (
+                                            <div style={{ margin: "30px 0px" }}>
+                                                <Button type="primary" size={"large"} block>
+                                                    Зогсоолыг үнэлэх
+                                                </Button>
+                                            </div>
+                                        )
+                                    }
+                                })()}
                             </TabPane>
                             <TabPane tab="Үнэлгээ" key="2">
                                 Үнэлгээ
@@ -432,7 +530,60 @@ const OrderId = () => {
                     </Sider>
                 </Layout>
             </Layout>
-        </DefaultLayout>
+            <Modal title="Захиалга цуцлах" visible={isModalVisibleCancelOrder} onOk={handleOkCancelOrder} onCancel={handleCancelCancelOrder} footer={[
+                <Button key="back" type="primary" size="large" onClick={handleClickCancelOrderContinue} block>
+                    Үргэлжлүүлэх
+                </Button>,
+            ]}>
+                <div>
+                    Цуцлах захиалгын эхлэх өдрийг сонгоно уу
+                </div>
+                <CustomCalendar />
+
+                <div style={{ fontWeight: "bold", fontSize: "14px", color: "#141A29", marginTop: "30px" }}>
+                    Таны цуцлах захиалга:
+                </div>
+                <div>
+                    {selectedDate
+                        ? selectedDate + '-ны ' + time + ' хойшхи захиалга цуцлагдана!'
+                        : null}
+                </div>
+                <Row style={{ fontSize: "14px", color: "#35446D", marginTop: "10px" }}>
+                    <Col span={8}> Өдөр: &nbsp;
+                        {orderData.totalAtDay ? orderData.totalAtDay : 0}</Col>
+                    <Col span={8}> Шөнө: &nbsp;
+                        {orderData.totalAtNight ? orderData.totalAtNight : 0}</Col>
+                    <Col span={8}> Бүтэн өдөр: &nbsp;
+                        {orderData.totalAtDay ? orderData.totalAllDay : 0}</Col>
+                </Row>
+                <Divider />
+                <Row style={{ fontWeight: "bold", fontSize: "14px", color: "#141A29", marginTop: "30px" }}>
+                    <Col span={12}>Нийт цуцлах захиалгын төлбөр:</Col>
+                    <Col span={12} style={{ textAlign: "right" }}>{orderData.totalPrice ? Helper.formatValueReverse(orderData.totalPrice) : 0}₮</Col>
+                </Row>
+            </Modal>
+
+            <Modal title="Захиалга цуцлах" visible={isModalVisibleCancelOrderConfirm} onOk={handleOkCancelOrderConfirm} onCancel={handleCancelCancelOrderConfirm} footer={[
+                <Button key="back" type="primary" size="large" onClick={handleClickConfirm} block>
+                    Үргэлжлүүлэх
+                </Button>,
+            ]}>
+                <Row>
+                    <Col span={12}>Нийт цуцлах захиалгын төлбөр</Col>
+                    <Col span={12}>{Helper.formatValueReverse(orderData.totalPrice)}₮</Col>
+                </Row>
+                <Row>
+                    <Col span={12}>Захиалга цуцалсны шимтгэл</Col>
+                    <Col span={12}>{Helper.formatValueReverse(orderData.totalPrice) - Helper.formatValueReverse(orderData.returnAmount)}₮</Col>
+                </Row>
+                <Divider />
+                <Row>
+                    <Col span={12}>Буцаалт</Col>
+                    <Col span={12}>{Helper.formatValueReverse(orderData.returnAmount)}₮</Col>
+                </Row>
+
+            </Modal>
+        </DefaultLayout >
     );
 }
 
