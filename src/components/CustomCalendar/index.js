@@ -20,6 +20,7 @@ const CustomCalendar = (props) => {
   const [selectedDate, setselectedDate] = useState([]);
   const [selectType, setSelectType] = useState("multi");
   const [value, setValue] = useState(null);
+  const [current, setCurrent] = useState(0);
 
   useEffect(() => {
     if (props.selectType || props.selectType === "single" || props.selectType === "multi") {
@@ -44,16 +45,18 @@ const CustomCalendar = (props) => {
   function dateFullCellRender(value) {
     const day = moment(value).format("D");
     const today = moment();
-    let onclickclass = '';
+    let onclickclass = "";
     let style;
-    if (selectedDate.find(dDate => isSameDay(dDate.toDate(), value.toDate()))) {
-      onclickclass = 'onclickeddate'
+    if (
+      selectedDate.find((dDate) => isSameDay(dDate.toDate(), value.toDate()))
+    ) {
+      onclickclass = "onclickeddate";
     }
-
     if (isSameDay(today.toDate(), value.toDate())) {
       style = {
         background: "rgb(34 230 185)",
-        color: "white"
+        color: "white",
+        marginLeft: "5px",
       };
     }
     return <div className={`customFullCellRender ant-picker-cell-inner ${onclickclass}`} style={style}><div className="ant-picker-calendar-date-value">{day}</div></div>;
@@ -69,6 +72,15 @@ const CustomCalendar = (props) => {
       }
     } else {
       setselectedDate([value]);
+    }
+    setCurrent(props.tabskey);
+    console.log(current);
+    if (current === 1) {
+      props.setDayOfNumber(selectedDate.length);
+    } else if (current === 2) {
+      props.setNightOfNumber(selectedDate.length);
+    } else if (current === 3) {
+      props.setFullDayNumber(selectedDate.length);
     }
   }
   function disabledDate(current) {

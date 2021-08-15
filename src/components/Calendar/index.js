@@ -1,93 +1,131 @@
-import { Calendar, Select, Radio, Col, Row, Typography, Button } from "antd";
+import {
+  Calendar,
+  Select,
+  Radio,
+  Col,
+  Row,
+  Typography,
+  Button,
+  Badge,
+} from "antd";
 import { RightOutlined, LeftOutlined } from "@ant-design/icons";
 import { calendarLocale } from "@constants/constants.js";
 import moment, { months } from "moment";
-import { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 moment.updateLocale("mn", {
   weekdaysMin: ["НЯ", "ДА", "МЯ", "ЛХ", "ПҮ", "БА", "БЯ"],
 });
-
-function onPanelChange(value, mode) {
-  console.log(value, mode);
-}
-const onClose = () => {};
+let DateValue = [];
+let selectData = [];
 
 const calendar = (props) => {
   const [curr, setCurr] = useState(0);
-  const [day, setDay] = useState(0);
   const [selectedDate, setSelectedDate] = useState([]);
-  const onChangeLeft = () => {
-    if (curr > 0) {
-      setCurr(curr - 1);
-    } else setCurr(0);
-  };
+  const [calendarData, setCalendarData] = useState([]);
+  const onChangeLeft = () => {};
+  const onClickRight = () => {};
+  const calendarRef = useRef(null);
+  const onselectClass = "onselectDate";
   const onselect = (e) => {
-    console.log("nuguu date --->", e._d);
-    if (e._d !== selectedDate) {
-      setSelectedDate([...selectedDate, e._d]);
-      setDay(day + 1);
-      console.log(day);
+    let date = moment(e).format("YYYY/MM/DD");
+    if (isInArray(calendarData, date)) {
+      arrayRemove(calendarData, date);
     } else {
+      calendarData.push({ date: date });
+    }
+    setCurr(props.tabskey);
+    console.log(curr);
+    if (curr === 1) {
+      props.setDayOfNumber(calendarData.length);
+    } else if (curr === 2) {
+      props.setNightOfNumber(calendarData.length);
+    } else if (curr === 3) {
+      props.setFullDayNumber(calendarData.length);
     }
   };
-  const onClickRight = () => {
-    console.log(day);
-    console.log(selectedDate);
-  };
+
+  function getListData(value) {
+    let listData = [];
+    if (calendarData.length > 0) {
+      calendarData.forEach(function (element) {
+        var currentMoment = moment(element.date, "YYYY/MM/DD");
+        if (value.format("YYYY-MM-DD") === currentMoment.format("YYYY-MM-DD")) {
+          listData.push(element);
+        }
+      });
+    }
+    return listData || [];
+  }
+  function dateCellRender(value) {
+    const listData = getListData(value);
+    return (
+      <div className="events">
+        {listData.map((item) => (
+          <div
+            className={`pickCalendarTime ant-picker-cell-inner ${onselectClass}`}
+          >
+            <div className="ant-picker-calendar-date-value">1</div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+  function arrayRemove(array, value) {
+    const removeIndex = array.findIndex((item) => item.date === value);
+    array.splice(removeIndex, 1);
+    return array;
+  }
+  function isInArray(array, value) {
+    return array.find((item) => {
+      if (item.date === value) {
+        return true;
+      } else return false;
+    });
+  }
   return (
     <div className=" site-calendar-customize-header-wrapper">
       <Calendar
+        dateCellRender={dateCellRender}
         className="timePickCalendar"
         onSelect={onselect}
         locale={calendarLocale}
         fullscreen={false}
-        headerRender={({ value, type, onChange, onTypeChange }) => {
-          const start = 0;
-          const end = 12;
-          const monthOptions = [];
-          const current = value.clone();
-
-          const localeData = value.localeData();
-          const year = value.year();
-          const month = [];
-          for (let i = 0; i < 12; i++) {
-            current.month(i);
-            month.push(localeData.months(current));
-          }
-          // for (let index = start; index < end; index++) {
-          //   monthOptions.push(
-          //     <Select.Option className="month-item" key={`${index}`}>
-          //       {months[index]}
-          //     </Select.Option>
-          //   );
-          // }
-          setCurr(value.clone().month());
-          return (
-            <div style={{ padding: 16 }}>
-              <Row gutter={8}>
-                <Col span={2}>
-                  <LeftOutlined
-                    onClick={onChangeLeft}
-                    style={{ cursor: "pointer" }}
-                  />
-                </Col>
-                <Col span={12}>
-                  {month[curr]},{year}
-                </Col>
-                <Col
-                  span={2}
-                  onClick={onClickRight}
-                  style={{ cursor: "pointer" }}
-                >
-                  <RightOutlined />
-                </Col>
-              </Row>
-            </div>
-          );
-        }}
-        onPanelChange={onPanelChange}
+        // headerRender={({ value, type, onChange, onTypeChange }) => {
+        //   const current = value.clone();
+        //   const localeData = value.localeData();
+        //   const year = value.year();
+        //   const month = [];
+        //   for (let i = 0; i < 12; i++) {
+        //     month.push(localeData.months(current));
+        //   }
+        //   return (
+        //     <div style={{ padding: 16 }}>
+        //       <Row gutter={8}>
+        //         <Col span={2}>
+        //           <LeftOutlined
+        //             onClick={onChangeLeft}
+        //             style={{ cursor: "pointer" }}
+        //           />
+        //         </Col>
+        //         <Col span={12}>
+        //           {month[current]},{year}
+        //         </Col>
+        //         <Col
+        //           span={2}
+        //           onClick={onClickRight}
+        //           style={{ cursor: "pointer" }}
+        //         >
+        //           <RightOutlined />
+        //         </Col>
+        //       </Row>
+        //     </div>
+        //   );
+        // }}
+        // ref={calendarRef}
+        // onPanelChange={onPanelChange}
       />
     </div>
   );
 };
+
 export default calendar;

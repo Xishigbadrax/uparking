@@ -1815,15 +1815,17 @@
 
 .freeTimePick{
   font-size: 10px !important;
+  background: rgba(3, 54, 255, 0.08);
+border-radius: 8px;
 }
 
-/* .ant-rate-star .ant-rate-star-full{
+ /* .ant-rate-star .ant-rate-star-full{
   margin-left: 2px !important;
-}
+} */
 
 .ant-drawer-right.ant-drawer-open .ant-drawer-content-wrapper {
   box-shadow: none;
-} */
+} 
 /* .ant-col .ant-col-3{
    background-color: #00f9b8;
 } */
@@ -1844,52 +1846,164 @@
   background: linear-gradient(90deg, #0013D4 0%, #00F9B8 100%) !important;
 } */
 .chooseButton{
-  margin-top: 20px;
-  background: rgba(3, 54, 255, 0.08);
-  display: block;
+  display: flex;
+flex-direction: column;
+align-items: center;
+padding: 10px 14px;
+cursor: pointer;
+
+width: 392.4px;
+height: 40px;
+
+
+/* Smooth/1 */
+
+background: rgba(3, 54, 255, 0.08);
+/* Brand Color / Primary */
+
+border: 1px solid #0013D4;
+box-sizing: border-box;
+border-radius: 8px;
   
 }
 .searchButton{
   height: 50px  !important;
 }
-
-/* .ant-radio-button-wrapper{
-  width: 192px;
-  height: 56px;
-  justify-content: center;
-  align-items: center;
-  align-content: center;
-  margin-left: 5%;
-  margin-top: 2%;
-} */
-
-.timePickCalendar tbody tr td{
-  padding: 5px !important;
+.customCalendarMini .ant-picker-panel .ant-picker-content {
+    width: 450px !important;
+    height: 400px !important;
 }
-/* tbody{
-   height: 400px !important;
-   width: 400px!important;
-   
-} */
-
- /*.ant-picker-cell.ant-picker-cell-in-view {
-  height: 50px !important;
-  width: 50px !important;
+ .customCalendarMini tbody tr .ant-picker-cell.ant-picker-cell-in-view {
+  min-height: 50px !important;
+  max-width: 50px !important;
   background:  #76E8AA ;
-  border-radius: 20px !important;
+  border-radius: 10px !important;
+
   
 }
-.ant-picker-cell.ant-picker-cell-in-view.ant-picker-cell-selected{
-  border: 1px  black !important;
-  border-radius: 20px !important;
-} */
-.timePickCalendar tbody tr td:first-of-type{
-  color: white;
-  border-radius: 20px !important;
-  background-color: #141A29;
+.customCalendarMini .ant-picker-cell-selected {
+   background-color: #00f9b8 !important;
 }
-.timePickCalendar tbody tr td:last-of-type{
+
+.timePickCalendar .ant-picker-cell-selected .ant-picker-cell-inner:hover{
+  /* border: 1px  black !important;
   border-radius: 20px !important;
+  background-color: #00f9b8 !important; */
+  position: none !important;
+  background: none  !important;
+  color: black !important;
+}
+
+.customCalendarMini tbody tr td:first-of-type{
   color: white;
-  background: #141A29;
+  border-radius: 10px !important;
+ 
+  background-color: #141A29 !important;
+}
+.customCalendarMini tbody tr td:last-of-type{
+  border-radius: 20px !important;
+  
+  color: white;
+  background: #141A29 !important;
+}
+.ResidenceCardList .ant-card-body{
+  padding-top: 0px !important
+}
+.ResidenceCardList .ant-rate  svg{
+ 
+  height: 10.903876304626465px !important;
+  width: 11.409276962280273px !important;
+  margin-top: 2.3px !important;
+  border-radius: 0px;
+}
+.ResidenceCardList .ant-rate .ant-rate-star .ant-rate-star-full{
+  margin-left: 2.29px !important;
+}
+.ant-rate-star:not(:last-child) {
+  margin-right: 0px !important;
+}
+
+.OptionPane .ant-tabs-tab{
+  padding: 0px !important;
+}
+.DetailsPane .ant-tabs-tab{
+  padding: 0px !important;
+}
+.SpaceIcons{
+  background: rgba(222, 226, 233, 0.2);
+border-radius: 24px;
+margin-top: 10px;
+}
+.priceInfoOfOnDay{
+  display: flex;
+flex-direction: column;
+align-items: center;
+padding: 0px;
+width: 44px;
+height: 40px;
+left: calc(50% - 44px/2 + 5px);
+top: calc(50% - 40px/2 + 0.5px);
+}
+.priceInfoOfOneNight{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0px;
+  
+  
+  width: 53px;
+  height: 40px;
+  left: calc(50% - 53px/2 + 5px);
+  top: calc(50% - 40px/2 + 0.5px);
+}
+.priceInfoOfFullDay{
+  display: flex;
+flex-direction: column;
+align-items: center;
+padding: 0px;
+width: 70px;
+height: 40px;
+left: calc(50% - 70px/2 + 5px);
+top: calc(50% - 40px/2 + 0.5px);
+
+  
+}
+
+.OptionPane .ant-tabs-ink-bar .ant-tabs-ink-bar-animated{
+  width: 100px !important;
+  margin-left: 20px !important;
+}
+
+.pickVehicle{
+  width: 192px;
+height: 56px;
+left: 0px;
+top: 0px;
+
+/* Base Color / White */
+
+background: #FFFFFF;
+/* Brand Color / Primary */
+border: 1px solid #0013D4;
+box-sizing: border-box;
+border-radius: 8px;
+}
+.ant-radio-button-wrapper .pickVehicle:hover{
+ background: none !important;
+ color: none !important;
+}
+
+.ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+  background: grey;
+  background-color: none; 
+}
+
+.timePickCalendar tbody tr td ::after {
+  margin-right: 20px !important;
+  height: 50px;
+  width: 50px;
+}
+
+.timePickCalendar tbody tr td ::before{
+  margin-left: 10px;
 }

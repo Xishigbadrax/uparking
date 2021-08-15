@@ -24,15 +24,15 @@ export const ContextProvider = ({ children }) => {
   };
 
   const getProfileData = async (user) => {
-      const userdata = await callGet(`/user/${user.user_id}/test`)
-      if (!userdata || userdata === undefined) {
-        showMessage(messageType.FAILED.type, defaultMsg.dataError);
-        return;
-      }
-      if (userdata.lastName !== undefined) {
-        setUserdata(userdata);
-      }
-  }
+    const userdata = await callGet(`/user/${user.user_id}/test`);
+    if (!userdata || userdata === undefined) {
+      showMessage(messageType.FAILED.type, defaultMsg.dataError);
+      return;
+    }
+    if (userdata.lastName !== undefined) {
+      setUserdata(userdata);
+    }
+  };
 
   const setMenuAndPermissions = async () => {
     // if (
@@ -119,7 +119,7 @@ export const ContextProvider = ({ children }) => {
         dispatch,
         setMenuAndPermissions,
         checkPermission,
-        userdata
+        userdata,
       }}
     >
       {children}
