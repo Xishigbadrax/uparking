@@ -88,7 +88,7 @@ const fsearch = () => {
     // const listData = await callGet(
     //   `/search/keyword/?syllable=${e.target.value}`
     // );
-    filterofSearchData(listData);
+    // filterofSearchData(listData);
     console.log(options);
   };
   const onChangeType = (e) => {
