@@ -10,26 +10,26 @@ import { useState, useEffect } from "react";
 import { callGet } from "@api/api";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import {
-  withScriptjs,
-  withGoogleMap,
-  GoogleMap,
-  Marker,
-} from "react-google-maps";
+// import {
+//   withScriptjs,
+//   withGoogleMap,
+//   GoogleMap,
+//   Marker,
+// } from "react-google-maps";
 const data = [
   { id: 1, image: "/ganbat.png" },
   { id: 2, image: "/Adiyadorj.png" },
   { id: 3, image: "/Bat-ochir.png" },
 ];
-const MyMapComponent = withScriptjs(
-  withGoogleMap((props) => (
-    <GoogleMap defaultZoom={8} defaultCenter={{ lat: -34.397, lng: 150.644 }}>
-      {props.isMarkerShown && (
-        <Marker position={{ lat: -34.397, lng: 150.644 }} />
-      )}
-    </GoogleMap>
-  ))
-);
+// const MyMapComponent = withScriptjs(
+//   withGoogleMap((props) => (
+//     <GoogleMap defaultZoom={8} defaultCenter={{ lat: -34.397, lng: 150.644 }}>
+//       {props.isMarkerShown && (
+//         <Marker position={{ lat: -34.397, lng: 150.644 }} />
+//       )}
+//     </GoogleMap>
+//   ))
+// );
 function getBase64(img, callback) {
   const reader = new FileReader();
   reader.addEventListener("load", () => callback(reader.result));
@@ -186,7 +186,7 @@ const Edit = () => {
               <p>AAAAA</p>
             </Col>
             <Col offset={4}>
-              <MyMapComponent
+              {/* <MyMapComponent
                 isMarkerShown
                 googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
                 loadingElement={<div style={{ height: `100%` }} />}
@@ -200,7 +200,7 @@ const Edit = () => {
                   />
                 }
                 mapElement={<div style={{ height: `100%` }} />}
-              />
+              /> */}
             </Col>
           </Row>
         )}

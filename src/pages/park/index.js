@@ -25,7 +25,6 @@ const Dashboard = () => {
   const disabledDate = (current) => {
     return current && current > moment().endOf('day');
   }
-  console.log( 'profileeeeeeeeeee')
   const getData = async (start_date, end_date) => {
     console.log('dashboard')
     ctx.setIsLoading(true);

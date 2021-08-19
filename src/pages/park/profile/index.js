@@ -30,22 +30,13 @@ import Discount from "@components/registerSpace/discount";
 import RentDate from "@components/registerSpace/rentDate";
 import Context from "@context/Context";
 
-import {
-  withScriptjs,
-  withGoogleMap,
-  GoogleMap,
-  Marker,
-} from "react-google-maps";
+// import {
+//   withScriptjs,
+//   withGoogleMap,
+//   GoogleMap,
+//   Marker,
+// } from "react-google-maps";
 
-const MyMapComponent = withScriptjs(
-  withGoogleMap((props) => (
-    <GoogleMap defaultZoom={8} defaultCenter={{ lat: -34.397, lng: 150.644 }}>
-      {props.isMarkerShown && (
-        <Marker position={{ lat: -34.397, lng: 150.644 }} />
-      )}
-    </GoogleMap>
-  ))
-);
 const { SubMenu } = Menu;
 const { Content } = Layout;
 const { Option } = Select;
@@ -95,8 +86,8 @@ const Profile = () => {
   const [selectedZagwar, setSelectedZagwar] = useState({});
   const [selectedColor, setSelectedColor] = useState({});
   const [vehicles, setVehicles] = useState([]);
+
   const [current, setCurrent] = useState(0);
-  // const ctx = useContext(Context);
 
   const [residenceData, setResidenceData] = useState({});
   const [aimag, setAimag] = useState([]);
@@ -116,10 +107,31 @@ const Profile = () => {
   const [isParkVisible, setIsParkVisible] = useState(false);
   const mainInfoRef = useRef(null);
   const [form] = Form.useForm();
+  // const [userform] = Form.useForm();
+  const {userdata} = useContext(Context);
+  const [realData, setRealData] = useState("");
+  // const {userFormData, setUserFormData} = useState({
+  //   lastName: '111',
+  //   firstName: '222',
+  //   registerNumber: '333',
+  //   phoneNumber: '444',
+  //   email:'55',
+  //   fbLink: '6',
+  //   id: '7'
+  // });
+  // useEffect(() => {
+  //   userform.setFieldsValue(userFormData)
+  //  }, [userform, userFormData])
+  useEffect(async () => {
+    if(typeof userdata.firstName != "undefined"){
+      setRealData(userdata)
+    }
+    
+  }, [userdata]);
 
-  const onFinish1234 = (values) => {
-    console.log(values);
-  };
+
+
+  const onFinish1234 = (values) => {};
 
   useEffect(async () => {
     const aimag = await callGet("/address/aimag");
@@ -139,7 +151,11 @@ const Profile = () => {
   function classNames(...classes) {
     return classes.filter(Boolean).join("  ");
   }
-
+  const onSavedSpaceFormData = async () => {
+    console.log(mainData);
+    // const res = await callPost("/parkingfirst", mainData);
+    console.log();
+  };
   const onChangeUildver = async (e) => {
     console.log("i am here-->", e);
     const uildver = uildwer.find((item) => item.value === e);
@@ -167,6 +183,8 @@ const Profile = () => {
   };
 
   const [mainData, setMainData] = useState(null);
+  const [imageData, setImageData] = useState(null);
+  const [spaceData, setSpaceData] = useState(null);
   const onFinish = (values) => {
     console.log("Success:", values);
   };
@@ -191,12 +209,73 @@ const Profile = () => {
   const handleCancel = () => {
     setIsVehileVisible(false);
   };
+  const onChangeAimag = (e) => {
+    const aimag1 = aimag.find((item) => item.value === Number(e));
+    setSelectedAimag(aimag1);
+    setResidenceData({ ...residenceData, provinceId: aimag1.value });
+  };
+
+  const onChangeSum = (e) => {
+    const sum1 = sum.find((item) => item.value === Number(e));
+    console.log(sum1);
+    setSelectedSum(sum1);
+    setResidenceData({ ...residenceData, districtId: sum1.value });
+  };
+  const onChangeKhoroo = (e) => {
+    const horoo = khoroo.find((item) => item.value === Number(e));
+    setSelectedKhoroo(horoo);
+    setResidenceData({ ...residenceData, sectionId: horoo.value });
+  };
+  const onChangeResidence = (e) => {
+    const residence1 = residence.find((item) => item.value === Number(e));
+    setSelectedResidence(residence1);
+
+    setResidenceData({
+      ...residenceData,
+      residenceName: residence1.label,
+      residenceId: e,
+    });
+    console.log("nicee");
+  };
+
+  const onChangeResidenceNumber = (e) => {
+    const resiblock = residenceblock.find((item) => item.value === Number(e));
+    setSelectedResidenceBlock(resiblock);
+    setResidenceData({
+      ...residenceData,
+      residenceBlockId: selectedResidenceBlock.value,
+    });
+    setResidenceData({
+      ...residenceData,
+      residenceBlockNumber: selectedResidenceBlock.label,
+      residenceBlockId: e,
+    });
+  };
+  const onChangeDoorNumber = (e) => {
+    console.log(e.target.value);
+    setDoorNo(e.target.value);
+
+    setResidenceData({
+      ...residenceData,
+      parkingGateNumber: e.target.value,
+    });
+  };
+  const onChangeSpaceNumber = (e) => {
+    setSpaceNumber(e.target.value);
+    setResidenceData({
+      ...residenceData,
+      parkingSpaceId: e.target.value,
+    });
+  };
 
   const onClickContinue = async () => {
     // if (steps === "Үндсэн мэдээлэл") {
     console.log("mainData11111111111", mainData);
     console.log(":mainInfoRef", mainInfoRef);
     console.log(form.validateFields());
+    {
+      form.getFieldError() ? setCurrent(current + 1) : null;
+    }
     // }
     // return;
     // const res = callPost("/parkingfirst", residenceData);
@@ -210,10 +289,8 @@ const Profile = () => {
   const onFinishFailedVehile = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
-  const onclickOk = () => {
-    console.log("xaxa");
-  };
 
+  // console.log(userdata.firstName)
   return (
     <ProfileLayout>
       <Row style={{ marginLeft: "65px" }} className={"profileIndex"}>
@@ -235,32 +312,34 @@ const Profile = () => {
                 />
               </Col>
             </Row>
+            {realData != ""?
             <Form
               className="profileForm"
               name="basic"
               labelCol={{ span: 8 }}
               wrapperCol={{ span: 16 }}
-              initialValues={{ remember: true }}
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
+              initialValues={realData}
             >
               <Form.Item
                 label="Овог:"
-                name="surname"
+                name="lastName"
                 rules={[{ required: true, message: "Овог оруулна уу" }]}
+
               >
-                <Input disabled={isProfileNotEdit} />
+                <Input disabled={isProfileNotEdit}  />
               </Form.Item>
               <Form.Item
                 label="Нэр:"
-                name="givenname"
+                name="firstName"
                 rules={[{ required: true, message: "Нэр оруулна уу" }]}
               >
                 <Input disabled={isProfileNotEdit} />
               </Form.Item>
               <Form.Item
                 label="Регистрийн дугаар:"
-                name="register"
+                name="registerNumber"
                 rules={[
                   { required: true, message: "Регистрийн дугаар оруулна уу" },
                 ]}
@@ -269,7 +348,7 @@ const Profile = () => {
               </Form.Item>
               <Form.Item
                 label="Утасны дугаар:"
-                name="phonenumber"
+                name="phoneNumber"
                 rules={[
                   { required: true, message: "Утасны дугаар оруулна уу" },
                 ]}
@@ -285,14 +364,14 @@ const Profile = () => {
               </Form.Item>
               <Form.Item
                 label="Facebook:"
-                name="facebook"
+                name="fbLink"
                 rules={[{ required: false, message: "Facebook оруулна уу" }]}
               >
                 <Input disabled={isProfileNotEdit} />
               </Form.Item>
 
-              <Form.Item label="Хэрэглэгчийн дугаар:" name="usernumber">
-                <Input disabled={true} />
+              <Form.Item label="Хэрэглэгчийн дугаар:" name="id">
+                <Input  disabled={isProfileNotEdit} />
               </Form.Item>
 
               {!isProfileNotEdit && (
@@ -303,7 +382,8 @@ const Profile = () => {
                 </Form.Item>
               )}
             </Form>
-          </Card>
+          :null}
+           </Card>
         </Col>
         <Col span={12} style={{ paddingLeft: "25px" }}>
           <Card>
@@ -358,8 +438,10 @@ const Profile = () => {
               <Col span={3} style={{ textAlign: "right" }}></Col>
             </Row>
             <Row style={{ minHeight: "200px", paddingTop: "30px" }}>
-              {space.map(() => {
-                <Col offset={2}>АЗН</Col>;
+              {space.map((item) => {
+                <Col key={item.value} offset={2}>
+                  АЗН
+                </Col>;
               })}
             </Row>
             <Row>
@@ -385,6 +467,8 @@ const Profile = () => {
           key: "submit",
           htmlType: "submit",
         }}
+        onOk={() => setIsVehileVisible(false)}
+        onCancel={() => setIsVehileVisible(false)}
         width={1000}
         footer={[
           <Button key="back" type="link" onClick={handleCancel}>
@@ -494,7 +578,9 @@ const Profile = () => {
                   >
                     <Select onChange={onChangeColor}>
                       {color.map((item) => (
-                        <Option value={item.label}>{item.label}</Option>
+                        <Option key={item.value} value={item.label}>
+                          {item.label}
+                        </Option>
                       ))}
                     </Select>
                     <Divider />
@@ -518,19 +604,11 @@ const Profile = () => {
         className="fullModal"
         title="Авто зогсоол"
         centered
+        visible={isParkVisible}
+        // onOk={() => setIsParkVisible(false)}
+        onCancel={() => setIsParkVisible(false)}
         cancelButtonProps={{ style: { display: "none" } }}
         okButtonProps={{ style: { display: "none" } }}
-        visible={isParkVisible}
-        // footer={[
-        //   <Button key="back" type="link" onClick={goBack}>
-        //     <ArrowLeftOutlined /> Буцах
-        //   </Button>,
-
-        //   <Button key="submit" type="primary" onClick={onSaved}>
-        //     Үргэлжлүүлэх
-        //   </Button>,
-        // ]}
-        onCancel={() => setIsParkVisible(false)}
         width={1000}
       >
         <Row>
@@ -551,8 +629,12 @@ const Profile = () => {
             onFinish={onFinish1234}
           />
         )) ||
-          (steps[current].title === "Үндсэн зураг" && <MainImage />) ||
-          (steps[current].title === "Зогсоолын зураг" && <SpaceImage />) ||
+          (steps[current].title === "Үндсэн зураг" && (
+            <MainImage setImageData={setImageData} form={form} />
+          )) ||
+          (steps[current].title === "Зогсоолын зураг" && (
+            <SpaceImage setSpaceData={setSpaceData} />
+          )) ||
           (steps[current].title === "Зогсоолын үзүүлэлт" && (
             <SpaceIndicator />
           )) ||
@@ -575,10 +657,7 @@ const Profile = () => {
               </Button>
             )}
             {current === steps.length - 1 && (
-              <Button
-                onClick={() => setIsParkVisible(false)}
-                className="buttonGo"
-              >
+              <Button onClick={onSavedSpaceFormData} className="buttonGo">
                 Дуусгах
               </Button>
             )}

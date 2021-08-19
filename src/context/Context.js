@@ -5,11 +5,14 @@ import Auth from "@utils/auth";
 import { useRouter } from "next/router";
 import { apiList, sList } from "@api/api";
 import { profileMenu } from "@constants/profilemenu";
+import { walletMenu } from "@constants/walletmenu";
+import { callGet } from "@api/api";
 
 const Context = createContext();
 
 export const ContextProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [userdata, setUserdata] = useState({});
   const [menuOpenKeys, setMenuOpenKeys] = useState([]);
 
   const initialState = { auth: {}, menus: [], permissions: {} };
@@ -19,6 +22,17 @@ export const ContextProvider = ({ children }) => {
   const checkPermission = (permission) => {
     // return state.permissions[permission] ? true : false;
     return false;
+  };
+
+  const getProfileData = async (user) => {
+    const userdata = await callGet(`/user/${user.user_id}/test`);
+    if (!userdata || userdata === undefined) {
+      showMessage(messageType.FAILED.type, defaultMsg.dataError);
+      return;
+    }
+    if (userdata.lastName !== undefined) {
+      setUserdata(userdata);
+    }
   };
 
   const setMenuAndPermissions = async () => {
@@ -31,29 +45,32 @@ export const ContextProvider = ({ children }) => {
     // ) {
     //   return;
     // }
-    // #region set permission
     const accessToken = Auth.getToken();
-    console.log(accessToken, "accessTokenaaaaaaa");
-    if (accessToken == null || accessToken == "undefined") {
-      router.push("/");
-      return;
-    }
-    const user = jwt_decode(accessToken);
+    // let role = "admin";
     let permissionList = {};
-    if (user.authorities !== undefined) {
-      user.authorities.map((auths) => {
-        permissionList[auths] = auths;
-      });
-    }
+    if (router.pathname.startsWith("/park")) {
+      if (accessToken == null || accessToken == "undefined") {
+        router.push("/login");
+        return;
+      } else {
+        const user = jwt_decode(accessToken);
+        getProfileData(user);
 
+        if (user.authorities !== undefined) {
+          user.authorities.map((auths) => {
+            permissionList[auths] = auths;
+          });
+        }
+      }
+    }
     dispatch({
       type: "PERMISSIONS",
       payload: permissionList,
     });
-    // #endregion
-
-    //#region set menu
+    // // #endregion
+    // //#region set menu
     let menuData = [];
+
     const data = profileMenu;
     // const data = await sList({ code: apiList.adminMenu });
     // if (data && data.data) {
@@ -85,6 +102,7 @@ export const ContextProvider = ({ children }) => {
       type: "MENUS",
       payload: menuData,
     });
+
     //#endregion
   };
 
@@ -99,10 +117,12 @@ export const ContextProvider = ({ children }) => {
         setMenuOpenKeys,
         isLoading,
         setIsLoading,
+        walletMenu,
         state,
         dispatch,
         setMenuAndPermissions,
         checkPermission,
+        userdata,
       }}
     >
       {children}

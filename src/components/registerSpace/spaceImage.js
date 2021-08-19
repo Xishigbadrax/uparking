@@ -1,6 +1,5 @@
 import { Col, Row, Input } from "antd";
 import { useState } from "react";
-import { useMutate } from "restful-react";
 import { Upload, message } from "antd";
 import { Spin } from "antd";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
@@ -91,7 +90,7 @@ const spaceImage = () => {
           тохиромжтой олоход тохиромжтой зураг хийнэ.
         </p>
       </Row>
-      <Row style={{ marginTop: "50px" }}>
+      <Row style={{ marginTop: "30px" }}>
         <Col offset={4}>
           <p style={{ fontSize: "15px" }}>
             Зогсоолын байршилын зураг (хаалга хэсгээс)
