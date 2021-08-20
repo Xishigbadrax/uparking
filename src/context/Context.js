@@ -5,6 +5,7 @@ import Auth from "@utils/auth";
 import { useRouter } from "next/router";
 import { apiList, sList } from "@api/api";
 import { profileMenu } from "@constants/profilemenu";
+import { walletMenu } from "@constants/walletmenu";
 import { callGet } from "@api/api";
 
 const Context = createContext();
@@ -69,6 +70,7 @@ export const ContextProvider = ({ children }) => {
     // // #endregion
     // //#region set menu
     let menuData = [];
+
     const data = profileMenu;
     // const data = await sList({ code: apiList.adminMenu });
     // if (data && data.data) {
@@ -115,6 +117,7 @@ export const ContextProvider = ({ children }) => {
         setMenuOpenKeys,
         isLoading,
         setIsLoading,
+        walletMenu,
         state,
         dispatch,
         setMenuAndPermissions,

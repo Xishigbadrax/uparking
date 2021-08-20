@@ -64,18 +64,14 @@ const callPost = async (command, data) => {
   const result = await baseAxios.post(command, data);
 
   if (result.status === 403) {
+    console.log(1111111);
     showMessage(messageType.FAILED.type, result.message);
     return result.message;
-  } else if (result.status === 201) {
-    showMessage(
-      result.data.status,
-      defaultMsg[result.data.status.toLowerCase()]
-    );
-  } else if (result.status !== 200 || !result.data) {
+  }
+  if ((result.status !== 200 && result.status !== 201) || !result.data) {
     showMessage(messageType.FAILED.type, defaultMsg.error);
     return defaultMsg.error;
   }
-
   const resultData = result.data;
   if (resultData.status) {
     if (resultData.msgList && resultData.msgList.length > 0) {
