@@ -66,7 +66,12 @@ const callPost = async (command, data) => {
     return result.message;
   }
   if ((result.status !== 200 && result.status !== 201) || !result.data) {
-    showMessage(messageType.FAILED.type, defaultMsg.error);
+    // console.log(result.error);
+    // console.log("dsfsdfdsfdsfdsf");
+    showMessage(
+      messageType.FAILED.type,
+      typeof result.error != "undefined" ? result.error : defaultMsg.error
+    );
     return defaultMsg.error;
   }
   const resultData = result.data;

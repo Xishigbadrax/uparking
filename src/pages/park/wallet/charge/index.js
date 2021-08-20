@@ -40,7 +40,6 @@ const tabItems = [
 const Charge = () => {
   const { userdata } = useContext(Context);
   const { TabPane } = Tabs;
-  const { Paragraph } = Typography;
   const pos = {
     display: "flex",
     justifyContent: "space-between",
@@ -49,6 +48,7 @@ const Charge = () => {
   const [type2, settype2] = useState("MONGOLCHAT");
   const [phoneNumber, setphoneNumber] = useState(null);
   const [amount, setamount] = useState(0);
+  const [promoCode, setPromoCode] = useState(null);
   const [type, settype] = useState("KHANBANK");
   const [data, setdata] = useState(null);
   const [message, setmessage] = useState("");
@@ -59,6 +59,7 @@ const Charge = () => {
     amount: null,
     phoneNumber: null,
   });
+  const [formData3, setformData3] = useState("");
 
   const fetchData2 = async () => {
     if (amount != 0) {
@@ -96,7 +97,6 @@ const Charge = () => {
             })
           : type2 == "LENDMN"
           ? await callPost(`/lend/qr/wallettopup`, formData).then((res) => {
-              console.log(res);
               if (res.qr_string) {
                 settitle("Амжилтай");
                 setmessage("Амжилттай. Нэхэмжлэх үүсгэлээ.");
@@ -151,6 +151,29 @@ const Charge = () => {
       setdata(res);
     });
   };
+
+  const fetchData3 = async () => {
+    setformData3();
+    await callPost(`/wallet/promocode`, {
+      promoCode: promoCode,
+    }).then((res) => {
+      // if (res.status == "failed") {
+      //   console.log(res["status"], "resresr");
+      //   settitle(res.status);
+      //   setmessage(res.error);
+      //   setstatus(res.status);
+      //   setmessageShow(true);
+      // } else {
+      // console.log(res);
+      // settitle("Амжилттай");
+      // setmessage("Таны Uwallet хэтэвч амжилттай цэнэглэлт хийгдлээ.");
+      // // console.log(res.error, "errorr");
+      // setstatus("success");
+      // setmessageShow(true);
+      // }
+    });
+  };
+
   useEffect(() => {
     fetchData();
   }, [type]);
@@ -161,6 +184,7 @@ const Charge = () => {
   const onChangeInput = (value) => {
     setamount(value);
   };
+
   const onChangeInputPhone = (value) => {
     setphoneNumber(value);
   };
@@ -172,7 +196,9 @@ const Charge = () => {
   const handleCancel = () => {
     setmessageShow(false);
   };
-
+  const onChangePromo = (value) => {
+    setPromoCode(value);
+  };
   return (
     <WalletLayout>
       <div style={pos}>
@@ -309,7 +335,12 @@ const Charge = () => {
             </div>
           </TabPane>
           <TabPane tab="Промо код" key="3">
-            Промо код
+            <WalletBankInfo onChangeInput={onChangePromo}>
+              Промо код
+            </WalletBankInfo>
+            <Button onClick={() => fetchData3()} type="primary" block>
+              Идэвхжүүлэх
+            </Button>
           </TabPane>
         </Tabs>
       </div>

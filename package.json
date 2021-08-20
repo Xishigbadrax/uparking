@@ -36,6 +36,7 @@
     "react-to-print": "^2.12.6",
     "react-top-loading-bar": "^2.0.1",
     "react-use-websocket": "^2.6.1",
+    "react-youtube": "^7.13.1",
     "restful-react": "^6.1.1",
     "sass": "^1.34.0"
   },
