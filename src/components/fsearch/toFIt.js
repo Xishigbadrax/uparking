@@ -88,16 +88,15 @@ const tofit = ({ data, lat, lng }) => {
   const handleClickDayTab = (key) => {
     setSelectedDayTab(key);
   };
-
   return (
-    <div style={{ height: "828px", width: "528px" }}>
+    <div style={{ height: "828px", width: "100%", overflow: true }}>
       {data.map((item) => (
         <div key={item.id}>
           <Card
             className={`ResidenceCardList`}
             style={{
               height: "200px",
-              width: "500px",
+
               marginTop: "20px",
               borderRadius: "10px",
               background: "#FFFFFF",

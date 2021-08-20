@@ -17,7 +17,7 @@ import {
   Divider,
 } from "antd";
 import { useContext, useState, useRef } from "react";
-import { useEffect, useS } from "react";
+import { useEffect } from "react";
 import { Steps } from "antd";
 import { apiList, callGet, callPost } from "@api/api";
 import Link from "next/link";
@@ -57,25 +57,29 @@ const steps = [
   },
   {
     title: "Зогсоолын үзүүлэлт",
-    content: "Зогсоолын зураг",
+    content: "Зогсоолын үзүүлэлт",
   },
   {
     title: "Үнийн мэдээлэл",
-    content: "Зогсоолын зураг",
+    content: "Үнийн мэдээлэл",
   },
   {
     title: "Хөнгөлөлт",
-    content: "Зогсоолын зураг",
+    content: "Хөнгөлөлт ",
   },
   {
     title: "Түрээслэх өдрүүд",
-    content: "Зогсоолын зураг",
+    content: "Түрээслэх өдрүүд",
   },
 ];
 
 const Profile = () => {
+  function getBase64(img, callback) {
+    const reader = new FileReader();
+    reader.addEventListener("load", () => callback(reader.result));
+    reader.readAsDataURL(img);
+  }
   const [formData, setFormdata] = useState({});
-  // const [residenceData, setResidenceData] = useState({});
   const [dugaar, setDugaar] = useState();
   const [space, setSpace] = useState([]);
   const [uildwer, setUildwer] = useState([]);
@@ -86,10 +90,9 @@ const Profile = () => {
   const [selectedZagwar, setSelectedZagwar] = useState({});
   const [selectedColor, setSelectedColor] = useState({});
   const [vehicles, setVehicles] = useState([]);
-
-  const [current, setCurrent] = useState(0);
-
+  const [current, setCurrent] = useState(5);
   const [residenceData, setResidenceData] = useState({});
+  const [MainImageData, setMainImageData] = useState({});
   const [aimag, setAimag] = useState([]);
   const [selectedAimag, setSelectedAimag] = useState({});
   const [sum, setSum] = useState([]);
@@ -105,38 +108,73 @@ const Profile = () => {
   const [isProfileNotEdit, setIsProfileNotEdit] = useState(true);
   const [isVehileVisible, setIsVehileVisible] = useState(false);
   const [isParkVisible, setIsParkVisible] = useState(false);
+  const [isVehicleEditVisible, setIsVehicleEditVisible] = useState(false);
+  const [imageSpaceNumber, setImageSpaceNUmbe] = useState();
+  const [imageParkingGate, setImageParkingGate] = useState();
+  const [imageParkingOverall, setImageParkingOverall] = useState();
+  const [imageFromGate, setImageFromGate] = useState();
   const mainInfoRef = useRef(null);
   const [form] = Form.useForm();
-  // const [userform] = Form.useForm();
-  const {userdata} = useContext(Context);
+  const [vehicleForm] = Form.useForm();
+  const [vehicleEditForm] = Form.useForm();
+
+  const { userdata } = useContext(Context);
   const [realData, setRealData] = useState("");
-  // const {userFormData, setUserFormData} = useState({
-  //   lastName: '111',
-  //   firstName: '222',
-  //   registerNumber: '333',
-  //   phoneNumber: '444',
-  //   email:'55',
-  //   fbLink: '6',
-  //   id: '7'
-  // });
-  // useEffect(() => {
-  //   userform.setFieldsValue(userFormData)
-  //  }, [userform, userFormData])
+  const [mainData, setMainData] = useState(null);
+  const [imageData, setImageData] = useState(null);
+  const [parkingSpaceData, setParkingSpaceData] = useState({
+    entranceLock: null,
+    floorNumber: null,
+    isNumbering: null,
+    parkingSpaceId: null,
+    residenceBlockId: null,
+    returnRoutes: null,
+    capacityId: null,
+    parkingId: null,
+    returnRoutes: null,
+    typeId: null,
+    typeOther: null,
+  });
+  const [spaceData, setSpaceData] = useState(null);
+  const [vehicleId, setVehicleId] = useState();
+  const [updatedData, setUpdatedData] = useState();
+  const [id, setId] = useState(null);
+  const [weekSale, setweekSale] = useState(null);
+  const [weekId, setweekId] = useState(null);
+  const [weekDescription, setweekDescription] = useState();
+  const [monthId, setmonthId] = useState(null);
+  const [monthSale, setmonthSale] = useState(null);
+  const [monthDescription, setMonthDescription] = useState();
   useEffect(async () => {
-    if(typeof userdata.firstName != "undefined"){
-      setRealData(userdata)
+    if (typeof userdata.firstName != "undefined") {
+      setRealData(userdata);
     }
-    
   }, [userdata]);
+  const onFinish123 = (values) => {};
 
-
-
-  const onFinish1234 = (values) => {};
-
+  const onFinishSPace = (values) => {
+    console.log(values);
+    console.log(form.getFieldsValue());
+  };
+  const onchangeNewVehicle = () => {
+    vehicleForm.setFieldsValue({
+      vehicleNumber: null,
+      maker: null,
+      model: null,
+      color: null,
+    });
+  };
+  const onChangeisVehicleEditVisible = async (a) => {
+    const vehicleData = await callGet(`/user/vehicle?vehicleId=${a}`);
+    vehicleEditForm.setFieldsValue({
+      vehicleNumber: vehicleData.vehicleNumber,
+      maker: vehicleData.maker,
+      model: vehicleData.model,
+      color: vehicleData.color,
+    });
+    setIsVehicleEditVisible(true);
+  };
   useEffect(async () => {
-    const aimag = await callGet("/address/aimag");
-    console.log(aimag);
-    setAimag(aimag);
     const data = await callGet("/user/vehicle/list");
     setVehicles(data);
     const uildwer = await callGet("/user/vehicle/maker");
@@ -147,15 +185,6 @@ const Profile = () => {
     // const space = await callGet("/parkingspace/list");
     setFormdata({ ...formData, rfid: "12" });
   }, []);
-
-  function classNames(...classes) {
-    return classes.filter(Boolean).join("  ");
-  }
-  const onSavedSpaceFormData = async () => {
-    console.log(mainData);
-    // const res = await callPost("/parkingfirst", mainData);
-    console.log();
-  };
   const onChangeUildver = async (e) => {
     console.log("i am here-->", e);
     const uildver = uildwer.find((item) => item.value === e);
@@ -181,14 +210,6 @@ const Profile = () => {
     setSelectedColor(selectColor);
     setFormdata({ ...formData, color: selectColor.value });
   };
-
-  const [mainData, setMainData] = useState(null);
-  const [imageData, setImageData] = useState(null);
-  const [spaceData, setSpaceData] = useState(null);
-  const onFinish = (values) => {
-    console.log("Success:", values);
-  };
-
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
@@ -200,88 +221,206 @@ const Profile = () => {
     }
   };
   const handleOk = async () => {
-    console.log(formData);
-    const res = await callPost("/user/vehicle", formData);
-    console.log("success", res);
-    setIsVehileVisible(false);
+    console.log(vehicleForm.validateFields());
+    if (vehicleForm.validateFields()) {
+      const a = vehicleForm.getFieldsValue();
+      console.log("boloh l ymdaaa------->");
+      const res = await callPost("/user/vehicle", {
+        vehicleNumber: a.vehicleNumber,
+        maker: a.maker,
+        color: a.colorId,
+        model: a.model,
+      });
+      console.log(res);
+      setIsVehileVisible(false);
+    } else {
+    }
+    // setIsVehileVisible(false);
   };
-
+  const handleEditOk = async () => {
+    const a = vehicleForm.getFieldsValue();
+    console.log(a);
+    console.log(vehicleId);
+    const res = await callPost("/user/vehicle/update", {
+      vehicleNumber: a.vehicleNumber,
+      maker: a.maker,
+      color: a.colorId,
+      model: a.model,
+      vehicleId: vehicleId,
+    });
+    setUpdatedData(res.data);
+  };
   const handleCancel = () => {
     setIsVehileVisible(false);
   };
-  const onChangeAimag = (e) => {
-    const aimag1 = aimag.find((item) => item.value === Number(e));
-    setSelectedAimag(aimag1);
-    setResidenceData({ ...residenceData, provinceId: aimag1.value });
+  const onFinish = (values) => {
+    console.log("Undesen dataaa yma");
   };
-
-  const onChangeSum = (e) => {
-    const sum1 = sum.find((item) => item.value === Number(e));
-    console.log(sum1);
-    setSelectedSum(sum1);
-    setResidenceData({ ...residenceData, districtId: sum1.value });
-  };
-  const onChangeKhoroo = (e) => {
-    const horoo = khoroo.find((item) => item.value === Number(e));
-    setSelectedKhoroo(horoo);
-    setResidenceData({ ...residenceData, sectionId: horoo.value });
-  };
-  const onChangeResidence = (e) => {
-    const residence1 = residence.find((item) => item.value === Number(e));
-    setSelectedResidence(residence1);
-
-    setResidenceData({
-      ...residenceData,
-      residenceName: residence1.label,
-      residenceId: e,
-    });
-    console.log("nicee");
-  };
-
-  const onChangeResidenceNumber = (e) => {
-    const resiblock = residenceblock.find((item) => item.value === Number(e));
-    setSelectedResidenceBlock(resiblock);
-    setResidenceData({
-      ...residenceData,
-      residenceBlockId: selectedResidenceBlock.value,
-    });
-    setResidenceData({
-      ...residenceData,
-      residenceBlockNumber: selectedResidenceBlock.label,
-      residenceBlockId: e,
-    });
-  };
-  const onChangeDoorNumber = (e) => {
-    console.log(e.target.value);
-    setDoorNo(e.target.value);
-
-    setResidenceData({
-      ...residenceData,
-      parkingGateNumber: e.target.value,
-    });
-  };
-  const onChangeSpaceNumber = (e) => {
-    setSpaceNumber(e.target.value);
-    setResidenceData({
-      ...residenceData,
-      parkingSpaceId: e.target.value,
-    });
+  const onFinishSale = () => {
+    console.log("sale Data--->");
   };
 
   const onClickContinue = async () => {
-    // if (steps === "Үндсэн мэдээлэл") {
-    console.log("mainData11111111111", mainData);
-    console.log(":mainInfoRef", mainInfoRef);
-    console.log(form.validateFields());
-    {
-      form.getFieldError() ? setCurrent(current + 1) : null;
+    const componentData = form.getFieldsValue();
+    form.validateFields();
+    //Үндсэн мэдээллийн өгөгдлийг өгөгдлийн санруу
+    if (current === 0) {
+      console.log(mainData, ",<---------main");
+      const res = callPost("/parkingfirst", mainData);
+      console.log(res);
+      const e = await callGet("/parkingfirst");
+      console.log(e.id);
+      setId(e.id);
+      {
+        (res.status === 200 || res.status === 201) & setCurrent(current + 5);
+      }
     }
-    // }
-    // return;
-    // const res = callPost("/parkingfirst", residenceData);
-    // setCurrent(current + 1);
-    // console.log("success", res);
+    //Үндсэн зургийн мэдээллийг өгөгдлийн санруу бичих
+    if (current === 1) {
+      getBase64(componentData.imageParkingGate.file.originFileObj, (image2) =>
+        setImageParkingGate(image2)
+      );
+      getBase64(
+        componentData.imageParkingOverall.file.originFileObj,
+        (image2) => {
+          setImageParkingOverall(image2), console.log(image2);
+        }
+      );
+      const res = await callPost("/parkingspace/parkingimage", {
+        imageParkingOverall: imageParkingOverall,
+        imageParkingGate: imageParkingGate,
+        parkingSpaceId: id,
+      });
+      console.log(res);
+      setCurrent(current + 1);
+    }
+    //зогсоолын зургийн мэдээллийг өгөгдлийн санруу бичих
+    if (current === 2) {
+      getBase64(componentData.imageFromGate.file.originFileObj, (image2) => {
+        setImageFromGate(image2.substring(24));
+      });
+      getBase64(componentData.imageSpaceNumber.file.originFileObj, (image2) => {
+        setImageSpaceNUmbe(image2.substring(24)),
+          console.log(image2.substring(24));
+      });
+      const res = await callPost("/parkingspace/detail", {
+        imageFromGate: imageFromGate,
+        imageSpaceNumber: imageSpaceNumber,
+        parkingSpaceId: id,
+      });
+      console.log(res);
+    }
+    if (current === 3) {
+      console.log(componentData);
+      setParkingSpaceData({
+        entranceLock: componentData.entranceLock,
+        floorNumber: componentData.floorNumber,
+        isNumbering: componentData.isNumbering,
+        parkingSpaceId: mainData.parkingSpaceId,
+        residenceBlockId: mainData.residenceBlockId,
+        returnRoutes: componentData.returnRoutes[0],
+        capacityId: componentData.capacityId,
+        parkingId: id,
+        typeId: componentData.typeId,
+        typeOther: " ",
+      });
+      console.log(parkingSpaceData);
+      const res = await callPost("/parkingspace", parkingSpaceData);
+      console.log(res);
+      if (res.status === 200 || res.status === 201) {
+        setCurrent(current + 1);
+      }
+    }
+    if (current === 4) {
+      const data = await callGet("/parkingspace/timesplit");
+      console.log(data);
+      console.log(componentData);
+      let array = [
+        {
+          dateSplitId: data.daySplit.winterId,
+          timeSplitId: [data.daySplit.id],
+          priceForRenter: componentData.daySplitWinterPrice,
+        },
+        {
+          dateSplitId: data.daySplit.summerId,
+          timeSplitId: [data.daySplit.id],
+          priceForRenter: componentData.daySplitSummerPrice,
+        },
+        {
+          dateSplitId: data.nightSplit.winterId,
+          timeSplitId: [data.nightSplit.id],
+          priceForRenter: componentData.nighSplitWinterPrice,
+        },
+        {
+          dateSplitId: data.nightSplit.summerId,
+          timeSplitId: [data.nightSplit.id],
+          priceForRenter: componentData.nightSplitSummerPrice,
+        },
+        {
+          dateSplitId: data.fullDaySplit.winterId,
+          timeSplitId: [data.fullDaySplit.id],
+          priceForRenter: componentData.fullDaySplitWinterPrice,
+        },
+        {
+          dateSplitId: data.fullDaySplit.summerId,
+          timeSplitId: [data.fullDaySplit.id],
+          priceForRenter: componentData.fullDaySplitSummerPrice,
+        },
+      ];
+
+      let formData = {
+        hourlyPrice: Number(componentData.hourlyPrice),
+        parkingSpaceId: id,
+        parkingSpacePriceInstance: array,
+      };
+      console.log(formData);
+      const res = await callPost(`/parkingspace/price`, formData);
+      console.log(res);
+    }
+    if (current === 5) {
+      const saleData = form.getFieldsValue();
+      console.log(saleData);
+      const res = await callGet("/division/salesplit");
+      console.log(res);
+      if (res && res.saleSplit) {
+        res.saleSplit.forEach((c) => {
+          if (c.code == "WEEKLY_SALE") {
+            setweekId(c.id);
+            setweekSale(Number(saleData.weekSale));
+            setweekDescription(c.description);
+          }
+          if (c.code == "MONTHLY_SALE") {
+            setmonthId(c.id);
+            setmonthSale(Number(saleData.monthSale));
+            setMonthDescription(c.description);
+          }
+        });
+      }
+      let formData = {
+        parkingSpaceId: id,
+        parkingSpaceSale: [
+          {
+            salePercent: weekSale,
+            saleSplitId: weekId,
+            saleSplitDescription: weekDescription,
+          },
+          {
+            salePercent: monthSale,
+            saleSplitId: monthId,
+            saleSplitDescription: monthDescription,
+          },
+        ],
+      };
+      console.log(formData);
+      if (formData) {
+        const a = await callPost("/parkingspace/sale", {
+          formData,
+        });
+        console.log(a);
+      }
+    }
   };
+
   const goBack = () => {
     console.log("Bye");
     setCurrent(current - 1);
@@ -312,78 +451,79 @@ const Profile = () => {
                 />
               </Col>
             </Row>
-            {realData != ""?
-            <Form
-              className="profileForm"
-              name="basic"
-              labelCol={{ span: 8 }}
-              wrapperCol={{ span: 16 }}
-              onFinish={onFinish}
-              onFinishFailed={onFinishFailed}
-              initialValues={realData}
-            >
-              <Form.Item
-                label="Овог:"
-                name="lastName"
-                rules={[{ required: true, message: "Овог оруулна уу" }]}
-
+            {realData != "" ? (
+              <Form
+                className="profileForm"
+                name="basic"
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 16 }}
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
+                initialValues={realData}
               >
-                <Input disabled={isProfileNotEdit}  />
-              </Form.Item>
-              <Form.Item
-                label="Нэр:"
-                name="firstName"
-                rules={[{ required: true, message: "Нэр оруулна уу" }]}
-              >
-                <Input disabled={isProfileNotEdit} />
-              </Form.Item>
-              <Form.Item
-                label="Регистрийн дугаар:"
-                name="registerNumber"
-                rules={[
-                  { required: true, message: "Регистрийн дугаар оруулна уу" },
-                ]}
-              >
-                <Input disabled={isProfileNotEdit} />
-              </Form.Item>
-              <Form.Item
-                label="Утасны дугаар:"
-                name="phoneNumber"
-                rules={[
-                  { required: true, message: "Утасны дугаар оруулна уу" },
-                ]}
-              >
-                <Input disabled={isProfileNotEdit} />
-              </Form.Item>
-              <Form.Item
-                label="И-мэйл хаяг:"
-                name="email"
-                rules={[{ required: true, message: "И-мэйл хаяг оруулна уу" }]}
-              >
-                <Input disabled={isProfileNotEdit} />
-              </Form.Item>
-              <Form.Item
-                label="Facebook:"
-                name="fbLink"
-                rules={[{ required: false, message: "Facebook оруулна уу" }]}
-              >
-                <Input disabled={isProfileNotEdit} />
-              </Form.Item>
-
-              <Form.Item label="Хэрэглэгчийн дугаар:" name="id">
-                <Input  disabled={isProfileNotEdit} />
-              </Form.Item>
-
-              {!isProfileNotEdit && (
-                <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                  <Button type="primary" htmlType="submit">
-                    Хадгалах
-                  </Button>
+                <Form.Item
+                  label="Овог:"
+                  name="lastName"
+                  rules={[{ required: true, message: "Овог оруулна уу" }]}
+                >
+                  <Input disabled={isProfileNotEdit} />
                 </Form.Item>
-              )}
-            </Form>
-          :null}
-           </Card>
+                <Form.Item
+                  label="Нэр:"
+                  name="firstName"
+                  rules={[{ required: true, message: "Нэр оруулна уу" }]}
+                >
+                  <Input disabled={isProfileNotEdit} />
+                </Form.Item>
+                <Form.Item
+                  label="Регистрийн дугаар:"
+                  name="registerNumber"
+                  rules={[
+                    { required: true, message: "Регистрийн дугаар оруулна уу" },
+                  ]}
+                >
+                  <Input disabled={isProfileNotEdit} />
+                </Form.Item>
+                <Form.Item
+                  label="Утасны дугаар:"
+                  name="phoneNumber"
+                  rules={[
+                    { required: true, message: "Утасны дугаар оруулна уу" },
+                  ]}
+                >
+                  <Input disabled={isProfileNotEdit} />
+                </Form.Item>
+                <Form.Item
+                  label="И-мэйл хаяг:"
+                  name="email"
+                  rules={[
+                    { required: true, message: "И-мэйл хаяг оруулна уу" },
+                  ]}
+                >
+                  <Input disabled={isProfileNotEdit} />
+                </Form.Item>
+                <Form.Item
+                  label="Facebook:"
+                  name="fbLink"
+                  rules={[{ required: false, message: "Facebook оруулна уу" }]}
+                >
+                  <Input disabled={isProfileNotEdit} />
+                </Form.Item>
+
+                <Form.Item label="Хэрэглэгчийн дугаар:" name="id">
+                  <Input disabled={isProfileNotEdit} />
+                </Form.Item>
+
+                {!isProfileNotEdit && (
+                  <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                    <Button type="primary" htmlType="submit">
+                      Хадгалах
+                    </Button>
+                  </Form.Item>
+                )}
+              </Form>
+            ) : null}
+          </Card>
         </Col>
         <Col span={12} style={{ paddingLeft: "25px" }}>
           <Card>
@@ -411,9 +551,14 @@ const Profile = () => {
                     </div>
                   </div>
                   <div className="ml-40 mt-2 ">
-                    <Link href={`/teever/edit/${item.id}`}>
+                    <div
+                      onClick={(key) => {
+                        setVehicleId(item.value);
+                        onChangeisVehicleEditVisible(item.value);
+                      }}
+                    >
                       <img src="/mode_24px.png" />
-                    </Link>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -422,7 +567,9 @@ const Profile = () => {
               <Button
                 type="dashed"
                 block
-                onClick={() => setIsVehileVisible(true)}
+                onClick={() => {
+                  onchangeNewVehicle(), setIsVehileVisible(true);
+                }}
               >
                 +
               </Button>
@@ -460,6 +607,7 @@ const Profile = () => {
         className="fullModal "
         title="Тээврийн хэрэгсэл бүртгүүлэх"
         centered
+        form={form}
         style={{ minHeight: "800px", height: "auto" }}
         visible={isVehileVisible}
         okButtonProps={{
@@ -474,7 +622,12 @@ const Profile = () => {
           <Button key="back" type="link" onClick={handleCancel}>
             <ArrowLeftOutlined /> Буцах
           </Button>,
-          <Button key="submit" type="primary" onClick={handleOk}>
+          <Button
+            key="submit"
+            type="primary"
+            htmlType="submit"
+            onClick={(values) => handleOk(values)}
+          >
             Хадгалах
           </Button>,
         ]}
@@ -489,27 +642,23 @@ const Profile = () => {
                 хийхгүй
               </div>
             </div>
-            <Row style={{ marginTop: "20px" }}>
-              <Col span={10}>
+            <Row style={{ marginTop: "100px" }}>
+              <Col span={8}>
                 <Form
-                  id="vehile-edit-form"
+                  className={`addVehicleForm`}
+                  form={vehicleForm}
                   layout="vertical"
                   name="basic"
-                  labelCol={{
-                    span: 8,
-                  }}
-                  wrapperCol={{
-                    span: 16,
-                  }}
                   initialValues={{
                     remember: true,
                   }}
-                  onFinish={handleOk}
+                  onFinish={onFinish}
                   onFinishFailed={onFinishFailedVehile}
                 >
                   <Form.Item
                     label="Улсын дугаар"
-                    name="licensePlate"
+                    name="vehicleNumber"
+                    // defaultValue={vehicleEditData.vehicleNumber}
                     rules={[
                       {
                         required: true,
@@ -518,61 +667,53 @@ const Profile = () => {
                     ]}
                   >
                     <Input onChange={onChangeDugaar} />
-                    <Divider />
                   </Form.Item>
+                  <Divider />
                   <Form.Item
                     label="Үйлдвэр"
                     name="maker"
                     rules={[
                       {
                         required: true,
-                        message: "Үйлдвэр оруулна уу",
+                        message: "Үйлдвэр сонгоно уу",
                       },
                     ]}
                   >
                     <Select onChange={onChangeUildver}>
                       {uildwer.map((item) => (
-                        <Option
-                          className="py-1"
-                          key={item.value}
-                          value={item.value}
-                        >
+                        <Select.Option key={item.value} value={item.value}>
                           {item.label}
-                        </Option>
+                        </Select.Option>
                       ))}
                     </Select>
-                    <Divider />
                   </Form.Item>
+                  <Divider />
                   <Form.Item
                     label="Загвар"
                     name="model"
                     rules={[
                       {
                         required: true,
-                        message: "Загвар оруулна уу",
+                        message: "Загвар сонгоно уу",
                       },
                     ]}
                   >
                     <Select onChange={onChangeZagwar}>
                       {zagwar.map((item) => (
-                        <Option
-                          className="py-1"
-                          key={item.value}
-                          value={item.value}
-                        >
+                        <Option key={item.value} value={item.value}>
                           {item.label}
                         </Option>
                       ))}
                     </Select>
-                    <Divider />
                   </Form.Item>
+                  <Divider />
                   <Form.Item
                     label="Өнгө"
                     name="color"
                     rules={[
                       {
-                        required: false,
-                        message: "Өнгө оруулна уу",
+                        required: true,
+                        message: "Өнгө сонгоно уу?",
                       },
                     ]}
                   >
@@ -583,11 +724,148 @@ const Profile = () => {
                         </Option>
                       ))}
                     </Select>
-                    <Divider />
                   </Form.Item>
+                  <Divider />
                 </Form>
               </Col>
-              <Col span={14}>
+              <Col span={12} offset={1}>
+                <Alert
+                  message="Мэдэгдэл"
+                  description="Түрээслэгдсэн зогсоолыг тээврийн хэрэгслийн мэдээлэлтэй тулган шалгах тохиолдолд байдаг тул Та тээврийн хэрэгслийн мэдээллийг үнэн зөв оруулна уу! "
+                  type="warning"
+                  showIcon
+                />
+              </Col>
+            </Row>
+          </Col>
+          <Col span={2}></Col>
+        </Row>
+      </Modal>
+      {/*Машины мэдээлэл шинэчлэх Modal */}
+      <Modal
+        className="fullModal "
+        title="Тээврийн хэрэгсэл шинэчлэх"
+        centered
+        form={vehicleEditForm}
+        style={{ minHeight: "800px", height: "auto" }}
+        visible={isVehicleEditVisible}
+        okButtonProps={{
+          form: "vehile-edit-form",
+          key: "submit",
+          htmlType: "submit",
+        }}
+        onOk={() => setIsVehicleEditVisible(false)}
+        onCancel={() => setIsVehicleEditVisible(false)}
+        width={1000}
+        footer={[
+          <Button key="back" type="link" onClick={handleCancel}>
+            <ArrowLeftOutlined /> Буцах
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            htmlType="submit"
+            onClick={(values) => handleEditOk(values)}
+          >
+            Хадгалах
+          </Button>,
+        ]}
+      >
+        <Row>
+          <Col span={2}></Col>
+          <Col span={20}>
+            <div className={"titleV"}>
+              <div className="topV">Тээврийн - мэдээлэл</div>
+              <div className="bottomV">
+                Тухайн хэсэгт зогсоолын байрлал, дугаарлалт харагдаж буй зураг
+                хийхгүй
+              </div>
+            </div>
+            <Row style={{ marginTop: "100px" }}>
+              <Col span={8}>
+                <Form
+                  className={`addVehicleForm`}
+                  form={vehicleEditForm}
+                  layout="vertical"
+                  name="basic"
+                  initialValues={{
+                    remember: true,
+                  }}
+                  onFinish={onFinish}
+                >
+                  <Form.Item
+                    label="Улсын дугаар"
+                    name="vehicleNumber"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Улсын дугаар оруулна уу",
+                      },
+                    ]}
+                  >
+                    <Input onChange={onChangeDugaar} />
+                  </Form.Item>
+                  <Divider />
+                  <Form.Item
+                    label="Үйлдвэр"
+                    name="maker"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Үйлдвэр сонгоно уу",
+                      },
+                    ]}
+                  >
+                    <Select onChange={onChangeUildver}>
+                      {uildwer.map((item) => (
+                        <Select.Option key={item.value} value={item.value}>
+                          {item.label}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                  <Divider />
+                  <Form.Item
+                    label="Загвар"
+                    name="model"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Загвар сонгоно уу",
+                      },
+                    ]}
+                  >
+                    <Select onChange={onChangeZagwar}>
+                      {zagwar.map((item) => (
+                        <Option key={item.value} value={item.value}>
+                          {item.label}
+                        </Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                  <Divider />
+                  <Form.Item
+                    label="Өнгө"
+                    name="color"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Өнгө сонгоно уу?",
+                      },
+                    ]}
+                  >
+                    <Select onChange={onChangeColor}>
+                      {color.map((item) => (
+                        <Option key={item.value} value={item.label}>
+                          {item.label}
+                        </Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                  <Divider />
+                </Form>
+              </Col>
+              <Col span={12} offset={1}>
                 <Alert
                   message="Мэдэгдэл"
                   description="Түрээслэгдсэн зогсоолыг тээврийн хэрэгслийн мэдээлэлтэй тулган шалгах тохиолдолд байдаг тул Та тээврийн хэрэгслийн мэдээллийг үнэн зөв оруулна уу! "
@@ -603,6 +881,7 @@ const Profile = () => {
       <Modal
         className="fullModal"
         title="Авто зогсоол"
+        height="820px"
         centered
         visible={isParkVisible}
         // onOk={() => setIsParkVisible(false)}
@@ -610,42 +889,64 @@ const Profile = () => {
         cancelButtonProps={{ style: { display: "none" } }}
         okButtonProps={{ style: { display: "none" } }}
         width={1000}
+        footer={null}
       >
-        <Row>
-          <Steps
-            size="small"
-            style={{ fontSize: "15px", color: "blue" }}
-            current={current}
-          >
-            {steps.map((item) => (
-              <Step key={item.title} title={item.title} />
-            ))}
-          </Steps>
+        <Row width={1266}>
+          <Col span={22} offset={1}>
+            <Steps
+              size="small"
+              style={{ fontSize: "15px", color: "blue" }}
+              current={current}
+            >
+              {steps.map((item) => (
+                <Step key={item.title} title={item.title} />
+              ))}
+            </Steps>
+          </Col>
         </Row>
-        {(steps[current].title === "Үндсэн мэдээлэл" && (
-          <MainInfo
-            setMainData={setMainData}
-            form={form}
-            onFinish={onFinish1234}
-          />
-        )) ||
-          (steps[current].title === "Үндсэн зураг" && (
-            <MainImage setImageData={setImageData} form={form} />
-          )) ||
-          (steps[current].title === "Зогсоолын зураг" && (
-            <SpaceImage setSpaceData={setSpaceData} />
-          )) ||
-          (steps[current].title === "Зогсоолын үзүүлэлт" && (
-            <SpaceIndicator />
-          )) ||
-          (steps[current].title === "Үнийн мэдээлэл" && <PriceInfo />) ||
-          (steps[current].title === "Хөнгөлөлт" && <Discount />) ||
-          (steps[current].title === "Түрээслэх өдрүүд" && <RentDate />)}
-
-        <Row style={{ marginLeft: "100px" }}>
+        <Row style={{ height: "580px" }}>
+          <Col span={24}>
+            {(steps[current].title === "Үндсэн мэдээлэл" && (
+              <MainInfo
+                form={form}
+                setMainData={setMainData}
+                current={current}
+                setCurrent={setCurrent}
+                onFinish={onFinish123}
+              />
+            )) ||
+              (steps[current].title === "Үндсэн зураг" && (
+                <MainImage setImageData={setImageData} form={form} />
+              )) ||
+              (steps[current].title === "Зогсоолын зураг" && (
+                <SpaceImage setSpaceData={setSpaceData} form={form} />
+              )) ||
+              (steps[current].title === "Зогсоолын үзүүлэлт" && (
+                <SpaceIndicator form={form} onFinish={onFinishSPace} />
+              )) ||
+              (steps[current].title === "Үнийн мэдээлэл" && (
+                <PriceInfo form={form} />
+              )) ||
+              (steps[current].title === "Хөнгөлөлт" && (
+                <Discount form={form} onFinish={onFinishSale} />
+              )) ||
+              (steps[current].title === "Түрээслэх өдрүүд" && <RentDate />)}
+          </Col>
+        </Row>
+        <Row
+          style={{
+            marginLeft: "100px",
+          }}
+        >
           <Col>
             {current > 0 && (
-              <Button onClick={goBack} style={{ color: "blue" }}>
+              <Button
+                onClick={goBack}
+                style={{
+                  color: "blue",
+                  position: "absolute",
+                }}
+              >
                 Буцах
               </Button>
             )}

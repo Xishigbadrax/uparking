@@ -211,6 +211,8 @@ body {
   }
 }
 .fullModal {
+  min-height: 98vh !important;
+  max-height: 98vh !important;
   height: 98vh !important;
   width: 98vw !important;
   margin: 0 !important;
@@ -262,7 +264,6 @@ body {
         display: flex;
         justify-content: center;
         align-items: center;
-
         font-style: normal;
         font-weight: bold;
         font-size: 14px;
@@ -483,6 +484,7 @@ body {
     }
   }
 }
+
 .calendarViewer {
   position: absolute !important;
   margin-top: 20px;
@@ -574,19 +576,18 @@ body {
     tbody {
       tr {
         td {
+          align-items: center;
+          justify-items: center;
+          .pickCalendarTime {
+            height: 50px;
+            width: 50px;
+            display: flex;
             align-items: center;
-            justify-items: center;
-            .pickCalendarTime{
-                height: 50px;
-                width: 50px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border-radius: 5px;
-            }
+            justify-content: center;
+            border-radius: 5px;
+          }
           .onselectDate {
             background: #35446d !important;
-            
           }
         }
       }
@@ -597,7 +598,7 @@ body {
 .customCalendarMini {
   .ant-picker-calendar-header {
     float: left;
-    
+
     .ant-picker-calendar-mode-switch {
       display: none;
     }
@@ -605,7 +606,6 @@ body {
   .ant-picker-content {
     thead {
       text-transform: uppercase;
-      
     }
     tbody {
       tr {
