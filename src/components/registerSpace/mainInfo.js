@@ -10,66 +10,35 @@ import {
   Divider,
 } from "antd";
 import { useContext, useState } from "react";
-import { useEffect, useS } from "react";
+import { useEffect, useForm } from "react";
 import { apiList, callGet, callPost } from "@api/api";
 import { Steps } from "antd";
+import GoogleMapReact from "google-map-react";
+const GOOGLE_API = process.env.NEXT_GOOGLE_API;
 
-// import {
-//   withScriptjs,
-//   // withGoogleMap,
-//   GoogleMap,
-//   Marker,
-// } from "react-google-maps";
-import { AntDesignOutlined } from "@ant-design/icons";
-
-// const MyMapComponent = withScriptjs(
-//   // withGoogleMap((props) => (
-//   //   <GoogleMap defaultZoom={8} defaultCenter={{ lat: -34.397, lng: 150.644 }}>
-//   //     {props.isMarkerShown && (
-//   //       <Marker position={{ lat: -34.397, lng: 150.644 }} />
-//   //     )}
-//   //   </GoogleMap>
-//   // ))
-// );
-const steps = [
-  {
-    title: "Үндсэн мэдээлэл",
-    content: "Үндсэн мэдээлэл",
-  },
-  {
-    title: "Үндсэн зураг",
-    content: "Үндсэн зураг",
-  },
-  {
-    title: "Зогсоолын зураг",
-    content: "Зогсоолын зураг",
-  },
-  {
-    title: "Зогсоолын зураг",
-    content: "Зогсоолын зураг",
-  },
-  {
-    title: "Зогсоолын үзүүлэлт",
-    content: "Зогсоолын зураг",
-  },
-  {
-    title: "Үнийн мэдээлэл",
-    content: "Зогсоолын зураг",
-  },
-  {
-    title: "Хөнгөлөлт",
-    content: "Зогсоолын зураг",
-  },
-  {
-    title: "Түрээслэх өдрүүд",
-    content: "Зогсоолын зураг",
-  },
-];
 const { SubMenu } = Menu;
 const { Content } = Layout;
 const { Option } = Select;
 const { Step } = Steps;
+const ClickLocation = () => (
+  <div
+    className={`locationBackground`}
+    style={{ marginTop: "-35px", marginLeft: "-27px" }}
+  >
+    <p
+      style={{
+        textAlign: "center",
+        fontSize: "16px",
+        color: "white",
+      }}
+    >
+      <b>Энд</b>
+    </p>
+  </div>
+);
+
 const mainInfo = (props) => {
+  console.log(props);
   const [InputResidenceData, setInputResidenceData] = useState({});
   const [residenceData, setResidenceData] = useState({});
   const [aimag, setAimag] = useState([]);
@@ -85,6 +54,11 @@ const mainInfo = (props) => {
   const [DoorNo, setDoorNo] = useState();
   const [spaceNumber, setSpaceNumber] = useState();
   const [current, setCurrent] = useState(0);
+  const [longitude, setLongitude] = useState(106.9057);
+  const [latitude, setLatitude] = useState(47.886398);
+  const [selectLat, setSelectLat] = useState();
+  const [selectLng, setSelectLng] = useState();
+  const [form] = Form.useForm();
   useEffect(async () => {
     const aimag = await callGet("/address/aimag");
     console.log(aimag);
@@ -100,13 +74,13 @@ const mainInfo = (props) => {
   }
 
   const onChangeAimag = async (e) => {
+    console.log(e);
     const aimag1 = aimag.find((item) => item.value === Number(e));
     setSelectedAimag(aimag1);
+
     setResidenceData({
       ...residenceData,
       provinceId: aimag1.value,
-      latitude: 12,
-      longitude: 10293,
       parkingSpaceGarageNumber: "axaxa",
     });
     const sums = await callGet(`/address/sum/${aimag1.value}`);
@@ -160,13 +134,11 @@ const mainInfo = (props) => {
   const onChangeResidenceNumber = (e) => {
     const resiblock = residenceblock.find((item) => item.value === Number(e));
     setSelectedResidenceBlock(resiblock);
+
     setResidenceData({
       ...residenceData,
-      residenceBlockId: selectedResidenceBlock.value,
-    });
-    setResidenceData({
-      ...residenceData,
-      residenceBlockNumber: resiblock.label,
+      residenceBlockNumber: resiblock.value,
+      residenceBlockId: parseInt(resiblock.label),
     });
   };
   const onChangeDoorNumber = (e) => {
@@ -181,68 +153,78 @@ const mainInfo = (props) => {
     setSpaceNumber(e.target.value);
     setResidenceData({
       ...residenceData,
-      parkingSpaceId: e.target.value,
+      parkingSpaceId: parseInt(e.target.value),
     });
     console.log(residenceData);
   };
-  const onFinishFailedVehile = (errorInfo) => {
+  const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
-  // const onFinish = (values) => {
-  //   console.log(values);
-  // };
+  const onFinish = (values) => {
+    console.log(values);
+    if (residenceData.latitude) {
+      props.setMainData(residenceData);
+      props.setCurrent(current + 1);
+    } else {
+      alert("Байршил сонгоно уу?");
+    }
+  };
+  const onMapClick = (e) => {
+    setSelectLng(e.lng);
+    setSelectLat(e.lat);
+    setResidenceData({
+      ...residenceData,
+      latitude: e.lat,
+      longitude: e.lng,
+    });
+  };
   return (
-    <div className={`h-5/6`}>
-      <Row offset={4}>
+    <div style={{ marginLeft: "162px" }}>
+      <div>
         <p
           style={{
             color: "blue",
             fontSize: "20px",
-            marginTop: "50px",
-            marginLeft: "100px",
+            marginTop: "25px",
           }}
         >
           <b> Орон сууц хотхоны үндсэн мэдээлэл</b>
         </p>
-      </Row>
-      <Row>
+      </div>
+      <div>
         <p
           style={{
             width: "300px",
-            marginLeft: "100px",
             fontSize: "12px",
           }}
         >
           Албан ёсны болон олон нийтийн нэршил болсон нэрийг ашиглана уу!
         </p>
-      </Row>
-      <Row>
-        <Col span={9}>
+      </div>
+      <div style={{ display: "flex" }}>
+        <div className={`address`}>
           <Form
-            layout="horizontal"
             form={props.form}
-            style={{ marginLeft: "100px", marginTop: "50px" }}
-            onFinish={props.onFinish}
-            onFinishFailed={onFinishFailedVehile}
+            layout="horizontal"
+            // initialValues={residenceData}
+            style={{ marginTop: "20px" }}
+            onFinish={(values) => props.onFinish(form, values)}
+            onFinishFailed={onFinishFailed}
+            className={`spaceMainInfo`}
           >
             <Form.Item
               name="provinceId"
               rules={[{ required: true, message: "Аймаг хотоо сонгоно уу?" }]}
-              valuePropName={Select.Option}
             >
-              <Select
-                onChange={onChangeAimag}
-                placeholder="Аймаг хот*"
-                name="provinceId"
-              >
+              <Select onChange={onChangeAimag} placeholder="Аймаг хот*">
                 {aimag.map((item) => (
                   <Select.Option key={item.value} value={item.value}>
                     {item.label}
                   </Select.Option>
                 ))}
               </Select>
-              <Divider />
             </Form.Item>
+            <Divider />
             <Form.Item
               name="districtId"
               rules={[
@@ -259,8 +241,8 @@ const mainInfo = (props) => {
                   </Select.Option>
                 ))}
               </Select>
-              <Divider />
             </Form.Item>
+            <Divider />
             <Form.Item
               name="sectionId"
               rules={[
@@ -271,17 +253,18 @@ const mainInfo = (props) => {
               ]}
             >
               <Select onChange={onChangeKhoroo} placeholder="Баг Хороо">
+                {/* <Option value="Бусад">Бусад</Option> */}
                 {khoroo.map((item) => (
                   <Select.Option key={item.value} value={item.value}>
                     {item.label}
                   </Select.Option>
                 ))}
               </Select>
-              <Divider />
             </Form.Item>
+            <Divider />
             <Form.Item
               name="residenceName"
-              rules={[{ required: true, message: "Choose value" }]}
+              rules={[{ required: true, message: "Байрны нэрээ сонгоно уу" }]}
             >
               <Select onChange={onChangeResidence} placeholder="Байрны нэр*">
                 {residence.map((item) => (
@@ -290,80 +273,129 @@ const mainInfo = (props) => {
                   </Select.Option>
                 ))}
               </Select>
-              <Divider />
             </Form.Item>
+            <Divider />
             {selectedResidence.label === "Бусад" ? (
               <div>
-                <Form.Item name="residenceName" style={{ marginTop: "-10px" }}>
+                <Form.Item
+                  name="residenceName"
+                  rules={[
+                    { required: true, message: "Байрны нэрээ оруулна уу?" },
+                  ]}
+                >
                   <Input
                     onChange={onChangeInputResidence}
                     placeholder="Байрны нэр "
                   />
-                  <Divider />
                 </Form.Item>
-                <Form.Item name="residenceNumber">
+                <Divider />
+                <Form.Item
+                  name="residenceNumber"
+                  rules={[
+                    { required: true, message: "Байрны дугаараа оруулна уу?" },
+                  ]}
+                >
                   <Input
                     onChange={onChangeInputResidenceNumber}
                     placeholder="Байрны дугаар "
                   />
-                  <Divider />
                 </Form.Item>
+                <Divider />
               </div>
             ) : (
-              <Form.Item
-                name="residenceNumber"
-                rules={[{ required: true, message: "Choose value" }]}
-              >
-                <Select
-                  placeholder="Байрны дугаар*"
-                  onChange={onChangeResidenceNumber}
+              <div>
+                <Form.Item
+                  name="residenceNumber"
+                  rules={[
+                    { required: true, message: "Байрны дугаар  сонгоно  уу?" },
+                  ]}
                 >
-                  {residenceblock.map((item) => (
-                    <Select.Option key={item.value} value={item.value}>
-                      {item.label}
-                    </Select.Option>
-                  ))}
-                </Select>
+                  <Select
+                    placeholder="Байрны дугаар*"
+                    onChange={onChangeResidenceNumber}
+                  >
+                    {residenceblock.map((item) => (
+                      <Select.Option key={item.value} value={item.value}>
+                        {item.label}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
                 <Divider />
-              </Form.Item>
+              </div>
             )}
             {selectedResidenceBlock === "Бусад" && (
-              <Form.Item
-                name="haalgaNumber"
-                rules={[{ required: true, message: "Utgaa oruulna uu?" }]}
-              >
-                <Input
-                  placeholder="Авто зогсоолын хаалганы тоо"
-                  onChange={onChangeInputResidenceNumber}
-                />
+              <div>
+                <Form.Item
+                  name="residenceBlockNumber"
+                  rules={[
+                    {
+                      required: true,
+                      type: "number",
+                      message: "Хаалганы дугаар оруулна",
+                    },
+                  ]}
+                >
+                  <Input
+                    placeholder="Авто зогсоолын хаалганы тоо"
+                    onChange={onChangeInputResidenceNumber}
+                  />
+                </Form.Item>
                 <Divider />
-              </Form.Item>
+              </div>
             )}
             <Form.Item
-              name="DoorNo"
-              rules={[{ required: true, message: "error" }]}
+              name="parkingGateNumber"
+              rules={[
+                {
+                  required: true,
+                  types: "number",
+                  message: "Хаалганы тоо оруулна уу?",
+                },
+              ]}
             >
               <Input
                 placeholder="Авто зогсоолын хаалганы тоо"
                 onChange={onChangeDoorNumber}
               />
-              <Divider />
             </Form.Item>
-            <Form.Item name="spaceNumber ">
+            <Divider />
+            <Form.Item
+              name="parkingSpaceId "
+              rules={[
+                {
+                  required: true,
+                  types: "number",
+                  message: "Авто зогсоолын дугаар оруулна уу?",
+                },
+              ]}
+            >
               <Input
                 onChange={onChangeSpaceNumber}
                 placeholder="Авто зогсоолын дугаар"
               />
-              <Divider />
             </Form.Item>
+            <Divider />
+            <Row
+              style={{
+                position: "absolute",
+                marginRight: "300px",
+              }}
+            >
+              {/* <Form.Item style={{ position: "absolute", marginTop: "20px" }}>
+                <Button className={`buttonGo`} htmlType="submit">
+                  Үргэлжлүүлэх
+                </Button>
+              </Form.Item> */}
+            </Row>
           </Form>
-        </Col>
-        <Col offset={2} span={10}>
-          <Row style={{ fontSize: "18px" }}>
+        </div>
+        <div style={{ marginLeft: "163px" }}>
+          <div width={690} style={{ fontSize: "12px" }}>
             Хамгийн нарийвчлалтайгаар авто зогсоолын орох хаалгыг{" "}
             <b>“Google Map” дээр</b> тэмдэглэнэ үү!
-          </Row>
-          <Row>
+          </div>
+          <div>
             <div
               className="flex"
               style={{
@@ -381,19 +413,21 @@ const mainInfo = (props) => {
                 Та зогсоолын орох хаалгын зааж өгнө үү!!
               </div>
             </div>
-          </Row>
-          {/* <MyMapComponent
-            isMarkerShown
-            googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
-            loadingElement={<div style={{ height: `100%` }} />}
-            containerElement={
-              <div style={{ height: `400px`, marginTop: "20px" }} />
-            }
-            mapElement={<div style={{ height: `100%` }} />}
-            style={{ marginTop: "10px" }}
-          /> */}
-        </Col>
-      </Row>
+          </div>
+          <div style={{ height: "342.5px", width: "688px" }}>
+            <GoogleMapReact
+              bootstrapURLKeys={{ key: GOOGLE_API }}
+              center={{ lat: latitude, lng: longitude }}
+              defaultZoom={16}
+              onClick={onMapClick}
+            >
+              {selectLat & selectLng ? (
+                <ClickLocation lat={selectLat} lng={selectLng} />
+              ) : null}
+            </GoogleMapReact>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

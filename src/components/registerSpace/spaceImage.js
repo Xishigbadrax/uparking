@@ -1,9 +1,10 @@
 import { Col, Row, Input } from "antd";
 import { useState } from "react";
 import { Upload, message } from "antd";
-import { Spin } from "antd";
-import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import { Spin, Form } from "antd";
+import { LoadingOutlined, PlusOutlined, RedoOutlined } from "@ant-design/icons";
 import { info } from "autoprefixer";
+
 function getBase64(img, callback) {
   const reader = new FileReader();
   reader.addEventListener("load", () => callback(reader.result));
@@ -21,7 +22,8 @@ function beforeUpload(file) {
   }
   return isJpgOrPng && isLt2M;
 }
-const spaceImage = () => {
+const spaceImage = (props) => {
+  console.log(props);
   const LoadIcon = <LoadingOutlined />;
   const [selectedPositionImage, setSelectedPositionImage] = useState();
   const [selectedDirectionImage, setSelectedDirectionImage] = useState();
@@ -71,154 +73,260 @@ const spaceImage = () => {
     }
   };
   return (
-    <div>
-      <Row offset={4}>
-        <p
-          style={{
-            fontSize: "20px",
-            marginTop: "50px",
-            color: "blue",
-            marginLeft: "100px",
-          }}
-        >
-          <b>Түрээслэгчид харагдах зогсоолын зураг</b>
-        </p>
-      </Row>
-      <Row>
-        <p style={{ fontSize: "12px", marginLeft: "100px" }}>
-          Тухайн зогсоолийн байрлал, дугаарлалт харагдаж буй зогсоолыг олоход
-          тохиромжтой олоход тохиромжтой зураг хийнэ.
-        </p>
-      </Row>
-      <Row style={{ marginTop: "30px" }}>
-        <Col offset={4}>
-          <p style={{ fontSize: "15px" }}>
-            Зогсоолын байршилын зураг (хаалга хэсгээс)
-          </p>
-
-          <Upload
-            name="avatar"
-            listType="picture-card"
-            className="avatar-uploader"
-            showUploadList={false}
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-            beforeUpload={beforeUpload}
-            onChange={onChangePositionImage}
+    <div className={`spaceImage`}>
+      <Form form={props.form}>
+        <Row offset={4}>
+          <p
+            style={{
+              fontSize: "20px",
+              marginTop: "50px",
+              color: "blue",
+              marginLeft: "100px",
+            }}
           >
-            {selectedPositionImage ? (
-              <img
-                src={selectedPositionImage}
-                alt="avatar"
-                style={{ width: "100%", height: "240px" }}
-              />
-            ) : (
-              <div>
-                {loadingPosition ? (
-                  <Spin indicator={LoadIcon} tip="зургийг хуулж байна." />
-                ) : (
-                  <PlusOutlined
-                    style={{
-                      justifyContent: "center",
-                      alignContent: "center",
-                      backgroundColor: "blue",
-                      color: "white",
-                      height: "20px",
-                      width: "20px",
-                      borderRadius: "10px",
-                    }}
-                  />
-                )}
-              </div>
-            )}
-          </Upload>
-        </Col>
-        <Col offset={4}>
-          <p style={{ fontSize: "15px" }}>
-            Зогсоолын эргэх урсгал харагдах зураг
+            <b>Түрээслэгчид харагдах зогсоолын зураг</b>
           </p>
-
-          <Upload
-            name="avatar"
-            listType="picture-card"
-            className="avatar-uploader"
-            showUploadList={false}
-            style={{ width: "400px" }}
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-            beforeUpload={beforeUpload}
-            onChange={onChangeDirectionImage}
-          >
-            {selectedDirectionImage ? (
-              <img
-                src={selectedDirectionImage}
-                alt="avatar"
-                style={{ height: "240px" }}
+        </Row>
+        <Row>
+          <p style={{ fontSize: "12px", marginLeft: "100px" }}>
+            Тухайн зогсоолийн байрлал, дугаарлалт харагдаж буй зогсоолыг олоход
+            тохиромжтой олоход тохиромжтой зураг хийнэ.
+          </p>
+        </Row>
+        <Row style={{ marginTop: "30px" }}>
+          <Col offset={4} span={6}>
+            <p style={{ fontSize: "15px" }}>
+              Зогсоолын байршлын зураг (хаалга хэсгээс)
+            </p>
+            <Form.Item
+              name="imageFromGate"
+              rules={[
+                {
+                  required: true,
+                  message: "Зогсоолын байршлын зураг оруулна уу?",
+                },
+              ]}
+            >
+              <Upload
+                name="avatar"
+                listType="picture-card"
+                className="avatar-uploader"
+                showUploadList={false}
+                beforeUpload={beforeUpload}
+                onChange={onChangePositionImage}
               >
-                <text className={`ButtonGo`}>Дахин сонгох</text>
-              </img>
-            ) : (
-              <div>
-                {loadingDirect ? (
-                  <Spin indicator={LoadIcon} tip="зургийг хуулж байна." />
+                {selectedPositionImage ? (
+                  <div>
+                    <img
+                      src={selectedPositionImage}
+                      alt="avatar"
+                      style={{ width: "327px", height: "134px" }}
+                    />
+                    <div
+                      className={`buttonGo`}
+                      style={{
+                        marginTop: "-40px",
+                        zIndex: 5,
+                        position: "absolute",
+                        marginLeft: "150px",
+                        height: "28px",
+                        width: "150px",
+                        display: "flex",
+                      }}
+                    >
+                      <p style={{ marginLeft: "30px", color: "white" }}>
+                        Дахин авах{" "}
+                      </p>
+                      <RedoOutlined
+                        style={{
+                          color: "white",
+                          marginLeft: "10px",
+                          marginTop: "5px",
+                          height: "20px",
+                          width: "20px",
+                        }}
+                      />
+                    </div>
+                  </div>
                 ) : (
-                  <PlusOutlined
-                    style={{
-                      justifyContent: "center",
-                      alignContent: "center",
-                      backgroundColor: "blue",
-                      color: "white",
-                      height: "20px",
-                      width: "20px",
-                      borderRadius: "10px",
-                    }}
-                  />
+                  <div>
+                    {loadingPosition ? (
+                      <Spin indicator={LoadIcon} tip="зургийг хуулж байна." />
+                    ) : (
+                      <PlusOutlined
+                        style={{
+                          justifyContent: "center",
+                          alignContent: "center",
+                          backgroundColor: "blue",
+                          color: "white",
+                          height: "20px",
+                          width: "20px",
+                          borderRadius: "10px",
+                        }}
+                      />
+                    )}
+                  </div>
                 )}
-              </div>
-            )}
-          </Upload>
-        </Col>
-      </Row>
-      <Row style={{ marginTop: "50px" }}>
-        <Col offset={4}>
-          <p style={{ fontSize: "15px" }}>
-            Дугаарлалтын харагдах байдлын зураг
-          </p>
-          <Upload
-            name="avatar"
-            listType="picture-card"
-            className="avatar-uploader"
-            showUploadList={false}
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-            beforeUpload={beforeUpload}
-            onChange={onChangeNumberingImage}
-          >
-            {selectedNumberingImage ? (
-              <img
-                src={selectedNumberingImage}
-                alt="avatar"
-                style={{ width: "100%", height: "250px" }}
-              />
-            ) : (
-              <div>
-                {loadingNumbering ? (
-                  <Spin indicator={LoadIcon} tip="зургийг хуулж байна." />
+              </Upload>
+            </Form.Item>
+          </Col>
+          <Col offset={4} span={6}>
+            <p style={{ fontSize: "15px" }}>
+              Зогсоолын эргэх урсгал харагдах зураг
+            </p>
+            <Form.Item
+              name="imageRouting"
+              rules={[
+                {
+                  required: true,
+                  message: "Зогсоолын эргэх урсгал харагдах зураг оруулна уу?",
+                },
+              ]}
+            >
+              <Upload
+                name="avatar"
+                listType="picture-card"
+                className="avatar-uploader"
+                showUploadList={false}
+                style={{ width: "400px" }}
+                beforeUpload={beforeUpload}
+                onChange={onChangeDirectionImage}
+              >
+                {selectedDirectionImage ? (
+                  <div>
+                    <img
+                      src={selectedDirectionImage}
+                      alt="avatar"
+                      style={{ height: "134px", width: "327px" }}
+                    />
+                    <div
+                      className={`buttonGo`}
+                      style={{
+                        marginTop: "-40px",
+                        zIndex: 5,
+                        position: "absolute",
+                        marginLeft: "150px",
+                        height: "28px",
+                        width: "150px",
+                        display: "flex",
+                      }}
+                    >
+                      <p style={{ marginLeft: "30px", color: "white" }}>
+                        Дахин авах{" "}
+                      </p>
+                      <RedoOutlined
+                        style={{
+                          color: "white",
+                          marginLeft: "10px",
+                          marginTop: "5px",
+                          height: "20px",
+                          width: "20px",
+                        }}
+                      />
+                    </div>
+                  </div>
                 ) : (
-                  <PlusOutlined
-                    style={{
-                      justifyContent: "center",
-                      alignContent: "center",
-                      backgroundColor: "blue",
-                      color: "white",
-                      height: "20px",
-                      width: "20px",
-                      borderRadius: "10px",
-                    }}
-                  />
+                  <div>
+                    {loadingDirect ? (
+                      <Spin indicator={LoadIcon} tip="зургийг хуулж байна." />
+                    ) : (
+                      <PlusOutlined
+                        style={{
+                          justifyContent: "center",
+                          alignContent: "center",
+                          backgroundColor: "blue",
+                          color: "white",
+                          height: "20px",
+                          width: "20px",
+                          borderRadius: "10px",
+                        }}
+                      />
+                    )}
+                  </div>
                 )}
-              </div>
-            )}
-          </Upload>
-        </Col>
-      </Row>
+              </Upload>
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row style={{ marginTop: "50px" }}>
+          <Col offset={4} span={6}>
+            <p style={{ fontSize: "15px" }}>
+              Дугаарлалтын харагдах байдлын зураг
+            </p>
+            <Form.Item
+              name="imageSpaceNumber"
+              rules={[
+                {
+                  required: true,
+                  message: "Дугаарлалтын харагдах байдлын зураг оруулна уу?",
+                },
+              ]}
+            >
+              <Upload
+                name="avatar"
+                listType="picture-card"
+                className="avatar-uploader"
+                showUploadList={false}
+                beforeUpload={beforeUpload}
+                onChange={onChangeNumberingImage}
+              >
+                {selectedNumberingImage ? (
+                  <div>
+                    <img
+                      src={selectedNumberingImage}
+                      alt="avatar"
+                      style={{ width: "327px", height: "134px" }}
+                    />
+                    <div
+                      className={`buttonGo`}
+                      style={{
+                        marginTop: "-40px",
+                        zIndex: 5,
+                        position: "absolute",
+                        marginLeft: "150px",
+                        height: "28px",
+                        width: "150px",
+                        display: "flex",
+                      }}
+                    >
+                      <p style={{ marginLeft: "30px", color: "white" }}>
+                        Дахин авах{" "}
+                      </p>
+                      <RedoOutlined
+                        style={{
+                          color: "white",
+                          marginLeft: "10px",
+                          marginTop: "5px",
+                          height: "20px",
+                          width: "20px",
+                        }}
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    {loadingNumbering ? (
+                      <Spin indicator={LoadIcon} tip="зургийг хуулж байна." />
+                    ) : (
+                      <PlusOutlined
+                        style={{
+                          justifyContent: "center",
+                          alignContent: "center",
+                          backgroundColor: "blue",
+                          color: "white",
+                          height: "20px",
+                          width: "20px",
+                          borderRadius: "10px",
+                        }}
+                      />
+                    )}
+                  </div>
+                )}
+              </Upload>
+            </Form.Item>
+          </Col>
+        </Row>
+      </Form>
     </div>
   );
 };

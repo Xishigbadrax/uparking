@@ -47,7 +47,9 @@ const deleteSList = async (code, id) => {
 
 const callGet = async (command) => {
   const result = await baseAxios.get(command);
-  return result.status === 200 ? result.data : [];
+  if (result.status === 200) return result.data;
+  if (result.status === 201) return result.data;
+  else return [];
 };
 
 const execData = async (code, data, child, deletedIds) => {
@@ -60,6 +62,7 @@ const execData = async (code, data, child, deletedIds) => {
 
 const callPost = async (command, data) => {
   const result = await baseAxios.post(command, data);
+
   if (result.status === 403) {
     console.log(1111111);
     showMessage(messageType.FAILED.type, result.message);

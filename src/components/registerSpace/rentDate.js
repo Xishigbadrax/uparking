@@ -1,122 +1,198 @@
 import { Calendar, Badge, Select } from "antd";
-import { Row, Col, Button, Divider, Typography, Radio } from "antd";
+import { Row, Col, Button, Divider, Typography, Radio, Checkbox } from "antd";
 import { useState, useEffect } from "react";
 import { callGet, apiList } from "@api/api";
 import { calendarLocale } from "@constants/constants.js";
+import DayNightColumn from "@components/DayNightColumn";
+import { InfoCircleOutlined } from "@ant-design/icons";
 import moment from "moment";
+import { set } from "js-cookie";
 moment.updateLocale("mn", {
   weekdaysMin: ["Ням", "Даваа", "Мягмар", "Лхагва", "Пүрэв", "Баасан", "Бямба"],
 });
 
-const timeSplit = [
-  { id: 1, name: "Боломжтой" },
-  { id: 2, name: "Боломжгүй" },
-];
-const days = [
-  {
-    id: 1,
-    label: "НЯМ",
-  },
-  {
-    id: 2,
-    label: "ДАВАА",
-  },
-  {
-    id: 3,
-    label: "МЯГМАР",
-  },
-  {
-    id: 4,
-    label: "ЛХАГВА",
-  },
-  {
-    id: 5,
-    label: "ПҮРЭВ",
-  },
-  {
-    id: 6,
-    label: "БААСАН",
-  },
-  {
-    id: 7,
-    label: "БЯМБА",
-  },
-];
-function getListData(value) {
-  let listData;
-  switch (value.date()) {
-    case 8:
-      listData = [
-        { type: "warning", content: "This is warning event." },
-        { type: "success", content: "This is usual event." },
-      ];
-      break;
-    case 10:
-      listData = [
-        { type: "warning", content: "This is warning event." },
-        { type: "success", content: "This is usual event." },
-        { type: "error", content: "This is error event." },
-      ];
-      break;
-    case 15:
-      listData = [
-        { type: "warning", content: "This is warning event" },
-        { type: "success", content: "This is very long usual event。。...." },
-        { type: "error", content: "This is error event 1." },
-        { type: "error", content: "This is error event 2." },
-        { type: "error", content: "This is error event 3." },
-        { type: "error", content: "This is error event 4." },
-      ];
-      break;
-    default:
-  }
-  return listData || [];
-}
-
-function dateCellRender(value) {
-  const listData = getListData(value);
-  return (
-    <ul className="events">
-      {listData.map((item) => (
-        <li key={item.content}>
-          <span
-            style={{
-              backgroundColor: "red",
-              borderRadius: "10px",
-            }}
-          >
-            {item.type}
-          </span>
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-function getMonthData(value) {
-  if (value.month() === 8) {
-    return 1394;
-  }
-}
-
-function monthCellRender(value) {
-  const num = getMonthData(value);
-  return num ? (
-    <div className="notes-month" style={{ height: "50px" }}>
-      <section>{num}</section>
-      <span>Backlog number</span>
-    </div>
-  ) : null;
-}
 const rentDate = () => {
   const [filterType, setFilterType] = useState("");
-  const [dayValue, setDayValue] = useState({});
+  const [weekData, setWeekData] = useState({});
+  const [dayState, setDayState] = useState("Боломжтой");
+  const [checked, setChecked] = useState();
+
+  const [mondayMorning, setmondayMorning] = useState("Боломжтой");
+  const [mondayMorningIsShow, setmondayMorningIsShow] = useState(false);
+  const [tuesdayMorning, settuesdayMorning] = useState("Боломжтой");
+  const [tuedayMorningIsShow, settuedayMorningIsShow] = useState(false);
+  const [wednesdayMorning, setwednesdayMorning] = useState("Боломжтой");
+  const [wednesdayMorningIsShow, setwednesdayMorningIsShow] = useState(false);
+  const [thursdayMorning, setthursdayMorning] = useState("Боломжтой");
+  const [thursdayMorningIsShow, setthursdayMorningIsShow] = useState(false);
+  const [fridayMorning, setfridayMorning] = useState("Боломжтой");
+  const [fridayMorningIsShow, setfridayMorningIsShow] = useState(false);
+  const [saturdayMorning, setsaturdayMorning] = useState("Боломжтой");
+  const [saturdayMorningIsShow, setsaturdayMorningIsShow] = useState(false);
+  const [sundayMorning, setsundayMorning] = useState("Боломжтой");
+  const [sundayMorningIsShow, setsundayMorningIsShow] = useState(false);
+  const [celebdayMorning, setcelebdayMorning] = useState("Боломжтой");
+  const [celebdayMorningIsShow, setcelebdayMorningIsShow] = useState(false);
+  const [mondayNight, setmondayNight] = useState("Боломжтой");
+  const [mondayNightIsShow, setmondayNightIsShow] = useState(false);
+  const [tuesdayNight, settuesdayNight] = useState("Боломжтой");
+  const [tuesdayNightIsShow, settuesdayNightIsShow] = useState(false);
+  const [wednesdayNight, setwednesdayNight] = useState("Боломжтой");
+  const [wednesdayNightIsShow, setwednesdayNightIsShow] = useState(false);
+  const [thursdayNight, setthursdayNight] = useState("Боломжтой");
+  const [thursdayNightIsShow, setthursdayNightIsShow] = useState(false);
+  const [fridayNight, setfridayNight] = useState("Боломжтой");
+  const [fridayNightIsShow, setfridayNightIsShow] = useState(false);
+  const [saturdayNight, setsaturdayNight] = useState("Боломжтой");
+  const [saturdayNightIsShow, setsaturdayNightIsShow] = useState(false);
+  const [sundayNight, setsundayNight] = useState("Боломжтой");
+  const [sundayNightIsShow, setsundayNightIsShow] = useState(false);
+  const [celebdayNight, setcelebdayNight] = useState("Боломжтой");
+  const [isCalendar, setisCalendar] = useState("Үгүй");
+
+  const onChangeViewCalendar = (e) => {
+    setChecked(e.target.value);
+
+    let data = {
+      dayOfWeek: [
+        {
+          day: 1,
+          timeSplitDescription: "Өдөр",
+          spaceStatusDescription: mondayMorning,
+        },
+        {
+          day: 1,
+          timeSplitDescription: "Шөнө",
+          spaceStatusDescription: mondayNight,
+        },
+        {
+          day: 2,
+          timeSplitDescription: "Өдөр",
+          spaceStatusDescription: tuesdayMorning,
+        },
+        {
+          day: 2,
+          timeSplitDescription: "Шөнө",
+          spaceStatusDescription: tuesdayNight,
+        },
+        {
+          day: 3,
+          timeSplitDescription: "Өдөр",
+          spaceStatusDescription: wednesdayMorning,
+        },
+        {
+          day: 3,
+          timeSplitDescription: "Шөнө",
+          spaceStatusDescription: wednesdayNight,
+        },
+        {
+          day: 4,
+          timeSplitDescription: "Өдөр",
+          spaceStatusDescription: thursdayMorning,
+        },
+        {
+          day: 4,
+          timeSplitDescription: "Шөнө",
+          spaceStatusDescription: thursdayNight,
+        },
+        {
+          day: 5,
+          timeSplitDescription: "Өдөр",
+          spaceStatusDescription: fridayMorning,
+        },
+        {
+          day: 5,
+          timeSplitDescription: "Шөнө",
+          spaceStatusDescription: fridayNight,
+        },
+        {
+          day: 6,
+          timeSplitDescription: "Өдөр",
+          spaceStatusDescription: saturdayMorning,
+        },
+        {
+          day: 6,
+          timeSplitDescription: "Шөнө",
+          spaceStatusDescription: saturdayNight,
+        },
+        {
+          day: 0,
+          timeSplitDescription: "Өдөр",
+          spaceStatusDescription: sundayMorning,
+        },
+        {
+          day: 0,
+          timeSplitDescription: "Шөнө",
+          spaceStatusDescription: sundayNight,
+        },
+      ],
+    };
+    setWeekData(data);
+    console.log(weekData);
+    console.log(data);
+  };
+
+  const timeSplit = [
+    { id: 1, name: "Боломжтой" },
+    { id: 2, name: "Боломжгүй" },
+  ];
+
+  function getListData(value) {
+    let listData;
+
+    console.log(value.day());
+    switch (value.day()) {
+      case weekData.day:
+        listData = [{ type: "warning", content: "This is warning event." }];
+        break;
+
+      default:
+    }
+    return listData || [];
+  }
+
+  function dateCellRender(value) {
+    const listData = getListData(value);
+    return (
+      <ul className="events">
+        {listData.map((item) => (
+          <li key={item.content} style={{ height: "15px" }}>
+            <span
+              style={{
+                backgroundColor: "red",
+                borderRadius: "10px",
+                fontSize: "5px",
+              }}
+            >
+              {item.type}
+            </span>
+          </li>
+        ))}
+      </ul>
+    );
+  }
+
+  function getMonthData(value) {
+    if (value.month() === 8) {
+      return 1394;
+    }
+  }
+
+  function monthCellRender(value) {
+    const num = getMonthData(value);
+    return num ? (
+      <div className="notes-month" style={{ height: "50px" }}>
+        <section>{num}</section>
+        <span>Backlog number</span>
+      </div>
+    ) : null;
+  }
   useEffect(async () => {
     // const timeSplit = await callGet("/parkingspace/timesplit");
     // console.log(timeSplit);
   }, []);
   return (
-    <div className={`h-5/6`}>
+    <div>
       <Row offset={4}>
         <p
           style={{
@@ -139,7 +215,6 @@ const rentDate = () => {
         <Col span={10}>
           <Row
             style={{
-              marginTop: "80px",
               marginLeft: "100px",
             }}
           >
@@ -172,7 +247,7 @@ const rentDate = () => {
             <p style={{ marginLeft: "10px", fontSize: "16px" }}>
               Тохиргоо хийх
             </p>
-            <Divider />
+            <Divider className={`stateDivider`} />
           </Row>
           <Row style={{ marginLeft: "100px" }}>
             <Col span={6} offset={1}></Col>
@@ -183,57 +258,371 @@ const rentDate = () => {
               Шөнө|08:00-18:30
             </Col>
           </Row>
-          {days.map((item) => (
-            <Row
-              style={{ marginLeft: "100px", marginTop: "10px" }}
-              key={item.id}
+          <Row
+            style={{ marginLeft: "100px", marginTop: "5px" }}
+            className={`pickWeekDayState`}
+          >
+            <Col span={4} offset={3} style={{ fontSize: "15px" }}>
+              Ням
+            </Col>
+            <Col span={5} offset={1}>
+              <Select
+                onChange={(e) => {
+                  setsundayMorning(e), setChecked(2);
+                }}
+                value={sundayMorning}
+                className={
+                  sundayMorning === "Боломжтой" ? "Surrender" : "NotSurrender"
+                }
+              >
+                {timeSplit.map((item) => (
+                  <Select.Option key={item.id} value={item.name}>
+                    {item.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Col>
+            <Col span={5} offset={2}>
+              <Select
+                onChange={(e) => {
+                  setsundayNight(e), setChecked(2);
+                }}
+                value={sundayNight}
+                className={
+                  sundayNight === "Боломжтой" ? "Surrender" : "NotSurrender"
+                }
+              >
+                {timeSplit.map((item) => (
+                  <Select.Option key={item.id} value={item.name}>
+                    {item.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Col>
+          </Row>
+          {/*Даваа гараг*/}
+          <Row
+            style={{ marginLeft: "100px", marginTop: "5px" }}
+            className={`pickWeekDayState`}
+          >
+            <Col span={4} offset={3} style={{ fontSize: "15px" }}>
+              Даваа
+            </Col>
+            <Col span={5} offset={1}>
+              <Select
+                onChange={(e) => {
+                  setmondayMorning(e), setChecked(2);
+                }}
+                value={mondayMorning}
+                className={
+                  mondayMorning === "Боломжтой" ? "Surrender" : "NotSurrender"
+                }
+              >
+                {timeSplit.map((item) => (
+                  <Select.Option key={item.id} value={item.name}>
+                    {item.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Col>
+            <Col span={5} offset={2}>
+              <Select
+                onChange={(e) => {
+                  setmondayNight(e), setChecked(2);
+                }}
+                value={mondayNight}
+                className={
+                  mondayNight === "Боломжтой" ? "Surrender" : "NotSurrender"
+                }
+              >
+                {timeSplit.map((item) => (
+                  <Select.Option key={item.id} value={item.name}>
+                    {item.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Col>
+          </Row>
+          {/*Мягмар гараг */}
+          <Row
+            style={{ marginLeft: "100px", marginTop: "5px" }}
+            className={`pickWeekDayState`}
+          >
+            <Col span={4} offset={3} style={{ fontSize: "15px" }}>
+              Мягмар
+            </Col>
+            <Col span={5} offset={1}>
+              <Select
+                s
+                onChange={(e) => {
+                  settuesdayMorning(e), setChecked(2);
+                }}
+                value={tuesdayMorning}
+                className={
+                  tuesdayMorning === "Боломжтой" ? "Surrender" : "NotSurrender"
+                }
+              >
+                {timeSplit.map((item) => (
+                  <Select.Option key={item.id} value={item.name}>
+                    {item.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Col>
+            <Col span={5} offset={2}>
+              <Select
+                onChange={(e) => {
+                  settuesdayNight(e), setChecked(2);
+                }}
+                value={tuesdayNight}
+                className={
+                  tuesdayNight === "Боломжтой" ? "Surrender" : "NotSurrender"
+                }
+              >
+                {timeSplit.map((item) => (
+                  <Select.Option key={item.id} value={item.name}>
+                    {item.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Col>
+          </Row>
+          {/*Лхагва гараг  */}
+          <Row
+            style={{ marginLeft: "100px", marginTop: "5px" }}
+            className={`pickWeekDayState`}
+          >
+            <Col span={4} offset={3} style={{ fontSize: "15px" }}>
+              Лхагва
+            </Col>
+            <Col span={5} offset={1}>
+              <Select
+                span={6}
+                onChange={(e) => {
+                  setwednesdayMorning(e), setChecked(2);
+                }}
+                value={wednesdayMorning}
+                className={
+                  wednesdayMorning === "Боломжтой"
+                    ? "Surrender"
+                    : "NotSurrender"
+                }
+              >
+                {timeSplit.map((item) => (
+                  <Select.Option key={item.id} value={item.name}>
+                    {item.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Col>
+            <Col span={5} offset={2}>
+              <Select
+                onChange={(e) => {
+                  setwednesdayNight(e), setChecked(2);
+                }}
+                value={wednesdayNight}
+                className={
+                  wednesdayNight === "Боломжтой" ? "Surrender" : "NotSurrender"
+                }
+              >
+                {timeSplit.map((item) => (
+                  <Select.Option key={item.id} value={item.name}>
+                    {item.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Col>
+          </Row>
+          {/*Пүрэв гараг */}
+          <Row
+            style={{ marginLeft: "100px", marginTop: "5px" }}
+            className={`pickWeekDayState`}
+          >
+            <Col span={4} offset={3} style={{ fontSize: "15px" }}>
+              Пүрэв
+            </Col>
+            <Col span={5} offset={1}>
+              <Select
+                onChange={(e) => {
+                  setthursdayMorning(e), setChecked(2);
+                }}
+                value={thursdayMorning}
+                className={
+                  thursdayMorning === "Боломжтой" ? "Surrender" : "NotSurrender"
+                }
+              >
+                {timeSplit.map((item) => (
+                  <Select.Option key={item.id} value={item.name}>
+                    {item.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Col>
+            <Col span={5} offset={2}>
+              <Select
+                onChange={(e) => {
+                  setthursdayNight(e), setChecked(2);
+                }}
+                value={thursdayNight}
+                className={
+                  thursdayNight === "Боломжтой" ? "Surrender" : "NotSurrender"
+                }
+              >
+                {timeSplit.map((item) => (
+                  <Select.Option key={item.id} value={item.name}>
+                    {item.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Col>
+          </Row>
+          {/*Баасан гараг */}
+          <Row
+            style={{ marginLeft: "100px", marginTop: "5px" }}
+            className={`pickWeekDayState`}
+          >
+            <Col span={4} offset={3} style={{ fontSize: "15px" }}>
+              Баасан
+            </Col>
+            <Col span={5} offset={1}>
+              <Select
+                onChange={(e) => {
+                  setfridayMorning(e), setChecked(2);
+                }}
+                value={fridayMorning}
+                className={
+                  fridayMorning === "Боломжтой" ? "Surrender" : "NotSurrender"
+                }
+              >
+                {timeSplit.map((item) => (
+                  <Select.Option key={item.id} value={item.name}>
+                    {item.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Col>
+            <Col span={5} offset={2}>
+              <Select
+                onChange={(e) => {
+                  setfridayNight(e), setChecked(2);
+                }}
+                value={fridayNight}
+                className={
+                  fridayNight === "Боломжтой" ? "Surrender" : "NotSurrender"
+                }
+              >
+                {timeSplit.map((item) => (
+                  <Select.Option key={item.id} value={item.name}>
+                    {item.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Col>
+          </Row>
+          {/*Бямба гараг*/}
+          <Row
+            style={{ marginLeft: "100px", marginTop: "5px" }}
+            className={`pickWeekDayState`}
+          >
+            <Col span={4} offset={3} style={{ fontSize: "15px" }}>
+              Бямба
+            </Col>
+            <Col span={5} offset={1}>
+              <Select
+                onChange={(e) => {
+                  setsaturdayMorning(e), setChecked(2);
+                }}
+                value={saturdayMorning}
+                className={
+                  saturdayMorning === "Боломжтой" ? "Surrender" : "NotSurrender"
+                }
+              >
+                {timeSplit.map((item) => (
+                  <Select.Option key={item.id} value={item.name}>
+                    {item.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Col>
+            <Col span={5} offset={2}>
+              <Select
+                onChange={(e) => {
+                  setsaturdayNight(e), setChecked(2);
+                }}
+                value={saturdayNight}
+                className={
+                  saturdayNight === "Боломжтой" ? "Surrender" : "NotSurrender"
+                }
+              >
+                {timeSplit.map((item) => (
+                  <Select.Option key={item.id} value={item.name}>
+                    {item.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Col>
+          </Row>
+          <Row style={{ marginLeft: "100px", marginTop: "20px" }}>
+            <p
+              style={{
+                color: "#141A29",
+                fontSize: "14px",
+                fontFamily: "Helvetica",
+                fontWeight: "normal",
+                fontStyle: "normal",
+              }}
             >
-              <Col span={6} offset={1} style={{ fontSize: "15px" }}>
-                {item.label}
+              Долоо хоногын хувиарыг сарын календарлуу шилжүүлэх үү ?
+            </p>
+          </Row>
+          <Row
+            style={{ marginLeft: "100px", height: "24px" }}
+            className={`InfoIconInDayState`}
+          >
+            <Col span={2}>
+              <InfoCircleOutlined
+                style={{ height: "24px", width: "24px", color: "yellow" }}
+              />
+            </Col>
+            <Col span={22}>
+              <p style={{ fontSize: "12px", fontWeight: 400 }}>
+                Үгүй гэсэн сонголтыг хийсэн тохиолдолд 7 хоног бүр хуваарийг
+                шинэчлэхийг анхаарна уу!
+              </p>
+            </Col>
+          </Row>
+          <Row style={{ marginLeft: "100px", marginTop: "10px" }}>
+            <Radio.Group onChange={onChangeViewCalendar} value={checked}>
+              <Radio value={1}>Тийм</Radio>
+              <Radio value={2}>Үгүй</Radio>
+            </Radio.Group>
+          </Row>
+        </Col>
+        <Divider
+          type="vertical"
+          style={{
+            height: "450px ",
+            width: "1px",
+            marginTop: "20px",
+          }}
+        />
+        {checked === 1 && (
+          <Col>
+            <Row style={{ width: "720px" }} className={`rentDate`}>
+              <Col span={2}>
+                <DayNightColumn className={`rentCalendarDayNightText`} />
               </Col>
-              <Col span={6} offset={1}>
-                <select span={6} className={`w-32 DAY `}>
-                  {timeSplit.map((item) => (
-                    <option key={item.id}>{item.name}</option>
-                  ))}
-                </select>
-              </Col>
-              <Col span={6} offset={1}>
-                <select span={6} className={`w-32 DAY`}>
-                  {timeSplit.map((item) => (
-                    <option key={item.id}>{item.name}</option>
-                  ))}
-                </select>
+              <Col span={20}>
+                <Calendar
+                  className={`rentDateCalendar`}
+                  dateCellRender={dateCellRender}
+                  locale={calendarLocale}
+                  monthCellRender={monthCellRender}
+                />
               </Col>
             </Row>
-          ))}
-        </Col>
-        <Col offset={2}>
-          <div style={{ width: "720px", height: "388px", display: "flex" }}>
-            <div style={{ marginTop: "90px" }}>
-              <p>Өглөө </p>
-              <p>Орой</p>
-              <p>Өглөө </p>
-              <p>Орой</p>
-              <p>Өглөө </p>
-              <p>Орой</p>
-              <p>Өглөө </p>
-              <p>Орой</p>
-              <p>Өглөө </p>
-              <p>Орой</p>
-              <p>Өглөө </p>
-              <p>Орой</p>
-              <p>Өглөө </p>
-              <p>Орой</p>
-            </div>
-            <Calendar
-              className={`ant-picker-cell ant-picker-cell-in-view`}
-              dateCellRender={dateCellRender}
-              locale={calendarLocale}
-              monthCellRender={monthCellRender}
-            />
-          </div>
-        </Col>
+          </Col>
+        )}
       </Row>
     </div>
   );
