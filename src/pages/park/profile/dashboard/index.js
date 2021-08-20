@@ -243,7 +243,7 @@ const Dashboard = () => {
             </Col>
           </Row>
           {/* <CustomCalendar data={data} ></CustomCalendar> */}
-          <DayNightColumn />{" "}
+          <DayNightColumn />
           <Calendar
             className="customCalendar"
             locale={calendarLocale}

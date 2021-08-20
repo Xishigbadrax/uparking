@@ -1,10 +1,27 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Image } from "antd";
+import { callGet, callPost } from "@api/api";
 import Helper from "@utils/helper";
+import Context from "@context/Context";
 
 const WalletCard = () => {
   const [orderData, setOrderData] = useState({});
+  const ctx = useContext(Context);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+  const fetchData = async () => {
+    ctx.setIsLoading(true);
+    await callGet(`/wallet/user`, null).then((res) => {
+      console.log(res, "resres22222");
+      setOrderData(res);
+
+      ctx.setIsLoading(false);
+    });
+  };
+
   return (
     <div
       style={{
@@ -38,8 +55,8 @@ const WalletCard = () => {
               color: "#FFFFFF",
             }}
           >
-            {orderData.totalPrice
-              ? Helper.formatValueReverse(orderData.totalPrice)
+            {orderData.walletBalance
+              ? Helper.formatValueReverse(orderData.walletBalance)
               : 0}
           </div>
           <div
@@ -62,8 +79,8 @@ const WalletCard = () => {
               color: "#FFFFFF",
             }}
           >
-            {orderData.totalPrice
-              ? Helper.formatValueReverse(orderData.totalPrice)
+            {orderData.promoBalance
+              ? Helper.formatValueReverse(orderData.promoBalance)
               : 0}
           </div>
         </div>

@@ -1713,7 +1713,7 @@
 /*HHM bvrtgeh end*/
 
 /* Go button*/
-.buttonGooo{
+.buttonGooo {
   background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
   border-radius: 8px;
   height: 40px !important;
@@ -1743,7 +1743,7 @@
   line-height: 1.5715;
   text-align: left;
   } */
-  /* .ant-modal-content {
+/* .ant-modal-content {
     min-height: 700px;
     height:auto;
     width: 1000px;
@@ -1757,12 +1757,12 @@
     height: 30px;
     border-color: #fff;
   } */
-  
-   .placeholder {
-    color: red !important;
-  }
 
-  /* .ant-upload.ant-upload-select-picture-card {
+.placeholder {
+  color: red !important;
+}
+
+/* .ant-upload.ant-upload-select-picture-card {
     width: 400px;
     height: 150px ;
     
@@ -1781,13 +1781,9 @@
     padding: 0 !important;
   } */
 
-  /* .ant-input{
+/* .ant-input{
       border:none;
   }
-.ant-divider-horizontal{
-  margin: 15px 0  !important;
-  margin-top: 5px;
-} */
 
 .fullModal .ant-modal-content {
   height: auto !important;
@@ -1813,18 +1809,21 @@
   color:"black"
 } */
 
-.freeTimePick{
+.freeTimePick {
   font-size: 10px !important;
   background: rgba(3, 54, 255, 0.08);
-border-radius: 8px;
+  border-radius: 8px;
 }
 
- /* .ant-rate-star .ant-rate-star-full{
+/* .ant-rate-star .ant-rate-star-full{
   margin-left: 2px !important;
 } */
 
 .ant-drawer-right.ant-drawer-open .ant-drawer-content-wrapper {
   box-shadow: none;
+}
+.fullModal .ant-modal-content {
+  height: auto !important;
 } 
 /* .ant-col .ant-col-3{
    background-color: #00f9b8;
@@ -1836,8 +1835,8 @@ border-radius: 8px;
   width: 33% !important;
 } */
 
-.listImage{
-  background: rgba(222, 226, 233, 0.2),
+.listImage {
+  background: rgba(222, 226, 233, 0.2);
 }
 /* .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
   color:#0013D4 ;
@@ -1845,157 +1844,147 @@ border-radius: 8px;
 .ant-tabs-ink-bar {
   background: linear-gradient(90deg, #0013D4 0%, #00F9B8 100%) !important;
 } */
-.chooseButton{
+.chooseButton {
   display: flex;
-flex-direction: column;
-align-items: center;
-padding: 10px 14px;
-cursor: pointer;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 14px;
+  cursor: pointer;
+  height: 40px;
 
-width: 392.4px;
-height: 40px;
+  /* Smooth/1 */
 
+  background: rgba(3, 54, 255, 0.08);
+  /* Brand Color / Primary */
 
-/* Smooth/1 */
-
-background: rgba(3, 54, 255, 0.08);
-/* Brand Color / Primary */
-
-border: 1px solid #0013D4;
-box-sizing: border-box;
-border-radius: 8px;
-  
+  border: 1px solid #0013d4;
+  box-sizing: border-box;
+  border-radius: 8px;
 }
-.searchButton{
-  height: 50px  !important;
-}
+
 .timePickCalendar .ant-picker-panel .ant-picker-content {
-    width: 450px !important;
-    height: 400px !important;
+  width: 450px !important;
+  height: 400px !important;
 }
- .timePickCalendar tbody tr .ant-picker-cell.ant-picker-cell-in-view {
+.timePickCalendar tbody tr .ant-picker-cell.ant-picker-cell-in-view {
   min-height: 50px !important;
   max-width: 50px !important;
-  background:  #76E8AA ;
+  background: #76e8aa;
   border-radius: 10px !important;
-
-  
 }
 .timePickCalendar .ant-picker-cell-selected {
-   background-color: #00f9b8 !important;
+  background-color: #00f9b8 !important;
 }
 
-.timePickCalendar .ant-picker-cell-selected .ant-picker-cell-inner:hover{
+.timePickCalendar .ant-picker-cell-selected .ant-picker-cell-inner:hover {
   /* border: 1px  black !important;
   border-radius: 20px !important;
   background-color: #00f9b8 !important; */
   position: none !important;
-  background: none  !important;
+  background: none !important;
   color: black !important;
 }
 
-.timePickCalendar tbody tr td:first-of-type{
+.timePickCalendar tbody tr td:first-of-type {
   color: white;
   border-radius: 10px !important;
- 
-  background-color: #141A29 !important;
+
+  background-color: #141a29 !important;
 }
-.timePickCalendar tbody tr td:last-of-type{
+.timePickCalendar tbody tr td:last-of-type {
   border-radius: 20px !important;
-  
+
   color: white;
-  background: #141A29 !important;
+  background: #141a29 !important;
 }
-.ResidenceCardList .ant-card-body{
-  padding-top: 0px !important
+.ResidenceCardList .ant-card-body {
+  padding-top: 0px !important;
+  align-items: center;
 }
-.ResidenceCardList .ant-rate  svg{
- 
+.ResidenceCardList .ant-rate svg {
   height: 10.903876304626465px !important;
   width: 11.409276962280273px !important;
   margin-top: 2.3px !important;
   border-radius: 0px;
 }
-.ResidenceCardList .ant-rate .ant-rate-star .ant-rate-star-full{
+.ResidenceCardList .ant-rate .ant-rate-star .ant-rate-star-full {
   margin-left: 2.29px !important;
 }
 .ant-rate-star:not(:last-child) {
   margin-right: 0px !important;
 }
 
-.OptionPane .ant-tabs-tab{
+.OptionPane .ant-tabs-tab {
   padding: 0px !important;
 }
-.DetailsPane .ant-tabs-tab{
+.DetailsPane .ant-tabs-tab {
   padding: 0px !important;
 }
-.SpaceIcons{
+.SpaceIcons {
   background: rgba(222, 226, 233, 0.2);
-border-radius: 24px;
-margin-top: 10px;
+  border-radius: 24px;
+  margin-top: 10px;
 }
-.priceInfoOfOnDay{
-  display: flex;
-flex-direction: column;
-align-items: center;
-padding: 0px;
-width: 44px;
-height: 40px;
-left: calc(50% - 44px/2 + 5px);
-top: calc(50% - 40px/2 + 0.5px);
-}
-.priceInfoOfOneNight{
+.priceInfoOfOnDay {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 0px;
-  
-  
+  width: 44px;
+  height: 40px;
+  left: calc(50% - 44px / 2 + 5px);
+  top: calc(50% - 40px / 2 + 0.5px);
+}
+.priceInfoOfOneNight {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0px;
+
   width: 53px;
   height: 40px;
-  left: calc(50% - 53px/2 + 5px);
-  top: calc(50% - 40px/2 + 0.5px);
+  left: calc(50% - 53px / 2 + 5px);
+  top: calc(50% - 40px / 2 + 0.5px);
 }
-.priceInfoOfFullDay{
+.priceInfoOfFullDay {
   display: flex;
-flex-direction: column;
-align-items: center;
-padding: 0px;
-width: 70px;
-height: 40px;
-left: calc(50% - 70px/2 + 5px);
-top: calc(50% - 40px/2 + 0.5px);
-
-  
+  flex-direction: column;
+  align-items: center;
+  padding: 0px;
+  width: 70px;
+  height: 40px;
+  left: calc(50% - 70px / 2 + 5px);
+  top: calc(50% - 40px / 2 + 0.5px);
 }
 
-.OptionPane .ant-tabs-ink-bar .ant-tabs-ink-bar-animated{
+/* .OptionPane .ant-tabs-ink-bar .ant-tabs-ink-bar-animated{
   width: 100px !important;
   margin-left: 20px !important;
-}
+} */
 
-.pickVehicle{
+.pickVehicle {
   width: 192px;
-height: 56px;
-left: 0px;
-top: 0px;
+  height: 56px;
+  left: 0px;
+  top: 0px;
 
-/* Base Color / White */
+  /* Base Color / White */
 
-background: #FFFFFF;
-/* Brand Color / Primary */
-border: 1px solid #0013D4;
-box-sizing: border-box;
-border-radius: 8px;
+  background: #ffffff;
+  /* Brand Color / Primary */
+  border: 1px solid #0013d4 !important;
+  box-sizing: border-box;
+  border-radius: 8px;
 }
-.ant-radio-button-wrapper .pickVehicle:hover{
- background: none !important;
- color: none !important;
+.ant-radio-button-wrapper .pickVehicle:hover {
+  background: none !important;
+  color: none !important;
 }
 
-.ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+.ant-radio-group-solid
+  .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
   background: grey;
-  background-color: none; 
+  background-color: none;
 }
 
 .timePickCalendar tbody tr td ::after {
@@ -2004,6 +1993,198 @@ border-radius: 8px;
   width: 50px;
 }
 
-.timePickCalendar tbody tr td ::before{
+.timePickCalendar tbody tr td ::before {
   margin-left: 10px;
+}
+.pickType .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+  border: none !important;
+}
+.pickType
+  .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input)
+  .ant-select-selector {
+  border-color: none !important;
+  border-right-width: none !important;
+  box-shadow: none !important;
+}
+.pickType .ant-picker {
+  border: none !important;
+}
+.pickType .ant-picker-focused {
+  border-color: none !important;
+  box-shadow: none !important;
+}
+.locationBackground {
+  background: url("/icons/locationBackground.png") !important;
+  height: 28px;
+  width: 48px;
+  align-items: center;
+  justify-items: center;
+}
+.spaceMainInfo .ant-form-item-control-input-content {
+  /* height: 32px !important; */
+}
+.spaceMainInfo .ant-divider-horizontal {
+  /* margin: 0px 0px !important; */
+  margin: 0px 0px !important;
+}
+/* .spaceMainInfo .ant-form-item{ margin-bottom: 10px;} */
+.spaceMainInfo .ant-row .ant-form-item.ant-input {
+  /* height: 30px !important; */
+  border: none !important;
+}
+.spaceMainInfo
+  .ant-select:not(.ant-select-customize-input)
+  .ant-select-selector {
+  border: none !important;
+}
+.spaceMainInfo.ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector{
+  box-shadow: none !important;
+  border-color: none !important;
+}
+.spaceMainInfo.ant-input:focus,.ant-input-focused {
+  border-color: none !important;
+  border-right-color: none !important;
+  box-shadow: none !important;
+}
+.spaceMainInfo .ant-input{
+  border: none !important;
+}
+.MainImage .ant-upload.ant-upload-select-picture-card{
+  height: 134px !important;
+  width: 327px !important;
+}
+.spaceImage .ant-upload.ant-upload-select-picture-card {
+  height: 134px !important;
+  width: 327px !important;  
+}
+.address{
+  height: 456px !important;
+  width: 350px !important;
+}
+.spaceIndocator .ant-form {
+
+  height: 350px !important;
+}
+.spaceIndocator .ant-form-item-control-input-content{
+  height: 40px !important;
+}
+.spaceIndocator  .ant-divider-horizontal{
+ margin: 0px !important;
+}
+.spaceIndocator .ant-select:not(.ant-select-customize-input) .ant-select-selector{
+  border: none !important;
+}
+.spaceIndocator .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector{
+  box-shadow:none !important;
+  border-right-width: none !important;
+}
+.spaceIndocator .ant-row .ant-form-item{
+  margin-bottom: 5px !important;
+  margin-top: 10px !important;
+}
+.priceInfo .ant-divider-horizontal{
+  margin: 0px !important;
+}
+.priceInfo .ant-input{
+  border: none !important;
+}
+.priceInfo .ant-input:focus, .ant-input-focused{
+  border-color:none !important;
+  border-right-width:none !important;
+  box-shadow:none !important;
+}
+.priceInfo .ant-form-item{
+  margin-bottom: 0px !important;
+}
+.checkOption.ant-form-item-explain .ant-form-item-explain-error{
+  margin-top: -50px !important;
+}
+.ImageAgainPickButton{
+  z-index: 10px !important;
+  background-color: #0013d4 !important;  
+}
+.Sale .ant-input{
+  border: none !important;
+}
+.Sale .ant-input:focus, .ant-input-focused{
+  border-color: none !important;
+  box-shadow: none !important;
+  border-right-width:none !important;
+}
+.Sale .ant-divider-horizontal{
+  margin:0px !important ;
+}
+
+.Sale .ant-form-item{ margin-bottom: 0px !important;}
+.rentDateCalendar .ant-picker-cell .ant-picker-cell-in-view{
+    height:42px  !important;
+    width:auto !important;
+}
+.rentDateCalendar{
+  width: 720px !important;
+}
+.rentDateCalendar .ant-picker-panel .ant-picker-body .ant-picker-content tbody tr{
+  height:42px  !important;
+    width:auto !important;
+}
+.rentDateCalendar  .ant-picker-panel .ant-picker-calendar-date{
+   height: 52px !important;
+}
+.rentDate .daynighttext .item{
+  margin-top: 15px !important;
+}
+.rentDate .daynighttext .item ul li {
+  font-size: 12px !important;
+}
+
+.rentDateCalendar .ant-picker-calendar-date-value{
+  width: 40px !important;
+}
+.pickWeekDayState .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+  border-radius: 10px !important;
+}
+.Surrender .ant-select-selector {
+  background:  rgba(0, 249, 184, 0.08) !important;
+   color: #76E8AA;
+   border: 1px solid #76E8AA !important ;
+}
+.NotSurrender .ant-select-selector {
+  background-color: #DEE2E9 !important;
+  color: black;
+  border: 1px solid black !important;
+}
+.Surrender.ant-select-arrow{
+   color: blueviolet;
+}
+.stateDivider{
+  margin: 12px !important;
+}
+.addVehicleForm .ant-form-item-control-input{
+  height: 24px !important ;
+  /* width: 318px !important; */
+}
+.addVehicleForm .ant-divider-horizontal{
+  margin: 0px  !important;
+ 
+}
+.addVehicleForm .ant-select-selector{
+  border: none !important;
+
+}
+
+.addVehicleForm .ant-form-item{
+  margin-bottom: 0px !important  ;
+}
+.addVehicleForm .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector{
+  box-shadow: none !important;
+  border-right-width: none !important;
+  border-color: none !important;
+}
+.addVehicleForm .ant-input{
+  border: none !important;
+}
+.addVehicleForm.ant-input:focus, .ant-input-focused{
+  box-shadow: none !important;
+  border-right-width: none !important;
+  border-color: none !important;
 }

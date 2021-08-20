@@ -3,6 +3,7 @@ import { useState, useEffect, useContext } from "react";
 import WalletLayout from "@components/layouts/WalletLayout";
 import WalletCard from "../../../components/WalletCard";
 import { calendarLocale } from "@constants/constants.js";
+import Helper from "@utils/helper";
 import WalletChart from "@components/WalletChart";
 import moment from "moment";
 import { callGet, callPost } from "@api/api";
@@ -23,7 +24,6 @@ const Wallet = () => {
   const fetchData = async () => {
     ctx.setIsLoading(true);
     await callGet(`/wallet/user`, null).then((res) => {
-      console.log(res, "resres");
       setuserData(res);
       if (res && res.pendingList && res.pendingList.length > 0) {
         setCalendarData(res.pendingList);
@@ -93,7 +93,15 @@ const Wallet = () => {
       <div>
         <div style={text}>
           <b>
-            Хүлээгдэж буй орлого: <text style={{ color: "blue" }}>86000₮</text>
+            Хүлээгдэж буй орлого:{" "}
+            <text style={{ color: "blue" }}>
+              {userData != null
+                ? userData.totalIncome
+                  ? Helper.formatValueReverse(userData.totalIncome + "")
+                  : 0
+                : null}
+              ₮
+            </text>
           </b>
         </div>
         <div>

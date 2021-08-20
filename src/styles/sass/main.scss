@@ -211,6 +211,8 @@ body {
   }
 }
 .fullModal {
+  min-height: 98vh !important;
+  max-height: 98vh !important;
   height: 98vh !important;
   width: 98vw !important;
   margin: 0 !important;
@@ -262,7 +264,6 @@ body {
         display: flex;
         justify-content: center;
         align-items: center;
-
         font-style: normal;
         font-weight: bold;
         font-size: 14px;
@@ -483,6 +484,7 @@ body {
     }
   }
 }
+
 .calendarViewer {
   position: absolute !important;
   margin-top: 20px;
