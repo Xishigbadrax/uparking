@@ -244,9 +244,12 @@ const Profile = () => {
     if (current === 0) {
       console.log(mainData, ",<---------main");
       const res = callPost("/parkingfirst", mainData);
-      console.log(res);
-      {
-        (res.status === 200 || res.status === 201) & setCurrent(current + 1);
+      if (!res || res === undefined) {
+        showMessage(messageType.FAILED.type, res.error);
+        return true;
+      } else {
+        console.log(res, 'res11111111111111')
+        setCurrent(current + 1);
       }
     }
     //Үндсэн зургийн мэдээллийг өгөгдлийн санруу бичих
