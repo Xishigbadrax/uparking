@@ -105,7 +105,7 @@ const Profile = () => {
   const [form] = Form.useForm();
   const [vehicleForm] = Form.useForm();
   const [vehicleEditForm] = Form.useForm();
-
+  const ctx = useContext(Context);
   const { userdata } = useContext(Context);
   const [realData, setRealData] = useState("");
   const [mainData, setMainData] = useState(null);
@@ -122,9 +122,23 @@ const Profile = () => {
   const [monthSale, setmonthSale] = useState(null);
   const [monthDescription, setMonthDescription] = useState();
   const [parkingSpaceData, setParkingSpaceData] = useState({});
+  const [message, setmessage] = useState("");
+  const [status, setstatus] = useState("");
+  const [title, settitle] = useState("");
+  const [messageShow, setmessageShow] = useState(false);
+  const [userFormData, setUserFormData] = useState({
+    email: null,
+    fbLink: null,
+    firstName: null,
+    homeAddress: null,
+    lastName: null,
+    registerNumber: null,
+    workAddress: null,
+  });
   useEffect(async () => {
     if (typeof userdata.firstName != "undefined") {
       setRealData(userdata);
+      console.log(userdata, "userdata shuu");
     }
   }, [userdata]);
   const onFinish123 = (values) => {};
@@ -229,10 +243,43 @@ const Profile = () => {
   };
   const handleCancel = () => {
     setIsVehileVisible(false);
+    setmessageShow(false);
   };
   const onFinish = (values) => {
     console.log("Undesen dataaa yma");
   };
+  const onFinishUserSave = (values) => {
+    console.log("form data", values);
+
+    userFormData.email = values.email;
+    userFormData.fbLink = values.fbLink;
+    userFormData.firstName = values.firstName;
+    userFormData.homeAddress = values.homeAddress;
+    userFormData.lastName = values.lastName;
+    userFormData.registerNumber = values.registerNumber;
+    userFormData.workAddress = values.workAddress;
+
+    setmessageShow(true);
+    setmessage("Та итгэлтэй байна уу");
+    setstatus("warning");
+    settitle("Баталгаажуулах");
+  };
+  const SaveUserInfo = async () => {
+    ctx.setIsLoading(true);
+    await callPost("/user/update", userFormData).then((result) => {
+      if (result.status == "success") {
+        setmessageShow(false);
+        setIsProfileNotEdit(true);
+      } else {
+        setstatus("failed");
+        settitle("Амжилтгүй");
+        setmessageShow(true);
+        setmessage(result);
+      }
+    });
+    ctx.setIsLoading(false);
+  };
+
   const onFinishSale = () => {
     console.log("sale Data--->");
   };
@@ -248,7 +295,7 @@ const Profile = () => {
         showMessage(messageType.FAILED.type, res.error);
         return true;
       } else {
-        console.log(res, 'res11111111111111')
+        console.log(res, "res11111111111111");
         setCurrent(current + 1);
       }
     }
@@ -460,7 +507,7 @@ const Profile = () => {
                 name="basic"
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 16 }}
-                onFinish={onFinish}
+                onFinish={onFinishUserSave}
                 onFinishFailed={onFinishFailed}
                 initialValues={realData}
               >
@@ -512,8 +559,22 @@ const Profile = () => {
                 >
                   <Input disabled={isProfileNotEdit} />
                 </Form.Item>
-
-                <Form.Item label="Хэрэглэгчийн дугаар:" name="id">
+                <Form.Item
+                  label="Гэрийн хаяг:"
+                  name="homeAddress"
+                  rules={[
+                    { required: true, message: "Гэрийн хаягаа оруулна уу" },
+                  ]}
+                >
+                  <Input disabled={isProfileNotEdit} />
+                </Form.Item>
+                <Form.Item
+                  label="Ажлын хаяг:"
+                  name="workAddress"
+                  rules={[
+                    { required: true, message: "Ажлын хаягаа оруулна уу" },
+                  ]}
+                >
                   <Input disabled={isProfileNotEdit} />
                 </Form.Item>
 
@@ -893,18 +954,14 @@ const Profile = () => {
         okButtonProps={{ style: { display: "none" } }}
         width={1000}
         footer={[
-          <div>
-            {current > 0 && (
-              <Button
-                onClick={goBack}
-              >
-                Буцах
-              </Button>
-            )}
-          </div>,
+          <div>{current > 0 && <Button onClick={goBack}>Буцах</Button>}</div>,
           <div>
             {current < steps.length - 1 && (
-              <Button onClick={onClickContinue} type="primary" className="buttonGo">
+              <Button
+                onClick={onClickContinue}
+                type="primary"
+                className="buttonGo"
+              >
                 Үргэлжлүүлэх
               </Button>
             )}
@@ -983,7 +1040,7 @@ const Profile = () => {
                 Үргэлжлүүлэх
               </Button>
             )} */}
-          {/* {current === steps.length - 1 && (
+        {/* {current === steps.length - 1 && (
               <Button onClick={onSavedSpaceFormData} className="buttonGo">
                 Дуусгах
               </Button>
@@ -991,7 +1048,14 @@ const Profile = () => {
           </Col>
         </Row> */}
       </Modal>
-      );
+      <Modal
+        visible={messageShow}
+        title="Мэдээлэл"
+        onOk={SaveUserInfo}
+        onCancel={handleCancel}
+      >
+        <Alert message={title} description={message} type="warning" />
+      </Modal>
     </ProfileLayout>
   );
 };
