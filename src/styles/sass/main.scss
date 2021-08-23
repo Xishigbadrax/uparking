@@ -211,14 +211,13 @@ body {
   }
 }
 .fullModal {
-  min-height: 98vh !important;
-  max-height: 98vh !important;
-  height: 98vh !important;
+
+  height: 100vh !important;
   width: 98vw !important;
   margin: 0 !important;
   top: 0 !important;
   .ant-modal-content {
-    height: 98vh !important;
+    height: 100vh !important;
     width: 98vw !important;
     margin: 0 !important;
     top: 0 !important;
