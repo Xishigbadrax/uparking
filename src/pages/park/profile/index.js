@@ -48,6 +48,10 @@ const steps = [
     content: "Үндсэн мэдээлэл",
   },
   {
+    title: "Зогсоолын үзүүлэлт",
+    content: "Зогсоолын үзүүлэлт",
+  },
+  {
     title: "Үндсэн зураг",
     content: "Үндсэн зураг",
   },
@@ -55,10 +59,7 @@ const steps = [
     title: "Зогсоолын зураг",
     content: "Зогсоолын зураг",
   },
-  {
-    title: "Зогсоолын үзүүлэлт",
-    content: "Зогсоолын үзүүлэлт",
-  },
+
   {
     title: "Үнийн мэдээлэл",
     content: "Үнийн мэдээлэл",
@@ -90,21 +91,8 @@ const Profile = () => {
   const [selectedZagwar, setSelectedZagwar] = useState({});
   const [selectedColor, setSelectedColor] = useState({});
   const [vehicles, setVehicles] = useState([]);
-  const [current, setCurrent] = useState(5);
-  const [residenceData, setResidenceData] = useState({});
-  const [MainImageData, setMainImageData] = useState({});
-  const [aimag, setAimag] = useState([]);
-  const [selectedAimag, setSelectedAimag] = useState({});
-  const [sum, setSum] = useState([]);
-  const [selectedSum, setSelectedSum] = useState({});
-  const [khoroo, setKhoroo] = useState([]);
-  const [selectedKhoroo, setSelectedKhoroo] = useState({});
-  const [residence, setResidence] = useState([]);
-  const [selectedResidence, setSelectedResidence] = useState({});
-  const [residenceblock, setResidenceBlock] = useState([]);
-  const [selectedResidenceBlock, setSelectedResidenceBlock] = useState({});
-  const [DoorNo, setDoorNo] = useState();
-  const [spaceNumber, setSpaceNumber] = useState();
+  const [current, setCurrent] = useState(6);
+
   const [isProfileNotEdit, setIsProfileNotEdit] = useState(true);
   const [isVehileVisible, setIsVehileVisible] = useState(false);
   const [isParkVisible, setIsParkVisible] = useState(false);
@@ -122,19 +110,7 @@ const Profile = () => {
   const [realData, setRealData] = useState("");
   const [mainData, setMainData] = useState(null);
   const [imageData, setImageData] = useState(null);
-  const [parkingSpaceData, setParkingSpaceData] = useState({
-    entranceLock: null,
-    floorNumber: null,
-    isNumbering: null,
-    parkingSpaceId: null,
-    residenceBlockId: null,
-    returnRoutes: null,
-    capacityId: null,
-    parkingId: null,
-    returnRoutes: null,
-    typeId: null,
-    typeOther: null,
-  });
+
   const [spaceData, setSpaceData] = useState(null);
   const [vehicleId, setVehicleId] = useState();
   const [updatedData, setUpdatedData] = useState();
@@ -145,6 +121,7 @@ const Profile = () => {
   const [monthId, setmonthId] = useState(null);
   const [monthSale, setmonthSale] = useState(null);
   const [monthDescription, setMonthDescription] = useState();
+  const [parkingSpaceData, setParkingSpaceData] = useState({});
   useEffect(async () => {
     if (typeof userdata.firstName != "undefined") {
       setRealData(userdata);
@@ -268,15 +245,12 @@ const Profile = () => {
       console.log(mainData, ",<---------main");
       const res = callPost("/parkingfirst", mainData);
       console.log(res);
-      const e = await callGet("/parkingfirst");
-      console.log(e.id);
-      setId(e.id);
       {
-        (res.status === 200 || res.status === 201) & setCurrent(current + 5);
+        (res.status === 200 || res.status === 201) & setCurrent(current + 1);
       }
     }
     //Үндсэн зургийн мэдээллийг өгөгдлийн санруу бичих
-    if (current === 1) {
+    if (current === 2) {
       getBase64(componentData.imageParkingGate.file.originFileObj, (image2) =>
         setImageParkingGate(image2)
       );
@@ -295,7 +269,7 @@ const Profile = () => {
       setCurrent(current + 1);
     }
     //зогсоолын зургийн мэдээллийг өгөгдлийн санруу бичих
-    if (current === 2) {
+    if (current === 3) {
       getBase64(componentData.imageFromGate.file.originFileObj, (image2) => {
         setImageFromGate(image2.substring(24));
       });
@@ -308,11 +282,18 @@ const Profile = () => {
         imageSpaceNumber: imageSpaceNumber,
         parkingSpaceId: id,
       });
-      console.log(res);
+      if (
+        res.status === 200 ||
+        res.status === 201 ||
+        res.status === "success"
+      ) {
+        setCurrent(current + 1);
+      }
     }
-    if (current === 3) {
+    if (current === 1) {
       console.log(componentData);
       setParkingSpaceData({
+        ...parkingSpaceData,
         entranceLock: componentData.entranceLock,
         floorNumber: componentData.floorNumber,
         isNumbering: componentData.isNumbering,
@@ -320,15 +301,34 @@ const Profile = () => {
         residenceBlockId: mainData.residenceBlockId,
         returnRoutes: componentData.returnRoutes[0],
         capacityId: componentData.capacityId,
-        parkingId: id,
+        typeId: componentData.typeId,
+        parkingId: 220,
+        typeOther: null,
+      });
+      const second = await callGet(
+        `/parkingsecond?parkingFloorId=${componentData.floorNumber}&residenceBlockId=${mainData.residenceBlockId}`
+      );
+      console.log(second);
+      const res = await callPost("/parkingspace", {
+        entranceLock: componentData.entranceLock,
+        floorNumber: componentData.floorNumber,
+        isNumbering: componentData.isNumbering,
+        parkingSpaceId: mainData.parkingSpaceId,
+        residenceBlockId: mainData.residenceBlockId,
+        returnRoutes: componentData.returnRoutes[0],
+        capacityId: componentData.capacityId,
         typeId: componentData.typeId,
         typeOther: " ",
       });
-      console.log(parkingSpaceData);
-      const res = await callPost("/parkingspace", parkingSpaceData);
       console.log(res);
-      if (res.status === 200 || res.status === 201) {
+      if (
+        res.status === 200 ||
+        res.status === 201 ||
+        res.status === "success"
+      ) {
         setCurrent(current + 1);
+        setId(res.message);
+        console.log(id);
       }
     }
     if (current === 4) {
@@ -338,22 +338,22 @@ const Profile = () => {
       let array = [
         {
           dateSplitId: data.daySplit.winterId,
-          timeSplitId: [data.daySplit.id],
+          timeSplitId: data.daySplit.id,
           priceForRenter: componentData.daySplitWinterPrice,
         },
         {
           dateSplitId: data.daySplit.summerId,
-          timeSplitId: [data.daySplit.id],
+          timeSplitId: data.daySplit.id,
           priceForRenter: componentData.daySplitSummerPrice,
         },
         {
           dateSplitId: data.nightSplit.winterId,
-          timeSplitId: [data.nightSplit.id],
-          priceForRenter: componentData.nighSplitWinterPrice,
+          timeSplitId: data.nightSplit.id,
+          priceForRenter: componentData.nightSplitWinterPrice,
         },
         {
           dateSplitId: data.nightSplit.summerId,
-          timeSplitId: [data.nightSplit.id],
+          timeSplitId: data.nightSplit.id,
           priceForRenter: componentData.nightSplitSummerPrice,
         },
         {
@@ -958,9 +958,10 @@ const Profile = () => {
         {/* <Row
           style={{
             marginLeft: "100px",
+            paddingBottom: "10px",
           }}
         >
-          <Col>
+          {/* <Col>
             {current > 0 && (
               <Button
                 onClick={goBack}
@@ -974,12 +975,12 @@ const Profile = () => {
             )}
           </Col>
           <Col offset={20}>
-            {current < steps.length - 1 && (
+            {current < steps.length - 0 && (
               <Button onClick={onClickContinue} className="buttonGo">
                 Үргэлжлүүлэх
               </Button>
-            )}
-            {current === steps.length - 1 && (
+            )} */}
+          {/* {current === steps.length - 1 && (
               <Button onClick={onSavedSpaceFormData} className="buttonGo">
                 Дуусгах
               </Button>

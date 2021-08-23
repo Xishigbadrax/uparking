@@ -37,10 +37,12 @@ const tofit = ({ data, lat, lng }) => {
 
   const DetailsDrawerOpen = async (id) => {
     setDetailsVisible(true);
-    const selectDataa = data.find((item) => item.id == id);
-    console.log(selectDataa);
+    // const selectDataa = data.parkingSpaceList.content.find(
+    //   (item) => item.id == id
+    // );
+    // console.log(selectDataa);
     setDrawerItem(selectDataa);
-    const a = await callGet(`/search/parkingspace/list/test`);
+    // const a = await callGet(`/search/parkingspace/list/test`);
     const priceData = await callGet(`/parkingspace/price?parkingSpaceId=${id}`);
     console.log("lat----------->", lat);
     const residenceData = await callGet(
@@ -92,254 +94,249 @@ const tofit = ({ data, lat, lng }) => {
     <div style={{ height: "828px", width: "100%", overflow: true }}>
       {data.map((item) => (
         <div key={item.residenceBlockId}>
-          <Card
-            className={`ResidenceCardList`}
-            style={{
-              height: "200px",
-
-              marginTop: "20px",
-              borderRadius: "10px",
-              background: "#FFFFFF",
-            }}
-          >
-            {" "}
-            {!item.hourlySearch ? (
-              <div
-                style={{
-                  width: "99px",
-                  position: "absolute",
-                  marginLeft: "16px",
-                  height: "13px",
-                  background: "GREEN",
-                  borderRadius: "0px 0px 4px 4px",
-                }}
-              >
-                <p
+          {item.parkingSpaceList.content.map((el) => (
+            <Card
+              key={el.parkingSpaceId}
+              className={`ResidenceCardList`}
+              style={{
+                height: "200px",
+                marginTop: "20px",
+                borderRadius: "10px",
+                background: "#FFFFFF",
+              }}
+            >
+              {item.hourlySearch ? (
+                <div
                   style={{
-                    display: "flex",
-                    fontSize: "8px",
-                    marginLeft: "24px",
+                    width: "99px",
+                    position: "absolute",
+                    marginLeft: "16px",
+                    height: "13px",
+                    background: "GREEN",
+                    borderRadius: "0px 0px 4px 4px",
                   }}
                 >
-                  Шууд захиалах
-                </p>
-              </div>
-            ) : (
-              <div></div>
-            )}
-            <div style={{ marginLeft: "10px", marginTop: "19px" }}>
-              <Row>
-                <Col>
-                  <Row>
-                    <Image
-                      src="/pexels-photo-3349460 1.png"
-                      height="140px"
-                      width="209.58px"
-                    ></Image>
-                  </Row>
-                  <Row>
-                    <div style={{ display: "flex " }}>
-                      <p style={{ fontSize: "15px", marginLeft: "20px" }}>
-                        <b>B1</b>
-                      </p>
-                      <Image
-                        src="/icons/1) Checkbox.png"
-                        width="20px"
-                        height="20px"
-                        style={{ marginLeft: "10px" }}
-                      />
-                      <Image
-                        src="/icons/temdegleegui.png"
-                        width="20px"
-                        height="10px"
-                        style={{ paddingLeft: "10px" }}
-                      />
-                      <Image
-                        src="/icons/haadag.png"
-                        width="20px"
-                        height="20px"
-                      />
-                      <Image
-                        src="/icons/Small SUV.png"
-                        width="20px"
-                        height="20px"
-                        style={{ paddingLeft: "10px" }}
-                      />
-                      <Image
-                        src="/icons/Up.png"
-                        width="20px"
-                        height="20px"
-                        style={{ paddingLeft: "10px" }}
-                      />
-                      <Image
-                        src="/icons/haadag.png"
-                        width="20px"
-                        height="20px"
-                        style={{ paddingLeft: "10px" }}
-                      />
-                      <Image
-                        src="/keyboard_arrow_down_24px.png"
-                        width="20px"
-                        height="20px"
-                        style={{ paddingLeft: "10px" }}
-                      />
-                    </div>
-                  </Row>
-                </Col>
-                <Col style={{ width: "210px", marginLeft: "10px" }}>
-                  <div
+                  <p
                     style={{
-                      position: "static",
-                      width: "232px",
-                      height: "24px",
-                      alignItems: "center",
                       display: "flex",
-                      flexDirection: "row",
+                      fontSize: "8px",
+                      marginLeft: "24px",
                     }}
                   >
-                    <p
+                    Шууд захиалах
+                  </p>
+                </div>
+              ) : (
+                <div></div>
+              )}
+              <div style={{ marginLeft: "10px", marginTop: "19px" }}>
+                <Row>
+                  <Col>
+                    <Row>
+                      <Image
+                        src="/pexels-photo-3349460 1.png"
+                        height="140px"
+                        width="209.58px"
+                      />
+                    </Row>
+                    <Row>
+                      <div style={{ display: "flex " }}>
+                        {/* <Image src={``} width="20px" height="20px" /> */}
+                        <Image
+                          src="/icons/1) Checkbox.png"
+                          width="20px"
+                          height="20px"
+                          style={{ marginLeft: "10px" }}
+                        />
+                        <Image
+                          src="/icons/temdegleegui.png"
+                          width="20px"
+                          height="10px"
+                          style={{ paddingLeft: "10px" }}
+                        />
+                        <Image
+                          src="/icons/haadag.png"
+                          width="20px"
+                          height="20px"
+                        />
+                        <Image
+                          src="/icons/Small SUV.png"
+                          width="20px"
+                          height="20px"
+                          style={{ paddingLeft: "10px" }}
+                        />
+                        <Image
+                          src="/icons/Up.png"
+                          width="20px"
+                          height="20px"
+                          style={{ paddingLeft: "10px" }}
+                        />
+                        <Image
+                          src="/icons/haadag.png"
+                          width="20px"
+                          height="20px"
+                          style={{ paddingLeft: "10px" }}
+                        />
+                        <Image
+                          src="/keyboard_arrow_down_24px.png"
+                          width="20px"
+                          height="20px"
+                          style={{ paddingLeft: "10px" }}
+                        />
+                      </div>
+                    </Row>
+                  </Col>
+                  <Col style={{ width: "210px", marginLeft: "10px" }}>
+                    <div
                       style={{
-                        fontFamily: "Helvetica",
-                        fontStyle: "normal",
-                        fontWeight: "bold",
+                        position: "static",
+                        width: "232px",
+                        height: "24px",
+                        alignItems: "center",
+                        display: "flex",
+                        flexDirection: "row",
                       }}
                     >
-                      <b>
-                        {item.keyword.split(" ")[0]}
-                        {item.keyword.split(" ")[1]}
-                        {item.keyword.split(" ")[2]}
-                      </b>
-                    </p>
-                    <div>
-                      <CheckCircleOutlined
-                        style={{
-                          color: "white",
-                          backgroundColor: "green",
-                          borderRadius: "7.5px",
-                          marginLeft: "1.5px",
-                        }}
-                        height="15px"
-                        width="15px"
-                      />
-                    </div>
-                  </div>
-                  <Row>
-                    <Rate
-                      style={{ width: "80px", height: "16px", order: "1" }}
-                      disabled
-                      defaultValue={2}
-                    />
-                  </Row>
-                  <Row>
-                    <div style={{ display: "flex" }}>
-                      <div
-                        style={{
-                          height: "16px",
-                          width: "16px",
-                          marginTop: "10px",
-                        }}
-                      >
-                        <Image
-                          src="/directions_car_24px.png"
-                          height="12px"
-                          width="10.67px"
-                          style={{ marginLeft: "2px" }}
-                        />
-                      </div>
                       <p
                         style={{
-                          width: "40px",
-                          height: "16px",
-                          marginTop: "12px",
-                          fontSize: "12px",
-                        }}
-                      >
-                        112м
-                      </p>
-                      <p
-                        style={{
-                          width: "75px",
-                          fontSize: "12px",
-                          textAlign: "center",
-                          marginTop: "12px",
-                          fontStyle: "regular",
-                        }}
-                      >
-                        Байршил ID
-                      </p>
-                      <p
-                        style={{
-                          width: "43px",
-                          fontSize: "12px",
-                          marginTop: "12px",
-                        }}
-                      >
-                        {item.locationId}
-                      </p>
-                    </div>
-                    <div style={{ display: "flex" }}>
-                      <div
-                        style={{
-                          marginTop: "10px",
-                        }}
-                      >
-                        <Image
-                          src="/icons/location_on_24px.png"
-                          height="16px"
-                          width="16px"
-                        />
-                      </div>
-                      <p
-                        style={{
-                          width: "226px",
-                          height: "32px",
-                          fontSize: "12px",
+                          fontFamily: "Helvetica",
                           fontStyle: "normal",
-                          alignItems: "center",
-                          textAlign: "justify",
-                          marginTop: "10px",
+                          fontWeight: "bold",
                         }}
                       >
-                        {item.keyword}
+                        <b>{item.residenceName}</b>
                       </p>
+                      <div>
+                        <CheckCircleOutlined
+                          style={{
+                            color: "white",
+                            backgroundColor: "green",
+                            borderRadius: "7.5px",
+                            marginLeft: "1.5px",
+                          }}
+                          height="15px"
+                          width="15px"
+                        />
+                      </div>
                     </div>
-                  </Row>
-                  <Row>
-                    <Col span={10}>
-                      <Button
-                        style={{
-                          width: "105px",
-                          height: "32px",
-                          fontSize: "11px",
-                          marginTop: "10px",
-                          borderRadius: "10px",
-                        }}
-                        onClick={() => showTimePickDrawer(item.id)}
-                      >
-                        Сул цаг харах
-                      </Button>
-                    </Col>
-                    <Col span={10} offset={4}>
-                      <Button
-                        style={{
-                          color: "blue",
-                          width: "105px",
-                          height: "32px",
-                          marginTop: "10px",
-                          fontSize: "11px",
-                        }}
-                        className={`freeTimePick`}
-                        onClick={() => DetailsDrawerOpen(item.id)}
-                      >
-                        Дэлгэрэнгүй
-                      </Button>
-                    </Col>
-                  </Row>
-                </Col>
-                <Row></Row>
-              </Row>
-            </div>
-          </Card>
+                    <Row>
+                      <Rate
+                        style={{ width: "80px", height: "16px", order: "1" }}
+                        disabled
+                        defaultValue={2}
+                      />
+                    </Row>
+                    <Row>
+                      <div style={{ display: "flex" }}>
+                        <div
+                          style={{
+                            height: "16px",
+                            width: "16px",
+                            marginTop: "10px",
+                          }}
+                        >
+                          <Image
+                            src="/directions_car_24px.png"
+                            height="12px"
+                            width="10.67px"
+                            style={{ marginLeft: "2px" }}
+                          />
+                        </div>
+                        <p
+                          style={{
+                            width: "40px",
+                            height: "16px",
+                            marginTop: "12px",
+                            fontSize: "12px",
+                          }}
+                        >
+                          112м
+                        </p>
+                        <p
+                          style={{
+                            width: "75px",
+                            fontSize: "12px",
+                            textAlign: "center",
+                            marginTop: "12px",
+                            fontStyle: "regular",
+                          }}
+                        >
+                          Байршил ID
+                        </p>
+                        <p
+                          style={{
+                            width: "43px",
+                            fontSize: "12px",
+                            marginTop: "12px",
+                          }}
+                        >
+                          {item.locationId}
+                        </p>
+                      </div>
+                      <div style={{ display: "flex" }}>
+                        <div
+                          style={{
+                            marginTop: "10px",
+                          }}
+                        >
+                          <Image
+                            src="/icons/location_on_24px.png"
+                            height="16px"
+                            width="16px"
+                          />
+                        </div>
+                        <p
+                          style={{
+                            width: "226px",
+                            height: "32px",
+                            fontSize: "12px",
+                            fontStyle: "normal",
+                            alignItems: "center",
+                            textAlign: "justify",
+                            marginTop: "10px",
+                          }}
+                        >
+                          {item.address}
+                        </p>
+                      </div>
+                    </Row>
+                    <Row>
+                      <Col span={10}>
+                        <Button
+                          style={{
+                            width: "105px",
+                            height: "32px",
+                            fontSize: "11px",
+                            marginTop: "10px",
+                            borderRadius: "10px",
+                          }}
+                          onClick={() => showTimePickDrawer(item.id)}
+                        >
+                          Сул цаг харах
+                        </Button>
+                      </Col>
+                      <Col span={10} offset={4}>
+                        <Button
+                          style={{
+                            color: "blue",
+                            width: "105px",
+                            height: "32px",
+                            marginTop: "10px",
+                            fontSize: "11px",
+                          }}
+                          className={`freeTimePick`}
+                          onClick={() => DetailsDrawerOpen(el.id)}
+                        >
+                          Дэлгэрэнгүй
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Col>
+                  <Row></Row>
+                </Row>
+              </div>
+            </Card>
+          ))}
           {detailVisible && (
             <Drawer
               width="100%"
@@ -370,9 +367,9 @@ const tofit = ({ data, lat, lng }) => {
                       }}
                     >
                       <b>
-                        {drawerItem.keyword.split(" ")[0]}
+                        {/* {drawerItem.keyword.split(" ")[0]}
                         {drawerItem.keyword.split(" ")[1]}
-                        {drawerItem.keyword.split(" ")[2]}
+                        {drawerItem.keyword.split(" ")[2]} */}
                       </b>
                     </p>
                   </Col>
@@ -440,7 +437,7 @@ const tofit = ({ data, lat, lng }) => {
                           marginTop: "12px",
                         }}
                       >
-                        {drawerItem.locationId}
+                        {/* {drawerItem.locationId} */}
                       </p>
                     </div>
                   </Col>
@@ -471,7 +468,7 @@ const tofit = ({ data, lat, lng }) => {
                           marginLeft: "24px",
                         }}
                       >
-                        {drawerItem.keyword}
+                        {/* {drawerItem.keyword} */}
                       </p>
                     </div>
                   </Col>
@@ -1119,7 +1116,6 @@ const tofit = ({ data, lat, lng }) => {
           )}
         </div>
       ))}
-      {/* <Pagination onChange={onChange} total={50} /> */}
     </div>
   );
 };

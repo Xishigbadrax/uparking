@@ -1728,7 +1728,7 @@
   background-image: url("../../../public/add.png");
 }
 .events {
-  height: 30px;
+  height: 20px;
 }
 /* .ant-picker-cell {
   height: 50px;
@@ -2131,14 +2131,21 @@
    height: 52px !important;
 }
 .rentDate .daynighttext .item{
-  margin-top: 15px !important;
+  margin-top: 28px !important;
 }
 .rentDate .daynighttext .item ul li {
+  height: 10px !important;
   font-size: 12px !important;
 }
+.rentDate .daynighttext .item ul{
+  margin-top: 28px;
+}
+
 
 .rentDateCalendar .ant-picker-calendar-date-value{
   width: 40px !important;
+  font-size: 10px !important;
+  height: 13px !important;
 }
 .pickWeekDayState .ant-select:not(.ant-select-customize-input) .ant-select-selector {
   border-radius: 10px !important;
@@ -2187,4 +2194,23 @@
   box-shadow: none !important;
   border-right-width: none !important;
   border-color: none !important;
+}
+.Success{
+  background:  rgba(0, 249, 184, 0.08) !important;
+  color: #76E8AA;
+  border: 1px solid #76E8AA !important ;
+   font-size: 15px;
+   height: 10px;
+   margin-left: 10px;
+   border-radius: 5px;
+   padding: 1px;
+}
+.NotSuccess{
+  background-color: #DEE2E9 !important;
+  padding: 1px;
+  color: black;
+  width: 70px !important;
+  border: 1px solid black !important;
+  border-radius: 5px ;
+  margin-left: 10px;
 }

@@ -13,7 +13,7 @@ moment.updateLocale("mn", {
 
 const rentDate = () => {
   const [filterType, setFilterType] = useState("");
-  const [weekData, setWeekData] = useState({});
+  const [weekData, setWeekData] = useState();
   const [dayState, setDayState] = useState("Боломжтой");
   const [checked, setChecked] = useState();
 
@@ -128,41 +128,45 @@ const rentDate = () => {
       ],
     };
     setWeekData(data);
-    console.log(weekData);
-    console.log(data);
   };
-
   const timeSplit = [
     { id: 1, name: "Боломжтой" },
     { id: 2, name: "Боломжгүй" },
   ];
-
   function getListData(value) {
-    let listData;
+    let array = [];
 
-    console.log(value.day());
-    switch (value.day()) {
-      case weekData.day:
-        listData = [{ type: "warning", content: "This is warning event." }];
-        break;
-
-      default:
-    }
-    return listData || [];
+    weekData.dayOfWeek.map((item) => {
+      switch (item.day) {
+        case value.day():
+          if (item.spaceStatusDescription === "Боломжтой") {
+            array.push({
+              type: item.spaceStatusDescription,
+              content: item.timeSplitDescription,
+            });
+          }
+          if (item.spaceStatusDescription === "Боломжгүй") {
+            array.push({
+              type: item.spaceStatusDescription,
+              content: item.timeSplitDescription,
+            });
+          }
+          break;
+        default:
+      }
+    });
+    return array || [];
   }
-
   function dateCellRender(value) {
     const listData = getListData(value);
+    console.log(listData);
     return (
       <ul className="events">
         {listData.map((item) => (
           <li key={item.content} style={{ height: "15px" }}>
             <span
-              style={{
-                backgroundColor: "red",
-                borderRadius: "10px",
-                fontSize: "5px",
-              }}
+              style={{ fontSize: "10px" }}
+              className={item.type === "Боломжтой" ? "Success" : "NotSuccess"}
             >
               {item.type}
             </span>

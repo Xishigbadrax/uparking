@@ -160,6 +160,7 @@ const fsearch = () => {
     //   if (inputData) {
     const data = await callGet(`/search/test/input?keywordId=${keywordId}`);
     console.log(data);
+    setSearchedData(data);
     //     // setSearchedData(cutData);
     //   } else {
     //     const data = await callGet(
@@ -175,6 +176,14 @@ const fsearch = () => {
   };
   function onOk(value) {
     console.log("onOk: ", value);
+  }
+  function disabledDate(current) {
+    // Can not select days before today and today
+    return current && current < moment().endOf("day");
+  }
+  function disabledDate(current) {
+    // Can not select days before today and today
+    return current && current < moment().endOf("day");
   }
   function callback(key) {
     console.log(key);
@@ -193,11 +202,11 @@ const fsearch = () => {
             onSearch={onChangeAddress}
             onSelect={onSelect}
           >
-            {/* <Input
+            <Input
               style={{ height: "50px", borderRadius: "15px" }}
               placeholder="Хаяг"
               iconprefix={<SearchOutlined />}
-            /> */}
+            />
           </AutoComplete>
         </Col>
         <Col
@@ -244,6 +253,7 @@ const fsearch = () => {
               style={{ width: "100%" }}
               onChange={handleStartDateChange}
               placeholder="Сонгох"
+              disabledDate={disabledDate}
               suffixIcon={
                 <div>
                   <DownOutlined />
@@ -269,6 +279,7 @@ const fsearch = () => {
             <DatePicker
               style={{ width: "100%" }}
               onChange={handleEndDateChange}
+              disabledDate={disabledDate}
               placeholder="Сонгох"
               suffixIcon={
                 <div>
@@ -337,7 +348,7 @@ const fsearch = () => {
                 key="1"
                 style={{ width: "100%" }}
               >
-                <ToFit data={searchedData} lat={latitude} lng={longitude} />
+                <ToFit data={searchedData} lat={latitude} lng={longitude} />;
               </TabPane>
               <TabPane
                 tab={
