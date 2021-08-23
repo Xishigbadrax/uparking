@@ -206,7 +206,7 @@ const Dashboard = () => {
           showMessage(messageType.FAILED.type, defaultMsg.dataError);
           return;
         } else {
-          console.log(res, "resresres22");
+          console.log(res, "resresres22111111");
           const locationarray = [];
           if (res.length > 0) {
             res.forEach((item, key) => {

@@ -1714,15 +1714,15 @@
 
 /* Go button*/
 .buttonGooo {
-  background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
+  /* background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
   border-radius: 8px;
   height: 40px !important;
-  width: 100% !important;
+  width: 100% !important; */
 }
 .buttonGo {
-  background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
-  border-radius: 8px;
-  position: absolute;
+  /* background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
+  border-radius: 8px; */
+  /* position: absolute; */
 }
 .addButton {
   background-image: url("../../../public/add.png");
@@ -1822,9 +1822,9 @@
 .ant-drawer-right.ant-drawer-open .ant-drawer-content-wrapper {
   box-shadow: none;
 }
-.fullModal .ant-modal-content {
+/* .fullModal .ant-modal-content {
   height: auto !important;
-} 
+}  */
 /* .ant-col .ant-col-3{
    background-color: #00f9b8;
 } */

@@ -91,7 +91,7 @@ const tofit = ({ data, lat, lng }) => {
   return (
     <div style={{ height: "828px", width: "100%", overflow: true }}>
       {data.map((item) => (
-        <div key={item.id}>
+        <div key={item.residenceBlockId}>
           <Card
             className={`ResidenceCardList`}
             style={{
@@ -101,7 +101,6 @@ const tofit = ({ data, lat, lng }) => {
               borderRadius: "10px",
               background: "#FFFFFF",
             }}
-            key={item.id}
           >
             {" "}
             {!item.hourlySearch ? (

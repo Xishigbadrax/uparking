@@ -238,6 +238,7 @@ body {
     }
     .ant-modal-body {
       height: calc(98vh - 110px);
+      overflow: auto;
       .titleV {
         .topV {
           font-weight: bold;

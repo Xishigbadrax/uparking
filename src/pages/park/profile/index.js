@@ -881,7 +881,7 @@ const Profile = () => {
       <Modal
         className="fullModal"
         title="Авто зогсоол"
-        height="820px"
+        style={{ minHeight: "800px", height: "auto" }}
         centered
         visible={isParkVisible}
         // onOk={() => setIsParkVisible(false)}
@@ -889,7 +889,29 @@ const Profile = () => {
         cancelButtonProps={{ style: { display: "none" } }}
         okButtonProps={{ style: { display: "none" } }}
         width={1000}
-        footer={null}
+        footer={[
+          <div>
+            {current > 0 && (
+              <Button
+                onClick={goBack}
+              >
+                Буцах
+              </Button>
+            )}
+          </div>,
+          <div>
+            {current < steps.length - 1 && (
+              <Button onClick={onClickContinue} type="primary" className="buttonGo">
+                Үргэлжлүүлэх
+              </Button>
+            )}
+            {/* {current === steps.length - 1 && (
+              <Button onClick={onSavedSpaceFormData} className="buttonGo">
+                Дуусгах
+              </Button>
+            )} */}
+          </div>,
+        ]}
       >
         <Row width={1266}>
           <Col span={22} offset={1}>
@@ -933,7 +955,7 @@ const Profile = () => {
               (steps[current].title === "Түрээслэх өдрүүд" && <RentDate />)}
           </Col>
         </Row>
-        <Row
+        {/* <Row
           style={{
             marginLeft: "100px",
           }}
@@ -963,7 +985,7 @@ const Profile = () => {
               </Button>
             )}
           </Col>
-        </Row>
+        </Row> */}
       </Modal>
       );
     </ProfileLayout>
