@@ -50,6 +50,9 @@ const rentDate = () => {
   const [celebdayNight, setcelebdayNight] = useState("Боломжтой");
   const [isCalendar, setisCalendar] = useState("Үгүй");
 
+  const [daySplitId, setDaySplitId] = useState();
+  const [nightSplitId, setNightSplit] = useState();
+
   const onChangeViewCalendar = (e) => {
     setChecked(e.target.value);
 
@@ -68,6 +71,7 @@ const rentDate = () => {
         {
           day: 2,
           timeSplitDescription: "Өдөр",
+
           spaceStatusDescription: tuesdayMorning,
         },
         {
@@ -192,8 +196,11 @@ const rentDate = () => {
     ) : null;
   }
   useEffect(async () => {
-    // const timeSplit = await callGet("/parkingspace/timesplit");
-    // console.log(timeSplit);
+    const data = await callGet("/parkingspace/timesplit");
+    console.log(data);
+    setDaySplitId(data.daySplit.id);
+    setNightSplit(data.nightSplit.id);
+    console.log(daySplitId, nightSplitId);
   }, []);
   return (
     <div>
@@ -206,7 +213,7 @@ const rentDate = () => {
             marginLeft: "100px",
           }}
         >
-          <b> Түрээслэх үнийн мэдээлэл</b>
+          <b> Түрээслэх өдөр</b>
         </p>
       </Row>
       <Row>

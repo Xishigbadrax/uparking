@@ -35,10 +35,10 @@ const mainImage = (props) => {
   const [loadingDirect, setLoadingDirect] = useState(false);
   const [loadingExit, setLoadingExit] = useState(false);
   const [loadingExitImage, setLoadingExitImage] = useState(false);
-  useEffect(async () => {
-    const e = await callGet("/parkingfirst");
-    console.log("-------->", e);
-  }, []);
+  // useEffect(async () => {
+  //   const e = await callGet("/parkingfirst");
+  //   console.log("-------->", e);
+  // }, []);
   const onChangeDoorExitImage = (info) => {
     if (info.file.status === "uploading") {
       setLoadingExitImage(true);

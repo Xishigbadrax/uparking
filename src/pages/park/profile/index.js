@@ -238,8 +238,8 @@ const Profile = () => {
   };
 
   const onClickContinue = async () => {
-    const componentData = form.getFieldsValue();
     form.validateFields();
+    const componentData = form.getFieldsValue();
     //Үндсэн мэдээллийн өгөгдлийг өгөгдлийн санруу
     if (current === 0) {
       console.log(mainData, ",<---------main");
@@ -248,7 +248,7 @@ const Profile = () => {
         showMessage(messageType.FAILED.type, res.error);
         return true;
       } else {
-        console.log(res, 'res11111111111111')
+        console.log(res, "res11111111111111");
         setCurrent(current + 1);
       }
     }
@@ -285,12 +285,12 @@ const Profile = () => {
         imageSpaceNumber: imageSpaceNumber,
         parkingSpaceId: id,
       });
-      if (
-        res.status === 200 ||
-        res.status === 201 ||
-        res.status === "success"
-      ) {
-        setCurrent(current + 1);
+      if (!res || res === undefined) {
+        showMessage(messageType.FAILED.type, res.error);
+        return true;
+      } else {
+        console.log(res, "res11111111111111");
+        setCurrent(current + 2);
       }
     }
     if (current === 1) {
@@ -324,14 +324,12 @@ const Profile = () => {
         typeOther: " ",
       });
       console.log(res);
-      if (
-        res.status === 200 ||
-        res.status === 201 ||
-        res.status === "success"
-      ) {
+      if (!res || res === undefined) {
+        showMessage(messageType.FAILED.type, res.error);
+        return true;
+      } else {
+        console.log(res, "res11111111111111");
         setCurrent(current + 1);
-        setId(res.message);
-        console.log(id);
       }
     }
     if (current === 4) {
@@ -341,36 +339,35 @@ const Profile = () => {
       let array = [
         {
           dateSplitId: data.daySplit.winterId,
-          timeSplitId: data.daySplit.id,
           priceForRenter: componentData.daySplitWinterPrice,
+          timeSplitId: [data.daySplit.id],
         },
         {
           dateSplitId: data.daySplit.summerId,
-          timeSplitId: data.daySplit.id,
           priceForRenter: componentData.daySplitSummerPrice,
+          timeSplitId: [data.daySplit.id],
         },
         {
           dateSplitId: data.nightSplit.winterId,
-          timeSplitId: data.nightSplit.id,
           priceForRenter: componentData.nightSplitWinterPrice,
+          timeSplitId: [data.nightSplit.id],
         },
         {
           dateSplitId: data.nightSplit.summerId,
-          timeSplitId: data.nightSplit.id,
           priceForRenter: componentData.nightSplitSummerPrice,
+          timeSplitId: [data.nightSplit.id],
         },
         {
           dateSplitId: data.fullDaySplit.winterId,
-          timeSplitId: [data.fullDaySplit.id],
           priceForRenter: componentData.fullDaySplitWinterPrice,
+          timeSplitId: [data.fullDaySplit.id],
         },
         {
           dateSplitId: data.fullDaySplit.summerId,
-          timeSplitId: [data.fullDaySplit.id],
           priceForRenter: componentData.fullDaySplitSummerPrice,
+          timeSplitId: [data.fullDaySplit.id],
         },
       ];
-
       let formData = {
         hourlyPrice: Number(componentData.hourlyPrice),
         parkingSpaceId: id,
@@ -399,7 +396,8 @@ const Profile = () => {
           }
         });
       }
-      let formData = {
+
+      const ress = await callPost("/parkingspace/sale", {
         parkingSpaceId: id,
         parkingSpaceSale: [
           {
@@ -413,13 +411,14 @@ const Profile = () => {
             saleSplitDescription: monthDescription,
           },
         ],
-      };
-      console.log(formData);
-      if (formData) {
-        const a = await callPost("/parkingspace/sale", {
-          formData,
-        });
-        console.log(a);
+      });
+      console.log(ress);
+      if (!ress || ress === undefined) {
+        showMessage(messageType.FAILED.type, ress.error);
+        return true;
+      } else {
+        console.log(ress, "res11111111111111");
+        setCurrent(current + 1);
       }
     }
   };
@@ -893,18 +892,14 @@ const Profile = () => {
         okButtonProps={{ style: { display: "none" } }}
         width={1000}
         footer={[
+          <div>{current > 0 && <Button onClick={goBack}>Буцах</Button>}</div>,
           <div>
-            {current > 0 && (
+            {current < steps.length - 0 && (
               <Button
-                onClick={goBack}
+                onClick={onClickContinue}
+                type="primary"
+                className="buttonGo"
               >
-                Буцах
-              </Button>
-            )}
-          </div>,
-          <div>
-            {current < steps.length - 1 && (
-              <Button onClick={onClickContinue} type="primary" className="buttonGo">
                 Үргэлжлүүлэх
               </Button>
             )}
@@ -983,7 +978,7 @@ const Profile = () => {
                 Үргэлжлүүлэх
               </Button>
             )} */}
-          {/* {current === steps.length - 1 && (
+        {/* {current === steps.length - 1 && (
               <Button onClick={onSavedSpaceFormData} className="buttonGo">
                 Дуусгах
               </Button>
