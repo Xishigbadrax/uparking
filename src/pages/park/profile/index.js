@@ -888,7 +888,32 @@ const Profile = () => {
         cancelButtonProps={{ style: { display: "none" } }}
         okButtonProps={{ style: { display: "none" } }}
         width={1000}
-        footer={null}
+        footer={
+          ((
+            <div>
+              {current > 0 && (
+                <Button
+                  onClick={goBack}
+                  style={{
+                    color: "blue",
+                    position: "absolute",
+                  }}
+                >
+                  Буцах
+                </Button>
+              )}
+            </div>
+          ),
+          (
+            <div>
+              {current < steps.length - 0 && (
+                <Button onClick={onClickContinue} className="buttonGo">
+                  Үргэлжлүүлэх
+                </Button>
+              )}
+            </div>
+          ))
+        }
       >
         <Row width={1266}>
           <Col span={22} offset={1}>
@@ -938,7 +963,7 @@ const Profile = () => {
             paddingBottom: "10px",
           }}
         >
-          <Col>
+          {/* <Col>
             {current > 0 && (
               <Button
                 onClick={goBack}
@@ -956,13 +981,13 @@ const Profile = () => {
               <Button onClick={onClickContinue} className="buttonGo">
                 Үргэлжлүүлэх
               </Button>
-            )}
-            {/* {current === steps.length - 1 && (
+            )} */}
+          {/* {current === steps.length - 1 && (
               <Button onClick={onSavedSpaceFormData} className="buttonGo">
                 Дуусгах
               </Button>
             )} */}
-          </Col>
+          {/* </Col> */}
         </Row>
       </Modal>
       );
