@@ -4,6 +4,9 @@ import { Drawer, Divider } from "antd";
 import { useState, useEffect } from "react";
 import { Radio } from "antd";
 import Image from "next/image";
+import { Collapse } from "antd";
+const IMG_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
+const { Panel } = Collapse;
 import {
   CloseOutlined,
   ArrowLeftOutlined,
@@ -26,8 +29,8 @@ const tofit = ({ data, lat, lng }) => {
   console.log(data);
   const [PickTimevisible, setPickTimeVisible] = useState(false);
   const [detailVisible, setDetailsVisible] = useState(false);
-  const [selectItem, setSelected] = useState();
-  const [drawerItem, setDrawerItem] = useState({});
+  const [selectItem, setSelected] = useState([]);
+  const [ResidenceItem, setResidenceDrawerItem] = useState({});
   const [dayOfNumber, setDayofNumber] = useState(0);
   const [nightOfNumber, setNightOfNumber] = useState(0);
   const [fullDayNumber, setFullDayNumber] = useState(0);
@@ -36,13 +39,17 @@ const tofit = ({ data, lat, lng }) => {
   const [chooseTimeVisible, setChooseTimeVisible] = useState(false);
   const [selectedDayTab, setSelectedDayTab] = useState("day");
 
+  const [priceForRenter1, setpriceForRenter1] = useState(0);
+  const [priceForRenter2, setpriceForRenter2] = useState(0);
+  const [priceForRenter3, setpriceForRenter3] = useState(0);
+
   const DetailsDrawerOpen = async (id) => {
     setDetailsVisible(true);
     // const selectDataa = data.parkingSpaceList.content.find(
     //   (item) => item.id == id
     // );
     // console.log(selectDataa);
-    console.log(id);
+    // console.log(id);
     // setDrawerItem(selectDataa);
     // const a = await callGet(`/search/parkingspace/list/test`);
     const priceData = await callGet(`/parkingspace/price?parkingSpaceId=${id}`);
@@ -50,11 +57,27 @@ const tofit = ({ data, lat, lng }) => {
     const residenceData = await callGet(
       `/search/input/test?keywordId=${id}&latitude=${lat}&longitude=${lng}`
     );
-    console.log(residenceData);
+    const a = data.find((item) => item.el.parkingSpaceId === id);
+    console.log(a);
+    setResidenceDrawerItem(a.item);
+
     setSelected(priceData);
-    console.log(selectItem);
-    // const saleData = await callGet(`/parkingspace/sale?parkingSpaceId=${id}`);
-    // setSaleData(saleData);
+    console.log(priceData);
+    {
+      priceData.priceList.map((item) => {
+        if (item.dateString === "Зуны хуваарь") {
+          setpriceForRenter1(item.priceForRenter1);
+          setpriceForRenter2(item.priceForRenter2);
+          setpriceForRenter3(item.priceForRenter3);
+        }
+      });
+    }
+    const sale = await callGet(`/parkingSpace/sale?parkingSpaceId=${id}`);
+    console.log(sale);
+    const space = await callGet(
+      `/search/parkingspace/test?parkingSpaceId=${id}`
+    );
+    console.log("spacee------------->", space);
     const vehicle = await callGet(`/user/vehicle/list`);
     setVehiclesData(vehicle);
   };
@@ -80,7 +103,6 @@ const tofit = ({ data, lat, lng }) => {
     setChooseTimeVisible(true);
   };
   const onChange = () => {};
-
   const getSelectedDate = async (data) => {
     console.log(data, "dataaaaaaaa");
     const alength = data.length;
@@ -365,7 +387,7 @@ const tofit = ({ data, lat, lng }) => {
                     textAlign: "justify",
                   }}
                 >
-                  <b>бажбжабжа</b>
+                  <b>{ResidenceItem.residenceName}</b>
                 </p>
               </Col>
               <Col span={1}>
@@ -463,7 +485,7 @@ const tofit = ({ data, lat, lng }) => {
                       marginLeft: "24px",
                     }}
                   >
-                    {/* {drawerItem.keyword} */}
+                    {ResidenceItem.address}
                   </p>
                 </div>
               </Col>
@@ -517,7 +539,13 @@ const tofit = ({ data, lat, lng }) => {
                           justifyItems: "center",
                         }}
                         className={`SpaceIcons`}
-                      ></div>
+                      >
+                        <Collapse onChange={callback} className={""}>
+                          <Panel header="This is panel header 1" key="1">
+                            <p>йййййййййййййй</p>
+                          </Panel>
+                        </Collapse>
+                      </div>
                     </Row>
                     <Row
                       height=" 24px"
@@ -565,7 +593,15 @@ const tofit = ({ data, lat, lng }) => {
                               color: "#141A29",
                             }}
                           >
-                            {selectItem ? (
+                            <p
+                              style={{
+                                fontFamily: "Roboto",
+                                fontSize: "14px",
+                                textAlign: "center",
+                                fontStyle: "normal",
+                                fontWeight: "700",
+                              }}
+                            >
                               <p
                                 style={{
                                   fontFamily: "Roboto",
@@ -575,32 +611,22 @@ const tofit = ({ data, lat, lng }) => {
                                   fontWeight: "700",
                                 }}
                               >
-                                {selectItem.priceForRenter1}
+                                {priceForRenter1}
                               </p>
-                            ) : (
-                              <p
-                                style={{
-                                  fontFamily: "Roboto",
-                                  fontSize: "14px",
-                                  textAlign: "center",
-                                  fontStyle: "normal",
-                                  fontWeight: "700",
-                                }}
-                              >
-                                awdaw
-                              </p>
-                            )}
+                            </p>
                           </div>
-                          <p
-                            style={{
-                              fontStyle: "normal",
-                              fontSize: "12px",
-                              textAlign: "center",
-                              color: "#35446D",
-                            }}
-                          >
-                            1 Өдөр
-                          </p>
+                          <div>
+                            <p
+                              style={{
+                                fontStyle: "normal",
+                                fontSize: "12px",
+                                textAlign: "center",
+                                color: "#35446D",
+                              }}
+                            >
+                              1 Өдөр
+                            </p>
+                          </div>
                         </div>
                       </Col>
                       <Divider
@@ -621,38 +647,19 @@ const tofit = ({ data, lat, lng }) => {
                       >
                         <div style={{ width: "100%" }}>
                           <div style={{ color: "#141A29" }}>
-                            {selectItem === null ? (
-                              selectItem.map((item) => {
-                                <p
-                                  style={{
-                                    marginLeft: "10%",
-                                    width: "80%",
-                                    fontFamily: "Roboto",
-                                    fontSize: "14px",
-                                    textAlign: "center",
-                                    fontStyle: "normal",
-                                    fontWeight: "700",
-                                  }}
-                                >
-                                  {item.dateString === "Зуны хуваарь" &&
-                                    item.priceForRenter2}
-                                </p>;
-                              })
-                            ) : (
-                              <p
-                                style={{
-                                  marginLeft: "10%",
-                                  width: "80%",
-                                  fontFamily: "Roboto",
-                                  fontSize: "14px",
-                                  textAlign: "center",
-                                  fontStyle: "normal",
-                                  fontWeight: "700",
-                                }}
-                              >
-                                dwawd
-                              </p>
-                            )}
+                            <p
+                              style={{
+                                marginLeft: "10%",
+                                width: "80%",
+                                fontFamily: "Roboto",
+                                fontSize: "14px",
+                                textAlign: "center",
+                                fontStyle: "normal",
+                                fontWeight: "700",
+                              }}
+                            >
+                              {priceForRenter2}
+                            </p>
                           </div>
                           <p
                             style={{
@@ -679,35 +686,19 @@ const tofit = ({ data, lat, lng }) => {
                       <Col span={7}>
                         <div style={{ width: "100%" }}>
                           <div style={{ color: "#141A29" }}>
-                            {selectItem === null ? (
-                              <p
-                                style={{
-                                  marginLeft: "10%",
-                                  width: "80%",
-                                  fontFamily: "Roboto",
-                                  fontSize: "14px",
-                                  textAlign: "center",
-                                  fontStyle: "normal",
-                                  fontWeight: "700",
-                                }}
-                              >
-                                {selectItem.priceForRenter3}
-                              </p>
-                            ) : (
-                              <p
-                                style={{
-                                  marginLeft: "10%",
-                                  width: "80%",
-                                  fontFamily: "Roboto",
-                                  fontSize: "14px",
-                                  textAlign: "center",
-                                  fontStyle: "normal",
-                                  fontWeight: "700",
-                                }}
-                              >
-                                dwawd
-                              </p>
-                            )}
+                            <p
+                              style={{
+                                marginLeft: "10%",
+                                width: "80%",
+                                fontFamily: "Roboto",
+                                fontSize: "14px",
+                                textAlign: "center",
+                                fontStyle: "normal",
+                                fontWeight: "700",
+                              }}
+                            >
+                              {priceForRenter3}
+                            </p>
                           </div>
                           <p
                             style={{

@@ -108,7 +108,7 @@ const Profile = () => {
   const [vehicleEditForm] = Form.useForm();
 
   const [residenceBlockId, setResidenceBlockId] = useState();
-  const [parkingSpaceId, setParkingSpaceId] = useState();
+  const [parkingSpaceId, setParkingSpaceId] = useState(null);
 
   const { userdata } = useContext(Context);
   const [realData, setRealData] = useState("");
@@ -245,16 +245,36 @@ const Profile = () => {
     const componentData = form.getFieldsValue();
     //Үндсэн мэдээллийн өгөгдлийг өгөгдлийн санруу
     if (current === 0) {
-      console.log(mainData, ",<---------main");
       const res = await callPost("/parkingfirst", mainData);
       setResidenceBlockId(mainData.residenceBlockId);
-      setParkingSpaceId(mainData.parkingSpaceId);
       if (res.status === "success") {
         setCurrent(current + 1);
       }
+    } else if (current === 1) {
+      const second = await callGet(
+        `/parkingsecond?parkingFloorId=${componentData.floorNumber}&residenceBlockId=${mainData.residenceBlockId}`
+      );
+      setParkId(second.parkingId);
+      console.log(second);
+      const res = await callPost("/parkingspace", {
+        entranceLock: componentData.entranceLock,
+        floorNumber: componentData.floorNumber,
+        isNumbering: componentData.isNumbering,
+        parkingSpaceId: parkingSpaceId,
+        residenceBlockId: residenceBlockId,
+        returnRoutes: componentData.returnRoutes[0],
+        capacityId: componentData.capacityId,
+        parkingId: parkId,
+        typeId: componentData.typeId,
+        typeOther: " ",
+      });
+      if (res.status === "success") {
+        setCurrent(current + 1);
+      } else {
+      }
     }
     //Үндсэн зургийн мэдээллийг өгөгдлийн санруу бичих
-    if (current === 2) {
+    else if (current === 2) {
       getBase64(componentData.imageParkingGate.file.originFileObj, (image2) =>
         setImageParkingGate(image2)
       );
@@ -275,7 +295,7 @@ const Profile = () => {
       }
     }
     //зогсоолын зургийн мэдээллийг өгөгдлийн санруу бичих
-    if (current === 3) {
+    else if (current === 3) {
       getBase64(componentData.imageFromGate.file.originFileObj, (image2) => {
         setImageFromGate(image2.substring(24));
       });
@@ -298,48 +318,7 @@ const Profile = () => {
       if (res.status === "success") {
         setCurrent(current + 1);
       }
-    }
-    if (current === 1) {
-      console.log(componentData);
-      console.log(parkingSpaceId, " mainData.parkingSpaceId,");
-      console.log(residenceBlockId, " mainData.residenceBlockId,");
-      // setParkingSpaceData({
-      //   ...parkingSpaceData,
-      //   entranceLock: componentData.entranceLock,
-      //   floorNumber: componentData.floorNumber,
-      //   isNumbering: componentData.isNumbering,
-      //   parkingSpaceId: mainData.parkingSpaceId,
-      //   residenceBlockId: mainData.residenceBlockId,
-      //   returnRoutes: componentData.returnRoutes[0],
-      //   capacityId: componentData.capacityId,
-      //   typeId: componentData.typeId,
-      //   parkingId: 220,
-      //   typeOther: null,
-      // });
-      const second = await callGet(
-        `/parkingsecond?parkingFloorId=${componentData.floorNumber}&residenceBlockId=${mainData.residenceBlockId}`
-      );
-      setParkId(second.parkingId);
-      console.log(second);
-      const res = await callPost("/parkingspace", {
-        entranceLock: componentData.entranceLock,
-        floorNumber: componentData.floorNumber,
-        isNumbering: componentData.isNumbering,
-        parkingSpaceId: parkingSpaceId,
-        residenceBlockId: residenceBlockId,
-        returnRoutes: componentData.returnRoutes[0],
-        capacityId: componentData.capacityId,
-        parkingId: parkId,
-        typeId: componentData.typeId,
-        typeOther: " ",
-      });
-      console.log(res);
-      if (res.status === "success") {
-        setCurrent(current + 1);
-      } else {
-      }
-    }
-    if (current === 4) {
+    } else if (current === 4) {
       const data = await callGet("/parkingspace/timesplit");
       console.log(data);
       console.log(componentData);
@@ -384,8 +363,7 @@ const Profile = () => {
       const res = await callPost(`/parkingspace/price`, formData);
       console.log(res);
       setCurrent(current + 1);
-    }
-    if (current === 5) {
+    } else if (current === 5) {
       const saleData = form.getFieldsValue();
       console.log(saleData);
       const res = await callGet("/division/salesplit");
@@ -428,8 +406,7 @@ const Profile = () => {
         console.log(ress, "res11111111111111");
         setCurrent(current + 1);
       }
-    }
-    if (current === 6) {
+    } else if (current === 6) {
       console.log(rentData);
     }
   };

@@ -111,7 +111,7 @@ const fsearch = () => {
   const handleEndDateChange = (value, dateString) => {
     if (dateString) {
       setEndtDate(dateString);
-      getData(dateString[0], dateString[1]);
+      // getData(dateString[0], dateString[1]);
     }
   };
   const searchResult = (listData) =>
