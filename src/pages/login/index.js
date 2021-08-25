@@ -37,12 +37,12 @@ const Login = () => {
     setLoading(true);
     const res = await login(values);
     if (res.response || res.data === undefined) {
-      if (res.response.data.error === "unauthorized") {
+      // if (res.response.data.error === "unauthorized") {
         //   setModalVisible(true);
         //   showMessage(messageType.FAILED.type, defaultMsg.newDeviceConfirmErrorTxt);
         // } else {
         showMessage(messageType.FAILED.type, defaultMsg.loginErrorTxt);
-      }
+      // }
       setLoading(false);
       return;
     }
