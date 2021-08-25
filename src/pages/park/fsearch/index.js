@@ -25,6 +25,7 @@ import ToFit from "@components/fsearch/toFIt";
 import Closest from "@components/fsearch/closest";
 import Farthest from "@components/fsearch/farthest";
 import GoogleMapReact from "google-map-react";
+import { useRouter } from "next/router";
 import { dateTimePickerLocale } from "@constants/constants";
 const { TabPane } = Tabs;
 const IndexPageMoreInfo = dynamic(
@@ -32,6 +33,7 @@ const IndexPageMoreInfo = dynamic(
   { ssr: false }
 );
 const { RangePicker } = DatePicker;
+
 const { Option } = Select;
 const ClickLocation = () => (
   <div
@@ -83,6 +85,8 @@ const fsearch = () => {
   const dateFormat = "YYYY-MM-DD";
   const [inputData, setInputdata] = useState();
   const [searchedData, setSearchedData] = useState([]);
+  const router = useRouter();
+  const { typeOrder, inputAdress, homeStartDate, homeEndDate } = router.query;
 
   // const disabledDate = (current) => {
   //   return current && current > moment().endOf("day");

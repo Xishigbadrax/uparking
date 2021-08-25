@@ -4,9 +4,16 @@ import { Fragment, useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
 import Link from "next/link";
+import { DatePicker } from "antd";
 import ParkResult from "../components/ParkResult";
 import News from "../components/News";
 import Footer from "../components/Footer";
+import moment from "moment";
+import { DownOutlined } from "@ant-design/icons";
+import Address from "@components/UserMoreInfo/Address";
+import Auth from "@utils/auth";
+import { useRouter } from "next/router";
+import { red } from "tailwindcss/colors";
 
 const news = [
   {
@@ -35,66 +42,14 @@ const news = [
   },
 ];
 
-const people = [
+const orderType = [
   {
     id: 1,
-    name: "Wade Cooper",
-    avatar:
-      "https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    name: "Өдөр",
   },
   {
     id: 2,
-    name: "Arlene Mccoy",
-    avatar:
-      "https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-  },
-  {
-    id: 3,
-    name: "Devon Webb",
-    avatar:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80",
-  },
-  {
-    id: 4,
-    name: "Tom Cook",
-    avatar:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-  },
-  {
-    id: 5,
-    name: "Tanya Fox",
-    avatar:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-  },
-  {
-    id: 6,
-    name: "Hellen Schmidt",
-    avatar:
-      "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-  },
-  {
-    id: 7,
-    name: "Caroline Schultz",
-    avatar:
-      "https://images.unsplash.com/photo-1568409938619-12e139227838?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-  },
-  {
-    id: 8,
-    name: "Mason Heaney",
-    avatar:
-      "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-  },
-  {
-    id: 9,
-    name: "Claudie Smitham",
-    avatar:
-      "https://images.unsplash.com/photo-1584486520270-19eca1efcce5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-  },
-  {
-    id: 10,
-    name: "Emil Schaefer",
-    avatar:
-      "https://images.unsplash.com/photo-1561505457-3bcad021f8ee?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    name: "Шөнө",
   },
 ];
 
@@ -166,13 +121,76 @@ function classNames(...classes) {
 }
 
 export default function Home() {
-  const [selected, setSelected] = useState(people[3]);
+  const [selected, setSelected] = useState(orderType[0]);
+  const [filterType, setFilterType] = useState(true);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [inputAddress, setInputAddress] = useState("");
+  const router = useRouter();
+  let styles;
+  let styles2;
+  filterType
+    ? (styles = {
+        marginTop: "12px",
+        color: "blue",
+        textAlign: "center",
+        width: "45%",
+        display: "inline-block",
+        paddingBottom: "5px",
+        background:
+          "linear-gradient(to right,  #0013D4, #00F9B8), linear-gradient(to right,  #0013D4, #00F9B8)",
+        backgroundSize: "100% 2px",
+        backgroundPosition: "bottom 0 left 0",
+        backgroundRepeat: "no-repeat",
+      })
+    : (styles = {
+        marginTop: "12px",
+        width: "45%",
+      });
+  filterType
+    ? (styles2 = {
+        marginTop: "12px",
+        width: "45%",
+      })
+    : (styles2 = {
+        marginTop: "12px",
+        color: "blue",
+        textAlign: "center",
+        width: "45%",
+        display: "inline-block",
+        paddingBottom: "5px",
+        background:
+          "linear-gradient(to right,  #0013D4, #00F9B8), linear-gradient(to right,  #0013D4, #00F9B8)",
+        backgroundSize: "100% 2px",
+        backgroundPosition: "bottom 0 left 0",
+        backgroundRepeat: "no-repeat",
+      });
 
-  const [filterType, setFilterType] = useState("day");
+  let typeOrder = selected.name;
 
   const handleDateFilter = (time) => {
     setFilterType(time);
   };
+
+  function onChangeStartDate(data, dateString) {
+    setStartDate(dateString);
+  }
+
+  function onChangeEndDate(data, dateString) {
+    setEndDate(dateString);
+  }
+  function onSearch() {
+    router.push({
+      pathname: "park/fsearch",
+      query: {
+        typeOrder: typeOrder,
+        inputAdress: inputAddress,
+        homeStartDate: startDate,
+        homeEndDate: endDate,
+      },
+    });
+  }
+
   return (
     <div>
       {/* <div className="imageContainer}>
@@ -194,21 +212,26 @@ export default function Home() {
             className={`md:col-span-2 sm:col-span-2 lg:col-span-1 flex flex-col justify-between searchFilter`}
           >
             <h6 className={`filterTitle`}>Авто зогсоол хайх</h6>
-            <div className={`grid grid-cols-2 w-full`}>
-              <div
-                onClick={() => setFilterType("day")}
-                className={`text-center py-3 col-span-1 dateFilter1 ${
-                  filterType == "day" ? "active" : ""
-                }`}
-              >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-around",
+                backgroundColor: "white",
+                borderRadius: "10px",
+                height: "48px",
+                cursor: "pointer",
+                fontWeight: "bold",
+                color: "#A2A4AA",
+                paddingRight: "20px",
+                paddingLeft: "20px",
+                textAlign: "center",
+              }}
+            >
+              <div style={styles} onClick={() => setFilterType(true)}>
                 Өдрөөр
               </div>
-              <div
-                onClick={() => setFilterType("month")}
-                className={`text-center py-3 col-span-1 dateFilter2 ${
-                  filterType == "month" ? "active" : ""
-                }`}
-              >
+
+              <div style={styles2} onClick={() => setFilterType(false)}>
                 Сараар
               </div>
             </div>
@@ -234,6 +257,7 @@ export default function Home() {
                 style={{ outline: "none" }}
                 type="text"
                 placeholder="Хаяг, байршил, ID"
+                onChange={(e) => setInputAddress(e.target.value)}
               />
               <div className="py-4 px-2 flex-none">
                 <img className="h6 w-6" src="./icons/location.png" />
@@ -247,11 +271,6 @@ export default function Home() {
                     <div className="relative">
                       <Listbox.Button className="relative w-full rounded-md pl-3 pr-10 py-1 text-left cursor-default focus:outline-none sm:text-sm">
                         <span className="flex items-center">
-                          <img
-                            src={selected.avatar}
-                            alt=""
-                            className="flex-shrink-0 h-6 w-6 rounded-full"
-                          />
                           <span className="ml-3 block truncate">
                             {selected.name}
                           </span>
@@ -276,9 +295,9 @@ export default function Home() {
                           style={{ backgroundColor: "white" }}
                           className="absolute z-10 mt-1 w-full max-h-56 rounded-md py-1 text-base ring-1 ring-black overflow-auto focus:outline-none sm:text-sm"
                         >
-                          {people.map((person) => (
+                          {orderType.map((type) => (
                             <Listbox.Option
-                              key={person.id}
+                              key={type.id}
                               className={({ active }) =>
                                 classNames(
                                   active
@@ -287,16 +306,11 @@ export default function Home() {
                                   "cursor-default select-none relative py-2 pl-3 pr-9"
                                 )
                               }
-                              value={person}
+                              value={type}
                             >
                               {({ selected, active }) => (
                                 <>
                                   <div className="flex items-center">
-                                    <img
-                                      src={person.avatar}
-                                      alt=""
-                                      className="flex-shrink-0 h-6 w-6 rounded-full"
-                                    />
                                     <span
                                       className={classNames(
                                         selected
@@ -305,7 +319,7 @@ export default function Home() {
                                         "ml-3 block truncate"
                                       )}
                                     >
-                                      {person.name}
+                                      {type.name}
                                     </span>
                                   </div>
 
@@ -338,12 +352,52 @@ export default function Home() {
             <div className="flex flex-row justify-between">
               <div className="filterStartDate">
                 <div className="searchFilterLabel">Эхлэх хугацаа</div>
+                {filterType ? (
+                  <DatePicker
+                    showTime={{ defaultValue: moment("00:00", "HH:mm") }}
+                    suffixIcon={<DownOutlined />}
+                    bordered={false}
+                    format="YYYY/MM/DD HH:mm"
+                    onChange={onChangeStartDate}
+                    placeholder="Сонгох"
+                  />
+                ) : (
+                  <DatePicker
+                    suffixIcon={<DownOutlined />}
+                    bordered={false}
+                    picker="month"
+                    format="YYYY/MM/"
+                    onChange={onChangeStartDate}
+                    placeholder="Сонгох"
+                  />
+                )}
               </div>
               <div className="filterEndDate">
                 <div className="searchFilterLabel">Дуусах хугацаа</div>
+                {filterType ? (
+                  <DatePicker
+                    showTime={{ defaultValue: moment("00:00", "HH:mm") }}
+                    suffixIcon={<DownOutlined />}
+                    bordered={false}
+                    format="YYYY/MM/DD HH:mm"
+                    onChange={onChangeEndDate}
+                    placeholder="Сонгох"
+                  />
+                ) : (
+                  <DatePicker
+                    suffixIcon={<DownOutlined />}
+                    bordered={false}
+                    picker="month"
+                    format="YYYY/MM/"
+                    onChange={onChangeEndDate}
+                    placeholder="Сонгох"
+                  />
+                )}
               </div>
             </div>
-            <button className={`searchFilterBtn`}>Хайх</button>
+            <button onClick={onSearch} className={`searchFilterBtn`}>
+              Хайх
+            </button>
           </div>
         </div>
       </div>
