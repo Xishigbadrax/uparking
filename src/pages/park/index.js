@@ -110,13 +110,12 @@ const Dashboard = () => {
   const [visibleDrawerMore, setVisibleDrawerMore] = useState(false);
   const [parkingObject, setParkingObject] = useState({});
   const showDrawer = async (item) => {
-    console.log(item, 'itemitem')
+    console.log(item, "itemitem");
     setParkingSpaceList(item.parkingSpaceList.content);
     setVisibleDrawer(true);
   };
   const showDrawerMore = async (item) => {
-    console.log(item, 'item')
-
+    console.log(item, "item");
     // const res = await callGet(`/booking/id/test?id=${orderId}&asWho=1`);
     const res = await callGet(
       `/parkingspace?parkingSpaceId=${item.parkingSpaceId}`
@@ -518,70 +517,70 @@ const Dashboard = () => {
               {parkingObject ? (
                 <div>
                   {console.log("endeeeeeeeeeeeee")}
-                    <div>
-                      <Row>
-                        <Col span={12}>Residence</Col>
-                        <Col
-                          span={12}
-                          style={{
-                            color: "#0013D4",
-                            textAlign: "right",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          {!Helper.isNullOrEmpty(parkingObject.residenceName)
-                            ? parkingObject.residenceName
-                            : null}
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col span={12}>Floor number</Col>
-                        <Col
-                          span={12}
-                          style={{
-                            color: "#0013D4",
-                            textAlign: "right",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          {!Helper.isNullOrEmpty(parkingObject.floorNumberLabel)
-                            ? parkingObject.floorNumberLabel
-                            : null}
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col span={12}>Garage number</Col>
-                        <Col
-                          span={12}
-                          style={{
-                            color: "#0013D4",
-                            textAlign: "right",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          {!Helper.isNullOrEmpty(
-                            parkingObject.parkingSpaceGarageNumber
-                          )
-                            ? parkingObject.parkingSpaceGarageNumber
-                            : null}
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col span={12}>Uparking number</Col>
-                        <Col
-                          span={12}
-                          style={{
-                            color: "#0013D4",
-                            textAlign: "right",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          {!Helper.isNullOrEmpty(parkingObject.uparkingNumber)
-                            ? parkingObject.uparkingNumber
-                            : null}
-                        </Col>
-                      </Row>
-                    </div>
+                  <div>
+                    <Row>
+                      <Col span={12}>Residence</Col>
+                      <Col
+                        span={12}
+                        style={{
+                          color: "#0013D4",
+                          textAlign: "right",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {!Helper.isNullOrEmpty(parkingObject.residenceName)
+                          ? parkingObject.residenceName
+                          : null}
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col span={12}>Floor number</Col>
+                      <Col
+                        span={12}
+                        style={{
+                          color: "#0013D4",
+                          textAlign: "right",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {!Helper.isNullOrEmpty(parkingObject.floorNumberLabel)
+                          ? parkingObject.floorNumberLabel
+                          : null}
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col span={12}>Garage number</Col>
+                      <Col
+                        span={12}
+                        style={{
+                          color: "#0013D4",
+                          textAlign: "right",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {!Helper.isNullOrEmpty(
+                          parkingObject.parkingSpaceGarageNumber
+                        )
+                          ? parkingObject.parkingSpaceGarageNumber
+                          : null}
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col span={12}>Uparking number</Col>
+                      <Col
+                        span={12}
+                        style={{
+                          color: "#0013D4",
+                          textAlign: "right",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {!Helper.isNullOrEmpty(parkingObject.uparkingNumber)
+                          ? parkingObject.uparkingNumber
+                          : null}
+                      </Col>
+                    </Row>
+                  </div>
                   <Row style={{ padding: "20px 10px" }}>
                     <Col
                       span={24}

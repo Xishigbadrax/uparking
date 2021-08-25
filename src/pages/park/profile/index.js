@@ -92,7 +92,7 @@ const Profile = () => {
   const [selectedColor, setSelectedColor] = useState({});
   const [vehicles, setVehicles] = useState([]);
   const [current, setCurrent] = useState(6);
-
+  const [rentData, setRentData] = useState();
   const [isProfileNotEdit, setIsProfileNotEdit] = useState(true);
   const [isVehileVisible, setIsVehileVisible] = useState(false);
   const [isParkVisible, setIsParkVisible] = useState(false);
@@ -101,16 +101,20 @@ const Profile = () => {
   const [imageParkingGate, setImageParkingGate] = useState();
   const [imageParkingOverall, setImageParkingOverall] = useState();
   const [imageFromGate, setImageFromGate] = useState();
+
   const mainInfoRef = useRef(null);
   const [form] = Form.useForm();
   const [vehicleForm] = Form.useForm();
   const [vehicleEditForm] = Form.useForm();
 
+  const [residenceBlockId, setResidenceBlockId] = useState();
+  const [parkingSpaceId, setParkingSpaceId] = useState();
+
   const { userdata } = useContext(Context);
   const [realData, setRealData] = useState("");
   const [mainData, setMainData] = useState(null);
   const [imageData, setImageData] = useState(null);
-
+  const [parkId, setParkId] = useState(null);
   const [spaceData, setSpaceData] = useState(null);
   const [vehicleId, setVehicleId] = useState();
   const [updatedData, setUpdatedData] = useState();
@@ -128,7 +132,6 @@ const Profile = () => {
     }
   }, [userdata]);
   const onFinish123 = (values) => {};
-
   const onFinishSPace = (values) => {
     console.log(values);
     console.log(form.getFieldsValue());
@@ -243,12 +246,10 @@ const Profile = () => {
     //Үндсэн мэдээллийн өгөгдлийг өгөгдлийн санруу
     if (current === 0) {
       console.log(mainData, ",<---------main");
-      const res = callPost("/parkingfirst", mainData);
-      if (!res || res === undefined) {
-        showMessage(messageType.FAILED.type, res.error);
-        return true;
-      } else {
-        console.log(res, "res11111111111111");
+      const res = await callPost("/parkingfirst", mainData);
+      setResidenceBlockId(mainData.residenceBlockId);
+      setParkingSpaceId(mainData.parkingSpaceId);
+      if (res.status === "success") {
         setCurrent(current + 1);
       }
     }
@@ -266,10 +267,12 @@ const Profile = () => {
       const res = await callPost("/parkingspace/parkingimage", {
         imageParkingOverall: imageParkingOverall,
         imageParkingGate: imageParkingGate,
-        parkingSpaceId: id,
+        parkingSpaceId: 522,
       });
       console.log(res);
-      setCurrent(current + 1);
+      if (res.status === "success") {
+        setCurrent(current + 1);
+      }
     }
     //зогсоолын зургийн мэдээллийг өгөгдлийн санруу бичих
     if (current === 3) {
@@ -283,53 +286,57 @@ const Profile = () => {
       const res = await callPost("/parkingspace/detail", {
         imageFromGate: imageFromGate,
         imageSpaceNumber: imageSpaceNumber,
-        parkingSpaceId: id,
+        parkingSpaceId: 522,
       });
-      if (!res || res === undefined) {
-        showMessage(messageType.FAILED.type, res.error);
-        return true;
-      } else {
-        console.log(res, "res11111111111111");
-        setCurrent(current + 2);
+      // if () {
+      //   showMessage(messageType.FAILED.type, res.error);
+      //   return true;
+      // } else {
+      //   console.log(res, "res11111111111111");
+      //   setCurrent(current + 2);
+      // }
+      if (res.status === "success") {
+        setCurrent(current + 1);
       }
     }
     if (current === 1) {
       console.log(componentData);
-      setParkingSpaceData({
-        ...parkingSpaceData,
-        entranceLock: componentData.entranceLock,
-        floorNumber: componentData.floorNumber,
-        isNumbering: componentData.isNumbering,
-        parkingSpaceId: mainData.parkingSpaceId,
-        residenceBlockId: mainData.residenceBlockId,
-        returnRoutes: componentData.returnRoutes[0],
-        capacityId: componentData.capacityId,
-        typeId: componentData.typeId,
-        parkingId: 220,
-        typeOther: null,
-      });
+      console.log(parkingSpaceId, " mainData.parkingSpaceId,");
+      console.log(residenceBlockId, " mainData.residenceBlockId,");
+      // setParkingSpaceData({
+      //   ...parkingSpaceData,
+      //   entranceLock: componentData.entranceLock,
+      //   floorNumber: componentData.floorNumber,
+      //   isNumbering: componentData.isNumbering,
+      //   parkingSpaceId: mainData.parkingSpaceId,
+      //   residenceBlockId: mainData.residenceBlockId,
+      //   returnRoutes: componentData.returnRoutes[0],
+      //   capacityId: componentData.capacityId,
+      //   typeId: componentData.typeId,
+      //   parkingId: 220,
+      //   typeOther: null,
+      // });
       const second = await callGet(
         `/parkingsecond?parkingFloorId=${componentData.floorNumber}&residenceBlockId=${mainData.residenceBlockId}`
       );
+      setParkId(second.parkingId);
       console.log(second);
       const res = await callPost("/parkingspace", {
         entranceLock: componentData.entranceLock,
         floorNumber: componentData.floorNumber,
         isNumbering: componentData.isNumbering,
-        parkingSpaceId: mainData.parkingSpaceId,
-        residenceBlockId: mainData.residenceBlockId,
+        parkingSpaceId: parkingSpaceId,
+        residenceBlockId: residenceBlockId,
         returnRoutes: componentData.returnRoutes[0],
         capacityId: componentData.capacityId,
+        parkingId: parkId,
         typeId: componentData.typeId,
         typeOther: " ",
       });
       console.log(res);
-      if (!res || res === undefined) {
-        showMessage(messageType.FAILED.type, res.error);
-        return true;
-      } else {
-        console.log(res, "res11111111111111");
+      if (res.status === "success") {
         setCurrent(current + 1);
+      } else {
       }
     }
     if (current === 4) {
@@ -370,12 +377,13 @@ const Profile = () => {
       ];
       let formData = {
         hourlyPrice: Number(componentData.hourlyPrice),
-        parkingSpaceId: id,
+        parkingSpaceId: 522,
         parkingSpacePriceInstance: array,
       };
       console.log(formData);
       const res = await callPost(`/parkingspace/price`, formData);
       console.log(res);
+      setCurrent(current + 1);
     }
     if (current === 5) {
       const saleData = form.getFieldsValue();
@@ -398,7 +406,7 @@ const Profile = () => {
       }
 
       const ress = await callPost("/parkingspace/sale", {
-        parkingSpaceId: id,
+        parkingSpaceId: 522,
         parkingSpaceSale: [
           {
             salePercent: weekSale,
@@ -420,6 +428,9 @@ const Profile = () => {
         console.log(ress, "res11111111111111");
         setCurrent(current + 1);
       }
+    }
+    if (current === 6) {
+      console.log(rentData);
     }
   };
 
@@ -950,7 +961,9 @@ const Profile = () => {
               (steps[current].title === "Хөнгөлөлт" && (
                 <Discount form={form} onFinish={onFinishSale} />
               )) ||
-              (steps[current].title === "Түрээслэх өдрүүд" && <RentDate />)}
+              (steps[current].title === "Түрээслэх өдрүүд" && (
+                <RentDate setRentData={setRentData} />
+              ))}
           </Col>
         </Row>
         {/* <Row

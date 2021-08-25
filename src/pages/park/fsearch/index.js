@@ -160,7 +160,14 @@ const fsearch = () => {
     //   if (inputData) {
     const data = await callGet(`/search/test/input?keywordId=${keywordId}`);
     console.log(data);
-    setSearchedData(data);
+    let array = [];
+    data.map((item) => {
+      item.parkingSpaceList.content.map((el) => {
+        array.push({ item, el });
+      });
+    });
+    console.log(array);
+    setSearchedData(array);
     //     // setSearchedData(cutData);
     //   } else {
     //     const data = await callGet(
