@@ -703,3 +703,13 @@ body {
     width: 95% ;
   }
 }
+.ant-btn-primary{
+  color: #fff;
+  background:linear-gradient(90deg, #0013D4 0%, #00F9B8 100%);
+  border:none !important;
+  &:active , &:focus, &:hover{
+    color: #fff;
+    background:linear-gradient(90deg, #0012d4be 0%, #00f9b7d0 100%);
+    border:none !important;
+  }
+}
