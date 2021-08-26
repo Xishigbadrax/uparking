@@ -10,7 +10,6 @@ import {messageType, defaultMsg} from '@constants/constants';
 import {showMessage} from '@utils/message';
 import Context from '@context/Context';
 import MaskedInput from 'antd-mask-input';
-import auth_cookie from '@utils/auth';
 
 const layout = {
   labelCol: {},
@@ -28,7 +27,6 @@ const Login = () => {
   const {auth} = state;
   const router = useRouter();
   const [modalVisible, setModalVisible] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [confirmCode, setConfirmCode] = useState(null);
   // eslint-disable-next-line no-unused-vars
   const [loading, setLoading]= useState(false);

@@ -9,10 +9,6 @@ import moment from 'moment';
 import {callGet} from '@api/api';
 import {Calendar, Tag} from 'antd';
 import Context from '@context/Context';
-<<<<<<< HEAD
-=======
-
->>>>>>> 270409b59625d35c0932b3f6f01e75ce73f3220e
 
 const Wallet = () => {
   const [calendarData, setCalendarData] = useState([]);

@@ -275,9 +275,8 @@ const Profile = () => {
         setCurrent(current + 1);
       } else {
       }
-    }
+    } else if (current === 2) {
     // Үндсэн зургийн мэдээллийг өгөгдлийн санруу бичих
-    else if (current === 2) {
       getBase64(componentData.imageParkingGate.file.originFileObj, (image2) =>
         setImageParkingGate(image2),
       );
@@ -296,9 +295,8 @@ const Profile = () => {
       if (res.status === 'success') {
         setCurrent(current + 1);
       }
-    }
-    // зогсоолын зургийн мэдээллийг өгөгдлийн санруу бичих
-    else if (current === 3) {
+    } else if (current === 3) {
+      // зогсоолын зургийн мэдээллийг өгөгдлийн санруу бичих
       getBase64(componentData.imageFromGate.file.originFileObj, (image2) => {
         setImageFromGate(image2.substring(24));
       });

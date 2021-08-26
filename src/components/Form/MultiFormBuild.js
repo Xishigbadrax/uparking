@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import {Form, Input, Select, DatePicker, Checkbox, InputNumber} from 'antd';
 import FormWrapper from './FormWrapper';
 

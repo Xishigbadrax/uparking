@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import {Checkbox} from 'antd';
 const Data = ({Date, title, details, checkbox, key}) => {

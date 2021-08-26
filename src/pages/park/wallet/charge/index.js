@@ -3,16 +3,9 @@ import {useState, useEffect, useContext} from 'react';
 import WalletLayout from '@components/layouts/WalletLayout';
 import WalletChart from '@components/WalletChart';
 import WalletCard from '../../../../components/WalletCard';
-<<<<<<< HEAD
-
-import WalletBankInfo from '@components/WalletBankInfo';
-import {Tabs, Image, Button, Modal, Alert} from 'antd';
-
-=======
 // import WalletBankInfo2 from '@components/WalletBankInfo2';
 import WalletBankInfo from '@components/WalletBankInfo';
 import {Tabs, Image, Button, Modal, Alert} from 'antd';
->>>>>>> 270409b59625d35c0932b3f6f01e75ce73f3220e
 import {callGet, callPost} from '@api/api';
 import Context from '@context/Context';
 
@@ -65,11 +58,8 @@ const Charge = () => {
     amount: null,
     phoneNumber: null,
   });
-<<<<<<< HEAD
-  // const [formData3, setformData3] = useState('');
-=======
+  // eslint-disable-next-line no-unused-vars
   const [formData3, setformData3] = useState('');
->>>>>>> 270409b59625d35c0932b3f6f01e75ce73f3220e
 
   const fetchData2 = async () => {
     if (amount != 0) {
@@ -163,11 +153,7 @@ const Charge = () => {
   };
 
   const fetchData3 = async () => {
-<<<<<<< HEAD
-    // setformData3();
-=======
     setformData3();
->>>>>>> 270409b59625d35c0932b3f6f01e75ce73f3220e
     await callPost('/wallet/promocode', {
       promoCode: promoCode,
     }).then((res) => {

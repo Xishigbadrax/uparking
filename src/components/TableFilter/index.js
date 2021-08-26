@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import {useState, useEffect} from 'react';
 import css from './_.module.css';
 import {Input, DatePicker, Select, Button, Form, Divider} from 'antd';

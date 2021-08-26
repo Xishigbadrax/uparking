@@ -1,6 +1,5 @@
 import Footer from '../../components/Footer';
 import InforNavbar from '../../components/InforNavbar';
-<<<<<<< HEAD
 import './style.module.css';
 import {Image} from 'antd';
 import Context from '@context/Context';
@@ -10,65 +9,6 @@ import {useEffect, useState, useContext} from 'react';
 import {callGet} from '@api/api';
 
 
-=======
-// const news = [
-//   {
-//     id: 0,
-//     head: 'Урамшуулал',
-//     image: '/news/news-1.png',
-//     date: '2020/10/10 12:40',
-//     title: 'Зогсоолын',
-//     titlebold: 'Шинэ ЭРИН',
-//     desc: 'Бүх автозогсоолын таны утсанд. Энэ бол Uparking онлайн автозогсоолын платформ. Хаана ч хэзээ ч өөрт тохирох зогсоолыг түрээслэн өөрийн машинаа байршуулах боломжийг олгож ...',
-//   },
-//   {
-//     id: 1,
-//     head: 'Зөвөлгөө',
-//     image: '/news/news-2.png',
-//     date: '2020/12/10 12:40',
-//     title: 'Хэрхэн',
-//     titlebold: 'Ашиглэх Вэ ?',
-//     desc: 'Бүх автозогсоолын таны утсанд. Энэ бол Uparking онлайн автозогсоолын платформ. Хаана ч хэзээ ч өөрт тохирох зогсоолыг түрээслэн өөрийн машинаа байршуулах боломжийг олгож ...',
-//   },
-//   {
-//     id: 2,
-//     head: 'Компанийн мэдээ',
-//     image: '/medee3.png',
-//     date: '2020/12/10 12:40',
-//     title: 'Uparking',
-//     titlebold: 'Your PARKING ?',
-//     desc: 'Бүх автозогсоолын таны утсанд. Энэ бол Uparking онлайн автозогсоолын платформ. Хаана ч хэзээ ч өөрт тохирох зогсоолыг түрээслэн өөрийн машинаа байршуулах боломжийг олгож ...',
-//   },
-//   {
-//     id: 3,
-//     head: 'Компанийн мэдээ',
-//     image: '/medee4.png',
-//     date: '2020/12/10 12:40',
-//     title: 'Uparking',
-//     titlebold: 'Your PARKING ?',
-//     desc: 'Бүх автозогсоолын таны утсанд. Энэ бол Uparking онлайн автозогсоолын платформ. Хаана ч хэзээ ч өөрт тохирох зогсоолыг түрээслэн өөрийн машинаа байршуулах боломжийг олгож ...',
-//   },
-//   {
-//     id: 4,
-//     head: 'Компанийн мэдээ',
-//     image: '/medee6.png',
-//     date: '2020/12/10 12:40',
-//     title: 'Uparking',
-//     titlebold: 'Your PARKING ?',
-//     desc: 'Бүх автозогсоолын таны утсанд. Энэ бол Uparking онлайн автозогсоолын платформ. Хаана ч хэзээ ч өөрт тохирох зогсоолыг түрээслэн өөрийн машинаа байршуулах боломжийг олгож ...',
-//   },
-//   {
-//     id: 5,
-//     head: 'Компанийн мэдээ',
-//     image: '/medee7.png',
-//     date: '2020/12/10 12:40',
-//     title: 'Uparking',
-//     titlebold: 'Your PARKING ?',
-//     desc: 'Бүх автозогсоолын таны утсанд. Энэ бол Uparking онлайн автозогсоолын платформ. Хаана ч хэзээ ч өөрт тохирох зогсоолыг түрээслэн өөрийн машинаа байршуулах боломжийг олгож ...',
-//   },
-// ];
-// import {Fragment, useEffect, useState} from 'react';
->>>>>>> 270409b59625d35c0932b3f6f01e75ce73f3220e
 const News = () => {
   const [data, setdata] = useState(null);
   const router = useRouter();
@@ -235,13 +175,7 @@ const News = () => {
           </div>
           <div className="grid lg:grid-cols-2 bg-blue-300 md ml-4 mt-8 ">
             <div>
-<<<<<<< HEAD
               <div className={`grid-cols-1 Information1 flex justify-between`}>
-=======
-              <div
-                className={'grid-cols-1 Information1 flex justify-between'}
-              >
->>>>>>> 270409b59625d35c0932b3f6f01e75ce73f3220e
                 <div className="flex  mt-2">
                   <img
                     src="/eye-24.png "
@@ -339,13 +273,7 @@ const News = () => {
         <div className="grid lg:grid-cols-2 sm:grid-cols-1">
           <div className="grid lg:grid-cols-2 bg-blue-300 md: ml-4 mt-8 lg:ml-0">
             <div>
-<<<<<<< HEAD
               <div className={`grid-cols-1 Information3 flex justify-between`}>
-=======
-              <div
-                className={'grid-cols-1 Information3 flex justify-between'}
-              >
->>>>>>> 270409b59625d35c0932b3f6f01e75ce73f3220e
                 <div className="flex mt-2">
                   <img
                     src="/eye-24.png "
