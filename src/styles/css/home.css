@@ -2221,3 +2221,6 @@
   border: none !important;
   border-radius: 20px !important;
 }
+.searchAutoComplete  .ant-select-selector .ant-select-selection-search .ant-select-selection-search-input{
+  height: 70px !important;
+}

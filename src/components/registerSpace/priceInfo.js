@@ -1,9 +1,9 @@
-import { callGet } from "@api/api";
+import {callGet} from '@api/api';
 
-import { Row, Col } from "antd";
-import Helper from "@utils/helper";
-import { Form, Input, Label, Divider } from "antd";
-import { useEffect, useState } from "react";
+import {Row, Col} from 'antd';
+import Helper from '@utils/helper';
+import {Form, Input, Label, Divider} from 'antd';
+import {useEffect, useState} from 'react';
 
 const priceInfo = (props) => {
   const [rentInfoData, setRentInfoData] = useState();
@@ -28,10 +28,10 @@ const priceInfo = (props) => {
     console.log(rentInfoData);
   };
   useEffect(async () => {
-    const bigData = await callGet(`/parkingspace/timesplit`);
+    const bigData = await callGet('/parkingspace/timesplit');
     console.log(bigData);
     setPriceData(bigData);
-    let total = bigData.timeSet1.price / bigData.timeSet1.value;
+    const total = bigData.timeSet1.price / bigData.timeSet1.value;
     setdayWinterValue(bigData.daySplit.winterPrice);
     setdaySummerValue(bigData.daySplit.summerPrice);
     setnightSummerValue(bigData.nightSplit.summerPrice);
@@ -63,55 +63,55 @@ const priceInfo = (props) => {
       <Row offset={4}>
         <p
           style={{
-            color: "blue",
-            fontSize: "20px",
-            marginTop: "20px",
-            marginLeft: "100px",
+            color: 'blue',
+            fontSize: '20px',
+            marginTop: '20px',
+            marginLeft: '100px',
           }}
         >
           <b> Түрээслэх үнийн мэдээлэл</b>
         </p>
       </Row>
       <Form
-        labelCol={{ span: 10 }}
+        labelCol={{span: 10}}
         layout="vertical"
-        className={`priceInfo`}
+        className={'priceInfo'}
         form={props.form}
         initialValues={{
           remember: true,
         }}
       >
-        <Row style={{ marginTop: "30px" }}>
+        <Row style={{marginTop: '30px'}}>
           <Col offset={4} span={6}>
             <Row>
               Өдрийн цагаар түрээслэх үнэ
-              <p style={{ color: "blue" }}>
+              <p style={{color: 'blue'}}>
                 |
                 {priceData ? (
                   <b>
-                    {" "}
+                    {' '}
                     {priceData.daySplit.start} - {priceData.daySplit.end}
                   </b>
                 ) : null}
                 |
               </p>
             </Row>
-            <label style={{ fontSize: "14px", color: "gray" }}>
-              Өвөл |{" "}
+            <label style={{fontSize: '14px', color: 'gray'}}>
+              Өвөл |{' '}
               {priceData ? (
                 <>
-                  {priceData.daySplit.winterStart} -{" "}
+                  {priceData.daySplit.winterStart} -{' '}
                   {priceData.daySplit.winterEnd}
                 </>
               ) : null}
             </label>
             <Form.Item
               name="daySplitWinterPrice"
-              style={{ marginTop: "10px" }}
+              style={{marginTop: '10px'}}
               rules={[
                 {
                   required: true,
-                  message: "Өдрийн цагаар түрээслэх дүнгээ оруулна уу?",
+                  message: 'Өдрийн цагаар түрээслэх дүнгээ оруулна уу?',
                 },
               ]}
             >
@@ -122,12 +122,12 @@ const priceInfo = (props) => {
             </Form.Item>
             <Divider />
             <label
-              style={{ fontSize: "14px", color: "gray", marginTop: "10px" }}
+              style={{fontSize: '14px', color: 'gray', marginTop: '10px'}}
             >
-              Зун |{" "}
+              Зун |{' '}
               {priceData ? (
                 <>
-                  {" "}
+                  {' '}
                   {priceData.daySplit.summerStart} -
                   {priceData.daySplit.summerEnd}
                 </>
@@ -135,11 +135,11 @@ const priceInfo = (props) => {
             </label>
             <Form.Item
               name="daySplitSummerPrice"
-              style={{ marginTop: "10px" }}
+              style={{marginTop: '10px'}}
               rules={[
                 {
                   required: true,
-                  message: "Өдрийн цагаар түрээслэх дүнгээ оруулна уу?",
+                  message: 'Өдрийн цагаар түрээслэх дүнгээ оруулна уу?',
                 },
               ]}
             >
@@ -149,9 +149,9 @@ const priceInfo = (props) => {
               ></Input>
             </Form.Item>
             <Divider />
-            <Row style={{ marginTop: "20px" }}>
+            <Row style={{marginTop: '20px'}}>
               Шөнийн цагаар түрээслэх үнэ
-              <p style={{ color: "blue" }}>
+              <p style={{color: 'blue'}}>
                 {priceData ? (
                   <b>
                     | {priceData.nightSplit.start} - {priceData.nightSplit.end}
@@ -159,23 +159,23 @@ const priceInfo = (props) => {
                 ) : null}
               </p>
             </Row>
-            <label style={{ fontSize: "14px", color: "gray" }}>
+            <label style={{fontSize: '14px', color: 'gray'}}>
               Өвөл|
               {priceData ? (
                 <>
-                  {" "}
+                  {' '}
                   {priceData.nightSplit.winterStart} -
                   {priceData.nightSplit.winterEnd}
                 </>
               ) : null}
             </label>
             <Form.Item
-              style={{ marginTop: "10px" }}
+              style={{marginTop: '10px'}}
               name="nightSplitWinterPrice"
               rules={[
                 {
                   required: true,
-                  message: "Шөнийн цагаар түрээслэх дүнгээ оруулна уу?",
+                  message: 'Шөнийн цагаар түрээслэх дүнгээ оруулна уу?',
                 },
               ]}
             >
@@ -185,23 +185,23 @@ const priceInfo = (props) => {
               ></Input>
             </Form.Item>
             <Divider />
-            <label style={{ fontSize: "14px", color: "gray" }}>
+            <label style={{fontSize: '14px', color: 'gray'}}>
               Зун|
               {priceData ? (
                 <>
-                  {" "}
+                  {' '}
                   {priceData.nightSplit.summerStart} -
                   {priceData.nightSplit.summerEnd}
                 </>
               ) : null}
             </label>
             <Form.Item
-              style={{ marginTop: "10px" }}
+              style={{marginTop: '10px'}}
               name="nightSplitSummerPrice"
               rules={[
                 {
                   required: true,
-                  message: "Шөнийн цагаар түрээслэх дүнгээ оруулна уу?",
+                  message: 'Шөнийн цагаар түрээслэх дүнгээ оруулна уу?',
                 },
               ]}
             >
@@ -215,11 +215,11 @@ const priceInfo = (props) => {
           <Col offset={4} span={6}>
             <Row>
               Бүтэн өдрийн түрээслэх үнэ
-              <p style={{ color: "blue" }}>
+              <p style={{color: 'blue'}}>
                 <b>|24 цаг|</b>
               </p>
             </Row>
-            <label style={{ fontSize: "14px", color: "gray" }}>
+            <label style={{fontSize: '14px', color: 'gray'}}>
               Өвөл|
               {priceData ? (
                 <>
@@ -230,11 +230,11 @@ const priceInfo = (props) => {
             </label>
             <Form.Item
               name="fullDaySplitWinterPrice"
-              style={{ marginTop: "10px" }}
+              style={{marginTop: '10px'}}
               rules={[
                 {
                   required: true,
-                  message: "Бүтэн өдрийн түрээслэх дүнгээ оруулна уу?",
+                  message: 'Бүтэн өдрийн түрээслэх дүнгээ оруулна уу?',
                 },
               ]}
             >
@@ -244,8 +244,8 @@ const priceInfo = (props) => {
               ></Input>
             </Form.Item>
             <Divider />
-            <label style={{ fontSize: "14px", color: "gray" }}>
-              Зун|{" "}
+            <label style={{fontSize: '14px', color: 'gray'}}>
+              Зун|{' '}
               {priceData ? (
                 <>
                   {priceData.fullDaySplit.summerStart} -
@@ -254,12 +254,12 @@ const priceInfo = (props) => {
               ) : null}
             </label>
             <Form.Item
-              style={{ marginTop: "10px" }}
+              style={{marginTop: '10px'}}
               name="fullDaySplitSummerPrice"
               rules={[
                 {
                   required: true,
-                  message: "Бүтэн өдрийн түрээслэх дүнгээ оруулна уу?",
+                  message: 'Бүтэн өдрийн түрээслэх дүнгээ оруулна уу?',
                 },
               ]}
             >
@@ -272,20 +272,20 @@ const priceInfo = (props) => {
 
             <Row>
               Цагийн түрээслэх үнэ
-              <p style={{ color: "blue" }}>
+              <p style={{color: 'blue'}}>
                 <b>|1 цаг|</b>
               </p>
             </Row>
-            <label style={{ fontSize: "14px", color: "gray" }}>
+            <label style={{fontSize: '14px', color: 'gray'}}>
               1 цаг түрээслэх
             </label>
             <Form.Item
-              style={{ marginTop: "10px" }}
+              style={{marginTop: '10px'}}
               name="hourlyPrice"
               rules={[
                 {
                   required: true,
-                  message: "1 цагаар түрээслэх дүнгээ оруулна уу?",
+                  message: '1 цагаар түрээслэх дүнгээ оруулна уу?',
                 },
               ]}
             >
@@ -297,39 +297,39 @@ const priceInfo = (props) => {
             <Divider />
             <Row>
               <Col>
-                <p style={{ fontSize: "12px" }}>
+                <p style={{fontSize: '12px'}}>
                   Багц 1 | {priceData ? priceData.timeSet1.description : null}|
                 </p>
                 <p>
-                  {hourlyPrice
-                    ? Helper.formatValueReverse(
-                        hourlyPrice * priceData.timeSet1.value
-                      ) + "₮"
-                    : null}
+                  {hourlyPrice ?
+                    Helper.formatValueReverse(
+                      hourlyPrice * priceData.timeSet1.value,
+                    ) + '₮' :
+                    null}
                 </p>
               </Col>
-              <Col style={{ marginLeft: "15px" }}>
-                <p style={{ fontSize: "12px" }}>
+              <Col style={{marginLeft: '15px'}}>
+                <p style={{fontSize: '12px'}}>
                   Багц 2 | {priceData ? priceData.timeSet2.description : null} |
                 </p>
                 <p>
-                  {hourlyPrice
-                    ? Helper.formatValueReverse(
-                        hourlyPrice * priceData.timeSet2.value
-                      ) + "₮"
-                    : null}
+                  {hourlyPrice ?
+                    Helper.formatValueReverse(
+                      hourlyPrice * priceData.timeSet2.value,
+                    ) + '₮' :
+                    null}
                 </p>
               </Col>
-              <Col style={{ marginLeft: "15px" }}>
-                <p style={{ fontSize: "12px" }}>
+              <Col style={{marginLeft: '15px'}}>
+                <p style={{fontSize: '12px'}}>
                   Багц 3 | {priceData ? priceData.timeSet3.description : null}|
                 </p>
                 <p>
-                  {hourlyPrice
-                    ? Helper.formatValueReverse(
-                        hourlyPrice * priceData.timeSet3.value
-                      ) + "₮"
-                    : null}
+                  {hourlyPrice ?
+                    Helper.formatValueReverse(
+                      hourlyPrice * priceData.timeSet3.value,
+                    ) + '₮' :
+                    null}
                 </p>
               </Col>
             </Row>

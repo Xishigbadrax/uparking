@@ -1,13 +1,13 @@
-import "tailwindcss/tailwind.css";
-import "../styles/css/main.css";
-import "../styles/sass/main.scss";
-import { ContextProvider } from "@context/Context";
-import auth from "@utils/auth";
-import Login from "./login";
-import { useState, useEffect } from "react";
-import Navbar from "@components/Navbar";
+import 'tailwindcss/tailwind.css';
+import '../styles/css/main.css';
+import '../styles/sass/main.scss';
+import {ContextProvider} from '@context/Context';
+import auth from '@utils/auth';
+import Login from './login';
+import {useState, useEffect} from 'react';
+import Navbar from '@components/Navbar';
 
-const App = ({ Component, pageProps, router }) => {
+const App = ({Component, pageProps, router}) => {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const App = ({ Component, pageProps, router }) => {
   return (
     <ContextProvider>
       <Navbar />
-      {router.pathname.startsWith("/park") ? (
+      {router.pathname.startsWith('/park') ? (
         auth.loggedIn() ? (
           <Component {...pageProps} />
         ) : (

@@ -1,3 +1,4 @@
+// eslint-disable-next-line require-jsdoc
 export default function Custom500() {
   return (
     <div className="errorPageContainer">
@@ -7,5 +8,5 @@ export default function Custom500() {
         <p className="errorDetail">Дотоод серверийн алдаа</p>
       </div>
     </div>
-  )
+  );
 }

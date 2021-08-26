@@ -47,19 +47,19 @@ const {Option} = AutoComplete;
 const {Header, Sider, Content} = Layout;
 
 const MapWithAMarkerClusterer = compose(
-    withProps({
-      googleMapURL: `https://maps.googleapis.com/maps/api/js?key=AIzaSyD15334amUTZVfPVXv7p989Mew8iMmAoA0&v=3.exp&libraries=geometry,drawing,places`,
-      loadingElement: <div style={{height: `100%`}} />,
-      containerElement: <div style={{height: `100%`}} />,
-      mapElement: <div style={{height: `100%`}} />,
-    }),
-    withHandlers({
-      onMarkerClustererClick: () => (markerClusterer) => {
-        markerClusterer.getMarkers();
-      },
-    }),
-    withScriptjs,
-    withGoogleMap,
+  withProps({
+    googleMapURL: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyD15334amUTZVfPVXv7p989Mew8iMmAoA0&v=3.exp&libraries=geometry,drawing,places',
+    loadingElement: <div style={{height: '100%'}} />,
+    containerElement: <div style={{height: '100%'}} />,
+    mapElement: <div style={{height: '100%'}} />,
+  }),
+  withHandlers({
+    onMarkerClustererClick: () => (markerClusterer) => {
+      markerClusterer.getMarkers();
+    },
+  }),
+  withScriptjs,
+  withGoogleMap,
 )((props) => (
   <GoogleMap defaultZoom={13} defaultCenter={props.defaultCenter}>
     <MarkerClusterer
@@ -118,7 +118,7 @@ const Dashboard = () => {
 
   const showDrawer = async (item) => {
     const res = await callGet(
-        `/parkingspace?parkingSpaceId=${item.park.parkingSpaceId}`,
+      `/parkingspace?parkingSpaceId=${item.park.parkingSpaceId}`,
     );
     if (!res || res === undefined) {
       showMessage(messageType.FAILED.type, defaultMsg.dataError);
@@ -135,7 +135,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await callGet(`/config/timesplit`).then((res) => {
+      await callGet('/config/timesplit').then((res) => {
         settimeSplit(res);
       });
     };
@@ -217,9 +217,9 @@ const Dashboard = () => {
       url = `/search/test/input?latitude=${position.latitude}&longitude=${
         position.longitude
       }&keywordId=${searchId}&startDate=${values.startdate.format(
-          'YYYY-MM-DD',
+        'YYYY-MM-DD',
       )}&endDate=${values.enddate.format(
-          'YYYY-MM-DD',
+        'YYYY-MM-DD',
       )}&fullDay=true&startTime=${timeSplit.dayStart}&endTime=${
         timeSplit.nightEnd
       }`;
@@ -227,9 +227,9 @@ const Dashboard = () => {
       url = `/search/test/input?latitude=${position.latitude}&longitude=${
         position.longitude
       }&keywordId=${searchId}&startDate=${values.startdate.format(
-          'YYYY-MM-DD',
+        'YYYY-MM-DD',
       )}&endDate=${values.enddate.format(
-          'YYYY-MM-DD',
+        'YYYY-MM-DD',
       )}&fullDay=false&startTime=${timeSplit.dayStart}&endTime=${
         timeSplit.dayEnd
       }`;
@@ -237,9 +237,9 @@ const Dashboard = () => {
       url = `/search/test/input?latitude=${position.latitude}&longitude=${
         position.longitude
       }&keywordId=${searchId}&startDate=${values.startdate.format(
-          'YYYY-MM-DD',
+        'YYYY-MM-DD',
       )}&endDate=${values.enddate.format(
-          'YYYY-MM-DD',
+        'YYYY-MM-DD',
       )}&fullDay=false&startTime=${timeSplit.nightStart}&endTime=${
         timeSplit.nightEnd
       }`;
@@ -414,7 +414,7 @@ const Dashboard = () => {
                                     preview={false}
                                     width={18}
                                     fallback={
-                                      `data:image/png;base64,` +
+                                      'data:image/png;base64,' +
                                       item.park.floorNumber
                                     }
                                   />
@@ -687,45 +687,45 @@ const Dashboard = () => {
                       <div>
                         {parkingObject.park &&
                         parkingObject.park.floorNumber ? (
-                          <div style={{marginRight: '13px', display: 'flex'}}>
-                            <Image
-                              preview={false}
-                              width={24}
-                              src={IMG_URL + parkingObject.park.floorNumber}
-                            />
-                            <div style={{marginLeft: '25px'}}>
-                              <span>{parkingObject.park.floorNumberLabel}</span>
+                            <div style={{marginRight: '13px', display: 'flex'}}>
+                              <Image
+                                preview={false}
+                                width={24}
+                                src={IMG_URL + parkingObject.park.floorNumber}
+                              />
+                              <div style={{marginLeft: '25px'}}>
+                                <span>{parkingObject.park.floorNumberLabel}</span>
+                              </div>
                             </div>
-                          </div>
-                        ) : null}
+                          ) : null}
                         {parkingObject.park &&
                         parkingObject.park.entranceLock ? (
-                          <div style={{marginRight: '13px', display: 'flex'}}>
-                            <Image
-                              preview={false}
-                              width={24}
-                              src={IMG_URL + parkingObject.park.entranceLock}
-                            />
-                            <div style={{marginLeft: '25px'}}>
-                              <span>
-                                {parkingObject.park.entranceLockLabel}
-                              </span>
+                            <div style={{marginRight: '13px', display: 'flex'}}>
+                              <Image
+                                preview={false}
+                                width={24}
+                                src={IMG_URL + parkingObject.park.entranceLock}
+                              />
+                              <div style={{marginLeft: '25px'}}>
+                                <span>
+                                  {parkingObject.park.entranceLockLabel}
+                                </span>
+                              </div>
                             </div>
-                          </div>
-                        ) : null}
+                          ) : null}
                         {parkingObject.park &&
                         parkingObject.park.isNumbering ? (
-                          <div style={{marginRight: '13px', display: 'flex'}}>
-                            <Image
-                              preview={false}
-                              width={24}
-                              src={IMG_URL + parkingObject.park.isNumbering}
-                            />
-                            <div style={{marginLeft: '25px'}}>
-                              <span>{parkingObject.park.isNumberingLabel}</span>
+                            <div style={{marginRight: '13px', display: 'flex'}}>
+                              <Image
+                                preview={false}
+                                width={24}
+                                src={IMG_URL + parkingObject.park.isNumbering}
+                              />
+                              <div style={{marginLeft: '25px'}}>
+                                <span>{parkingObject.park.isNumberingLabel}</span>
+                              </div>
                             </div>
-                          </div>
-                        ) : null}
+                          ) : null}
                         {parkingObject.park && parkingObject.park.capacity ? (
                           <div style={{marginRight: '13px', display: 'flex'}}>
                             <Image
@@ -752,19 +752,19 @@ const Dashboard = () => {
                         ) : null}
                         {parkingObject.park &&
                         parkingObject.park.returnRoutes ? (
-                          <div style={{marginRight: '13px', display: 'flex'}}>
-                            <Image
-                              preview={false}
-                              width={24}
-                              src={IMG_URL + parkingObject.park.returnRoutes}
-                            />
-                            <div style={{marginLeft: '25px'}}>
-                              <span>
-                                {parkingObject.park.returnRoutesLabel}
-                              </span>
+                            <div style={{marginRight: '13px', display: 'flex'}}>
+                              <Image
+                                preview={false}
+                                width={24}
+                                src={IMG_URL + parkingObject.park.returnRoutes}
+                              />
+                              <div style={{marginLeft: '25px'}}>
+                                <span>
+                                  {parkingObject.park.returnRoutesLabel}
+                                </span>
+                              </div>
                             </div>
-                          </div>
-                        ) : null}
+                          ) : null}
                       </div>
                     ) : null}
                   </Col>
@@ -776,10 +776,10 @@ const Dashboard = () => {
                       <div style={{color: '#0013D4'}}>Эхлэх хугацаа</div>
                       {parkingObject.park &&
                       parkingObject.park.startDateTime ? (
-                        <div>
-                          {Helper.removeSec(parkingObject.park.startDateTime)}
-                        </div>
-                      ) : null}
+                          <div>
+                            {Helper.removeSec(parkingObject.park.startDateTime)}
+                          </div>
+                        ) : null}
                     </div>
                   </Col>
                   <Col className="gutter-row" span={12}>

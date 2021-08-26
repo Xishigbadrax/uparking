@@ -36,7 +36,6 @@ const ForgotPassword = () => {
   // const [modalVisible, setModalVisible] = useState(false);
   const clockRef = useRef(null);
 
-  const [form] = Form.useForm();
   const handleSubmit = (e) => {
     e.preventDefault();
   };

@@ -46,7 +46,7 @@ const rentDate = (props) => {
         {
           day: 1,
           timeSplitDescription: 'Шөнө',
-          timeSplitId: Number(nightSplit),
+          timeSplitId: Number(nightSplitId),
           spaceStatusDescription: mondayNight,
         },
         {
@@ -58,7 +58,7 @@ const rentDate = (props) => {
         {
           day: 2,
           timeSplitDescription: 'Шөнө',
-          timeSplitId: Number(nightSplit),
+          timeSplitId: Number(nightSplitId),
           spaceStatusDescription: tuesdayNight,
         },
         {
@@ -70,7 +70,7 @@ const rentDate = (props) => {
         {
           day: 3,
           timeSplitDescription: 'Шөнө',
-          timeSplitId: Number(nightSplit),
+          timeSplitId: Number(nightSplitId),
           spaceStatusDescription: wednesdayNight,
         },
         {
@@ -82,7 +82,7 @@ const rentDate = (props) => {
         {
           day: 4,
           timeSplitDescription: 'Шөнө',
-          timeSplitId: Number(nightSplit),
+          timeSplitId: Number(nightSplitId),
           spaceStatusDescription: thursdayNight,
         },
         {
@@ -94,7 +94,7 @@ const rentDate = (props) => {
         {
           day: 5,
           timeSplitDescription: 'Шөнө',
-          timeSplitId: Number(nightSplit),
+          timeSplitId: Number(nightSplitId),
           spaceStatusDescription: fridayNight,
         },
         {
@@ -106,7 +106,7 @@ const rentDate = (props) => {
         {
           day: 6,
           timeSplitDescription: 'Шөнө',
-          timeSplitId: Number(nightSplit),
+          timeSplitId: Number(nightSplitId),
           spaceStatusDescription: saturdayNight,
         },
         {
@@ -118,7 +118,7 @@ const rentDate = (props) => {
         {
           day: 0,
           timeSplitDescription: 'Шөнө',
-          timeSplitId: Number(nightSplit),
+          timeSplitId: Number(nightSplitId),
           spaceStatusDescription: sundayNight,
         },
       ],
@@ -134,21 +134,21 @@ const rentDate = (props) => {
 
     weekData.dayOfWeek.map((item) => {
       switch (item.day) {
-        case value.day():
-          if (item.spaceStatusDescription === 'Боломжтой') {
-            array.push({
-              type: item.spaceStatusDescription,
-              content: item.timeSplitDescription,
-            });
-          }
-          if (item.spaceStatusDescription === 'Боломжгүй') {
-            array.push({
-              type: item.spaceStatusDescription,
-              content: item.timeSplitDescription,
-            });
-          }
-          break;
-        default:
+      case value.day():
+        if (item.spaceStatusDescription === 'Боломжтой') {
+          array.push({
+            type: item.spaceStatusDescription,
+            content: item.timeSplitDescription,
+          });
+        }
+        if (item.spaceStatusDescription === 'Боломжгүй') {
+          array.push({
+            type: item.spaceStatusDescription,
+            content: item.timeSplitDescription,
+          });
+        }
+        break;
+      default:
       }
     });
     return array || [];
@@ -250,7 +250,7 @@ const rentDate = (props) => {
             <p style={{marginLeft: '10px', fontSize: '16px'}}>
               Тохиргоо хийх
             </p>
-            <Divider className={`stateDivider`} />
+            <Divider className={'stateDivider'} />
           </Row>
           <Row style={{marginLeft: '100px'}}>
             <Col span={6} offset={1}></Col>
@@ -263,7 +263,7 @@ const rentDate = (props) => {
           </Row>
           <Row
             style={{marginLeft: '100px', marginTop: '5px'}}
-            className={`pickWeekDayState`}
+            className={'pickWeekDayState'}
           >
             <Col span={4} offset={3} style={{fontSize: '15px'}}>
               Ням
@@ -308,7 +308,7 @@ const rentDate = (props) => {
           {/* Даваа гараг*/}
           <Row
             style={{marginLeft: '100px', marginTop: '5px'}}
-            className={`pickWeekDayState`}
+            className={'pickWeekDayState'}
           >
             <Col span={4} offset={3} style={{fontSize: '15px'}}>
               Даваа
@@ -353,7 +353,7 @@ const rentDate = (props) => {
           {/* Мягмар гараг */}
           <Row
             style={{marginLeft: '100px', marginTop: '5px'}}
-            className={`pickWeekDayState`}
+            className={'pickWeekDayState'}
           >
             <Col span={4} offset={3} style={{fontSize: '15px'}}>
               Мягмар
@@ -399,7 +399,7 @@ const rentDate = (props) => {
           {/* Лхагва гараг  */}
           <Row
             style={{marginLeft: '100px', marginTop: '5px'}}
-            className={`pickWeekDayState`}
+            className={'pickWeekDayState'}
           >
             <Col span={4} offset={3} style={{fontSize: '15px'}}>
               Лхагва
@@ -447,7 +447,7 @@ const rentDate = (props) => {
           {/* Пүрэв гараг */}
           <Row
             style={{marginLeft: '100px', marginTop: '5px'}}
-            className={`pickWeekDayState`}
+            className={'pickWeekDayState'}
           >
             <Col span={4} offset={3} style={{fontSize: '15px'}}>
               Пүрэв
@@ -492,7 +492,7 @@ const rentDate = (props) => {
           {/* Баасан гараг */}
           <Row
             style={{marginLeft: '100px', marginTop: '5px'}}
-            className={`pickWeekDayState`}
+            className={'pickWeekDayState'}
           >
             <Col span={4} offset={3} style={{fontSize: '15px'}}>
               Баасан
@@ -536,7 +536,7 @@ const rentDate = (props) => {
           {/* Бямба гараг*/}
           <Row
             style={{marginLeft: '100px', marginTop: '5px'}}
-            className={`pickWeekDayState`}
+            className={'pickWeekDayState'}
           >
             <Col span={4} offset={3} style={{fontSize: '15px'}}>
               Бямба
@@ -595,7 +595,7 @@ const rentDate = (props) => {
           </Row>
           <Row
             style={{marginLeft: '100px', height: '24px'}}
-            className={`InfoIconInDayState`}
+            className={'InfoIconInDayState'}
           >
             <Col span={2}>
               <InfoCircleOutlined
@@ -626,13 +626,13 @@ const rentDate = (props) => {
         />
         {checked === 1 && (
           <Col>
-            <Row style={{width: '720px'}} className={`rentDate`}>
+            <Row style={{width: '720px'}} className={'rentDate'}>
               <Col span={2}>
-                <DayNightColumn className={`rentCalendarDayNightText`} />
+                <DayNightColumn className={'rentCalendarDayNightText'} />
               </Col>
               <Col span={20}>
                 <Calendar
-                  className={`rentDateCalendar`}
+                  className={'rentDateCalendar'}
                   dateCellRender={dateCellRender}
                   locale={calendarLocale}
                   monthCellRender={monthCellRender}

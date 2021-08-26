@@ -18,39 +18,11 @@ const callback = (key) => {
 moment.updateLocale('mn', {
   weekdaysMin: ['Ням', 'Даваа', 'Мягмар', 'Лхагва', 'Пүрэв', 'Баасан', 'Бямба'],
 });
-
-// const getListData = (value) => {
-//   let listData;
-//   switch (value.date()) {
-//     case 8:
-//       listData = [
-//         { id:1, type: 'warning', content: 'Uparking дугаар' },
-//         { id:2, type: 'success', content: 'This is usual event.' },
-//       ];
-//       break;
-//     case 10:
-//       listData = [
-//         { id:3, type: 'warning', content: 'Uparking дугаар' },
-//         { id:5, type: 'error', content: 'This is error event.' },
-//       ];
-//       break;
-//     case 15:
-//       listData = [
-//         { id:6, type: 'warning', content: 'Uparking дугаар' },
-//         { id:7, type: 'warning', content: 'Uparking дугаар' },
-//       ];
-//       break;
-//     default:
-//   }
-//   return listData || [];
-// }
-
 const getMonthData = (value) => {
   if (value.month() === 8) {
     return 1394;
   }
 };
-
 const monthCellRender = (value) => {
   const num = getMonthData(value);
   return num ? (
@@ -60,9 +32,7 @@ const monthCellRender = (value) => {
     </div>
   ) : null;
 };
-
 const data = [];
-
 const data1 = {
   labels: ['Thing 1', 'Thing 2', 'Thing 3', 'Thing 4', 'Thing 5', 'Thing 6'],
   datasets: [
@@ -75,13 +45,11 @@ const data1 = {
     },
   ],
 };
-
 const options = {
   scale: {
     ticks: {beginAtZero: true},
   },
 };
-
 const data2 = {
   labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
   datasets: [
@@ -133,7 +101,7 @@ const options2 = {
 const Dashboard = () => {
   const ctx = useContext(Context);
   const [userData, setuserData] = useState(null);
-  const [markedDate, setmarkedDate] = useState(null);
+  // const [markedDate, setmarkedDate] = useState(null);
   const [calendarData, setCalendarData] = useState([]);
   useEffect(() => {
     fetchData();
@@ -174,15 +142,6 @@ const Dashboard = () => {
     }
     return listData || [];
   };
-  const getTagColor = (item) => {
-    if (item.bookingStatus === 'CONFIRMED') {
-      if (calendarStatus == 3) {
-        return 'cyan';
-      }
-      return 'green';
-    }
-  };
-
   const dateCellRender = (value) => {
     const listData = getListData(value);
     return (

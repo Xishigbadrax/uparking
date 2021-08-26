@@ -11,9 +11,12 @@ const vehile = () => {
   const [uildwer, setUildwer] = useState([]);
   const [selectedUildwer, setSelectedUildwer] = useState({});
   const [zagwar, setZagwar] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [rfId, setRfId] = useState();
   const [color, setColor] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [selectedZagwar, setSelectedZagwar] = useState({});
+  // eslint-disable-next-line no-unused-vars
   const [selectedColor, setSelectedColor] = useState({});
 
   useEffect(async () => {
@@ -25,9 +28,7 @@ const vehile = () => {
     setColor(color);
   }, []);
 
-  function classNames(...classes) {
-    return classes.filter(Boolean).join('  ');
-  }
+
   const onSaved = () => {
     console.log(formData);
     const res = callPost('/user/vehicle', formData);

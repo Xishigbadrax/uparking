@@ -1,72 +1,69 @@
-import React from "react";
-import { useState } from "react";
-import WalletLayout from "@components/layouts/WalletLayout";
-import WalletCard from "../../../../components/WalletCard";
-import WalletChart from "@components/WalletChart";
-import WalletBankInfo2 from "@components/WalletBankInfo2";
+import React from 'react';
+import {useState} from 'react';
+import WalletLayout from '@components/layouts/WalletLayout';
+import WalletCard from '../../../../components/WalletCard';
+import WalletChart from '@components/WalletChart';
+import WalletBankInfo2 from '@components/WalletBankInfo2';
 
-import { Tabs, Image, Button, Modal, Divider, Input, Alert } from "antd";
-import { callGet, callPost } from "@api/api";
-import { showMessage } from "@utils/message";
-import Item from "antd/lib/list/Item";
-import { contextType } from "google-map-react";
-import Password from "antd/lib/input/Password";
+import {Tabs, Image, Button, Modal, Divider, Input, Alert} from 'antd';
+import {callGet, callPost} from '@api/api';
+
 
 const tabItems = [
   {
     id: 1,
-    name: "Хаан банк",
-    type: "KHANBANK",
-    src: "../../images/icon/khanbank.png",
+    name: 'Хаан банк',
+    type: 'KHANBANK',
+    src: '../../images/icon/khanbank.png',
   },
   {
     id: 2,
-    name: "Хас банк",
-    type: "KHASBANK",
-    src: "../../images/icon/xac.png",
+    name: 'Хас банк',
+    type: 'KHASBANK',
+    src: '../../images/icon/xac.png',
   },
   {
     id: 3,
-    name: "Голомт банк",
-    type: "GOLOMTBANK",
-    src: "../../images/icon/golomt.png",
+    name: 'Голомт банк',
+    type: 'GOLOMTBANK',
+    src: '../../images/icon/golomt.png',
   },
   {
     id: 4,
-    name: "Худалдаа хөгжлийн банк",
-    type: "TDB",
-    src: "../../images/icon/tdb.png",
+    name: 'Худалдаа хөгжлийн банк',
+    type: 'TDB',
+    src: '../../images/icon/tdb.png',
   },
 ];
 
-function Transfer() {
+const Transfer = () =>{
   const pos = {
-    display: "flex",
-    justifyContent: "space-between",
+    display: 'flex',
+    justifyContent: 'space-between',
   };
-  const [type, settype] = useState("KHANBANK");
-  const [accountNumber, setAccountNumber] = useState("");
-  const [accountName, setAccountName] = useState("");
-  const [amount, setAmount] = useState("");
-  const [description, setDescription] = useState("");
+  const [type, settype] = useState('KHANBANK');
+  const [accountNumber, setAccountNumber] = useState('');
+  const [accountName, setAccountName] = useState('');
+  const [amount, setAmount] = useState('');
+  const [description, setDescription] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isTransactionDesc, setIsTransactionDesc] = useState(false);
   const [messageShow, setmessageShow] = useState(false);
-  const [message, setmessage] = useState("");
-  const [status, setstatus] = useState("");
-  const [title, settitle] = useState("");
+  const [message, setmessage] = useState('');
+  const [status, setstatus] = useState('');
+  const [title, settitle] = useState('');
 
-  const { TabPane } = Tabs;
-  const [modal] = Modal.useModal();
-  var password = "";
-  let formData = {
+  const {TabPane} = Tabs;
+  // const [modal] = Modal.useModal();
+  let password = '';
+  const formData = {
     amount: amount,
-    currency: "mnt",
+    currency: 'mnt',
     description: description,
     toAccount: accountNumber,
     toAccountName: accountName,
     toBank: type,
-    toCurrency: "mnt",
+    toCurrency: 'mnt',
   };
 
   const showModal = () => {
@@ -100,36 +97,36 @@ function Transfer() {
 
   const BankImage = (value) => {
     switch (type) {
-      case "KHANBANK":
-        return (
-          <Image
-            preview={false}
-            width={32}
-            src="../../images/icon/khanbank.png"
-          />
-        );
+    case 'KHANBANK':
+      return (
+        <Image
+          preview={false}
+          width={32}
+          src="../../images/icon/khanbank.png"
+        />
+      );
 
-      case "KHASBANK":
-        return (
-          <Image preview={false} width={32} src="../../images/icon/xac.png" />
-        );
+    case 'KHASBANK':
+      return (
+        <Image preview={false} width={32} src="../../images/icon/xac.png" />
+      );
 
-      case "GOLOMTBANK":
-        return (
-          <Image
-            preview={false}
-            width={32}
-            src="../../images/icon/golomt.png"
-          />
-        );
+    case 'GOLOMTBANK':
+      return (
+        <Image
+          preview={false}
+          width={32}
+          src="../../images/icon/golomt.png"
+        />
+      );
 
-      case "TDB":
-        return (
-          <Image preview={false} width={32} src="../../images/icon/tdb.png" />
-        );
+    case 'TDB':
+      return (
+        <Image preview={false} width={32} src="../../images/icon/tdb.png" />
+      );
 
-      default:
-        null;
+    default:
+      null;
     }
   };
 
@@ -144,26 +141,26 @@ function Transfer() {
 
     await callGet(`/user/check/transactionpass?rawPass=${password}`, null).then(
       async (res) => {
-        if (res.status == "success") {
-          await callPost(`/khanbank/intertransfer`, formData).then((res2) => {
-            alert("amjilttai");
+        if (res.status == 'success') {
+          await callPost('/khanbank/intertransfer', formData).then((res2) => {
+            alert('amjilttai');
             // setisLoading(false);
           });
         } else {
           setmessageShow(true);
 
           setmessage(res.error);
-          settitle("Амжилтгүй");
+          settitle('Амжилтгүй');
           setstatus(res.status);
         }
         // setisLoading(false);
-      }
+      },
     );
   };
-  function Validate() {
+  const Validate =()=> {
     Modal.info({
-      title: <p style={{ fontWeight: "bold" }}>Баталгаажуулах</p>,
-      okText: "Баталгаажуулах",
+      title: <p style={{fontWeight: 'bold'}}>Баталгаажуулах</p>,
+      okText: 'Баталгаажуулах',
 
       content: (
         <div>
@@ -180,7 +177,7 @@ function Transfer() {
       },
     });
     setIsModalVisible(false);
-  }
+  };
 
   return (
     <WalletLayout>
@@ -196,31 +193,33 @@ function Transfer() {
       <Modal
         title="Шилжүүлэх"
         visible={isModalVisible}
-        width={"327px"}
+        width={'327px'}
         onCancel={handleCancel}
         footer={[
-          <Button onClick={Validate} block type="primary">
+          <>
+            <Button onClick={Validate} block type="primary">
             Шилжүүлэх
-          </Button>,
+            </Button>
+          </>,
         ]}
       >
         <div
           style={{
-            display: "flex",
-            flexFlow: "column",
-            justifyContent: "center",
+            display: 'flex',
+            flexFlow: 'column',
+            justifyContent: 'center',
           }}
         >
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <div style={{ margin: "5px" }}>
-              {BankImage()}
+          <div style={{display: 'flex', justifyContent: 'center'}}>
+            <div style={{margin: '5px'}}>
+              {BankImage}
               {/* <Image width={32} src="../../images/icon/xac.png" /> */}
             </div>
             <div>
-              <p style={{ fontWeight: "bold", fontSize: "14px" }}>
+              <p style={{fontWeight: 'bold', fontSize: '14px'}}>
                 {accountNumber}
               </p>
-              <p style={{ color: "#A2A4AA", fontSize: "12px" }}>
+              <p style={{color: '#A2A4AA', fontSize: '12px'}}>
                 {accountName}
               </p>
             </div>
@@ -232,20 +231,20 @@ function Transfer() {
               bordered={false}
               placeholder="0₮"
             /> */}
-            <div style={{ textAlign: "center", fontSize: "48px" }}>
+            <div style={{textAlign: 'center', fontSize: '48px'}}>
               <WalletBankInfo2 onChangeInput={onChangeAmount} place="0₮" />
             </div>
 
             {!isTransactionDesc ? (
               <div
-                style={{ textAlign: "center", cursor: "pointer" }}
+                style={{textAlign: 'center', cursor: 'pointer'}}
                 onClick={handleClickAddTransactionDesc}
               >
-                +{" "}
+                +{' '}
                 <span
                   style={{
-                    color: "blue",
-                    fontWeight: "bold",
+                    color: 'blue',
+                    fontWeight: 'bold',
                   }}
                 >
                   Утга нэмэх
@@ -253,11 +252,11 @@ function Transfer() {
               </div>
             ) : (
               <div>
-                <p style={{ height: 16, fontSize: 12, color: "#A2A4AA" }}>
+                <p style={{height: 16, fontSize: 12, color: '#A2A4AA'}}>
                   Гүйлгээний утга
                 </p>
                 <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
+                  style={{display: 'flex', justifyContent: 'space-between'}}
                 >
                   <div>
                     <WalletBankInfo2
@@ -282,8 +281,8 @@ function Transfer() {
             <WalletChart />
           </div>
         </div>
-        <div style={{ height: "480px", width: "327px", marginTop: 20 }}>
-          <p style={{ height: 24, width: 304, fontSize: 14, color: "#A2A4AA" }}>
+        <div style={{height: '480px', width: '327px', marginTop: 20}}>
+          <p style={{height: 24, width: 304, fontSize: 14, color: '#A2A4AA'}}>
             Банкны данс руу
           </p>
 
@@ -322,15 +321,15 @@ function Transfer() {
             </Tabs>
             <p
               style={{
-                textAlign: "center",
+                textAlign: 'center',
                 fontSize: 12,
-                color: "#A2A4AA",
+                color: '#A2A4AA',
                 width: 300,
               }}
             >
               Таны нийт гүйлгээний нийт дүн 20’000₮ -с дээш бол гүйлгээний
-              шимтгэл <span style={{ color: "blue" }}>0₮</span>, доош бол
-              гүйлгээний шимтгэл <span style={{ color: "blue" }}>100₮</span>
+              шимтгэл <span style={{color: 'blue'}}>0₮</span>, доош бол
+              гүйлгээний шимтгэл <span style={{color: 'blue'}}>100₮</span>
             </p>
             <Button
               // onClick={showModal}
@@ -348,7 +347,7 @@ function Transfer() {
                   setmessageShow(true);
                 }
               }}
-              style={{ marginTop: "20px" }}
+              style={{marginTop: '20px'}}
               type="primary"
               block
             >
@@ -359,6 +358,6 @@ function Transfer() {
       </div>
     </WalletLayout>
   );
-}
+};
 
 export default Transfer;

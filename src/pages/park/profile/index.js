@@ -1,34 +1,31 @@
-import { Menu, Row, Col, Card, Alert } from "antd";
+import {Row, Col, Card, Alert} from 'antd';
 import {
   UserOutlined,
   EditOutlined,
   ArrowLeftOutlined,
-  ArrowRightOutlined,
-} from "@ant-design/icons";
-import ProfileLayout from "@components/layouts/ProfileLayout";
+
+} from '@ant-design/icons';
+import ProfileLayout from '@components/layouts/ProfileLayout';
 import {
   Modal,
   Button,
   Form,
   Input,
-  Checkbox,
-  Layout,
   Select,
   Divider,
-} from "antd";
-import { useContext, useState, useRef } from "react";
-import { useEffect } from "react";
-import { Steps } from "antd";
-import { apiList, callGet, callPost } from "@api/api";
-import Link from "next/link";
-import MainInfo from "@components/registerSpace/mainInfo";
-import MainImage from "@components/registerSpace/mainImage";
-import SpaceImage from "@components/registerSpace/spaceImage";
-import SpaceIndicator from "@components/registerSpace/spaceIndicator";
-import PriceInfo from "@components/registerSpace/priceInfo";
-import Discount from "@components/registerSpace/discount";
-import RentDate from "@components/registerSpace/rentDate";
-import Context from "@context/Context";
+} from 'antd';
+import {useContext, useState} from 'react';
+import {useEffect} from 'react';
+import {Steps} from 'antd';
+import {callGet, callPost} from '@api/api';
+import MainInfo from '@components/registerSpace/mainInfo';
+import MainImage from '@components/registerSpace/mainImage';
+import SpaceImage from '@components/registerSpace/spaceImage';
+import SpaceIndicator from '@components/registerSpace/spaceIndicator';
+import PriceInfo from '@components/registerSpace/priceInfo';
+import Discount from '@components/registerSpace/discount';
+import RentDate from '@components/registerSpace/rentDate';
+import Context from '@context/Context';
 
 // import {
 //   withScriptjs,
@@ -37,58 +34,62 @@ import Context from "@context/Context";
 //   Marker,
 // } from "react-google-maps";
 
-const { SubMenu } = Menu;
-const { Content } = Layout;
-const { Option } = Select;
-const { Step } = Steps;
+
+const {Option} = Select;
+const {Step} = Steps;
 
 const steps = [
   {
-    title: "Үндсэн мэдээлэл",
-    content: "Үндсэн мэдээлэл",
+    title: 'Үндсэн мэдээлэл',
+    content: 'Үндсэн мэдээлэл',
   },
   {
-    title: "Зогсоолын үзүүлэлт",
-    content: "Зогсоолын үзүүлэлт",
+    title: 'Зогсоолын үзүүлэлт',
+    content: 'Зогсоолын үзүүлэлт',
   },
   {
-    title: "Үндсэн зураг",
-    content: "Үндсэн зураг",
+    title: 'Үндсэн зураг',
+    content: 'Үндсэн зураг',
   },
   {
-    title: "Зогсоолын зураг",
-    content: "Зогсоолын зураг",
+    title: 'Зогсоолын зураг',
+    content: 'Зогсоолын зураг',
   },
 
   {
-    title: "Үнийн мэдээлэл",
-    content: "Үнийн мэдээлэл",
+    title: 'Үнийн мэдээлэл',
+    content: 'Үнийн мэдээлэл',
   },
   {
-    title: "Хөнгөлөлт",
-    content: "Хөнгөлөлт ",
+    title: 'Хөнгөлөлт',
+    content: 'Хөнгөлөлт ',
   },
   {
-    title: "Түрээслэх өдрүүд",
-    content: "Түрээслэх өдрүүд",
+    title: 'Түрээслэх өдрүүд',
+    content: 'Түрээслэх өдрүүд',
   },
 ];
 
 const Profile = () => {
-  function getBase64(img, callback) {
+  const getBase64 = (img, callback) =>{
     const reader = new FileReader();
-    reader.addEventListener("load", () => callback(reader.result));
+    reader.addEventListener('load', () => callback(reader.result));
     reader.readAsDataURL(img);
-  }
+  };
   const [formData, setFormdata] = useState({});
+  // eslint-disable-next-line no-unused-vars
   const [dugaar, setDugaar] = useState();
+  // eslint-disable-next-line no-unused-vars
   const [space, setSpace] = useState([]);
   const [uildwer, setUildwer] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [selectedUildwer, setSelectedUildwer] = useState({});
   const [zagwar, setZagwar] = useState([]);
-  const [rfId, setRfId] = useState();
+  // const [rfId, setRfId] = useState();
   const [color, setColor] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [selectedZagwar, setSelectedZagwar] = useState({});
+  // eslint-disable-next-line no-unused-vars
   const [selectedColor, setSelectedColor] = useState({});
   const [vehicles, setVehicles] = useState([]);
   const [current, setCurrent] = useState(6);
@@ -102,32 +103,36 @@ const Profile = () => {
   const [imageParkingOverall, setImageParkingOverall] = useState();
   const [imageFromGate, setImageFromGate] = useState();
 
-  const mainInfoRef = useRef(null);
+  // const mainInfoRef = useRef(null);
   const [form] = Form.useForm();
   const [vehicleForm] = Form.useForm();
   const [vehicleEditForm] = Form.useForm();
 
   const [residenceBlockId, setResidenceBlockId] = useState();
+  // eslint-disable-next-line no-unused-vars
   const [parkingSpaceId, setParkingSpaceId] = useState(null);
 
-  const { userdata } = useContext(Context);
-  const [realData, setRealData] = useState("");
+  const {userdata} = useContext(Context);
+  const [realData, setRealData] = useState('');
   const [mainData, setMainData] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [imageData, setImageData] = useState(null);
   const [parkId, setParkId] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [spaceData, setSpaceData] = useState(null);
   const [vehicleId, setVehicleId] = useState();
+  // eslint-disable-next-line no-unused-vars
   const [updatedData, setUpdatedData] = useState();
-  const [id, setId] = useState(null);
+  // const [id, setId] = useState(null);
   const [weekSale, setweekSale] = useState(null);
   const [weekId, setweekId] = useState(null);
   const [weekDescription, setweekDescription] = useState();
   const [monthId, setmonthId] = useState(null);
   const [monthSale, setmonthSale] = useState(null);
   const [monthDescription, setMonthDescription] = useState();
-  const [parkingSpaceData, setParkingSpaceData] = useState({});
+  // const [parkingSpaceData, setParkingSpaceData] = useState({});
   useEffect(async () => {
-    if (typeof userdata.firstName != "undefined") {
+    if (typeof userdata.firstName != 'undefined') {
       setRealData(userdata);
     }
   }, [userdata]);
@@ -155,43 +160,43 @@ const Profile = () => {
     setIsVehicleEditVisible(true);
   };
   useEffect(async () => {
-    const data = await callGet("/user/vehicle/list");
+    const data = await callGet('/user/vehicle/list');
     setVehicles(data);
-    const uildwer = await callGet("/user/vehicle/maker");
+    const uildwer = await callGet('/user/vehicle/maker');
     setSelectedUildwer(uildwer);
     setUildwer(uildwer);
-    const color = await callGet("/user/vehicle/color");
+    const color = await callGet('/user/vehicle/color');
     setColor(color);
     // const space = await callGet("/parkingspace/list");
-    setFormdata({ ...formData, rfid: "12" });
+    setFormdata({...formData, rfid: '12'});
   }, []);
   const onChangeUildver = async (e) => {
-    console.log("i am here-->", e);
+    console.log('i am here-->', e);
     const uildver = uildwer.find((item) => item.value === e);
     setSelectedUildwer(uildver);
     const model = await callGet(`/user/vehicle/model?maker=${uildver.label}`);
     setZagwar(model);
-    setFormdata({ ...formData, maker: uildver.value });
+    setFormdata({...formData, maker: uildver.value});
   };
   const onChangeZagwar = (e) => {
     console.log(e);
     const selectZagwar = zagwar.find((item) => item.value === e);
     setSelectedZagwar(selectZagwar);
-    setFormdata({ ...formData, model: selectZagwar.value });
+    setFormdata({...formData, model: selectZagwar.value});
   };
   const onChangeDugaar = (e) => {
     const dugar = e.target.value;
     setDugaar(dugar);
-    setFormdata({ ...formData, vehicleNumber: dugar });
+    setFormdata({...formData, vehicleNumber: dugar});
   };
   const onChangeColor = (e) => {
     console.log(e);
     const selectColor = color.find((item) => item.label === e);
     setSelectedColor(selectColor);
-    setFormdata({ ...formData, color: selectColor.value });
+    setFormdata({...formData, color: selectColor.value});
   };
   const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+    console.log('Failed:', errorInfo);
   };
   const clickProfileEdit = () => {
     if (isProfileNotEdit) {
@@ -204,8 +209,8 @@ const Profile = () => {
     console.log(vehicleForm.validateFields());
     if (vehicleForm.validateFields()) {
       const a = vehicleForm.getFieldsValue();
-      console.log("boloh l ymdaaa------->");
-      const res = await callPost("/user/vehicle", {
+      console.log('boloh l ymdaaa------->');
+      const res = await callPost('/user/vehicle', {
         vehicleNumber: a.vehicleNumber,
         maker: a.maker,
         color: a.colorId,
@@ -221,7 +226,7 @@ const Profile = () => {
     const a = vehicleForm.getFieldsValue();
     console.log(a);
     console.log(vehicleId);
-    const res = await callPost("/user/vehicle/update", {
+    const res = await callPost('/user/vehicle/update', {
       vehicleNumber: a.vehicleNumber,
       maker: a.maker,
       color: a.colorId,
@@ -234,29 +239,29 @@ const Profile = () => {
     setIsVehileVisible(false);
   };
   const onFinish = (values) => {
-    console.log("Undesen dataaa yma");
+    console.log('Undesen dataaa yma');
   };
   const onFinishSale = () => {
-    console.log("sale Data--->");
+    console.log('sale Data--->');
   };
 
   const onClickContinue = async () => {
     form.validateFields();
     const componentData = form.getFieldsValue();
-    //Үндсэн мэдээллийн өгөгдлийг өгөгдлийн санруу
+    // Үндсэн мэдээллийн өгөгдлийг өгөгдлийн санруу
     if (current === 0) {
-      const res = await callPost("/parkingfirst", mainData);
+      const res = await callPost('/parkingfirst', mainData);
       setResidenceBlockId(mainData.residenceBlockId);
-      if (res.status === "success") {
+      if (res.status === 'success') {
         setCurrent(current + 1);
       }
     } else if (current === 1) {
       const second = await callGet(
-        `/parkingsecond?parkingFloorId=${componentData.floorNumber}&residenceBlockId=${mainData.residenceBlockId}`
+        `/parkingsecond?parkingFloorId=${componentData.floorNumber}&residenceBlockId=${mainData.residenceBlockId}`,
       );
       setParkId(second.parkingId);
       console.log(second);
-      const res = await callPost("/parkingspace", {
+      const res = await callPost('/parkingspace', {
         entranceLock: componentData.entranceLock,
         floorNumber: componentData.floorNumber,
         isNumbering: componentData.isNumbering,
@@ -266,63 +271,52 @@ const Profile = () => {
         capacityId: componentData.capacityId,
         parkingId: parkId,
         typeId: componentData.typeId,
-        typeOther: " ",
+        typeOther: ' ',
       });
-      if (res.status === "success") {
+      if (res.status === 'success') {
         setCurrent(current + 1);
-      } else {
-      }
-    }
-    //Үндсэн зургийн мэдээллийг өгөгдлийн санруу бичих
-    else if (current === 2) {
+      };
+    } else if (current === 2) {
+      // Үндсэн зургийн мэдээллийг өгөгдлийн санруу бичих
       getBase64(componentData.imageParkingGate.file.originFileObj, (image2) =>
-        setImageParkingGate(image2)
+        setImageParkingGate(image2),
       );
       getBase64(
         componentData.imageParkingOverall.file.originFileObj,
         (image2) => {
           setImageParkingOverall(image2), console.log(image2);
-        }
+        },
       );
-      const res = await callPost("/parkingspace/parkingimage", {
+      const res = await callPost('/parkingspace/parkingimage', {
         imageParkingOverall: imageParkingOverall,
         imageParkingGate: imageParkingGate,
         parkingSpaceId: 522,
       });
       console.log(res);
-      if (res.status === "success") {
+      if (res.status === 'success') {
         setCurrent(current + 1);
       }
-    }
-    //зогсоолын зургийн мэдээллийг өгөгдлийн санруу бичих
-    else if (current === 3) {
+    } else if (current === 3) {
       getBase64(componentData.imageFromGate.file.originFileObj, (image2) => {
         setImageFromGate(image2.substring(24));
       });
       getBase64(componentData.imageSpaceNumber.file.originFileObj, (image2) => {
         setImageSpaceNUmbe(image2.substring(24)),
-          console.log(image2.substring(24));
+        console.log(image2.substring(24));
       });
-      const res = await callPost("/parkingspace/detail", {
+      const res = await callPost('/parkingspace/detail', {
         imageFromGate: imageFromGate,
         imageSpaceNumber: imageSpaceNumber,
         parkingSpaceId: 522,
       });
-      // if () {
-      //   showMessage(messageType.FAILED.type, res.error);
-      //   return true;
-      // } else {
-      //   console.log(res, "res11111111111111");
-      //   setCurrent(current + 2);
-      // }
-      if (res.status === "success") {
+      if (res.status === 'success') {
         setCurrent(current + 1);
       }
     } else if (current === 4) {
-      const data = await callGet("/parkingspace/timesplit");
+      const data = await callGet('/parkingspace/timesplit');
       console.log(data);
       console.log(componentData);
-      let array = [
+      const array = [
         {
           dateSplitId: data.daySplit.winterId,
           priceForRenter: componentData.daySplitWinterPrice,
@@ -354,28 +348,28 @@ const Profile = () => {
           timeSplitId: [data.fullDaySplit.id],
         },
       ];
-      let formData = {
+      const formData = {
         hourlyPrice: Number(componentData.hourlyPrice),
         parkingSpaceId: 522,
         parkingSpacePriceInstance: array,
       };
       console.log(formData);
-      const res = await callPost(`/parkingspace/price`, formData);
+      const res = await callPost('/parkingspace/price', formData);
       console.log(res);
       setCurrent(current + 1);
     } else if (current === 5) {
       const saleData = form.getFieldsValue();
       console.log(saleData);
-      const res = await callGet("/division/salesplit");
+      const res = await callGet('/division/salesplit');
       console.log(res);
       if (res && res.saleSplit) {
         res.saleSplit.forEach((c) => {
-          if (c.code == "WEEKLY_SALE") {
+          if (c.code == 'WEEKLY_SALE') {
             setweekId(c.id);
             setweekSale(Number(saleData.weekSale));
             setweekDescription(c.description);
           }
-          if (c.code == "MONTHLY_SALE") {
+          if (c.code == 'MONTHLY_SALE') {
             setmonthId(c.id);
             setmonthSale(Number(saleData.monthSale));
             setMonthDescription(c.description);
@@ -383,7 +377,7 @@ const Profile = () => {
         });
       }
 
-      const ress = await callPost("/parkingspace/sale", {
+      const ress = await callPost('/parkingspace/sale', {
         parkingSpaceId: 522,
         parkingSpaceSale: [
           {
@@ -403,7 +397,7 @@ const Profile = () => {
         showMessage(messageType.FAILED.type, ress.error);
         return true;
       } else {
-        console.log(ress, "res11111111111111");
+        console.log(ress, 'res11111111111111');
         setCurrent(current + 1);
       }
     } else if (current === 6) {
@@ -412,41 +406,41 @@ const Profile = () => {
   };
 
   const goBack = () => {
-    console.log("Bye");
+    console.log('Bye');
     setCurrent(current - 1);
   };
   const onFinishFailedVehile = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+    console.log('Failed:', errorInfo);
   };
 
   // console.log(userdata.firstName)
   return (
     <ProfileLayout>
-      <Row style={{ marginLeft: "65px" }} className={"profileIndex"}>
+      <Row style={{marginLeft: '65px'}} className={'profileIndex'}>
         <Col span={12}>
           <Card>
             <Row className="header">
               <Col span={3}>
-                <UserOutlined style={{ fontSize: "30px" }} />
+                <UserOutlined style={{fontSize: '30px'}} />
               </Col>
               <Col span={18}>
-                {" "}
+                {' '}
                 <span className="text">Хувийн мэдээлэл</span>
               </Col>
-              <Col span={3} style={{ textAlign: "right" }}>
+              <Col span={3} style={{textAlign: 'right'}}>
                 <EditOutlined
                   className="edit"
                   onClick={clickProfileEdit}
-                  style={{ fontSize: "28px" }}
+                  style={{fontSize: '28px'}}
                 />
               </Col>
             </Row>
-            {realData != "" ? (
+            {realData != '' ? (
               <Form
                 className="profileForm"
                 name="basic"
-                labelCol={{ span: 8 }}
-                wrapperCol={{ span: 16 }}
+                labelCol={{span: 8}}
+                wrapperCol={{span: 16}}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
                 initialValues={realData}
@@ -454,14 +448,14 @@ const Profile = () => {
                 <Form.Item
                   label="Овог:"
                   name="lastName"
-                  rules={[{ required: true, message: "Овог оруулна уу" }]}
+                  rules={[{required: true, message: 'Овог оруулна уу'}]}
                 >
                   <Input disabled={isProfileNotEdit} />
                 </Form.Item>
                 <Form.Item
                   label="Нэр:"
                   name="firstName"
-                  rules={[{ required: true, message: "Нэр оруулна уу" }]}
+                  rules={[{required: true, message: 'Нэр оруулна уу'}]}
                 >
                   <Input disabled={isProfileNotEdit} />
                 </Form.Item>
@@ -469,7 +463,7 @@ const Profile = () => {
                   label="Регистрийн дугаар:"
                   name="registerNumber"
                   rules={[
-                    { required: true, message: "Регистрийн дугаар оруулна уу" },
+                    {required: true, message: 'Регистрийн дугаар оруулна уу'},
                   ]}
                 >
                   <Input disabled={isProfileNotEdit} />
@@ -478,7 +472,7 @@ const Profile = () => {
                   label="Утасны дугаар:"
                   name="phoneNumber"
                   rules={[
-                    { required: true, message: "Утасны дугаар оруулна уу" },
+                    {required: true, message: 'Утасны дугаар оруулна уу'},
                   ]}
                 >
                   <Input disabled={isProfileNotEdit} />
@@ -487,7 +481,7 @@ const Profile = () => {
                   label="И-мэйл хаяг:"
                   name="email"
                   rules={[
-                    { required: true, message: "И-мэйл хаяг оруулна уу" },
+                    {required: true, message: 'И-мэйл хаяг оруулна уу'},
                   ]}
                 >
                   <Input disabled={isProfileNotEdit} />
@@ -495,7 +489,7 @@ const Profile = () => {
                 <Form.Item
                   label="Facebook:"
                   name="fbLink"
-                  rules={[{ required: false, message: "Facebook оруулна уу" }]}
+                  rules={[{required: false, message: 'Facebook оруулна уу'}]}
                 >
                   <Input disabled={isProfileNotEdit} />
                 </Form.Item>
@@ -505,7 +499,7 @@ const Profile = () => {
                 </Form.Item>
 
                 {!isProfileNotEdit && (
-                  <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                  <Form.Item wrapperCol={{offset: 8, span: 16}}>
                     <Button type="primary" htmlType="submit">
                       Хадгалах
                     </Button>
@@ -515,28 +509,28 @@ const Profile = () => {
             ) : null}
           </Card>
         </Col>
-        <Col span={12} style={{ paddingLeft: "25px" }}>
+        <Col span={12} style={{paddingLeft: '25px'}}>
           <Card>
             <Row className="header">
               <Col span={3}></Col>
               <Col span={18}>
                 <span className="text">Тээврийн хэрэгсэл</span>
               </Col>
-              <Col span={3} style={{ textAlign: "right" }}></Col>
+              <Col span={3} style={{textAlign: 'right'}}></Col>
             </Row>
-            <Row style={{ minHeight: "200px", paddingTop: "30px" }}>
+            <Row style={{minHeight: '200px', paddingTop: '30px'}}>
               {vehicles.map((item) => (
                 <div
                   key={item.value}
                   className="mt-4 width-auto  rounded flex shadow-sm"
-                  style={{ backgroundColor: "white", width: "325px" }}
+                  style={{backgroundColor: 'white', width: '325px'}}
                 >
                   <div className="mt-4 ml-4">
                     <img src="/directions_car_24px.png"></img>
                   </div>
                   <div className="ml-4">
                     {/* <div class="text-sm">{item.label}</div> */}
-                    <div className="text-base" style={{ color: "blue " }}>
+                    <div className="text-base" style={{color: 'blue '}}>
                       {item.label}
                     </div>
                   </div>
@@ -565,16 +559,16 @@ const Profile = () => {
               </Button>
             </Row>
           </Card>
-          <Card style={{ marginTop: "25px" }}>
+          <Card style={{marginTop: '25px'}}>
             <Row className="header">
               <Col span={3}></Col>
               <Col span={18}>
-                {" "}
+                {' '}
                 <span className="text">Авто зогсоол</span>
               </Col>
-              <Col span={3} style={{ textAlign: "right" }}></Col>
+              <Col span={3} style={{textAlign: 'right'}}></Col>
             </Row>
-            <Row style={{ minHeight: "200px", paddingTop: "30px" }}>
+            <Row style={{minHeight: '200px', paddingTop: '30px'}}>
               {space.map((item) => {
                 <Col key={item.value} offset={2}>
                   АЗН
@@ -598,12 +592,12 @@ const Profile = () => {
         title="Тээврийн хэрэгсэл бүртгүүлэх"
         centered
         form={form}
-        style={{ minHeight: "800px", height: "auto" }}
+        style={{minHeight: '800px', height: 'auto'}}
         visible={isVehileVisible}
         okButtonProps={{
-          form: "vehile-edit-form",
-          key: "submit",
-          htmlType: "submit",
+          form: 'vehile-edit-form',
+          key: 'submit',
+          htmlType: 'submit',
         }}
         onOk={() => setIsVehileVisible(false)}
         onCancel={() => setIsVehileVisible(false)}
@@ -625,17 +619,17 @@ const Profile = () => {
         <Row>
           <Col span={2}></Col>
           <Col span={20}>
-            <div className={"titleV"}>
+            <div className={'titleV'}>
               <div className="topV">Тээврийн - мэдээлэл</div>
               <div className="bottomV">
                 Тухайн хэсэгт зогсоолын байрлал, дугаарлалт харагдаж буй зураг
                 хийхгүй
               </div>
             </div>
-            <Row style={{ marginTop: "100px" }}>
+            <Row style={{marginTop: '100px'}}>
               <Col span={8}>
                 <Form
-                  className={`addVehicleForm`}
+                  className={'addVehicleForm'}
                   form={vehicleForm}
                   layout="vertical"
                   name="basic"
@@ -652,7 +646,7 @@ const Profile = () => {
                     rules={[
                       {
                         required: true,
-                        message: "Улсын дугаар оруулна уу",
+                        message: 'Улсын дугаар оруулна уу',
                       },
                     ]}
                   >
@@ -665,7 +659,7 @@ const Profile = () => {
                     rules={[
                       {
                         required: true,
-                        message: "Үйлдвэр сонгоно уу",
+                        message: 'Үйлдвэр сонгоно уу',
                       },
                     ]}
                   >
@@ -684,7 +678,7 @@ const Profile = () => {
                     rules={[
                       {
                         required: true,
-                        message: "Загвар сонгоно уу",
+                        message: 'Загвар сонгоно уу',
                       },
                     ]}
                   >
@@ -703,7 +697,7 @@ const Profile = () => {
                     rules={[
                       {
                         required: true,
-                        message: "Өнгө сонгоно уу?",
+                        message: 'Өнгө сонгоно уу?',
                       },
                     ]}
                   >
@@ -731,18 +725,18 @@ const Profile = () => {
           <Col span={2}></Col>
         </Row>
       </Modal>
-      {/*Машины мэдээлэл шинэчлэх Modal */}
+      {/* Машины мэдээлэл шинэчлэх Modal */}
       <Modal
         className="fullModal "
         title="Тээврийн хэрэгсэл шинэчлэх"
         centered
         form={vehicleEditForm}
-        style={{ minHeight: "800px", height: "auto" }}
+        style={{minHeight: '800px', height: 'auto'}}
         visible={isVehicleEditVisible}
         okButtonProps={{
-          form: "vehile-edit-form",
-          key: "submit",
-          htmlType: "submit",
+          form: 'vehile-edit-form',
+          key: 'submit',
+          htmlType: 'submit',
         }}
         onOk={() => setIsVehicleEditVisible(false)}
         onCancel={() => setIsVehicleEditVisible(false)}
@@ -764,17 +758,17 @@ const Profile = () => {
         <Row>
           <Col span={2}></Col>
           <Col span={20}>
-            <div className={"titleV"}>
+            <div className={'titleV'}>
               <div className="topV">Тээврийн - мэдээлэл</div>
               <div className="bottomV">
                 Тухайн хэсэгт зогсоолын байрлал, дугаарлалт харагдаж буй зураг
                 хийхгүй
               </div>
             </div>
-            <Row style={{ marginTop: "100px" }}>
+            <Row style={{marginTop: '100px'}}>
               <Col span={8}>
                 <Form
-                  className={`addVehicleForm`}
+                  className={'addVehicleForm'}
                   form={vehicleEditForm}
                   layout="vertical"
                   name="basic"
@@ -789,7 +783,7 @@ const Profile = () => {
                     rules={[
                       {
                         required: true,
-                        message: "Улсын дугаар оруулна уу",
+                        message: 'Улсын дугаар оруулна уу',
                       },
                     ]}
                   >
@@ -802,7 +796,7 @@ const Profile = () => {
                     rules={[
                       {
                         required: true,
-                        message: "Үйлдвэр сонгоно уу",
+                        message: 'Үйлдвэр сонгоно уу',
                       },
                     ]}
                   >
@@ -821,7 +815,7 @@ const Profile = () => {
                     rules={[
                       {
                         required: true,
-                        message: "Загвар сонгоно уу",
+                        message: 'Загвар сонгоно уу',
                       },
                     ]}
                   >
@@ -840,7 +834,7 @@ const Profile = () => {
                     rules={[
                       {
                         required: true,
-                        message: "Өнгө сонгоно уу?",
+                        message: 'Өнгө сонгоно уу?',
                       },
                     ]}
                   >
@@ -871,22 +865,23 @@ const Profile = () => {
       <Modal
         className="fullModal"
         title="Авто зогсоол"
-        style={{ minHeight: "800px", height: "auto" }}
+        style={{minHeight: '800px', height: 'auto'}}
         centered
         visible={isParkVisible}
         // onOk={() => setIsParkVisible(false)}
         onCancel={() => setIsParkVisible(false)}
-        cancelButtonProps={{ style: { display: "none" } }}
-        okButtonProps={{ style: { display: "none" } }}
+        cancelButtonProps={{style: {display: 'none'}}}
+        okButtonProps={{style: {display: 'none'}}}
         width={1000}
         footer={[
-          <div>{current > 0 && <Button onClick={goBack}>Буцах</Button>}</div>,
-          <div>
+          <>
+            {current > 0 && <Button onClick={goBack}>Буцах</Button>}</>,
+          <>
             {current < steps.length - 0 && (
               <Button
                 onClick={onClickContinue}
                 type="primary"
-                className="buttonGo"
+                // className="buttonGo"
               >
                 Үргэлжлүүлэх
               </Button>
@@ -896,14 +891,14 @@ const Profile = () => {
                 Дуусгах
               </Button>
             )} */}
-          </div>,
+          </>,
         ]}
       >
         <Row width={1266}>
           <Col span={22} offset={1}>
             <Steps
               size="small"
-              style={{ fontSize: "15px", color: "blue" }}
+              style={{fontSize: '15px', color: 'blue'}}
               current={current}
             >
               {steps.map((item) => (
@@ -912,9 +907,9 @@ const Profile = () => {
             </Steps>
           </Col>
         </Row>
-        <Row style={{ height: "580px" }}>
+        <Row style={{height: '580px'}}>
           <Col span={24}>
-            {(steps[current].title === "Үндсэн мэдээлэл" && (
+            {(steps[current].title === 'Үндсэн мэдээлэл' && (
               <MainInfo
                 form={form}
                 setMainData={setMainData}
@@ -923,22 +918,22 @@ const Profile = () => {
                 onFinish={onFinish123}
               />
             )) ||
-              (steps[current].title === "Үндсэн зураг" && (
+              (steps[current].title === 'Үндсэн зураг' && (
                 <MainImage setImageData={setImageData} form={form} />
               )) ||
-              (steps[current].title === "Зогсоолын зураг" && (
+              (steps[current].title === 'Зогсоолын зураг' && (
                 <SpaceImage setSpaceData={setSpaceData} form={form} />
               )) ||
-              (steps[current].title === "Зогсоолын үзүүлэлт" && (
+              (steps[current].title === 'Зогсоолын үзүүлэлт' && (
                 <SpaceIndicator form={form} onFinish={onFinishSPace} />
               )) ||
-              (steps[current].title === "Үнийн мэдээлэл" && (
+              (steps[current].title === 'Үнийн мэдээлэл' && (
                 <PriceInfo form={form} />
               )) ||
-              (steps[current].title === "Хөнгөлөлт" && (
+              (steps[current].title === 'Хөнгөлөлт' && (
                 <Discount form={form} onFinish={onFinishSale} />
               )) ||
-              (steps[current].title === "Түрээслэх өдрүүд" && (
+              (steps[current].title === 'Түрээслэх өдрүүд' && (
                 <RentDate setRentData={setRentData} />
               ))}
           </Col>

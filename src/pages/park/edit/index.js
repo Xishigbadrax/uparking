@@ -1,15 +1,13 @@
-import { Row, Col, Button, Divider, Form, Input, Item, Upload } from "antd";
+import {Row, Col, Button, Divider, Form, Input, Item, Upload, Spin} from 'antd';
 import {
   EditOutlined,
   LeftOutlined,
   RightOutlined,
   PlusOutlined,
   LoadingOutlined,
-} from "@ant-design/icons";
-import { useState, useEffect } from "react";
-import { callGet } from "@api/api";
-import { useRouter } from "next/router";
-import Image from "next/image";
+} from '@ant-design/icons';
+import {useState} from 'react';
+import Image from 'next/image';
 // import {
 //   withScriptjs,
 //   withGoogleMap,
@@ -17,9 +15,9 @@ import Image from "next/image";
 //   Marker,
 // } from "react-google-maps";
 const data = [
-  { id: 1, image: "/ganbat.png" },
-  { id: 2, image: "/Adiyadorj.png" },
-  { id: 3, image: "/Bat-ochir.png" },
+  {id: 1, image: '/ganbat.png'},
+  {id: 2, image: '/Adiyadorj.png'},
+  {id: 3, image: '/Bat-ochir.png'},
 ];
 // const MyMapComponent = withScriptjs(
 //   withGoogleMap((props) => (
@@ -30,39 +28,43 @@ const data = [
 //     </GoogleMap>
 //   ))
 // );
-function getBase64(img, callback) {
-  const reader = new FileReader();
-  reader.addEventListener("load", () => callback(reader.result));
-  reader.readAsDataURL(img);
-}
+// const getBase64=(img, callback)=> {
+//   const reader = new FileReader();
+//   reader.addEventListener('load', () => callback(reader.result));
+//   reader.readAsDataURL(img);
+// };
 
-function beforeUpload(file) {
-  const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+const beforeUpload = (file)=> {
+  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
   if (!isJpgOrPng) {
-    message.error("You can only upload JPG/PNG file!");
+    message.error('You can only upload JPG/PNG file!');
   }
   const isLt2M = file.size / 1024 / 1024 < 6;
   if (!isLt2M) {
-    message.error("Image must smaller than 2MB!");
+    message.error('Image must smaller than 2MB!');
   }
   return isJpgOrPng && isLt2M;
-}
+};
 const Edit = () => {
-  const router = useRouter();
+  // const router = useRouter();
   const [current, setCurrent] = useState(0);
-  const { id } = router.query;
+  // const {id} = router.query;
   const [Mainvalue, setValue] = useState(false);
   const [spaceValue, setSpaceValue] = useState(false);
   const [mainImageValue, setMainImageValue] = useState(false);
   const LoadIcon = <LoadingOutlined />;
+  // eslint-disable-next-line no-unused-vars
   const [selectedPositionImage, setSelectedResidenceSideImage] = useState();
-  const [selectedDirectionImage, setSelectedMainImage] = useState();
-  const [selectedNumberingImage, setSelectedDoorExitImage] = useState();
+  // const [selectedDirectionImage, setSelectedMainImage] = useState();
+  // const [selectedNumberingImage, setSelectedDoorExitImage] = useState();
+  // eslint-disable-next-line no-unused-vars
   const [selectResidenceEXitImage, setSelectedResidenceExitImage] = useState();
+  // eslint-disable-next-line no-unused-vars
   const [loadingPosition, setLoadingPosition] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [loadingDirect, setLoadingDirect] = useState(false);
-  const [loadingNumbering, setLoadingNumbering] = useState(false);
-  const [loadingExitImage, setLoadingExitImage] = useState(false);
+  // const [loadingNumbering, setLoadingNumbering] = useState(false);
+  // const [loadingExitImage, setLoadingExitImage] = useState(false);
 
   // useEffect = async () => {
   //   const data = await callGet(`/parkingspace/update/${id}`);
@@ -93,34 +95,34 @@ const Edit = () => {
     setMainImageValue(false);
   };
   const onFinish = (e) => {
-    console.log("xaaxaa");
+    console.log('xaaxaa');
   };
   return (
     <div>
       <Row
         style={{
-          fontSize: "20px",
-          marginTop: "50px",
-          marginLeft: "100px",
+          fontSize: '20px',
+          marginTop: '50px',
+          marginLeft: '100px',
         }}
       >
         Авто зогсоол бүртгүүлэх
       </Row>
-      <div style={{ width: "1500px", marginLeft: "160px" }}>
+      <div style={{width: '1500px', marginLeft: '160px'}}>
         <Row>
           <Col span={6}>
             <p
               style={{
-                color: "blue",
-                fontSize: "17px",
-                marginTop: "50px",
+                color: 'blue',
+                fontSize: '17px',
+                marginTop: '50px',
               }}
             >
               <b>Үндсэн мэдээлэл</b>
-              <p style={{ color: "gray", fontSize: "12px" }}>Алхам 1/7</p>
+              <p style={{color: 'gray', fontSize: '12px'}}>Алхам 1/7</p>
             </p>
           </Col>
-          <Col style={{ marginTop: "50px " }} span={6} push={16}>
+          <Col style={{marginTop: '50px '}} span={6} push={16}>
             <Button
               onClick={changeMaindata}
               title="Засах"
@@ -133,11 +135,11 @@ const Edit = () => {
         </Row>
         <Divider />
         {Mainvalue ? (
-          <div style={{ padding: "30px" }}>
+          <div style={{padding: '30px'}}>
             <Form
               onFinish={onFinish}
-              labelCol={{ span: 3 }}
-              wrapperCol={{ span: 6 }}
+              labelCol={{span: 3}}
+              wrapperCol={{span: 6}}
             >
               <Form.Item label="Аймаг,Хот*">
                 <Input />
@@ -166,8 +168,8 @@ const Edit = () => {
             </Form>
           </div>
         ) : (
-          <Row style={{ padding: "30px" }}>
-            <Col style={{ lineHeight: "40px" }}>
+          <Row style={{padding: '30px'}}>
+            <Col style={{lineHeight: '40px'}}>
               <p>Хот,Аймаг *</p>
               <p>Дүүрэг ,Сум *</p>
               <p>Хороо ,Баг*</p>
@@ -176,7 +178,7 @@ const Edit = () => {
               <p>Хаалганы тоо</p>
               <p>Зогсоолын дугаар *</p>
             </Col>
-            <Col offset={4} style={{ lineHeight: "40px", alignItems: "right" }}>
+            <Col offset={4} style={{lineHeight: '40px', alignItems: 'right'}}>
               <p>A</p>
               <p>AA</p>
               <p>AAA</p>
@@ -206,25 +208,25 @@ const Edit = () => {
         )}
         <Col></Col>
       </div>
-      <div style={{ width: "1500px", marginLeft: "160px" }}>
+      <div style={{width: '1500px', marginLeft: '160px'}}>
         <Row>
           <Col span={6}>
             <p
               style={{
-                color: "blue",
-                fontSize: "17px",
-                marginTop: "50px",
+                color: 'blue',
+                fontSize: '17px',
+                marginTop: '50px',
               }}
             >
               <b>Зогсоолын үзүүлэлт</b>
-              <p style={{ color: "gray", fontSize: "12px" }}>Алхам 2/7</p>
+              <p style={{color: 'gray', fontSize: '12px'}}>Алхам 2/7</p>
             </p>
           </Col>
-          <Col style={{ marginTop: "50px " }} span={6} push={16}>
+          <Col style={{marginTop: '50px '}} span={6} push={16}>
             <Button
               onClick={changeSpaceData}
               title="Засах"
-              icon={<EditOutlined style={{ fontSize: "12px" }} />}
+              icon={<EditOutlined style={{fontSize: '12px'}} />}
               shape="rounded"
             >
               засах
@@ -233,11 +235,11 @@ const Edit = () => {
         </Row>
         <Divider />
         {spaceValue ? (
-          <div style={{ padding: "30px" }}>
+          <div style={{padding: '30px'}}>
             <Form
               onFinish={onFinish}
-              labelCol={{ span: 3 }}
-              wrapperCol={{ span: 6 }}
+              labelCol={{span: 3}}
+              wrapperCol={{span: 6}}
             >
               <Form.Item label="Давхрын байршил*" width={400}>
                 <Input />
@@ -267,8 +269,8 @@ const Edit = () => {
           </div>
         ) : (
           <div>
-            <Row style={{ padding: "30px" }}>
-              <Col style={{ lineHeight: "40px" }}>
+            <Row style={{padding: '30px'}}>
+              <Col style={{lineHeight: '40px'}}>
                 <p>Давхрын байршил *</p>
                 <p>Орох хаалга</p>
                 <p>Дугаарын тэмдэглэгээ </p>
@@ -277,7 +279,7 @@ const Edit = () => {
                 <p>Эргэх урсгал</p>
                 <p>Нэмэлт тайлбар</p>
               </Col>
-              <Col offset={4} style={{ lineHeight: "40px" }}>
+              <Col offset={4} style={{lineHeight: '40px'}}>
                 <p>A</p>
                 <p>AA</p>
                 <p>AAA</p>
@@ -291,25 +293,25 @@ const Edit = () => {
           </div>
         )}
       </div>
-      <div style={{ width: "1500px", marginLeft: "160px" }}>
+      <div style={{width: '1500px', marginLeft: '160px'}}>
         <Row>
           <Col span={6}>
             <p
               style={{
-                color: "blue",
-                fontSize: "17px",
-                marginTop: "50px",
+                color: 'blue',
+                fontSize: '17px',
+                marginTop: '50px',
               }}
             >
               <b>Үндсэн зураг </b>
-              <p style={{ color: "gray", fontSize: "12px" }}>Алхам 3/7</p>
+              <p style={{color: 'gray', fontSize: '12px'}}>Алхам 3/7</p>
             </p>
           </Col>
-          <Col style={{ marginTop: "50px " }} span={6} push={16}>
+          <Col style={{marginTop: '50px '}} span={6} push={16}>
             <Button
               onClick={changeMainValue}
               title="Засах"
-              icon={<EditOutlined style={{ fontSize: "12px" }} />}
+              icon={<EditOutlined style={{fontSize: '12px'}} />}
               shape="rounded"
             >
               засах
@@ -319,35 +321,35 @@ const Edit = () => {
         <Divider />
         <Row>
           {!mainImageValue ? (
-            <Col offset={2} style={{ marginTop: "30px" }}>
+            <Col offset={2} style={{marginTop: '30px'}}>
               <div key={Item}>
                 <Image
                   src={data[current].image}
                   width="1400px"
                   height="600px"
-                  style={{ zIndex: "-1" }}
+                  style={{zIndex: '-1'}}
                 />
                 <div
                   style={{
-                    display: "flex",
-                    color: "white",
-                    marginTop: "-30px",
-                    marginLeft: "884px",
-                    position: "absolute",
+                    display: 'flex',
+                    color: 'white',
+                    marginTop: '-30px',
+                    marginLeft: '884px',
+                    position: 'absolute',
                   }}
                 >
                   <p>Зогсоолын орц гарцын зураг</p>
                   {current >= 1 && (
                     <LeftOutlined
                       onClick={divideCurrent}
-                      style={{ marginLeft: "10px" }}
+                      style={{marginLeft: '10px'}}
                     />
                   )}
-                  <p style={{ marginLeft: "10px" }}>{current + 1}/3</p>
+                  <p style={{marginLeft: '10px'}}>{current + 1}/3</p>
                   {current < 2 && (
                     <RightOutlined
                       onClick={addCurrent}
-                      style={{ fontSize: "12px", marginLeft: "10px" }}
+                      style={{fontSize: '12px', marginLeft: '10px'}}
                     />
                   )}
                 </div>
@@ -355,9 +357,9 @@ const Edit = () => {
             </Col>
           ) : (
             <div>
-              <Row style={{ marginTop: "50px" }}>
+              <Row style={{marginTop: '50px'}}>
                 <Col offset={4}>
-                  <p style={{ fontSize: "15px" }}>Хотхоны ойр орчмын зураг</p>
+                  <p style={{fontSize: '15px'}}>Хотхоны ойр орчмын зураг</p>
 
                   <Upload
                     name="avatar"
@@ -371,7 +373,7 @@ const Edit = () => {
                       <img
                         src={selectedPositionImage}
                         alt="avatar"
-                        style={{ width: "100%", height: "240px" }}
+                        style={{width: '100%', height: '240px'}}
                       />
                     ) : (
                       <div>
@@ -383,13 +385,13 @@ const Edit = () => {
                         ) : (
                           <PlusOutlined
                             style={{
-                              justifyContent: "center",
-                              alignContent: "center",
-                              backgroundColor: "blue",
-                              color: "white",
-                              height: "20px",
-                              width: "20px",
-                              borderRadius: "10px",
+                              justifyContent: 'center',
+                              alignContent: 'center',
+                              backgroundColor: 'blue',
+                              color: 'white',
+                              height: '20px',
+                              width: '20px',
+                              borderRadius: '10px',
                             }}
                           />
                         )}
@@ -398,13 +400,13 @@ const Edit = () => {
                   </Upload>
                 </Col>
                 <Col offset={4}>
-                  <p style={{ fontSize: "15px" }}>Хотхоны орц гарцын зураг</p>
+                  <p style={{fontSize: '15px'}}>Хотхоны орц гарцын зураг</p>
                   <Upload
                     name="avatar"
                     listType="picture-card"
                     className="avatar-uploader"
                     showUploadList={false}
-                    style={{ width: "400px" }}
+                    style={{width: '400px'}}
                     action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                     beforeUpload={beforeUpload}
                   >
@@ -412,7 +414,7 @@ const Edit = () => {
                       <Image
                         src={selectResidenceEXitImage}
                         alt="avatar"
-                        style={{ height: "240px" }}
+                        style={{height: '240px'}}
                       />
                     ) : (
                       <div>
@@ -424,13 +426,13 @@ const Edit = () => {
                         ) : (
                           <PlusOutlined
                             style={{
-                              justifyContent: "center",
-                              alignContent: "center",
-                              backgroundColor: "blue",
-                              color: "white",
-                              height: "20px",
-                              width: "20px",
-                              borderRadius: "10px",
+                              justifyContent: 'center',
+                              alignContent: 'center',
+                              backgroundColor: 'blue',
+                              color: 'white',
+                              height: '20px',
+                              width: '20px',
+                              borderRadius: '10px',
                             }}
                           />
                         )}
@@ -439,7 +441,7 @@ const Edit = () => {
                   </Upload>
                 </Col>
               </Row>
-              <Button onClick={onsaveMainImage}>Svaeee</Button>
+              <Button onClick={onsaveMainImage}>Svaeaee</Button>
             </div>
           )}
         </Row>
