@@ -1,9 +1,7 @@
 import {useState, createContext, useReducer, useEffect} from 'react';
 import reducers from './Reducers';
-import jwt_decode from 'jwt-decode';
 import Auth from '@utils/auth';
 import {useRouter} from 'next/router';
-import {apiList, sList} from '@api/api';
 import {profileMenu} from '@constants/profilemenu';
 import {walletMenu} from '@constants/walletmenu';
 import {callGet} from '@api/api';
@@ -11,6 +9,7 @@ import {showMessage} from '../utils/message';
 
 const Context = createContext();
 
+// eslint-disable-next-line react/prop-types
 export const ContextProvider = ({children}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [userdata, setUserdata] = useState({});

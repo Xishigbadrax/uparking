@@ -3,13 +3,13 @@ import {useState} from 'react';
 import {Upload, message} from 'antd';
 import {Spin, Form} from 'antd';
 import {LoadingOutlined, PlusOutlined, RedoOutlined} from '@ant-design/icons';
-function getBase64(img, callback) {
+const getBase64 = (img, callback) => {
   const reader = new FileReader();
   reader.addEventListener('load', () => callback(reader.result));
   reader.readAsDataURL(img);
-}
+};
 
-function beforeUpload(file) {
+const beforeUpload = (file) => {
   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
   if (!isJpgOrPng) {
     message.error('You can only upload JPG/PNG file!');
@@ -19,7 +19,7 @@ function beforeUpload(file) {
     message.error('Image must smaller than 2MB!');
   }
   return isJpgOrPng && isLt2M;
-}
+};
 const mainImage = (props) => {
   const LoadIcon = <LoadingOutlined />;
   const [selectedPositionImage, setSelectedResidenceSideImage] = useState();
@@ -70,7 +70,6 @@ const mainImage = (props) => {
       );
     }
   };
-  const onFinish = () => {};
   const onChangeResidenceSideImage = (info) => {
     if (info.file.status === 'uploading') {
       setLoadingPosition(true);

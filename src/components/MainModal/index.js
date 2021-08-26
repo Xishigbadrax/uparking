@@ -1,6 +1,6 @@
-import { Button, Modal } from "antd";
-import Context from "@context/Context";
-import { useContext, useState } from "react";
+/* eslint-disable react/prop-types */
+import {Button, Modal} from 'antd';
+import {useState} from 'react';
 
 const MainModal = ({
   title,
@@ -11,7 +11,7 @@ const MainModal = ({
   onCancel,
   footer,
   okTitle,
-  cancelTitle
+  cancelTitle,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -25,26 +25,26 @@ const MainModal = ({
 
   return (
     <Modal
-      title={<b style={{ textTransform: "uppercase" }}>{title}</b>}
+      title={<b style={{textTransform: 'uppercase'}}>{title}</b>}
       visible={visible}
-      width={width || "700px"}
+      width={width || '700px'}
       onCancel={handleCancel}
       footer={
-        footer !== null
-          ? [
-              <Button key="back" onClick={handleCancel}>
-                {cancelTitle ? cancelTitle : "Хаах"}
-              </Button>,
-              <Button
-                key="submit"
-                type="primary"
-                loading={isLoading}
-                onClick={handleOk}
-              >
-                {okTitle ? okTitle : "Хадгалах"}
-              </Button>,
-            ]
-          : null
+        footer !== null ?
+          [
+            <Button key="back" onClick={handleCancel}>
+              {cancelTitle ? cancelTitle : 'Хаах'}
+            </Button>,
+            <Button
+              key="submit"
+              type="primary"
+              loading={isLoading}
+              onClick={handleOk}
+            >
+              {okTitle ? okTitle : 'Хадгалах'}
+            </Button>,
+          ] :
+          null
       }
     >
       {children}

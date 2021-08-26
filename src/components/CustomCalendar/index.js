@@ -19,6 +19,7 @@ console.log(AcademicYearEnd, 'AcademicYearEndAcademicYearEnd');
 const CustomCalendar = (props) => {
   const [selectedDate, setselectedDate] = useState([]);
   const [selectType, setSelectType] = useState('multi');
+  // eslint-disable-next-line no-unused-vars
   const [value, setValue] = useState(null);
 
   useEffect(() => {

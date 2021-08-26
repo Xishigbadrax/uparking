@@ -54,10 +54,11 @@ const Charge = () => {
   const [status, setstatus] = useState('');
   const [title, settitle] = useState('');
   const [messageShow, setmessageShow] = useState(false);
-  const [formData, setformData] = useState({
+  const [formData] = useState({
     amount: null,
     phoneNumber: null,
   });
+  // eslint-disable-next-line no-unused-vars
   const [formData3, setformData3] = useState('');
 
   const fetchData2 = async () => {

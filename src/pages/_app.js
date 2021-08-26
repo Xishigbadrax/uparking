@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import 'tailwindcss/tailwind.css';
 import '../styles/css/main.css';
 import '../styles/sass/main.scss';

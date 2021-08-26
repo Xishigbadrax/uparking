@@ -10,7 +10,6 @@ import {callGet} from '@api/api';
 import {Calendar, Tag} from 'antd';
 import Context from '@context/Context';
 
-
 const Wallet = () => {
   const [calendarData, setCalendarData] = useState([]);
   const [userData, setuserData] = useState(null);

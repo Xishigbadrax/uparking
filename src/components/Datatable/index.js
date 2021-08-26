@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import Link from 'next/link';
 import Icon, {
   DeleteFilled,
@@ -182,6 +183,7 @@ const Datatable = ({
 
           if (column['ln']) {
             const ln = column['ln'].split('#');
+            // eslint-disable-next-line react/display-name
             cmn.render = (text, record) => {
               return (
                 <Link href={`${ln[0]}/${record[ln[1]]}`.replaceAll('=/', '=')}>
@@ -213,6 +215,7 @@ const Datatable = ({
             key: 'operation',
             align: 'center',
             width: opWidth || '8%',
+            // eslint-disable-next-line react/display-name
             render: (_, record) => {
               const addEl = [];
               let deleteEl;
@@ -363,9 +366,6 @@ const Datatable = ({
     setCsvColumns(cols);
   }, [columns]);
 
-  /**
-   * Table-n mur songoh
-   */
   const onSelectChange = (selectedRowKeys) => {
     setselectedRowKeys(selectedRowKeys);
     console.log('selectedRowKeys changed: ', selectedRowKeys);

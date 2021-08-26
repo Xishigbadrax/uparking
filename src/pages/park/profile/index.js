@@ -33,6 +33,8 @@ import Context from '@context/Context';
 //   Marker,
 // } from "react-google-maps";
 
+// const {SubMenu} = Menu;
+// const {Content} = Layout;
 const {Option} = Select;
 const {Step} = Steps;
 
@@ -109,7 +111,6 @@ const Profile = () => {
   const [residenceBlockId, setResidenceBlockId] = useState();
   // eslint-disable-next-line no-unused-vars
   const [parkingSpaceId, setParkingSpaceId] = useState(null);
-  console.log( Context.userdata);
 
   const {userdata} = useContext(Context);
   const [realData, setRealData] = useState('');

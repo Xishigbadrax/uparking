@@ -1,40 +1,40 @@
 export default {
-  t: "Амьдарч буй орон сууц",
-  k: "home",
-  tp: "select",
-  w: "10%",
+  t: 'Амьдарч буй орон сууц',
+  k: 'home',
+  tp: 'select',
+  w: '10%',
   s: 1,
   isc: 1,
-  sk: "home",
-  st: "text",
+  sk: 'home',
+  st: 'text',
   opts: [
     {
-      id: "house",
-      name: "Амины орон сууц",
+      id: 'house',
+      name: 'Амины орон сууц',
     },
     {
-      id: "apartment",
-      name: "Орон сууц",
+      id: 'apartment',
+      name: 'Орон сууц',
     },
     {
-      id: "public_apartment",
-      name: "Нийтийн байр",
+      id: 'public_apartment',
+      name: 'Нийтийн байр',
     },
     {
-      id: "ger",
-      name: "Гэр",
+      id: 'ger',
+      name: 'Гэр',
     },
     {
-      id: "hashaa_baishin",
-      name: "Хашаа байшин",
+      id: 'hashaa_baishin',
+      name: 'Хашаа байшин',
     },
     {
-      id: "private_apartment",
-      name: "Хувийн сууц",
+      id: 'private_apartment',
+      name: 'Хувийн сууц',
     },
     {
-      id: "other_apartment",
-      name: "Бусад",
+      id: 'other_apartment',
+      name: 'Бусад',
     },
   ],
-}
+};

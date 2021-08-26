@@ -48,6 +48,7 @@ const style = {
 const Payment = () => {
   const {userdata} = useContext(Context);
   const ctx = useContext(Context);
+  // eslint-disable-next-line no-unused-vars
   const [orderData, setOrderData] = useState({
     residenceName: 'Маршал хотхон',
     province: 'Улаанбаатар',

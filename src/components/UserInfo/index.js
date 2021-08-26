@@ -1,13 +1,14 @@
-import { useState, useEffect, useContext } from "react";
-import { Form, Input, Button, Grid, Row, Col, Divider, Checkbox } from "antd";
-import css from "./_.module.css";
-import { sList } from "@api/api";
-import Context from "@context/Context";
-import MainModal from "@components/MainModal";
-import UserMoreInfo from "@components/UserMoreInfo";
-import Datatable from "@components/Datatable";
+import {useState, useEffect, useContext} from 'react';
+import {Form, Input, Button, Grid, Row, Col, Divider, Checkbox} from 'antd';
+import css from './_.module.css';
+import {sList} from '@api/api';
+import Context from '@context/Context';
+import MainModal from '@components/MainModal';
+import UserMoreInfo from '@components/UserMoreInfo';
+import Datatable from '@components/Datatable';
 
-const ProfileInfo = ({ filter }) => {
+// eslint-disable-next-line react/prop-types
+const ProfileInfo = ({filter}) => {
   const ctx = useContext(Context);
   const [showMore, setShowMore] = useState(false);
   const [showBankAccount, setShowBankAccount] = useState(false);
@@ -15,12 +16,13 @@ const ProfileInfo = ({ filter }) => {
   const [showUserLog, setShowUserLog] = useState(false);
   const [data, setData] = useState({});
 
+  // eslint-disable-next-line no-unused-vars
   const [checkboxOptions, setCheckboxOptions] = useState([
-    "Гар утас",
-    "Анкет",
-    "Банкны данс",
-    "Монгол банк",
-    "Гарын үсэг",
+    'Гар утас',
+    'Анкет',
+    'Банкны данс',
+    'Монгол банк',
+    'Гарын үсэг',
   ]);
   const [checked, setChecked] = useState([]);
 
@@ -48,12 +50,12 @@ const ProfileInfo = ({ filter }) => {
       (async () => {
         ctx.setIsLoading(true);
         const res = await sList({
-          code: "userGeneralInfo",
+          code: 'userGeneralInfo',
           filter: {
             id: {
               filter: filter,
-              filterType: "number",
-              type: "equals",
+              filterType: 'number',
+              type: 'equals',
             },
           },
         });
@@ -64,12 +66,12 @@ const ProfileInfo = ({ filter }) => {
   }, [filter]);
 
   useEffect(() => {
-    let tmpArray = [];
-    data.ispassedmobile && tmpArray.push("Гар утас");
-    data.ispassedanket && tmpArray.push("Анкет");
-    data.ispassedbank && tmpArray.push("Банкны данс");
-    data.ispassedbom && tmpArray.push("Монгол банк");
-    data.ispassedagreement && tmpArray.push("Гарын үсэг");
+    const tmpArray = [];
+    data.ispassedmobile && tmpArray.push('Гар утас');
+    data.ispassedanket && tmpArray.push('Анкет');
+    data.ispassedbank && tmpArray.push('Банкны данс');
+    data.ispassedbom && tmpArray.push('Монгол банк');
+    data.ispassedagreement && tmpArray.push('Гарын үсэг');
     setChecked(tmpArray);
   }, [data]);
 
@@ -188,41 +190,41 @@ const ProfileInfo = ({ filter }) => {
       <MainModal
         title="Зээлийн мэдээллийн сан"
         visible={showLoanInfo}
-        width={"80%"}
+        width={'80%'}
         onCancel={() => setShowLoanInfo(false)}
         footer={null}
       >
         <Datatable
-          title={"userCbi"}
-          code={"userCbi"}
+          title={'userCbi'}
+          code={'userCbi'}
           showTitle={false}
-          params={{ user_id: filter }}
+          params={{user_id: filter}}
           doesFilter={false}
         />
       </MainModal>
       <MainModal
         title="Банкны данс"
         visible={showBankAccount}
-        width={"80%"}
+        width={'80%'}
         onCancel={() => setShowBankAccount(false)}
         footer={null}
       >
         <Datatable
-          title={"userBankAcc"}
-          code={"userBankAcc"}
+          title={'userBankAcc'}
+          code={'userBankAcc'}
           showTitle={false}
-          params={{ user_id: filter }}
+          params={{user_id: filter}}
           doesFilter={false}
         />
       </MainModal>
       <MainModal
         title="Хэрэглэгчийн түүх харах"
         visible={showUserLog}
-        width={"80%"}
+        width={'80%'}
         onCancel={() => setShowUserLog(false)}
         footer={null}
       >
-        <Datatable title={"news"} code={"news"} showTitle={false} />
+        <Datatable title={'news'} code={'news'} showTitle={false} />
       </MainModal>
     </>
   );

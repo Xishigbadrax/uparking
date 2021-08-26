@@ -1,16 +1,17 @@
-import { Tabs } from "antd";
-import { useState, useEffect, useContext } from "react";
-import Context from "@context/Context";
-import { sList } from "@api/api";
-import UserGeneralInfo from "@components/UserMoreInfo/General";
-import FinanceInfo from "@components/UserMoreInfo/Finance";
-import EmploymentInfo from "@components/UserMoreInfo/Employment";
-import Address from "@components/UserMoreInfo/Address";
-import OtherInfo from "@components/UserMoreInfo/Other";
+/* eslint-disable react/prop-types */
+import {Tabs} from 'antd';
+import {useState, useEffect, useContext} from 'react';
+import Context from '@context/Context';
+import {sList} from '@api/api';
+import UserGeneralInfo from '@components/UserMoreInfo/General';
+import FinanceInfo from '@components/UserMoreInfo/Finance';
+import EmploymentInfo from '@components/UserMoreInfo/Employment';
+import Address from '@components/UserMoreInfo/Address';
+import OtherInfo from '@components/UserMoreInfo/Other';
 
-const { TabPane } = Tabs;
+const {TabPane} = Tabs;
 
-const ProfileInfo = ({ filter }) => {
+const ProfileInfo = ({filter}) => {
   const ctx = useContext(Context);
   const [data, setData] = useState();
 
@@ -19,12 +20,12 @@ const ProfileInfo = ({ filter }) => {
       (async () => {
         ctx.setIsLoading(true);
         const res = await sList({
-          code: "userDetailedInfo",
+          code: 'userDetailedInfo',
           filter: {
             id: {
               filter: filter,
-              filterType: "number",
-              type: "equals",
+              filterType: 'number',
+              type: 'equals',
             },
           },
         });
