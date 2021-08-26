@@ -1,28 +1,29 @@
-import { Column } from '@ant-design/charts';
-import css from "./_.module.css";
+/* eslint-disable react/prop-types */
+import {Column} from '@ant-design/charts';
+import css from './_.module.css';
 
-const ColumnChart = ({ title, data, xField, yField,seriesField, colors,opacity=0,additionalConfig }) => {
+const ColumnChart = ({title, data, xField, yField, seriesField, colors, opacity=0, additionalConfig}) => {
   if (data === undefined) {
-    return <></>
+    return <></>;
   }
   const config = {
     data: data,
     xField: xField,
     yField: yField,
-    seriesField:seriesField,
+    seriesField: seriesField,
     theme: {
-      colors10: colors
+      colors10: colors,
     },
     label: {
       position: 'middle',
       style: {
-        opacity: opacity, 
+        opacity: opacity,
       },
     },
     legend: {
-      position: 'bottom'
+      position: 'bottom',
     },
-    ...additionalConfig
+    ...additionalConfig,
   };
   return (
     <div className={css.chartDiv}>

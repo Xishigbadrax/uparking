@@ -1,24 +1,25 @@
-import { Form, Checkbox } from "antd";
-import { useState } from "react";
+import {Form, Checkbox} from 'antd';
+import {useState} from 'react';
 
-const CustomCheckbox = ({ label, name, fieldKey, layout, restField }) => {
-    const [isChecked, setIsChecked] = useState(false);
+// eslint-disable-next-line react/prop-types
+const CustomCheckbox = ({label, name, fieldKey, layout, restField}) => {
+  const [isChecked, setIsChecked] = useState(false);
 
-    const onChange = e => {
-        setIsChecked(e.target.checked);
-    };
+  const onChange = (e) => {
+    setIsChecked(e.target.checked);
+  };
 
-    return (
-        <Form.Item
-            {...layout}
-            {...restField}
-            name={name}
-            fieldKey={fieldKey}
-            valuePropName="checked"
-        >
-            <Checkbox onChange={onChange} checked={isChecked}>{label}</Checkbox>
-        </Form.Item>
-    );
+  return (
+    <Form.Item
+      {...layout}
+      {...restField}
+      name={name}
+      fieldKey={fieldKey}
+      valuePropName="checked"
+    >
+      <Checkbox onChange={onChange} checked={isChecked}>{label}</Checkbox>
+    </Form.Item>
+  );
 };
 
 export default CustomCheckbox;

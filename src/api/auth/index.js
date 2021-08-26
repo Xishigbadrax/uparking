@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 const TOKEN_URL = process.env.NEXT_PUBLIC_TOKEN_URL;
 const AUTH_USERNAME = process.env.NEXT_PUBLIC_AUTH_USERNAME;
@@ -14,7 +14,7 @@ export const login = async (body) => {
           username: AUTH_USERNAME,
           password: AUTH_PASSWORD,
         },
-      }
+      },
     )
     .catch((error) => {
       return error;
