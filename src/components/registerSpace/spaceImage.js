@@ -4,13 +4,13 @@ import {Upload, message} from 'antd';
 import {Spin, Form} from 'antd';
 import {LoadingOutlined, PlusOutlined, RedoOutlined} from '@ant-design/icons';
 
-function getBase64(img, callback) {
+const getBase64 = (img, callback) =>{
   const reader = new FileReader();
   reader.addEventListener('load', () => callback(reader.result));
   reader.readAsDataURL(img);
-}
+};
 
-function beforeUpload(file) {
+const beforeUpload = (file) => {
   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
   if (!isJpgOrPng) {
     message.error('You can only upload JPG/PNG file!');
@@ -20,7 +20,7 @@ function beforeUpload(file) {
     message.error('Image must smaller than 2MB!');
   }
   return isJpgOrPng && isLt2M;
-}
+};
 const spaceImage = (props) => {
   console.log(props);
   const LoadIcon = <LoadingOutlined />;
@@ -38,10 +38,10 @@ const spaceImage = (props) => {
     if (info.file.status === 'done') {
       // Get this url from response in real world.
       getBase64(
-          info.file.originFileObj,
-          (image) => (
-            setLoadingNumbering(false), setSelectedNumberingImage(image)
-          ),
+        info.file.originFileObj,
+        (image) => (
+          setLoadingNumbering(false), setSelectedNumberingImage(image)
+        ),
       );
     }
   };
@@ -52,8 +52,8 @@ const spaceImage = (props) => {
     }
     if (info.file.status === 'done') {
       getBase64(
-          info.file.originFileObj,
-          (image2) => (setLoadingDirect(false), setSelectedDirectionImage(image2)),
+        info.file.originFileObj,
+        (image2) => (setLoadingDirect(false), setSelectedDirectionImage(image2)),
       );
     }
   };
@@ -64,15 +64,15 @@ const spaceImage = (props) => {
     }
     if (info.file.status === 'done') {
       getBase64(
-          info.file.originFileObj,
-          (image3) => (
-            setLoadingPosition(false), setSelectedPositionImage(image3)
-          ),
+        info.file.originFileObj,
+        (image3) => (
+          setLoadingPosition(false), setSelectedPositionImage(image3)
+        ),
       );
     }
   };
   return (
-    <div className={`spaceImage`}>
+    <div className={'spaceImage'}>
       <Form form={props.form}>
         <Row offset={4}>
           <p
@@ -122,7 +122,7 @@ const spaceImage = (props) => {
                       style={{width: '327px', height: '134px'}}
                     />
                     <div
-                      className={`buttonGo`}
+                      className={'buttonGo'}
                       style={{
                         marginTop: '-40px',
                         zIndex: 5,
@@ -199,7 +199,7 @@ const spaceImage = (props) => {
                       style={{height: '134px', width: '327px'}}
                     />
                     <div
-                      className={`buttonGo`}
+                      className={'buttonGo'}
                       style={{
                         marginTop: '-40px',
                         zIndex: 5,
@@ -277,7 +277,7 @@ const spaceImage = (props) => {
                       style={{width: '327px', height: '134px'}}
                     />
                     <div
-                      className={`buttonGo`}
+                      className={'buttonGo'}
                       style={{
                         marginTop: '-40px',
                         zIndex: 5,

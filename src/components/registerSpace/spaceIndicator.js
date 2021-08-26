@@ -20,7 +20,7 @@ const spaceIndicator = (props) => {
     const parking = await callGet('/reference/list/test?type=SPACE_SIGN');
     setParkingData(parking);
     const entranceLock = await callGet(
-        '/reference/list/test?type=ENTRANCE_LOCK',
+      '/reference/list/test?type=ENTRANCE_LOCK',
     );
     setEncranceData(entranceLock);
     const spaceType = await callGet('/reference/list/test?type=SPACE_CAPACITY');
@@ -60,7 +60,7 @@ const spaceIndicator = (props) => {
     // setIndicatorData({ ...setIndicatorData, typeId: type.value });
   };
   return (
-    <div className={`spaceIndocator`} style={{height: '520px'}}>
+    <div className={'spaceIndocator'} style={{height: '520px'}}>
       <Row offset={4}>
         <p
           style={{
@@ -110,7 +110,7 @@ const spaceIndicator = (props) => {
                         <div style={{display: 'flex'}}>
                           <div>
                             <img
-                              src={`https://uparking.mn` + item.image}
+                              src={'https://uparking.mn' + item.image}
                               height="24px"
                               width="48px"
                               style={{
@@ -146,7 +146,7 @@ const spaceIndicator = (props) => {
                         <div style={{display: 'flex'}}>
                           <div>
                             <img
-                              src={`https://uparking.mn` + item.image}
+                              src={'https://uparking.mn' + item.image}
                               height="24px"
                               width="24px"
                             ></img>
@@ -175,7 +175,7 @@ const spaceIndicator = (props) => {
                         <div style={{display: 'flex'}}>
                           <div>
                             <img
-                              src={`https://uparking.mn` + item.image}
+                              src={'https://uparking.mn' + item.image}
                               height="24px"
                               width="24px"
                             ></img>
@@ -203,7 +203,7 @@ const spaceIndicator = (props) => {
                         <div style={{display: 'flex'}}>
                           <div>
                             <img
-                              src={`https://uparking.mn` + item.image}
+                              src={'https://uparking.mn' + item.image}
                               height="24px"
                               width="24px"
                             ></img>
@@ -234,7 +234,7 @@ const spaceIndicator = (props) => {
                         <div style={{display: 'flex'}}>
                           <div>
                             <img
-                              src={`https://uparking.mn` + item.image}
+                              src={'https://uparking.mn' + item.image}
                               height="20px"
                               width="24px"
                             ></img>
@@ -260,7 +260,7 @@ const spaceIndicator = (props) => {
                   ]}
                 >
                   <Checkbox.Group
-                    className={`checkOption`}
+                    className={'checkOption'}
                     onChange={onChangeCheckBox}
                     style={{marginTop: '50px'}}
                   >
@@ -270,7 +270,7 @@ const spaceIndicator = (props) => {
                           <div style={{display: 'flex', paddingTop: '5px'}}>
                             <div style={{paddingTop: '5px'}}>
                               <img
-                                src={`https://uparking.mn` + item.image}
+                                src={'https://uparking.mn' + item.image}
                                 height="20px"
                                 width="20px"
                               ></img>

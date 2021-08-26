@@ -2,12 +2,10 @@ import {callGet} from '@api/api';
 
 import {Row, Col} from 'antd';
 import Helper from '@utils/helper';
-import {Form, Input, Label, Divider} from 'antd';
+import {Form, Input, Divider} from 'antd';
 import {useEffect, useState} from 'react';
 
 const priceInfo = (props) => {
-  const [rentInfoData, setRentInfoData] = useState();
-  const [rentInfo, setRentInfo] = useState();
   const [dayWinterValue, setdayWinterValue] = useState(null);
   const [daySummerValue, setdaySummerValue] = useState(null);
   const [nightWinterValue, setnightWinterValue] = useState(null);
@@ -17,16 +15,6 @@ const priceInfo = (props) => {
   const [hourlyPrice, sethourlyPrice] = useState(null);
   const [priceData, setPriceData] = useState();
 
-  const onChangeDayofWinterPrice = (e) => {};
-  const onChangeDayofSummerPrice = (e) => {
-    setRentInfoData({});
-  };
-  const onChangeNightofWInterPrice = (e) => {};
-  const onChangeNightofSummerPrice = (e) => {};
-  const onChangeWinterDay = (e) => {};
-  const onChangeSummerDay = (e) => {
-    console.log(rentInfoData);
-  };
   useEffect(async () => {
     const bigData = await callGet('/parkingspace/timesplit');
     console.log(bigData);
@@ -40,7 +28,6 @@ const priceInfo = (props) => {
     setfullDayWinterValue(bigData.fullDaySplit.winterPrice);
     sethourlyPrice(total.toString());
   }, []);
-  const onChangeTimePrice = (e) => {};
 
   useEffect(() => {
     {

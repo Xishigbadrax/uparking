@@ -1,9 +1,10 @@
-import { callGet } from "@api/api";
-import { Card, Col, Row, Image, Rate, Button, Drawer } from "antd";
-import { useState } from "react";
-import { showMessage } from "../../utils/message";
+/* eslint-disable react/prop-types */
+import {callGet} from '@api/api';
+import {Card, Col, Row, Image, Rate, Button, Drawer} from 'antd';
+import {useState} from 'react';
+import {showMessage} from '../../utils/message';
 
-const ListItem = ({ item }) => {
+const ListItem = ({item}) => {
   const [visible, setVisible] = useState(false);
   const showDrawer = async (id) => {
     const res = await callGet(`/search/input/test?keywordId=${id}`);
@@ -11,7 +12,7 @@ const ListItem = ({ item }) => {
       showMessage(messageType.FAILED.type, defaultMsg.dataError);
       return;
     }
-    console.log(res, 'rese')
+    console.log(res, 'rese');
 
     // setVisible(true);
   };
@@ -34,38 +35,38 @@ const ListItem = ({ item }) => {
               preview={false}
               src="/icons/1) Checkbox.png"
               width="20px"
-              style={{ marginLeft: "10px" }}
+              style={{marginLeft: '10px'}}
             />
             <Image
               preview={false}
               src="/icons/temdegleegui.png"
               width="20px"
-              style={{ paddingLeft: "10px" }}
+              style={{paddingLeft: '10px'}}
             />
             <Image preview={false} src="/icons/haadag.png" width="20px" />
             <Image
               preview={false}
               src="/icons/Small SUV.png"
               width="20px"
-              style={{ paddingLeft: "10px" }}
+              style={{paddingLeft: '10px'}}
             />
             <Image
               preview={false}
               src="/icons/Up.png"
               width="20px"
-              style={{ paddingLeft: "10px" }}
+              style={{paddingLeft: '10px'}}
             />
             <Image
               preview={false}
               src="/icons/haadag.png"
               width="20px"
-              style={{ paddingLeft: "10px" }}
+              style={{paddingLeft: '10px'}}
             />
             <Image
               preview={false}
               src="/keyboard_arrow_down_24px.png"
               width="20px"
-              style={{ paddingLeft: "10px" }}
+              style={{paddingLeft: '10px'}}
             />
           </div>
         </Col>
@@ -86,27 +87,27 @@ const ListItem = ({ item }) => {
             <Col
               span="2"
               style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
               <Image
                 preview={false}
                 width="10px"
-                src={"/images/icon/location_on.png"}
+                src={'/images/icon/location_on.png'}
               ></Image>
             </Col>
             <Col span="22">
               Улаанбаатар хот, сүхбаатар дүүрэг, 7-р хороо, Хангай хотхон, 516-р
-              ...,{" "}
+              ...,{' '}
             </Col>
           </Row>
           <div>
             <div className="totalText">Нийт үнэ</div>
             <div className="totalAmount">16000</div>
           </div>
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <div style={{display: 'flex', justifyContent: 'flex-end'}}>
             <Button type="primary" onClick={showDrawer(item.id)}>
               Дэлгэрэнгүй
             </Button>

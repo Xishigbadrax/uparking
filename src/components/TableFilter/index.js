@@ -1,16 +1,16 @@
-import { useState, useEffect } from "react";
-import css from "./_.module.css";
-import { Input, DatePicker, Select, Button, Form, Divider } from "antd";
-import { dataType, datePickerLocale, searchOp } from "@constants/constants";
-import { SearchOutlined, ClearOutlined } from "@ant-design/icons";
-import moment from "moment";
+import {useState, useEffect} from 'react';
+import css from './_.module.css';
+import {Input, DatePicker, Select, Button, Form, Divider} from 'antd';
+import {dataType, datePickerLocale, searchOp} from '@constants/constants';
+import {SearchOutlined, ClearOutlined} from '@ant-design/icons';
+import moment from 'moment';
 
-const { RangePicker } = DatePicker;
+const {RangePicker} = DatePicker;
 
-const TableFilter = ({ code, searchColumns, filter, setFilter, setPagination }) => {
+// eslint-disable-next-line react/prop-types
+const TableFilter = ({code, searchColumns, filter, setFilter, setPagination}) => {
   const [valueMap, setValueMap] = useState(new Map());
   const [isSearchVisible, setIsSearchVisible] = useState(false);
-  const [numberRange] = Form.useForm();
 
   const updateValue = (key, value) => {
     setValueMap(new Map(valueMap.set(key, value)));
@@ -20,56 +20,57 @@ const TableFilter = ({ code, searchColumns, filter, setFilter, setPagination }) 
     return () => {
       clear();
     };
-  }, [code])
+  }, [code]);
 
   const filterCase = (type, value, column) => {
     switch (type) {
-      case dataType.NUMBER:
-        return {
-          filter: value,
-          type: searchOp.EQUALS,
-        };
-      case dataType.TEXT:
-      case dataType.TEXTAREA:
-        return {
-          filter: value,
-          type: searchOp.CONTAINS,
-        };
-      case dataType.SELECT:
-        return {
-          filter: value,
-          filterType: column.st || "text",
-          type: searchOp.EQUALS,
-        };
-      case dataType.DATE:
-        return {
-          filter: value[0],
-          filterTo: value[1],
-          type: searchOp.IN_RANGE,
-        };
-      case dataType.AMOUNT:
-        return {
-          filter: value.min_amount,
-          filterTo: value.max_amount,
-          filterType: "number",
-          type: searchOp.IN_RANGE
-        }
-      default:
-        break;
+    case dataType.NUMBER:
+      return {
+        filter: value,
+        type: searchOp.EQUALS,
+      };
+    case dataType.TEXT:
+    case dataType.TEXTAREA:
+      return {
+        filter: value,
+        type: searchOp.CONTAINS,
+      };
+    case dataType.SELECT:
+      return {
+        filter: value,
+        filterType: column.st || 'text',
+        type: searchOp.EQUALS,
+      };
+    case dataType.DATE:
+      return {
+        filter: value[0],
+        filterTo: value[1],
+        type: searchOp.IN_RANGE,
+      };
+    case dataType.AMOUNT:
+      return {
+        filter: value.min_amount,
+        filterTo: value.max_amount,
+        filterType: 'number',
+        type: searchOp.IN_RANGE,
+      };
+    default:
+      break;
     }
   };
 
   const search = () => {
     let _filter = filter;
 
+    // eslint-disable-next-line react/prop-types
     searchColumns.forEach((column) => {
-      let type = column.tp;
-      let key = column.sk || column.k;
-      let value = valueMap.get(key);
+      const type = column.tp;
+      const key = column.sk || column.k;
+      const value = valueMap.get(key);
       if (
-        value === "" ||
+        value === '' ||
         value === undefined ||
-        (type === dataType.DATE && (value[0] === "" || value[1] === ""))
+        (type === dataType.DATE && (value[0] === '' || value[1] === ''))
       ) {
         delete _filter[key];
       } else {
@@ -95,18 +96,18 @@ const TableFilter = ({ code, searchColumns, filter, setFilter, setPagination }) 
   const reloadList = (_filter) => {
     setFilter(_filter);
     // ehnii huudas ruu usreh
-    setPagination(prev => ({
+    setPagination((prev) => ({
       ...prev,
       current: 1,
     }));
   };
 
   const filterComponent = (column) => {
-    let key = column.k;
-    let type = column.tp;
-    let title = column.t;
-    let options = column.opts;
-    let searchKey = column.sk;
+    const key = column.k;
+    const type = column.tp;
+    const title = column.t;
+    const options = column.opts;
+    const searchKey = column.sk;
 
     return (
       <div key={key} className={type === dataType.SEPARATOR && css.separator}>
@@ -133,7 +134,7 @@ const TableFilter = ({ code, searchColumns, filter, setFilter, setPagination }) 
               updateValue(searchKey || key, value);
             }}
             onClear={() => {
-              updateValue(searchKey || key, "");
+              updateValue(searchKey || key, '');
             }}
             filterOption={(input, option) =>
               option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -156,12 +157,12 @@ const TableFilter = ({ code, searchColumns, filter, setFilter, setPagination }) 
             className={`${css.filter} filterField`}
             size="default"
             value={
-              valueMap.get(key)
-                ? [
-                  valueMap.get(key)[0] !== "" ? moment(valueMap.get(key)[0], "YYYY-MM-DD") : null,
-                  valueMap.get(key)[1] !== "" ? moment(valueMap.get(key)[1], "YYYY-MM-DD") : null,
-                ]
-                : [null, null]
+              valueMap.get(key) ?
+                [
+                  valueMap.get(key)[0] !== '' ? moment(valueMap.get(key)[0], 'YYYY-MM-DD') : null,
+                  valueMap.get(key)[1] !== '' ? moment(valueMap.get(key)[1], 'YYYY-MM-DD') : null,
+                ] :
+                [null, null]
             }
           />
         )}
@@ -171,7 +172,7 @@ const TableFilter = ({ code, searchColumns, filter, setFilter, setPagination }) 
               <Input
                 allowClear
                 placeholder={'-с их'}
-                value={valueMap.get(key) ? valueMap.get(key).min_amount : ""}
+                value={valueMap.get(key) ? valueMap.get(key).min_amount : ''}
                 // onChange={(e) => updateValue(key, [e.target.value, form.getFieldValue("max_amount")])}
                 onPressEnter={search}
                 className={`${css.filter} filterField`}
@@ -181,7 +182,7 @@ const TableFilter = ({ code, searchColumns, filter, setFilter, setPagination }) 
               <Input
                 allowClear
                 placeholder={'-с бага'}
-                value={valueMap.get(key) ? valueMap.get(key).max_amount : ""}
+                value={valueMap.get(key) ? valueMap.get(key).max_amount : ''}
                 // onChange={(e) => updateValue(key, [numberRange.getFieldValue("min_amount"), e.target.value])}
                 onPressEnter={search}
                 className={`${css.filter} filterField`}
@@ -193,12 +194,12 @@ const TableFilter = ({ code, searchColumns, filter, setFilter, setPagination }) 
           <div className={css.separatorTitle}>{title}</div>
         )} */}
       </div>
-    )
+    );
   };
 
   return (
     <>
-      <div className={css.banner} onClick={() => setIsSearchVisible(prev => !prev)}>
+      <div className={css.banner} onClick={() => setIsSearchVisible((prev) => !prev)}>
         <SearchOutlined /> Хайх
       </div>
       {isSearchVisible && (

@@ -1,25 +1,16 @@
-import {Menu, Row, Col, Card, Alert} from 'antd';
+import {Row} from 'antd';
 import {
-  Modal,
-  Button,
   Form,
   Input,
-  Checkbox,
-  Layout,
   Select,
   Divider,
 } from 'antd';
-import {useContext, useState} from 'react';
-import {useEffect, useForm} from 'react';
-import {apiList, callGet, callPost} from '@api/api';
-import {Steps} from 'antd';
+import {useState} from 'react';
+import {useEffect} from 'react';
+import {callGet} from '@api/api';
 import GoogleMapReact from 'google-map-react';
 const GOOGLE_API = process.env.NEXT_GOOGLE_API;
 
-const {SubMenu} = Menu;
-const {Content} = Layout;
-const {Option} = Select;
-const {Step} = Steps;
 const ClickLocation = () => (
   <div
     className={'locationBackground'}
@@ -45,14 +36,19 @@ const mainInfo = (props) => {
   const [sum, setSum] = useState([]);
   const [districtId, setSelectedSum] = useState({});
   const [khoroo, setKhoroo] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [selectedKhoroo, setSelectedKhoroo] = useState({});
   const [residence, setResidence] = useState([]);
   const [selectedResidence, setSelectedResidence] = useState({});
   const [residenceblock, setResidenceBlock] = useState([]);
   const [selectedResidenceBlock, setSelectedResidenceBlock] = useState({});
+  // eslint-disable-next-line no-unused-vars
   const [DoorNo, setDoorNo] = useState();
+  // eslint-disable-next-line no-unused-vars
   const [spaceNumber, setSpaceNumber] = useState();
+  // eslint-disable-next-line no-unused-vars
   const [longitude, setLongitude] = useState(106.9057);
+  // eslint-disable-next-line no-unused-vars
   const [latitude, setLatitude] = useState(47.886398);
   const [selectLat, setSelectLat] = useState();
   const [selectLng, setSelectLng] = useState();
@@ -147,15 +143,6 @@ const mainInfo = (props) => {
   };
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
-  };
-  const onFinish = (values) => {
-    console.log(values);
-    if (residenceData.latitude) {
-      props.setMainData(residenceData);
-      props.setCurrent(current + 1);
-    } else {
-      alert('Байршил сонгоно уу?');
-    }
   };
   const onMapClick = (e) => {
     setSelectLng(e.lng);

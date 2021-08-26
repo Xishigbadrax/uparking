@@ -1,4 +1,5 @@
-import { useState, useEffect, useContext } from "react";
+/* eslint-disable react/prop-types */
+import {useState, useEffect, useContext} from 'react';
 import {
   Input,
   Checkbox,
@@ -8,11 +9,10 @@ import {
   Grid,
   Form,
   Modal,
-  TextArea,
-} from "antd";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
-import { sList } from "@api/api";
-import Context from "@context/Context";
+} from 'antd';
+import {ExclamationCircleOutlined} from '@ant-design/icons';
+import {sList} from '@api/api';
+import Context from '@context/Context';
 
 const layout = {
   labelCol: {
@@ -23,7 +23,7 @@ const layout = {
   },
 };
 
-const LoanCredit = ({ filter }) => {
+const LoanCredit = ({filter}) => {
   const ctx = useContext(Context);
   const [data, setData] = useState({
     id: null,
@@ -37,7 +37,9 @@ const LoanCredit = ({ filter }) => {
   const [lendLimit, setLendLimit] = useState(0);
   const [loanLimit, setLoanLimit] = useState(0);
   const [anket, setAnket] = useState();
+  // eslint-disable-next-line no-unused-vars
   const [lendPermissionReason, setLendPermissionReason] = useState();
+  // eslint-disable-next-line no-unused-vars
   const [loanPermissionReason, setLoanPermissionReason] = useState();
 
   const [canGiveLoan, setCanGiveLoan] = useState(false);
@@ -49,12 +51,12 @@ const LoanCredit = ({ filter }) => {
     (async () => {
       ctx.setIsLoading(true);
       const res = await sList({
-        code: "userLoanPermission",
+        code: 'userLoanPermission',
         filter: {
           id: {
             filter: filter,
-            filterType: "number",
-            type: "equals",
+            filterType: 'number',
+            type: 'equals',
           },
         },
       });
@@ -72,41 +74,41 @@ const LoanCredit = ({ filter }) => {
 
   const lendPermissionHandler = () => {
     Modal.confirm({
-      title: "Анхааруулга!",
+      title: 'Анхааруулга!',
       icon: <ExclamationCircleOutlined />,
       content: (
         <>
           <p>Та уг үйлдлийг хийхэд итгэлтэй байна уу?</p>
           <Input.TextArea
             placeholder="Шалтгаан..."
-            autoSize={{ minRows: 3, maxRows: 5 }}
+            autoSize={{minRows: 3, maxRows: 5}}
             onChange={(e) => setLendPermissionReason(e.target.value)}
           />
         </>
       ),
       onOk: () => console.log(canTakeLoan, canGiveLoan),
-      okText: "Тийм",
-      cancelText: "Үгүй",
+      okText: 'Тийм',
+      cancelText: 'Үгүй',
     });
   };
 
   const loanPermissionHandler = () => {
     Modal.confirm({
-      title: "Анхааруулга!",
+      title: 'Анхааруулга!',
       icon: <ExclamationCircleOutlined />,
       content: (
         <>
           <p>Та уг үйлдлийг хийхэд итгэлтэй байна уу?</p>
           <Input.TextArea
             placeholder="Шалтгаан..."
-            autoSize={{ minRows: 3, maxRows: 5 }}
+            autoSize={{minRows: 3, maxRows: 5}}
             onChange={(e) => setLoanPermissionReason(e.target.value)}
           />
         </>
       ),
       onOk: () => console.log(canTakeLoan, canGiveLoan),
-      okText: "Тийм",
-      cancelText: "Үгүй",
+      okText: 'Тийм',
+      cancelText: 'Үгүй',
     });
   };
 
@@ -142,7 +144,7 @@ const LoanCredit = ({ filter }) => {
                   onChange={(e) => setCanTakeLoan(e.target.checked)}
                 />
               }
-              suffix={"₮"}
+              suffix={'₮'}
               enterButton="Хадгалах"
               value={lendLimit}
               onChange={(e) => setGiveValue(e.target.value)}
@@ -157,7 +159,7 @@ const LoanCredit = ({ filter }) => {
                   onChange={(e) => setCanGiveLoan(e.target.checked)}
                 />
               }
-              suffix={"₮"}
+              suffix={'₮'}
               enterButton="Хадгалах"
               value={loanLimit}
               onChange={(e) => setTakeValue(e.target.value)}

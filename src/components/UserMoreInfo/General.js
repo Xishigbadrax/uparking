@@ -1,7 +1,7 @@
-import { Form, Input, Button, Grid, Row, Col, Divider } from "antd";
+/* eslint-disable react/prop-types */
+import {Form, Input, Button, Row, Col, Divider} from 'antd';
 
-const UserGeneralInfo = ({ data }) => {
-  
+const UserGeneralInfo = ({data}) => {
   const layout = {
     labelCol: {
       span: 8,
@@ -20,8 +20,8 @@ const UserGeneralInfo = ({ data }) => {
   return (
     <>
       <Row>
-          {data && (
-            <>
+        {data && (
+          <>
             <Col span={24}>
               <Form {...layout}>
                 <Form.Item label="Регистерийн дугаар">
@@ -43,9 +43,9 @@ const UserGeneralInfo = ({ data }) => {
                   <Button type="primary">Засах</Button>
                 </Form.Item>
               </Form>
-              </Col>
-              <Divider orientation="left" />
-              <Col span={24}>
+            </Col>
+            <Divider orientation="left" />
+            <Col span={24}>
               <Form {...layout}>
                 <Form.Item label="Гэрлэсэн эсэх">
                   <Input value={data.is_married} />
@@ -69,9 +69,9 @@ const UserGeneralInfo = ({ data }) => {
                   <img src={data.image2} height="150" alt="Иргэний үнэмлэхний ар" />
                 </Form.Item>
               </Form>
-              </Col>
-            </>
-          )}
+            </Col>
+          </>
+        )}
       </Row>
     </>
   );

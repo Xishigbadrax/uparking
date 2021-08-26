@@ -1,8 +1,8 @@
 const Footer = () => {
   return (
     <div>
-      <div className={`grid lg:grid-cols-3 md:pl-16 pl-16 footer1`}>
-        <div style={{ height: "auto" }}>
+      <div className={'grid lg:grid-cols-3 md:pl-16 pl-16 footer1'}>
+        <div style={{height: 'auto'}}>
           <img className="lg:mx-auto pt-7" src="/logo.png" />
         </div>
         <div className="lg:grid col-span-2 lg:grid-cols-5 py-6 md:space-y-6 space-y-6 lg:space-y-0">
@@ -38,7 +38,7 @@ const Footer = () => {
             <div className="footerTitle">Хамтран ажиллах</div>
           </div>
           <div
-            style={{ maxWidth: "70%" }}
+            style={{maxWidth: '70%'}}
             className="flex flex-col justify-around md:space-y-2 space-y-2"
           >
             <div className="footerHeadTitle">Холбоо барих</div>
@@ -50,7 +50,7 @@ const Footer = () => {
                 + 976 7744 0606
               </div>
             </div>
-            <div style={{ height: "auto" }} className="footerLitleTitle">
+            <div style={{height: 'auto'}} className="footerLitleTitle">
               Монгол улс, Улаанбаатар хот, Сүхбаатар дүүрэг, 7-р хороо, Алтайн
               гудамж 281, Хоймор оффис, 1408 тоот
             </div>
@@ -67,7 +67,7 @@ const Footer = () => {
         </div>
       </div>
       <div
-        className={`grid md:grid-cols-1 lg:grid-cols-2  $"footerEnd}`}
+        className={'grid md:grid-cols-1 lg:grid-cols-2  $"footerEnd}'}
       >
         <div className="flex justify-center my-auto py-5">
           <p className="footerEndText">
