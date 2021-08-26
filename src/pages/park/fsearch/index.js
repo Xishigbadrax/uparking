@@ -9,6 +9,7 @@ import {
   Input,
   Select,
   Modal,
+  Form,
   AutoComplete,
 } from "antd";
 import Context from "@context/Context";
@@ -27,6 +28,7 @@ import Farthest from "@components/fsearch/farthest";
 import GoogleMapReact from "google-map-react";
 import { useRouter } from "next/router";
 import { dateTimePickerLocale } from "@constants/constants";
+
 const { TabPane } = Tabs;
 const IndexPageMoreInfo = dynamic(
   () => import("@components/IndexPageMoreInfo"),
@@ -88,21 +90,6 @@ const fsearch = () => {
   const router = useRouter();
   const { typeOrder, inputAdress, homeStartDate, homeEndDate } = router.query;
 
-  // const disabledDate = (current) => {
-  //   return current && current > moment().endOf("day");
-  // };
-  // const getData = async (start_date, end_date) => {
-  //   console.log("dashboard");
-  //   ctx.setIsLoading(true);
-  //   if (ctx.checkPermission("DASHBOARD_CARD")) {
-  //     // const data = await sList({
-  //     //   code: apiList.dashboardCard, defaultParams: [{ key: "start_date", value: start_date }, { key: "end_date", value: end_date }]
-  //     // });
-  //     const data = [];
-  //     setDashboardData(data?.data[0]);
-  //   }
-  //   ctx.setIsLoading(false);
-  // };
   const handleStartDateChange = (value, dateString) => {
     if (dateString) {
       setStartDate(dateString);
@@ -161,29 +148,17 @@ const fsearch = () => {
   //   console.log(listData);
   // };
   const onSearch = async () => {
+    ctx.setIsLoading(true);
     //   if (inputData) {
     const data = await callGet(`/search/test/input?keywordId=${keywordId}`);
-    console.log(data);
     let array = [];
     data.map((item) => {
       item.parkingSpaceList.content.map((el) => {
         array.push({ item, el });
       });
     });
-    console.log(array);
     setSearchedData(array);
-    //     // setSearchedData(cutData);
-    //   } else {
-    //     const data = await callGet(
-    //       `/search/test/input?keywordId=2&endDate=${endDate}&startDate=${startDate}&keywordId=0`
-    //     );
-    //     console.log(data);
-    //   }
-    // };
-    // function filterofSearchData(array) {
-    //   array.map((item) => {
-    //     setOptions(...options, item.keyword);
-    //   });
+    ctx.setIsLoading(false);
   };
   function onOk(value) {
     console.log("onOk: ", value);
@@ -196,206 +171,241 @@ const fsearch = () => {
     // Can not select days before today and today
     return current && current < moment().endOf("day");
   }
-  function callback(key) {
-    console.log(key);
+  async function callback(key) {
+    if (key === "2") {
+      const cheapSpace = await callGet(``);
+    }
   }
 
   return (
     <div style={{ backgroundColor: "#fff" }}>
-      <Row style={{ padding: "20px" }}>
-        <Col span={9}>
-          <AutoComplete
+      <Form>
+        <Row style={{ padding: "20px" }}>
+          <Col span={9}>
+            <Form.Item
+              name="keywordId"
+              rules={[{ required: true, message: "Хаягаа сонгоно уу ?" }]}
+            >
+              <AutoComplete
+                style={{
+                  width: "100%",
+                }}
+                options={options}
+                // onChange={onChangeAddress}
+                onSearch={onChangeAddress}
+                onSelect={onSelect}
+              >
+                <Input
+                  style={{ height: "50px", borderRadius: "15px" }}
+                  placeholder="Хаяг"
+                  iconprefix={<SearchOutlined />}
+                />
+              </AutoComplete>
+            </Form.Item>
+          </Col>
+
+          <Col
+            span={3}
             style={{
-              width: "100%",
+              height: "50px",
+              borderRadius: "15px",
+              marginLeft: "10px",
+              border: "1px solid #DCDCDC",
             }}
-            options={options}
-            // onChange={onChangeAddress}
-            onSearch={onChangeAddress}
-            onSelect={onSelect}
           >
-            <Input
-              style={{ height: "50px", borderRadius: "15px" }}
-              placeholder="Хаяг"
-              iconprefix={<SearchOutlined />}
-            />
-          </AutoComplete>
-        </Col>
-        <Col
-          span={3}
-          style={{
-            height: "50px",
-            borderRadius: "15px",
-            marginLeft: "10px",
-            border: "1px solid #DCDCDC",
-          }}
-        >
-          <div
-            className={`pickType`}
-            style={{ marginLeft: "10px", paddingRight: "5px" }}
-          >
-            <p style={{ fontSize: "10px" }}>Захиалгын төрөл</p>
-            <Select
-              style={{ width: "100%" }}
-              placeholder="Сонгох"
-              onChange={onChangeType}
+            <div
+              className={`pickType`}
+              style={{ marginLeft: "10px", paddingRight: "5px" }}
             >
-              <Option value="day">Өдөр</Option>
-              <Option value="night">Шөнө</Option>
-            </Select>
-          </div>
-        </Col>
-        <Col
-          span={3}
-          style={{
-            height: "50px",
-            borderRadius: "15px",
-            marginLeft: "10px",
-            border: "1px solid #DCDCDC",
-          }}
-        >
-          <div
-            className={`pickType`}
-            style={{ marginLeft: "10px", paddingRight: "5px" }}
+              <p style={{ fontSize: "10px" }}>Захиалгын төрөл</p>
+              <Form.Item
+                name="type"
+                rules={[
+                  { required: false, message: "Захиалгын төрөл сонгож болно" },
+                ]}
+              >
+                <Select
+                  style={{ width: "100%" }}
+                  placeholder="Сонгох"
+                  onChange={onChangeType}
+                >
+                  <Option value="day">Өдөр</Option>
+                  <Option value="night">Шөнө</Option>
+                </Select>
+              </Form.Item>
+            </div>
+          </Col>
+          <Col
+            span={3}
+            style={{
+              height: "50px",
+              borderRadius: "15px",
+              marginLeft: "10px",
+              border: "1px solid #DCDCDC",
+            }}
           >
-            <p style={{ fontSize: "10px", color: "gray" }}>
-              Эхлэх хугацаа сонгох
-            </p>
-            <DatePicker
-              style={{ width: "100%" }}
-              onChange={handleStartDateChange}
-              placeholder="Сонгох"
-              disabledDate={disabledDate}
-              suffixIcon={
-                <div>
-                  <DownOutlined />
-                </div>
-              }
-            ></DatePicker>
-          </div>
-        </Col>
-        <Col
-          span={3}
-          style={{
-            height: "50px",
-            borderRadius: "15px",
-            marginLeft: "10px",
-            border: "1px solid #DCDCDC",
-          }}
-        >
-          <div
-            className={`pickType`}
-            style={{ paddingRight: "5px", marginLeft: "10px" }}
-          >
-            <p style={{ fontSize: "10px" }}>Дуусах хугацаа сонгох</p>
-            <DatePicker
-              style={{ width: "100%" }}
-              onChange={handleEndDateChange}
-              disabledDate={disabledDate}
-              placeholder="Сонгох"
-              suffixIcon={
-                <div>
-                  <DownOutlined />
-                </div>
-              }
-            ></DatePicker>
-          </div>
-        </Col>
-        <Col span={4} style={{ marginLeft: "10px" }} size="large">
-          <Button
-            style={{ height: "50px" }}
-            htmlType="submit"
-            size={"large"}
-            type="primary"
-            className={`buttonGo`}
-            block
-            onClick={onSearch}
-          >
-            Хайх
-          </Button>
-        </Col>
-      </Row>
-      <Row>
-        <Col span={15}>
-          <GoogleMapReact
-            style={{ height: "828px" }}
-            bootstrapURLKeys={{ key: GOOGLE_API }}
-            center={{ lat: latitude, lng: longitude }}
-            defaultZoom={16}
-            onClick={onMapClick}
-          >
-            {selectLat & selectLng ? (
-              <ClickLocation lat={selectLat} lng={selectLng} />
-            ) : null}
-            {spaceData.map((item) => (
-              <AnyReactComponent
-                key={item.residenceBlockId}
-                lat={item.latitude}
-                lng={item.longitude}
-                text="20p"
-              />
-            ))}
-          </GoogleMapReact>
-        </Col>
-        <Col span={9}>
-          <Card>
-            <Tabs
-              defaultActiveKey="1"
-              onChange={callback}
-              className={`OptionPane`}
+            <div
+              className={`pickType`}
+              style={{ marginLeft: "10px", paddingRight: "5px" }}
             >
-              <TabPane
-                tab={
-                  <div
-                    style={{
-                      width: "157px",
-                      height: "48px",
-                    }}
-                  >
-                    <p style={{ height: "24px", paddingLeft: "35px" }}>
-                      Тохирох
-                    </p>
-                  </div>
-                }
-                key="1"
-                style={{ width: "100%" }}
+              <p style={{ fontSize: "10px", color: "gray" }}>
+                Эхлэх хугацаа сонгох
+              </p>
+              <Form.Item
+                name="startDate"
+                rules={[
+                  { required: false, message: "Эхлэх хугацаа сонгоно уу ?" },
+                ]}
               >
-                <ToFit data={searchedData} lat={latitude} lng={longitude} />;
-              </TabPane>
-              <TabPane
-                tab={
-                  <div
-                    style={{
-                      height: "48px",
-                      width: "156px",
-                    }}
-                  >
-                    <p style={{ height: "24px" }}> Хамгийн хямд</p>
-                  </div>
-                }
-                disabled
-                key="2"
+                <DatePicker
+                  style={{ width: "100%" }}
+                  onChange={handleStartDateChange}
+                  placeholder="Сонгох"
+                  disabledDate={disabledDate}
+                  suffixIcon={
+                    <div>
+                      <DownOutlined />
+                    </div>
+                  }
+                ></DatePicker>
+              </Form.Item>
+            </div>
+          </Col>
+          <Col
+            span={3}
+            style={{
+              height: "50px",
+              borderRadius: "15px",
+              marginLeft: "10px",
+              border: "1px solid #DCDCDC",
+            }}
+          >
+            <div
+              className={`pickType`}
+              style={{ paddingRight: "5px", marginLeft: "10px" }}
+            >
+              <p style={{ fontSize: "10px" }}>Дуусах хугацаа сонгох</p>
+              <Form.Item
+                name="endDate"
+                rules={[
+                  { required: false, message: "Дуусах хугацаа сонгоно уу?" },
+                ]}
               >
-                <Closest />
-              </TabPane>
-              <TabPane
-                tab={
-                  <div
-                    style={{
-                      height: "48px",
-                      width: "156px",
-                    }}
-                  >
-                    <p style={{ height: "24px" }}> Хамгийн ойр</p>
-                  </div>
-                }
-                key="3"
+                <DatePicker
+                  style={{ width: "100%" }}
+                  onChange={handleEndDateChange}
+                  disabledDate={disabledDate}
+                  placeholder="Сонгох"
+                  suffixIcon={
+                    <div>
+                      <DownOutlined />
+                    </div>
+                  }
+                ></DatePicker>
+              </Form.Item>
+            </div>
+          </Col>
+          <Col span={4} style={{ marginLeft: "10px" }} size="large">
+            <Form.Item>
+              <Button
+                style={{ height: "50px" }}
+                htmlType="submit"
+                size={"large"}
+                type="primary"
+                className={`buttonGo`}
+                block
+                onClick={onSearch}
               >
-                <Farthest data={spaceData} />
-              </TabPane>
-            </Tabs>
-          </Card>
-        </Col>
-      </Row>
+                Хайх
+              </Button>
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={15}>
+            <GoogleMapReact
+              style={{ height: "828px" }}
+              bootstrapURLKeys={{ key: GOOGLE_API }}
+              center={{ lat: latitude, lng: longitude }}
+              defaultZoom={16}
+              onClick={onMapClick}
+            >
+              {selectLat & selectLng ? (
+                <ClickLocation lat={selectLat} lng={selectLng} />
+              ) : null}
+              {spaceData.map((item) => (
+                <AnyReactComponent
+                  key={item.residenceBlockId}
+                  lat={item.latitude}
+                  lng={item.longitude}
+                  text="20p"
+                />
+              ))}
+            </GoogleMapReact>
+          </Col>
+          <Col span={9}>
+            <Card>
+              <Tabs
+                defaultActiveKey="1"
+                onChange={callback}
+                className={`OptionPane`}
+                style={{
+                  alignContent: "center",
+                  marginLeft: "5%",
+                }}
+              >
+                <TabPane
+                  tab={
+                    <div
+                      style={{
+                        width: "140px",
+                        height: "48px",
+                      }}
+                    >
+                      <p style={{ height: "24px", paddingLeft: "25px" }}>
+                        Тохирох
+                      </p>
+                    </div>
+                  }
+                  key="1"
+                >
+                  <ToFit data={searchedData} lat={latitude} lng={longitude} />
+                </TabPane>
+                <TabPane
+                  tab={
+                    <div
+                      style={{
+                        height: "48px",
+                        width: "140px",
+                      }}
+                    >
+                      <p style={{ height: "24px" }}> Хамгийн хямд</p>
+                    </div>
+                  }
+                  key="2"
+                >
+                  <Closest />
+                </TabPane>
+                <TabPane
+                  tab={
+                    <div
+                      style={{
+                        height: "48px",
+                        width: "140px",
+                      }}
+                    >
+                      <p style={{ height: "24px" }}> Хамгийн ойр</p>
+                    </div>
+                  }
+                  key="3"
+                >
+                  <Farthest data={spaceData} />
+                </TabPane>
+              </Tabs>
+            </Card>
+          </Col>
+        </Row>
+      </Form>
     </div>
   );
 };
