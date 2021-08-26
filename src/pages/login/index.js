@@ -4,6 +4,8 @@ import {Form, Input, Button, Modal} from 'antd';
 import {RightOutlined} from '@ant-design/icons';
 import {login} from '@api/auth';
 import {callPost} from '@api/api';
+// eslint-disable-next-line camelcase
+import auth_cookie from '@utils/auth';
 import {messageType, defaultMsg} from '@constants/constants';
 import {showMessage} from '@utils/message';
 import Context from '@context/Context';
@@ -28,6 +30,8 @@ const Login = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [confirmCode, setConfirmCode] = useState(null);
+  // eslint-disable-next-line no-unused-vars
+  const [loading, setLoading]= useState(false);
   const [form] = Form.useForm();
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -89,11 +93,11 @@ const Login = () => {
     } catch (e) {}
   };
 
-  const pushrouter = (route) => {
-    // if (router.pathname ==='/login'){
-    // router.push('/'+ route)
-    // }
-  };
+  // const pushrouter = (route) => {
+  //   // if (router.pathname ==='/login'){
+  //   // router.push('/'+ route)
+  //   // }
+  // };
   return (
     <div>
       <div className="login">

@@ -1,3 +1,4 @@
+// eslint-disable-next-line camelcase
 import auth_cookie from '@utils/auth';
 import {useRouter} from 'next/router';
 import {useEffect} from 'react';

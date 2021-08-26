@@ -1,8 +1,8 @@
-import { Form, Input, Button, Modal, Grid } from "antd";
-import { useContext } from "react";
-import Context from "@context/Context";
-import { apiList, callPost } from "@api/api";
-const { confirm } = Modal;
+import {Form, Input, Button, Modal, Grid} from 'antd';
+import {useContext} from 'react';
+import Context from '@context/Context';
+import {apiList, callPost} from '@api/api';
+const {confirm} = Modal;
 
 const layout = {
   labelCol: {
@@ -26,14 +26,14 @@ const ChangePassword = () => {
 
   const onFinish = (values) => {
     confirm({
-      title: "Нууц үгээ солихдоо итгэлтэй байна уу?",
-      okText: "Солих",
-      cancelText: "Цуцлах",
+      title: 'Нууц үгээ солихдоо итгэлтэй байна уу?',
+      okText: 'Солих',
+      cancelText: 'Цуцлах',
       onOk: () => {
         changePass(values);
-      }
-    })
-  }
+      },
+    });
+  };
   const changePass = async (values) => {
     ctx.setIsLoading(true);
     await callPost(apiList.changePassword, values);
@@ -45,25 +45,25 @@ const ChangePassword = () => {
         <Form.Item name="oldPassword" label="Нууц үг" rules={[
           {
             required: true,
-            message: "Хуучин нууц үгээ оруулна уу."
-          }
+            message: 'Хуучин нууц үгээ оруулна уу.',
+          },
         ]}>
           <Input.Password />
         </Form.Item>
         <Form.Item name="newPassword" label="Шинэ нууц үг" rules={[
           {
             required: true,
-            message: "Шинэ нууц үгээ оруулна уу."
-          }
+            message: 'Шинэ нууц үгээ оруулна уу.',
+          },
         ]}>
           <Input.Password />
         </Form.Item>
         <Form.Item name="newPasswordRepeat" label="Шинэ нууц үг давтах" rules={[
           {
             required: true,
-            message: "Шинэ нууц үгээ давтана уу."
+            message: 'Шинэ нууц үгээ давтана уу.',
           },
-          ({ getFieldValue }) => ({
+          ({getFieldValue}) => ({
             validator(_, value) {
               if (!value || getFieldValue('newPassword') === value) {
                 return Promise.resolve();
@@ -80,7 +80,7 @@ const ChangePassword = () => {
         </Form.Item>
       </Form>
     </div>
-  )
-}
+  );
+};
 
 export default ChangePassword;

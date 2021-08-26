@@ -1,22 +1,22 @@
-import { useState, createContext, useReducer, useEffect } from "react";
-import reducers from "./Reducers";
-import jwt_decode from "jwt-decode";
-import Auth from "@utils/auth";
-import { useRouter } from "next/router";
-import { apiList, sList } from "@api/api";
-import { profileMenu } from "@constants/profilemenu";
-import { walletMenu } from "@constants/walletmenu";
-import { callGet } from "@api/api";
-import { showMessage } from "../utils/message";
+import {useState, createContext, useReducer, useEffect} from 'react';
+import reducers from './Reducers';
+import jwt_decode from 'jwt-decode';
+import Auth from '@utils/auth';
+import {useRouter} from 'next/router';
+import {apiList, sList} from '@api/api';
+import {profileMenu} from '@constants/profilemenu';
+import {walletMenu} from '@constants/walletmenu';
+import {callGet} from '@api/api';
+import {showMessage} from '../utils/message';
 
 const Context = createContext();
 
-export const ContextProvider = ({ children }) => {
+export const ContextProvider = ({children}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [userdata, setUserdata] = useState({});
   const [menuOpenKeys, setMenuOpenKeys] = useState([]);
 
-  const initialState = { auth: {}, menus: [], permissions: {} };
+  const initialState = {auth: {}, menus: [], permissions: {}};
   const [state, dispatch] = useReducer(reducers, initialState);
   const router = useRouter();
 
@@ -48,10 +48,10 @@ export const ContextProvider = ({ children }) => {
     // }
     const accessToken = Auth.getToken();
     // let role = "admin";
-    let permissionList = {};
-    if (router.pathname.startsWith("/park")) {
-      if (accessToken == null || accessToken == "undefined") {
-        router.push("/login");
+    const permissionList = {};
+    if (router.pathname.startsWith('/park')) {
+      if (accessToken == null || accessToken == 'undefined') {
+        router.push('/login');
         return;
       } else {
         const user = jwt_decode(accessToken);
@@ -65,7 +65,7 @@ export const ContextProvider = ({ children }) => {
       }
     }
     dispatch({
-      type: "PERMISSIONS",
+      type: 'PERMISSIONS',
       payload: permissionList,
     });
     // // #endregion
@@ -80,15 +80,15 @@ export const ContextProvider = ({ children }) => {
     // });
     const tmpMenus = data;
 
-    let menus = {};
+    const menus = {};
     tmpMenus.map((mnu) => {
       const parentId = mnu.parentId;
       if (parentId !== null) {
-        if (menus[parentId]["children"] === undefined) {
-          menus[parentId]["children"] = [];
-          delete menus[parentId]["link"];
+        if (menus[parentId]['children'] === undefined) {
+          menus[parentId]['children'] = [];
+          delete menus[parentId]['link'];
         }
-        menus[parentId]["children"].push(mnu);
+        menus[parentId]['children'].push(mnu);
       } else {
         menus[mnu.id] = mnu;
       }
@@ -100,11 +100,11 @@ export const ContextProvider = ({ children }) => {
     // }
 
     dispatch({
-      type: "MENUS",
+      type: 'MENUS',
       payload: menuData,
     });
 
-    //#endregion
+    // #endregion
   };
 
   useEffect(() => {

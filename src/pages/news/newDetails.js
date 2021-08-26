@@ -1,9 +1,9 @@
 // import styles from "../styles/NewDetails.module.css";
-export default function NewDetails() {
+const NewDetails = ()=> {
   return (
     <div>
-      <div className={`backgroundImage`}></div>
+      <div className={'backgroundImage'}></div>
     </div>
   );
-}
-s;
+};
+export default NewDetails;

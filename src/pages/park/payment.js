@@ -1,4 +1,4 @@
-import DefaultLayout from "@components/layouts/DefaultLayout";
+import DefaultLayout from '@components/layouts/DefaultLayout';
 import {
   Layout,
   Button,
@@ -9,84 +9,72 @@ import {
   Divider,
   Modal,
   Alert,
-  Calendar,
-} from "antd";
+  // Calendar,
+} from 'antd';
 import {
   LeftOutlined,
   DownOutlined,
   UpOutlined,
-  CodeSandboxCircleFilled,
-} from "@ant-design/icons";
-import { useEffect, useState, useContext } from "react";
-import { callGet, callPost } from "@api/api";
-import Context from "@context/Context";
-import { useRouter } from "next/router";
-import Helper from "@utils/helper";
-import Link from "next/link";
+  // CodeSandboxCircleFilled,
+} from '@ant-design/icons';
+import {useEffect, useState, useContext} from 'react';
+import {callGet, callPost} from '@api/api';
+import Context from '@context/Context';
+// import {useRouter} from 'next/router';
+import Helper from '@utils/helper';
+import Link from 'next/link';
 
-import { Tabs } from "antd";
-import WalletCard from "@components/WalletCard";
-import WalletBankInfo from "@components/WalletBankInfo";
-import { calendarLocale } from "@constants/constants.js";
-import moment from "moment";
+import {Tabs} from 'antd';
+import WalletCard from '@components/WalletCard';
+import WalletBankInfo from '@components/WalletBankInfo';
+// import {calendarLocale} from '@constants/constants.js';
+import moment from 'moment';
 // import Calendar from 'react-calendar';
-import CustomCalendar from "@components/CustomCalendar";
-moment.updateLocale("mn", {
-  weekdaysMin: ["НЯ", "ДА", "МЯ", "ЛХ", "ПҮ", "БА", "БЯ"],
+moment.updateLocale('mn', {
+  weekdaysMin: ['НЯ', 'ДА', 'МЯ', 'ЛХ', 'ПҮ', 'БА', 'БЯ'],
 });
 
-const { TabPane } = Tabs;
+const {TabPane} = Tabs;
 
-const { Header, Sider, Content } = Layout;
+const {Header, Sider, Content} = Layout;
 
 const IMG_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
 const style = {
-  border: "1px solid #DEE2E9",
-  borderRadius: "8px",
-  padding: "5px 10px",
+  border: '1px solid #DEE2E9',
+  borderRadius: '8px',
+  padding: '5px 10px',
 };
 
 const Payment = () => {
-  const { userdata } = useContext(Context);
-  const router = useRouter();
+  const {userdata} = useContext(Context);
   const ctx = useContext(Context);
   const [orderData, setOrderData] = useState({
-    residenceName: "Маршал хотхон",
-    province: "Улаанбаатар",
-    district: "Хан-Уул",
-    section: "5-р хороо",
-    residenceBlockNumber: "67",
-    totalAtDay: "2",
+    residenceName: 'Маршал хотхон',
+    province: 'Улаанбаатар',
+    district: 'Хан-Уул',
+    section: '5-р хороо',
+    residenceBlockNumber: '67',
+    totalAtDay: '2',
     returnRoutes:
-      "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    bookingStatus: "SAVED",
-    totalPrice: "16000",
+      'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+    bookingStatus: 'SAVED',
+    totalPrice: '16000',
   });
   const [images, setImages] = useState([]);
   const [parkingUpDownArrow, setParkingUpDownArrow] = useState(false);
-  const [seemoreUpDownArrow, setSeemoreUpDownArrow] = useState(false);
-  const [isModalVisibleCancelOrder, setIsModalVisibleCancelOrder] =
-    useState(false);
-  const [
-    isModalVisibleCancelOrderConfirm,
-    setIsModalVisibleCancelOrderConfirm,
-  ] = useState(false);
-  const [selectedDate, setSelectedDate] = useState([]);
-  const [fromSelectedDate, setFromSelectedDate] = useState([]);
-  const [time, settime] = useState(null);
-  const [value, setValue] = useState(new Date());
   const [bankData, setBankData] = useState(null);
-  const [type, settype] = useState("KHANBANK");
-  const [type2, settype2] = useState("MONGOLCHAT");
+  const [type, settype] = useState('KHANBANK');
+  const [type2, settype2] = useState('MONGOLCHAT');
   const [amount, setamount] = useState(0);
   const [phoneNumber, setphoneNumber] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [formData, setformData] = useState({
     amount: null,
     phoneNumber: null,
   });
-  const [message, setmessage] = useState("");
-  const [status, setstatus] = useState("");
-  const [title, settitle] = useState("");
+  const [message, setmessage] = useState('');
+  const [status, setstatus] = useState('');
+  const [title, settitle] = useState('');
   const [messageShow, setmessageShow] = useState(false);
 
   useEffect(() => {
@@ -104,94 +92,94 @@ const Payment = () => {
 
   const fetchData2 = async () => {
     if (amount != 0) {
-      let formData2 = {
+      const formData2 = {
         amount: +amount,
         bookingId: null,
         topUp: true,
       };
       formData.amount = amount;
       formData.phoneNumber =
-        type2 == "LENDMN" ? phoneNumber : userdata.phoneNumber;
+        type2 == 'LENDMN' ? phoneNumber : userdata.phoneNumber;
       {
-        type2 == "MONGOLCHAT"
-          ? await callPost(`/mongolchat/wallet`, formData).then((res) => {
-              if (res.code == 1000) {
-                settitle("Амжилтай");
-                setmessage("Амжилттай. Нэхэмжлэх үүсгэлээ.");
-                setstatus("success");
-                setmessageShow(true);
-                try {
-                  const win = window.open(res.dynamic_link, "_blank");
-                  win.focus();
-                } catch (e) {
-                  settitle("Анхааруулга");
-                  setmessage("Нэхэмжлэх үүсгэхэд алдаа гарлаа");
-                  setstatus("warning");
-                  setmessageShow(true);
-                }
-              } else {
-                settitle("Анхааруулга");
-                setmessage("Нэхэмжлэх үүсгэхэд алдаа гарлаа");
-                setstatus("warning");
+        type2 == 'MONGOLCHAT' ?
+          await callPost('/mongolchat/wallet', formData).then((res) => {
+            if (res.code == 1000) {
+              settitle('Амжилтай');
+              setmessage('Амжилттай. Нэхэмжлэх үүсгэлээ.');
+              setstatus('success');
+              setmessageShow(true);
+              try {
+                const win = window.open(res.dynamic_link, '_blank');
+                win.focus();
+              } catch (e) {
+                settitle('Анхааруулга');
+                setmessage('Нэхэмжлэх үүсгэхэд алдаа гарлаа');
+                setstatus('warning');
                 setmessageShow(true);
               }
-            })
-          : type2 == "LENDMN"
-          ? await callPost(`/lend/qr/wallettopup`, formData).then((res) => {
+            } else {
+              settitle('Анхааруулга');
+              setmessage('Нэхэмжлэх үүсгэхэд алдаа гарлаа');
+              setstatus('warning');
+              setmessageShow(true);
+            }
+          }) :
+          type2 == 'LENDMN' ?
+            await callPost('/lend/qr/wallettopup', formData).then((res) => {
               if (res.qr_string) {
-                settitle("Амжилтай");
-                setmessage("Амжилттай. Нэхэмжлэх үүсгэлээ.");
-                setstatus("success");
+                settitle('Амжилтай');
+                setmessage('Амжилттай. Нэхэмжлэх үүсгэлээ.');
+                setstatus('success');
                 setmessageShow(true);
               } else {
-                settitle("Анхааруулга");
-                setmessage("Нэхэмжлэх үүсгэхэд алдаа гарлаа");
-                setstatus("warning");
+                settitle('Анхааруулга');
+                setmessage('Нэхэмжлэх үүсгэхэд алдаа гарлаа');
+                setstatus('warning');
                 setmessageShow(true);
               }
-            })
-          : type2 == "SOCIALPAY"
-          ? await callPost(`/invoice`, formData2).then((res) => {
-              if (res && res.invoice) {
-                settitle("Амжилтай");
-                setmessage("Амжилттай. Нэхэмжлэх үүсгэлээ.");
-                setstatus("success");
-                setmessageShow(true);
-                try {
-                  const win = window.open(
-                    "https://ecommerce.golomtbank.com/socialpay/mn/" +
+            }) :
+            type2 == 'SOCIALPAY' ?
+              await callPost('/invoice', formData2).then((res) => {
+                if (res && res.invoice) {
+                  settitle('Амжилтай');
+                  setmessage('Амжилттай. Нэхэмжлэх үүсгэлээ.');
+                  setstatus('success');
+                  setmessageShow(true);
+                  try {
+                    const win = window.open(
+                      'https://ecommerce.golomtbank.com/socialpay/mn/' +
                       res.invoice,
-                    "_blank"
-                  );
-                  win.focus();
-                } catch (e) {
-                  settitle("Анхааруулга");
-                  setmessage("Нэхэмжлэх үүсгэхэд алдаа гарлаа");
-                  setstatus("warning");
+                      '_blank',
+                    );
+                    win.focus();
+                  } catch (e) {
+                    settitle('Анхааруулга');
+                    setmessage('Нэхэмжлэх үүсгэхэд алдаа гарлаа');
+                    setstatus('warning');
+                    setmessageShow(true);
+                  }
+                } else {
+                  settitle('Анхааруулга');
+                  setmessage('Нэхэмжлэх үүсгэхэд алдаа гарлаа');
+                  setstatus('warning');
                   setmessageShow(true);
                 }
-              } else {
-                settitle("Анхааруулга");
-                setmessage("Нэхэмжлэх үүсгэхэд алдаа гарлаа");
-                setstatus("warning");
-                setmessageShow(true);
-              }
-            })
-          : null;
+              }) :
+              null;
       }
     } else {
-      settitle("Анхааруулга");
-      setmessage("Үнийн дүн хоосон байна");
-      setstatus("warning");
+      settitle('Анхааруулга');
+      setmessage('Үнийн дүн хоосон байна');
+      setstatus('warning');
       setmessageShow(true);
     }
   };
 
   const getData = async () => {
-    const orderId = router.query.id;
+    // const orderId = router.query.id;
     ctx.setIsLoading(true);
     const res = await callGet(`/booking/id/test?id=${497}&asWho=1`);
-    console.log(res, "resresres");
+    console.log(res, 'resresres');
     if (!res || res === undefined) {
       showMessage(messageType.FAILED.type, defaultMsg.dataError);
     } else {
@@ -202,7 +190,7 @@ const Payment = () => {
         ...images,
         {
           id: 4,
-          path: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+          path: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
         },
       ]);
       // }
@@ -234,44 +222,8 @@ const Payment = () => {
     ctx.setIsLoading(false);
   };
 
-  function callback(key) {
-    console.log(key);
-  }
-  const handleClickCancelOrder = () => {
-    setIsModalVisibleCancelOrder(true);
-  };
-  const handleClickCancelOrderContinue = () => {
-    setIsModalVisibleCancelOrder(false);
-    setIsModalVisibleCancelOrderConfirm(true);
-  };
 
-  const handleOkCancelOrder = () => {
-    setIsModalVisibleCancelOrder(false);
-  };
-
-  const handleCancelCancelOrder = () => {
-    setIsModalVisibleCancelOrder(false);
-  };
-
-  const handleOkCancelOrderConfirm = () => {
-    setIsModalVisibleCancelOrder(false);
-  };
-
-  const handleCancelCancelOrderConfirm = () => {
-    setIsModalVisibleCancelOrder(false);
-  };
-
-  function onPanelChange(value, mode) {
-    console.log(value, mode);
-  }
-  function handleClickConfirm(value, mode) {
-    console.log(value, mode);
-  }
-  function getSelectedDate(data) {
-    console.log(data, "datadatadata");
-    setFromSelectedDate(data);
-  }
-  const handleClickBankLogo = (activekey) => {
+  ndleClickBankLogo = (activekey) => {
     settype(activekey);
   };
 
@@ -290,28 +242,28 @@ const Payment = () => {
   };
   return (
     <DefaultLayout>
-      <Layout style={{ overflow: "hidden" }}>
-        <Header style={{ padding: "0px" }}>
-          <Link href={{ pathname: `/park/profile/order/` }} passHref>
+      <Layout style={{overflow: 'hidden'}}>
+        <Header style={{padding: '0px'}}>
+          <Link href={{pathname: '/park/profile/order/'}} passHref>
             <Button
               type="primary"
               shape="circle"
               icon={<LeftOutlined />}
-              size={"large"}
+              size={'large'}
             />
           </Link>
           <span
             style={{
-              fontSize: "20px",
-              lineHeight: "24px",
-              color: "#0013D4",
-              marginLeft: "20px",
+              fontSize: '20px',
+              lineHeight: '24px',
+              color: '#0013D4',
+              marginLeft: '20px',
             }}
           >
             Хадгалсан захиалга
           </span>
         </Header>
-        <Layout style={{ padding: "0px 0px 0px 60px" }}>
+        <Layout style={{padding: '0px 0px 0px 60px'}}>
           <Content>
             {images.length > 0 ? (
               <Carousel>
@@ -327,13 +279,13 @@ const Payment = () => {
                 ))}
               </Carousel>
             ) : null}
-            <Row style={{ marginTop: "24px" }}>
+            <Row style={{marginTop: '24px'}}>
               <Col span={12}>
-                <div style={{ fontSize: "20px" }}>
+                <div style={{fontSize: '20px'}}>
                   <strong>
-                    {!Helper.isNullOrEmpty(orderData.residenceName)
-                      ? orderData.residenceName
-                      : null}
+                    {!Helper.isNullOrEmpty(orderData.residenceName) ?
+                      orderData.residenceName :
+                      null}
                   </strong>
                 </div>
                 {/* <div>rating</div> */}
@@ -343,20 +295,20 @@ const Payment = () => {
                 span={12}
               >{`${orderData.province}, ${orderData.district}, ${orderData.section}, ${orderData.residenceName}, ${orderData.residenceBlockNumber}`}</Col>
             </Row>
-            <Row justify="center" style={{ padding: "20px 10px" }}>
+            <Row justify="center" style={{padding: '20px 10px'}}>
               <Col
                 span={10}
                 style={{
-                  background: "rgba(222, 226, 233, 0.2)",
-                  borderRadius: "24px",
-                  padding: "13px 23px",
-                  display: "inline-flex",
-                  textAlign: "center",
-                  justifyContent: "center",
+                  background: 'rgba(222, 226, 233, 0.2)',
+                  borderRadius: '24px',
+                  padding: '13px 23px',
+                  display: 'inline-flex',
+                  textAlign: 'center',
+                  justifyContent: 'center',
                 }}
               >
                 {orderData && orderData.floorNumber ? (
-                  <div style={{ marginRight: "13px" }}>
+                  <div style={{marginRight: '13px'}}>
                     <Image
                       preview={false}
                       width={24}
@@ -365,7 +317,7 @@ const Payment = () => {
                   </div>
                 ) : null}
                 {orderData && orderData.entranceLock ? (
-                  <div style={{ marginRight: "13px" }}>
+                  <div style={{marginRight: '13px'}}>
                     <Image
                       preview={false}
                       width={24}
@@ -374,7 +326,7 @@ const Payment = () => {
                   </div>
                 ) : null}
                 {orderData && orderData.isNumbering ? (
-                  <div style={{ marginRight: "13px" }}>
+                  <div style={{marginRight: '13px'}}>
                     <Image
                       preview={false}
                       width={24}
@@ -383,7 +335,7 @@ const Payment = () => {
                   </div>
                 ) : null}
                 {orderData && orderData.capacity ? (
-                  <div style={{ marginRight: "13px" }}>
+                  <div style={{marginRight: '13px'}}>
                     <Image
                       preview={false}
                       width={24}
@@ -392,7 +344,7 @@ const Payment = () => {
                   </div>
                 ) : null}
                 {orderData && orderData.type ? (
-                  <div style={{ marginRight: "13px" }}>
+                  <div style={{marginRight: '13px'}}>
                     <Image
                       preview={false}
                       width={24}
@@ -401,7 +353,7 @@ const Payment = () => {
                   </div>
                 ) : null}
                 {orderData && orderData.returnRoutes ? (
-                  <div style={{ marginRight: "13px" }}>
+                  <div style={{marginRight: '13px'}}>
                     <Image
                       preview={false}
                       width={24}
@@ -424,73 +376,73 @@ const Payment = () => {
                 {parkingUpDownArrow ? (
                   <div>
                     {orderData && orderData.floorNumber ? (
-                      <div style={{ marginRight: "13px", display: "flex" }}>
+                      <div style={{marginRight: '13px', display: 'flex'}}>
                         <Image
                           preview={false}
                           width={24}
                           src={IMG_URL + orderData.floorNumber}
                         />
-                        <div style={{ marginLeft: "25px" }}>
+                        <div style={{marginLeft: '25px'}}>
                           <span>{orderData.floorNumberLabel}</span>
                         </div>
                       </div>
                     ) : null}
                     {orderData && orderData.entranceLock ? (
-                      <div style={{ marginRight: "13px", display: "flex" }}>
+                      <div style={{marginRight: '13px', display: 'flex'}}>
                         <Image
                           preview={false}
                           width={24}
                           src={IMG_URL + orderData.entranceLock}
                         />
-                        <div style={{ marginLeft: "25px" }}>
+                        <div style={{marginLeft: '25px'}}>
                           <span>{orderData.entranceLockLabel}</span>
                         </div>
                       </div>
                     ) : null}
                     {orderData && orderData.isNumbering ? (
-                      <div style={{ marginRight: "13px", display: "flex" }}>
+                      <div style={{marginRight: '13px', display: 'flex'}}>
                         <Image
                           preview={false}
                           width={24}
                           src={IMG_URL + orderData.isNumbering}
                         />
-                        <div style={{ marginLeft: "25px" }}>
+                        <div style={{marginLeft: '25px'}}>
                           <span>{orderData.isNumberingLabel}</span>
                         </div>
                       </div>
                     ) : null}
                     {orderData && orderData.capacity ? (
-                      <div style={{ marginRight: "13px", display: "flex" }}>
+                      <div style={{marginRight: '13px', display: 'flex'}}>
                         <Image
                           preview={false}
                           width={24}
                           src={IMG_URL + orderData.capacity}
                         />
-                        <div style={{ marginLeft: "25px" }}>
+                        <div style={{marginLeft: '25px'}}>
                           <span>{orderData.capacityLabel}</span>
                         </div>
                       </div>
                     ) : null}
                     {orderData && orderData.type ? (
-                      <div style={{ marginRight: "13px", display: "flex" }}>
+                      <div style={{marginRight: '13px', display: 'flex'}}>
                         <Image
                           preview={false}
                           width={24}
                           src={IMG_URL + orderData.type}
                         />
-                        <div style={{ marginLeft: "25px" }}>
+                        <div style={{marginLeft: '25px'}}>
                           <span>{orderData.typeLabel}</span>
                         </div>
                       </div>
                     ) : null}
                     {orderData && orderData.returnRoutes ? (
-                      <div style={{ marginRight: "13px", display: "flex" }}>
+                      <div style={{marginRight: '13px', display: 'flex'}}>
                         <Image
                           preview={false}
                           width={24}
                           src={IMG_URL + orderData.returnRoutes}
                         />
-                        <div style={{ marginLeft: "25px" }}>
+                        <div style={{marginLeft: '25px'}}>
                           <span>{orderData.returnRoutesLabel}</span>
                         </div>
                       </div>
@@ -500,19 +452,19 @@ const Payment = () => {
               </Col>
             </Row>
           </Content>
-          <Sider style={{ overflow: "hidden" }} width={400}>
-            <Row style={{ marginTop: "30px" }}>
+          <Sider style={{overflow: 'hidden'}} width={400}>
+            <Row style={{marginTop: '30px'}}>
               <Col
                 span={24}
                 style={{
-                  fontWeight: "bold",
-                  fontSize: "14px",
-                  lineHeight: "24px",
+                  fontWeight: 'bold',
+                  fontSize: '14px',
+                  lineHeight: '24px',
                 }}
               >
-                <div style={{ color: "#0013D4" }}>Таны сонгосон захиалга:</div>
+                <div style={{color: '#0013D4'}}>Таны сонгосон захиалга:</div>
                 {orderData.totalAtDay ? (
-                  <div style={{ color: "#35446d", marginLeft: "10px" }}>
+                  <div style={{color: '#35446d', marginLeft: '10px'}}>
                     Нийт {orderData.totalAtDay} өдөр
                   </div>
                 ) : null}
@@ -521,7 +473,7 @@ const Payment = () => {
             <Row gutter={16}>
               <Col className="gutter-row" span={12}>
                 <div style={style}>
-                  <div style={{ color: "#0013D4" }}>Эхлэх хугацаа</div>
+                  <div style={{color: '#0013D4'}}>Эхлэх хугацаа</div>
                   {orderData && orderData.startDateTime ? (
                     <div>{Helper.removeSec(orderData.startDateTime)}</div>
                   ) : null}
@@ -529,7 +481,7 @@ const Payment = () => {
               </Col>
               <Col className="gutter-row" span={12}>
                 <div style={style}>
-                  <div style={{ color: "#0013D4" }}>Дуусах хугацаа</div>
+                  <div style={{color: '#0013D4'}}>Дуусах хугацаа</div>
                   {orderData && orderData.endDateTime ? (
                     <div>{Helper.removeSec(orderData.endDateTime)}</div>
                   ) : null}
@@ -538,17 +490,17 @@ const Payment = () => {
             </Row>
 
             {(() => {
-              if (orderData.bookingStatus === "SAVED") {
+              if (orderData.bookingStatus === 'SAVED') {
                 return (
                   <div>
                     <Divider />
-                    <Row style={{ marginTop: "30px" }}>
+                    <Row style={{marginTop: '30px'}}>
                       <Col
                         span={12}
                         style={{
-                          fontWeight: "bold",
-                          fontSize: "14px",
-                          lineHeight: "24px",
+                          fontWeight: 'bold',
+                          fontSize: '14px',
+                          lineHeight: '24px',
                         }}
                       >
                         <div>Нийт захиалгын төлбөр:</div>
@@ -556,27 +508,27 @@ const Payment = () => {
                       <Col
                         span={12}
                         style={{
-                          fontWeight: "bold",
-                          fontSize: "14px",
-                          lineHeight: "24px",
-                          textAlign: "right",
-                          fontSize: "20px",
+                          fontWeight: 'bold',
+                          fontSize: '14px',
+                          lineHeight: '24px',
+                          textAlign: 'right',
+                          fontSize: '20px',
                         }}
                       >
-                        {orderData.totalPrice
-                          ? Helper.formatValueReverse(orderData.totalPrice)
-                          : 0}
+                        {orderData.totalPrice ?
+                          Helper.formatValueReverse(orderData.totalPrice) :
+                          0}
                         ₮
                       </Col>
                     </Row>
-                    <Row style={{ margin: "30px 0px" }}>
+                    <Row style={{margin: '30px 0px'}}>
                       <Col span={24}>
                         <Tabs defaultActiveKey="1">
                           <TabPane tab="Хэтэвч" key="1">
                             <WalletCard />
-                            <Row style={{ marginTop: "35px" }}>
+                            <Row style={{marginTop: '35px'}}>
                               <Col span={24}>
-                                <Button type="primary" size={"large"} block>
+                                <Button type="primary" size={'large'} block>
                                   Төлөх
                                 </Button>
                               </Col>
@@ -606,27 +558,27 @@ const Payment = () => {
                                     <div>
                                       <WalletBankInfo
                                         value={
-                                          bankData && bankData.accountNumber
-                                            ? bankData.accountNumber
-                                            : 0
+                                          bankData && bankData.accountNumber ?
+                                            bankData.accountNumber :
+                                            0
                                         }
                                       >
                                         Дансны дугаар
                                       </WalletBankInfo>
                                       <WalletBankInfo
                                         value={
-                                          bankData && bankData.accountName
-                                            ? bankData.accountName
-                                            : 0
+                                          bankData && bankData.accountName ?
+                                            bankData.accountName :
+                                            0
                                         }
                                       >
                                         Хүлээн авагч
                                       </WalletBankInfo>
                                       <WalletBankInfo
                                         value={
-                                          bankData && bankData.description
-                                            ? bankData.description
-                                            : 0
+                                          bankData && bankData.description ?
+                                            bankData.description :
+                                            0
                                         }
                                       >
                                         Гүйлгээний утга
@@ -644,7 +596,7 @@ const Payment = () => {
                                   tab={
                                     <span
                                       onClick={() => {
-                                        settype2("MONGOLCHAT");
+                                        settype2('MONGOLCHAT');
                                       }}
                                     >
                                       <Image
@@ -669,7 +621,7 @@ const Payment = () => {
                                   tab={
                                     <span
                                       onClick={() => {
-                                        settype2("LENDMN");
+                                        settype2('LENDMN');
                                       }}
                                     >
                                       <Image
@@ -692,7 +644,7 @@ const Payment = () => {
                                   tab={
                                     <span
                                       onClick={() => {
-                                        settype2("SOCIALPAY");
+                                        settype2('SOCIALPAY');
                                       }}
                                     >
                                       <Image
@@ -724,10 +676,10 @@ const Payment = () => {
                     </Row>
                   </div>
                 );
-              } else if (orderData.bookingStatus === "HISTORY") {
+              } else if (orderData.bookingStatus === 'HISTORY') {
                 return (
-                  <div style={{ margin: "30px 0px" }}>
-                    <Button type="primary" size={"large"} block>
+                  <div style={{margin: '30px 0px'}}>
+                    <Button type="primary" size={'large'} block>
                       Зогсоолыг үнэлэх
                     </Button>
                   </div>
@@ -754,27 +706,27 @@ const Payment = () => {
 const tabItems = [
   {
     id: 1,
-    name: "Хаан банк",
-    type: "KHANBANK",
-    src: "../../images/icon/khanbank.png",
+    name: 'Хаан банк',
+    type: 'KHANBANK',
+    src: '../../images/icon/khanbank.png',
   },
   {
     id: 2,
-    name: "Хас банк",
-    type: "KHASBANK",
-    src: "../../images/icon/xac.png",
+    name: 'Хас банк',
+    type: 'KHASBANK',
+    src: '../../images/icon/xac.png',
   },
   {
     id: 3,
-    name: "Голомт банк",
-    type: "GOLOMTBANK",
-    src: "../../images/icon/golomt.png",
+    name: 'Голомт банк',
+    type: 'GOLOMTBANK',
+    src: '../../images/icon/golomt.png',
   },
   {
     id: 4,
-    name: "Худалдаа хөгжлийн банк",
-    type: "TDB",
-    src: "../../images/icon/tdb.png",
+    name: 'Худалдаа хөгжлийн банк',
+    type: 'TDB',
+    src: '../../images/icon/tdb.png',
   },
 ];
 

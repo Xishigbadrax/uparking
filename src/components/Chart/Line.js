@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { Line } from "@ant-design/charts";
-import css from "./_.module.css";
-const DemoLine = ({ title, data, xField, yField, additionalConfig }) => {
-  var config = {
+import React from 'react';
+import {Line} from '@ant-design/charts';
+import css from './_.module.css';
+// eslint-disable-next-line react/prop-types
+const DemoLine = ({title, data, xField, yField, additionalConfig}) => {
+  const config = {
     title: title,
     data: data,
     xField: xField,
@@ -10,21 +11,21 @@ const DemoLine = ({ title, data, xField, yField, additionalConfig }) => {
     label: {},
     point: {
       size: 5,
-      shape: "diamond",
+      shape: 'diamond',
       style: {
-        fill: "white",
-        stroke: "#5B8FF9",
+        fill: 'white',
+        stroke: '#5B8FF9',
         lineWidth: 2,
       },
     },
-    tooltip: { showMarkers: false },
+    tooltip: {showMarkers: false},
     state: {
       active: {
         style: {
-          shadowColor: "yellow",
+          shadowColor: 'yellow',
           shadowBlur: 4,
-          stroke: "transparent",
-          fill: "red",
+          stroke: 'transparent',
+          fill: 'red',
         },
       },
     },
@@ -34,16 +35,16 @@ const DemoLine = ({ title, data, xField, yField, additionalConfig }) => {
           diamond: {
             active: {
               style: {
-                shadowColor: "#FCEBB9",
+                shadowColor: '#FCEBB9',
                 shadowBlur: 2,
-                stroke: "#F6BD16",
+                stroke: '#F6BD16',
               },
             },
           },
         },
       },
     },
-    interactions: [{ type: "marker-active" }],
+    interactions: [{type: 'marker-active'}],
     ...additionalConfig,
   };
   return (

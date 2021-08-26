@@ -1,4 +1,4 @@
-export default function Custom404() {
+const Custom404=()=> {
   return (
     <div className="errorPageContainer">
       <div className="logo">
@@ -7,5 +7,6 @@ export default function Custom404() {
         <p className="errorDetail">Таны хандсан хаяг байхгүй байна</p>
       </div>
     </div>
-  )
-}
+  );
+};
+export default Custom404;
