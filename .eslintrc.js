@@ -25,5 +25,6 @@ module.exports = {
     'semi': ['error', 'always'],
     'indent': ['error', 2],
     'no-multi-spaces': ['error'],
+    'linebreak-style': 'off',
   },
 };

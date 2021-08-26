@@ -23,23 +23,19 @@ export default function InforNavbar() {
           style={{ width: "1110px" }}
         >
           {" "}
-          {console.log(navbar)}
           {navbar.map((item) => (
             <div
               key={item.id}
               onClick={() => setFilterType(item.href)}
-              className={`text-center py-3 grid-cols-1 dateFilter1 ${
-                filterType == item.href ? styles.active : ""
-              }`}
+              className={`text-center py-3 grid-cols-1 dateFilter1 `}
             >
               {item.name}
             </div>
           ))}
         </div>
         <div className="py-3 ml-32">
-          <span style={{ color: "aqua" }}>10/19/2020 , </span>
           <span style={{ color: "blue" }}>
-            <b> Даваа гараг</b>
+            10/19/2020 , <b> Даваа гараг</b>
           </span>
         </div>
       </div>

@@ -8,6 +8,7 @@ import {messageType, defaultMsg} from '@constants/constants';
 import {showMessage} from '@utils/message';
 import Context from '@context/Context';
 import MaskedInput from 'antd-mask-input';
+import auth_cookie from '@utils/auth';
 
 const layout = {
   labelCol: {},
@@ -25,6 +26,7 @@ const Login = () => {
   const {auth} = state;
   const router = useRouter();
   const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [confirmCode, setConfirmCode] = useState(null);
   const [form] = Form.useForm();
   const handleSubmit = (e) => {
@@ -64,8 +66,8 @@ const Login = () => {
 
   useEffect(() => {
     console.log(
-        Object.keys(auth).length,
-        'Object.keys(auth).lengthObject.keys(auth).length',
+      Object.keys(auth).length,
+      'Object.keys(auth).lengthObject.keys(auth).length',
     );
     if (Object.keys(auth).length !== 0) router.push('/park');
   }, [auth]);
@@ -506,8 +508,8 @@ const Login = () => {
                       disabled={
                         !form.isFieldsTouched(true) ||
                         !!form
-                            .getFieldsError()
-                            .filter(({errors}) => errors.length).length
+                          .getFieldsError()
+                          .filter(({errors}) => errors.length).length
                       }
                     >
                       Нэвтрэх
