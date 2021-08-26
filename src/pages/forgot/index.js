@@ -1,465 +1,432 @@
-import { useState, useContext, useEffect, useRef } from 'react';
-import { useRouter } from 'next/router';
-import { Form, Input, Button, Modal } from 'antd';
-import { UserOutlined, LockOutlined, RightOutlined, ExclamationCircleOutlined, ReloadOutlined } from '@ant-design/icons';
-import { callGet, callPost } from '@api/api';
-import { messageType, defaultMsg } from '@constants/constants';
-import { showMessage } from "@utils/message";
-import MaskedInput from 'antd-mask-input'
-import Countdown from "react-countdown";
+import {useState, useRef} from 'react';
+import {useRouter} from 'next/router';
+import {Form, Input, Button, Modal} from 'antd';
+import {ExclamationCircleOutlined, ReloadOutlined} from '@ant-design/icons';
+import {callGet, callPost} from '@api/api';
+import {messageType} from '@constants/constants';
+import {showMessage} from '@utils/message';
+import MaskedInput from 'antd-mask-input';
+import Countdown from 'react-countdown';
 
 
 const layout = {
-    labelCol: {
-    },
-    wrapperCol: {
-    },
+  labelCol: {
+  },
+  wrapperCol: {
+  },
 };
 const tailLayout = {
-    wrapperCol: {
-        // offset: 14,
-        // span: 16,
-    },
+  wrapperCol: {
+    // offset: 14,
+    // span: 16,
+  },
 };
 
 const ForgotPassword = () => {
+  const {confirm} = Modal;
+  // eslint-disable-next-line no-unused-vars
+  const [loading, setLoading] = useState(false);
+  const [isOneTimePass, setIsOneTimePass] = useState(false);
+  const [isTransactionCode, setIsTransactionCode] = useState(false);
+  const initialValue = 0;
+  const [phoneNumber, setPhoneNumber] = useState(initialValue);
+  const [havecode, setHaveCode] = useState(true);
+  const [verifyCode, setVerifyCode] = useState('');
+  const router = useRouter();
+  // const [modalVisible, setModalVisible] = useState(false);
+  const clockRef = useRef(null);
 
+  const [form] = Form.useForm();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
+  const handleSubmitVerication = (e) => {
+    e.preventDefault();
+  };
+  const handleSubmitTransaction = (e) => {
+    e.preventDefault();
+  };
 
-    const { confirm } = Modal;
-    const [loading, setLoading] = useState(false);
-    const [isOneTimePass, setIsOneTimePass] = useState(false);
-    const [isTransactionCode, setIsTransactionCode] = useState(false);
-    const initialValue = 0;
-    const [phoneNumber, setPhoneNumber, ref] = useState(initialValue);
-    const [havecode, setHaveCode] = useState(true);
-    const [OTP, setOTP] = useState('');
-    const [verifyCode, setVerifyCode] = useState('');
-    const router = useRouter();
-    // const [modalVisible, setModalVisible] = useState(false);
-    const [confirmCode, setConfirmCode] = useState(null);
-    const clockRef = useRef(null);
-
-    const [form] = Form.useForm();
-    const handleSubmit = (e) => {
-        e.preventDefault();
-    };
-    const handleSubmitVerication = (e) => {
-        e.preventDefault();
-    };
-    const handleSubmitTransaction = (e) => {
-        e.preventDefault();
-
+  const onFinish = (values) => {
+    setPhoneNumber(values.phonenumber);
+    // setModalVisible(true);
+    confirm({
+      title: 'Санамж',
+      icon: <ExclamationCircleOutlined />,
+      content: `Таны +976 ${values.phonenumber} дугаарт баталгаажуулах нууц үг илгээх үү?`,
+      okText: 'Тийм',
+      cancelText: 'Үгүй',
+      onOk: async (e) => {
+        await phoneNumberOK(values.phonenumber);
+      },
+      onCancel() { },
+    });
+  };
+  const phoneNumberOK = async (value) => {
+    try {
+      const result = await callGet(`forgotPassword/sendSms/${value}`);
+      if (result.status === 'failed') {
+        showMessage(messageType.FAILED.type, result.error);
+        return true;
+      } else {
+        setIsOneTimePass(true);
+      }
+    } catch (e) {
+      showMessage(messageType.FAILED.type, 'Баталгаажуулахад алдаа гарлаа');
     }
+  };
 
-    const onFinish = (values) => {
-        setPhoneNumber(values.phonenumber);
-        // setModalVisible(true);
-        confirm({
-            title: 'Санамж',
-            icon: <ExclamationCircleOutlined />,
-            content: `Таны +976 ${values.phonenumber} дугаарт баталгаажуулах нууц үг илгээх үү?`,
-            okText: 'Тийм',
-            cancelText: 'Үгүй',
-            onOk: async (e) => {
-                await phoneNumberOK(values.phonenumber);
-            },
-            onCancel() { },
-        });
-
-    };
-    const phoneNumberOK = async (value) => {
-        try {
-            const result = await callGet(`forgotPassword/sendSms/${value}`);
-            if (result.status === 'failed'){
-                showMessage(messageType.FAILED.type, result.error);
-                return true;
-            } else {
-                setIsOneTimePass(true);
-            }
-        } catch (e) {
-            showMessage(messageType.FAILED.type, 'Баталгаажуулахад алдаа гарлаа');
-        }
+  const onFinishVerfication = async (values) => {
+    try {
+      setVerifyCode(values.verificationCode);
+      const data = {
+        'confCode': values.verificationCode,
+        'phoneNumber': phoneNumber,
+      };
+      const result = await callPost('forgotPassword/checkAuth', data);
+      if (result.status === 'failed') {
+        showMessage(messageType.FAILED.type, result.error);
+        return true;
+      } else {
+        setIsTransactionCode(true);
+      }
+    } catch (e) {
+      console.log('verify Хадгалахад алдаа гарлаа');
     }
-
-    const onFinishVerfication = async (values) => {
-        try {
-            setVerifyCode(values.verificationCode);
-            const data = {
-                "confCode": values.verificationCode,
-                "phoneNumber": phoneNumber
-            }
-            const result = await callPost('forgotPassword/checkAuth', data);
-            if (result.status === 'failed') {
-                showMessage(messageType.FAILED.type, result.error);
-                return true;
-            } else {
-                setIsTransactionCode(true);
-            }
-        } catch (e) {
-            console.log('verify Хадгалахад алдаа гарлаа')
-        }
-
-    };
+  };
 
 
-    // useEffect(() => {
-    // }, [counter]);
+  // useEffect(() => {
+  // }, [counter]);
 
 
-    const counterOnComplete = () => {
-        setHaveCode(false);
+  const counterOnComplete = () => {
+    setHaveCode(false);
+  };
+  const getCodeAgain = async () => {
+    const result = await callGet(`forgotPassword/sendSms/${phoneNumber}`);
+    if (result.status === 'failed') {
+      showMessage(messageType.FAILED.type, result.error);
+      return true;
+    } else {
+      clockRef.current.start();
+      setHaveCode(true);
     }
-    const getCodeAgain = async () => {
+  };
+  const rendererCounter = ({hours, minutes, seconds, completed}) => {
+    return <span>{minutes}:{seconds}</span>;
+  };
 
-        const result = await callGet(`forgotPassword/sendSms/${phoneNumber}`);
-        if (result.status === 'failed'){
-            showMessage(messageType.FAILED.type, result.error);
-            return true;
-        } else {
-            clockRef.current.start();
-            setHaveCode(true);
-        }
-    }
-    const rendererCounter = ({ hours, minutes, seconds, completed }) => {
-        return <span>{minutes}:{seconds}</span>;
-    };
-
-    const handleConfirm = async () => {
-        try {
-            await form.validateFields();
-            callPost("confirmCode", confirmCode);
-            form.resetFields();
-            // setModalVisible(false);
-            handleSubmit();
-        } catch (e) {
-            console.log('Хадгалахад алдаа гарлаа')
-        }
-    };
-    const handleClickForgotPassword = async () => {
-        try {
-            console.log('daralaaaa')
-
-        } catch (e) {
-        }
-
-    }
-    const onFinishTransaction = async (values) => {
-        console.log(values , 'valuesvaluesvalues')
-        try {
-            
-            const data = 
+  const onFinishTransaction = async (values) => {
+    console.log(values, 'valuesvaluesvalues');
+    try {
+      const data =
             {
-                "authCode": verifyCode,
-                "matchPassword": values.password,
-                "password": values.confirm,
-                "phoneNumber": phoneNumber
-            }
-            const result = await callPost('/forgotPassword/changePass', data);
-            if (result.status === 'failed') {
-                showMessage(messageType.FAILED.type, result.error);
-                return true;
-            } else {
-                showMessage(messageType.SUCCESS.type, "Нууц үг амжилттай солигдлоо. Шинэ нууц үгээ ашиглан нэвтэрнэ үү");
-                router.push('/login');
-            }
-        } catch (e) {
-            console.log('Хадгалахад алдаа гарлаа')
-        }
+              'authCode': verifyCode,
+              'matchPassword': values.password,
+              'password': values.confirm,
+              'phoneNumber': phoneNumber,
+            };
+      const result = await callPost('/forgotPassword/changePass', data);
+      if (result.status === 'failed') {
+        showMessage(messageType.FAILED.type, result.error);
+        return true;
+      } else {
+        showMessage(messageType.SUCCESS.type, 'Нууц үг амжилттай солигдлоо. Шинэ нууц үгээ ашиглан нэвтэрнэ үү');
+        router.push('/login');
+      }
+    } catch (e) {
+      console.log('Хадгалахад алдаа гарлаа');
     }
+  };
 
+  let mainform;
 
-    const handleChangeOtp = (otp) => {
-        console.log('111111')
-    };
-
-
-    let mainform;
-
-    if (!isOneTimePass) {
-        mainform =
+  if (!isOneTimePass) {
+    mainform =
             <Form
-                {...layout}
-                name="basic"
-                onFinish={onFinish}
-                onSubmit={handleSubmit}
+              {...layout}
+              name="basic"
+              onFinish={onFinish}
+              onSubmit={handleSubmit}
             >
-                <div className="welcomeText">
+              <div className="welcomeText">
                     Бүртгэлтэй утасны дугаараа оруулна уу .
-                </div>
-                <div className="inputs">
-                    <Form.Item
-                        name="phonenumber"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Утасны дугаараа оруулна уу',
-                            },
-                        ]}
-                    >
-                        <MaskedInput mask="11111111" name="phonenumber" />
+              </div>
+              <div className="inputs">
+                <Form.Item
+                  name="phonenumber"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Утасны дугаараа оруулна уу',
+                    },
+                  ]}
+                >
+                  <MaskedInput mask="11111111" name="phonenumber" />
 
-                    </Form.Item>
+                </Form.Item>
 
-                </div>
+              </div>
 
-                <Form.Item {...tailLayout} >
-                    <Button
-                        loading={loading}
-                        htmlType="submit"
-                        type="primary"
-                        size="large"
-                        block
-                        className="loginBtn"
-                    >
+              <Form.Item {...tailLayout} >
+                <Button
+                  loading={loading}
+                  htmlType="submit"
+                  type="primary"
+                  size="large"
+                  block
+                  className="loginBtn"
+                >
                         Нууц үг сэргээх
-                    </Button>
-                </Form.Item>
-            </Form>
-    } else if (isOneTimePass && !isTransactionCode) {
-        mainform =
+                </Button>
+              </Form.Item>
+            </Form>;
+  } else if (isOneTimePass && !isTransactionCode) {
+    mainform =
             <Form
-                {...layout}
-                name="basic"
-                onFinish={onFinishVerfication}
-                onSubmit={handleSubmitVerication}
+              {...layout}
+              name="basic"
+              onFinish={onFinishVerfication}
+              onSubmit={handleSubmitVerication}
             >
-                <div className="welcomeText">
+              <div className="welcomeText">
                     Таны {phoneNumber} утсанд ирсэн 1 удаагын нууц үгийг оруулна уу.
-                </div>
-                <div className="inputs">
-                    <Form.Item
-                        name="verificationCode"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Нууц үгээ оруулна уу',
-                            },
-                        ]}
-                    >
-                        <MaskedInput mask="1111" name="verificationCode" />
+              </div>
+              <div className="inputs">
+                <Form.Item
+                  name="verificationCode"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Нууц үгээ оруулна уу',
+                    },
+                  ]}
+                >
+                  <MaskedInput mask="1111" name="verificationCode" />
 
-                    </Form.Item>
-                    <div className="getCodeAgain">
+                </Form.Item>
+                <div className="getCodeAgain">
 
-                        <Countdown className="getCodeAgainCountDown" renderer={rendererCounter} ref={clockRef} date={Date.now() + 30000} onComplete={counterOnComplete} >
-                        </Countdown>
-                        <Button className="getCodeAgainButton" icon={<ReloadOutlined />} disabled={havecode} onClick={getCodeAgain}>Дахин код авах</Button>
-                    </div>
-
+                  <Countdown className="getCodeAgainCountDown" renderer={rendererCounter} ref={clockRef} date={Date.now() + 30000} onComplete={counterOnComplete} >
+                  </Countdown>
+                  <Button className="getCodeAgainButton" icon={<ReloadOutlined />} disabled={havecode} onClick={getCodeAgain}>Дахин код авах</Button>
                 </div>
 
-                <Form.Item {...tailLayout}>
-                    <Button
-                        loading={loading}
-                        htmlType="submit"
-                        type="primary"
-                        size="large"
-                        block
-                        className="loginBtn"
-                    >
+              </div>
+
+              <Form.Item {...tailLayout}>
+                <Button
+                  loading={loading}
+                  htmlType="submit"
+                  type="primary"
+                  size="large"
+                  block
+                  className="loginBtn"
+                >
                         Үргэлжлүүлэх
-                    </Button>
-                </Form.Item>
-            </Form>
-    } else if (isOneTimePass, isTransactionCode) {
-        mainform = <div>
-            <Form
-                {...layout}
-                name="basic"
-                onFinish={onFinishTransaction}
-                onSubmit={handleSubmitTransaction}
-            >
-                <div className="welcomeText">
+                </Button>
+              </Form.Item>
+            </Form>;
+  } else if (isOneTimePass, isTransactionCode) {
+    mainform = <div>
+      <Form
+        {...layout}
+        name="basic"
+        onFinish={onFinishTransaction}
+        onSubmit={handleSubmitTransaction}
+      >
+        <div className="welcomeText">
                     Шинэ нууц үг үүсгэх
-                </div>
-                <div className="inputs">
-                <Form.Item
-                    name="password"
-                    rules={[
-                    {
-                        required: true,
-                        message: 'Нууц үгээ оруулна уу!',
-                    },
-                    ]}
-                    hasFeedback
-                >
-                    <Input.Password placeholder="Нууц үг" />
-                </Form.Item>
+        </div>
+        <div className="inputs">
+          <Form.Item
+            name="password"
+            rules={[
+              {
+                required: true,
+                message: 'Нууц үгээ оруулна уу!',
+              },
+            ]}
+            hasFeedback
+          >
+            <Input.Password placeholder="Нууц үг" />
+          </Form.Item>
 
-                <Form.Item
-                    name="confirm"
-                    dependencies={['password']}
-                    hasFeedback
-                    rules={[
-                    {
-                        required: true,
-                        message: 'Нууг үгээ оруулна уу!',
-                    },
-                    ({ getFieldValue }) => ({
-                        validator(_, value) {
-                        if (!value || getFieldValue('password') === value) {
-                            return Promise.resolve();
-                        }
-                        return Promise.reject(new Error('Ижил биш байна!'));
-                        },
-                    }),
-                    ]}
-                >
-                    <Input.Password  placeholder="Нууц үг давтах"/>
-                </Form.Item>
-                </div>
+          <Form.Item
+            name="confirm"
+            dependencies={['password']}
+            hasFeedback
+            rules={[
+              {
+                required: true,
+                message: 'Нууг үгээ оруулна уу!',
+              },
+              ({getFieldValue}) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue('password') === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error('Ижил биш байна!'));
+                },
+              }),
+            ]}
+          >
+            <Input.Password placeholder="Нууц үг давтах"/>
+          </Form.Item>
+        </div>
 
-                <Form.Item {...tailLayout}>
-                    <Button
-                        loading={loading}
-                        htmlType="submit"
-                        type="primary"
-                        size="large"
-                        block
-                        className="loginBtn"
-                    >
+        <Form.Item {...tailLayout}>
+          <Button
+            loading={loading}
+            htmlType="submit"
+            type="primary"
+            size="large"
+            block
+            className="loginBtn"
+          >
                         Үүсгэх
-                    </Button>
-                </Form.Item>
-            </Form>
+          </Button>
+        </Form.Item>
+      </Form>
 
-        </div>
-    }
+    </div>;
+  }
 
-    return (
-        <div>
-            <div className="login">
-                <div className="container mx-auto flex flex-wrap overflow-hidden">
+  return (
+    <div>
+      <div className="login">
+        <div className="container mx-auto flex flex-wrap overflow-hidden">
 
-                    <div className="w-2/3 overflow-hidden">
+          <div className="w-2/3 overflow-hidden">
 
-                        <svg width="726" height="520" viewBox="0 0 726 520" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g opacity="0.2">
-                                <path opacity="0.68" d="M341.133 175.069L455.32 289.256C465.012 298.947 465.012 314.662 455.32 324.353L341.133 438.53C331.442 448.222 315.727 448.222 306.036 438.53L191.849 324.343C182.157 314.652 182.157 298.937 191.849 289.246L306.036 175.059C315.727 165.377 331.442 165.377 341.133 175.069Z" fill="url(#paint0_radial)" stroke="url(#paint1_radial)" strokeWidth="0.75" strokeMiterlimit="10" />
-                                <path opacity="0.2" d="M349.204 17.2686L463.391 131.452C473.083 141.143 473.083 156.857 463.391 166.548L349.204 280.731C339.512 290.423 323.798 290.423 314.106 280.731L199.929 166.548C190.237 156.857 190.237 141.143 199.929 131.452L314.116 17.2686C323.798 7.57715 339.512 7.57715 349.204 17.2686Z" fill="url(#paint2_radial)" />
-                                <path opacity="0.68" d="M191.414 25.3489L305.601 139.536C315.293 149.228 315.293 164.942 305.601 174.634L191.414 288.811C181.722 298.503 166.008 298.503 156.316 288.811L42.1389 174.634C32.4472 164.942 32.4472 149.228 42.1389 139.536L156.316 25.3489C166.008 15.6571 181.722 15.6571 191.414 25.3489Z" fill="url(#paint3_radial)" stroke="url(#paint4_radial)" strokeWidth="0.75" strokeMiterlimit="10" />
-                                <path opacity="0.2" d="M113.548 248.269L227.731 362.452C237.423 372.143 237.423 387.857 227.731 397.548L113.548 511.731C103.857 521.423 88.1432 521.423 78.4518 511.731L-35.7314 397.548C-45.4229 387.857 -45.4229 372.143 -35.7314 362.452L78.4518 248.269C88.1432 238.577 103.857 238.577 113.548 248.269Z" fill="url(#paint5_radial)" stroke="url(#paint6_radial)" strokeWidth="0.75" strokeMiterlimit="10" />
-                            </g>
-                            <g clipPath="url(#clip0)">
-                                <path d="M725.26 161.409H724.204V132.481C724.204 130.282 723.771 128.105 722.93 126.074C722.088 124.043 720.855 122.197 719.3 120.642C717.746 119.087 715.9 117.854 713.869 117.013C711.837 116.171 709.66 115.738 707.461 115.738H646.173C643.975 115.738 641.797 116.171 639.766 117.013C637.735 117.854 635.889 119.087 634.334 120.642C632.78 122.197 631.546 124.043 630.705 126.074C629.863 128.105 629.43 130.282 629.43 132.481V291.183C629.43 293.382 629.863 295.559 630.705 297.59C631.546 299.622 632.78 301.467 634.334 303.022C635.889 304.577 637.735 305.81 639.766 306.651C641.797 307.493 643.975 307.926 646.173 307.926H707.461C709.66 307.926 711.837 307.493 713.869 306.651C715.9 305.81 717.746 304.577 719.3 303.022C720.855 301.467 722.088 299.622 722.93 297.59C723.771 295.559 724.204 293.382 724.204 291.183V182.001H725.26V161.409Z" fill="#35446D" />
-                                <path d="M720.641 133.464V291.935C720.641 295.252 719.324 298.433 716.979 300.778C714.633 303.123 711.453 304.44 708.136 304.441H646.553C644.912 304.44 643.286 304.117 641.769 303.488C640.252 302.86 638.874 301.938 637.713 300.777C636.553 299.616 635.632 298.237 635.004 296.72C634.376 295.203 634.053 293.577 634.054 291.935V133.464C634.054 130.149 635.371 126.97 637.715 124.626C640.059 122.282 643.238 120.965 646.553 120.965H654.025C653.658 121.867 653.519 122.845 653.619 123.813C653.719 124.782 654.055 125.711 654.598 126.519C655.141 127.327 655.874 127.989 656.734 128.447C657.593 128.905 658.551 129.145 659.525 129.146H694.637C695.611 129.148 696.571 128.91 697.432 128.452C698.292 127.995 699.027 127.333 699.571 126.524C700.115 125.715 700.451 124.785 700.549 123.815C700.648 122.846 700.506 121.867 700.136 120.965H708.136C711.452 120.965 714.632 122.281 716.977 124.625C719.322 126.969 720.64 130.149 720.641 133.464Z" fill="#DEE2E9" />
-                                <path d="M708.983 202.099H637.395V221.416H708.983V202.099Z" fill="#00F9B8" />
-                                <path d="M711.824 218.006H642.508C642.056 218.006 641.623 217.826 641.303 217.507C640.984 217.187 640.804 216.754 640.804 216.302V199.257C640.804 198.805 640.984 198.372 641.303 198.053C641.623 197.733 642.056 197.553 642.508 197.553H711.824C712.276 197.553 712.709 197.733 713.028 198.053C713.348 198.372 713.528 198.805 713.528 199.257V216.302C713.528 216.754 713.348 217.187 713.028 217.507C712.709 217.826 712.276 218.006 711.824 218.006ZM642.508 198.689C642.358 198.689 642.213 198.749 642.107 198.856C642 198.962 641.94 199.107 641.94 199.257V216.302C641.94 216.453 642 216.597 642.107 216.704C642.213 216.81 642.358 216.87 642.508 216.87H711.824C711.974 216.87 712.119 216.81 712.225 216.704C712.332 216.597 712.392 216.453 712.392 216.302V199.257C712.392 199.107 712.332 198.962 712.225 198.856C712.119 198.749 711.974 198.689 711.824 198.689H642.508Z" fill="#35446D" />
-                                <path d="M654.439 212.894H645.349V214.03H654.439V212.894Z" fill="#35446D" />
-                                <path d="M666.939 212.894H657.849V214.03H666.939V212.894Z" fill="#35446D" />
-                                <path d="M679.438 212.894H670.348V214.03H679.438V212.894Z" fill="#35446D" />
-                                <path d="M691.938 212.894H682.847V214.03H691.938V212.894Z" fill="#35446D" />
-                                <path d="M704.438 212.894H695.347V214.03H704.438V212.894Z" fill="#35446D" />
-                                <path opacity="0.1" d="M720.641 275.823V291.936C720.641 295.252 719.324 298.433 716.979 300.778C714.633 303.123 711.453 304.441 708.136 304.441H646.553C644.912 304.441 643.286 304.117 641.769 303.488C640.252 302.86 638.874 301.939 637.713 300.777C636.553 299.616 635.632 298.238 635.004 296.72C634.376 295.203 634.053 293.577 634.054 291.936V217.813L720.641 275.823Z" fill="#0013D4" />
-                                <path d="M425.471 261.188H156.731V393.001H425.471V261.188Z" fill="#DEE2E9" />
-                                <path opacity="0.1" d="M357.15 393.001H157.868C157.567 393 157.278 392.88 157.065 392.667C156.852 392.454 156.732 392.165 156.731 391.864V262.324C156.732 262.023 156.852 261.734 157.065 261.521C157.278 261.308 157.567 261.188 157.868 261.188H160.39L357.15 393.001Z" fill="#0013D4" />
-                                <path d="M697.619 278.8H281.158V279.936H697.619V278.8Z" fill="#35446D" />
-                                <path d="M412.825 2.45318H293.801V0H239.831V2.45318H120.317C119.26 2.45317 118.213 2.66142 117.236 3.06603C116.259 3.47063 115.372 4.06366 114.624 4.81127C113.876 5.55888 113.283 6.44642 112.879 7.42322C112.474 8.40002 112.266 9.44695 112.266 10.5042V173.484C112.266 175.619 113.114 177.667 114.624 179.177C116.134 180.687 118.182 181.535 120.317 181.535H412.825C414.96 181.535 417.008 180.687 418.518 179.177C420.028 177.667 420.876 175.619 420.876 173.484V10.5042C420.876 9.44695 420.668 8.40002 420.263 7.42322C419.858 6.44642 419.265 5.55888 418.518 4.81127C417.77 4.06366 416.883 3.47063 415.906 3.06603C414.929 2.66142 413.882 2.45317 412.825 2.45318Z" fill="#35446D" />
-                                <path d="M410.08 16.6797H123.062V178.594H410.08V16.6797Z" fill="#DEE2E9" />
-                                <path d="M266.326 12.2656C267.951 12.2656 269.269 10.9476 269.269 9.32175C269.269 7.69592 267.951 6.37793 266.326 6.37793C264.7 6.37793 263.382 7.69592 263.382 9.32175C263.382 10.9476 264.7 12.2656 266.326 12.2656Z" fill="#00F9B8" />
-                                <path d="M208.434 77.1029H201.616C201.164 77.1024 200.731 76.9226 200.411 76.6031C200.092 76.2835 199.912 75.8503 199.912 75.3984V68.5805C199.912 68.1286 200.092 67.6953 200.411 67.3758C200.731 67.0562 201.164 66.8765 201.616 66.876H208.434C208.886 66.8765 209.319 67.0562 209.639 67.3758C209.958 67.6953 210.138 68.1286 210.139 68.5805V75.3984C210.138 75.8503 209.958 76.2835 209.639 76.6031C209.319 76.9226 208.886 77.1024 208.434 77.1029ZM201.616 68.0123C201.465 68.0125 201.321 68.0724 201.215 68.1789C201.108 68.2854 201.048 68.4298 201.048 68.5805V75.3984C201.048 75.549 201.108 75.6934 201.215 75.7999C201.321 75.9064 201.465 75.9663 201.616 75.9665H208.434C208.585 75.9663 208.729 75.9064 208.836 75.7999C208.942 75.6934 209.002 75.549 209.002 75.3984V68.5805C209.002 68.4298 208.942 68.2854 208.836 68.1789C208.729 68.0724 208.585 68.0125 208.434 68.0123H201.616Z" fill="#35446D" />
-                                <path d="M330.02 75.9668H200.48V77.1031H330.02V75.9668Z" fill="#35446D" />
-                                <path d="M326.611 107.216H296.499V116.306H326.611V107.216Z" fill="#00F9B8" />
-                                <path d="M328.884 114.034H301.044C300.592 114.033 300.159 113.853 299.839 113.534C299.52 113.214 299.34 112.781 299.34 112.329V105.511C299.34 105.059 299.52 104.626 299.839 104.306C300.159 103.987 300.592 103.807 301.044 103.807H328.884C329.336 103.807 329.769 103.987 330.089 104.306C330.408 104.626 330.588 105.059 330.588 105.511V112.329C330.588 112.781 330.408 113.214 330.089 113.534C329.769 113.853 329.336 114.033 328.884 114.034ZM301.044 104.943C300.893 104.943 300.749 105.003 300.643 105.11C300.536 105.216 300.476 105.36 300.476 105.511V112.329C300.476 112.48 300.536 112.624 300.643 112.731C300.749 112.837 300.893 112.897 301.044 112.897H328.884C329.035 112.897 329.179 112.837 329.285 112.731C329.392 112.624 329.452 112.48 329.452 112.329V105.511C329.452 105.36 329.392 105.216 329.285 105.11C329.179 105.003 329.035 104.943 328.884 104.943H301.044Z" fill="#35446D" />
-                                <path d="M556.716 117.442H499.9V157.214H556.716V117.442Z" fill="#00F9B8" />
-                                <path d="M562.398 154.089H507.854C507.252 154.088 506.674 153.848 506.248 153.422C505.822 152.996 505.582 152.419 505.582 151.816V114.318C505.582 113.715 505.822 113.137 506.248 112.711C506.674 112.285 507.252 112.046 507.854 112.045H562.398C563 112.046 563.578 112.285 564.004 112.711C564.43 113.137 564.67 113.715 564.67 114.318V151.816C564.67 152.419 564.43 152.996 564.004 153.422C563.578 153.848 563 154.088 562.398 154.089ZM507.854 114.318V151.816H562.399L562.398 114.318H507.854Z" fill="#35446D" />
-                                <path d="M556.148 112.897H553.875C553.875 107.924 551.9 103.155 548.384 99.6392C544.867 96.123 540.099 94.1476 535.126 94.1476C530.153 94.1476 525.384 96.123 521.868 99.6392C518.352 103.155 516.377 107.924 516.377 112.897H514.104C514.104 107.322 516.319 101.975 520.261 98.0322C524.204 94.0898 529.551 91.875 535.126 91.875C540.701 91.875 546.048 94.0898 549.991 98.0322C553.933 101.975 556.148 107.322 556.148 112.897Z" fill="#35446D" />
-                                <path d="M540.808 128.521C540.809 127.532 540.551 126.559 540.061 125.7C539.571 124.841 538.865 124.124 538.013 123.621C537.161 123.118 536.192 122.847 535.203 122.834C534.214 122.82 533.238 123.065 532.373 123.545C531.507 124.024 530.782 124.721 530.269 125.567C529.755 126.413 529.472 127.378 529.446 128.367C529.42 129.356 529.653 130.335 530.122 131.206C530.591 132.077 531.279 132.811 532.118 133.335V139.433C532.118 139.828 532.196 140.219 532.347 140.584C532.498 140.949 532.72 141.281 532.999 141.56C533.278 141.839 533.61 142.061 533.975 142.212C534.34 142.363 534.731 142.441 535.126 142.441C535.924 142.441 536.689 142.124 537.253 141.56C537.817 140.996 538.134 140.231 538.134 139.433V133.335C538.952 132.826 539.626 132.117 540.094 131.274C540.562 130.432 540.807 129.485 540.808 128.521Z" fill="#35446D" />
-                                <path d="M270.647 319.707H261.557V320.843H270.647V319.707Z" fill="#35446D" />
-                                <path d="M283.147 319.707H274.056V320.843H283.147V319.707Z" fill="#35446D" />
-                                <path d="M295.646 319.707H286.556V320.843H295.646V319.707Z" fill="#35446D" />
-                                <path d="M308.146 319.707H299.056V320.843H308.146V319.707Z" fill="#35446D" />
-                                <path d="M320.646 319.707H311.555V320.843H320.646V319.707Z" fill="#35446D" />
-                                <path d="M437.402 383.342H170.936C170.333 383.341 169.755 383.101 169.329 382.675C168.903 382.249 168.664 381.672 168.663 381.069V251.528C168.664 250.926 168.903 250.348 169.329 249.922C169.755 249.496 170.333 249.257 170.936 249.256H437.402C438.005 249.256 438.583 249.496 439.009 249.922C439.435 250.348 439.674 250.926 439.675 251.528V381.069C439.674 381.672 439.435 382.249 439.009 382.675C438.583 383.101 438.005 383.341 437.402 383.342ZM170.936 251.528V381.069H437.404L437.402 251.528H170.936Z" fill="#35446D" />
-                                <path d="M182.867 270.845C184.75 270.845 186.276 269.319 186.276 267.436C186.276 265.554 184.75 264.027 182.867 264.027C180.984 264.027 179.458 265.554 179.458 267.436C179.458 269.319 180.984 270.845 182.867 270.845Z" fill="#35446D" />
-                                <path d="M194.798 270.845C196.681 270.845 198.207 269.319 198.207 267.436C198.207 265.554 196.681 264.027 194.798 264.027C192.916 264.027 191.389 265.554 191.389 267.436C191.389 269.319 192.916 270.845 194.798 270.845Z" fill="#35446D" />
-                                <path d="M206.73 270.845C208.612 270.845 210.138 269.319 210.138 267.436C210.138 265.554 208.612 264.027 206.73 264.027C204.847 264.027 203.321 265.554 203.321 267.436C203.321 269.319 204.847 270.845 206.73 270.845Z" fill="#35446D" />
-                                <path d="M329.452 327.661H252.75C252.299 327.66 251.865 327.481 251.546 327.161C251.226 326.842 251.047 326.408 251.046 325.956V306.639C251.047 306.187 251.226 305.754 251.546 305.434C251.865 305.115 252.299 304.935 252.75 304.935H329.452C329.904 304.935 330.337 305.115 330.657 305.434C330.976 305.754 331.156 306.187 331.157 306.639V325.956C331.156 326.408 330.976 326.842 330.657 327.161C330.337 327.481 329.904 327.66 329.452 327.661ZM252.75 306.071C252.6 306.071 252.455 306.131 252.349 306.237C252.242 306.344 252.182 306.488 252.182 306.639V325.956C252.182 326.107 252.242 326.252 252.349 326.358C252.455 326.465 252.6 326.524 252.75 326.525H329.452C329.603 326.524 329.747 326.465 329.854 326.358C329.96 326.252 330.02 326.107 330.02 325.956V306.639C330.02 306.488 329.96 306.344 329.854 306.237C329.747 306.131 329.603 306.071 329.452 306.071H252.75Z" fill="#35446D" />
-                                <path d="M348.769 328.229C354.418 328.229 358.996 323.65 358.996 318.002C358.996 312.354 354.418 307.775 348.769 307.775C343.121 307.775 338.543 312.354 338.543 318.002C338.543 323.65 343.121 328.229 348.769 328.229Z" fill="#00F9B8" />
-                                <path d="M352.178 327.093C350.043 327.093 347.956 326.46 346.181 325.274C344.406 324.088 343.022 322.402 342.205 320.429C341.388 318.457 341.174 316.286 341.591 314.192C342.007 312.098 343.036 310.174 344.545 308.665C346.055 307.155 347.978 306.127 350.072 305.71C352.166 305.294 354.337 305.508 356.31 306.325C358.282 307.142 359.968 308.525 361.154 310.301C362.34 312.076 362.974 314.163 362.974 316.298C362.97 319.16 361.832 321.904 359.808 323.928C357.784 325.951 355.04 327.09 352.178 327.093ZM352.178 306.639C350.268 306.639 348.401 307.206 346.812 308.267C345.224 309.328 343.986 310.837 343.255 312.602C342.524 314.367 342.333 316.309 342.705 318.182C343.078 320.056 343.998 321.777 345.349 323.128C346.7 324.479 348.421 325.398 350.294 325.771C352.168 326.144 354.11 325.953 355.875 325.221C357.64 324.49 359.148 323.252 360.209 321.664C361.271 320.076 361.837 318.208 361.837 316.298C361.834 313.737 360.816 311.282 359.005 309.471C357.194 307.661 354.739 306.642 352.178 306.639Z" fill="#35446D" />
-                                <path d="M352.33 320.33L346.83 314.829L348.436 313.222L352.027 316.812L362.044 302.576L363.903 303.885L352.33 320.33Z" fill="#35446D" />
-                                <path opacity="0.1" d="M346.446 178.594H123.062V28.9463L346.446 178.594Z" fill="#0013D4" />
-                                <path d="M428.935 175.648H400.923V173.63C400.923 173.577 400.913 173.525 400.893 173.477C400.873 173.428 400.843 173.384 400.806 173.347C400.769 173.31 400.725 173.28 400.676 173.26C400.628 173.24 400.576 173.229 400.523 173.229H390.919C390.867 173.229 390.815 173.24 390.766 173.26C390.718 173.28 390.673 173.31 390.636 173.347C390.599 173.384 390.57 173.428 390.549 173.477C390.529 173.525 390.519 173.577 390.519 173.63V175.648H384.517V173.63C384.517 173.577 384.506 173.525 384.486 173.477C384.466 173.428 384.437 173.384 384.399 173.347C384.362 173.31 384.318 173.28 384.27 173.26C384.221 173.24 384.169 173.229 384.116 173.229H374.512C374.46 173.229 374.408 173.24 374.359 173.26C374.311 173.28 374.267 173.31 374.23 173.347C374.192 173.384 374.163 173.428 374.143 173.477C374.123 173.525 374.112 173.577 374.112 173.63V175.648H368.11V173.63C368.11 173.577 368.1 173.525 368.079 173.477C368.059 173.428 368.03 173.384 367.993 173.347C367.956 173.31 367.911 173.28 367.863 173.26C367.814 173.24 367.762 173.229 367.71 173.229H358.106C358.053 173.229 358.001 173.24 357.953 173.26C357.904 173.28 357.86 173.31 357.823 173.347C357.786 173.384 357.756 173.428 357.736 173.477C357.716 173.525 357.706 173.577 357.706 173.63V175.648H351.703V173.63C351.703 173.577 351.693 173.525 351.673 173.477C351.653 173.428 351.623 173.384 351.586 173.347C351.549 173.31 351.505 173.28 351.456 173.26C351.408 173.24 351.356 173.229 351.303 173.229H341.699C341.647 173.229 341.594 173.24 341.546 173.26C341.497 173.28 341.453 173.31 341.416 173.347C341.379 173.384 341.349 173.428 341.329 173.477C341.309 173.525 341.299 173.577 341.299 173.63V175.648H335.296V173.63C335.296 173.577 335.286 173.525 335.266 173.477C335.246 173.428 335.216 173.384 335.179 173.347C335.142 173.31 335.098 173.28 335.049 173.26C335.001 173.24 334.949 173.229 334.896 173.229H325.292C325.24 173.229 325.188 173.24 325.139 173.26C325.091 173.28 325.047 173.31 325.009 173.347C324.972 173.384 324.943 173.428 324.923 173.477C324.903 173.525 324.892 173.577 324.892 173.63V175.648H318.89V173.63C318.89 173.577 318.879 173.525 318.859 173.477C318.839 173.428 318.81 173.384 318.773 173.347C318.735 173.31 318.691 173.28 318.643 173.26C318.594 173.24 318.542 173.229 318.49 173.229H308.886C308.833 173.229 308.781 173.24 308.732 173.26C308.684 173.28 308.64 173.31 308.603 173.347C308.565 173.384 308.536 173.428 308.516 173.477C308.496 173.525 308.485 173.577 308.485 173.63V175.648H302.483V173.63C302.483 173.577 302.473 173.525 302.453 173.477C302.432 173.428 302.403 173.384 302.366 173.347C302.329 173.31 302.285 173.28 302.236 173.26C302.187 173.24 302.135 173.229 302.083 173.229H226.852C226.799 173.229 226.747 173.24 226.699 173.26C226.65 173.28 226.606 173.31 226.569 173.347C226.532 173.384 226.502 173.428 226.482 173.477C226.462 173.525 226.452 173.577 226.452 173.63V175.648H220.449V173.63C220.449 173.577 220.439 173.525 220.419 173.477C220.399 173.428 220.369 173.384 220.332 173.347C220.295 173.31 220.251 173.28 220.202 173.26C220.154 173.24 220.102 173.229 220.049 173.229H210.445C210.393 173.229 210.341 173.24 210.292 173.26C210.244 173.28 210.199 173.31 210.162 173.347C210.125 173.384 210.096 173.428 210.076 173.477C210.055 173.525 210.045 173.577 210.045 173.63V175.648H204.043V173.63C204.043 173.577 204.032 173.525 204.012 173.477C203.992 173.428 203.963 173.384 203.925 173.347C203.888 173.31 203.844 173.28 203.796 173.26C203.747 173.24 203.695 173.229 203.642 173.229H194.039C193.986 173.229 193.934 173.24 193.885 173.26C193.837 173.28 193.793 173.31 193.756 173.347C193.718 173.384 193.689 173.428 193.669 173.477C193.649 173.525 193.638 173.577 193.638 173.63V175.648H187.636V173.63C187.636 173.577 187.626 173.525 187.605 173.477C187.585 173.428 187.556 173.384 187.519 173.347C187.482 173.31 187.437 173.28 187.389 173.26C187.34 173.24 187.288 173.229 187.236 173.229H177.632C177.579 173.229 177.527 173.24 177.479 173.26C177.43 173.28 177.386 173.31 177.349 173.347C177.312 173.384 177.282 173.428 177.262 173.477C177.242 173.525 177.232 173.577 177.232 173.63V175.648H171.229V173.63C171.229 173.577 171.219 173.525 171.199 173.477C171.179 173.428 171.149 173.384 171.112 173.347C171.075 173.31 171.031 173.28 170.982 173.26C170.934 173.24 170.882 173.229 170.829 173.229H161.225C161.173 173.229 161.12 173.24 161.072 173.26C161.023 173.28 160.979 173.31 160.942 173.347C160.905 173.384 160.875 173.428 160.855 173.477C160.835 173.525 160.825 173.577 160.825 173.63V175.648H154.822V173.63C154.822 173.577 154.812 173.525 154.792 173.477C154.772 173.428 154.742 173.384 154.705 173.347C154.668 173.31 154.624 173.28 154.575 173.26C154.527 173.24 154.475 173.229 154.422 173.229H144.818C144.766 173.229 144.714 173.24 144.665 173.26C144.617 173.28 144.573 173.31 144.535 173.347C144.498 173.384 144.469 173.428 144.449 173.477C144.429 173.525 144.418 173.577 144.418 173.63V175.648H138.416V173.63C138.416 173.577 138.405 173.525 138.385 173.477C138.365 173.428 138.336 173.384 138.299 173.347C138.261 173.31 138.217 173.28 138.169 173.26C138.12 173.24 138.068 173.229 138.016 173.229H128.412C128.359 173.229 128.307 173.24 128.259 173.26C128.21 173.28 128.166 173.31 128.129 173.347C128.092 173.384 128.062 173.428 128.042 173.477C128.022 173.525 128.011 173.577 128.011 173.63V175.648H109.604C108.343 175.648 107.094 175.896 105.929 176.379C104.763 176.862 103.705 177.569 102.813 178.461C101.921 179.353 101.214 180.411 100.731 181.577C100.248 182.742 100 183.991 100 185.252V189.594C100 192.142 101.012 194.584 102.813 196.385C104.614 198.187 107.057 199.198 109.604 199.198H428.935C430.196 199.198 431.445 198.95 432.61 198.467C433.775 197.985 434.834 197.277 435.726 196.385C436.618 195.494 437.325 194.435 437.808 193.27C438.29 192.105 438.539 190.856 438.539 189.594V185.252C438.539 183.991 438.29 182.742 437.808 181.577C437.325 180.411 436.618 179.353 435.726 178.461C434.834 177.569 433.775 176.862 432.61 176.379C431.445 175.896 430.196 175.648 428.935 175.648Z" fill="#35446D" />
-                                <path d="M341.383 123.693H191.389C190.937 123.692 190.504 123.512 190.185 123.193C189.865 122.873 189.685 122.44 189.685 121.988V59.4906C189.685 59.0387 189.865 58.6055 190.185 58.2859C190.504 57.9664 190.937 57.7866 191.389 57.7861H341.383C341.835 57.7866 342.269 57.9664 342.588 58.2859C342.908 58.6055 343.087 59.0387 343.088 59.4906V121.988C343.087 122.44 342.908 122.873 342.588 123.193C342.269 123.512 341.835 123.692 341.383 123.693ZM191.389 58.9225C191.239 58.9226 191.094 58.9826 190.988 59.0891C190.881 59.1956 190.821 59.34 190.821 59.4906V121.988C190.821 122.139 190.881 122.283 190.988 122.39C191.094 122.496 191.239 122.556 191.389 122.556H341.383C341.534 122.556 341.678 122.496 341.785 122.39C341.892 122.283 341.951 122.139 341.952 121.988V59.4906C341.951 59.34 341.892 59.1956 341.785 59.0891C341.678 58.9826 341.534 58.9226 341.383 58.9225H191.389Z" fill="#35446D" />
-                                <path d="M208.434 94.1478H201.616C201.164 94.1473 200.731 93.9676 200.411 93.648C200.092 93.3285 199.912 92.8952 199.912 92.4433V85.6254C199.912 85.1735 200.092 84.7402 200.411 84.4207C200.731 84.1011 201.164 83.9214 201.616 83.9209H208.434C208.886 83.9214 209.319 84.1011 209.639 84.4207C209.958 84.7402 210.138 85.1735 210.139 85.6254V92.4433C210.138 92.8952 209.958 93.3285 209.639 93.648C209.319 93.9676 208.886 94.1473 208.434 94.1478ZM201.616 85.0572C201.465 85.0574 201.321 85.1173 201.215 85.2238C201.108 85.3304 201.048 85.4748 201.048 85.6254V92.4433C201.048 92.5939 201.108 92.7383 201.215 92.8448C201.321 92.9514 201.465 93.0113 201.616 93.0115H208.434C208.585 93.0113 208.729 92.9514 208.836 92.8448C208.942 92.7383 209.002 92.5939 209.002 92.4433V85.6254C209.002 85.4748 208.942 85.3304 208.836 85.2238C208.729 85.1173 208.585 85.0574 208.434 85.0572H201.616Z" fill="#35446D" />
-                                <path d="M330.02 93.0117H200.48V94.148H330.02V93.0117Z" fill="#35446D" />
-                                <path d="M666.939 153.236H250.478V154.373H666.939V153.236Z" fill="#35446D" />
-                                <path d="M250.478 161.191C254.871 161.191 258.432 157.629 258.432 153.236C258.432 148.843 254.871 145.282 250.478 145.282C246.085 145.282 242.524 148.843 242.524 153.236C242.524 157.629 246.085 161.191 250.478 161.191Z" fill="#35446D" />
-                                <path d="M666.939 160.623C670.391 160.623 673.189 157.824 673.189 154.373C673.189 150.921 670.391 148.123 666.939 148.123C663.487 148.123 660.689 150.921 660.689 154.373C660.689 157.824 663.487 160.623 666.939 160.623Z" fill="#35446D" />
-                                <path d="M697.62 286.186C701.071 286.186 703.869 283.388 703.869 279.936C703.869 276.485 701.071 273.687 697.62 273.687C694.168 273.687 691.37 276.485 691.37 279.936C691.37 283.388 694.168 286.186 697.62 286.186Z" fill="#35446D" />
-                                <path d="M282.863 286.186C286.315 286.186 289.113 283.388 289.113 279.936C289.113 276.485 286.315 273.687 282.863 273.687C279.411 273.687 276.613 276.485 276.613 279.936C276.613 283.388 279.411 286.186 282.863 286.186Z" fill="#35446D" />
-                            </g>
-                            <defs>
-                                <radialGradient id="paint0_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(324.773 465.494) rotate(180) scale(229.301)">
-                                    <stop stopColor="#000044" />
-                                    <stop offset="0.0869" stopColor="#070749" stopOpacity="0.9131" />
-                                    <stop offset="0.2169" stopColor="#1C1C58" stopOpacity="0.7831" />
-                                    <stop offset="0.3739" stopColor="#3D3D71" stopOpacity="0.6261" />
-                                    <stop offset="0.552" stopColor="#6C6C93" stopOpacity="0.448" />
-                                    <stop offset="0.7478" stopColor="#A7A7BF" stopOpacity="0.2522" />
-                                    <stop offset="0.9555" stopColor="#EFEFF3" stopOpacity="0.0445" />
-                                    <stop offset="1" stopColor="white" stopOpacity="0" />
-                                </radialGradient>
-                                <radialGradient id="paint1_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(323.585 306.797) rotate(180) scale(139.376)">
-                                    <stop stopColor="#231F20" />
-                                    <stop offset="1" stopColor="white" />
-                                </radialGradient>
-                                <radialGradient id="paint2_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(332.847 307.694) rotate(180) scale(229.302 229.294)">
-                                    <stop stopColor="#6A0091" />
-                                    <stop offset="0.0822" stopColor="#5C007E" />
-                                    <stop offset="0.2934" stopColor="#3B0051" />
-                                    <stop offset="0.4967" stopColor="#21002E" />
-                                    <stop offset="0.6873" stopColor="#0F0015" />
-                                    <stop offset="0.8603" stopColor="#040005" />
-                                    <stop offset="1" />
-                                </radialGradient>
-                                <radialGradient id="paint3_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(175.056 315.778) rotate(180) scale(229.302)">
-                                    <stop stopColor="#000044" />
-                                    <stop offset="0.0869" stopColor="#070749" stopOpacity="0.9131" />
-                                    <stop offset="0.2169" stopColor="#1C1C58" stopOpacity="0.7831" />
-                                    <stop offset="0.3739" stopColor="#3D3D71" stopOpacity="0.6261" />
-                                    <stop offset="0.552" stopColor="#6C6C93" stopOpacity="0.448" />
-                                    <stop offset="0.7478" stopColor="#A7A7BF" stopOpacity="0.2522" />
-                                    <stop offset="0.9555" stopColor="#EFEFF3" stopOpacity="0.0445" />
-                                    <stop offset="1" stopColor="white" stopOpacity="0" />
-                                </radialGradient>
-                                <radialGradient id="paint4_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(173.868 157.08) rotate(180) scale(139.376)">
-                                    <stop stopColor="#231F20" />
-                                    <stop offset="1" stopColor="white" />
-                                </radialGradient>
-                                <radialGradient id="paint5_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(97.1928 538.693) rotate(180) scale(229.294)">
-                                    <stop stopColor="#000044" />
-                                    <stop offset="0.0869" stopColor="#070749" stopOpacity="0.9131" />
-                                    <stop offset="0.2169" stopColor="#1C1C58" stopOpacity="0.7831" />
-                                    <stop offset="0.3739" stopColor="#3D3D71" stopOpacity="0.6261" />
-                                    <stop offset="0.552" stopColor="#6C6C93" stopOpacity="0.448" />
-                                    <stop offset="0.7478" stopColor="#A7A7BF" stopOpacity="0.2522" />
-                                    <stop offset="0.9555" stopColor="#EFEFF3" stopOpacity="0.0445" />
-                                    <stop offset="1" stopColor="white" stopOpacity="0" />
-                                </radialGradient>
-                                <radialGradient id="paint6_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(96.0041 380.001) rotate(180) scale(139.371)">
-                                    <stop stopColor="#231F20" />
-                                    <stop offset="1" stopColor="white" />
-                                </radialGradient>
-                                <clipPath id="clip0">
-                                    <rect width="625.26" height="393" fill="white" transform="translate(100)" />
-                                </clipPath>
-                            </defs>
-                        </svg>
+            <svg width="726" height="520" viewBox="0 0 726 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g opacity="0.2">
+                <path opacity="0.68" d="M341.133 175.069L455.32 289.256C465.012 298.947 465.012 314.662 455.32 324.353L341.133 438.53C331.442 448.222 315.727 448.222 306.036 438.53L191.849 324.343C182.157 314.652 182.157 298.937 191.849 289.246L306.036 175.059C315.727 165.377 331.442 165.377 341.133 175.069Z" fill="url(#paint0_radial)" stroke="url(#paint1_radial)" strokeWidth="0.75" strokeMiterlimit="10" />
+                <path opacity="0.2" d="M349.204 17.2686L463.391 131.452C473.083 141.143 473.083 156.857 463.391 166.548L349.204 280.731C339.512 290.423 323.798 290.423 314.106 280.731L199.929 166.548C190.237 156.857 190.237 141.143 199.929 131.452L314.116 17.2686C323.798 7.57715 339.512 7.57715 349.204 17.2686Z" fill="url(#paint2_radial)" />
+                <path opacity="0.68" d="M191.414 25.3489L305.601 139.536C315.293 149.228 315.293 164.942 305.601 174.634L191.414 288.811C181.722 298.503 166.008 298.503 156.316 288.811L42.1389 174.634C32.4472 164.942 32.4472 149.228 42.1389 139.536L156.316 25.3489C166.008 15.6571 181.722 15.6571 191.414 25.3489Z" fill="url(#paint3_radial)" stroke="url(#paint4_radial)" strokeWidth="0.75" strokeMiterlimit="10" />
+                <path opacity="0.2" d="M113.548 248.269L227.731 362.452C237.423 372.143 237.423 387.857 227.731 397.548L113.548 511.731C103.857 521.423 88.1432 521.423 78.4518 511.731L-35.7314 397.548C-45.4229 387.857 -45.4229 372.143 -35.7314 362.452L78.4518 248.269C88.1432 238.577 103.857 238.577 113.548 248.269Z" fill="url(#paint5_radial)" stroke="url(#paint6_radial)" strokeWidth="0.75" strokeMiterlimit="10" />
+              </g>
+              <g clipPath="url(#clip0)">
+                <path d="M725.26 161.409H724.204V132.481C724.204 130.282 723.771 128.105 722.93 126.074C722.088 124.043 720.855 122.197 719.3 120.642C717.746 119.087 715.9 117.854 713.869 117.013C711.837 116.171 709.66 115.738 707.461 115.738H646.173C643.975 115.738 641.797 116.171 639.766 117.013C637.735 117.854 635.889 119.087 634.334 120.642C632.78 122.197 631.546 124.043 630.705 126.074C629.863 128.105 629.43 130.282 629.43 132.481V291.183C629.43 293.382 629.863 295.559 630.705 297.59C631.546 299.622 632.78 301.467 634.334 303.022C635.889 304.577 637.735 305.81 639.766 306.651C641.797 307.493 643.975 307.926 646.173 307.926H707.461C709.66 307.926 711.837 307.493 713.869 306.651C715.9 305.81 717.746 304.577 719.3 303.022C720.855 301.467 722.088 299.622 722.93 297.59C723.771 295.559 724.204 293.382 724.204 291.183V182.001H725.26V161.409Z" fill="#35446D" />
+                <path d="M720.641 133.464V291.935C720.641 295.252 719.324 298.433 716.979 300.778C714.633 303.123 711.453 304.44 708.136 304.441H646.553C644.912 304.44 643.286 304.117 641.769 303.488C640.252 302.86 638.874 301.938 637.713 300.777C636.553 299.616 635.632 298.237 635.004 296.72C634.376 295.203 634.053 293.577 634.054 291.935V133.464C634.054 130.149 635.371 126.97 637.715 124.626C640.059 122.282 643.238 120.965 646.553 120.965H654.025C653.658 121.867 653.519 122.845 653.619 123.813C653.719 124.782 654.055 125.711 654.598 126.519C655.141 127.327 655.874 127.989 656.734 128.447C657.593 128.905 658.551 129.145 659.525 129.146H694.637C695.611 129.148 696.571 128.91 697.432 128.452C698.292 127.995 699.027 127.333 699.571 126.524C700.115 125.715 700.451 124.785 700.549 123.815C700.648 122.846 700.506 121.867 700.136 120.965H708.136C711.452 120.965 714.632 122.281 716.977 124.625C719.322 126.969 720.64 130.149 720.641 133.464Z" fill="#DEE2E9" />
+                <path d="M708.983 202.099H637.395V221.416H708.983V202.099Z" fill="#00F9B8" />
+                <path d="M711.824 218.006H642.508C642.056 218.006 641.623 217.826 641.303 217.507C640.984 217.187 640.804 216.754 640.804 216.302V199.257C640.804 198.805 640.984 198.372 641.303 198.053C641.623 197.733 642.056 197.553 642.508 197.553H711.824C712.276 197.553 712.709 197.733 713.028 198.053C713.348 198.372 713.528 198.805 713.528 199.257V216.302C713.528 216.754 713.348 217.187 713.028 217.507C712.709 217.826 712.276 218.006 711.824 218.006ZM642.508 198.689C642.358 198.689 642.213 198.749 642.107 198.856C642 198.962 641.94 199.107 641.94 199.257V216.302C641.94 216.453 642 216.597 642.107 216.704C642.213 216.81 642.358 216.87 642.508 216.87H711.824C711.974 216.87 712.119 216.81 712.225 216.704C712.332 216.597 712.392 216.453 712.392 216.302V199.257C712.392 199.107 712.332 198.962 712.225 198.856C712.119 198.749 711.974 198.689 711.824 198.689H642.508Z" fill="#35446D" />
+                <path d="M654.439 212.894H645.349V214.03H654.439V212.894Z" fill="#35446D" />
+                <path d="M666.939 212.894H657.849V214.03H666.939V212.894Z" fill="#35446D" />
+                <path d="M679.438 212.894H670.348V214.03H679.438V212.894Z" fill="#35446D" />
+                <path d="M691.938 212.894H682.847V214.03H691.938V212.894Z" fill="#35446D" />
+                <path d="M704.438 212.894H695.347V214.03H704.438V212.894Z" fill="#35446D" />
+                <path opacity="0.1" d="M720.641 275.823V291.936C720.641 295.252 719.324 298.433 716.979 300.778C714.633 303.123 711.453 304.441 708.136 304.441H646.553C644.912 304.441 643.286 304.117 641.769 303.488C640.252 302.86 638.874 301.939 637.713 300.777C636.553 299.616 635.632 298.238 635.004 296.72C634.376 295.203 634.053 293.577 634.054 291.936V217.813L720.641 275.823Z" fill="#0013D4" />
+                <path d="M425.471 261.188H156.731V393.001H425.471V261.188Z" fill="#DEE2E9" />
+                <path opacity="0.1" d="M357.15 393.001H157.868C157.567 393 157.278 392.88 157.065 392.667C156.852 392.454 156.732 392.165 156.731 391.864V262.324C156.732 262.023 156.852 261.734 157.065 261.521C157.278 261.308 157.567 261.188 157.868 261.188H160.39L357.15 393.001Z" fill="#0013D4" />
+                <path d="M697.619 278.8H281.158V279.936H697.619V278.8Z" fill="#35446D" />
+                <path d="M412.825 2.45318H293.801V0H239.831V2.45318H120.317C119.26 2.45317 118.213 2.66142 117.236 3.06603C116.259 3.47063 115.372 4.06366 114.624 4.81127C113.876 5.55888 113.283 6.44642 112.879 7.42322C112.474 8.40002 112.266 9.44695 112.266 10.5042V173.484C112.266 175.619 113.114 177.667 114.624 179.177C116.134 180.687 118.182 181.535 120.317 181.535H412.825C414.96 181.535 417.008 180.687 418.518 179.177C420.028 177.667 420.876 175.619 420.876 173.484V10.5042C420.876 9.44695 420.668 8.40002 420.263 7.42322C419.858 6.44642 419.265 5.55888 418.518 4.81127C417.77 4.06366 416.883 3.47063 415.906 3.06603C414.929 2.66142 413.882 2.45317 412.825 2.45318Z" fill="#35446D" />
+                <path d="M410.08 16.6797H123.062V178.594H410.08V16.6797Z" fill="#DEE2E9" />
+                <path d="M266.326 12.2656C267.951 12.2656 269.269 10.9476 269.269 9.32175C269.269 7.69592 267.951 6.37793 266.326 6.37793C264.7 6.37793 263.382 7.69592 263.382 9.32175C263.382 10.9476 264.7 12.2656 266.326 12.2656Z" fill="#00F9B8" />
+                <path d="M208.434 77.1029H201.616C201.164 77.1024 200.731 76.9226 200.411 76.6031C200.092 76.2835 199.912 75.8503 199.912 75.3984V68.5805C199.912 68.1286 200.092 67.6953 200.411 67.3758C200.731 67.0562 201.164 66.8765 201.616 66.876H208.434C208.886 66.8765 209.319 67.0562 209.639 67.3758C209.958 67.6953 210.138 68.1286 210.139 68.5805V75.3984C210.138 75.8503 209.958 76.2835 209.639 76.6031C209.319 76.9226 208.886 77.1024 208.434 77.1029ZM201.616 68.0123C201.465 68.0125 201.321 68.0724 201.215 68.1789C201.108 68.2854 201.048 68.4298 201.048 68.5805V75.3984C201.048 75.549 201.108 75.6934 201.215 75.7999C201.321 75.9064 201.465 75.9663 201.616 75.9665H208.434C208.585 75.9663 208.729 75.9064 208.836 75.7999C208.942 75.6934 209.002 75.549 209.002 75.3984V68.5805C209.002 68.4298 208.942 68.2854 208.836 68.1789C208.729 68.0724 208.585 68.0125 208.434 68.0123H201.616Z" fill="#35446D" />
+                <path d="M330.02 75.9668H200.48V77.1031H330.02V75.9668Z" fill="#35446D" />
+                <path d="M326.611 107.216H296.499V116.306H326.611V107.216Z" fill="#00F9B8" />
+                <path d="M328.884 114.034H301.044C300.592 114.033 300.159 113.853 299.839 113.534C299.52 113.214 299.34 112.781 299.34 112.329V105.511C299.34 105.059 299.52 104.626 299.839 104.306C300.159 103.987 300.592 103.807 301.044 103.807H328.884C329.336 103.807 329.769 103.987 330.089 104.306C330.408 104.626 330.588 105.059 330.588 105.511V112.329C330.588 112.781 330.408 113.214 330.089 113.534C329.769 113.853 329.336 114.033 328.884 114.034ZM301.044 104.943C300.893 104.943 300.749 105.003 300.643 105.11C300.536 105.216 300.476 105.36 300.476 105.511V112.329C300.476 112.48 300.536 112.624 300.643 112.731C300.749 112.837 300.893 112.897 301.044 112.897H328.884C329.035 112.897 329.179 112.837 329.285 112.731C329.392 112.624 329.452 112.48 329.452 112.329V105.511C329.452 105.36 329.392 105.216 329.285 105.11C329.179 105.003 329.035 104.943 328.884 104.943H301.044Z" fill="#35446D" />
+                <path d="M556.716 117.442H499.9V157.214H556.716V117.442Z" fill="#00F9B8" />
+                <path d="M562.398 154.089H507.854C507.252 154.088 506.674 153.848 506.248 153.422C505.822 152.996 505.582 152.419 505.582 151.816V114.318C505.582 113.715 505.822 113.137 506.248 112.711C506.674 112.285 507.252 112.046 507.854 112.045H562.398C563 112.046 563.578 112.285 564.004 112.711C564.43 113.137 564.67 113.715 564.67 114.318V151.816C564.67 152.419 564.43 152.996 564.004 153.422C563.578 153.848 563 154.088 562.398 154.089ZM507.854 114.318V151.816H562.399L562.398 114.318H507.854Z" fill="#35446D" />
+                <path d="M556.148 112.897H553.875C553.875 107.924 551.9 103.155 548.384 99.6392C544.867 96.123 540.099 94.1476 535.126 94.1476C530.153 94.1476 525.384 96.123 521.868 99.6392C518.352 103.155 516.377 107.924 516.377 112.897H514.104C514.104 107.322 516.319 101.975 520.261 98.0322C524.204 94.0898 529.551 91.875 535.126 91.875C540.701 91.875 546.048 94.0898 549.991 98.0322C553.933 101.975 556.148 107.322 556.148 112.897Z" fill="#35446D" />
+                <path d="M540.808 128.521C540.809 127.532 540.551 126.559 540.061 125.7C539.571 124.841 538.865 124.124 538.013 123.621C537.161 123.118 536.192 122.847 535.203 122.834C534.214 122.82 533.238 123.065 532.373 123.545C531.507 124.024 530.782 124.721 530.269 125.567C529.755 126.413 529.472 127.378 529.446 128.367C529.42 129.356 529.653 130.335 530.122 131.206C530.591 132.077 531.279 132.811 532.118 133.335V139.433C532.118 139.828 532.196 140.219 532.347 140.584C532.498 140.949 532.72 141.281 532.999 141.56C533.278 141.839 533.61 142.061 533.975 142.212C534.34 142.363 534.731 142.441 535.126 142.441C535.924 142.441 536.689 142.124 537.253 141.56C537.817 140.996 538.134 140.231 538.134 139.433V133.335C538.952 132.826 539.626 132.117 540.094 131.274C540.562 130.432 540.807 129.485 540.808 128.521Z" fill="#35446D" />
+                <path d="M270.647 319.707H261.557V320.843H270.647V319.707Z" fill="#35446D" />
+                <path d="M283.147 319.707H274.056V320.843H283.147V319.707Z" fill="#35446D" />
+                <path d="M295.646 319.707H286.556V320.843H295.646V319.707Z" fill="#35446D" />
+                <path d="M308.146 319.707H299.056V320.843H308.146V319.707Z" fill="#35446D" />
+                <path d="M320.646 319.707H311.555V320.843H320.646V319.707Z" fill="#35446D" />
+                <path d="M437.402 383.342H170.936C170.333 383.341 169.755 383.101 169.329 382.675C168.903 382.249 168.664 381.672 168.663 381.069V251.528C168.664 250.926 168.903 250.348 169.329 249.922C169.755 249.496 170.333 249.257 170.936 249.256H437.402C438.005 249.256 438.583 249.496 439.009 249.922C439.435 250.348 439.674 250.926 439.675 251.528V381.069C439.674 381.672 439.435 382.249 439.009 382.675C438.583 383.101 438.005 383.341 437.402 383.342ZM170.936 251.528V381.069H437.404L437.402 251.528H170.936Z" fill="#35446D" />
+                <path d="M182.867 270.845C184.75 270.845 186.276 269.319 186.276 267.436C186.276 265.554 184.75 264.027 182.867 264.027C180.984 264.027 179.458 265.554 179.458 267.436C179.458 269.319 180.984 270.845 182.867 270.845Z" fill="#35446D" />
+                <path d="M194.798 270.845C196.681 270.845 198.207 269.319 198.207 267.436C198.207 265.554 196.681 264.027 194.798 264.027C192.916 264.027 191.389 265.554 191.389 267.436C191.389 269.319 192.916 270.845 194.798 270.845Z" fill="#35446D" />
+                <path d="M206.73 270.845C208.612 270.845 210.138 269.319 210.138 267.436C210.138 265.554 208.612 264.027 206.73 264.027C204.847 264.027 203.321 265.554 203.321 267.436C203.321 269.319 204.847 270.845 206.73 270.845Z" fill="#35446D" />
+                <path d="M329.452 327.661H252.75C252.299 327.66 251.865 327.481 251.546 327.161C251.226 326.842 251.047 326.408 251.046 325.956V306.639C251.047 306.187 251.226 305.754 251.546 305.434C251.865 305.115 252.299 304.935 252.75 304.935H329.452C329.904 304.935 330.337 305.115 330.657 305.434C330.976 305.754 331.156 306.187 331.157 306.639V325.956C331.156 326.408 330.976 326.842 330.657 327.161C330.337 327.481 329.904 327.66 329.452 327.661ZM252.75 306.071C252.6 306.071 252.455 306.131 252.349 306.237C252.242 306.344 252.182 306.488 252.182 306.639V325.956C252.182 326.107 252.242 326.252 252.349 326.358C252.455 326.465 252.6 326.524 252.75 326.525H329.452C329.603 326.524 329.747 326.465 329.854 326.358C329.96 326.252 330.02 326.107 330.02 325.956V306.639C330.02 306.488 329.96 306.344 329.854 306.237C329.747 306.131 329.603 306.071 329.452 306.071H252.75Z" fill="#35446D" />
+                <path d="M348.769 328.229C354.418 328.229 358.996 323.65 358.996 318.002C358.996 312.354 354.418 307.775 348.769 307.775C343.121 307.775 338.543 312.354 338.543 318.002C338.543 323.65 343.121 328.229 348.769 328.229Z" fill="#00F9B8" />
+                <path d="M352.178 327.093C350.043 327.093 347.956 326.46 346.181 325.274C344.406 324.088 343.022 322.402 342.205 320.429C341.388 318.457 341.174 316.286 341.591 314.192C342.007 312.098 343.036 310.174 344.545 308.665C346.055 307.155 347.978 306.127 350.072 305.71C352.166 305.294 354.337 305.508 356.31 306.325C358.282 307.142 359.968 308.525 361.154 310.301C362.34 312.076 362.974 314.163 362.974 316.298C362.97 319.16 361.832 321.904 359.808 323.928C357.784 325.951 355.04 327.09 352.178 327.093ZM352.178 306.639C350.268 306.639 348.401 307.206 346.812 308.267C345.224 309.328 343.986 310.837 343.255 312.602C342.524 314.367 342.333 316.309 342.705 318.182C343.078 320.056 343.998 321.777 345.349 323.128C346.7 324.479 348.421 325.398 350.294 325.771C352.168 326.144 354.11 325.953 355.875 325.221C357.64 324.49 359.148 323.252 360.209 321.664C361.271 320.076 361.837 318.208 361.837 316.298C361.834 313.737 360.816 311.282 359.005 309.471C357.194 307.661 354.739 306.642 352.178 306.639Z" fill="#35446D" />
+                <path d="M352.33 320.33L346.83 314.829L348.436 313.222L352.027 316.812L362.044 302.576L363.903 303.885L352.33 320.33Z" fill="#35446D" />
+                <path opacity="0.1" d="M346.446 178.594H123.062V28.9463L346.446 178.594Z" fill="#0013D4" />
+                <path d="M428.935 175.648H400.923V173.63C400.923 173.577 400.913 173.525 400.893 173.477C400.873 173.428 400.843 173.384 400.806 173.347C400.769 173.31 400.725 173.28 400.676 173.26C400.628 173.24 400.576 173.229 400.523 173.229H390.919C390.867 173.229 390.815 173.24 390.766 173.26C390.718 173.28 390.673 173.31 390.636 173.347C390.599 173.384 390.57 173.428 390.549 173.477C390.529 173.525 390.519 173.577 390.519 173.63V175.648H384.517V173.63C384.517 173.577 384.506 173.525 384.486 173.477C384.466 173.428 384.437 173.384 384.399 173.347C384.362 173.31 384.318 173.28 384.27 173.26C384.221 173.24 384.169 173.229 384.116 173.229H374.512C374.46 173.229 374.408 173.24 374.359 173.26C374.311 173.28 374.267 173.31 374.23 173.347C374.192 173.384 374.163 173.428 374.143 173.477C374.123 173.525 374.112 173.577 374.112 173.63V175.648H368.11V173.63C368.11 173.577 368.1 173.525 368.079 173.477C368.059 173.428 368.03 173.384 367.993 173.347C367.956 173.31 367.911 173.28 367.863 173.26C367.814 173.24 367.762 173.229 367.71 173.229H358.106C358.053 173.229 358.001 173.24 357.953 173.26C357.904 173.28 357.86 173.31 357.823 173.347C357.786 173.384 357.756 173.428 357.736 173.477C357.716 173.525 357.706 173.577 357.706 173.63V175.648H351.703V173.63C351.703 173.577 351.693 173.525 351.673 173.477C351.653 173.428 351.623 173.384 351.586 173.347C351.549 173.31 351.505 173.28 351.456 173.26C351.408 173.24 351.356 173.229 351.303 173.229H341.699C341.647 173.229 341.594 173.24 341.546 173.26C341.497 173.28 341.453 173.31 341.416 173.347C341.379 173.384 341.349 173.428 341.329 173.477C341.309 173.525 341.299 173.577 341.299 173.63V175.648H335.296V173.63C335.296 173.577 335.286 173.525 335.266 173.477C335.246 173.428 335.216 173.384 335.179 173.347C335.142 173.31 335.098 173.28 335.049 173.26C335.001 173.24 334.949 173.229 334.896 173.229H325.292C325.24 173.229 325.188 173.24 325.139 173.26C325.091 173.28 325.047 173.31 325.009 173.347C324.972 173.384 324.943 173.428 324.923 173.477C324.903 173.525 324.892 173.577 324.892 173.63V175.648H318.89V173.63C318.89 173.577 318.879 173.525 318.859 173.477C318.839 173.428 318.81 173.384 318.773 173.347C318.735 173.31 318.691 173.28 318.643 173.26C318.594 173.24 318.542 173.229 318.49 173.229H308.886C308.833 173.229 308.781 173.24 308.732 173.26C308.684 173.28 308.64 173.31 308.603 173.347C308.565 173.384 308.536 173.428 308.516 173.477C308.496 173.525 308.485 173.577 308.485 173.63V175.648H302.483V173.63C302.483 173.577 302.473 173.525 302.453 173.477C302.432 173.428 302.403 173.384 302.366 173.347C302.329 173.31 302.285 173.28 302.236 173.26C302.187 173.24 302.135 173.229 302.083 173.229H226.852C226.799 173.229 226.747 173.24 226.699 173.26C226.65 173.28 226.606 173.31 226.569 173.347C226.532 173.384 226.502 173.428 226.482 173.477C226.462 173.525 226.452 173.577 226.452 173.63V175.648H220.449V173.63C220.449 173.577 220.439 173.525 220.419 173.477C220.399 173.428 220.369 173.384 220.332 173.347C220.295 173.31 220.251 173.28 220.202 173.26C220.154 173.24 220.102 173.229 220.049 173.229H210.445C210.393 173.229 210.341 173.24 210.292 173.26C210.244 173.28 210.199 173.31 210.162 173.347C210.125 173.384 210.096 173.428 210.076 173.477C210.055 173.525 210.045 173.577 210.045 173.63V175.648H204.043V173.63C204.043 173.577 204.032 173.525 204.012 173.477C203.992 173.428 203.963 173.384 203.925 173.347C203.888 173.31 203.844 173.28 203.796 173.26C203.747 173.24 203.695 173.229 203.642 173.229H194.039C193.986 173.229 193.934 173.24 193.885 173.26C193.837 173.28 193.793 173.31 193.756 173.347C193.718 173.384 193.689 173.428 193.669 173.477C193.649 173.525 193.638 173.577 193.638 173.63V175.648H187.636V173.63C187.636 173.577 187.626 173.525 187.605 173.477C187.585 173.428 187.556 173.384 187.519 173.347C187.482 173.31 187.437 173.28 187.389 173.26C187.34 173.24 187.288 173.229 187.236 173.229H177.632C177.579 173.229 177.527 173.24 177.479 173.26C177.43 173.28 177.386 173.31 177.349 173.347C177.312 173.384 177.282 173.428 177.262 173.477C177.242 173.525 177.232 173.577 177.232 173.63V175.648H171.229V173.63C171.229 173.577 171.219 173.525 171.199 173.477C171.179 173.428 171.149 173.384 171.112 173.347C171.075 173.31 171.031 173.28 170.982 173.26C170.934 173.24 170.882 173.229 170.829 173.229H161.225C161.173 173.229 161.12 173.24 161.072 173.26C161.023 173.28 160.979 173.31 160.942 173.347C160.905 173.384 160.875 173.428 160.855 173.477C160.835 173.525 160.825 173.577 160.825 173.63V175.648H154.822V173.63C154.822 173.577 154.812 173.525 154.792 173.477C154.772 173.428 154.742 173.384 154.705 173.347C154.668 173.31 154.624 173.28 154.575 173.26C154.527 173.24 154.475 173.229 154.422 173.229H144.818C144.766 173.229 144.714 173.24 144.665 173.26C144.617 173.28 144.573 173.31 144.535 173.347C144.498 173.384 144.469 173.428 144.449 173.477C144.429 173.525 144.418 173.577 144.418 173.63V175.648H138.416V173.63C138.416 173.577 138.405 173.525 138.385 173.477C138.365 173.428 138.336 173.384 138.299 173.347C138.261 173.31 138.217 173.28 138.169 173.26C138.12 173.24 138.068 173.229 138.016 173.229H128.412C128.359 173.229 128.307 173.24 128.259 173.26C128.21 173.28 128.166 173.31 128.129 173.347C128.092 173.384 128.062 173.428 128.042 173.477C128.022 173.525 128.011 173.577 128.011 173.63V175.648H109.604C108.343 175.648 107.094 175.896 105.929 176.379C104.763 176.862 103.705 177.569 102.813 178.461C101.921 179.353 101.214 180.411 100.731 181.577C100.248 182.742 100 183.991 100 185.252V189.594C100 192.142 101.012 194.584 102.813 196.385C104.614 198.187 107.057 199.198 109.604 199.198H428.935C430.196 199.198 431.445 198.95 432.61 198.467C433.775 197.985 434.834 197.277 435.726 196.385C436.618 195.494 437.325 194.435 437.808 193.27C438.29 192.105 438.539 190.856 438.539 189.594V185.252C438.539 183.991 438.29 182.742 437.808 181.577C437.325 180.411 436.618 179.353 435.726 178.461C434.834 177.569 433.775 176.862 432.61 176.379C431.445 175.896 430.196 175.648 428.935 175.648Z" fill="#35446D" />
+                <path d="M341.383 123.693H191.389C190.937 123.692 190.504 123.512 190.185 123.193C189.865 122.873 189.685 122.44 189.685 121.988V59.4906C189.685 59.0387 189.865 58.6055 190.185 58.2859C190.504 57.9664 190.937 57.7866 191.389 57.7861H341.383C341.835 57.7866 342.269 57.9664 342.588 58.2859C342.908 58.6055 343.087 59.0387 343.088 59.4906V121.988C343.087 122.44 342.908 122.873 342.588 123.193C342.269 123.512 341.835 123.692 341.383 123.693ZM191.389 58.9225C191.239 58.9226 191.094 58.9826 190.988 59.0891C190.881 59.1956 190.821 59.34 190.821 59.4906V121.988C190.821 122.139 190.881 122.283 190.988 122.39C191.094 122.496 191.239 122.556 191.389 122.556H341.383C341.534 122.556 341.678 122.496 341.785 122.39C341.892 122.283 341.951 122.139 341.952 121.988V59.4906C341.951 59.34 341.892 59.1956 341.785 59.0891C341.678 58.9826 341.534 58.9226 341.383 58.9225H191.389Z" fill="#35446D" />
+                <path d="M208.434 94.1478H201.616C201.164 94.1473 200.731 93.9676 200.411 93.648C200.092 93.3285 199.912 92.8952 199.912 92.4433V85.6254C199.912 85.1735 200.092 84.7402 200.411 84.4207C200.731 84.1011 201.164 83.9214 201.616 83.9209H208.434C208.886 83.9214 209.319 84.1011 209.639 84.4207C209.958 84.7402 210.138 85.1735 210.139 85.6254V92.4433C210.138 92.8952 209.958 93.3285 209.639 93.648C209.319 93.9676 208.886 94.1473 208.434 94.1478ZM201.616 85.0572C201.465 85.0574 201.321 85.1173 201.215 85.2238C201.108 85.3304 201.048 85.4748 201.048 85.6254V92.4433C201.048 92.5939 201.108 92.7383 201.215 92.8448C201.321 92.9514 201.465 93.0113 201.616 93.0115H208.434C208.585 93.0113 208.729 92.9514 208.836 92.8448C208.942 92.7383 209.002 92.5939 209.002 92.4433V85.6254C209.002 85.4748 208.942 85.3304 208.836 85.2238C208.729 85.1173 208.585 85.0574 208.434 85.0572H201.616Z" fill="#35446D" />
+                <path d="M330.02 93.0117H200.48V94.148H330.02V93.0117Z" fill="#35446D" />
+                <path d="M666.939 153.236H250.478V154.373H666.939V153.236Z" fill="#35446D" />
+                <path d="M250.478 161.191C254.871 161.191 258.432 157.629 258.432 153.236C258.432 148.843 254.871 145.282 250.478 145.282C246.085 145.282 242.524 148.843 242.524 153.236C242.524 157.629 246.085 161.191 250.478 161.191Z" fill="#35446D" />
+                <path d="M666.939 160.623C670.391 160.623 673.189 157.824 673.189 154.373C673.189 150.921 670.391 148.123 666.939 148.123C663.487 148.123 660.689 150.921 660.689 154.373C660.689 157.824 663.487 160.623 666.939 160.623Z" fill="#35446D" />
+                <path d="M697.62 286.186C701.071 286.186 703.869 283.388 703.869 279.936C703.869 276.485 701.071 273.687 697.62 273.687C694.168 273.687 691.37 276.485 691.37 279.936C691.37 283.388 694.168 286.186 697.62 286.186Z" fill="#35446D" />
+                <path d="M282.863 286.186C286.315 286.186 289.113 283.388 289.113 279.936C289.113 276.485 286.315 273.687 282.863 273.687C279.411 273.687 276.613 276.485 276.613 279.936C276.613 283.388 279.411 286.186 282.863 286.186Z" fill="#35446D" />
+              </g>
+              <defs>
+                <radialGradient id="paint0_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(324.773 465.494) rotate(180) scale(229.301)">
+                  <stop stopColor="#000044" />
+                  <stop offset="0.0869" stopColor="#070749" stopOpacity="0.9131" />
+                  <stop offset="0.2169" stopColor="#1C1C58" stopOpacity="0.7831" />
+                  <stop offset="0.3739" stopColor="#3D3D71" stopOpacity="0.6261" />
+                  <stop offset="0.552" stopColor="#6C6C93" stopOpacity="0.448" />
+                  <stop offset="0.7478" stopColor="#A7A7BF" stopOpacity="0.2522" />
+                  <stop offset="0.9555" stopColor="#EFEFF3" stopOpacity="0.0445" />
+                  <stop offset="1" stopColor="white" stopOpacity="0" />
+                </radialGradient>
+                <radialGradient id="paint1_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(323.585 306.797) rotate(180) scale(139.376)">
+                  <stop stopColor="#231F20" />
+                  <stop offset="1" stopColor="white" />
+                </radialGradient>
+                <radialGradient id="paint2_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(332.847 307.694) rotate(180) scale(229.302 229.294)">
+                  <stop stopColor="#6A0091" />
+                  <stop offset="0.0822" stopColor="#5C007E" />
+                  <stop offset="0.2934" stopColor="#3B0051" />
+                  <stop offset="0.4967" stopColor="#21002E" />
+                  <stop offset="0.6873" stopColor="#0F0015" />
+                  <stop offset="0.8603" stopColor="#040005" />
+                  <stop offset="1" />
+                </radialGradient>
+                <radialGradient id="paint3_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(175.056 315.778) rotate(180) scale(229.302)">
+                  <stop stopColor="#000044" />
+                  <stop offset="0.0869" stopColor="#070749" stopOpacity="0.9131" />
+                  <stop offset="0.2169" stopColor="#1C1C58" stopOpacity="0.7831" />
+                  <stop offset="0.3739" stopColor="#3D3D71" stopOpacity="0.6261" />
+                  <stop offset="0.552" stopColor="#6C6C93" stopOpacity="0.448" />
+                  <stop offset="0.7478" stopColor="#A7A7BF" stopOpacity="0.2522" />
+                  <stop offset="0.9555" stopColor="#EFEFF3" stopOpacity="0.0445" />
+                  <stop offset="1" stopColor="white" stopOpacity="0" />
+                </radialGradient>
+                <radialGradient id="paint4_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(173.868 157.08) rotate(180) scale(139.376)">
+                  <stop stopColor="#231F20" />
+                  <stop offset="1" stopColor="white" />
+                </radialGradient>
+                <radialGradient id="paint5_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(97.1928 538.693) rotate(180) scale(229.294)">
+                  <stop stopColor="#000044" />
+                  <stop offset="0.0869" stopColor="#070749" stopOpacity="0.9131" />
+                  <stop offset="0.2169" stopColor="#1C1C58" stopOpacity="0.7831" />
+                  <stop offset="0.3739" stopColor="#3D3D71" stopOpacity="0.6261" />
+                  <stop offset="0.552" stopColor="#6C6C93" stopOpacity="0.448" />
+                  <stop offset="0.7478" stopColor="#A7A7BF" stopOpacity="0.2522" />
+                  <stop offset="0.9555" stopColor="#EFEFF3" stopOpacity="0.0445" />
+                  <stop offset="1" stopColor="white" stopOpacity="0" />
+                </radialGradient>
+                <radialGradient id="paint6_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(96.0041 380.001) rotate(180) scale(139.371)">
+                  <stop stopColor="#231F20" />
+                  <stop offset="1" stopColor="white" />
+                </radialGradient>
+                <clipPath id="clip0">
+                  <rect width="625.26" height="393" fill="white" transform="translate(100)" />
+                </clipPath>
+              </defs>
+            </svg>
 
 
-                    </div>
+          </div>
 
-                    <div className="w-1/3 overflow-hidden">
-                        <div className="loginContainer">
-                            {mainform}
-                        </div>
-                    </div>
-
-                </div>
+          <div className="w-1/3 overflow-hidden">
+            <div className="loginContainer">
+              {mainform}
             </div>
+          </div>
+
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default ForgotPassword;
