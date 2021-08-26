@@ -1,20 +1,10 @@
-import { PushpinFilled } from "@ant-design/icons";
-import { callGet } from "@api/api";
-import { Menu, Dropdown } from "@headlessui/react";
-import { Row, Col } from "antd";
-import { Divider } from "antd";
-import { Modal, Button, Form, Input, Checkbox, Layout, Select } from "antd";
-import { useEffect, useState } from "react";
-const validateMessages = [{}];
+import {callGet} from '@api/api';
+import {Row, Col} from 'antd';
+import {Divider} from 'antd';
+import {Form, Checkbox, Select} from 'antd';
+import {useEffect, useState} from 'react';
 
-function getBase64(img, callback) {
-  const reader = new FileReader();
-  reader.addEventListener("load", () => callback(reader.result));
-  reader.readAsDataURL(img);
-}
 const spaceIndicator = (props) => {
-  const [IndicatorData, setIndicatorData] = useState({});
-  const [spacesSize, setSpaceSize] = useState({});
   const [spaceSizeData, setSpaceSizeData] = useState([]);
   const [entranceData, setEncranceData] = useState([]);
   const [parkingData, setParkingData] = useState([]);
@@ -25,19 +15,19 @@ const spaceIndicator = (props) => {
 
   useEffect(async () => {
     console.log(props);
-    const spaceSize = await callGet("/reference/list/test?type=SPACE_TYPE");
+    const spaceSize = await callGet('/reference/list/test?type=SPACE_TYPE');
     setSpaceSizeData(spaceSize);
-    const parking = await callGet("/reference/list/test?type=SPACE_SIGN");
+    const parking = await callGet('/reference/list/test?type=SPACE_SIGN');
     setParkingData(parking);
     const entranceLock = await callGet(
-      "/reference/list/test?type=ENTRANCE_LOCK"
+        '/reference/list/test?type=ENTRANCE_LOCK',
     );
     setEncranceData(entranceLock);
-    const spaceType = await callGet("/reference/list/test?type=SPACE_CAPACITY");
+    const spaceType = await callGet('/reference/list/test?type=SPACE_CAPACITY');
     setSpaceTypeData(spaceType);
-    const route = await callGet("/reference/list/test?type=RETURN_ROUTE");
+    const route = await callGet('/reference/list/test?type=RETURN_ROUTE');
     setRouteData(route);
-    const floor = await callGet("/reference/list/test?type=FLOOR_NUMBER");
+    const floor = await callGet('/reference/list/test?type=FLOOR_NUMBER');
     setFloorData(floor);
   }, []);
   const onChangeEntranceLock = (e) => {
@@ -57,11 +47,7 @@ const spaceIndicator = (props) => {
     // console.log(e);
     // const spaceSizee = spaceSizeData.find((item) => item.label === e);
     // setIndicatorData({ ...IndicatorData, capacityId: spaceSizee.value });
-    console.log(IndicatorData);
-  };
-  const onChangeSpaceSizeInput = (e) => {
-    // console.log(e.target.value);
-    // setIndicatorData({ ...IndicatorData, capacityId: e.target.value });
+    // console.log(IndicatorData);
   };
   const onChangeCheckBox = (e) => {
     // const checked = routeData.find((item) => item.label === e[0]);
@@ -74,32 +60,32 @@ const spaceIndicator = (props) => {
     // setIndicatorData({ ...setIndicatorData, typeId: type.value });
   };
   return (
-    <div className={`spaceIndocator`} style={{ height: "520px" }}>
+    <div className={`spaceIndocator`} style={{height: '520px'}}>
       <Row offset={4}>
         <p
           style={{
-            fontSize: "20px",
-            marginTop: "50px",
-            color: "blue",
-            marginLeft: "100px",
+            fontSize: '20px',
+            marginTop: '50px',
+            color: 'blue',
+            marginLeft: '100px',
           }}
         >
           <b>Зогсоолийн үндсэн үзүүлэлт</b>
         </p>
       </Row>
       <Row>
-        <p style={{ fontSize: "12px", marginLeft: "100px" }}>
+        <p style={{fontSize: '12px', marginLeft: '100px'}}>
           Тухайн зогсоолийн тохиромжтой байдлыг илэрхийлэх үзүүлэлтүүд
         </p>
       </Row>
-      <Row style={{ height: "360px" }}>
+      <Row style={{height: '360px'}}>
         <Col span={24}>
           <Form
             form={props.form}
             onFinish={(values) => props.onFinish(values, form)}
-            style={{ marginTop: "50px" }}
+            style={{marginTop: '50px'}}
           >
-            <div style={{ display: "flex" }}>
+            <div style={{display: 'flex'}}>
               <Col offset={2} span={6}>
                 <Form.Item
                   name="entranceLock"
@@ -107,7 +93,7 @@ const spaceIndicator = (props) => {
                   rules={[
                     {
                       required: true,
-                      message: "Зогсоолын хаалгаа сонгоно уу?",
+                      message: 'Зогсоолын хаалгаа сонгоно уу?',
                     },
                   ]}
                 >
@@ -121,20 +107,20 @@ const spaceIndicator = (props) => {
                         value={item.value}
                         span={4}
                       >
-                        <div style={{ display: "flex" }}>
+                        <div style={{display: 'flex'}}>
                           <div>
                             <img
                               src={`https://uparking.mn` + item.image}
                               height="24px"
                               width="48px"
                               style={{
-                                marginTop: "-3px",
-                                marginLeft: "-10px",
+                                marginTop: '-3px',
+                                marginLeft: '-10px',
                               }}
                             ></img>
                           </div>
                           {item.label}
-                          <p style={{ fontSize: "12px" }}></p>
+                          <p style={{fontSize: '12px'}}></p>
                         </div>
                       </Select.Option>
                     ))}
@@ -147,7 +133,7 @@ const spaceIndicator = (props) => {
                   rules={[
                     {
                       required: true,
-                      message: "Зогсоолын давхрын байршилаа сонгоно уу?",
+                      message: 'Зогсоолын давхрын байршилаа сонгоно уу?',
                     },
                   ]}
                 >
@@ -157,7 +143,7 @@ const spaceIndicator = (props) => {
                   >
                     {floorData.map((item) => (
                       <Select.Option key={item.value} value={item.value}>
-                        <div style={{ display: "flex" }}>
+                        <div style={{display: 'flex'}}>
                           <div>
                             <img
                               src={`https://uparking.mn` + item.image}
@@ -165,7 +151,7 @@ const spaceIndicator = (props) => {
                               width="24px"
                             ></img>
                           </div>
-                          <p style={{ marginLeft: "10px", fontSize: "12px" }}>
+                          <p style={{marginLeft: '10px', fontSize: '12px'}}>
                             {item.label}
                           </p>
                         </div>
@@ -177,7 +163,7 @@ const spaceIndicator = (props) => {
                 <Form.Item
                   span={6}
                   name="isNumbering"
-                  rules={[{ required: true, message: "Сонгоно уу?" }]}
+                  rules={[{required: true, message: 'Сонгоно уу?'}]}
                 >
                   <Select
                     placeholder="Зогсоолын дугаарын тэмдэглэгээ*"
@@ -186,7 +172,7 @@ const spaceIndicator = (props) => {
                   >
                     {parkingData.map((item) => (
                       <Select.Option key={item.value} value={item.value}>
-                        <div style={{ display: "flex" }}>
+                        <div style={{display: 'flex'}}>
                           <div>
                             <img
                               src={`https://uparking.mn` + item.image}
@@ -205,7 +191,7 @@ const spaceIndicator = (props) => {
                   span={4}
                   name="capacityId"
                   rules={[
-                    { required: true, message: "Зогсоолын хэмжээ сонгоно уу?" },
+                    {required: true, message: 'Зогсоолын хэмжээ сонгоно уу?'},
                   ]}
                 >
                   <Select
@@ -214,7 +200,7 @@ const spaceIndicator = (props) => {
                   >
                     {spaceSizeData.map((item) => (
                       <Select.Option key={item.value} value={item.value}>
-                        <div style={{ display: "flex" }}>
+                        <div style={{display: 'flex'}}>
                           <div>
                             <img
                               src={`https://uparking.mn` + item.image}
@@ -222,7 +208,7 @@ const spaceIndicator = (props) => {
                               width="24px"
                             ></img>
                           </div>
-                          <p style={{ marginLeft: "10px", fontSize: "12px" }}>
+                          <p style={{marginLeft: '10px', fontSize: '12px'}}>
                             {item.label}
                           </p>
                         </div>
@@ -236,7 +222,7 @@ const spaceIndicator = (props) => {
                   span={4}
                   name="typeId"
                   rules={[
-                    { required: true, message: "Зогсоолын төрөл сонгоно уу?" },
+                    {required: true, message: 'Зогсоолын төрөл сонгоно уу?'},
                   ]}
                 >
                   <Select
@@ -245,7 +231,7 @@ const spaceIndicator = (props) => {
                   >
                     {spaceTypeData.map((item) => (
                       <Select.Option key={item.value} value={item.value}>
-                        <div style={{ display: "flex" }}>
+                        <div style={{display: 'flex'}}>
                           <div>
                             <img
                               src={`https://uparking.mn` + item.image}
@@ -253,7 +239,7 @@ const spaceIndicator = (props) => {
                               width="24px"
                             ></img>
                           </div>
-                          <p style={{ fontSize: "12px", marginLeft: "10px" }}>
+                          <p style={{fontSize: '12px', marginLeft: '10px'}}>
                             {item.label}
                           </p>
                         </div>
@@ -264,32 +250,32 @@ const spaceIndicator = (props) => {
                 <Divider />
               </Col>
               <Col offset={4} span={6}>
-                <p style={{ fontSize: "12px" }}>
+                <p style={{fontSize: '12px'}}>
                   Зогсоолын эргэж гарах боломжтой чиглэл
                 </p>
                 <Form.Item
                   name="returnRoutes"
                   rules={[
-                    { required: true, message: "Эргэлтийн юу сонгоно уу?" },
+                    {required: true, message: 'Эргэлтийн юу сонгоно уу?'},
                   ]}
                 >
                   <Checkbox.Group
                     className={`checkOption`}
                     onChange={onChangeCheckBox}
-                    style={{ marginTop: "50px" }}
+                    style={{marginTop: '50px'}}
                   >
                     {routeData.map((item) => (
                       <Row key={item.value}>
                         <Checkbox value={item.value}>
-                          <div style={{ display: "flex", paddingTop: "5px" }}>
-                            <div style={{ paddingTop: "5px" }}>
+                          <div style={{display: 'flex', paddingTop: '5px'}}>
+                            <div style={{paddingTop: '5px'}}>
                               <img
                                 src={`https://uparking.mn` + item.image}
                                 height="20px"
                                 width="20px"
                               ></img>
                             </div>
-                            <p style={{ fontSize: "16px", marginTop: "5px" }}>
+                            <p style={{fontSize: '16px', marginTop: '5px'}}>
                               {item.label}
                             </p>
                           </div>
