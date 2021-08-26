@@ -55,8 +55,8 @@ export const ContextProvider = ({children}) => {
         return;
       } else {
         const user = jwt_decode(accessToken);
+        console.log(user);
         getProfileData(user);
-
         if (user.authorities !== undefined) {
           user.authorities.map((auths) => {
             permissionList[auths] = auths;

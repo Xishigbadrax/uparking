@@ -91,6 +91,7 @@ const Dashboard = () => {
     lat: 47.91909306508191,
     lng: 106.91761127921768,
   });
+  // eslint-disable-next-line no-unused-vars
   const [position, setPosition] = useState({
     latitude: 47.918913,
     longitude: 106.917584,

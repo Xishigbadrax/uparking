@@ -1,10 +1,5 @@
-<<<<<<< HEAD
 import {useContext, useState} from 'react';
 import {callGet} from '@api/api';
-=======
-import {useContext, useEffect, useState} from 'react';
-import {callGet, sList} from '@api/api';
->>>>>>> 21be8f1422ec55b13f78d7efeb3d86bdbabeeba1
 import {
   Card,
   Col,
@@ -17,7 +12,6 @@ import {
   AutoComplete,
 } from 'antd';
 import Context from '@context/Context';
-<<<<<<< HEAD
 const {compose, withProps, withHandlers} = require('recompose');
 import moment from 'moment';
 // import Data from '../../../data/googlrMapData.json';
@@ -31,7 +25,7 @@ import Closest from '@components/fsearch/closest';
 import Farthest from '@components/fsearch/farthest';
 // import GoogleMapReact from 'google-map-react';
 // import {useRouter} from 'next/router';
-const {Header, Sider, Content} = Layout;
+const {Content} = Layout;
 
 const {TabPane} = Tabs;
 const {
@@ -65,57 +59,6 @@ const MapWithAMarkerClusterer = compose(
       averageCenter
       enableRetinaIcons
       gridSize={60}
-=======
-import moment from 'moment';
-import Data from '../../../data/googlrMapData.json';
-import {
-  SearchOutlined,
-  DownOutlined,
-  TrademarkOutlined,
-} from '@ant-design/icons';
-import dynamic from 'next/dynamic';
-import {Tabs} from 'antd';
-import ToFit from '@components/fsearch/toFIt';
-import Closest from '@components/fsearch/closest';
-import Farthest from '@components/fsearch/farthest';
-import GoogleMapReact from 'google-map-react';
-import {useRouter} from 'next/router';
-import {dateTimePickerLocale} from '@constants/constants';
-
-const {TabPane} = Tabs;
-const IndexPageMoreInfo = dynamic(
-  () => import('@components/IndexPageMoreInfo'),
-  {ssr: false},
-);
-const {RangePicker} = DatePicker;
-
-const {Option} = Select;
-const ClickLocation = () => (
-  <div
-    style={{
-      height: '15px',
-      width: '15px',
-      backgroundColor: 'blue',
-      borderRadius: '10px',
-      marginTop: '-10px',
-      marginLeft: '-15px',
-      alignContent: 'center',
-      border: '3px solid deepskyblue',
-    }}
-  ></div>
-);
-
-const AnyReactComponent = ({text}) => (
-  <div
-    className={'locationBackground'}
-    style={{marginTop: '-35px', marginLeft: '-27px'}}
-  >
-    <p
-      style={{
-        textAlign: 'center',
-        fontSize: '16px',
-      }}
->>>>>>> 21be8f1422ec55b13f78d7efeb3d86bdbabeeba1
     >
       {props.markers.map((marker) => (
         <Marker
@@ -162,21 +105,24 @@ const {Option} = Select;
 // );
 const fsearch = () => {
   // const array = [];
+  // eslint-disable-next-line no-unused-vars
   const GOOGLE_API = process.env.NEXT_GOOGLE_API;
   const ctx = useContext(Context);
   // eslint-disable-next-line no-unused-vars
   const [longitude, setLongitude] = useState(106.905746);
   // eslint-disable-next-line no-unused-vars
   const [latitude, setLatitude] = useState(47.886398);
+  // eslint-disable-next-line no-unused-vars
   const [selectLat, setSelectLate] = useState();
+  // eslint-disable-next-line no-unused-vars
   const [selectLng, setSelectLng] = useState();
   const [startDate, setStartDate] = useState();
   const [keywordId, setKeywordId] = useState({});
   const [dataSource, setDataSource]=useState([]);
   const [type, setType] = useState({});
   const [endDate, setEndtDate] = useState();
+  // eslint-disable-next-line no-unused-vars
   const [spaceData, setSpacedata] = useState([]);
-<<<<<<< HEAD
   const [markers, setMarkers]= useState([]);
   const [defaultCenter, setDefaultCenter]=useState({
     lat: null,
@@ -184,14 +130,6 @@ const fsearch = () => {
   });
   // const [options, setOptions] = useState([]);
   const [searchedData, setSearchedData] = useState([]);
-=======
-  const [options, setOptions] = useState([]);
-  const dateFormat = 'YYYY-MM-DD';
-  const [inputData, setInputdata] = useState();
-  const [searchedData, setSearchedData] = useState([]);
-  const router = useRouter();
-  const {typeOrder, inputAdress, homeStartDate, homeEndDate} = router.query;
->>>>>>> 21be8f1422ec55b13f78d7efeb3d86bdbabeeba1
 
   const onFinish = async (values) => {
     console.log(values, 'values');
@@ -250,46 +188,22 @@ const fsearch = () => {
       // getData(dateString[0], dateString[1]);
     }
   };
-<<<<<<< HEAD
 
-=======
-  const searchResult = (listData) =>
-    listData.map((item) => {
-      return {
-        value: item.id + ' ' + item.keyword,
-        label: (
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-            }}
-          >
-            <span>{item.keyword}</span>
-          </div>
-        ),
-      };
-    });
-  const onChangeAddress = async (e) => {
-    const listData = await callGet(`/search/keyword/?syllable=${e}`);
-    setOptions(listData ? searchResult(listData) : []);
-  };
->>>>>>> 21be8f1422ec55b13f78d7efeb3d86bdbabeeba1
   const onChangeType = (e) => {
     console.log(e);
     setType(e);
     console.log(startDate, endDate, type);
   };
-  const onMapClick = async (e) => {
-    console.log(e);
-    setSelectLate(e.lat);
-    setSelectLng(e.lng);
-    const locationsData = await callGet(
-      `/search/location/test?latitude=${e.lat}&longitude=${e.lng}`,
-    );
-    console.log(locationsData);
-    setSpacedata(locationsData);
-  };
-<<<<<<< HEAD
+  // const onMapClick = async (e) => {
+  //   console.log(e);
+  //   setSelectLate(e.lat);
+  //   setSelectLng(e.lng);
+  //   const locationsData = await callGet(
+  //     `/search/location/test?latitude=${e.lat}&longitude=${e.lng}`,
+  //   );
+  //   console.log(locationsData);
+  //   setSpacedata(locationsData);
+  // };
   const loadData = (res) => {
     const mergedparks = [];
     setSearchedData([]);
@@ -324,12 +238,6 @@ const fsearch = () => {
         loadData(res);
       }
     }
-=======
-  const onSelect = (values) => {
-    console.log('values', values);
-    const id = values.split(' ')[0];
-    setKeywordId(id);
->>>>>>> 21be8f1422ec55b13f78d7efeb3d86bdbabeeba1
   };
   const onSearchAuto =async (searchText)=>{
     if (searchText.length > 0) {
@@ -362,7 +270,6 @@ const fsearch = () => {
     setSearchedData(array);
     ctx.setIsLoading(false);
   };
-<<<<<<< HEAD
   const disabledDate=(current)=> {
     // Can not select days before today and today
     return current && current < moment().endOf('day');
@@ -370,32 +277,12 @@ const fsearch = () => {
   const callback = async (key)=> {
     if (key === '2') {
       // const cheapSpace = await callGet('');
-=======
-  function onOk(value) {
-    console.log('onOk: ', value);
-  }
-  function disabledDate(current) {
-    // Can not select days before today and today
-    return current && current < moment().endOf('day');
-  }
-  function disabledDate(current) {
-    // Can not select days before today and today
-    return current && current < moment().endOf('day');
-  }
-  async function callback(key) {
-    if (key === '2') {
-      const cheapSpace = await callGet('');
->>>>>>> 21be8f1422ec55b13f78d7efeb3d86bdbabeeba1
     }
   };
   return (
     <div style={{backgroundColor: '#fff'}}>
-<<<<<<< HEAD
       <Form onFinish={onFinish}
         onFinishFailed={onFinishFailed}>
-=======
-      <Form>
->>>>>>> 21be8f1422ec55b13f78d7efeb3d86bdbabeeba1
         <Row style={{padding: '20px'}}>
           <Col span={9}>
             <Form.Item
@@ -403,12 +290,11 @@ const fsearch = () => {
               rules={[{required: true, message: 'Хаягаа сонгоно уу ?'}]}
             >
               <AutoComplete
+                className='searchAutoComplete'
                 style={{
                   width: '100%',
-<<<<<<< HEAD
                   height: '70px',
-=======
->>>>>>> 21be8f1422ec55b13f78d7efeb3d86bdbabeeba1
+                  borderRadius: '',
                 }}
 
                 // onChange={onChangeAddress}
@@ -416,19 +302,11 @@ const fsearch = () => {
                 onSelect={(value, option)=>onSelect(value, option)}
                 placeholder="Байршилаа хайна уу!"
               >
-<<<<<<< HEAD
                 {dataSource.map((item, key) => (
                   <Option key={key} value={item.value} id={item.id}>
                     {item.value}
                   </Option>
                 ))}
-=======
-                <Input
-                  style={{height: '50px', borderRadius: '15px'}}
-                  placeholder="Хаяг"
-                  iconprefix={<SearchOutlined />}
-                />
->>>>>>> 21be8f1422ec55b13f78d7efeb3d86bdbabeeba1
               </AutoComplete>
             </Form.Item>
           </Col>
@@ -552,7 +430,6 @@ const fsearch = () => {
         </Row>
         <Row>
           <Col span={15}>
-<<<<<<< HEAD
             <Content>
               <div style={{height: '100vh', width: '100%'}}>
                 <MapWithAMarkerClusterer
@@ -563,9 +440,6 @@ const fsearch = () => {
             </Content>
 
             {/* <GoogleMapReact
-=======
-            <GoogleMapReact
->>>>>>> 21be8f1422ec55b13f78d7efeb3d86bdbabeeba1
               style={{height: '828px'}}
               bootstrapURLKeys={{key: GOOGLE_API}}
               center={{lat: latitude, lng: longitude}}
