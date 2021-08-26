@@ -11,6 +11,8 @@ import {
   CloseOutlined,
   ArrowLeftOutlined,
   CheckCircleOutlined,
+  DownOutlined,
+  UpOutlined,
 } from "@ant-design/icons";
 import { Pagination } from "antd";
 import { Tabs } from "antd";
@@ -34,35 +36,38 @@ const tofit = ({ data, lat, lng }) => {
   const [dayOfNumber, setDayofNumber] = useState(0);
   const [nightOfNumber, setNightOfNumber] = useState(0);
   const [fullDayNumber, setFullDayNumber] = useState(0);
+  const [completeDayOfNumber, setCompleteDayOfNumber] = useState(0);
+  const [completeNightOfNumber, setCompleteNightOfNumber] = useState(0);
+  const [completeFullDayNumber, setCompleteFullDayNumber] = useState(0);
   const [saleDatas, setSaleData] = useState();
   const [vehicles, setVehiclesData] = useState([]);
   const [chooseTimeVisible, setChooseTimeVisible] = useState(false);
   const [selectedDayTab, setSelectedDayTab] = useState("day");
-
+  const [parkingUpDownArrow, setParkingUpDownArrow] = useState(false);
+  const [spaceData, setSpaceData] = useState();
+  const [weekSale, setweekSale] = useState();
+  const [monthSale, setMonthSale] = useState();
   const [priceForRenter1, setpriceForRenter1] = useState(0);
   const [priceForRenter2, setpriceForRenter2] = useState(0);
   const [priceForRenter3, setpriceForRenter3] = useState(0);
+  const [selectedDate2, setSelectedDate2] = useState([]);
+  const [fromSelectedDate2, setFromSelectedDate2] = useState([]);
+  const [selectedDate1, setSelectedDate1] = useState([]);
+  const [fromSelectedDate1, setFromSelectedDate1] = useState([]);
+  const [id, setId] = useState(null);
+  const [selectedDate3, setSelectedDate3] = useState([]);
+  const [fromSelectedDate3, setFromSelectedDate3] = useState([]);
 
   const DetailsDrawerOpen = async (id) => {
     setDetailsVisible(true);
-    // const selectDataa = data.parkingSpaceList.content.find(
-    //   (item) => item.id == id
-    // );
-    // console.log(selectDataa);
-    // console.log(id);
-    // setDrawerItem(selectDataa);
-    // const a = await callGet(`/search/parkingspace/list/test`);
+    setId(id);
     const priceData = await callGet(`/parkingspace/price?parkingSpaceId=${id}`);
-    console.log("lat----------->", lat);
     const residenceData = await callGet(
       `/search/input/test?keywordId=${id}&latitude=${lat}&longitude=${lng}`
     );
     const a = data.find((item) => item.el.parkingSpaceId === id);
-    console.log(a);
     setResidenceDrawerItem(a.item);
-
     setSelected(priceData);
-    console.log(priceData);
     {
       priceData.priceList.map((item) => {
         if (item.dateString === "Зуны хуваарь") {
@@ -73,25 +78,29 @@ const tofit = ({ data, lat, lng }) => {
       });
     }
     const sale = await callGet(`/parkingSpace/sale?parkingSpaceId=${id}`);
-    console.log(sale);
     const space = await callGet(
       `/search/parkingspace/test?parkingSpaceId=${id}`
     );
-    console.log("spacee------------->", space);
+    setSpaceData(space);
+    space.salePercent.map((item) => {
+      if (item.saleSplitCode === "WEEKLY_SALE") {
+        setweekSale(item.salePercent);
+      } else setMonthSale(item.salePercent);
+    });
+
+    // setweekSale(weekSale);
     const vehicle = await callGet(`/user/vehicle/list`);
     setVehiclesData(vehicle);
-  };
-  const showTimePickDrawer = async (id) => {
-    // setSelected(id);
-    // setPickTimeVisible(true);
-    // const selectDataa = data.find((item) => item.id == id);
-    // console.log(selectDataa);
-    // setDrawerItem(selectDataa);
-    // const spaceData = await callGet(`parkingspace/price?parkingSpaceId =${id}`);
-    // console.log(spaceData);
+    console.log(vehicle);
   };
   const onChangeChooseVehicle = (e) => {
     console.log(e.target.value);
+  };
+  const onClickSubmit = () => {
+    setCompleteDayOfNumber(dayOfNumber);
+    setCompleteNightOfNumber(nightOfNumber);
+    setCompleteFullDayNumber(fullDayNumber);
+    setChooseTimeVisible(false);
   };
   const onClosePickTime = () => {
     setChooseTimeVisible(false);
@@ -99,16 +108,32 @@ const tofit = ({ data, lat, lng }) => {
   const onClose = () => {
     setDetailsVisible(false);
   };
-  const onclickPick = () => {
+  const onclickPick = async () => {
     setChooseTimeVisible(true);
+    const calValidateDate = await callGet(
+      `/schedule/custom?parkingSpaceId=${id}`
+    );
+    console.log("Batalgaajsan udruud----->", calValidateDate);
   };
   const onChange = () => {};
-  const getSelectedDate = async (data) => {
-    console.log(data, "dataaaaaaaa");
-    const alength = data.length;
-    await setDayofNumber(alength);
-    // console.log(selectedDayTab, "selectedDayTab");
-    // console.log(data, "selected data");
+
+  const getSelectedDate1 = (data) => {
+    setDayofNumber(data.length);
+    data.map((item) => {
+      console.log(item.format("YYYY-MM-DD"), "datyeeeeeeeeee");
+    });
+  };
+  const getSelectedDate2 = (data) => {
+    setNightOfNumber(data.length);
+    data.map((item) => {
+      console.log(item.format("YYYY-MM-DD"), "datyeeeeeeeeee");
+    });
+  };
+  const getSelectedDate3 = (data) => {
+    setFullDayNumber(data.length);
+    data.map((item) => {
+      console.log(item.format("YYYY-MM-DD"), "datyeeeeeeeeee");
+    });
   };
 
   const handleClickDayTab = (key) => {
@@ -150,7 +175,26 @@ const tofit = ({ data, lat, lng }) => {
               </p>
             </div>
           ) : (
-            <div></div>
+            <div
+              style={{
+                width: "99px",
+                position: "absolute",
+                marginLeft: "16px",
+                height: "13px",
+                background: "yellow",
+                borderRadius: "0px 0px 4px 4px",
+              }}
+            >
+              <p
+                style={{
+                  display: "flex",
+                  fontSize: "8px",
+                  marginLeft: "24px",
+                }}
+              >
+                Хүсэлт илгээх
+              </p>
+            </div>
           )}
           <div style={{ marginLeft: "10px", marginTop: "19px" }}>
             <Row>
@@ -163,45 +207,212 @@ const tofit = ({ data, lat, lng }) => {
                   />
                 </Row>
                 <Row>
-                  <div style={{ display: "flex " }}>
+                  <div>
                     {/* <Image src={``} width="20px" height="20px" /> */}
-                    <Image
-                      src="/icons/1) Checkbox.png"
-                      width="20px"
-                      height="20px"
-                      style={{ marginLeft: "10px" }}
-                    />
-                    <Image
-                      src="/icons/temdegleegui.png"
-                      width="20px"
-                      height="10px"
-                      style={{ paddingLeft: "10px" }}
-                    />
-                    <Image src="/icons/haadag.png" width="20px" height="20px" />
-                    <Image
-                      src="/icons/Small SUV.png"
-                      width="20px"
-                      height="20px"
-                      style={{ paddingLeft: "10px" }}
-                    />
-                    <Image
-                      src="/icons/Up.png"
-                      width="20px"
-                      height="20px"
-                      style={{ paddingLeft: "10px" }}
-                    />
-                    <Image
-                      src="/icons/haadag.png"
-                      width="20px"
-                      height="20px"
-                      style={{ paddingLeft: "10px" }}
-                    />
-                    <Image
-                      src="/keyboard_arrow_down_24px.png"
-                      width="20px"
-                      height="20px"
-                      style={{ paddingLeft: "10px" }}
-                    />
+                    {/*Том зургын доод талын зогсоолын үзүүлэлтийн зураг*/}
+                    <div
+                      style={{
+                        display: "inline-flex",
+                        marginTop: "5px",
+                        marginLeft: "30px",
+                      }}
+                    >
+                      {spaceData && spaceData.floorNumber ? (
+                        <div style={{ marginRight: "5px" }}>
+                          <img
+                            preview={false}
+                            width={18}
+                            height={18}
+                            src={IMG_URL + spaceData.floorNumber}
+                          />
+                        </div>
+                      ) : null}
+                      {spaceData && spaceData.entranceLock ? (
+                        <div style={{ marginRight: "5px" }}>
+                          <img
+                            preview={false}
+                            width={18}
+                            height={18}
+                            src={IMG_URL + spaceData.entranceLock}
+                          />
+                        </div>
+                      ) : null}
+                      {spaceData && spaceData.isNumbering ? (
+                        <div style={{ marginRight: "5px" }}>
+                          <img
+                            preview={false}
+                            width={18}
+                            height={18}
+                            src={IMG_URL + spaceData.isNumbering}
+                          />
+                        </div>
+                      ) : null}
+                      {spaceData && spaceData.capacity ? (
+                        <div style={{ marginRight: "5px" }}>
+                          <img
+                            preview={false}
+                            width={18}
+                            height={18}
+                            src={IMG_URL + spaceData.capacity}
+                          />
+                        </div>
+                      ) : null}
+                      {spaceData && spaceData.type ? (
+                        <div style={{ marginRight: "5px" }}>
+                          <img
+                            preview={false}
+                            width={18}
+                            height={18}
+                            src={IMG_URL + spaceData.type}
+                          />
+                        </div>
+                      ) : null}
+                      {spaceData && spaceData.returnRoutes ? (
+                        <div style={{ marginRight: "5px" }}>
+                          <img
+                            preview={false}
+                            width={18}
+                            height={18}
+                            src={IMG_URL + spaceData.returnRoutes}
+                          />
+                        </div>
+                      ) : null}
+                      <div>
+                        {!parkingUpDownArrow ? (
+                          <DownOutlined
+                            onClick={() => setParkingUpDownArrow(true)}
+                          />
+                        ) : (
+                          <UpOutlined
+                            onClick={() => setParkingUpDownArrow(false)}
+                          />
+                        )}
+                      </div>
+                    </div>
+                    {parkingUpDownArrow ? (
+                      <div>
+                        {spaceData && spaceData.floorNumber ? (
+                          <div
+                            style={{
+                              marginRight: "13px",
+                              display: "flex",
+                            }}
+                          >
+                            <div>
+                              <img
+                                preview={false}
+                                width={18}
+                                height={18}
+                                src={IMG_URL + spaceData.floorNumber}
+                              />
+                            </div>
+                            <div style={{ marginLeft: "25px" }}>
+                              <span>{spaceData.floorNumberLabel}</span>
+                            </div>
+                          </div>
+                        ) : null}
+                        {spaceData && spaceData.entranceLock ? (
+                          <div
+                            style={{
+                              marginRight: "13px",
+                              display: "flex",
+                            }}
+                          >
+                            <div>
+                              <img
+                                preview={false}
+                                width={18}
+                                height={18}
+                                src={IMG_URL + spaceData.entranceLock}
+                              />
+                            </div>
+                            <div style={{ marginLeft: "25px" }}>
+                              <span>{spaceData.entranceLockLabel}</span>
+                            </div>
+                          </div>
+                        ) : null}
+                        {spaceData && spaceData.isNumbering ? (
+                          <div
+                            style={{
+                              marginRight: "13px",
+                              display: "flex",
+                            }}
+                          >
+                            <div>
+                              <img
+                                preview={false}
+                                width={18}
+                                height={18}
+                                src={IMG_URL + spaceData.isNumbering}
+                              />
+                            </div>
+                            <div style={{ marginLeft: "25px" }}>
+                              <span>{spaceData.isNumberingLabel}</span>
+                            </div>
+                          </div>
+                        ) : null}
+                        {spaceData && spaceData.capacity ? (
+                          <div
+                            style={{
+                              marginRight: "13px",
+                              display: "flex",
+                            }}
+                          >
+                            <div>
+                              <img
+                                preview={false}
+                                width={18}
+                                height={18}
+                                src={IMG_URL + spaceData.capacity}
+                              />
+                            </div>
+                            <div style={{ marginLeft: "25px" }}>
+                              <span>{spaceData.capacityLabel}</span>
+                            </div>
+                          </div>
+                        ) : null}
+                        {spaceData && spaceData.type ? (
+                          <div
+                            style={{
+                              marginRight: "13px",
+                              display: "flex",
+                            }}
+                          >
+                            <div>
+                              <img
+                                preview={false}
+                                width={18}
+                                height={18}
+                                src={IMG_URL + spaceData.type}
+                              />
+                            </div>
+                            <div style={{ marginLeft: "25px" }}>
+                              <span>{spaceData.typeLabel}</span>
+                            </div>
+                          </div>
+                        ) : null}
+                        {spaceData && spaceData.returnRoutes ? (
+                          <div
+                            style={{
+                              marginRight: "13px",
+                              display: "flex",
+                            }}
+                          >
+                            <div>
+                              <img
+                                preview={false}
+                                width={18}
+                                height={18}
+                                src={IMG_URL + spaceData.returnRoutes}
+                              />
+                            </div>
+                            <div style={{ marginLeft: "25px" }}>
+                              <span>{spaceData.returnRoutesLabel}</span>
+                            </div>
+                          </div>
+                        ) : null}
+                      </div>
+                    ) : null}
                   </div>
                 </Row>
               </Col>
@@ -329,7 +540,7 @@ const tofit = ({ data, lat, lng }) => {
                         marginTop: "10px",
                         borderRadius: "10px",
                       }}
-                      // onClick={() => showTimePickDrawer(item.id)}
+                      onClick={() => setChooseTimeVisible(true)}
                     >
                       Сул цаг харах
                     </Button>
@@ -410,7 +621,7 @@ const tofit = ({ data, lat, lng }) => {
               defaultValue={3}
             />
             <Row style={{ height: "16px", display: "flex", width: "100%" }}>
-              <Col span={18} offset={1}>
+              <Col span={22} offset={1}>
                 <div style={{ display: "flex" }}>
                   <div
                     style={{
@@ -460,7 +671,7 @@ const tofit = ({ data, lat, lng }) => {
               </Col>
             </Row>
             <Row>
-              <Col span={18} offset={1}>
+              <Col span={22} offset={1}>
                 <div style={{ display: "flex", marginTop: "10px" }}>
                   <div
                     style={{
@@ -491,115 +702,310 @@ const tofit = ({ data, lat, lng }) => {
               </Col>
             </Row>
             <Row>
-              <div
-                className={`DetailsPane`}
-                style={{
-                  height: "48px",
-                  marginLeft: "25px",
-                  marginTop: "10px",
-                }}
-              >
-                <Tabs
-                  defaultActiveKey="1"
-                  onChange={callback}
-                  style={{ width: "100% " }}
+              <Col span={22}>
+                <div
+                  className={`DetailsPane`}
+                  style={{
+                    height: "48px",
+                    marginLeft: "25px",
+                    marginTop: "10px",
+                  }}
                 >
-                  <TabPane
-                    tab={
-                      <div
-                        style={{
-                          width: "33%",
-                          height: "48px",
-                          marginLeft: "10%",
-                        }}
-                      >
-                        <p
+                  <Tabs
+                    defaultActiveKey="1"
+                    onChange={callback}
+                    style={{ width: "100% " }}
+                  >
+                    <TabPane
+                      tab={
+                        <div
                           style={{
-                            width: "110px",
-                            height: "24px",
-                            paddingTop: "12px",
-                            marginLeft: "20px",
-                            fontSize: "14px",
-                            color: "#0013D4",
+                            width: "33%",
+                            height: "48px",
+                            marginLeft: "10%",
                           }}
                         >
-                          Танилцуулга
-                        </p>
-                      </div>
-                    }
-                    key="1"
-                  >
-                    <Row>
-                      <div
+                          <p
+                            style={{
+                              width: "110px",
+                              height: "24px",
+                              paddingTop: "12px",
+                              marginLeft: "20px",
+                              fontSize: "14px",
+                              color: "#0013D4",
+                            }}
+                          >
+                            Танилцуулга
+                          </p>
+                        </div>
+                      }
+                      key="1"
+                    >
+                      <Row>
+                        <div
+                          style={{
+                            display: "flex ",
+                            marginLeft: "8%",
+                            width: "84%",
+                            justifyItems: "center",
+                          }}
+                          className={`SpaceIcons`}
+                        >
+                          <Col
+                            span={24}
+                            style={{
+                              background: "rgba(222, 226, 233, 0.2)",
+                              borderRadius: "24px",
+                              padding: "13px 23px",
+                              // display: "inline-flex",
+                              textAlign: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <div style={{ display: "inline-flex" }}>
+                              {spaceData && spaceData.floorNumber ? (
+                                <div style={{ marginRight: "13px" }}>
+                                  <img
+                                    preview={false}
+                                    width={24}
+                                    height={24}
+                                    src={IMG_URL + spaceData.floorNumber}
+                                  />
+                                </div>
+                              ) : null}
+                              {spaceData && spaceData.entranceLock ? (
+                                <div style={{ marginRight: "13px" }}>
+                                  <img
+                                    preview={false}
+                                    width={24}
+                                    height={24}
+                                    src={IMG_URL + spaceData.entranceLock}
+                                  />
+                                </div>
+                              ) : null}
+                              {spaceData && spaceData.isNumbering ? (
+                                <div style={{ marginRight: "13px" }}>
+                                  <img
+                                    preview={false}
+                                    width={24}
+                                    height={24}
+                                    src={IMG_URL + spaceData.isNumbering}
+                                  />
+                                </div>
+                              ) : null}
+                              {spaceData && spaceData.capacity ? (
+                                <div style={{ marginRight: "13px" }}>
+                                  <img
+                                    preview={false}
+                                    width={24}
+                                    height={24}
+                                    src={IMG_URL + spaceData.capacity}
+                                  />
+                                </div>
+                              ) : null}
+                              {spaceData && spaceData.type ? (
+                                <div style={{ marginRight: "13px" }}>
+                                  <img
+                                    preview={false}
+                                    width={24}
+                                    height={24}
+                                    src={IMG_URL + spaceData.type}
+                                  />
+                                </div>
+                              ) : null}
+                              {spaceData && spaceData.returnRoutes ? (
+                                <div style={{ marginRight: "13px" }}>
+                                  <img
+                                    preview={false}
+                                    width={24}
+                                    height={24}
+                                    src={IMG_URL + spaceData.returnRoutes}
+                                  />
+                                </div>
+                              ) : null}
+                              <div>
+                                {!parkingUpDownArrow ? (
+                                  <DownOutlined
+                                    onClick={() => setParkingUpDownArrow(true)}
+                                  />
+                                ) : (
+                                  <UpOutlined
+                                    onClick={() => setParkingUpDownArrow(false)}
+                                  />
+                                )}
+                              </div>
+                            </div>
+                            {parkingUpDownArrow ? (
+                              <div>
+                                {spaceData && spaceData.floorNumber ? (
+                                  <div
+                                    style={{
+                                      marginRight: "13px",
+                                      display: "flex",
+                                    }}
+                                  >
+                                    <div>
+                                      <img
+                                        preview={false}
+                                        width={24}
+                                        height={24}
+                                        src={IMG_URL + spaceData.floorNumber}
+                                      />
+                                    </div>
+                                    <div style={{ marginLeft: "25px" }}>
+                                      <span>{spaceData.floorNumberLabel}</span>
+                                    </div>
+                                  </div>
+                                ) : null}
+                                {spaceData && spaceData.entranceLock ? (
+                                  <div
+                                    style={{
+                                      marginRight: "13px",
+                                      display: "flex",
+                                    }}
+                                  >
+                                    <div>
+                                      <img
+                                        preview={false}
+                                        width={24}
+                                        height={24}
+                                        src={IMG_URL + spaceData.entranceLock}
+                                      />
+                                    </div>
+                                    <div style={{ marginLeft: "25px" }}>
+                                      <span>{spaceData.entranceLockLabel}</span>
+                                    </div>
+                                  </div>
+                                ) : null}
+                                {spaceData && spaceData.isNumbering ? (
+                                  <div
+                                    style={{
+                                      marginRight: "13px",
+                                      display: "flex",
+                                    }}
+                                  >
+                                    <div>
+                                      <img
+                                        preview={false}
+                                        width={24}
+                                        height={24}
+                                        src={IMG_URL + spaceData.isNumbering}
+                                      />
+                                    </div>
+                                    <div style={{ marginLeft: "25px" }}>
+                                      <span>{spaceData.isNumberingLabel}</span>
+                                    </div>
+                                  </div>
+                                ) : null}
+                                {spaceData && spaceData.capacity ? (
+                                  <div
+                                    style={{
+                                      marginRight: "13px",
+                                      display: "flex",
+                                    }}
+                                  >
+                                    <div>
+                                      <img
+                                        preview={false}
+                                        width={24}
+                                        height={24}
+                                        src={IMG_URL + spaceData.capacity}
+                                      />
+                                    </div>
+                                    <div style={{ marginLeft: "25px" }}>
+                                      <span>{spaceData.capacityLabel}</span>
+                                    </div>
+                                  </div>
+                                ) : null}
+                                {spaceData && spaceData.type ? (
+                                  <div
+                                    style={{
+                                      marginRight: "13px",
+                                      display: "flex",
+                                    }}
+                                  >
+                                    <div>
+                                      <img
+                                        preview={false}
+                                        width={24}
+                                        height={24}
+                                        src={IMG_URL + spaceData.type}
+                                      />
+                                    </div>
+                                    <div style={{ marginLeft: "25px" }}>
+                                      <span>{spaceData.typeLabel}</span>
+                                    </div>
+                                  </div>
+                                ) : null}
+                                {spaceData && spaceData.returnRoutes ? (
+                                  <div
+                                    style={{
+                                      marginRight: "13px",
+                                      display: "flex",
+                                    }}
+                                  >
+                                    <div>
+                                      <img
+                                        preview={false}
+                                        width={24}
+                                        height={24}
+                                        src={IMG_URL + spaceData.returnRoutes}
+                                      />
+                                    </div>
+                                    <div style={{ marginLeft: "25px" }}>
+                                      <span>{spaceData.returnRoutesLabel}</span>
+                                    </div>
+                                  </div>
+                                ) : null}
+                              </div>
+                            ) : null}
+                          </Col>
+                        </div>
+                      </Row>
+                      <Row
+                        height=" 24px"
                         style={{
-                          display: "flex ",
+                          width: "3100",
+                          marginTop: "10px",
+
+                          justifyItems: "center",
+                        }}
+                      >
+                        <div
+                          style={{
+                            color: "#35446D",
+                            fontSize: "14px",
+                            fontStyle: "normal",
+                            fontFamily: "Roboto",
+                            fontWeight: "700",
+                          }}
+                        >
+                          Зун цагийн хуваарь /04.01-09.31
+                        </div>
+                      </Row>
+                      <Row
+                        className={`SpaceIcons`}
+                        style={{
+                          height: "50px",
+                          display: "flex",
                           marginLeft: "8%",
+                          marginTop: "20px",
                           width: "84%",
                           height: "50px",
                           justifyItems: "center",
                         }}
-                        className={`SpaceIcons`}
                       >
-                        <Collapse onChange={callback} className={""}>
-                          <Panel header="This is panel header 1" key="1">
-                            <p>йййййййййййййй</p>
-                          </Panel>
-                        </Collapse>
-                      </div>
-                    </Row>
-                    <Row
-                      height=" 24px"
-                      style={{
-                        width: "3100",
-                        marginTop: "10px",
-
-                        justifyItems: "center",
-                      }}
-                    >
-                      <div
-                        style={{
-                          color: "#35446D",
-                          fontSize: "14px",
-                          fontStyle: "normal",
-                          fontFamily: "Roboto",
-                          fontWeight: "700",
-                        }}
-                      >
-                        Зун цагийн хуваарь /04.01-09.31
-                      </div>
-                    </Row>
-                    <Row
-                      className={`SpaceIcons`}
-                      style={{
-                        height: "50px",
-                        display: "flex",
-                        marginLeft: "8%",
-                        marginTop: "20px",
-                        width: "84%",
-                        height: "50px",
-                        justifyItems: "center",
-                      }}
-                    >
-                      <Col
-                        span={7}
-                        style={{
-                          height: "50px",
-                          alignItems: "center",
-                        }}
-                      >
-                        <div className={`priceInfoOfOneDay`}>
-                          <div
-                            style={{
-                              color: "#141A29",
-                            }}
-                          >
-                            <p
+                        <Col
+                          span={7}
+                          style={{
+                            height: "50px",
+                            alignItems: "center",
+                          }}
+                        >
+                          <div className={`priceInfoOfOneDay`}>
+                            <div
                               style={{
-                                fontFamily: "Roboto",
-                                fontSize: "14px",
-                                textAlign: "center",
-                                fontStyle: "normal",
-                                fontWeight: "700",
+                                color: "#141A29",
                               }}
                             >
                               <p
@@ -611,331 +1017,368 @@ const tofit = ({ data, lat, lng }) => {
                                   fontWeight: "700",
                                 }}
                               >
-                                {priceForRenter1}
+                                <p
+                                  style={{
+                                    fontFamily: "Roboto",
+                                    fontSize: "14px",
+                                    textAlign: "center",
+                                    fontStyle: "normal",
+                                    fontWeight: "700",
+                                  }}
+                                >
+                                  {priceForRenter1}
+                                </p>
                               </p>
-                            </p>
+                            </div>
+                            <div>
+                              <p
+                                style={{
+                                  fontStyle: "normal",
+                                  fontSize: "12px",
+                                  textAlign: "center",
+                                  color: "#35446D",
+                                }}
+                              >
+                                1 Өдөр
+                              </p>
+                            </div>
                           </div>
-                          <div>
+                        </Col>
+                        <Divider
+                          style={{
+                            background: "#0013D4",
+                            width: "2px",
+                            height: "8.33px",
+                            marginTop: "21px",
+                          }}
+                          type="vertical"
+                        />
+                        <Col
+                          span={7}
+                          style={{
+                            height: "50px",
+                            alignItems: "center",
+                          }}
+                        >
+                          <div style={{ width: "100%" }}>
+                            <div style={{ color: "#141A29" }}>
+                              <p
+                                style={{
+                                  marginLeft: "10%",
+                                  width: "80%",
+                                  fontFamily: "Roboto",
+                                  fontSize: "14px",
+                                  textAlign: "center",
+                                  fontStyle: "normal",
+                                  fontWeight: "700",
+                                }}
+                              >
+                                {priceForRenter2}
+                              </p>
+                            </div>
                             <p
                               style={{
                                 fontStyle: "normal",
                                 fontSize: "12px",
                                 textAlign: "center",
+                                height: "16px",
                                 color: "#35446D",
                               }}
                             >
-                              1 Өдөр
+                              1 Шөнө
                             </p>
                           </div>
+                        </Col>
+                        <Divider
+                          style={{
+                            background: "#0013D4",
+                            width: "2px",
+                            height: "8.33px",
+                            marginTop: "21px",
+                          }}
+                          type="vertical"
+                        />
+                        <Col span={7}>
+                          <div style={{ width: "100%" }}>
+                            <div style={{ color: "#141A29" }}>
+                              <p
+                                style={{
+                                  marginLeft: "10%",
+                                  width: "80%",
+                                  fontFamily: "Roboto",
+                                  fontSize: "14px",
+                                  textAlign: "center",
+                                  fontStyle: "normal",
+                                  fontWeight: "700",
+                                }}
+                              >
+                                {priceForRenter3}
+                              </p>
+                            </div>
+                            <p
+                              style={{
+                                fontStyle: "normal",
+                                fontSize: "12px",
+                                textAlign: "center",
+                                height: "16px",
+                                color: "#35446D",
+                              }}
+                            >
+                              Бүтэн өдөр
+                            </p>
+                          </div>
+                        </Col>
+                      </Row>
+                      {/*Хөнгөлөлтийн хэсэг*/}
+                      <Row>
+                        <div
+                          style={{
+                            width: "84px",
+                            height: "24px",
+                            fontSize: "14px",
+                            fontWeight: "bold",
+                            fontStyle: "normal",
+                            color: "#35446D",
+                          }}
+                        >
+                          Хөнгөлөлт
                         </div>
-                      </Col>
-                      <Divider
+                      </Row>
+
+                      {spaceData === null ? (
+                        <div>0</div>
+                      ) : (
+                        <div>
+                          <Row>
+                            <Col span={18} offset={1}>
+                              <p
+                                style={{
+                                  fontSize: "14px",
+                                  color: "#35446D",
+                                }}
+                              >
+                                7 өдөр эсвэл 7 шөнө{" "}
+                              </p>
+                            </Col>
+                            <Col span={2} offset={1}>
+                              <p>{Number(weekSale)}</p>
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col span={18} offset={1}>
+                              <p
+                                style={{
+                                  fontSize: "14px",
+                                  color: "#35446D",
+                                }}
+                              >
+                                30 өдөр эсвэл 30 шөнө
+                              </p>
+                            </Col>
+                            <Col span={2} offset={1}>
+                              {monthSale}
+                            </Col>
+                          </Row>
+                        </div>
+                      )}
+                      <Row style={{ marginTop: "20px" }}>
+                        <Col span={24}>
+                          <div onClick={onclickPick} className={`chooseButton`}>
+                            <p
+                              style={{
+                                alignItems: "center",
+                                width: "116px",
+                                color: "#0013D4",
+                              }}
+                            >
+                              Сул цаг сонгох
+                            </p>
+                          </div>
+                        </Col>
+                      </Row>
+                      <Row
                         style={{
-                          background: "#0013D4",
-                          width: "2px",
-                          height: "8.33px",
-                          marginTop: "21px",
+                          fontSize: "14px",
+                          color: "#35446D",
+                          marginTop: "20px",
                         }}
-                        type="vertical"
-                      />
-                      <Col
-                        span={7}
+                      >
+                        <b>Тээврийн хэрэгсэл сонгох</b>
+                      </Row>
+                      <Row>
+                        <Radio.Group
+                          buttonStyle="solid"
+                          onChange={onChangeChooseVehicle}
+                        >
+                          <Col span={11}>
+                            {vehicles.map((item) => (
+                              <Radio.Button
+                                key={item.value}
+                                value={item.value}
+                                className={`pickVehicle`}
+                              >
+                                <div style={{ display: "flex" }}>
+                                  <div
+                                    style={{
+                                      height: "24px",
+                                      width: "24px",
+                                      marginTop: "16px",
+                                      marginLeft: "16px",
+                                    }}
+                                  >
+                                    <img
+                                      src="/directions_car_24px.png"
+                                      height="16px"
+                                      width="18px"
+                                    />
+                                  </div>
+                                  <div
+                                    style={{
+                                      marginLeft: "10px",
+                                      height: "40px",
+                                      width: "75px",
+                                    }}
+                                  >
+                                    <p
+                                      style={{
+                                        fontSize: "12px",
+                                        height: "16px",
+                                      }}
+                                    >
+                                      {item.label.split(" ")[0]}
+                                      {item.label.split(" ")[1]}
+                                    </p>
+                                    <p
+                                      style={{
+                                        fontSize: "12px",
+                                        height: "16px",
+                                        color: "#0013D4",
+                                      }}
+                                    >
+                                      <b>{item.label.split(" ")[2]}</b>
+                                    </p>
+                                  </div>
+                                </div>
+                              </Radio.Button>
+                            ))}
+                          </Col>
+                        </Radio.Group>
+                      </Row>
+                      <Row style={{ marginTop: "10px" }}>
+                        <p style={{ color: "#35446D", fontSize: "14px" }}>
+                          <b>Таны сонгосон захиалга:</b>
+                        </p>
+                      </Row>
+                      <div style={{ marginTop: "10px" }}>
+                        <Row>
+                          <Col style={{ fontSize: "12px" }}>Өдөр:</Col>
+                          <Col style={{ fontSize: "12px" }}>
+                            {completeDayOfNumber}
+                          </Col>
+                        </Row>
+                        <Row style={{ marginTop: "5px" }}>
+                          <Col style={{ fontSize: "12px" }}>Шөнө:</Col>
+                          <Col style={{ fontSize: "12px" }}>
+                            {completeNightOfNumber}
+                          </Col>
+                        </Row>
+                        <Row style={{ marginTop: "5px" }}>
+                          <Col style={{ fontSize: "12px" }}>Бүтэн өдөр:</Col>
+                          <Col style={{ fontSize: "12px" }}>
+                            {completeFullDayNumber}
+                          </Col>
+                        </Row>
+                      </div>
+                      <Divider />
+                      <Row>
+                        <Col span={22}>
+                          <p>
+                            <b>Нийт захиалгын төлбөр</b>
+                          </p>
+                        </Col>
+                        <Col span={2}>
+                          {dayOfNumber === 7 || nightOfNumber === 7
+                            ? dayOfNumber * priceForRenter1 +
+                              nightOfNumber * priceForRenter2 +
+                              fullDayNumber * priceForRenter3 -
+                              (dayOfNumber * priceForRenter1 +
+                                nightOfNumber * priceForRenter2 +
+                                fullDayNumber * priceForRenter3) *
+                                0.05
+                            : dayOfNumber * priceForRenter1 +
+                              nightOfNumber * priceForRenter2 +
+                              fullDayNumber * priceForRenter3}
+                          {dayOfNumber === 30 || nightOfNumber === 30
+                            ? dayOfNumber * priceForRenter1 +
+                              nightOfNumber * priceForRenter2 +
+                              fullDayNumber * priceForRenter3 -
+                              (dayOfNumber * priceForRenter1 +
+                                nightOfNumber * priceForRenter2 +
+                                fullDayNumber * priceForRenter3) *
+                                0.1
+                            : null}
+                          ₮
+                        </Col>
+                      </Row>
+                      <Row
                         style={{
                           height: "50px",
-                          alignItems: "center",
+                          marginTop: "10px",
                         }}
                       >
-                        <div style={{ width: "100%" }}>
-                          <div style={{ color: "#141A29" }}>
-                            <p
-                              style={{
-                                marginLeft: "10%",
-                                width: "80%",
-                                fontFamily: "Roboto",
-                                fontSize: "14px",
-                                textAlign: "center",
-                                fontStyle: "normal",
-                                fontWeight: "700",
-                              }}
-                            >
-                              {priceForRenter2}
-                            </p>
-                          </div>
+                        <Col span={12}>
+                          <Button className={`buttonGo`}>Захиалга нэмэх</Button>
+                        </Col>
+                        <Col span={12}>
+                          <Button className={`buttonGo`}>Төлбөр төлөх</Button>
+                        </Col>
+                      </Row>
+                    </TabPane>
+                    <TabPane
+                      tab={
+                        <div style={{ width: "33%", height: "48px" }}>
                           <p
                             style={{
-                              fontStyle: "normal",
-                              fontSize: "12px",
+                              width: "140px",
+                              height: "24px",
+                              paddingTop: "12px",
+                              fontSize: "14px",
                               textAlign: "center",
-                              height: "16px",
-                              color: "#35446D",
-                            }}
-                          >
-                            1 Шөнө
-                          </p>
-                        </div>
-                      </Col>
-                      <Divider
-                        style={{
-                          background: "#0013D4",
-                          width: "2px",
-                          height: "8.33px",
-                          marginTop: "21px",
-                        }}
-                        type="vertical"
-                      />
-                      <Col span={7}>
-                        <div style={{ width: "100%" }}>
-                          <div style={{ color: "#141A29" }}>
-                            <p
-                              style={{
-                                marginLeft: "10%",
-                                width: "80%",
-                                fontFamily: "Roboto",
-                                fontSize: "14px",
-                                textAlign: "center",
-                                fontStyle: "normal",
-                                fontWeight: "700",
-                              }}
-                            >
-                              {priceForRenter3}
-                            </p>
-                          </div>
-                          <p
-                            style={{
-                              fontStyle: "normal",
-                              fontSize: "12px",
-                              textAlign: "center",
-                              height: "16px",
-                              color: "#35446D",
-                            }}
-                          >
-                            Бүтэн өдөр
-                          </p>
-                        </div>
-                      </Col>
-                    </Row>
-                    {/*Хөнгөлөлтийн хэсэг*/}
-                    <Row>
-                      <div
-                        style={{
-                          width: "84px",
-                          height: "24px",
-                          fontSize: "14px",
-                          fontWeight: "bold",
-                          fontStyle: "normal",
-                          color: "#35446D",
-                        }}
-                      >
-                        Хөнгөлөлт
-                      </div>
-                    </Row>
-
-                    {saleDatas === null ? (
-                      <div>utga obsoo bnaa brp</div>
-                    ) : (
-                      <div>
-                        <Row>
-                          <Col span={18} offset={1}>
-                            <p
-                              style={{
-                                fontSize: "14px",
-                                color: "#35446D",
-                              }}
-                            >
-                              7 өдөр эсвэл 7 шөнө{" "}
-                            </p>
-                          </Col>
-                          <Col span={2} offset={1}>
-                            aa--{saleDatas}
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col span={18} offset={1}>
-                            <p
-                              style={{
-                                fontSize: "14px",
-                                color: "#35446D",
-                              }}
-                            >
-                              30 өдөр эсвэл 30 шөнө
-                            </p>
-                          </Col>
-                          <Col span={2} offset={1}>
-                            <p>aa--{saleDatas}</p>
-                          </Col>
-                        </Row>
-                      </div>
-                    )}
-                    <Row style={{ marginTop: "20px" }}>
-                      <Col span={24}>
-                        <div onClick={onclickPick} className={`chooseButton`}>
-                          <p
-                            style={{
-                              alignItems: "center",
-                              width: "116px",
                               color: "#0013D4",
                             }}
                           >
-                            Сул цаг сонгох
+                            Үнэлгээ
                           </p>
                         </div>
-                      </Col>
-                    </Row>
-                    <Row
-                      style={{
-                        fontSize: "14px",
-                        color: "#35446D",
-                        marginTop: "20px",
-                      }}
+                      }
+                      key="2"
                     >
-                      <b>Тээврийн хэрэгсэл сонгох</b>
-                    </Row>
-                    <Row>
-                      <Radio.Group
-                        buttonStyle="solid"
-                        onChange={onChangeChooseVehicle}
-                      >
-                        <Col span={11}>
-                          {vehicles.map((item) => (
-                            <Radio.Button
-                              key={item.value}
-                              value={item.value}
-                              className={`pickVehicle`}
-                            >
-                              <div style={{ display: "flex" }}>
-                                <div
-                                  style={{
-                                    height: "24px",
-                                    width: "24px",
-                                    marginTop: "16px",
-                                    marginLeft: "16px",
-                                  }}
-                                >
-                                  <img
-                                    src="/directions_car_24px.png"
-                                    height="16px"
-                                    width="18px"
-                                  />
-                                </div>
-                                <div
-                                  style={{
-                                    marginLeft: "10px",
-                                    height: "40px",
-                                    width: "75px",
-                                  }}
-                                >
-                                  <p
-                                    style={{
-                                      fontSize: "12px",
-                                      height: "16px",
-                                    }}
-                                  >
-                                    {item.label.split(" ")[0]}
-                                    {item.label.split(" ")[1]}
-                                  </p>
-                                  <p
-                                    style={{
-                                      fontSize: "12px",
-                                      height: "16px",
-                                      color: "#0013D4",
-                                    }}
-                                  >
-                                    <b>{item.label.split(" ")[2]}</b>
-                                  </p>
-                                </div>
-                              </div>
-                            </Radio.Button>
-                          ))}
-                        </Col>
-                      </Radio.Group>
-                    </Row>
-                    <Row style={{ marginTop: "10px" }}>
-                      <p style={{ color: "#35446D", fontSize: "14px" }}>
-                        <b>Таны сонгосон захиалга:</b>
-                      </p>
-                    </Row>
-                    <div style={{ marginTop: "10px" }}>
-                      <Row>
-                        <Col style={{ fontSize: "12px" }}>Өдөр:</Col>
-                        <Col style={{ fontSize: "12px" }}>2</Col>
-                      </Row>
-                      <Row style={{ marginTop: "5px" }}>
-                        <Col style={{ fontSize: "12px" }}>Шөнө:</Col>
-                        <Col style={{ fontSize: "12px" }}>2</Col>
-                      </Row>
-                      <Row style={{ marginTop: "5px" }}>
-                        <Col style={{ fontSize: "12px" }}>Бүтэн өдөр:</Col>
-                        <Col style={{ fontSize: "12px" }}>0</Col>
-                      </Row>
-                    </div>
-                    <Divider />
-                    <Row>
-                      <Col span={22}>
-                        <p>
-                          <b>Нийт захиалгын төлбөр</b>
-                        </p>
-                      </Col>
-                      <Col span={2}>0₮</Col>
-                    </Row>
-                    <Row
-                      style={{
-                        height: "50px",
-                        marginTop: "10px",
-                      }}
+                      Хэрэглэгчийн үнэлгээ
+                    </TabPane>
+                    <TabPane
+                      tab={
+                        <div style={{ width: "33%", height: "48px" }}>
+                          <p
+                            style={{
+                              width: "140px",
+                              height: "24px",
+                              textAlign: "center",
+                              paddingTop: "12px",
+                              fontSize: "14px",
+                              color: "#0013D4",
+                            }}
+                          >
+                            Тусламж
+                          </p>
+                        </div>
+                      }
+                      key="3"
                     >
-                      <Col span={12}>
-                        <Button className={`buttonGooo`}>Захиалга нэмэх</Button>
-                      </Col>
-                      <Col span={12}>
-                        <Button className={`buttonGooo`}>Төлбөр төлөх</Button>
-                      </Col>
-                    </Row>
-                  </TabPane>
-                  <TabPane
-                    tab={
-                      <div style={{ width: "33%", height: "48px" }}>
-                        <p
-                          style={{
-                            width: "140px",
-                            height: "24px",
-                            paddingTop: "12px",
-                            fontSize: "14px",
-                            textAlign: "center",
-                            color: "#0013D4",
-                          }}
-                        >
-                          Үнэлгээ
-                        </p>
-                      </div>
-                    }
-                    key="2"
-                  >
-                    Content of Tab Pane 2
-                  </TabPane>
-                  <TabPane
-                    tab={
-                      <div style={{ width: "33%", height: "48px" }}>
-                        {" "}
-                        <p
-                          style={{
-                            width: "140px",
-                            height: "24px",
-                            textAlign: "center",
-                            paddingTop: "12px",
-                            fontSize: "14px",
-                            color: "#0013D4",
-                          }}
-                        >
-                          Тусламж
-                        </p>
-                      </div>
-                    }
-                    key="3"
-                  >
-                    Content of Tab Pane 3
-                  </TabPane>
-                </Tabs>
-              </div>
+                      Тусламж
+                    </TabPane>
+                  </Tabs>
+                </div>
+              </Col>
             </Row>
           </div>
         </Drawer>
@@ -999,9 +1442,9 @@ const tofit = ({ data, lat, lng }) => {
                   }
                 >
                   <Calendar
-                    type="multi"
-                    selectedDate={[]}
-                    getSelectedDate={getSelectedDate}
+                    selectType="multi"
+                    selectedDate={selectedDate1}
+                    getSelectedDate={getSelectedDate1}
                     className={`timePickCalendar`}
                   />
                 </TabPane>
@@ -1025,9 +1468,9 @@ const tofit = ({ data, lat, lng }) => {
                   }
                 >
                   <Calendar
-                    type="multi"
-                    selectedDate={[]}
-                    getSelectedDate={getSelectedDate}
+                    selectType="multi"
+                    selectedDate={selectedDate2}
+                    getSelectedDate={getSelectedDate2}
                     className={`timePickCalendar`}
                   />
                 </TabPane>
@@ -1051,9 +1494,9 @@ const tofit = ({ data, lat, lng }) => {
                   key="fullday"
                 >
                   <Calendar
-                    type="multi"
-                    selectedDate={[]}
-                    getSelectedDate={getSelectedDate}
+                    selectType="multi"
+                    selectedDate={selectedDate3}
+                    getSelectedDate={getSelectedDate3}
                     className={`timePickCalendar`}
                   />
                 </TabPane>
@@ -1083,13 +1526,36 @@ const tofit = ({ data, lat, lng }) => {
                   <b>Нийт захиалгын төлбөр</b>
                 </p>
               </Col>
-              <Col span={2}>0₮</Col>
+              <Col span={2}>
+                {dayOfNumber === 7 || nightOfNumber === 7
+                  ? dayOfNumber * priceForRenter1 +
+                    nightOfNumber * priceForRenter2 +
+                    fullDayNumber * priceForRenter3 -
+                    (dayOfNumber * priceForRenter1 +
+                      nightOfNumber * priceForRenter2 +
+                      fullDayNumber * priceForRenter3) *
+                      0.05
+                  : dayOfNumber * priceForRenter1 +
+                    nightOfNumber * priceForRenter2 +
+                    fullDayNumber * priceForRenter3}
+                {dayOfNumber === 30 || nightOfNumber === 30
+                  ? dayOfNumber * priceForRenter1 +
+                    nightOfNumber * priceForRenter2 +
+                    fullDayNumber * priceForRenter3 -
+                    (dayOfNumber * priceForRenter1 +
+                      nightOfNumber * priceForRenter2 +
+                      fullDayNumber * priceForRenter3) *
+                      0.1
+                  : null}
+                ₮
+              </Col>
             </Row>
             <Button
               style={{
                 width: "80%",
               }}
               className={`buttonGo`}
+              onClick={onClickSubmit}
             >
               Баталгаажуулах
             </Button>
