@@ -1,61 +1,48 @@
-import { Menu, Row, Col, Card, Alert } from "antd";
+
 import {
-  UserOutlined,
-  EditOutlined,
-  ArrowLeftOutlined,
-  ArrowRightOutlined,
-} from "@ant-design/icons";
-import ProfileLayout from "@components/layouts/ProfileLayout";
-import {
-  Modal,
-  Button,
   Form,
   Input,
-  Checkbox,
-  Layout,
   Select,
   Divider,
-} from "antd";
-import { useContext, useState, useRef } from "react";
-import { useEffect, useS } from "react";
-import { Steps } from "antd";
-import { apiList, callGet, callPost } from "@api/api";
+} from 'antd';
+import {useState} from 'react';
+import {useEffect} from 'react';
+import {callGet} from '@api/api';
+const {Option} = Select;
 
 const vehicle = (props) => {
-  console.log(props);
   const [uildwer, setUildwer] = useState([]);
-  const [selectedUildwer, setSelectedUildwer] = useState({});
+  // const [selectedUildwer, setSelectedUildwer] = useState({});
   const [zagwar, setZagwar] = useState([]);
-  const [rfId, setRfId] = useState();
   const [color, setColor] = useState([]);
-  const [selectedZagwar, setSelectedZagwar] = useState({});
-  const [selectedColor, setSelectedColor] = useState({});
-  const [vehicles, setVehicles] = useState([]);
+  // const [selectedZagwar, setSelectedZagwar] = useState({});
+  // const [selectedColor, setSelectedColor] = useState({});
+  // const [vehicles, setVehicles] = useState([]);
 
   useEffect(async () => {
-    const data = await callGet("/user/vehicle/list");
-    setVehicles(data);
-    const uildwer = await callGet("/user/vehicle/maker");
-    setSelectedUildwer(uildwer);
+    // const data = await callGet('/user/vehicle/list');
+    // setVehicles(data);
+    const uildwer = await callGet('/user/vehicle/maker');
+    // setSelectedUildwer(uildwer);
     setUildwer(uildwer);
-    const color = await callGet("/user/vehicle/color");
+    const color = await callGet('/user/vehicle/color');
     setColor(color);
     // const space = await callGet("/parkingspace/list");
     // setFormdata({ ...formData, rfid: "12" });
   }, []);
 
   const onChangeUildver = async (e) => {
-    console.log("i am here-->", e);
+    console.log('i am here-->', e);
     const uildver = uildwer.find((item) => item.value === e);
-    setSelectedUildwer(uildver);
+    // setSelectedUildwer(uildver);/
     const model = await callGet(`/user/vehicle/model?maker=${uildver.label}`);
     setZagwar(model);
     // setFormdata({ ...formData, maker: uildver.value });
   };
   const onChangeZagwar = (e) => {
-    console.log(e);
-    const selectZagwar = zagwar.find((item) => item.value === e);
-    setSelectedZagwar(selectZagwar);
+    // console.log(e);
+    // const selectZagwar = zagwar.find((item) => item.value === e);
+    // setSelectedZagwar(selectZagwar);
     // setFormdata({ ...formData, model: selectZagwar.value });
   };
   const onChangeDugaar = (e) => {
@@ -64,9 +51,9 @@ const vehicle = (props) => {
     // setFormdata({ ...formData, vehicleNumber: dugar });
   };
   const onChangeColor = (e) => {
-    console.log(e);
-    const selectColor = color.find((item) => item.label === e);
-    setSelectedColor(selectColor);
+    // console.log(e);
+    // const selectColor = color.find((item) => item.label === e);
+    // setSelectedColor(selectColor);
     // setFormdata({ ...formData, color: selectColor.value });
   };
 
@@ -92,7 +79,7 @@ const vehicle = (props) => {
           rules={[
             {
               required: true,
-              message: "Улсын дугаар оруулна уу",
+              message: 'Улсын дугаар оруулна уу',
             },
           ]}
         >
@@ -105,7 +92,7 @@ const vehicle = (props) => {
           rules={[
             {
               required: true,
-              message: "Үйлдвэр сонгоно уу",
+              message: 'Үйлдвэр сонгоно уу',
             },
           ]}
         >
@@ -124,7 +111,7 @@ const vehicle = (props) => {
           rules={[
             {
               required: true,
-              message: "Загвар сонгоно уу",
+              message: 'Загвар сонгоно уу',
             },
           ]}
         >
@@ -143,7 +130,7 @@ const vehicle = (props) => {
           rules={[
             {
               required: false,
-              message: "Өнгө сонгон уу?",
+              message: 'Өнгө сонгон уу?',
             },
           ]}
         >

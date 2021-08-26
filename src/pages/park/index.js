@@ -1,13 +1,11 @@
-import { useContext, useEffect, useState } from "react";
-import { callGet, sList } from "@api/api";
-import { showMessage } from "../../utils/message";
-import { datePickerLocale } from "@constants/constants";
+import {useEffect, useState} from 'react';
+import {callGet} from '@api/api';
+import {showMessage} from '../../utils/message';
 import {
   Col,
   Row,
   Button,
   DatePicker,
-  Input,
   Select,
   Layout,
   Tabs,
@@ -17,61 +15,51 @@ import {
   Image,
   Drawer,
   AutoComplete,
-  Divider,
   Form,
-} from "antd";
-import Context from "@context/Context";
-import moment from "moment";
-import { SearchOutlined } from "@ant-design/icons";
-import dynamic from "next/dynamic";
-import { dateTimePickerLocale } from "@constants/constants";
-import ListItem from "@components/ListItem";
-import Helper from "@utils/helper";
+} from 'antd';
+import moment from 'moment';
+import Helper from '@utils/helper';
 import {
-  LeftOutlined,
   DownOutlined,
   UpOutlined,
-  CodeSandboxCircleFilled,
-} from "@ant-design/icons";
+} from '@ant-design/icons';
 const IMG_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
 const style = {
-  border: "1px solid #DEE2E9",
-  borderRadius: "8px",
-  padding: "5px 10px",
+  border: '1px solid #DEE2E9',
+  borderRadius: '8px',
+  padding: '5px 10px',
 };
 
-const fetch = require("isomorphic-fetch");
-const { compose, withProps, withHandlers } = require("recompose");
+const {compose, withProps, withHandlers} = require('recompose');
 const {
   withScriptjs,
   withGoogleMap,
   GoogleMap,
   Marker,
-} = require("react-google-maps");
+} = require('react-google-maps');
 const {
   MarkerClusterer,
-} = require("react-google-maps/lib/components/addons/MarkerClusterer");
+} = require('react-google-maps/lib/components/addons/MarkerClusterer');
 
-const { RangePicker } = DatePicker;
-const { TabPane } = Tabs;
+const {TabPane} = Tabs;
 // const { Option } = Select;
-const { Option } = AutoComplete;
-const { Header, Sider, Content } = Layout;
+const {Option} = AutoComplete;
+const {Header, Sider, Content} = Layout;
 
 const MapWithAMarkerClusterer = compose(
-  withProps({
-    googleMapURL: `https://maps.googleapis.com/maps/api/js?key=AIzaSyD15334amUTZVfPVXv7p989Mew8iMmAoA0&v=3.exp&libraries=geometry,drawing,places`,
-    loadingElement: <div style={{ height: `100%` }} />,
-    containerElement: <div style={{ height: `100%` }} />,
-    mapElement: <div style={{ height: `100%` }} />,
-  }),
-  withHandlers({
-    onMarkerClustererClick: () => (markerClusterer) => {
-      const clickedMarkers = markerClusterer.getMarkers();
-    },
-  }),
-  withScriptjs,
-  withGoogleMap
+    withProps({
+      googleMapURL: `https://maps.googleapis.com/maps/api/js?key=AIzaSyD15334amUTZVfPVXv7p989Mew8iMmAoA0&v=3.exp&libraries=geometry,drawing,places`,
+      loadingElement: <div style={{height: `100%`}} />,
+      containerElement: <div style={{height: `100%`}} />,
+      mapElement: <div style={{height: `100%`}} />,
+    }),
+    withHandlers({
+      onMarkerClustererClick: () => (markerClusterer) => {
+        markerClusterer.getMarkers();
+      },
+    }),
+    withScriptjs,
+    withGoogleMap,
 )((props) => (
   <GoogleMap defaultZoom={13} defaultCenter={props.defaultCenter}>
     <MarkerClusterer
@@ -95,13 +83,10 @@ const MapWithAMarkerClusterer = compose(
 
 const Dashboard = () => {
   const [form] = Form.useForm();
-  const ctx = useContext(Context);
-  const [dashboardData, setDashboardData] = useState({});
   const [markers, setMarkers] = useState([]);
   const [searchedData, setSearchedData] = useState([]);
   const [dataSource, setDataSource] = useState([]);
   const [parkingUpDownArrow, setParkingUpDownArrow] = useState(false);
-  const [seemoreUpDownArrow, setSeemoreUpDownArrow] = useState(false);
   const [defaultCenter, setDefaultCenter] = useState({
     lat: 47.91909306508191,
     lng: 106.91761127921768,
@@ -112,16 +97,16 @@ const Dashboard = () => {
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   });
-  const [tuneType, setTuneType] = useState(null);
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  // const [tuneType, setTuneType] = useState(null);
+  // const [startDate, setStartDate] = useState(null);
+  // const [endDate, setEndDate] = useState(null);
   const [searchId, setSearchId] = useState(null);
   const [timeSplit, settimeSplit] = useState(null);
 
   const [visibleDrawerMore, setVisibleDrawerMore] = useState(false);
   const [parkingObject, setParkingObject] = useState({});
-  function isBase64(str) {
-    if (str === "" || str.trim() === "") {
+  const isBase64 = async (str) => {
+    if (str === '' || str.trim() === '') {
       return false;
     }
     try {
@@ -129,17 +114,17 @@ const Dashboard = () => {
     } catch (err) {
       return false;
     }
-  }
+  };
 
   const showDrawer = async (item) => {
     const res = await callGet(
-      `/parkingspace?parkingSpaceId=${item.park.parkingSpaceId}`
+        `/parkingspace?parkingSpaceId=${item.park.parkingSpaceId}`,
     );
     if (!res || res === undefined) {
       showMessage(messageType.FAILED.type, defaultMsg.dataError);
       return;
     }
-    let merged = { ...res, ...item };
+    const merged = {...res, ...item};
     setParkingObject(merged);
     setVisibleDrawerMore(true);
   };
@@ -169,7 +154,7 @@ const Dashboard = () => {
     if (res.length > 0) {
       res.map((residence) => {
         residence.parkingSpaceList.content.map((park) => {
-          mergedparks.push({ residence, park });
+          mergedparks.push({residence, park});
         });
       });
       setMarkers(mergedparks);
@@ -187,7 +172,7 @@ const Dashboard = () => {
   };
 
   const onSelectAuto = async (val, option) => {
-    if (option.id && option.id != "") {
+    if (option.id && option.id != '') {
       setSearchId(option.id);
       const res = await callGet(`/search/input/test?keywordId=${option.id}`);
       if (!res || res === undefined) {
@@ -215,7 +200,7 @@ const Dashboard = () => {
     }
   };
   const onChangeDay = (type) => {
-    console.log(type, "type");
+    console.log(type, 'type');
     setTuneType(type);
   };
   const onChangeStartDate = (date) => {
@@ -226,40 +211,40 @@ const Dashboard = () => {
   };
 
   const onFinish = async (values) => {
-    console.log(values, "values");
-    let url = "";
-    if (values.tuneType === "Бүтэн өдөр") {
+    console.log(values, 'values');
+    let url = '';
+    if (values.tuneType === 'Бүтэн өдөр') {
       url = `/search/test/input?latitude=${position.latitude}&longitude=${
         position.longitude
       }&keywordId=${searchId}&startDate=${values.startdate.format(
-        "YYYY-MM-DD"
+          'YYYY-MM-DD',
       )}&endDate=${values.enddate.format(
-        "YYYY-MM-DD"
+          'YYYY-MM-DD',
       )}&fullDay=true&startTime=${timeSplit.dayStart}&endTime=${
         timeSplit.nightEnd
       }`;
-    } else if (values.tuneType === "Өдөр") {
+    } else if (values.tuneType === 'Өдөр') {
       url = `/search/test/input?latitude=${position.latitude}&longitude=${
         position.longitude
       }&keywordId=${searchId}&startDate=${values.startdate.format(
-        "YYYY-MM-DD"
+          'YYYY-MM-DD',
       )}&endDate=${values.enddate.format(
-        "YYYY-MM-DD"
+          'YYYY-MM-DD',
       )}&fullDay=false&startTime=${timeSplit.dayStart}&endTime=${
         timeSplit.dayEnd
       }`;
-    } else if (values.tuneType === "Шөнө") {
+    } else if (values.tuneType === 'Шөнө') {
       url = `/search/test/input?latitude=${position.latitude}&longitude=${
         position.longitude
       }&keywordId=${searchId}&startDate=${values.startdate.format(
-        "YYYY-MM-DD"
+          'YYYY-MM-DD',
       )}&endDate=${values.enddate.format(
-        "YYYY-MM-DD"
+          'YYYY-MM-DD',
       )}&fullDay=false&startTime=${timeSplit.nightStart}&endTime=${
         timeSplit.nightEnd
       }`;
     }
-    if (url != "") {
+    if (url != '') {
       const res = await callGet(url);
       if (!res || res === undefined) {
         showMessage(messageType.FAILED.type, defaultMsg.dataError);
@@ -269,7 +254,7 @@ const Dashboard = () => {
     }
   };
   const onFinishFailed = (values) => {
-    console.log(values, "onFinishFailed");
+    console.log(values, 'onFinishFailed');
   };
 
   const onReset = () => {
@@ -281,7 +266,7 @@ const Dashboard = () => {
       <Header>
         <Form
           form={form}
-          style={{ marginTop: "10px" }}
+          style={{marginTop: '10px'}}
           name="basic"
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
@@ -290,13 +275,13 @@ const Dashboard = () => {
             <Col span={8}>
               <Form.Item
                 name="text"
-                rules={[{ required: true, message: "Хайх утга оруулна уу" }]}
+                rules={[{required: true, message: 'Хайх утга оруулна уу'}]}
               >
                 <AutoComplete
                   // dataSource={dataSource}
 
                   // options={options}
-                  style={{ width: "100%" }}
+                  style={{width: '100%'}}
                   onSelect={(value, option) => onSelectAuto(value, option)}
                   onSearch={onSearchAuto}
                   placeholder="Байршил хайх"
@@ -317,10 +302,10 @@ const Dashboard = () => {
             <Col span={4}>
               <Form.Item
                 name="tuneType"
-                rules={[{ required: true, message: "Өдрийн төрөл сонгон уу" }]}
+                rules={[{required: true, message: 'Өдрийн төрөл сонгоно уу'}]}
               >
                 <Select
-                  defaultValue="Бүтэн өдөр"
+                  placeholder="Өдрийн төрөл"
                   className="selectday"
                   onChange={onChangeDay}
                 >
@@ -333,39 +318,39 @@ const Dashboard = () => {
             <Col span={4}>
               <Form.Item
                 name="startdate"
-                rules={[{ required: true, message: "Эхлэх огноо сонгоно уу" }]}
+                rules={[{required: true, message: 'Эхлэх огноо сонгоно уу'}]}
               >
                 <DatePicker
                   format="YYYY-MM-DD HH:mm"
                   placeholder="Эхлэх огноо"
-                  showTime={{ defaultValue: moment("00:00", "HH:mm") }}
+                  showTime={{defaultValue: moment('00:00', 'HH:mm')}}
                   className="selectdates"
                   onChange={onChangeStartDate}
                 />
-              </Form.Item>{" "}
+              </Form.Item>{' '}
             </Col>
             <Col span={4}>
               <Form.Item
                 name="enddate"
-                rules={[{ required: true, message: "Дуусах огноо сонгоно уу" }]}
+                rules={[{required: true, message: 'Дуусах огноо сонгоно уу'}]}
               >
                 <DatePicker
                   format="YYYY-MM-DD HH:mm"
                   placeholder="Дуусах огноо"
-                  showTime={{ defaultValue: moment("00:00", "HH:mm") }}
+                  showTime={{defaultValue: moment('00:00', 'HH:mm')}}
                   className="selectdates"
                   onChange={onChangeEndDate}
                 />
               </Form.Item>
             </Col>
             <Col span={4}>
-              <Button htmlType="submit" type="primary" style={{ width: "63%" }}>
+              <Button htmlType="submit" type="primary" style={{width: '63%'}}>
                 Хайх
               </Button>
               <Button
                 htmlType="button"
                 onClick={onReset}
-                style={{ width: "35%" }}
+                style={{width: '35%'}}
               >
                 Цэвэрлэх
               </Button>
@@ -373,9 +358,9 @@ const Dashboard = () => {
           </Row>
         </Form>
       </Header>
-      <Layout style={{ background: "#F8FAFC!important" }}>
+      <Layout style={{background: '#F8FAFC!important'}}>
         <Content>
-          <div style={{ height: "100vh", width: "100%" }}>
+          <div style={{height: '100vh', width: '100%'}}>
             <MapWithAMarkerClusterer
               markers={markers}
               defaultCenter={defaultCenter}
@@ -396,9 +381,9 @@ const Dashboard = () => {
                         <div>
                           <Image
                             src={
-                              item.park.parkingSpaceImage
-                                ? IMG_URL + item.park.parkingSpaceImage
-                                : "/pexels-photo-3349460 1.png"
+                              item.park.parkingSpaceImage ?
+                                IMG_URL + item.park.parkingSpaceImage :
+                                '/pexels-photo-3349460 1.png'
                             }
                             width="209.58px"
                             preview={false}
@@ -408,16 +393,16 @@ const Dashboard = () => {
                           <Col
                             span={24}
                             style={{
-                              background: "rgba(222, 226, 233, 0.2)",
-                              borderRadius: "24px",
-                              padding: "13px 23px",
-                              display: "inline-flex",
-                              textAlign: "center",
-                              justifyContent: "center",
+                              background: 'rgba(222, 226, 233, 0.2)',
+                              borderRadius: '24px',
+                              padding: '13px 23px',
+                              display: 'inline-flex',
+                              textAlign: 'center',
+                              justifyContent: 'center',
                             }}
                           >
                             {item.park && item.park.floorNumber ? (
-                              <div style={{ marginRight: "13px" }}>
+                              <div style={{marginRight: '13px'}}>
                                 {!isBase64(item.park.floorNumber) ? (
                                   <Image
                                     preview={false}
@@ -437,7 +422,7 @@ const Dashboard = () => {
                               </div>
                             ) : null}
                             {item.park && item.park.entranceLock ? (
-                              <div style={{ marginRight: "13px" }}>
+                              <div style={{marginRight: '13px'}}>
                                 <Image
                                   preview={false}
                                   width={18}
@@ -446,7 +431,7 @@ const Dashboard = () => {
                               </div>
                             ) : null}
                             {item.park && item.park.isNumbering ? (
-                              <div style={{ marginRight: "13px" }}>
+                              <div style={{marginRight: '13px'}}>
                                 <Image
                                   preview={false}
                                   width={18}
@@ -455,7 +440,7 @@ const Dashboard = () => {
                               </div>
                             ) : null}
                             {item.park && item.park.capacity ? (
-                              <div style={{ marginRight: "13px" }}>
+                              <div style={{marginRight: '13px'}}>
                                 <Image
                                   preview={false}
                                   width={18}
@@ -464,7 +449,7 @@ const Dashboard = () => {
                               </div>
                             ) : null}
                             {item.park && item.park.type ? (
-                              <div style={{ marginRight: "13px" }}>
+                              <div style={{marginRight: '13px'}}>
                                 <Image
                                   preview={false}
                                   width={18}
@@ -473,7 +458,7 @@ const Dashboard = () => {
                               </div>
                             ) : null}
                             {item.park && item.park.returnRoutes ? (
-                              <div style={{ marginRight: "13px" }}>
+                              <div style={{marginRight: '13px'}}>
                                 <Image
                                   preview={false}
                                   width={18}
@@ -485,7 +470,7 @@ const Dashboard = () => {
                         </Row>
                       </Col>
                       <Col span="12" className="descriptionSide">
-                        <div className="title" style={{ marginBottom: "5px" }}>
+                        <div className="title" style={{marginBottom: '5px'}}>
                           {item.residence.residenceName}
                         </div>
 
@@ -507,15 +492,15 @@ const Dashboard = () => {
                           <Col
                             span="2"
                             style={{
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
                             }}
                           >
                             <Image
                               preview={false}
                               width="10px"
-                              src={"/images/icon/location_on.png"}
+                              src={'/images/icon/location_on.png'}
                             ></Image>
                           </Col>
                           <Col span="22">{item.residence.address}</Col>
@@ -528,8 +513,8 @@ const Dashboard = () => {
                         </div>
                         <div
                           style={{
-                            display: "flex",
-                            justifyContent: "flex-end",
+                            display: 'flex',
+                            justifyContent: 'flex-end',
                           }}
                         >
                           <Button type="info" onClick={() => showDrawer(item)}>
@@ -564,10 +549,10 @@ const Dashboard = () => {
       >
         <div>
           <div className="descriptionSide">
-            <div className="title" style={{ marginBottom: "5px" }}>
-              {parkingObject.residence
-                ? parkingObject.residence.residenceName
-                : null}
+            <div className="title" style={{marginBottom: '5px'}}>
+              {parkingObject.residence ?
+                parkingObject.residence.residenceName :
+                null}
             </div>
 
             <Rate
@@ -581,56 +566,56 @@ const Dashboard = () => {
                 • 110m
               </Col>
               <Col span={14} className="id">
-                Байршил ID:{" "}
-                {parkingObject.residence
-                  ? parkingObject.residence.residenceBlockCode
-                  : null}
+                Байршил ID:{' '}
+                {parkingObject.residence ?
+                  parkingObject.residence.residenceBlockCode :
+                  null}
               </Col>
             </Row>
             <Row className="addresss">
               <Col
                 span="2"
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
               >
                 <Image
                   preview={false}
                   width="10px"
-                  src={"/images/icon/location_on.png"}
+                  src={'/images/icon/location_on.png'}
                 ></Image>
               </Col>
               <Col span="22">
-                {parkingObject.residence
-                  ? parkingObject.residence.address
-                  : null}
+                {parkingObject.residence ?
+                  parkingObject.residence.address :
+                  null}
               </Col>
             </Row>
           </div>
           <Tabs
-            style={{ marginTop: "10px" }}
+            style={{marginTop: '10px'}}
             defaultActiveKey="1"
             onChange={callback}
             centered
           >
             <TabPane tab="Танилцуулга" key="1">
               <div>
-                <Row style={{ padding: "20px 10px" }}>
+                <Row style={{padding: '20px 10px'}}>
                   <Col
                     span={24}
                     style={{
-                      background: "rgba(222, 226, 233, 0.2)",
-                      borderRadius: "24px",
-                      padding: "13px 23px",
-                      display: "inline-flex",
-                      textAlign: "center",
-                      justifyContent: "center",
+                      background: 'rgba(222, 226, 233, 0.2)',
+                      borderRadius: '24px',
+                      padding: '13px 23px',
+                      display: 'inline-flex',
+                      textAlign: 'center',
+                      justifyContent: 'center',
                     }}
                   >
                     {parkingObject.park && parkingObject.park.floorNumber ? (
-                      <div style={{ marginRight: "13px" }}>
+                      <div style={{marginRight: '13px'}}>
                         <Image
                           preview={false}
                           width={24}
@@ -639,7 +624,7 @@ const Dashboard = () => {
                       </div>
                     ) : null}
                     {parkingObject.park && parkingObject.park.entranceLock ? (
-                      <div style={{ marginRight: "13px" }}>
+                      <div style={{marginRight: '13px'}}>
                         <Image
                           preview={false}
                           width={24}
@@ -648,7 +633,7 @@ const Dashboard = () => {
                       </div>
                     ) : null}
                     {parkingObject.park && parkingObject.park.isNumbering ? (
-                      <div style={{ marginRight: "13px" }}>
+                      <div style={{marginRight: '13px'}}>
                         <Image
                           preview={false}
                           width={24}
@@ -657,7 +642,7 @@ const Dashboard = () => {
                       </div>
                     ) : null}
                     {parkingObject.park && parkingObject.park.capacity ? (
-                      <div style={{ marginRight: "13px" }}>
+                      <div style={{marginRight: '13px'}}>
                         <Image
                           preview={false}
                           width={24}
@@ -666,7 +651,7 @@ const Dashboard = () => {
                       </div>
                     ) : null}
                     {parkingObject.park && parkingObject.park.type ? (
-                      <div style={{ marginRight: "13px" }}>
+                      <div style={{marginRight: '13px'}}>
                         <Image
                           preview={false}
                           width={24}
@@ -675,7 +660,7 @@ const Dashboard = () => {
                       </div>
                     ) : null}
                     {parkingObject.park && parkingObject.park.returnRoutes ? (
-                      <div style={{ marginRight: "13px" }}>
+                      <div style={{marginRight: '13px'}}>
                         <Image
                           preview={false}
                           width={24}
@@ -702,26 +687,26 @@ const Dashboard = () => {
                       <div>
                         {parkingObject.park &&
                         parkingObject.park.floorNumber ? (
-                          <div style={{ marginRight: "13px", display: "flex" }}>
+                          <div style={{marginRight: '13px', display: 'flex'}}>
                             <Image
                               preview={false}
                               width={24}
                               src={IMG_URL + parkingObject.park.floorNumber}
                             />
-                            <div style={{ marginLeft: "25px" }}>
+                            <div style={{marginLeft: '25px'}}>
                               <span>{parkingObject.park.floorNumberLabel}</span>
                             </div>
                           </div>
                         ) : null}
                         {parkingObject.park &&
                         parkingObject.park.entranceLock ? (
-                          <div style={{ marginRight: "13px", display: "flex" }}>
+                          <div style={{marginRight: '13px', display: 'flex'}}>
                             <Image
                               preview={false}
                               width={24}
                               src={IMG_URL + parkingObject.park.entranceLock}
                             />
-                            <div style={{ marginLeft: "25px" }}>
+                            <div style={{marginLeft: '25px'}}>
                               <span>
                                 {parkingObject.park.entranceLockLabel}
                               </span>
@@ -730,50 +715,50 @@ const Dashboard = () => {
                         ) : null}
                         {parkingObject.park &&
                         parkingObject.park.isNumbering ? (
-                          <div style={{ marginRight: "13px", display: "flex" }}>
+                          <div style={{marginRight: '13px', display: 'flex'}}>
                             <Image
                               preview={false}
                               width={24}
                               src={IMG_URL + parkingObject.park.isNumbering}
                             />
-                            <div style={{ marginLeft: "25px" }}>
+                            <div style={{marginLeft: '25px'}}>
                               <span>{parkingObject.park.isNumberingLabel}</span>
                             </div>
                           </div>
                         ) : null}
                         {parkingObject.park && parkingObject.park.capacity ? (
-                          <div style={{ marginRight: "13px", display: "flex" }}>
+                          <div style={{marginRight: '13px', display: 'flex'}}>
                             <Image
                               preview={false}
                               width={24}
                               src={IMG_URL + parkingObject.park.capacity}
                             />
-                            <div style={{ marginLeft: "25px" }}>
+                            <div style={{marginLeft: '25px'}}>
                               <span>{parkingObject.park.capacityLabel}</span>
                             </div>
                           </div>
                         ) : null}
                         {parkingObject.park && parkingObject.park.type ? (
-                          <div style={{ marginRight: "13px", display: "flex" }}>
+                          <div style={{marginRight: '13px', display: 'flex'}}>
                             <Image
                               preview={false}
                               width={24}
                               src={IMG_URL + parkingObject.park.type}
                             />
-                            <div style={{ marginLeft: "25px" }}>
+                            <div style={{marginLeft: '25px'}}>
                               <span>{parkingObject.park.typeLabel}</span>
                             </div>
                           </div>
                         ) : null}
                         {parkingObject.park &&
                         parkingObject.park.returnRoutes ? (
-                          <div style={{ marginRight: "13px", display: "flex" }}>
+                          <div style={{marginRight: '13px', display: 'flex'}}>
                             <Image
                               preview={false}
                               width={24}
                               src={IMG_URL + parkingObject.park.returnRoutes}
                             />
-                            <div style={{ marginLeft: "25px" }}>
+                            <div style={{marginLeft: '25px'}}>
                               <span>
                                 {parkingObject.park.returnRoutesLabel}
                               </span>
@@ -788,7 +773,7 @@ const Dashboard = () => {
                 <Row gutter={16}>
                   <Col className="gutter-row" span={12}>
                     <div style={style}>
-                      <div style={{ color: "#0013D4" }}>Эхлэх хугацаа</div>
+                      <div style={{color: '#0013D4'}}>Эхлэх хугацаа</div>
                       {parkingObject.park &&
                       parkingObject.park.startDateTime ? (
                         <div>
@@ -799,7 +784,7 @@ const Dashboard = () => {
                   </Col>
                   <Col className="gutter-row" span={12}>
                     <div style={style}>
-                      <div style={{ color: "#0013D4" }}>Дуусах хугацаа</div>
+                      <div style={{color: '#0013D4'}}>Дуусах хугацаа</div>
                       {parkingObject.park && parkingObject.park.endDateTime ? (
                         <div>
                           {Helper.removeSec(parkingObject.park.endDateTime)}
@@ -808,24 +793,24 @@ const Dashboard = () => {
                     </div>
                   </Col>
                 </Row>
-                <Row style={{ marginTop: "30px" }}>
+                <Row style={{marginTop: '30px'}}>
                   <Col
                     span={24}
                     style={{
-                      fontWeight: "bold",
-                      fontSize: "14px",
-                      lineHeight: "24px",
+                      fontWeight: 'bold',
+                      fontSize: '14px',
+                      lineHeight: '24px',
                     }}
                   >
-                    <div style={{ color: "#0013D4" }}>Өдөр</div>
+                    <div style={{color: '#0013D4'}}>Өдөр</div>
                     {parkingObject.park && parkingObject.park.totalAtDay ? (
-                      <div style={{ margin: "10px 0px", display: "flex" }}>
+                      <div style={{margin: '10px 0px', display: 'flex'}}>
                         <Image
                           preview={false}
                           width={24}
-                          src={"/images/icon/brightness_5_24px.png"}
+                          src={'/images/icon/brightness_5_24px.png'}
                         ></Image>
-                        <div style={{ color: "#35446d", marginLeft: "10px" }}>
+                        <div style={{color: '#35446d', marginLeft: '10px'}}>
                           Өдөр {parkingObject.park.totalAtDay}
                         </div>
                       </div>
@@ -833,45 +818,45 @@ const Dashboard = () => {
                   </Col>
                 </Row>
 
-                <Row style={{ marginTop: "30px" }}>
+                <Row style={{marginTop: '30px'}}>
                   <Col
                     span={24}
                     style={{
-                      fontWeight: "bold",
-                      fontSize: "14px",
-                      lineHeight: "24px",
+                      fontWeight: 'bold',
+                      fontSize: '14px',
+                      lineHeight: '24px',
                     }}
                   >
-                    <div style={{ color: "#0013D4" }}>
+                    <div style={{color: '#0013D4'}}>
                       Тээврийн хэрэгсэл сонгох
                     </div>
                     {parkingObject.park && parkingObject.park.totalAtDay ? (
-                      <Row style={{ marginTop: "20px" }}>
+                      <Row style={{marginTop: '20px'}}>
                         <Col
                           style={{
-                            borderRadius: "8px",
-                            border: "solid 1px #0013D4",
-                            display: "flex",
-                            alignItems: "center",
+                            borderRadius: '8px',
+                            border: 'solid 1px #0013D4',
+                            display: 'flex',
+                            alignItems: 'center',
                           }}
                         >
-                          <div style={{ padding: "20px" }}>
+                          <div style={{padding: '20px'}}>
                             <Image
                               preview={false}
                               width={24}
-                              src={"/images/icon/directions_car.png"}
+                              src={'/images/icon/directions_car.png'}
                             ></Image>
                           </div>
-                          <div style={{ paddingRight: "20px" }}>
-                            <div style={{ color: "#000000" }}>
-                              {parkingObject.park.vehicleMaker},{" "}
+                          <div style={{paddingRight: '20px'}}>
+                            <div style={{color: '#000000'}}>
+                              {parkingObject.park.vehicleMaker},{' '}
                               {parkingObject.park.vehicleModel}
                             </div>
                             <div
                               style={{
-                                color: "#0013D4",
-                                fontFamily: "Roboto-Bold",
-                                textTransform: "uppercase",
+                                color: '#0013D4',
+                                fontFamily: 'Roboto-Bold',
+                                textTransform: 'uppercase',
                               }}
                             >
                               {parkingObject.park.vehicleNumber}
@@ -882,36 +867,36 @@ const Dashboard = () => {
                     ) : null}
                   </Col>
                 </Row>
-                <Row style={{ marginTop: "30px" }}>
+                <Row style={{marginTop: '30px'}}>
                   <Col
                     span={24}
                     style={{
-                      fontWeight: "bold",
-                      fontSize: "14px",
-                      lineHeight: "24px",
+                      fontWeight: 'bold',
+                      fontSize: '14px',
+                      lineHeight: '24px',
                     }}
                   >
-                    <div style={{ color: "#0013D4" }}>
+                    <div style={{color: '#0013D4'}}>
                       Нийт захиалгын төлбөр
                     </div>
-                    <div style={{ margin: "10px 0px", }}>
-                      <div style={{ color: "#35446d", marginLeft: "10px" }}>
+                    <div style={{margin: '10px 0px'}}>
+                      <div style={{color: '#35446d', marginLeft: '10px'}}>
                         өдөр
                       </div>
-                      <div style={{ color: "#35446d", marginLeft: "10px" }}>
+                      <div style={{color: '#35446d', marginLeft: '10px'}}>
                         0 ₮
                       </div>
                     </div>
                   </Col>
                 </Row>
-                <Row style={{ margin: "30px 0px" }} gutter={16}>
+                <Row style={{margin: '30px 0px'}} gutter={16}>
                   <Col span={12}>
-                    <Button type="primary" size={"large"} block>
+                    <Button type="primary" size={'large'} block>
                       Захиалга нэмэх
                     </Button>
                   </Col>
                   <Col span={12}>
-                    <Button type="primary" size={"large"} block>
+                    <Button type="primary" size={'large'} block>
                       Төлбөр төлөх
                     </Button>
                   </Col>

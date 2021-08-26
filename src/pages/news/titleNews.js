@@ -1,5 +1,4 @@
 import News from "../../components/News";
-import styles from "../../styles/News.module.css";
 import InforNavbar from "../../components/InforNavbar";
 export default function newDetails() {
   return (
@@ -8,7 +7,7 @@ export default function newDetails() {
         <InforNavbar />
       </div>
 
-      <div className={`grid lg: grid-cols-1 ${styles.Infor} mx-32`}></div>
+      <div className={`grid lg: grid-cols-1 mx-32`}></div>
     </div>
   );
 }

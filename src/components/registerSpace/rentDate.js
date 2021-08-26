@@ -1,144 +1,123 @@
-import { Calendar, Badge, Select } from "antd";
-import { Row, Col, Button, Divider, Typography, Radio, Checkbox } from "antd";
-import { useState, useEffect } from "react";
-import { callGet, apiList } from "@api/api";
-import { calendarLocale } from "@constants/constants.js";
-import DayNightColumn from "@components/DayNightColumn";
-import { InfoCircleOutlined } from "@ant-design/icons";
-import moment from "moment";
-import { set } from "js-cookie";
-moment.updateLocale("mn", {
-  weekdaysMin: ["Ням", "Даваа", "Мягмар", "Лхагва", "Пүрэв", "Баасан", "Бямба"],
+import {Calendar, Select} from 'antd';
+import {Row, Col, Button, Divider, Radio} from 'antd';
+import {useState, useEffect} from 'react';
+import {callGet} from '@api/api';
+import {calendarLocale} from '@constants/constants.js';
+import DayNightColumn from '@components/DayNightColumn';
+import {InfoCircleOutlined} from '@ant-design/icons';
+import moment from 'moment';
+moment.updateLocale('mn', {
+  weekdaysMin: ['Ням', 'Даваа', 'Мягмар', 'Лхагва', 'Пүрэв', 'Баасан', 'Бямба'],
 });
 
 const rentDate = (props) => {
   console.log(props);
-  const [filterType, setFilterType] = useState("");
   const [weekData, setWeekData] = useState();
-  const [dayState, setDayState] = useState("Боломжтой");
   const [checked, setChecked] = useState();
 
-  const [mondayMorning, setmondayMorning] = useState("Боломжтой");
-  const [mondayMorningIsShow, setmondayMorningIsShow] = useState(false);
-  const [tuesdayMorning, settuesdayMorning] = useState("Боломжтой");
-  const [tuedayMorningIsShow, settuedayMorningIsShow] = useState(false);
-  const [wednesdayMorning, setwednesdayMorning] = useState("Боломжтой");
-  const [wednesdayMorningIsShow, setwednesdayMorningIsShow] = useState(false);
-  const [thursdayMorning, setthursdayMorning] = useState("Боломжтой");
-  const [thursdayMorningIsShow, setthursdayMorningIsShow] = useState(false);
-  const [fridayMorning, setfridayMorning] = useState("Боломжтой");
-  const [fridayMorningIsShow, setfridayMorningIsShow] = useState(false);
-  const [saturdayMorning, setsaturdayMorning] = useState("Боломжтой");
-  const [saturdayMorningIsShow, setsaturdayMorningIsShow] = useState(false);
-  const [sundayMorning, setsundayMorning] = useState("Боломжтой");
-  const [sundayMorningIsShow, setsundayMorningIsShow] = useState(false);
-  const [celebdayMorning, setcelebdayMorning] = useState("Боломжтой");
-  const [celebdayMorningIsShow, setcelebdayMorningIsShow] = useState(false);
-  const [mondayNight, setmondayNight] = useState("Боломжтой");
-  const [mondayNightIsShow, setmondayNightIsShow] = useState(false);
-  const [tuesdayNight, settuesdayNight] = useState("Боломжтой");
-  const [tuesdayNightIsShow, settuesdayNightIsShow] = useState(false);
-  const [wednesdayNight, setwednesdayNight] = useState("Боломжтой");
-  const [wednesdayNightIsShow, setwednesdayNightIsShow] = useState(false);
-  const [thursdayNight, setthursdayNight] = useState("Боломжтой");
-  const [thursdayNightIsShow, setthursdayNightIsShow] = useState(false);
-  const [fridayNight, setfridayNight] = useState("Боломжтой");
-  const [fridayNightIsShow, setfridayNightIsShow] = useState(false);
-  const [saturdayNight, setsaturdayNight] = useState("Боломжтой");
-  const [saturdayNightIsShow, setsaturdayNightIsShow] = useState(false);
-  const [sundayNight, setsundayNight] = useState("Боломжтой");
-  const [sundayNightIsShow, setsundayNightIsShow] = useState(false);
-  const [celebdayNight, setcelebdayNight] = useState("Боломжтой");
-  const [isCalendar, setisCalendar] = useState("Үгүй");
+  const [mondayMorning, setmondayMorning] = useState('Боломжтой');
+  const [tuesdayMorning, settuesdayMorning] = useState('Боломжтой');
+  const [wednesdayMorning, setwednesdayMorning] = useState('Боломжтой');
+  const [thursdayMorning, setthursdayMorning] = useState('Боломжтой');
+  const [fridayMorning, setfridayMorning] = useState('Боломжтой');
+  const [saturdayMorning, setsaturdayMorning] = useState('Боломжтой');
+  const [sundayMorning, setsundayMorning] = useState('Боломжтой');
+  const [mondayNight, setmondayNight] = useState('Боломжтой');
+  const [tuesdayNight, settuesdayNight] = useState('Боломжтой');
+  const [wednesdayNight, setwednesdayNight] = useState('Боломжтой');
+  const [thursdayNight, setthursdayNight] = useState('Боломжтой');
+  const [fridayNight, setfridayNight] = useState('Боломжтой');
+  const [saturdayNight, setsaturdayNight] = useState('Боломжтой');
+  const [sundayNight, setsundayNight] = useState('Боломжтой');
 
   const [daySplitId, setDaySplitId] = useState();
   const [nightSplitId, setNightSplit] = useState();
 
   const onChangeViewCalendar = (e) => {
     setChecked(e.target.value);
-    let data = {
+    const data = {
       dayOfWeek: [
         {
           day: 1,
-          timeSplitDescription: "Өдөр",
+          timeSplitDescription: 'Өдөр',
           timeSplitId: Number(daySplitId),
           spaceStatusDescription: mondayMorning,
         },
         {
           day: 1,
-          timeSplitDescription: "Шөнө",
+          timeSplitDescription: 'Шөнө',
           timeSplitId: Number(nightSplit),
           spaceStatusDescription: mondayNight,
         },
         {
           day: 2,
-          timeSplitDescription: "Өдөр",
+          timeSplitDescription: 'Өдөр',
           timeSplitId: Number(daySplitId),
           spaceStatusDescription: tuesdayMorning,
         },
         {
           day: 2,
-          timeSplitDescription: "Шөнө",
+          timeSplitDescription: 'Шөнө',
           timeSplitId: Number(nightSplit),
           spaceStatusDescription: tuesdayNight,
         },
         {
           day: 3,
-          timeSplitDescription: "Өдөр",
+          timeSplitDescription: 'Өдөр',
           timeSplitId: Number(daySplitId),
           spaceStatusDescription: wednesdayMorning,
         },
         {
           day: 3,
-          timeSplitDescription: "Шөнө",
+          timeSplitDescription: 'Шөнө',
           timeSplitId: Number(nightSplit),
           spaceStatusDescription: wednesdayNight,
         },
         {
           day: 4,
-          timeSplitDescription: "Өдөр",
+          timeSplitDescription: 'Өдөр',
           timeSplitId: Number(daySplitId),
           spaceStatusDescription: thursdayMorning,
         },
         {
           day: 4,
-          timeSplitDescription: "Шөнө",
+          timeSplitDescription: 'Шөнө',
           timeSplitId: Number(nightSplit),
           spaceStatusDescription: thursdayNight,
         },
         {
           day: 5,
-          timeSplitDescription: "Өдөр",
+          timeSplitDescription: 'Өдөр',
           timeSplitId: Number(daySplitId),
           spaceStatusDescription: fridayMorning,
         },
         {
           day: 5,
-          timeSplitDescription: "Шөнө",
+          timeSplitDescription: 'Шөнө',
           timeSplitId: Number(nightSplit),
           spaceStatusDescription: fridayNight,
         },
         {
           day: 6,
-          timeSplitDescription: "Өдөр",
+          timeSplitDescription: 'Өдөр',
           timeSplitId: Number(daySplitId),
           spaceStatusDescription: saturdayMorning,
         },
         {
           day: 6,
-          timeSplitDescription: "Шөнө",
+          timeSplitDescription: 'Шөнө',
           timeSplitId: Number(nightSplit),
           spaceStatusDescription: saturdayNight,
         },
         {
           day: 0,
-          timeSplitDescription: "Өдөр",
+          timeSplitDescription: 'Өдөр',
           timeSplitId: Number(daySplitId),
           spaceStatusDescription: sundayMorning,
         },
         {
           day: 0,
-          timeSplitDescription: "Шөнө",
+          timeSplitDescription: 'Шөнө',
           timeSplitId: Number(nightSplit),
           spaceStatusDescription: sundayNight,
         },
@@ -147,22 +126,22 @@ const rentDate = (props) => {
     setWeekData(data);
   };
   const timeSplit = [
-    { id: 1, name: "Боломжтой" },
-    { id: 2, name: "Боломжгүй" },
+    {id: 1, name: 'Боломжтой'},
+    {id: 2, name: 'Боломжгүй'},
   ];
-  function getListData(value) {
-    let array = [];
+  const getListData = (value) =>{
+    const array = [];
 
     weekData.dayOfWeek.map((item) => {
       switch (item.day) {
         case value.day():
-          if (item.spaceStatusDescription === "Боломжтой") {
+          if (item.spaceStatusDescription === 'Боломжтой') {
             array.push({
               type: item.spaceStatusDescription,
               content: item.timeSplitDescription,
             });
           }
-          if (item.spaceStatusDescription === "Боломжгүй") {
+          if (item.spaceStatusDescription === 'Боломжгүй') {
             array.push({
               type: item.spaceStatusDescription,
               content: item.timeSplitDescription,
@@ -173,17 +152,17 @@ const rentDate = (props) => {
       }
     });
     return array || [];
-  }
-  function dateCellRender(value) {
+  };
+  const dateCellRender = (value) => {
     const listData = getListData(value);
     console.log(listData);
     return (
       <ul className="events">
         {listData.map((item) => (
-          <li key={item.content} style={{ height: "15px" }}>
+          <li key={item.content} style={{height: '15px'}}>
             <span
-              style={{ fontSize: "10px" }}
-              className={item.type === "Боломжтой" ? "Success" : "NotSuccess"}
+              style={{fontSize: '10px'}}
+              className={item.type === 'Боломжтой' ? 'Success' : 'NotSuccess'}
             >
               {item.type}
             </span>
@@ -191,25 +170,25 @@ const rentDate = (props) => {
         ))}
       </ul>
     );
-  }
+  };
 
-  function getMonthData(value) {
+  const getMonthData = (value) => {
     if (value.month() === 8) {
       return 1394;
     }
-  }
+  };
 
-  function monthCellRender(value) {
+  const monthCellRender = (value) => {
     const num = getMonthData(value);
     return num ? (
-      <div className="notes-month" style={{ height: "50px" }}>
+      <div className="notes-month" style={{height: '50px'}}>
         <section>{num}</section>
         <span>Backlog number</span>
       </div>
     ) : null;
-  }
+  };
   useEffect(async () => {
-    const data = await callGet("/parkingspace/timesplit");
+    const data = await callGet('/parkingspace/timesplit');
     console.log(data);
     setDaySplitId(data.daySplit.id);
     setNightSplit(data.nightSplit.id);
@@ -220,17 +199,17 @@ const rentDate = (props) => {
       <Row offset={4}>
         <p
           style={{
-            color: "blue",
-            fontSize: "20px",
-            marginTop: "50px",
-            marginLeft: "100px",
+            color: 'blue',
+            fontSize: '20px',
+            marginTop: '50px',
+            marginLeft: '100px',
           }}
         >
           <b> Түрээслэх өдөр</b>
         </p>
       </Row>
       <Row>
-        <p style={{ fontSize: "12px", marginLeft: "100px" }}>
+        <p style={{fontSize: '12px', marginLeft: '100px'}}>
           Тухайн зогсоолийн байрлал, дугаарлалт харагдаж буй зогсоолыг олоход
           тохиромжтой олоход тохиромжтой зураг хийнэ.
         </p>
@@ -239,7 +218,7 @@ const rentDate = (props) => {
         <Col span={10}>
           <Row
             style={{
-              marginLeft: "100px",
+              marginLeft: '100px',
             }}
           >
             <Button
@@ -248,9 +227,9 @@ const rentDate = (props) => {
               //     filterType === "AV" ? "activeButton" : ""
               //   }`}
               style={{
-                backgroundColor: "#33FFFC",
-                color: "#76E8AA",
-                border: "1px solid #00F9B8",
+                backgroundColor: '#33FFFC',
+                color: '#76E8AA',
+                border: '1px solid #00F9B8',
               }}
             >
               AV
@@ -261,19 +240,19 @@ const rentDate = (props) => {
               //     filterType === "UN" ? "activeButton" : ""
               //   }`}
               style={{
-                marginLeft: "10px",
-                backgroundColor: "gray",
+                marginLeft: '10px',
+                backgroundColor: 'gray',
               }}
             >
               UN
             </Button>
 
-            <p style={{ marginLeft: "10px", fontSize: "16px" }}>
+            <p style={{marginLeft: '10px', fontSize: '16px'}}>
               Тохиргоо хийх
             </p>
             <Divider className={`stateDivider`} />
           </Row>
-          <Row style={{ marginLeft: "100px" }}>
+          <Row style={{marginLeft: '100px'}}>
             <Col span={6} offset={1}></Col>
             <Col span={6} offset={1}>
               Өдөр|08:00-18:30
@@ -283,10 +262,10 @@ const rentDate = (props) => {
             </Col>
           </Row>
           <Row
-            style={{ marginLeft: "100px", marginTop: "5px" }}
+            style={{marginLeft: '100px', marginTop: '5px'}}
             className={`pickWeekDayState`}
           >
-            <Col span={4} offset={3} style={{ fontSize: "15px" }}>
+            <Col span={4} offset={3} style={{fontSize: '15px'}}>
               Ням
             </Col>
             <Col span={5} offset={1}>
@@ -297,7 +276,7 @@ const rentDate = (props) => {
                 }}
                 value={sundayMorning}
                 className={
-                  sundayMorning === "Боломжтой" ? "Surrender" : "NotSurrender"
+                  sundayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                 }
               >
                 {timeSplit.map((item) => (
@@ -315,7 +294,7 @@ const rentDate = (props) => {
                 }}
                 value={sundayNight}
                 className={
-                  sundayNight === "Боломжтой" ? "Surrender" : "NotSurrender"
+                  sundayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                 }
               >
                 {timeSplit.map((item) => (
@@ -326,12 +305,12 @@ const rentDate = (props) => {
               </Select>
             </Col>
           </Row>
-          {/*Даваа гараг*/}
+          {/* Даваа гараг*/}
           <Row
-            style={{ marginLeft: "100px", marginTop: "5px" }}
+            style={{marginLeft: '100px', marginTop: '5px'}}
             className={`pickWeekDayState`}
           >
-            <Col span={4} offset={3} style={{ fontSize: "15px" }}>
+            <Col span={4} offset={3} style={{fontSize: '15px'}}>
               Даваа
             </Col>
             <Col span={5} offset={1}>
@@ -342,7 +321,7 @@ const rentDate = (props) => {
                 }}
                 value={mondayMorning}
                 className={
-                  mondayMorning === "Боломжтой" ? "Surrender" : "NotSurrender"
+                  mondayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                 }
               >
                 {timeSplit.map((item) => (
@@ -360,7 +339,7 @@ const rentDate = (props) => {
                 }}
                 value={mondayNight}
                 className={
-                  mondayNight === "Боломжтой" ? "Surrender" : "NotSurrender"
+                  mondayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                 }
               >
                 {timeSplit.map((item) => (
@@ -371,12 +350,12 @@ const rentDate = (props) => {
               </Select>
             </Col>
           </Row>
-          {/*Мягмар гараг */}
+          {/* Мягмар гараг */}
           <Row
-            style={{ marginLeft: "100px", marginTop: "5px" }}
+            style={{marginLeft: '100px', marginTop: '5px'}}
             className={`pickWeekDayState`}
           >
-            <Col span={4} offset={3} style={{ fontSize: "15px" }}>
+            <Col span={4} offset={3} style={{fontSize: '15px'}}>
               Мягмар
             </Col>
             <Col span={5} offset={1}>
@@ -388,7 +367,7 @@ const rentDate = (props) => {
                 }}
                 value={tuesdayMorning}
                 className={
-                  tuesdayMorning === "Боломжтой" ? "Surrender" : "NotSurrender"
+                  tuesdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                 }
               >
                 {timeSplit.map((item) => (
@@ -406,7 +385,7 @@ const rentDate = (props) => {
                 }}
                 value={tuesdayNight}
                 className={
-                  tuesdayNight === "Боломжтой" ? "Surrender" : "NotSurrender"
+                  tuesdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                 }
               >
                 {timeSplit.map((item) => (
@@ -417,12 +396,12 @@ const rentDate = (props) => {
               </Select>
             </Col>
           </Row>
-          {/*Лхагва гараг  */}
+          {/* Лхагва гараг  */}
           <Row
-            style={{ marginLeft: "100px", marginTop: "5px" }}
+            style={{marginLeft: '100px', marginTop: '5px'}}
             className={`pickWeekDayState`}
           >
-            <Col span={4} offset={3} style={{ fontSize: "15px" }}>
+            <Col span={4} offset={3} style={{fontSize: '15px'}}>
               Лхагва
             </Col>
             <Col span={5} offset={1}>
@@ -434,9 +413,9 @@ const rentDate = (props) => {
                 }}
                 value={wednesdayMorning}
                 className={
-                  wednesdayMorning === "Боломжтой"
-                    ? "Surrender"
-                    : "NotSurrender"
+                  wednesdayMorning === 'Боломжтой' ?
+                    'Surrender' :
+                    'NotSurrender'
                 }
               >
                 {timeSplit.map((item) => (
@@ -454,7 +433,7 @@ const rentDate = (props) => {
                 }}
                 value={wednesdayNight}
                 className={
-                  wednesdayNight === "Боломжтой" ? "Surrender" : "NotSurrender"
+                  wednesdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                 }
               >
                 {timeSplit.map((item) => (
@@ -465,12 +444,12 @@ const rentDate = (props) => {
               </Select>
             </Col>
           </Row>
-          {/*Пүрэв гараг */}
+          {/* Пүрэв гараг */}
           <Row
-            style={{ marginLeft: "100px", marginTop: "5px" }}
+            style={{marginLeft: '100px', marginTop: '5px'}}
             className={`pickWeekDayState`}
           >
-            <Col span={4} offset={3} style={{ fontSize: "15px" }}>
+            <Col span={4} offset={3} style={{fontSize: '15px'}}>
               Пүрэв
             </Col>
             <Col span={5} offset={1}>
@@ -481,7 +460,7 @@ const rentDate = (props) => {
                 }}
                 value={thursdayMorning}
                 className={
-                  thursdayMorning === "Боломжтой" ? "Surrender" : "NotSurrender"
+                  thursdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                 }
               >
                 {timeSplit.map((item) => (
@@ -499,7 +478,7 @@ const rentDate = (props) => {
                 }}
                 value={thursdayNight}
                 className={
-                  thursdayNight === "Боломжтой" ? "Surrender" : "NotSurrender"
+                  thursdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                 }
               >
                 {timeSplit.map((item) => (
@@ -510,12 +489,12 @@ const rentDate = (props) => {
               </Select>
             </Col>
           </Row>
-          {/*Баасан гараг */}
+          {/* Баасан гараг */}
           <Row
-            style={{ marginLeft: "100px", marginTop: "5px" }}
+            style={{marginLeft: '100px', marginTop: '5px'}}
             className={`pickWeekDayState`}
           >
-            <Col span={4} offset={3} style={{ fontSize: "15px" }}>
+            <Col span={4} offset={3} style={{fontSize: '15px'}}>
               Баасан
             </Col>
             <Col span={5} offset={1}>
@@ -526,7 +505,7 @@ const rentDate = (props) => {
                 }}
                 value={fridayMorning}
                 className={
-                  fridayMorning === "Боломжтой" ? "Surrender" : "NotSurrender"
+                  fridayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                 }
               >
                 {timeSplit.map((item) => (
@@ -543,7 +522,7 @@ const rentDate = (props) => {
                 }}
                 value={fridayNight}
                 className={
-                  fridayNight === "Боломжтой" ? "Surrender" : "NotSurrender"
+                  fridayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                 }
               >
                 {timeSplit.map((item) => (
@@ -554,24 +533,24 @@ const rentDate = (props) => {
               </Select>
             </Col>
           </Row>
-          {/*Бямба гараг*/}
+          {/* Бямба гараг*/}
           <Row
-            style={{ marginLeft: "100px", marginTop: "5px" }}
+            style={{marginLeft: '100px', marginTop: '5px'}}
             className={`pickWeekDayState`}
           >
-            <Col span={4} offset={3} style={{ fontSize: "15px" }}>
+            <Col span={4} offset={3} style={{fontSize: '15px'}}>
               Бямба
             </Col>
             <Col span={5} offset={1}>
               <Select
                 onChange={(e) => {
                   setsaturdayMorning(e),
-                    setChecked(2),
-                    props.setRentData(weekData);
+                  setChecked(2),
+                  props.setRentData(weekData);
                 }}
                 value={saturdayMorning}
                 className={
-                  saturdayMorning === "Боломжтой" ? "Surrender" : "NotSurrender"
+                  saturdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                 }
               >
                 {timeSplit.map((item) => (
@@ -585,12 +564,12 @@ const rentDate = (props) => {
               <Select
                 onChange={(e) => {
                   setsaturdayNight(e),
-                    setChecked(2),
-                    props.setRentData(weekData);
+                  setChecked(2),
+                  props.setRentData(weekData);
                 }}
                 value={saturdayNight}
                 className={
-                  saturdayNight === "Боломжтой" ? "Surrender" : "NotSurrender"
+                  saturdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                 }
               >
                 {timeSplit.map((item) => (
@@ -601,36 +580,36 @@ const rentDate = (props) => {
               </Select>
             </Col>
           </Row>
-          <Row style={{ marginLeft: "100px", marginTop: "20px" }}>
+          <Row style={{marginLeft: '100px', marginTop: '20px'}}>
             <p
               style={{
-                color: "#141A29",
-                fontSize: "14px",
-                fontFamily: "Helvetica",
-                fontWeight: "normal",
-                fontStyle: "normal",
+                color: '#141A29',
+                fontSize: '14px',
+                fontFamily: 'Helvetica',
+                fontWeight: 'normal',
+                fontStyle: 'normal',
               }}
             >
               Долоо хоногын хувиарыг сарын календарлуу шилжүүлэх үү ?
             </p>
           </Row>
           <Row
-            style={{ marginLeft: "100px", height: "24px" }}
+            style={{marginLeft: '100px', height: '24px'}}
             className={`InfoIconInDayState`}
           >
             <Col span={2}>
               <InfoCircleOutlined
-                style={{ height: "24px", width: "24px", color: "yellow" }}
+                style={{height: '24px', width: '24px', color: 'yellow'}}
               />
             </Col>
             <Col span={22}>
-              <p style={{ fontSize: "12px", fontWeight: 400 }}>
+              <p style={{fontSize: '12px', fontWeight: 400}}>
                 Үгүй гэсэн сонголтыг хийсэн тохиолдолд 7 хоног бүр хуваарийг
                 шинэчлэхийг анхаарна уу!
               </p>
             </Col>
           </Row>
-          <Row style={{ marginLeft: "100px", marginTop: "10px" }}>
+          <Row style={{marginLeft: '100px', marginTop: '10px'}}>
             <Radio.Group onChange={onChangeViewCalendar} value={checked}>
               <Radio value={1}>Тийм</Radio>
               <Radio value={2}>Үгүй</Radio>
@@ -640,14 +619,14 @@ const rentDate = (props) => {
         <Divider
           type="vertical"
           style={{
-            height: "450px ",
-            width: "1px",
-            marginTop: "20px",
+            height: '450px ',
+            width: '1px',
+            marginTop: '20px',
           }}
         />
         {checked === 1 && (
           <Col>
-            <Row style={{ width: "720px" }} className={`rentDate`}>
+            <Row style={{width: '720px'}} className={`rentDate`}>
               <Col span={2}>
                 <DayNightColumn className={`rentCalendarDayNightText`} />
               </Col>
