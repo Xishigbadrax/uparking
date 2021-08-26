@@ -1,12 +1,12 @@
-import axios from "axios";
-import { showMessage } from "../utils/message";
+import axios from 'axios';
+import {showMessage} from '../utils/message';
 import {
   messageType,
   defaultMsg,
   dataType,
   searchOp,
-} from "@constants/constants";
-import baseAxios from "./baseAxios";
+} from '@constants/constants';
+import baseAxios from './baseAxios';
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_BASEURL;
 
@@ -40,7 +40,7 @@ const sList = async (data) => {
 };
 
 const deleteSList = async (code, id) => {
-  return callPost(`ds/crud/delete/${code}`, { id: id });
+  return callPost(`ds/crud/delete/${code}`, {id: id});
 };
 
 /* #endregion */
@@ -73,7 +73,7 @@ const callPost = async (command, data) => {
     // console.log("dsfsdfdsfdsfdsf");
     showMessage(
       messageType.FAILED.type,
-      typeof result.error != "undefined" ? result.error : defaultMsg.error
+      typeof result.error != 'undefined' ? result.error : defaultMsg.error,
     );
     return defaultMsg.error;
   }
@@ -86,7 +86,7 @@ const callPost = async (command, data) => {
     } else {
       showMessage(
         resultData.status,
-        defaultMsg[resultData.status.toLowerCase()]
+        defaultMsg[resultData.status.toLowerCase()],
       );
     }
   }
@@ -95,7 +95,7 @@ const callPost = async (command, data) => {
 };
 
 const apiList = {
-  userUpdate: "/user/update",
+  userUpdate: '/user/update',
 };
 
-export { sListInfo, sList, deleteSList, callGet, callPost, execData, apiList };
+export {sListInfo, sList, deleteSList, callGet, callPost, execData, apiList};

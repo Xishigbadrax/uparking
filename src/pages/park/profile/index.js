@@ -1,9 +1,16 @@
+<<<<<<< HEAD
 import {Row, Col, Card, Alert} from 'antd';
+=======
+import {Menu, Row, Col, Card, Alert} from 'antd';
+>>>>>>> 21be8f1422ec55b13f78d7efeb3d86bdbabeeba1
 import {
   UserOutlined,
   EditOutlined,
   ArrowLeftOutlined,
+<<<<<<< HEAD
 
+=======
+>>>>>>> 21be8f1422ec55b13f78d7efeb3d86bdbabeeba1
 } from '@ant-design/icons';
 import ProfileLayout from '@components/layouts/ProfileLayout';
 import {
@@ -14,7 +21,11 @@ import {
   Select,
   Divider,
 } from 'antd';
+<<<<<<< HEAD
 import {useContext, useState} from 'react';
+=======
+import {useContext, useState, useRef} from 'react';
+>>>>>>> 21be8f1422ec55b13f78d7efeb3d86bdbabeeba1
 import {useEffect} from 'react';
 import {Steps} from 'antd';
 import {callGet, callPost} from '@api/api';
@@ -34,7 +45,12 @@ import Context from '@context/Context';
 //   Marker,
 // } from "react-google-maps";
 
+<<<<<<< HEAD
 
+=======
+const {SubMenu} = Menu;
+const {Content} = Layout;
+>>>>>>> 21be8f1422ec55b13f78d7efeb3d86bdbabeeba1
 const {Option} = Select;
 const {Step} = Steps;
 
@@ -71,7 +87,11 @@ const steps = [
 ];
 
 const Profile = () => {
+<<<<<<< HEAD
   const getBase64 = (img, callback) =>{
+=======
+  const getBase64 = (img, callback) => {
+>>>>>>> 21be8f1422ec55b13f78d7efeb3d86bdbabeeba1
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result));
     reader.readAsDataURL(img);
@@ -275,9 +295,17 @@ const Profile = () => {
       });
       if (res.status === 'success') {
         setCurrent(current + 1);
+<<<<<<< HEAD
       };
     } else if (current === 2) {
       // Үндсэн зургийн мэдээллийг өгөгдлийн санруу бичих
+=======
+      } else {
+      }
+    }
+    // Үндсэн зургийн мэдээллийг өгөгдлийн санруу бичих
+    else if (current === 2) {
+>>>>>>> 21be8f1422ec55b13f78d7efeb3d86bdbabeeba1
       getBase64(componentData.imageParkingGate.file.originFileObj, (image2) =>
         setImageParkingGate(image2),
       );
@@ -296,7 +324,13 @@ const Profile = () => {
       if (res.status === 'success') {
         setCurrent(current + 1);
       }
+<<<<<<< HEAD
     } else if (current === 3) {
+=======
+    }
+    // зогсоолын зургийн мэдээллийг өгөгдлийн санруу бичих
+    else if (current === 3) {
+>>>>>>> 21be8f1422ec55b13f78d7efeb3d86bdbabeeba1
       getBase64(componentData.imageFromGate.file.originFileObj, (image2) => {
         setImageFromGate(image2.substring(24));
       });
@@ -309,6 +343,16 @@ const Profile = () => {
         imageSpaceNumber: imageSpaceNumber,
         parkingSpaceId: 522,
       });
+<<<<<<< HEAD
+=======
+      // if () {
+      //   showMessage(messageType.FAILED.type, res.error);
+      //   return true;
+      // } else {
+      //   console.log(res, "res11111111111111");
+      //   setCurrent(current + 2);
+      // }
+>>>>>>> 21be8f1422ec55b13f78d7efeb3d86bdbabeeba1
       if (res.status === 'success') {
         setCurrent(current + 1);
       }

@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { Bar } from "@ant-design/charts";
-import css from "./_.module.css";
+/* eslint-disable react/prop-types */
+import React from 'react';
+import {Bar} from '@ant-design/charts';
+import css from './_.module.css';
 const DemoBar = ({
   title,
   data,
@@ -9,13 +10,13 @@ const DemoBar = ({
   additionalConfig,
   onReady,
 }) => {
-  var config = {
+  const config = {
     data: data,
     xField: xField,
     yField: yField,
     seriesField: xField,
-    barWidthRatio: 0.9, 
-    legend: { position: "top-left" },
+    barWidthRatio: 0.9,
+    legend: {position: 'top-left'},
     onReady: onReady,
     ...additionalConfig,
   };
