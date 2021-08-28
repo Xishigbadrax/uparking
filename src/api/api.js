@@ -1,12 +1,12 @@
-import axios from "axios";
-import { showMessage } from "../utils/message";
+import axios from 'axios';
+import {showMessage} from '../utils/message';
 import {
   messageType,
   defaultMsg,
   dataType,
   searchOp,
-} from "@constants/constants";
-import baseAxios from "./baseAxios";
+} from '@constants/constants';
+import baseAxios from './baseAxios';
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_BASEURL;
 
@@ -40,14 +40,16 @@ const sList = async (data) => {
 };
 
 const deleteSList = async (code, id) => {
-  return callPost(`ds/crud/delete/${code}`, { id: id });
+  return callPost(`ds/crud/delete/${code}`, {id: id});
 };
 
 /* #endregion */
 
 const callGet = async (command) => {
   const result = await baseAxios.get(command);
-  return result.status === 200 ? result.data : [];
+  if (result.status === 200) return result.data;
+  if (result.status === 201) return result.data;
+  else return [];
 };
 
 const execData = async (code, data, child, deletedIds) => {
@@ -60,13 +62,19 @@ const execData = async (code, data, child, deletedIds) => {
 
 const callPost = async (command, data) => {
   const result = await baseAxios.post(command, data);
+
   if (result.status === 403) {
-    console.log(1111111);
+    // console.log(1111111);
     showMessage(messageType.FAILED.type, result.message);
     return result.message;
   }
   if ((result.status !== 200 && result.status !== 201) || !result.data) {
-    showMessage(messageType.FAILED.type, defaultMsg.error);
+    // console.log(result.error);
+    // console.log("dsfsdfdsfdsfdsf");
+    showMessage(
+      messageType.FAILED.type,
+      typeof result.error != 'undefined' ? result.error : defaultMsg.error,
+    );
     return defaultMsg.error;
   }
   const resultData = result.data;
@@ -78,7 +86,7 @@ const callPost = async (command, data) => {
     } else {
       showMessage(
         resultData.status,
-        defaultMsg[resultData.status.toLowerCase()]
+        defaultMsg[resultData.status.toLowerCase()],
       );
     }
   }
@@ -87,7 +95,7 @@ const callPost = async (command, data) => {
 };
 
 const apiList = {
-  userUpdate: "/user/update",
+  userUpdate: '/user/update',
 };
 
-export { sListInfo, sList, deleteSList, callGet, callPost, execData, apiList };
+export {sListInfo, sList, deleteSList, callGet, callPost, execData, apiList};

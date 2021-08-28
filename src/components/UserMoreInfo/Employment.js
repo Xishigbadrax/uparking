@@ -1,19 +1,13 @@
-import { Form, Input, Button, Grid, Row, Col, Divider } from "antd";
+/* eslint-disable react/prop-types */
+import {Form, Input, Row, Col} from 'antd';
 
-const EmploymentInfo = ({ data }) => {
-
+const EmploymentInfo = ({data}) => {
   const layout = {
     labelCol: {
       span: 12,
     },
     wrapperCol: {
       span: 12,
-    },
-  };
-  const tailLayout = {
-    wrapperCol: {
-      offset: 8,
-      span: 24,
     },
   };
 

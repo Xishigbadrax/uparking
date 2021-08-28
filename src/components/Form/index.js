@@ -1,19 +1,19 @@
-import { useState, useEffect, useContext } from "react";
-import { Row, Col, Form, Button, Space, Typography } from "antd";
-import moment from "moment";
+import {useState, useEffect, useContext} from 'react';
+import {Row, Col, Form, Button, Space, Typography} from 'antd';
+import moment from 'moment';
 import {
   MinusCircleOutlined,
   PlusOutlined,
   SaveOutlined,
-} from "@ant-design/icons";
-import { callGet, apiList, execData } from "@api/api";
-import FormBuild from "./FormBuild";
-import MultiFormBuild from "./MultiFormBuild";
-import { showMessage } from "@utils/message";
-import { messageType, dataType, defaultMsg } from "@constants/constants";
-import Context from "@context/Context";
+} from '@ant-design/icons';
+import {callGet, apiList, execData} from '@api/api';
+import FormBuild from './FormBuild';
+import MultiFormBuild from './MultiFormBuild';
+import {showMessage} from '@utils/message';
+import {messageType, dataType, defaultMsg} from '@constants/constants';
+import Context from '@context/Context';
 
-const { Title } = Typography;
+const {Title} = Typography;
 
 const layout = {
   labelCol: {
@@ -34,7 +34,8 @@ const layout = {
   },
 };
 
-const CustomForm = ({ code, editData, onFinishSuccess }) => {
+// eslint-disable-next-line react/prop-types
+const CustomForm = ({code, editData, onFinishSuccess}) => {
   const ctx = useContext(Context);
   const [items, setItems] = useState([]);
   const [childItems, setChildItems] = useState([]);
@@ -55,7 +56,8 @@ const CustomForm = ({ code, editData, onFinishSuccess }) => {
       form.resetFields();
 
       form.setFieldsValue({
-        id: editData["id"],
+        // eslint-disable-next-line react/prop-types
+        id: editData['id'],
       });
       tmpItems.map((item) => {
         form.setFieldsValue({
@@ -63,9 +65,9 @@ const CustomForm = ({ code, editData, onFinishSuccess }) => {
         });
       });
 
-      let tmpInitialValues = {};
+      const tmpInitialValues = {};
       tmpChildItems.map((childItem) => {
-        let tmpConfig = { id: editData[`${childItem.code.toLowerCase()}_id`] };
+        const tmpConfig = {id: editData[`${childItem.code.toLowerCase()}_id`]};
         childItem.config.map((childItemConfig) => {
           tmpConfig[childItemConfig.name] = filterCase(childItemConfig);
         });
@@ -88,23 +90,23 @@ const CustomForm = ({ code, editData, onFinishSuccess }) => {
   const filterCase = (item) => {
     const type = item.type;
     switch (type) {
-      case dataType.NUMBER:
-      case dataType.SELECT:
-      case dataType.CHECKBOX:
-        return (
-          editData[item.name] ||
+    case dataType.NUMBER:
+    case dataType.SELECT:
+    case dataType.CHECKBOX:
+      return (
+        editData[item.name] ||
           (item.defaultVal != null ? Number(item.defaultVal) : null)
-        );
-      default:
-        return editData[item.name] || item.defaultVal;
+      );
+    default:
+      return editData[item.name] || item.defaultVal;
     }
   };
 
   const onFinish = async (values) => {
     ctx.setIsLoading(true);
-    let childData = [];
+    const childData = [];
     if (values.child !== undefined) {
-      Object.keys(values.child).forEach(function (k) {
+      Object.keys(values.child).forEach(function(k) {
         childData.push({
           code: k,
           data: values.child[k],
@@ -115,9 +117,9 @@ const CustomForm = ({ code, editData, onFinishSuccess }) => {
 
     Object.entries(values).map(([key, value]) => {
       if (moment.isMoment(value)) {
-        if (key.endsWith("time"))
-          values[key] = value.format("YYYY-MM-DD HH:mm:ss");
-        else values[key] = value.format("YYYY-MM-DD");
+        if (key.endsWith('time')) {
+          values[key] = value.format('YYYY-MM-DD HH:mm:ss');
+        } else values[key] = value.format('YYYY-MM-DD');
       }
     });
 
@@ -151,8 +153,8 @@ const CustomForm = ({ code, editData, onFinishSuccess }) => {
           return (
             <div key={child.code}>
               {child.isMulti === 1 && <Title level={3}>{child.name}</Title>}
-              <Form.List name={["child", child.code]}>
-                {(fields, { add, remove }) => (
+              <Form.List name={['child', child.code]}>
+                {(fields, {add, remove}) => (
                   <>
                     {child.isMulti === 1 && (
                       <Form.Item>
@@ -165,12 +167,12 @@ const CustomForm = ({ code, editData, onFinishSuccess }) => {
                         </Button>
                       </Form.Item>
                     )}
-                    {fields.map(({ key, name, fieldKey, ...restField }) => (
+                    {fields.map(({key, name, fieldKey, ...restField}) => (
                       <div key={key}>
                         {child.isMulti === 1 ? (
                           <Space
                             key={key}
-                            style={{ display: "flex", marginBottom: 8 }}
+                            style={{display: 'flex', marginBottom: 8}}
                             align="baseline"
                           >
                             <MultiFormBuild
@@ -195,10 +197,10 @@ const CustomForm = ({ code, editData, onFinishSuccess }) => {
           );
         })}
 
-      <Form.Item wrapperCol={{ sm: 22 }}>
+      <Form.Item wrapperCol={{sm: 22}}>
         <Button
           loading={ctx.isLoading}
-          style={{ float: "right", marginTop: "40px" }}
+          style={{float: 'right', marginTop: '40px'}}
           type="primary"
           htmlType="submit"
           icon={<SaveOutlined />}

@@ -1,9 +1,9 @@
-import { Calendar, Select, Col, Row, Badge } from "antd";
-import { RightOutlined, LeftOutlined } from "@ant-design/icons";
-import { calendarLocale } from "@constants/constants.js";
-import moment from "moment";
-import { useState, useEffect } from "react";
-import { differenceInCalendarDays } from 'date-fns';
+/* eslint-disable react/prop-types */
+import {Calendar} from 'antd';
+import {calendarLocale} from '@constants/constants.js';
+import moment from 'moment';
+import {useState, useEffect} from 'react';
+import {differenceInCalendarDays} from 'date-fns';
 
 const today = moment();
 export const AcademicYearStart = moment(today)
@@ -15,14 +15,14 @@ export const AcademicYearEnd = moment(today)
   .month(7)
   .date(18);
 
-console.log(AcademicYearEnd, 'AcademicYearEndAcademicYearEnd')
 const CustomCalendar = (props) => {
   const [selectedDate, setselectedDate] = useState([]);
-  const [selectType, setSelectType] = useState("multi");
+  const [selectType, setSelectType] = useState('multi');
+  // eslint-disable-next-line no-unused-vars
   const [value, setValue] = useState(null);
 
   useEffect(() => {
-    if (props.selectType || props.selectType === "single" || props.selectType === "multi") {
+    if (props.selectType || props.selectType === 'single' || props.selectType === 'multi') {
       setSelectType(props.selectType);
     }
   }, [props.selectType]);
@@ -35,36 +35,36 @@ const CustomCalendar = (props) => {
     props.getSelectedDate(selectedDate);
   }, [selectedDate]);
 
-  function onPanelChange(value, mode) {
+  const onPanelChange = (value, mode) => {
     // setselectedDate([]);
-  }
-  function isSameDay(a, b) {
+  };
+  const isSameDay = (a, b) => {
     return differenceInCalendarDays(a, b) === 0;
-  }
-  function dateFullCellRender(value) {
-    const day = moment(value).format("D");
+  };
+  const dateFullCellRender = (value) => {
+    const day = moment(value).format('D');
     const today = moment();
-    let onclickclass = "";
+    let onclickclass = '';
     let style;
     if (
       selectedDate.find((dDate) => isSameDay(dDate.toDate(), value.toDate()))
     ) {
-      onclickclass = "onclickeddate";
+      onclickclass = 'onclickeddate';
     }
     if (isSameDay(today.toDate(), value.toDate())) {
       style = {
-        background: "rgb(34 230 185)",
-        color: "white",
-        marginLeft: "5px",
+        background: 'rgb(34 230 185)',
+        color: 'white',
+        marginLeft: '5px',
       };
     }
     return <div className={`customFullCellRender ant-picker-cell-inner ${onclickclass}`} style={style}><div className="ant-picker-calendar-date-value">{day}</div></div>;
-  }
-  function onSelect(value) {
+  };
+  const onSelect = (value) => {
     let array = [];
-    if (selectType === "multi") {
-      if (selectedDate.find(dDate => isSameDay(dDate.toDate(), value.toDate()))) {
-        array = selectedDate.filter(i => !isSameDay(i.toDate(), value.toDate()));
+    if (selectType === 'multi') {
+      if (selectedDate.find((dDate) => isSameDay(dDate.toDate(), value.toDate()))) {
+        array = selectedDate.filter((i) => !isSameDay(i.toDate(), value.toDate()));
         setselectedDate(array);
       } else {
         setselectedDate([...selectedDate, value]);
@@ -72,14 +72,7 @@ const CustomCalendar = (props) => {
     } else {
       setselectedDate([value]);
     }
-
-
-  }
-  function disabledDate(current) {
-    return [moment(current), moment(current).add(3, 'days')]
-    // Can not select days before today and today
-    // return current && current < moment().endOf('day');
-  }
+  };
   return (
     <div className="site-calendar-customize-header-wrapper">
       <Calendar
@@ -162,7 +155,7 @@ const CustomCalendar = (props) => {
       //   // Remove `validRange` and this will log
       //   console.log(current);
       // }}
-      // validRange={[AcademicYearStart, AcademicYearEnd]} 
+      // validRange={[AcademicYearStart, AcademicYearEnd]}
       />
     </div>
   );

@@ -1,14 +1,15 @@
-import { useState, useContext, useEffect } from "react";
-import { useRouter } from "next/router";
-import { Form, Input, Button, Modal } from "antd";
-import { UserOutlined, LockOutlined, RightOutlined } from "@ant-design/icons";
-import auth_cookie from "@utils/auth";
-import { login } from "@api/auth";
-import { callPost } from "@api/api";
-import { messageType, defaultMsg } from "@constants/constants";
-import { showMessage } from "@utils/message";
-import Context from "@context/Context";
-import MaskedInput from "antd-mask-input";
+import {useState, useContext, useEffect} from 'react';
+import {useRouter} from 'next/router';
+import {Form, Input, Button, Modal} from 'antd';
+import {RightOutlined} from '@ant-design/icons';
+import {login} from '@api/auth';
+import {callPost} from '@api/api';
+// eslint-disable-next-line camelcase
+import auth_cookie from '@utils/auth';
+import {messageType, defaultMsg} from '@constants/constants';
+import {showMessage} from '@utils/message';
+import Context from '@context/Context';
+import MaskedInput from 'antd-mask-input';
 
 const layout = {
   labelCol: {},
@@ -22,38 +23,38 @@ const tailLayout = {
 };
 
 const Login = () => {
-  const [loading, setLoading] = useState(false);
-  const { state, dispatch, setMenuAndPermissions } = useContext(Context);
-  const { auth } = state;
+  const {state, dispatch, setMenuAndPermissions} = useContext(Context);
+  const {auth} = state;
   const router = useRouter();
   const [modalVisible, setModalVisible] = useState(false);
   const [confirmCode, setConfirmCode] = useState(null);
+  // eslint-disable-next-line no-unused-vars
+  const [loading, setLoading]= useState(false);
   const [form] = Form.useForm();
   const handleSubmit = (e) => {
     e.preventDefault();
   };
 
   const onFinish = async (values) => {
-    setLoading(true);
     const res = await login(values);
     if (res.response || res.data === undefined) {
-      if (res.response.data.error === "unauthorized") {
-        //   setModalVisible(true);
-        //   showMessage(messageType.FAILED.type, defaultMsg.newDeviceConfirmErrorTxt);
-        // } else {
-        showMessage(messageType.FAILED.type, defaultMsg.loginErrorTxt);
-      }
+      // if (res.response.data.error === "unauthorized") {
+      //   setModalVisible(true);
+      //   showMessage(messageType.FAILED.type, defaultMsg.newDeviceConfirmErrorTxt);
+      // } else {
+      showMessage(messageType.FAILED.type, defaultMsg.loginErrorTxt);
+      // }
       setLoading(false);
       return;
     }
 
-    if (res.data.error === "invalid_grant") {
+    if (res.data.error === 'invalid_grant') {
       showMessage(messageType.FAILED.type, res.data.error_description);
       setLoading(false);
       return;
     }
     dispatch({
-      type: "AUTH",
+      type: 'AUTH',
       payload: {
         user: res.data,
       },
@@ -68,33 +69,33 @@ const Login = () => {
   useEffect(() => {
     console.log(
       Object.keys(auth).length,
-      "Object.keys(auth).lengthObject.keys(auth).length"
+      'Object.keys(auth).lengthObject.keys(auth).length',
     );
-    if (Object.keys(auth).length !== 0) router.push("/park");
+    if (Object.keys(auth).length !== 0) router.push('/park');
   }, [auth]);
 
   const handleConfirm = async () => {
     try {
       await form.validateFields();
-      callPost("confirmCode", confirmCode);
+      callPost('confirmCode', confirmCode);
       form.resetFields();
       setModalVisible(false);
       handleSubmit();
     } catch (e) {
-      console.log("Хадгалахад алдаа гарлаа");
+      console.log('Хадгалахад алдаа гарлаа');
     }
   };
   const handleClickForgotPassword = async () => {
     try {
-      router.push("/forgot");
+      router.push('/forgot');
     } catch (e) {}
   };
 
-  const pushrouter = (route) => {
-    // if (router.pathname ==='/login'){
-    // router.push('/'+ route)
-    // }
-  };
+  // const pushrouter = (route) => {
+  //   // if (router.pathname ==='/login'){
+  //   // router.push('/'+ route)
+  //   // }
+  // };
   return (
     <div>
       <div className="login">
@@ -447,16 +448,16 @@ const Login = () => {
                   <Button
                     className="loginbutton activebutton"
                     onClick={() => {
-                      console.log(router.push("/login"));
+                      console.log(router.push('/login'));
                     }}
                     type="text"
                   >
-                    Нэвтрэх <div className="activeLine"></div>{" "}
+                    Нэвтрэх <div className="activeLine"></div>{' '}
                   </Button>
                   <Button
                     className="registerbutton"
                     onClick={() => {
-                      console.log(router.push("/register"));
+                      console.log(router.push('/register'));
                     }}
                     type="text"
                   >
@@ -469,7 +470,7 @@ const Login = () => {
                     rules={[
                       {
                         required: true,
-                        message: "Утасны дугаараа оруулна уу",
+                        message: 'Утасны дугаараа оруулна уу',
                       },
                     ]}
                   >
@@ -481,7 +482,7 @@ const Login = () => {
                     rules={[
                       {
                         required: true,
-                        message: "Нууц үг",
+                        message: 'Нууц үг',
                       },
                     ]}
                   >
@@ -510,7 +511,7 @@ const Login = () => {
                         !form.isFieldsTouched(true) ||
                         !!form
                           .getFieldsError()
-                          .filter(({ errors }) => errors.length).length
+                          .filter(({errors}) => errors.length).length
                       }
                     >
                       Нэвтрэх
@@ -538,12 +539,12 @@ const Login = () => {
             key="confirmForm"
             form={form}
             style={{
-              width: "230px",
-              marginLeft: "auto",
-              marginRight: "auto",
+              width: '230px',
+              marginLeft: 'auto',
+              marginRight: 'auto',
             }}
           >
-            <p key="name" style={{ fontSize: "20px" }}>
+            <p key="name" style={{fontSize: '20px'}}>
               Баталгаажуулах код оруулна уу
             </p>
             <Form.Item
@@ -551,7 +552,7 @@ const Login = () => {
               rules={[
                 {
                   required: true,
-                  message: "Заавал бөглөх талбар.",
+                  message: 'Заавал бөглөх талбар.',
                 },
               ]}
             >

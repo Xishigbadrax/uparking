@@ -1,7 +1,8 @@
-import { Form, Input, Button, Grid, Row, Col, Image } from "antd";
+/* eslint-disable react/prop-types */
+import {Form, Input, Grid, Row, Col} from 'antd';
 
-const ProfileInfo = ({ data }) => {
-
+// eslint-disable-next-line react/prop-types
+const ProfileInfo = ({data}) => {
   const screens = Grid.useBreakpoint();
 
   const layout = {
@@ -12,18 +13,12 @@ const ProfileInfo = ({ data }) => {
       span: 16,
     },
   };
-  const tailLayout = {
-    wrapperCol: {
-      offset: 8,
-      span: 24,
-    },
-  };
 
   return (
     <>
-    <Row>
-      <Col span={screens.xl ? 12 : 24}>
-        {data &&
+      <Row>
+        <Col span={screens.xl ? 12 : 24}>
+          {data &&
           <Form {...layout}>
             <Form.Item label="Овог">
               <Input value={data.last_name} />
@@ -38,11 +33,11 @@ const ProfileInfo = ({ data }) => {
               <Input value={data.username} />
             </Form.Item>
           </Form>
-        }
-      </Col>
-    </Row>
+          }
+        </Col>
+      </Row>
     </>
-  )
-}
+  );
+};
 
 export default ProfileInfo;

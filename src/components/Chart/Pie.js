@@ -1,15 +1,16 @@
-import { Pie } from '@ant-design/charts';
-import css from "./_.module.css";
+import {Pie} from '@ant-design/charts';
+import css from './_.module.css';
 
-const PieChart = ({ title, data, angleField, colorField, colors,additionalConfig}) => {
+// eslint-disable-next-line react/prop-types
+const PieChart = ({title, data, angleField, colorField, colors, additionalConfig}) => {
   if (data === undefined) {
-    return <></>
+    return <></>;
   }
 
   const config = {
     appendPadding: 10,
     data: data,
-    color:colors,
+    color: colors,
     angleField: angleField,
     colorField: colorField,
     radius: 0.8,
@@ -19,18 +20,18 @@ const PieChart = ({ title, data, angleField, colorField, colors,additionalConfig
       content: '{name}: {percentage}',
     },
     legend: {
-      position: 'bottom'
+      position: 'bottom',
     },
-    interactions: [{ type: 'element-selected' }, { type: 'element-active' }],
-    ...additionalConfig
-  }
+    interactions: [{type: 'element-selected'}, {type: 'element-active'}],
+    ...additionalConfig,
+  };
 
   return (
     <div className={css.chartDiv}>
       <h1 className={css.chartTitle}>{title}</h1>
       <Pie {...config} />
     </div>
-  )
-}
+  );
+};
 
 export default PieChart;

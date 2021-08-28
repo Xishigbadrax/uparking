@@ -4,7 +4,7 @@ const profileMenu = [
     name: 'Миний мэдээлэл',
     link: 'park/profile',
     icon: 'UserOutlined',
-    parentId: null
+    parentId: null,
 
   },
   {
@@ -12,14 +12,14 @@ const profileMenu = [
     name: 'Хянах самбар',
     link: 'park/profile/dashboard',
     icon: 'AppstoreOutlined',
-    parentId: null
+    parentId: null,
   },
   {
     id: 3,
     name: 'Миний захиалга',
     link: 'park/profile/order',
     icon: 'SettingOutlined',
-    parentId: null
+    parentId: null,
 
   },
   {
@@ -27,7 +27,7 @@ const profileMenu = [
     name: 'Тохиргоо',
     link: 'park/profile/settings',
     icon: 'SettingOutlined',
-    parentId: null
+    parentId: null,
 
   },
   {
@@ -35,7 +35,7 @@ const profileMenu = [
     name: 'Тусламж',
     link: 'park/profile/help',
     icon: 'QuestionCircleOutlined',
-    parentId: null
+    parentId: null,
 
   },
   {
@@ -43,9 +43,9 @@ const profileMenu = [
     name: 'Гарах',
     link: 'logout',
     icon: 'LoginOutlined',
-    parentId: null
+    parentId: null,
 
-  }
-]
+  },
+];
 
-export {profileMenu}
+export {profileMenu};

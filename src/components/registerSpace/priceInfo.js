@@ -1,140 +1,328 @@
-import { Row, Col } from "antd";
+import {callGet} from '@api/api';
 
-import { Form, Input, Label, Divider } from "antd";
-import { useState } from "react";
+import {Row, Col} from 'antd';
+import Helper from '@utils/helper';
+import {Form, Input, Divider} from 'antd';
+import {useEffect, useState} from 'react';
 
-const priceInfo = () => {
-  const [rentInfoData, setRentInfoData] = useState();
-  const onChangeDayofWinterPrice = (e) => {};
-  const onChangeDayofSummerPrice = (e) => {
-    setRentInfoData({});
-  };
-  const onChangeNightofWInterPrice = (e) => {};
-  const onChangeNightofSummerPrice = (e) => {};
-  const onChangeWinterDay = (e) => {};
-  const onChangeSummerDay = (e) => {
-    console.log(rentInfoData);
-  };
-  const onChangeTimePrice = (e) => {
-    setRentInfoData({ ...rentInfoData, hourlyPrice: e.target.value });
-  };
+const priceInfo = (props) => {
+  const [dayWinterValue, setdayWinterValue] = useState(null);
+  const [daySummerValue, setdaySummerValue] = useState(null);
+  const [nightWinterValue, setnightWinterValue] = useState(null);
+  const [nightSummerValue, setnightSummerValue] = useState(null);
+  const [fullDayWinterValue, setfullDayWinterValue] = useState(null);
+  const [fullDaySummerValue, setfullDaySummerValue] = useState(null);
+  const [hourlyPrice, sethourlyPrice] = useState(null);
+  const [priceData, setPriceData] = useState();
+
+  useEffect(async () => {
+    const bigData = await callGet('/parkingspace/timesplit');
+    console.log(bigData);
+    setPriceData(bigData);
+    const total = bigData.timeSet1.price / bigData.timeSet1.value;
+    setdayWinterValue(bigData.daySplit.winterPrice);
+    setdaySummerValue(bigData.daySplit.summerPrice);
+    setnightSummerValue(bigData.nightSplit.summerPrice);
+    setnightWinterValue(bigData.nightSplit.winterPrice);
+    setfullDaySummerValue(bigData.fullDaySplit.summerPrice);
+    setfullDayWinterValue(bigData.fullDaySplit.winterPrice);
+    sethourlyPrice(total.toString());
+  }, []);
+
+  useEffect(() => {
+    {
+      props.form.setFieldsValue({
+        hourlyPrice: hourlyPrice,
+      });
+    }
+  }, [sethourlyPrice]);
   return (
-    <div className={`h-4/5`}>
+    <div>
+      {props.form.setFieldsValue({
+        daySplitWinterPrice: dayWinterValue,
+        daySplitSummerPrice: daySummerValue,
+        nightSplitWinterPrice: nightWinterValue,
+        nightSplitSummerPrice: nightSummerValue,
+        fullDaySplitWinterPrice: fullDayWinterValue,
+        fullDaySplitSummerPrice: fullDaySummerValue,
+        hourlyPrice: hourlyPrice,
+      })}
       <Row offset={4}>
         <p
           style={{
-            color: "blue",
-            fontSize: "20px",
-            marginTop: "50px",
-            marginLeft: "100px",
+            color: 'blue',
+            fontSize: '20px',
+            marginTop: '20px',
+            marginLeft: '100px',
           }}
         >
           <b> Түрээслэх үнийн мэдээлэл</b>
         </p>
       </Row>
-      <Row style={{ marginLeft: "200px", marginTop: "70px" }}>
-        <Col>
-          <Row>
-            Өдрийн цагаар түрээслэх үнэ
-            <text style={{ color: "blue" }}>
-              <b>|09:00-18:30|</b>
-            </text>
-          </Row>
-          <Form labelCol={{ span: 10 }} layout="vertical">
-            <Form.Item>
-              <label style={{ fontSize: "14px", color: "gray" }}>
-                Өвөл|10.01-03.31
-              </label>
-              <Input type="text" onChange={onChangeDayofWinterPrice}></Input>
-              <Divider />
+      <Form
+        labelCol={{span: 10}}
+        layout="vertical"
+        className={'priceInfo'}
+        form={props.form}
+        initialValues={{
+          remember: true,
+        }}
+      >
+        <Row style={{marginTop: '30px'}}>
+          <Col offset={4} span={6}>
+            <Row>
+              Өдрийн цагаар түрээслэх үнэ
+              <p style={{color: 'blue'}}>
+                |
+                {priceData ? (
+                  <b>
+                    {' '}
+                    {priceData.daySplit.start} - {priceData.daySplit.end}
+                  </b>
+                ) : null}
+                |
+              </p>
+            </Row>
+            <label style={{fontSize: '14px', color: 'gray'}}>
+              Өвөл |{' '}
+              {priceData ? (
+                <>
+                  {priceData.daySplit.winterStart} -{' '}
+                  {priceData.daySplit.winterEnd}
+                </>
+              ) : null}
+            </label>
+            <Form.Item
+              name="daySplitWinterPrice"
+              style={{marginTop: '10px'}}
+              rules={[
+                {
+                  required: true,
+                  message: 'Өдрийн цагаар түрээслэх дүнгээ оруулна уу?',
+                },
+              ]}
+            >
+              <Input
+                type="text"
+                onChange={(e) => setdayWinterValue(Number(e.target.value))}
+              />
             </Form.Item>
-            <Form.Item>
-              <label
-                style={{ fontSize: "14px", color: "gray", marginTop: "10px" }}
-              >
-                Зун|04.01-09.31
-              </label>
-              <Input type="text" onChange={onChangeDayofSummerPrice}></Input>
-              <Divider />
+            <Divider />
+            <label
+              style={{fontSize: '14px', color: 'gray', marginTop: '10px'}}
+            >
+              Зун |{' '}
+              {priceData ? (
+                <>
+                  {' '}
+                  {priceData.daySplit.summerStart} -
+                  {priceData.daySplit.summerEnd}
+                </>
+              ) : null}
+            </label>
+            <Form.Item
+              name="daySplitSummerPrice"
+              style={{marginTop: '10px'}}
+              rules={[
+                {
+                  required: true,
+                  message: 'Өдрийн цагаар түрээслэх дүнгээ оруулна уу?',
+                },
+              ]}
+            >
+              <Input
+                type="text"
+                onChange={(e) => setdaySummerValue(Number(e.target.value))}
+              ></Input>
             </Form.Item>
-          </Form>
-          <Row>
-            Шөнийн цагаар түрээслэх үнэ
-            <text style={{ color: "blue" }}>
-              <b>|19:00-8:30|</b>
-            </text>
-          </Row>
-          <Form labelCol={{ span: 10 }} layout="vertical">
-            <Form.Item>
-              <label style={{ fontSize: "14px", color: "gray" }}>
-                Өвөл|10.01-03.31
-              </label>
-              <Input type="text" onChange={onChangeNightofWInterPrice}></Input>
-              <Divider />
+            <Divider />
+            <Row style={{marginTop: '20px'}}>
+              Шөнийн цагаар түрээслэх үнэ
+              <p style={{color: 'blue'}}>
+                {priceData ? (
+                  <b>
+                    | {priceData.nightSplit.start} - {priceData.nightSplit.end}
+                  </b>
+                ) : null}
+              </p>
+            </Row>
+            <label style={{fontSize: '14px', color: 'gray'}}>
+              Өвөл|
+              {priceData ? (
+                <>
+                  {' '}
+                  {priceData.nightSplit.winterStart} -
+                  {priceData.nightSplit.winterEnd}
+                </>
+              ) : null}
+            </label>
+            <Form.Item
+              style={{marginTop: '10px'}}
+              name="nightSplitWinterPrice"
+              rules={[
+                {
+                  required: true,
+                  message: 'Шөнийн цагаар түрээслэх дүнгээ оруулна уу?',
+                },
+              ]}
+            >
+              <Input
+                type="text"
+                onChange={(e) => setnightWinterValue(Number(e.target.value))}
+              ></Input>
             </Form.Item>
-            <Form.Item>
-              <label style={{ fontSize: "14px", color: "gray" }}>
-                Зун|04.01-09.31
-              </label>
-              <Input type="text" onChange={onChangeNightofSummerPrice}></Input>
-              <Divider />
+            <Divider />
+            <label style={{fontSize: '14px', color: 'gray'}}>
+              Зун|
+              {priceData ? (
+                <>
+                  {' '}
+                  {priceData.nightSplit.summerStart} -
+                  {priceData.nightSplit.summerEnd}
+                </>
+              ) : null}
+            </label>
+            <Form.Item
+              style={{marginTop: '10px'}}
+              name="nightSplitSummerPrice"
+              rules={[
+                {
+                  required: true,
+                  message: 'Шөнийн цагаар түрээслэх дүнгээ оруулна уу?',
+                },
+              ]}
+            >
+              <Input
+                type="text"
+                onChange={(e) => setnightSummerValue(Number(e.target.value))}
+              ></Input>
             </Form.Item>
-          </Form>
-        </Col>
-        <Col offset={4}>
-          <Row>
-            Бүтэн өдрийн түрээслэх үнэ
-            <text style={{ color: "blue" }}>
-              <b>|24 цаг|</b>
-            </text>
-          </Row>
-          <Form labelCol={{ span: 10 }} layout="vertical">
-            <Form.Item>
-              <label style={{ fontSize: "14px", color: "gray" }}>
-                Өвөл|10.01-03.31
-              </label>
-              <Input type="text" onChange={onChangeWinterDay}></Input>
-              <Divider />
+            <Divider />
+          </Col>
+          <Col offset={4} span={6}>
+            <Row>
+              Бүтэн өдрийн түрээслэх үнэ
+              <p style={{color: 'blue'}}>
+                <b>|24 цаг|</b>
+              </p>
+            </Row>
+            <label style={{fontSize: '14px', color: 'gray'}}>
+              Өвөл|
+              {priceData ? (
+                <>
+                  {priceData.fullDaySplit.winterStart} -
+                  {priceData.fullDaySplit.winterEnd}
+                </>
+              ) : null}
+            </label>
+            <Form.Item
+              name="fullDaySplitWinterPrice"
+              style={{marginTop: '10px'}}
+              rules={[
+                {
+                  required: true,
+                  message: 'Бүтэн өдрийн түрээслэх дүнгээ оруулна уу?',
+                },
+              ]}
+            >
+              <Input
+                type="text"
+                onChange={(e) => setfullDayWinterValue(Number(e.target.value))}
+              ></Input>
             </Form.Item>
-            <Form.Item>
-              <label style={{ fontSize: "14px", color: "gray" }}>
-                Зун|04.01-09.31
-              </label>
-              <Input type="text" onChange={onChangeSummerDay}></Input>
-              <Divider />
+            <Divider />
+            <label style={{fontSize: '14px', color: 'gray'}}>
+              Зун|{' '}
+              {priceData ? (
+                <>
+                  {priceData.fullDaySplit.summerStart} -
+                  {priceData.fullDaySplit.summerEnd}
+                </>
+              ) : null}
+            </label>
+            <Form.Item
+              style={{marginTop: '10px'}}
+              name="fullDaySplitSummerPrice"
+              rules={[
+                {
+                  required: true,
+                  message: 'Бүтэн өдрийн түрээслэх дүнгээ оруулна уу?',
+                },
+              ]}
+            >
+              <Input
+                type="text"
+                onChange={(e) => setfullDaySummerValue(Number(e.target.value))}
+              ></Input>
             </Form.Item>
-          </Form>
-          <Row>
-            Цагийн түрээслэх үнэ
-            <text style={{ color: "blue" }}>
-              <b>|1 цаг|</b>
-            </text>
-          </Row>
-          <Form labelCol={{ span: 10 }} layout="vertical">
-            <Form.Item>
-              <label style={{ fontSize: "14px", color: "gray" }}>
-                1 цаг түрээслэх
-              </label>
-              <Input type="text" onChange={onChangeTimePrice}></Input>
-              <Divider />
+            <Divider />
+
+            <Row>
+              Цагийн түрээслэх үнэ
+              <p style={{color: 'blue'}}>
+                <b>|1 цаг|</b>
+              </p>
+            </Row>
+            <label style={{fontSize: '14px', color: 'gray'}}>
+              1 цаг түрээслэх
+            </label>
+            <Form.Item
+              style={{marginTop: '10px'}}
+              name="hourlyPrice"
+              rules={[
+                {
+                  required: true,
+                  message: '1 цагаар түрээслэх дүнгээ оруулна уу?',
+                },
+              ]}
+            >
+              <Input
+                type="text"
+                onChange={(value) => sethourlyPrice(Number(value.target.value))}
+              ></Input>
             </Form.Item>
-          </Form>
-          <Row>
-            <Col>
-              <p style={{ fontSize: "12px" }}>Багц 1 | 1-3 цаг|</p>
-              <p>2,500</p>
-            </Col>
-            <Col style={{ marginLeft: "15px" }}>
-              <p style={{ fontSize: "12px" }}>Багц 2 | 3-5 цаг|</p>
-              <p>4,000</p>
-            </Col>
-            <Col style={{ marginLeft: "15px" }}>
-              <p style={{ fontSize: "12px" }}>Багц 3 | 5-8 цаг|</p>
-              <p>6,000</p>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
+            <Divider />
+            <Row>
+              <Col>
+                <p style={{fontSize: '12px'}}>
+                  Багц 1 | {priceData ? priceData.timeSet1.description : null}|
+                </p>
+                <p>
+                  {hourlyPrice ?
+                    Helper.formatValueReverse(
+                      hourlyPrice * priceData.timeSet1.value,
+                    ) + '₮' :
+                    null}
+                </p>
+              </Col>
+              <Col style={{marginLeft: '15px'}}>
+                <p style={{fontSize: '12px'}}>
+                  Багц 2 | {priceData ? priceData.timeSet2.description : null} |
+                </p>
+                <p>
+                  {hourlyPrice ?
+                    Helper.formatValueReverse(
+                      hourlyPrice * priceData.timeSet2.value,
+                    ) + '₮' :
+                    null}
+                </p>
+              </Col>
+              <Col style={{marginLeft: '15px'}}>
+                <p style={{fontSize: '12px'}}>
+                  Багц 3 | {priceData ? priceData.timeSet3.description : null}|
+                </p>
+                <p>
+                  {hourlyPrice ?
+                    Helper.formatValueReverse(
+                      hourlyPrice * priceData.timeSet3.value,
+                    ) + '₮' :
+                    null}
+                </p>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Form>
     </div>
   );
 };

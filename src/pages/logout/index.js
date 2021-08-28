@@ -1,6 +1,7 @@
+// eslint-disable-next-line camelcase
 import auth_cookie from '@utils/auth';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import {useRouter} from 'next/router';
+import {useEffect} from 'react';
 
 const Logout = () => {
   const router = useRouter();
@@ -9,7 +10,7 @@ const Logout = () => {
     router.push('/');
   }, []);
 
-  return <></>
+  return <></>;
 };
 
 export default Logout;

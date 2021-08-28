@@ -1,16 +1,16 @@
-import React, { useState, useCallback, useMemo, useRef } from "react";
-import useWebSocket, { ReadyState } from "react-use-websocket";
-import { Button, Input } from "antd";
-import css from "./_.module.css";
+import React, {useState, useMemo, useRef} from 'react';
+import useWebSocket, {ReadyState} from 'react-use-websocket';
+import {Button, Input} from 'antd';
+import css from './_.module.css';
 
 const WebSocket = () => {
-  //Public API that will echo messages sent to it back to the client
-  const [socketUrl, setSocketUrl] = useState("wss://echo.websocket.org");
+  // Public API that will echo messages sent to it back to the client
+  const [socketUrl, setSocketUrl] = useState('wss://echo.websocket.org');
   const [message, setMessage] = useState();
   const [socketUrlTmp, setSocketUrlTmp] = useState();
   const messageHistory = useRef([]);
 
-  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
+  const {sendMessage, lastMessage, readyState} = useWebSocket(socketUrl);
 
   messageHistory.current = useMemo(() => {
     return messageHistory.current.concat(lastMessage);
@@ -28,11 +28,11 @@ const WebSocket = () => {
     setMessage(null);
   };
   const connectionStatus = {
-    [ReadyState.CONNECTING]: "Connecting",
-    [ReadyState.OPEN]: "Open",
-    [ReadyState.CLOSING]: "Closing",
-    [ReadyState.CLOSED]: "Closed",
-    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
+    [ReadyState.CONNECTING]: 'Connecting',
+    [ReadyState.OPEN]: 'Open',
+    [ReadyState.CLOSING]: 'Closing',
+    [ReadyState.CLOSED]: 'Closed',
+    [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
   }[readyState];
 
   return (
@@ -68,7 +68,7 @@ const WebSocket = () => {
       {lastMessage ? <span>Last message: {lastMessage.data}</span> : null}
       <ul>
         {messageHistory.current.map((message, idx) =>
-          message !== null ? <li key={idx}>{message.data}</li> : null
+          message !== null ? <li key={idx}>{message.data}</li> : null,
         )}
       </ul>
     </div>

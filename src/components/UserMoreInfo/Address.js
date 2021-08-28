@@ -1,7 +1,8 @@
-import { Form, Input, Button, Grid, Row, Col, Divider } from "antd";
+/* eslint-disable react/prop-types */
+import {Form, Input, Row, Col} from 'antd';
 
-const Address = ({ data }) => {
-
+// eslint-disable-next-line react/prop-types
+const Address = ({data}) => {
   const layout = {
     labelCol: {
       span: 8,
@@ -10,13 +11,6 @@ const Address = ({ data }) => {
       span: 16,
     },
   };
-  const tailLayout = {
-    wrapperCol: {
-      offset: 8,
-      span: 24,
-    },
-  };
-
   return (
     <>
       <Row>

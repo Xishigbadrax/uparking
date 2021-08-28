@@ -1,7 +1,8 @@
-import WalletLayout from "@components/layouts/WalletLayout";
+// import WalletLayout from '@components/layouts/WalletLayout';
+import Help from '@pages/park/profile/help';
 
-const Summary = () => {
-  return <WalletLayout>Help</WalletLayout>;
+const WalletHelp = () => {
+  return <Help />;
 };
 
-export default Summary;
+export default WalletHelp;

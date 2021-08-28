@@ -1,147 +1,147 @@
-import React from "react";
-import { useState, useEffect, useContext } from "react";
-import WalletLayout from "@components/layouts/WalletLayout";
-import WalletChart from "@components/WalletChart";
-import WalletCard from "../../../../components/WalletCard";
-import WalletBankInfo2 from "@components/WalletBankInfo2";
-import WalletBankInfo from "@components/WalletBankInfo";
-import { Tabs, Image, Typography, Button, Modal, Alert } from "antd";
-import { center } from "@antv/g2plot/lib/plots/sankey/sankey";
-import { callGet, callPost } from "@api/api";
-import Context from "@context/Context";
+import React from 'react';
+import {useState, useEffect, useContext} from 'react';
+import WalletLayout from '@components/layouts/WalletLayout';
+import WalletChart from '@components/WalletChart';
+import WalletCard from '../../../../components/WalletCard';
+// import WalletBankInfo2 from '@components/WalletBankInfo2';
+import WalletBankInfo from '@components/WalletBankInfo';
+import {Tabs, Image, Button, Modal, Alert} from 'antd';
+import {callGet, callPost} from '@api/api';
+import Context from '@context/Context';
 
 const tabItems = [
   {
     id: 1,
-    name: "Хаан банк",
-    type: "KHANBANK",
-    src: "../../images/icon/khanbank.png",
+    name: 'Хаан банк',
+    type: 'KHANBANK',
+    src: '../../images/icon/khanbank.png',
   },
   {
     id: 2,
-    name: "Хас банк",
-    type: "KHASBANK",
-    src: "../../images/icon/xac.png",
+    name: 'Хас банк',
+    type: 'KHASBANK',
+    src: '../../images/icon/xac.png',
   },
   {
     id: 3,
-    name: "Голомт банк",
-    type: "GOLOMTBANK",
-    src: "../../images/icon/golomt.png",
+    name: 'Голомт банк',
+    type: 'GOLOMTBANK',
+    src: '../../images/icon/golomt.png',
   },
   {
     id: 4,
-    name: "Худалдаа хөгжлийн банк",
-    type: "TDB",
-    src: "../../images/icon/tdb.png",
+    name: 'Худалдаа хөгжлийн банк',
+    type: 'TDB',
+    src: '../../images/icon/tdb.png',
   },
 ];
 
 const Charge = () => {
-  const { userdata } = useContext(Context);
-  const { TabPane } = Tabs;
-  const { Paragraph } = Typography;
+  const {userdata} = useContext(Context);
+  const {TabPane} = Tabs;
   const pos = {
-    display: "flex",
-    justifyContent: "space-between",
+    display: 'flex',
+    justifyContent: 'space-between',
   };
 
-  const [type2, settype2] = useState("MONGOLCHAT");
+  const [type2, settype2] = useState('MONGOLCHAT');
   const [phoneNumber, setphoneNumber] = useState(null);
   const [amount, setamount] = useState(0);
-  const [type, settype] = useState("KHANBANK");
+  const [promoCode, setPromoCode] = useState(null);
+  const [type, settype] = useState('KHANBANK');
   const [data, setdata] = useState(null);
-  const [message, setmessage] = useState("");
-  const [status, setstatus] = useState("");
-  const [title, settitle] = useState("");
+  const [message, setmessage] = useState('');
+  const [status, setstatus] = useState('');
+  const [title, settitle] = useState('');
   const [messageShow, setmessageShow] = useState(false);
-  const [formData, setformData] = useState({
+  const [formData] = useState({
     amount: null,
     phoneNumber: null,
   });
+  // eslint-disable-next-line no-unused-vars
+  const [formData3, setformData3] = useState('');
 
   const fetchData2 = async () => {
     if (amount != 0) {
-      let formData2 = {
+      const formData2 = {
         amount: +amount,
         bookingId: null,
         topUp: true,
       };
       formData.amount = amount;
       formData.phoneNumber =
-        type2 == "LENDMN" ? phoneNumber : userdata.phoneNumber;
+        type2 == 'LENDMN' ? phoneNumber : userdata.phoneNumber;
       {
-        type2 == "MONGOLCHAT"
-          ? await callPost(`/mongolchat/wallet`, formData).then((res) => {
-              if (res.code == 1000) {
-                settitle("Амжилтай");
-                setmessage("Амжилттай. Нэхэмжлэх үүсгэлээ.");
-                setstatus("success");
-                setmessageShow(true);
-                try {
-                  const win = window.open(res.dynamic_link, "_blank");
-                  win.focus();
-                } catch (e) {
-                  settitle("Анхааруулга");
-                  setmessage("Нэхэмжлэх үүсгэхэд алдаа гарлаа");
-                  setstatus("warning");
-                  setmessageShow(true);
-                }
-              } else {
-                settitle("Анхааруулга");
-                setmessage("Нэхэмжлэх үүсгэхэд алдаа гарлаа");
-                setstatus("warning");
+        type2 == 'MONGOLCHAT' ?
+          await callPost('/mongolchat/wallet', formData).then((res) => {
+            if (res.code == 1000) {
+              settitle('Амжилтай');
+              setmessage('Амжилттай. Нэхэмжлэх үүсгэлээ.');
+              setstatus('success');
+              setmessageShow(true);
+              try {
+                const win = window.open(res.dynamic_link, '_blank');
+                win.focus();
+              } catch (e) {
+                settitle('Анхааруулга');
+                setmessage('Нэхэмжлэх үүсгэхэд алдаа гарлаа');
+                setstatus('warning');
                 setmessageShow(true);
               }
-            })
-          : type2 == "LENDMN"
-          ? await callPost(`/lend/qr/wallettopup`, formData).then((res) => {
-              console.log(res);
+            } else {
+              settitle('Анхааруулга');
+              setmessage('Нэхэмжлэх үүсгэхэд алдаа гарлаа');
+              setstatus('warning');
+              setmessageShow(true);
+            }
+          }) :
+          type2 == 'LENDMN' ?
+            await callPost('/lend/qr/wallettopup', formData).then((res) => {
               if (res.qr_string) {
-                settitle("Амжилтай");
-                setmessage("Амжилттай. Нэхэмжлэх үүсгэлээ.");
-                setstatus("success");
+                settitle('Амжилтай');
+                setmessage('Амжилттай. Нэхэмжлэх үүсгэлээ.');
+                setstatus('success');
                 setmessageShow(true);
               } else {
-                settitle("Анхааруулга");
-                setmessage("Нэхэмжлэх үүсгэхэд алдаа гарлаа");
-                setstatus("warning");
+                settitle('Анхааруулга');
+                setmessage('Нэхэмжлэх үүсгэхэд алдаа гарлаа');
+                setstatus('warning');
                 setmessageShow(true);
               }
-            })
-          : type2 == "SOCIALPAY"
-          ? await callPost(`/invoice`, formData2).then((res) => {
-              if (res && res.invoice) {
-                settitle("Амжилтай");
-                setmessage("Амжилттай. Нэхэмжлэх үүсгэлээ.");
-                setstatus("success");
-                setmessageShow(true);
-                try {
-                  const win = window.open(
-                    "https://ecommerce.golomtbank.com/socialpay/mn/" +
+            }) :
+            type2 == 'SOCIALPAY' ?
+              await callPost('/invoice', formData2).then((res) => {
+                if (res && res.invoice) {
+                  settitle('Амжилтай');
+                  setmessage('Амжилттай. Нэхэмжлэх үүсгэлээ.');
+                  setstatus('success');
+                  setmessageShow(true);
+                  try {
+                    const win = window.open(
+                      'https://ecommerce.golomtbank.com/socialpay/mn/' +
                       res.invoice,
-                    "_blank"
-                  );
-                  win.focus();
-                } catch (e) {
-                  settitle("Анхааруулга");
-                  setmessage("Нэхэмжлэх үүсгэхэд алдаа гарлаа");
-                  setstatus("warning");
+                      '_blank',
+                    );
+                    win.focus();
+                  } catch (e) {
+                    settitle('Анхааруулга');
+                    setmessage('Нэхэмжлэх үүсгэхэд алдаа гарлаа');
+                    setstatus('warning');
+                    setmessageShow(true);
+                  }
+                } else {
+                  settitle('Анхааруулга');
+                  setmessage('Нэхэмжлэх үүсгэхэд алдаа гарлаа');
+                  setstatus('warning');
                   setmessageShow(true);
                 }
-              } else {
-                settitle("Анхааруулга");
-                setmessage("Нэхэмжлэх үүсгэхэд алдаа гарлаа");
-                setstatus("warning");
-                setmessageShow(true);
-              }
-            })
-          : null;
+              }) :
+              null;
       }
     } else {
-      settitle("Анхааруулга");
-      setmessage("Үнийн дүн хоосон байна");
-      setstatus("warning");
+      settitle('Анхааруулга');
+      setmessage('Үнийн дүн хоосон байна');
+      setstatus('warning');
       setmessageShow(true);
     }
   };
@@ -151,6 +151,29 @@ const Charge = () => {
       setdata(res);
     });
   };
+
+  const fetchData3 = async () => {
+    setformData3();
+    await callPost('/wallet/promocode', {
+      promoCode: promoCode,
+    }).then((res) => {
+      // if (res.status == "failed") {
+      //   console.log(res["status"], "resresr");
+      //   settitle(res.status);
+      //   setmessage(res.error);
+      //   setstatus(res.status);
+      //   setmessageShow(true);
+      // } else {
+      // console.log(res);
+      // settitle("Амжилттай");
+      // setmessage("Таны Uwallet хэтэвч амжилттай цэнэглэлт хийгдлээ.");
+      // // console.log(res.error, "errorr");
+      // setstatus("success");
+      // setmessageShow(true);
+      // }
+    });
+  };
+
   useEffect(() => {
     fetchData();
   }, [type]);
@@ -161,6 +184,7 @@ const Charge = () => {
   const onChangeInput = (value) => {
     setamount(value);
   };
+
   const onChangeInputPhone = (value) => {
     setphoneNumber(value);
   };
@@ -172,7 +196,9 @@ const Charge = () => {
   const handleCancel = () => {
     setmessageShow(false);
   };
-
+  const onChangePromo = (value) => {
+    setPromoCode(value);
+  };
   return (
     <WalletLayout>
       <div style={pos}>
@@ -184,7 +210,7 @@ const Charge = () => {
           <WalletChart />
         </div>
       </div>
-      <div style={{ height: "480px", width: "327px" }}>
+      <div style={{height: '480px', width: '327px'}}>
         <Tabs defaultActiveKey="1" centered>
           <TabPane tab="Дансаар" key="1">
             <div>
@@ -238,7 +264,7 @@ const Charge = () => {
                   tab={
                     <span
                       onClick={() => {
-                        settype2("MONGOLCHAT");
+                        settype2('MONGOLCHAT');
                       }}
                     >
                       <Image
@@ -261,7 +287,7 @@ const Charge = () => {
                   tab={
                     <span
                       onClick={() => {
-                        settype2("LENDMN");
+                        settype2('LENDMN');
                       }}
                     >
                       <Image
@@ -285,7 +311,7 @@ const Charge = () => {
                   tab={
                     <span
                       onClick={() => {
-                        settype2("SOCIALPAY");
+                        settype2('SOCIALPAY');
                       }}
                     >
                       <Image
@@ -309,7 +335,12 @@ const Charge = () => {
             </div>
           </TabPane>
           <TabPane tab="Промо код" key="3">
-            Промо код
+            <WalletBankInfo onChangeInput={onChangePromo}>
+              Промо код
+            </WalletBankInfo>
+            <Button onClick={() => fetchData3()} type="primary" block>
+              Идэвхжүүлэх
+            </Button>
           </TabPane>
         </Tabs>
       </div>

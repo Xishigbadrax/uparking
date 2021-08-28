@@ -1,15 +1,14 @@
-import React from "react";
-import { useState, useEffect, useContext } from "react";
-import WalletLayout from "@components/layouts/WalletLayout";
-import WalletCard from "../../../components/WalletCard";
-import { calendarLocale } from "@constants/constants.js";
-import WalletChart from "@components/WalletChart";
-import moment from "moment";
-import { callGet, callPost } from "@api/api";
-import { Calendar, Tag } from "antd";
-import Context from "@context/Context";
-
-import Image from "antd";
+import React from 'react';
+import {useState, useEffect, useContext} from 'react';
+import WalletLayout from '@components/layouts/WalletLayout';
+import WalletCard from '../../../components/WalletCard';
+import {calendarLocale} from '@constants/constants.js';
+import Helper from '@utils/helper';
+import WalletChart from '@components/WalletChart';
+import moment from 'moment';
+import {callGet} from '@api/api';
+import {Calendar, Tag} from 'antd';
+import Context from '@context/Context';
 
 const Wallet = () => {
   const [calendarData, setCalendarData] = useState([]);
@@ -22,8 +21,7 @@ const Wallet = () => {
 
   const fetchData = async () => {
     ctx.setIsLoading(true);
-    await callGet(`/wallet/user`, null).then((res) => {
-      console.log(res, "resres");
+    await callGet('/wallet/user', null).then((res) => {
       setuserData(res);
       if (res && res.pendingList && res.pendingList.length > 0) {
         setCalendarData(res.pendingList);
@@ -33,11 +31,11 @@ const Wallet = () => {
   };
 
   const getListData = (value) => {
-    let listData = [];
+    const listData = [];
     if (calendarData.length > 0) {
-      calendarData.forEach(function (element) {
-        var currentMoment = moment(element.date, "YYYY/MM/DD");
-        if (value.format("YYYY-MM-DD") === currentMoment.format("YYYY-MM-DD")) {
+      calendarData.forEach(function(element) {
+        const currentMoment = moment(element.date, 'YYYY/MM/DD');
+        if (value.format('YYYY-MM-DD') === currentMoment.format('YYYY-MM-DD')) {
           listData.push(element);
         }
       });
@@ -72,12 +70,12 @@ const Wallet = () => {
   };
 
   const styles = {
-    display: "flex",
-    justifyContent: "space-between",
+    display: 'flex',
+    justifyContent: 'space-between',
   };
   const text = {
-    width: "327px",
-    height: "24px",
+    width: '327px',
+    height: '24px',
   };
   return (
     <WalletLayout>
@@ -93,7 +91,15 @@ const Wallet = () => {
       <div>
         <div style={text}>
           <b>
-            Хүлээгдэж буй орлого: <text style={{ color: "blue" }}>86000₮</text>
+            Хүлээгдэж буй орлого:{' '}
+            <text style={{color: 'blue'}}>
+              {userData != null ?
+                userData.totalIncome ?
+                  Helper.formatValueReverse(userData.totalIncome + '') :
+                  0 :
+                null}
+              ₮
+            </text>
           </b>
         </div>
         <div>

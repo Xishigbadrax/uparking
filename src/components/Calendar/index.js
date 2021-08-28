@@ -1,37 +1,24 @@
 import {
   Calendar,
-  Select,
-  Radio,
-  Col,
-  Row,
-  Typography,
-  Button,
-  Badge,
-} from "antd";
-import { RightOutlined, LeftOutlined } from "@ant-design/icons";
-import { calendarLocale } from "@constants/constants.js";
-import moment, { months } from "moment";
-import React, { useState, useRef, useEffect } from "react";
-moment.updateLocale("mn", {
-  weekdaysMin: ["НЯ", "ДА", "МЯ", "ЛХ", "ПҮ", "БА", "БЯ"],
+} from 'antd';
+import {calendarLocale} from '@constants/constants.js';
+import moment from 'moment';
+import React, {useState} from 'react';
+moment.updateLocale('mn', {
+  weekdaysMin: ['НЯ', 'ДА', 'МЯ', 'ЛХ', 'ПҮ', 'БА', 'БЯ'],
 });
-let DateValue = [];
-let selectData = [];
 
 const calendar = (props) => {
   const [curr, setCurr] = useState(0);
-  const [selectedDate, setSelectedDate] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [calendarData, setCalendarData] = useState([]);
-  const onChangeLeft = () => {};
-  const onClickRight = () => {};
-  const calendarRef = useRef(null);
-  const onselectClass = "onselectDate";
+  const onselectClass = 'onselectDate';
   const onselect = (e) => {
-    let date = moment(e).format("YYYY/MM/DD");
+    const date = moment(e).format('YYYY/MM/DD');
     if (isInArray(calendarData, date)) {
       arrayRemove(calendarData, date);
     } else {
-      calendarData.push({ date: date });
+      calendarData.push({date: date});
     }
     setCurr(props.tabskey);
     console.log(curr);
@@ -44,24 +31,24 @@ const calendar = (props) => {
     }
   };
 
-  function getListData(value) {
-    let listData = [];
+  const getListData = (value) => {
+    const listData = [];
     if (calendarData.length > 0) {
-      calendarData.forEach(function (element) {
-        var currentMoment = moment(element.date, "YYYY/MM/DD");
-        if (value.format("YYYY-MM-DD") === currentMoment.format("YYYY-MM-DD")) {
+      calendarData.forEach(function(element) {
+        const currentMoment = moment(element.date, 'YYYY/MM/DD');
+        if (value.format('YYYY-MM-DD') === currentMoment.format('YYYY-MM-DD')) {
           listData.push(element);
         }
       });
     }
     return listData || [];
-  }
-  function dateCellRender(value) {
+  };
+  const dateCellRender = (value) => {
     const listData = getListData(value);
     return (
       <div className="events">
-        {listData.map((item) => (
-          <div
+        {listData.map((item, key) => (
+          <div key={key}
             className={`pickCalendarTime ant-picker-cell-inner ${onselectClass}`}
           >
             <div className="ant-picker-calendar-date-value">1</div>
@@ -69,19 +56,19 @@ const calendar = (props) => {
         ))}
       </div>
     );
-  }
-  function arrayRemove(array, value) {
+  };
+  const arrayRemove = (array, value) => {
     const removeIndex = array.findIndex((item) => item.date === value);
     array.splice(removeIndex, 1);
     return array;
-  }
-  function isInArray(array, value) {
+  };
+  const isInArray = (array, value) => {
     return array.find((item) => {
       if (item.date === value) {
         return true;
       } else return false;
     });
-  }
+  };
   return (
     <div className=" site-calendar-customize-header-wrapper">
       <Calendar

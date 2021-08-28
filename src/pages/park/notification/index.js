@@ -1,12 +1,11 @@
-import ProfileLayout from "@components/layouts/ProfileLayout";
+import ProfileLayout from '@components/layouts/ProfileLayout';
 
 const Notification = () => {
-
-    return (
-        <ProfileLayout>
+  return (
+    <ProfileLayout>
             Notification
-        </ProfileLayout>
-    );
-}
+    </ProfileLayout>
+  );
+};
 
 export default Notification;

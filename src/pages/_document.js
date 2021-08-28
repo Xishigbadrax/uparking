@@ -1,4 +1,5 @@
-import Document, { Html, Head, Main, NextScript } from 'next/document';
+/* eslint-disable require-jsdoc */
+import Document, {Html, Head, Main, NextScript} from 'next/document';
 
 class MyDocument extends Document {
   render() {

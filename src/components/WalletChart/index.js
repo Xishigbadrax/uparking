@@ -1,61 +1,88 @@
-import React from "react";
-import { Line } from "@ant-design/charts";
-import { Button, Tabs } from "antd";
+/* eslint-disable no-unused-vars */
+import React from 'react';
+// import {Line} from '@ant-design/charts';
+import {Line} from 'react-chartjs-2';
+import {Button, Tabs} from 'antd';
 
 const WalletChart = () => {
-  const { TabPane } = Tabs;
-  const data = [
-    { year: "1 сар", value: 3 },
-    { year: "2 сар", value: 4 },
-    { year: "3 сар", value: 3.5 },
-    { year: "4 сар", value: 5 },
-    { year: "5 сар", value: 4 },
-    { year: "6 сар", value: 6 },
-    { year: "7 сар", value: 7 },
-    { year: "8 сар", value: 3 },
-    { year: "10 сар", value: 4 },
-    { year: "11 сар", value: 5 },
-    { year: "12 сар", value: 4 },
-  ];
+  const {TabPane} = Tabs;
+  // const data = [
+  //   {year: '1 сар', value: 3},
+  //   {year: '2 сар', value: 4},
+  //   {year: '3 сар', value: 3.5},
+  //   {year: '4 сар', value: 5},
+  //   {year: '5 сар', value: 4},
+  //   {year: '6 сар', value: 6},
+  //   {year: '7 сар', value: 7},
+  //   {year: '8 сар', value: 3},
+  //   {year: '10 сар', value: 4},
+  //   {year: '11 сар', value: 5},
+  //   {year: '12 сар', value: 4},
+  // ];
 
-  const config = {
-    data,
-    height: 100,
-    xField: "year",
-    yField: "value",
-    point: {
-      size: 5,
-      shape: "circle",
-    },
-    label: {
-      style: {
-        fill: "blue",
+  // const config = {
+  //   data,
+  //   height: 100,
+  //   xField: 'year',
+  //   yField: 'value',
+  //   point: {
+  //     size: 5,
+  //     shape: 'circle',
+  //   },
+  //   label: {
+  //     style: {
+  //       fill: 'blue',
+  //     },
+  //   },
+  // };
+  const data = {
+    labels: ['1', '2', '3', '4', '5', '6'],
+    datasets: [
+      {
+        label: '# of Votes',
+        data: [12, 19, 3, 5, 2, 3],
+        fill: false,
+        backgroundColor: 'rgb(255, 99, 132)',
+        borderColor: 'rgba(255, 99, 132, 0.2)',
       },
+    ],
+  };
+
+  const options = {
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            beginAtZero: true,
+          },
+        },
+      ],
     },
   };
   return (
     <div
       style={{
-        height: "199px",
-        width: "529px",
-        overflowWrap: "break-word",
+        height: '199px',
+        width: '529px',
+        overflowWrap: 'break-word',
       }}
     >
       <Tabs defaultActiveKey="1">
         <TabPane tab="Орлого" key="1">
-          <div style={{ textAlign: "right", lineHeight: "10px" }}>
+          <div style={{textAlign: 'right', lineHeight: '10px'}}>
             <Button type="text">Өдөр</Button>
             <Button type="text">Долоо хоног</Button>
             <Button type="text">Сар</Button>
           </div>
           <div>
-            <Line {...config} />
+            {/* <Line {...config} /> */}
+            <Line data={data} options={options} />
           </div>
         </TabPane>
         <TabPane tab="Зарлага" key="2">
           <div
             style={{
-              textAlign: "right",
+              textAlign: 'right',
             }}
           >
             <Button type="text">Өдөр</Button>
@@ -63,7 +90,8 @@ const WalletChart = () => {
             <Button type="text">Сар</Button>
           </div>
           <div>
-            <Line {...config} />;
+            {/* <Line {...config} />; */}
+            <Line data={data} options={options} />
           </div>
         </TabPane>
       </Tabs>
