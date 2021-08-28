@@ -7,6 +7,8 @@ import {walletMenu} from '@constants/walletmenu';
 import {callGet} from '@api/api';
 import {showMessage} from '../utils/message';
 
+import jwtDecode from 'jwt-decode';
+
 const Context = createContext();
 
 // eslint-disable-next-line react/prop-types
@@ -53,7 +55,7 @@ export const ContextProvider = ({children}) => {
         router.push('/login');
         return;
       } else {
-        const user = jwt_decode(accessToken);
+        const user = jwtDecode(accessToken);
         getProfileData(user);
 
         if (user.authorities !== undefined) {

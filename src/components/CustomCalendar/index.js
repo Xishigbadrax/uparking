@@ -15,7 +15,6 @@ export const AcademicYearEnd = moment(today)
   .month(7)
   .date(18);
 
-console.log(AcademicYearEnd, 'AcademicYearEndAcademicYearEnd');
 const CustomCalendar = (props) => {
   const [selectedDate, setselectedDate] = useState([]);
   const [selectType, setSelectType] = useState('multi');
