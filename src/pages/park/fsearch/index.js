@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-=======
 /* eslint-disable no-unused-vars */
->>>>>>> 6ccd16d855b841db293f75e3f216cddfe89c0833
 import {useContext, useState} from 'react';
 import {callGet} from '@api/api';
 import {
@@ -116,13 +113,6 @@ const fsearch = () => {
   const [longitude, setLongitude] = useState(106.905746);
   // eslint-disable-next-line no-unused-vars
   const [latitude, setLatitude] = useState(47.886398);
-<<<<<<< HEAD
-  // eslint-disable-next-line no-unused-vars
-  const [selectLat, setSelectLate] = useState();
-  // eslint-disable-next-line no-unused-vars
-  const [selectLng, setSelectLng] = useState();
-=======
->>>>>>> 6ccd16d855b841db293f75e3f216cddfe89c0833
   const [startDate, setStartDate] = useState();
   const [keywordId, setKeywordId] = useState({});
   const [dataSource, setDataSource]=useState([]);
@@ -195,10 +185,6 @@ const fsearch = () => {
       // getData(dateString[0], dateString[1]);
     }
   };
-<<<<<<< HEAD
-
-=======
->>>>>>> 6ccd16d855b841db293f75e3f216cddfe89c0833
   const onChangeType = (e) => {
     console.log(e);
     setType(e);
@@ -304,10 +290,6 @@ const fsearch = () => {
                 style={{
                   width: '100%',
                   height: '70px',
-<<<<<<< HEAD
-                  borderRadius: '',
-=======
->>>>>>> 6ccd16d855b841db293f75e3f216cddfe89c0833
                 }}
 
                 // onChange={onChangeAddress}

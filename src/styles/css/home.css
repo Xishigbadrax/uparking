@@ -2224,3 +2224,6 @@
 .searchAutoComplete  .ant-select-selector .ant-select-selection-search .ant-select-selection-search-input{
   height: 70px !important;
 }
+.editSpaceDataButton {
+  background: rgba(3, 54, 255, 0.08) !important;
+}
