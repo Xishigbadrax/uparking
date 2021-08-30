@@ -1,7 +1,7 @@
 import {Row, Col, Card, Button} from 'antd';
 import {Rate} from 'antd';
 import {Drawer, Divider} from 'antd';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Radio} from 'antd';
 import Image from 'next/image';
 // import {Collapse} from 'antd';
@@ -49,10 +49,13 @@ const tofit = ({data, lat, lng}) => {
   const [selectedDate1, setSelectedDate1] = useState([]);
   // const [fromSelectedDate1, setFromSelectedDate1] = useState([]);
   const [id, setId] = useState(null);
+  const [totalValue, setTotalValue]= useState();
   // eslint-disable-next-line no-unused-vars
   const [selectedDate3, setSelectedDate3] = useState([]);
   // const [fromSelectedDate3, setFromSelectedDate3] = useState([]);
+  useEffect(()=>{
 
+  }, []);
   const DetailsDrawerOpen = async (id) => {
     setDetailsVisible(true);
     setId(id);
@@ -114,18 +117,84 @@ const tofit = ({data, lat, lng}) => {
   };
   const getSelectedDate1 = (data) => {
     setDayofNumber(data.length);
+    if (data.length === 7 || nightOfNumber === 7 ) {
+      setTotalValue(data.length * priceForRenter1 +
+        nightOfNumber * priceForRenter2 +
+        fullDayNumber * priceForRenter3 -
+        (data.length * priceForRenter1 +
+          nightOfNumber * priceForRenter2 +
+          fullDayNumber * priceForRenter3) *
+          0.05);
+    } else if (data.length === 30 || nightOfNumber === 30 ) {
+      setTotalValue(data.length * priceForRenter1 +
+        nightOfNumber * priceForRenter2 +
+        fullDayNumber * priceForRenter3 -
+        (data.length * priceForRenter1 +
+          nightOfNumber * priceForRenter2 +
+          fullDayNumber * priceForRenter3) *
+          0.1 );
+    } else {
+      setTotalValue( data.length * priceForRenter1 +
+            nightOfNumber * priceForRenter2 +
+            fullDayNumber * priceForRenter3);
+    }
+
     data.map((item) => {
       console.log(item.format('YYYY-MM-DD'), 'datyeeeeeeeeee');
     });
   };
   const getSelectedDate2 = (data) => {
     setNightOfNumber(data.length);
+    if (dayOfNumber === 7 || data.length === 7 ) {
+      setTotalValue(dayOfNumber * priceForRenter1 +
+        data.length * priceForRenter2 +
+        fullDayNumber * priceForRenter3 -
+        (dayOfNumber * priceForRenter1 +
+          data.length * priceForRenter2 +
+          fullDayNumber * priceForRenter3) *
+          0.05);
+    } else if (dayOfNumber === 30 || data.length === 30 ) {
+      setTotalValue(dayOfNumber * priceForRenter1 +
+        data.length * priceForRenter2 +
+        fullDayNumber * priceForRenter3 -
+        (dayOfNumber * priceForRenter1 +
+          data.length * priceForRenter2 +
+          fullDayNumber * priceForRenter3) *
+          0.1 );
+    } else {
+      setTotalValue( dayOfNumber * priceForRenter1 +
+        data.length * priceForRenter2 +
+            fullDayNumber * priceForRenter3);
+    }
     data.map((item) => {
       console.log(item.format('YYYY-MM-DD'), 'datyeeeeeeeeee');
     });
   };
   const getSelectedDate3 = (data) => {
     setFullDayNumber(data.length);
+    if (data.length!==0 ) {
+      if (dayOfNumber === 7 || nightOfNumber === 7 ) {
+        setTotalValue(dayOfNumber * priceForRenter1 +
+        nightOfNumber * priceForRenter2 +
+        data.length * priceForRenter3 -
+        (dayOfNumber* priceForRenter1 +
+          nightOfNumber * priceForRenter2 +
+          data.length * priceForRenter3) *
+          0.05);
+      } if (dayOfNumber === 30 || nightOfNumber === 30 ) {
+        setTotalValue(dayOfNumber * priceForRenter1 +
+        nightOfNumber * priceForRenter2 +
+        data.length * priceForRenter3 -
+        (dayOfNumber * priceForRenter1 +
+          nightOfNumber * priceForRenter2 +
+          data.length * priceForRenter3) *
+          0.1 );
+      } else {
+        setTotalValue(dayOfNumber * priceForRenter1 +
+            nightOfNumber * priceForRenter2 +
+            data.length * priceForRenter3);
+      }
+    }
     data.map((item) => {
       console.log(item.format('YYYY-MM-DD'), 'datyeeeeeeeeee');
     });
@@ -1282,26 +1351,7 @@ const tofit = ({data, lat, lng}) => {
                           </p>
                         </Col>
                         <Col span={2}>
-                          {dayOfNumber === 7 || nightOfNumber === 7 ?
-                            dayOfNumber * priceForRenter1 +
-                              nightOfNumber * priceForRenter2 +
-                              fullDayNumber * priceForRenter3 -
-                              (dayOfNumber * priceForRenter1 +
-                                nightOfNumber * priceForRenter2 +
-                                fullDayNumber * priceForRenter3) *
-                                0.05 :
-                            dayOfNumber * priceForRenter1 +
-                              nightOfNumber * priceForRenter2 +
-                              fullDayNumber * priceForRenter3}
-                          {dayOfNumber === 30 || nightOfNumber === 30 ?
-                            dayOfNumber * priceForRenter1 +
-                              nightOfNumber * priceForRenter2 +
-                              fullDayNumber * priceForRenter3 -
-                              (dayOfNumber * priceForRenter1 +
-                                nightOfNumber * priceForRenter2 +
-                                fullDayNumber * priceForRenter3) *
-                                0.1 :
-                            null}
+                          {totalValue}
                           ₮
                         </Col>
                       </Row>
@@ -1310,13 +1360,12 @@ const tofit = ({data, lat, lng}) => {
                           height: '50px',
                           marginTop: '10px',
                         }}
-                        gutter={16}
                       >
                         <Col span={12}>
-                          <Button block type="primary" className={'buttonGo'}>Захиалга нэмэх</Button>
+                          <Button className={'buttonGo'}>Захиалга нэмэх</Button>
                         </Col>
                         <Col span={12}>
-                          <Button block type="primary" className={'buttonGo'}>Төлбөр төлөх</Button>
+                          <Button className={'buttonGo'}>Төлбөр төлөх</Button>
                         </Col>
                       </Row>
                     </TabPane>
@@ -1507,32 +1556,13 @@ const tofit = ({data, lat, lng}) => {
             </Row>
             <Divider />
             <Row>
-              <Col span={20}>
+              <Col span={19}>
                 <p>
                   <b>Нийт захиалгын төлбөр</b>
                 </p>
               </Col>
-              <Col span={2}>
-                {dayOfNumber === 7 || nightOfNumber === 7 ?
-                  dayOfNumber * priceForRenter1 +
-                    nightOfNumber * priceForRenter2 +
-                    fullDayNumber * priceForRenter3 -
-                    (dayOfNumber * priceForRenter1 +
-                      nightOfNumber * priceForRenter2 +
-                      fullDayNumber * priceForRenter3) *
-                      0.05 :
-                  dayOfNumber * priceForRenter1 +
-                    nightOfNumber * priceForRenter2 +
-                    fullDayNumber * priceForRenter3}
-                {dayOfNumber === 30 || nightOfNumber === 30 ?
-                  dayOfNumber * priceForRenter1 +
-                    nightOfNumber * priceForRenter2 +
-                    fullDayNumber * priceForRenter3 -
-                    (dayOfNumber * priceForRenter1 +
-                      nightOfNumber * priceForRenter2 +
-                      fullDayNumber * priceForRenter3) *
-                      0.1 :
-                  null}
+              <Col span={3}>
+                {totalValue}
                 ₮
               </Col>
             </Row>
