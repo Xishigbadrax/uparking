@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import {callGet} from '@api/api';
+import {useRouter} from 'next/router';
 import {showMessage} from '../../utils/message';
 import {
   Col,
@@ -10,7 +11,6 @@ import {
   Layout,
   Tabs,
   Empty,
-  Card,
   Rate,
   Image,
   Drawer,
@@ -19,6 +19,7 @@ import {
 } from 'antd';
 import moment from 'moment';
 import Helper from '@utils/helper';
+import ToFit from '@components/fsearch/toFIt.js';
 import {
   DownOutlined,
   UpOutlined,
@@ -84,9 +85,13 @@ const MapWithAMarkerClusterer = compose(
 const Dashboard = () => {
   const [form] = Form.useForm();
   const [markers, setMarkers] = useState([]);
+  const [searchType, setSearchType] =useState();
   const [searchedData, setSearchedData] = useState([]);
   const [dataSource, setDataSource] = useState([]);
   const [parkingUpDownArrow, setParkingUpDownArrow] = useState(false);
+  // eslint-disable-next-line no-unused-vars
+  const [transfer, setTransfer] = useState(null);
+  const router = useRouter();
   const [defaultCenter, setDefaultCenter] = useState({
     lat: 47.91909306508191,
     lng: 106.91761127921768,
@@ -106,29 +111,32 @@ const Dashboard = () => {
 
   const [visibleDrawerMore, setVisibleDrawerMore] = useState(false);
   const [parkingObject, setParkingObject] = useState({});
-  const isBase64 = async (str) => {
-    if (str === '' || str.trim() === '') {
-      return false;
-    }
-    try {
-      return btoa(atob(str)) == str;
-    } catch (err) {
-      return false;
-    }
-  };
+  // const isBase64 = async (str) => {
+  //   if (str === '' || str.trim() === '') {
+  //     return false;
+  //   }
+  //   try {
+  //     return btoa(atob(str)) == str;
+  //   } catch (err) {
+  //     return false;
+  //   }
+  // };
 
-  const showDrawer = async (item) => {
-    const res = await callGet(
-      `/parkingspace?parkingSpaceId=${item.park.parkingSpaceId}`,
-    );
-    if (!res || res === undefined) {
-      showMessage(messageType.FAILED.type, defaultMsg.dataError);
-      return;
-    }
-    const merged = {...res, ...item};
-    setParkingObject(merged);
-    setVisibleDrawerMore(true);
-  };
+  // const showDrawer = async (item) => {
+  //   const res = await callGet(
+  //     `/parkingspace?parkingSpaceId=${item.park.parkingSpaceId}`,
+
+  //     setTransfer(item.park.parkingSpaceId),
+
+  //   );
+  //   if (!res || res === undefined) {
+  //     showMessage(messageType.FAILED.type, defaultMsg.dataError);
+  //     return;
+  //   }
+  //   const merged = {...res, ...item};
+  //   setParkingObject(merged);
+  //   setVisibleDrawerMore(true);
+  // };
 
   const onCloseDrawerMore = () => {
     setVisibleDrawerMore(false);
@@ -210,6 +218,17 @@ const Dashboard = () => {
   const onChangeEndDate = (date) => {
     setEndDate(date);
   };
+  const onTransfer = (id) => {
+    console.log(id, 'ehnii id');
+    id &&
+      router.push({
+        pathname: 'park/payment',
+        query: {
+          id: id,
+        },
+      });
+  };
+
 
   const onFinish = async (values) => {
     console.log(values, 'values');
@@ -244,6 +263,7 @@ const Dashboard = () => {
       )}&fullDay=false&startTime=${timeSplit.nightStart}&endTime=${
         timeSplit.nightEnd
       }`;
+      setSearchType(full);
     }
     if (url != '') {
       const res = await callGet(url);
@@ -372,161 +392,164 @@ const Dashboard = () => {
           <Tabs defaultActiveKey="1" className="searchTab" onChange={callback}>
             <TabPane tab="Тохирох" key="1">
               {searchedData.length > 0 ? (
-                searchedData.map((item) => (
-                  <Card
-                    className="searchListItem"
-                    key={item.residence.residenceBlockId}
-                  >
-                    <Row>
-                      <Col span="12" className="imageSide">
-                        <div>
-                          <Image
-                            src={
-                              item.park.parkingSpaceImage ?
-                                IMG_URL + item.park.parkingSpaceImage :
-                                '/pexels-photo-3349460 1.png'
-                            }
-                            width="209.58px"
-                            preview={false}
-                          ></Image>
-                        </div>
-                        <Row>
-                          <Col
-                            span={24}
-                            style={{
-                              background: 'rgba(222, 226, 233, 0.2)',
-                              borderRadius: '24px',
-                              padding: '13px 23px',
-                              display: 'inline-flex',
-                              textAlign: 'center',
-                              justifyContent: 'center',
-                            }}
-                          >
-                            {item.park && item.park.floorNumber ? (
-                              <div style={{marginRight: '13px'}}>
-                                {!isBase64(item.park.floorNumber) ? (
-                                  <Image
-                                    preview={false}
-                                    width={18}
-                                    src={IMG_URL + item.park.floorNumber}
-                                  />
-                                ) : (
-                                  <Image
-                                    preview={false}
-                                    width={18}
-                                    fallback={
-                                      'data:image/png;base64,' +
-                                      item.park.floorNumber
-                                    }
-                                  />
-                                )}
-                              </div>
-                            ) : null}
-                            {item.park && item.park.entranceLock ? (
-                              <div style={{marginRight: '13px'}}>
-                                <Image
-                                  preview={false}
-                                  width={18}
-                                  src={IMG_URL + item.park.entranceLock}
-                                />
-                              </div>
-                            ) : null}
-                            {item.park && item.park.isNumbering ? (
-                              <div style={{marginRight: '13px'}}>
-                                <Image
-                                  preview={false}
-                                  width={18}
-                                  src={IMG_URL + item.park.isNumbering}
-                                />
-                              </div>
-                            ) : null}
-                            {item.park && item.park.capacity ? (
-                              <div style={{marginRight: '13px'}}>
-                                <Image
-                                  preview={false}
-                                  width={18}
-                                  src={IMG_URL + item.park.capacity}
-                                />
-                              </div>
-                            ) : null}
-                            {item.park && item.park.type ? (
-                              <div style={{marginRight: '13px'}}>
-                                <Image
-                                  preview={false}
-                                  width={18}
-                                  src={IMG_URL + item.park.type}
-                                />
-                              </div>
-                            ) : null}
-                            {item.park && item.park.returnRoutes ? (
-                              <div style={{marginRight: '13px'}}>
-                                <Image
-                                  preview={false}
-                                  width={18}
-                                  src={IMG_URL + item.park.returnRoutes}
-                                />
-                              </div>
-                            ) : null}
-                          </Col>
-                        </Row>
-                      </Col>
-                      <Col span="12" className="descriptionSide">
-                        <div className="title" style={{marginBottom: '5px'}}>
-                          {item.residence.residenceName}
-                        </div>
+              // searchedData.map((item) => (
+              //   <Card
+              //     className="searchListItem"
+              //     key={item.residence.residenceBlockId}
+              //   >
+              //     <Row>
+              //       <Col span="12" className="imageSide">
+              //         <div>
+              //           <Image
+              //             src={
+              //               item.park.parkingSpaceImage ?
+              //                 IMG_URL + item.park.parkingSpaceImage :
+              //                 '/pexels-photo-3349460 1.png'
+              //             }
+              //             width="209.58px"
+              //             preview={false}
+              //           ></Image>
+              //         </div>
+              //         <Row>
+              //           <Col
+              //             span={24}
+              //             style={{
+              //               background: 'rgba(222, 226, 233, 0.2)',
+              //               borderRadius: '24px',
+              //               padding: '13px 23px',
+              //               display: 'inline-flex',
+              //               textAlign: 'center',
+              //               justifyContent: 'center',
+              //             }}
+              //           >
+              //             {item.park && item.park.floorNumber ? (
+              //               <div style={{marginRight: '13px'}}>
+              //                 {!isBase64(item.park.floorNumber) ? (
+              //                   <Image
+              //                     preview={false}
+              //                     width={18}
+              //                     src={IMG_URL + item.park.floorNumber}
+              //                   />
+              //                 ) : (
+              //                   <Image
+              //                     preview={false}
+              //                     width={18}
+              //                     fallback={
+              //                       'data:image/png;base64,' +
+              //                       item.park.floorNumber
+              //                     }
+              //                   />
+              //                 )}
+              //               </div>
+              //             ) : null}
+              //             {item.park && item.park.entranceLock ? (
+              //               <div style={{marginRight: '13px'}}>
+              //                 <Image
+              //                   preview={false}
+              //                   width={18}
+              //                   src={IMG_URL + item.park.entranceLock}
+              //                 />
+              //               </div>
+              //             ) : null}
+              //             {item.park && item.park.isNumbering ? (
+              //               <div style={{marginRight: '13px'}}>
+              //                 <Image
+              //                   preview={false}
+              //                   width={18}
+              //                   src={IMG_URL + item.park.isNumbering}
+              //                 />
+              //               </div>
+              //             ) : null}
+              //             {item.park && item.park.capacity ? (
+              //               <div style={{marginRight: '13px'}}>
+              //                 <Image
+              //                   preview={false}
+              //                   width={18}
+              //                   src={IMG_URL + item.park.capacity}
+              //                 />
+              //               </div>
+              //             ) : null}
+              //             {item.park && item.park.type ? (
+              //               <div style={{marginRight: '13px'}}>
+              //                 <Image
+              //                   preview={false}
+              //                   width={18}
+              //                   src={IMG_URL + item.park.type}
+              //                 />
+              //               </div>
+              //             ) : null}
+              //             {item.park && item.park.returnRoutes ? (
+              //               <div style={{marginRight: '13px'}}>
+              //                 <Image
+              //                   preview={false}
+              //                   width={18}
+              //                   src={IMG_URL + item.park.returnRoutes}
+              //                 />
+              //               </div>
+              //             ) : null}
+              //           </Col>
+              //         </Row>
+              //       </Col>
+              //       <Col span="12" className="descriptionSide">
+              //         <div className="title" style={{marginBottom: '5px'}}>
+              //           {item.residence.residenceName}
+              //         </div>
 
-                        <Rate
-                          className="rateing"
-                          disabled
-                          value={item.park.totalRating}
-                        />
+              //         <Rate
+              //           className="rateing"
+              //           disabled
+              //           value={item.park.totalRating}
+              //         />
 
-                        <Row>
-                          <Col span={10} className="distance">
-                            • 110m
-                          </Col>
-                          <Col span={14} className="id">
-                            Байршил ID: {item.residence.residenceBlockCode}
-                          </Col>
-                        </Row>
-                        <Row className="addresss">
-                          <Col
-                            span="2"
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                            }}
-                          >
-                            <Image
-                              preview={false}
-                              width="10px"
-                              src={'/images/icon/location_on.png'}
-                            ></Image>
-                          </Col>
-                          <Col span="22">{item.residence.address}</Col>
-                        </Row>
-                        <div>
-                          <div className="totalText">Нийт үнэ</div>
-                          <div className="totalAmount">
-                            {item.park.price ? item.park.price : 0} ₮
-                          </div>
-                        </div>
-                        <div
-                          style={{
-                            display: 'flex',
-                            justifyContent: 'flex-end',
-                          }}
-                        >
-                          <Button type="info" onClick={() => showDrawer(item)}>
-                            Дэлгэрэнгүй
-                          </Button>
-                          {/* ))} */}
-                        </div>
-                      </Col>
-                    </Row>
-                  </Card>
-                ))
+                //         <Row>
+                //           <Col span={10} className="distance">
+                //             • 110m
+                //           </Col>
+                //           <Col span={14} className="id">
+                //             Байршил ID: {item.residence.residenceBlockCode}
+                //           </Col>
+                //         </Row>
+                //         <Row className="addresss">
+                //           <Col
+                //             span="2"
+                //             style={{
+                //               display: 'flex',
+                //               alignItems: 'center',
+                //               justifyContent: 'center',
+                //             }}
+                //           >
+                //             <Image
+                //               preview={false}
+                //               width="10px"
+                //               src={'/images/icon/location_on.png'}
+                //             ></Image>
+                //           </Col>
+                //           <Col span="22">{item.residence.address}</Col>
+                //         </Row>
+                //         {/* <div>
+                //           <div className="totalText">Нийт үнэ</div>
+                //           <div className="totalAmount">
+                //             {item.park.price ? item.park.price : 0} ₮
+                //           </div>
+                //         </div> */}
+                //         <div
+                //           style={{
+                //             display: 'flex',
+                //             justifyContent: 'flex-end',
+                //           }}
+                //         >
+                //           <Button type="info" onClick={() => showDrawer(item)}>
+                //             Дэлгэрэнгүй
+                //           </Button>
+                //           {/* ))} */}
+                //         </div>
+                //       </Col>
+                //     </Row>
+                //   </Card>
+                <div>
+                  {searchType ==='full' ?
+                    <ToFit data={searchedData} lat={defaultCenter.lat} lng={defaultCenter.lng} /> :<p>awdawdawdadaw</p>}
+                </div>
               ) : (
                 <Empty description={<span>Өгөгдөл байхгүй</span>} />
               )}
@@ -897,7 +920,7 @@ const Dashboard = () => {
                     </Button>
                   </Col>
                   <Col span={12}>
-                    <Button type="primary" size={'large'} block>
+                    <Button type="primary" size={'large'} block onClick={() => onTransfer(transfer)} >
                       Төлбөр төлөх
                     </Button>
                   </Col>
