@@ -26,7 +26,7 @@ import Closest from '@components/fsearch/closest';
 import Farthest from '@components/fsearch/farthest';
 // import GoogleMapReact from 'google-map-react';
 // import {useRouter} from 'next/router';
-const {Header, Sider, Content} = Layout;
+const {Content} = Layout;
 
 const {TabPane} = Tabs;
 const {
@@ -106,6 +106,7 @@ const {Option} = Select;
 // );
 const fsearch = () => {
   // const array = [];
+  // eslint-disable-next-line no-unused-vars
   const GOOGLE_API = process.env.NEXT_GOOGLE_API;
   const ctx = useContext(Context);
   // eslint-disable-next-line no-unused-vars
@@ -117,6 +118,7 @@ const fsearch = () => {
   const [dataSource, setDataSource]=useState([]);
   const [type, setType] = useState({});
   const [endDate, setEndtDate] = useState();
+  // eslint-disable-next-line no-unused-vars
   const [spaceData, setSpacedata] = useState([]);
   const [markers, setMarkers]= useState([]);
   const [defaultCenter, setDefaultCenter]=useState({
@@ -284,6 +286,7 @@ const fsearch = () => {
               rules={[{required: true, message: 'Хаягаа сонгоно уу ?'}]}
             >
               <AutoComplete
+                className='searchAutoComplete'
                 style={{
                   width: '100%',
                   height: '70px',

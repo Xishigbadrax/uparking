@@ -1720,9 +1720,9 @@
   width: 100% !important; */
 }
 .buttonGo {
-  background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
+  /* background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
   border-radius: 8px;
-  width: 100% !important
+  width: 100% !important */
   /* position: absolute; */
 }
 .addButton {
@@ -2038,189 +2038,211 @@
   .ant-select-selector {
   border: none !important;
 }
-.spaceMainInfo.ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector{
+.spaceMainInfo.ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input)
+  .ant-select-selector {
   box-shadow: none !important;
   border-color: none !important;
 }
-.spaceMainInfo.ant-input:focus,.ant-input-focused {
+.spaceMainInfo.ant-input:focus,
+.ant-input-focused {
   border-color: none !important;
   border-right-color: none !important;
   box-shadow: none !important;
 }
-.spaceMainInfo .ant-input{
+.spaceMainInfo .ant-input {
   border: none !important;
 }
-.MainImage .ant-upload.ant-upload-select-picture-card{
+.MainImage .ant-upload.ant-upload-select-picture-card {
   height: 134px !important;
   width: 327px !important;
 }
 .spaceImage .ant-upload.ant-upload-select-picture-card {
   height: 134px !important;
-  width: 327px !important;  
+  width: 327px !important;
 }
-.address{
+.address {
   height: 456px !important;
   width: 350px !important;
 }
 .spaceIndocator .ant-form {
-
   height: 350px !important;
 }
-.spaceIndocator .ant-form-item-control-input-content{
+.spaceIndocator .ant-form-item-control-input-content {
   height: 40px !important;
 }
-.spaceIndocator  .ant-divider-horizontal{
- margin: 0px !important;
+.spaceIndocator .ant-divider-horizontal {
+  margin: 0px !important;
 }
-.spaceIndocator .ant-select:not(.ant-select-customize-input) .ant-select-selector{
+.spaceIndocator
+  .ant-select:not(.ant-select-customize-input)
+  .ant-select-selector {
   border: none !important;
 }
-.spaceIndocator .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector{
-  box-shadow:none !important;
+.spaceIndocator
+  .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input)
+  .ant-select-selector {
+  box-shadow: none !important;
   border-right-width: none !important;
 }
-.spaceIndocator .ant-row .ant-form-item{
+.spaceIndocator .ant-row .ant-form-item {
   margin-bottom: 5px !important;
   margin-top: 10px !important;
 }
-.priceInfo .ant-divider-horizontal{
+.priceInfo .ant-divider-horizontal {
   margin: 0px !important;
 }
-.priceInfo .ant-input{
+.priceInfo .ant-input {
   border: none !important;
 }
-.priceInfo .ant-input:focus, .ant-input-focused{
-  border-color:none !important;
-  border-right-width:none !important;
-  box-shadow:none !important;
+.priceInfo .ant-input:focus,
+.ant-input-focused {
+  border-color: none !important;
+  border-right-width: none !important;
+  box-shadow: none !important;
 }
-.priceInfo .ant-form-item{
+.priceInfo .ant-form-item {
   margin-bottom: 0px !important;
 }
-.checkOption.ant-form-item-explain .ant-form-item-explain-error{
+.checkOption.ant-form-item-explain .ant-form-item-explain-error {
   margin-top: -50px !important;
 }
-.ImageAgainPickButton{
+.ImageAgainPickButton {
   z-index: 10px !important;
-  background-color: #0013d4 !important;  
+  background-color: #0013d4 !important;
 }
-.Sale .ant-input{
+.Sale .ant-input {
   border: none !important;
 }
-.Sale .ant-input:focus, .ant-input-focused{
+.Sale .ant-input:focus,
+.ant-input-focused {
   border-color: none !important;
   box-shadow: none !important;
-  border-right-width:none !important;
+  border-right-width: none !important;
 }
-.Sale .ant-divider-horizontal{
-  margin:0px !important ;
+.Sale .ant-divider-horizontal {
+  margin: 0px !important ;
 }
 
-.Sale .ant-form-item{ margin-bottom: 0px !important;}
-.rentDateCalendar .ant-picker-cell .ant-picker-cell-in-view{
-    height:42px  !important;
-    width:auto !important;
+.Sale .ant-form-item {
+  margin-bottom: 0px !important;
 }
-.rentDateCalendar{
+.rentDateCalendar .ant-picker-cell .ant-picker-cell-in-view {
+  height: 42px !important;
+  width: auto !important;
+}
+.rentDateCalendar {
   width: 720px !important;
 }
-.rentDateCalendar .ant-picker-panel .ant-picker-body .ant-picker-content tbody tr{
-  height:42px  !important;
-    width:auto !important;
+.rentDateCalendar
+  .ant-picker-panel
+  .ant-picker-body
+  .ant-picker-content
+  tbody
+  tr {
+  height: 42px !important;
+  width: auto !important;
 }
-.rentDateCalendar  .ant-picker-panel .ant-picker-calendar-date{
-   height: 52px !important;
+.rentDateCalendar .ant-picker-panel .ant-picker-calendar-date {
+  height: 52px !important;
 }
-.rentDate .daynighttext .item{
+.rentDate .daynighttext .item {
   margin-top: 28px !important;
 }
 .rentDate .daynighttext .item ul li {
   height: 10px !important;
   font-size: 12px !important;
 }
-.rentDate .daynighttext .item ul{
+.rentDate .daynighttext .item ul {
   margin-top: 28px;
 }
 
-
-.rentDateCalendar .ant-picker-calendar-date-value{
+.rentDateCalendar .ant-picker-calendar-date-value {
   width: 40px !important;
   font-size: 10px !important;
   height: 13px !important;
 }
-.pickWeekDayState .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+.pickWeekDayState
+  .ant-select:not(.ant-select-customize-input)
+  .ant-select-selector {
   border-radius: 10px !important;
 }
 .Surrender .ant-select-selector {
-  background:  rgba(0, 249, 184, 0.08) !important;
-   color: #76E8AA;
-   border: 1px solid #76E8AA !important ;
+  background: rgba(0, 249, 184, 0.08) !important;
+  color: #76e8aa;
+  border: 1px solid #76e8aa !important ;
 }
 .NotSurrender .ant-select-selector {
-  background-color: #DEE2E9 !important;
+  background-color: #dee2e9 !important;
   color: black;
   border: 1px solid black !important;
 }
-.Surrender.ant-select-arrow{
-   color: blueviolet;
+.Surrender.ant-select-arrow {
+  color: blueviolet;
 }
-.stateDivider{
+.stateDivider {
   margin: 12px !important;
 }
-.addVehicleForm .ant-form-item-control-input{
+.addVehicleForm .ant-form-item-control-input {
   height: 24px !important ;
   /* width: 318px !important; */
 }
-.addVehicleForm .ant-divider-horizontal{
-  margin: 0px  !important;
- 
+.addVehicleForm .ant-divider-horizontal {
+  margin: 0px !important;
 }
-.addVehicleForm .ant-select-selector{
+.addVehicleForm .ant-select-selector {
   border: none !important;
-
 }
 
-.addVehicleForm .ant-form-item{
+.addVehicleForm .ant-form-item {
   margin-bottom: 0px !important  ;
 }
-.addVehicleForm .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector{
+.addVehicleForm
+  .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input)
+  .ant-select-selector {
   box-shadow: none !important;
   border-right-width: none !important;
   border-color: none !important;
 }
-.addVehicleForm .ant-input{
+.addVehicleForm .ant-input {
   border: none !important;
 }
-.addVehicleForm.ant-input:focus, .ant-input-focused{
+.addVehicleForm.ant-input:focus,
+.ant-input-focused {
   box-shadow: none !important;
   border-right-width: none !important;
   border-color: none !important;
 }
-.Success{
-  background:  rgba(0, 249, 184, 0.08) !important;
-  color: #76E8AA;
-  border: 1px solid #76E8AA !important ;
-   font-size: 15px;
-   height: 10px;
-   margin-left: 10px;
-   border-radius: 5px;
-   padding: 1px;
+.Success {
+  background: rgba(0, 249, 184, 0.08) !important;
+  color: #76e8aa;
+  border: 1px solid #76e8aa !important ;
+  font-size: 15px;
+  height: 10px;
+  margin-left: 10px;
+  border-radius: 5px;
+  padding: 1px;
 }
-.NotSuccess{
-  background-color: #DEE2E9 !important;
+.NotSuccess {
+  background-color: #dee2e9 !important;
   padding: 1px;
   color: black;
   width: 70px !important;
   border: 1px solid black !important;
-  border-radius: 5px ;
+  border-radius: 5px;
   margin-left: 10px;
 }
-.SpaceIcons  .ant-collapse{
+.SpaceIcons .ant-collapse {
   border-color: none !important;
   width: 100% !important;
   border: none !important;
   border-radius: 20px !important;
 }
-.searchAutoComplete  .ant-select-selector .ant-select-selection-search .ant-select-selection-search-input{
+.searchAutoComplete
+  .ant-select-selector
+  .ant-select-selection-search
+  .ant-select-selection-search-input {
   height: 70px !important;
+}
+.editSpaceDataButton {
+  background: rgba(3, 54, 255, 0.08) !important;
 }

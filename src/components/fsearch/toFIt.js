@@ -16,8 +16,9 @@ const {TabPane} = Tabs;
 const callback = (key) =>{
   console.log(key);
 };
-const tofit = ({data, lat, lng, markers}) => {
-  console.log({data, lat, lng, markers});
+const tofit = ({data, lat, lng}) => {
+  console.log({data, lat, lng});
+
   // const [PickTimevisible, setPickTimeVisible] = useState(false);
   const [detailVisible, setDetailsVisible] = useState(false);
   // eslint-disable-next-line no-unused-vars
@@ -1309,12 +1310,13 @@ const tofit = ({data, lat, lng, markers}) => {
                           height: '50px',
                           marginTop: '10px',
                         }}
+                        gutter={16}
                       >
                         <Col span={12}>
-                          <Button className={'buttonGo'}>Захиалга нэмэх</Button>
+                          <Button block type="primary" className={'buttonGo'}>Захиалга нэмэх</Button>
                         </Col>
                         <Col span={12}>
-                          <Button className={'buttonGo'}>Төлбөр төлөх</Button>
+                          <Button block type="primary" className={'buttonGo'}>Төлбөр төлөх</Button>
                         </Col>
                       </Row>
                     </TabPane>

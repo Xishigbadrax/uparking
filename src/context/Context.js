@@ -1,6 +1,8 @@
 import {useState, createContext, useReducer, useEffect} from 'react';
 import reducers from './Reducers';
 import Auth from '@utils/auth';
+// eslint-disable-next-line camelcase
+import jwt_decode from 'jwt-decode';
 import {useRouter} from 'next/router';
 import {profileMenu} from '@constants/profilemenu';
 import {walletMenu} from '@constants/walletmenu';
@@ -28,6 +30,7 @@ export const ContextProvider = ({children}) => {
 
   const getProfileData = async (user) => {
     const userdata = await callGet(`/user/${user.user_id}/test`);
+
     if (!userdata || userdata === undefined) {
       showMessage(messageType.FAILED.type, defaultMsg.dataError);
       return;
@@ -58,6 +61,7 @@ export const ContextProvider = ({children}) => {
         const user = jwtDecode(accessToken);
         getProfileData(user);
 
+        getProfileData(user);
         if (user.authorities !== undefined) {
           user.authorities.map((auths) => {
             permissionList[auths] = auths;
@@ -69,6 +73,7 @@ export const ContextProvider = ({children}) => {
       type: 'PERMISSIONS',
       payload: permissionList,
     });
+
     // // #endregion
     // //#region set menu
     let menuData = [];
