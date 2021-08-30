@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import {Row, Col, Button, Divider, Form, Input, Item, Upload, Spin, Select} from 'antd';
+import {Row, Col, Button, Divider, Form, Input, Upload, Spin, Select} from 'antd';
 import {
   EditOutlined,
   LeftOutlined,
@@ -731,7 +731,7 @@ const Edit = ({data}) => {
           {!mainImageValue ? (
             <Col style={{marginTop: '30px'}} offset={3}>
 
-              <div key={Item}>
+              <div>
                 <Image src={mainImage[current].image} height="400px" width='800px'/>
                 <div
                   style={{
@@ -880,7 +880,7 @@ const Edit = ({data}) => {
         <Row>
           {!mainImageValue ? (
             <Col offset={3}>
-              <div key={Item}>
+              <div>
                 <Image src={mainImage[current].image} height="400px" width='800px'/>
                 <div
                   style={{
