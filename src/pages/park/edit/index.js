@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import {Row, Col, Button, Divider, Form, Input, Item, Upload, Spin, Select} from 'antd';
-=======
-import {Row, Col, Button, Divider, Form, Input, Upload, Spin} from 'antd';
->>>>>>> b7124eb6aa0ac3c60b700519d2d43ed14b562c12
 import {
   EditOutlined,
   LeftOutlined,
@@ -878,20 +874,9 @@ const Edit = ({data}) => {
         <Divider />
         <Row>
           {!mainImageValue ? (
-<<<<<<< HEAD
             <Col offset={3}>
               <div key={Item}>
                 <Image src={mainImage[current].image} height="400px" width='800px'/>
-=======
-            <Col offset={2} style={{marginTop: '30px'}}>
-              <div >
-                <Image
-                  src={data[current].image}
-                  width="1400px"
-                  height="600px"
-                  style={{zIndex: '-1'}}
-                />
->>>>>>> b7124eb6aa0ac3c60b700519d2d43ed14b562c12
                 <div
                   style={{
                     display: 'flex',
