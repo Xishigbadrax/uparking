@@ -16,8 +16,9 @@ const {TabPane} = Tabs;
 const callback = (key) =>{
   console.log(key);
 };
-const tofit = ({data, lat, lng, markers}) => {
-  console.log({data, lat, lng, markers});
+const tofit = ({data, lat, lng}) => {
+  console.log({data, lat, lng});
+
   // const [PickTimevisible, setPickTimeVisible] = useState(false);
   const [detailVisible, setDetailsVisible] = useState(false);
   // eslint-disable-next-line no-unused-vars
