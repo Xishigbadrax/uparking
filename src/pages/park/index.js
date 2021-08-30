@@ -16,8 +16,7 @@ import {
   Drawer,
   AutoComplete,
   Form,
-  Modal,
-  Alert,
+
 } from 'antd';
 import moment from 'moment';
 import Helper from '@utils/helper';
@@ -87,15 +86,12 @@ const MapWithAMarkerClusterer = compose(
 const Dashboard = () => {
   const [form] = Form.useForm();
   const [markers, setMarkers] = useState([]);
-  const [searchType, setSearchType] =useState();
   const [searchedData, setSearchedData] = useState([]);
   const [dataSource, setDataSource] = useState([]);
   const [parkingUpDownArrow, setParkingUpDownArrow] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const [transfer, setTransfer] = useState(null);
-  const [message, setmessage] = useState('');
-  const [status, setstatus] = useState('');
-  const [title, settitle] = useState('');
+  
   const [messageShow, setmessageShow] = useState(false);
   const router = useRouter();
   const [defaultCenter, setDefaultCenter] = useState({
@@ -276,7 +272,6 @@ const Dashboard = () => {
       )}&fullDay=false&startTime=${timeSplit.nightStart}&endTime=${
         timeSplit.nightEnd
       }`;
-      setSearchType(full);
     }
     if (url != '') {
       const res = await callGet(url);
@@ -560,9 +555,7 @@ const Dashboard = () => {
                 //     </Row>
                 //   </Card>
                 <div>
-                  {/* {searchType ==='full' ? */}
                   <ToFit data={searchedData} lat={defaultCenter.lat} lng={defaultCenter.lng} />
-                  {/* :<p>awdawdawdadaw</p>} */}
                 </div>
               ) : (
                 <Empty description={<span>Өгөгдөл байхгүй</span>} />
@@ -950,15 +943,7 @@ const Dashboard = () => {
           </Tabs>
         </div>
       </Drawer>
-      <Modal
-        visible={messageShow}
-        title="Мэдээлэл"
-        onOk={handleOk}
-        onCancel={handleCancel}
-        footer={[]}
-      >
-        <Alert message={title} description={message} type={status} showIcon />
-      </Modal>
+
     </Layout>
 
   );
