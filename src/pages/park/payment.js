@@ -504,7 +504,7 @@ const Payment = () => {
               <Col className="gutter-row" span={12}>
                 <div style={style}>
                   <div style={{color: '#0013D4'}}>Дуусах хугацаа</div>
-                  {orderData && orderData.endDateTime ? (
+                  {orderData || orderData.endDateTime ? (
                     <div>{Helper.removeSec(orderData.endDateTime)}</div>
                   ) : null}
                 </div>
@@ -512,7 +512,7 @@ const Payment = () => {
             </Row>
 
             {(() => {
-              if ( orderData && orderData.bookingStatus === 'SAVED') {
+              if ( orderData || orderData.bookingStatus === 'SAVED') {
                 return (
                   <div>
                     <Divider />
@@ -580,7 +580,7 @@ const Payment = () => {
                                     <div>
                                       <WalletBankInfo
                                         value={
-                                          bankData && bankData.accountNumber ?
+                                          bankData || bankData.accountNumber ?
                                             bankData.accountNumber :
                                             0
                                         }

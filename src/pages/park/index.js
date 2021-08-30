@@ -16,6 +16,8 @@ import {
   Drawer,
   AutoComplete,
   Form,
+  Modal,
+  Alert,
 } from 'antd';
 import moment from 'moment';
 import Helper from '@utils/helper';
@@ -90,6 +92,10 @@ const Dashboard = () => {
   const [parkingUpDownArrow, setParkingUpDownArrow] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const [transfer, setTransfer] = useState(null);
+  const [message, setmessage] = useState('');
+  const [status, setstatus] = useState('');
+  const [title, settitle] = useState('');
+  const [messageShow, setmessageShow] = useState(false);
   const router = useRouter();
   const [defaultCenter, setDefaultCenter] = useState({
     lat: 47.91909306508191,
@@ -139,6 +145,13 @@ const Dashboard = () => {
 
   const onCloseDrawerMore = () => {
     setVisibleDrawerMore(false);
+  };
+  const handleOk = () => {
+    setmessageShow(false);
+  };
+
+  const handleCancel = () => {
+    setmessageShow(false);
   };
 
   useEffect(() => {
@@ -905,7 +918,7 @@ const Dashboard = () => {
                         өдөр
                       </div>
                       <div style={{color: '#35446d', marginLeft: '10px'}}>
-                        0 ₮
+                        500 ₮
                       </div>
                     </div>
                   </Col>
@@ -933,7 +946,17 @@ const Dashboard = () => {
           </Tabs>
         </div>
       </Drawer>
+      <Modal
+        visible={messageShow}
+        title="Мэдээлэл"
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={[]}
+      >
+        <Alert message={title} description={message} type={status} showIcon />
+      </Modal>
     </Layout>
+
   );
 };
 
