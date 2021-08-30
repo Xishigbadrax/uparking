@@ -547,7 +547,8 @@ const Dashboard = () => {
                 //     </Row>
                 //   </Card>
                 <div>
-                  <ToFit data={searchedData} lat={defaultCenter.lat} lng={defaultCenter.lng} />
+                  {searchType ==='full' ?
+                    <ToFit data={searchedData} lat={defaultCenter.lat} lng={defaultCenter.lng} /> :<p>awdawdawdadaw</p>}
                 </div>
               ) : (
                 <Empty description={<span>Өгөгдөл байхгүй</span>} />
