@@ -1,0 +1,56 @@
+.d0{
+    position: relative;
+    margin-left: 150px;
+    width: 542px;
+   cursor: pointer;
+   margin-top: 12px;
+}
+.d1{
+    position: relative;
+    margin-left: 150px;
+    margin-top: 28px;
+    margin-bottom: 50px;
+    width: 261px;
+    height: 323px;
+    cursor: pointer;
+}
+.d2{
+    position: relative;
+    margin-left: 150px;
+    margin-top: 28px;
+    margin-bottom: 50px;
+    width: 261px;
+    height: 323px;
+    cursor: pointer;
+}
+.d3{
+    position: relative;
+    margin-left: 150px;
+    margin-top: 28px;
+    margin-bottom: 50px;
+    width: 261px;
+    height: 323px;
+    cursor: pointer;
+}
+.d4{
+    position: relative;
+    margin-left: 150px;
+    margin-top: 28px;
+    margin-bottom: 50px;
+    width: 261px;
+    height: 323px;
+    cursor: pointer;
+}
+.d5{
+    position: relative;
+    margin-left: 150px;
+    margin-top: 28px;
+    margin-bottom: 50px;
+    width: 261px;
+    height: 323px;
+    cursor: pointer;
+}
+.d1-img {
+    object-fit: cover;
+    height: auto;
+}
