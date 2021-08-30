@@ -1,14 +1,38 @@
+// import {Tabs} from 'antd';
+// const Test = () =>{
+//   const {TabPane} = Tabs;
+//   return <div>
+//     <Tabs defaultActiveKey="1" >
+//       <TabPane style={{borderBottom: '2px solid red'}}tab="Tab 1" key="1">
+//       Content of Tab Pane 1
+//       </TabPane>
+//       <TabPane tab="Tab 2" key="2">
+//       Content of Tab Pane 2
+//       </TabPane>
+//       <TabPane tab="Tab 3" key="3">
+//       Content of Tab Pane 3
+//       </TabPane>
+//     </Tabs>
+//   </div>;
+// };
+// export default Test;
+
+
 import Footer from '../../components/Footer';
-import InforNavbar from '../../components/InforNavbar';
+import InforNavbar from '../../components/InfoNavbar/InforNavbar';
 import {Image} from 'antd';
 import Context from '@context/Context';
 import {useRouter} from 'next/router';
 import {useEffect, useState, useContext} from 'react';
 import {callGet} from '@api/api';
+import css from './style.module.css';
+import {auto} from 'async';
 
 
 const News = () => {
   const [data, setdata] = useState(null);
+  const [data2, setdata2] = useState(null);
+
   const router = useRouter();
 
   const ctx = useContext(Context);
@@ -36,28 +60,35 @@ const News = () => {
   };
 
   useEffect(() => {
+    console.log('sss');
+    console.log(data2);
+  }, [data2]);
+  useEffect(() => {
     fetchData();
   }, []);
 
   return (
+
     <div>
-      <InforNavbar />
+
+      <InforNavbar onClick2={(e) =>setdata2(e)}/>
       <div>
         {data &&
           data.map((item, index) => (
             <div
               key={index}
-              className={`d + ${index}`}
-              style={{
-                position: 'relative',
-                marginLeft: '150px',
-              }}
+              onClick={() => newsDetails(item.id)}
+              className= { css['d' + index.toString()] }
+              // style={{
+              //   position: 'relative',
+              //   marginLeft: '150px',
+              // }}
             >
 
               <p
                 style={{
                   position: 'absolute',
-                  left: '280px',
+                  right: '0px',
                   top: '8px',
                   zIndex: '2',
                   color: 'white',
@@ -76,8 +107,6 @@ const News = () => {
                   top: '10px',
                   zIndex: '2',
                   color: 'white',
-
-
                 }}
               >
                 <Image preview= {false} src="/eye-24.png " />
@@ -113,16 +142,16 @@ const News = () => {
 
 
               <div
-                onClick={() => newsDetails(item.id)}
-                className={'d' + index.toString()}
+
+
                 style={{
 
                   backgroundColor: 'rgba(0, 0,0,0.5)',
                   height: '60px',
                   position: 'absolute',
                   zIndex: '2',
-                  width: '400px',
-                  top: '190px',
+                  width: '100%',
+                  bottom: '6px',
                   textAlign: 'left',
                   cursor: 'pointer',
                   color: 'white',
@@ -147,9 +176,8 @@ const News = () => {
               <Image
                 alt="img"
                 preview={false}
-                width={400}
-                height={250}
-                // style={{ zIndex: -1 }}
+
+                height={auto}
                 src={'https://uparking.mn' + item.image}
               />
 
@@ -159,9 +187,20 @@ const News = () => {
           )) }
       </div>
 
-      {/* /////////////////////// */}
+      <Footer />
+    </div>
+  );
+};
 
-      {/* <div className="mt-8">
+export default News;
+
+
+{/* ////////////////////////////////////////////////// */}
+
+
+{/* /////////////////////// */}
+
+{/* <div className="mt-8">
 
       </div>
       <div className="px-36">
@@ -454,7 +493,7 @@ const News = () => {
           </div>
         </div>
       </div> */}
-      {/* {news.map((item, index) => ({
+{/* {news.map((item, index) => ({
         if(   =  "0") {
           <div
             className={`${styles.backgroundInformation} ml-16`}
@@ -463,12 +502,7 @@ const News = () => {
         },
       }))}
       <div className="mt-16"> */}
-      <Footer />
-    </div>
-  );
-};
 
-export default News;
 
 // const news = [
 //   {

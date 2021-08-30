@@ -1,5 +1,5 @@
 // import News from '../../components/News';
-import InforNavbar from '../../components/InforNavbar';
+import InforNavbar from '../../components/InfoNavbar/InforNavbar';
 import NewDetails from './newDetails';
 const title=()=> {
   return (

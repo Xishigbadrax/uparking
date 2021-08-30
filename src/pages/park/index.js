@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import {callGet} from '@api/api';
+import {useRouter} from 'next/router';
 import {showMessage} from '../../utils/message';
 import {
   Col,
@@ -88,6 +89,9 @@ const Dashboard = () => {
   const [searchedData, setSearchedData] = useState([]);
   const [dataSource, setDataSource] = useState([]);
   const [parkingUpDownArrow, setParkingUpDownArrow] = useState(false);
+  // eslint-disable-next-line no-unused-vars
+  const [transfer, setTransfer] = useState(null);
+  const router = useRouter();
   const [defaultCenter, setDefaultCenter] = useState({
     lat: 47.91909306508191,
     lng: 106.91761127921768,
@@ -121,6 +125,9 @@ const Dashboard = () => {
   // const showDrawer = async (item) => {
   //   const res = await callGet(
   //     `/parkingspace?parkingSpaceId=${item.park.parkingSpaceId}`,
+
+  //     setTransfer(item.park.parkingSpaceId),
+
   //   );
   //   if (!res || res === undefined) {
   //     showMessage(messageType.FAILED.type, defaultMsg.dataError);
@@ -211,6 +218,17 @@ const Dashboard = () => {
   const onChangeEndDate = (date) => {
     setEndDate(date);
   };
+  const onTransfer = (id) => {
+    console.log(id, 'ehnii id');
+    id &&
+      router.push({
+        pathname: 'park/payment',
+        query: {
+          id: id,
+        },
+      });
+  };
+
 
   const onFinish = async (values) => {
     console.log(values, 'values');
@@ -901,7 +919,7 @@ const Dashboard = () => {
                     </Button>
                   </Col>
                   <Col span={12}>
-                    <Button type="primary" size={'large'} block>
+                    <Button type="primary" size={'large'} block onClick={() => onTransfer(transfer)} >
                       Төлбөр төлөх
                     </Button>
                   </Col>

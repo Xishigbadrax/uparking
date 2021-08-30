@@ -19,6 +19,7 @@ import {
 } from '@ant-design/icons';
 import {useEffect, useState, useContext} from 'react';
 import {callGet, callPost} from '@api/api';
+import {useRouter} from 'next/router';
 import Context from '@context/Context';
 // import {useRouter} from 'next/router';
 import Helper from '@utils/helper';
@@ -48,26 +49,33 @@ const style = {
 const Payment = () => {
   const {userdata} = useContext(Context);
   const ctx = useContext(Context);
+  const router = useRouter();
   // eslint-disable-next-line no-unused-vars
-  const [orderData, setOrderData] = useState({
-    residenceName: 'Маршал хотхон',
-    province: 'Улаанбаатар',
-    district: 'Хан-Уул',
-    section: '5-р хороо',
-    residenceBlockNumber: '67',
-    totalAtDay: '2',
-    returnRoutes:
-      'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    bookingStatus: 'SAVED',
-    totalPrice: '16000',
-  });
+  // const [orderData, setOrderData] = useState({
+  //   residenceName: 'Маршал хотхон',
+  //   province: 'Улаанбаатар',
+  //   district: 'Хан-Уул',
+  //   section: '5-р хороо',
+  //   residenceBlockNumber: '67',
+  //   totalAtDay: '2',
+  //   returnRoutes:
+  //     'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+  //   bookingStatus: 'SAVED',
+  //   totalPrice: '16000',
+  // });
+  const [orderData, setOrderData] = useState(null);
   const [images, setImages] = useState([]);
   const [parkingUpDownArrow, setParkingUpDownArrow] = useState(false);
   const [bankData, setBankData] = useState(null);
   const [type, settype] = useState('KHANBANK');
   const [type2, settype2] = useState('MONGOLCHAT');
   const [amount, setamount] = useState(0);
+
+  // const [test, setTest] = useState(null);
   const [phoneNumber, setphoneNumber] = useState(null);
+  const {id} = router.query;
+  // const orderId = id;
+
   // eslint-disable-next-line no-unused-vars
   const [formData, setformData] = useState({
     amount: null,
@@ -80,10 +88,11 @@ const Payment = () => {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [id]);
   useEffect(() => {
     fetchData();
   }, [type]);
+
 
   const fetchData = async () => {
     await callGet(`/payment/bankinfo?bankName=${type}`).then((res) => {
@@ -91,6 +100,19 @@ const Payment = () => {
     });
   };
 
+
+  console.log(id, 'id shuu');
+
+  // useEffect(() => {
+  //   const fetchData4 = async () => {
+  //     await callGet(`/parkingspace?parkingSpaceId=${id}`).then((res) => {
+  //       res && setOrderData(res);
+  //     });
+  //   };
+  //   fetchData4();
+  // }, [id]);
+
+  // console.log(orderData, 'orderiin medeelel');
   const fetchData2 = async () => {
     if (amount != 0) {
       const formData2 = {
@@ -176,55 +198,54 @@ const Payment = () => {
     }
   };
 
+  // await callGet(`/parkingspace?parkingSpaceId=${id}`).then((res) => {
+  //       res && setOrderData(res);
+  //     });
   const getData = async () => {
     // const orderId = router.query.id;
     ctx.setIsLoading(true);
-    const res = await callGet(`/booking/id/test?id=${497}&asWho=1`);
-    console.log(res, 'resresres');
-    if (!res || res === undefined) {
-      showMessage(messageType.FAILED.type, defaultMsg.dataError);
-    } else {
-      //   setOrderData({});
-      setImages([]);
-      // if (!Helper.isNullOrEmpty(res.imageFromGate)) {
-      setImages((images) => [
-        ...images,
-        {
-          id: 4,
-          path: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        },
-      ]);
-      // }
-      //   if (!Helper.isNullOrEmpty(res.imageParkingOverall)) {
-      //     setImages((images) => [
-      //       ...images,
-      //       { id: 5, path: res.imageParkingOverall },
-      //     ]);
-      //   }
-      //   if (!Helper.isNullOrEmpty(res.imageResidenceGate)) {
-      //     setImages((images) => [
-      //       ...images,
-      //       { id: 6, path: res.imageResidenceGate },
-      //     ]);
-      //   }
-      //   if (!Helper.isNullOrEmpty(res.imageSpaceNumber)) {
-      //     setImages((images) => [
-      //       ...images,
-      //       { id: 7, path: res.imageSpaceNumber },
-      //     ]);
-      //   }
-      //   if (!Helper.isNullOrEmpty(res.imageSpaceNumber)) {
-      //     setImages((images) => [
-      //       ...images,
-      //       { id: 8, path: res.imageSpaceNumber },
-      //     ]);
-      //   }
-    }
-    ctx.setIsLoading(false);
+    await callGet(`/parkingspace?parkingSpaceId=${id}`).then((res) => {
+      console.log(res, 'resresres');
+      if (!res || res === undefined) {
+        showMessage(messageType.FAILED.type, defaultMsg.dataError);
+      } else {
+        setOrderData(res);
+        setImages([]);
+        if (!Helper.isNullOrEmpty(res.imageFromGate)) {
+          setImages((images) => [...images, {id: 4, path: res.imageFromGate}]);
+        }
+
+        if (!Helper.isNullOrEmpty(res.imageParkingOverall)) {
+          setImages((images) => [
+            ...images,
+            {id: 5, path: res.imageParkingOverall},
+          ]);
+        }
+        if (!Helper.isNullOrEmpty(res.imageResidenceGate)) {
+          setImages((images) => [
+            ...images,
+            {id: 6, path: res.imageResidenceGate},
+          ]);
+        }
+        if (!Helper.isNullOrEmpty(res.imageSpaceNumber)) {
+          setImages((images) => [
+            ...images,
+            {id: 7, path: res.imageSpaceNumber},
+          ]);
+        }
+        if (!Helper.isNullOrEmpty(res.imageSpaceNumber)) {
+          setImages((images) => [
+            ...images,
+            {id: 8, path: res.imageSpaceNumber},
+          ]);
+        }
+      }
+      ctx.setIsLoading(false);
+    });
   };
+  console.log(orderData, 'orderDatagiin medeelel');
 
-
-  ndleClickBankLogo = (activekey) => {
+  const handleClickBankLogo = (activekey) => {
     settype(activekey);
   };
 
@@ -284,7 +305,7 @@ const Payment = () => {
               <Col span={12}>
                 <div style={{fontSize: '20px'}}>
                   <strong>
-                    {!Helper.isNullOrEmpty(orderData.residenceName) ?
+                    { orderData != null && !Helper.isNullOrEmpty(orderData.residenceName) ?
                       orderData.residenceName :
                       null}
                   </strong>
@@ -294,7 +315,7 @@ const Payment = () => {
               {/* <Col span={6}>2</Col> */}
               <Col
                 span={12}
-              >{`${orderData.province}, ${orderData.district}, ${orderData.section}, ${orderData.residenceName}, ${orderData.residenceBlockNumber}`}</Col>
+              >{ orderData && `${orderData.provinceLabel}, ${orderData.districtLabel}, ${orderData.sectionLabel}, ${orderData.residenceName}, ${orderData.residenceBlockNumber}` }</Col>
             </Row>
             <Row justify="center" style={{padding: '20px 10px'}}>
               <Col
@@ -313,7 +334,7 @@ const Payment = () => {
                     <Image
                       preview={false}
                       width={24}
-                      src={IMG_URL + orderData.floorNumber}
+                      src={IMG_URL + orderData.floorNumberImage}
                     />
                   </div>
                 ) : null}
@@ -358,8 +379,8 @@ const Payment = () => {
                     <Image
                       preview={false}
                       width={24}
-                      // src={IMG_URL + orderData.returnRoutes}
-                      src={orderData.returnRoutes}
+                      src={IMG_URL + orderData.returnRoutes}
+                      // src={orderData.returnRoutes}
                     />
                   </div>
                 ) : null}
@@ -376,7 +397,7 @@ const Payment = () => {
               <Col span={24}>
                 {parkingUpDownArrow ? (
                   <div>
-                    {orderData && orderData.floorNumber ? (
+                    {orderData || orderData.floorNumber ? (
                       <div style={{marginRight: '13px', display: 'flex'}}>
                         <Image
                           preview={false}
@@ -388,7 +409,7 @@ const Payment = () => {
                         </div>
                       </div>
                     ) : null}
-                    {orderData && orderData.entranceLock ? (
+                    {orderData || orderData.entranceLock ? (
                       <div style={{marginRight: '13px', display: 'flex'}}>
                         <Image
                           preview={false}
@@ -400,7 +421,7 @@ const Payment = () => {
                         </div>
                       </div>
                     ) : null}
-                    {orderData && orderData.isNumbering ? (
+                    {orderData || orderData.isNumbering ? (
                       <div style={{marginRight: '13px', display: 'flex'}}>
                         <Image
                           preview={false}
@@ -412,7 +433,7 @@ const Payment = () => {
                         </div>
                       </div>
                     ) : null}
-                    {orderData && orderData.capacity ? (
+                    {orderData || orderData.capacity ? (
                       <div style={{marginRight: '13px', display: 'flex'}}>
                         <Image
                           preview={false}
@@ -424,7 +445,7 @@ const Payment = () => {
                         </div>
                       </div>
                     ) : null}
-                    {orderData && orderData.type ? (
+                    {orderData || orderData.type ? (
                       <div style={{marginRight: '13px', display: 'flex'}}>
                         <Image
                           preview={false}
@@ -436,7 +457,7 @@ const Payment = () => {
                         </div>
                       </div>
                     ) : null}
-                    {orderData && orderData.returnRoutes ? (
+                    {orderData || orderData.returnRoutes ? (
                       <div style={{marginRight: '13px', display: 'flex'}}>
                         <Image
                           preview={false}
@@ -464,7 +485,7 @@ const Payment = () => {
                 }}
               >
                 <div style={{color: '#0013D4'}}>Таны сонгосон захиалга:</div>
-                {orderData.totalAtDay ? (
+                { orderData != null && orderData.totalAtDay ? (
                   <div style={{color: '#35446d', marginLeft: '10px'}}>
                     Нийт {orderData.totalAtDay} өдөр
                   </div>
@@ -491,7 +512,7 @@ const Payment = () => {
             </Row>
 
             {(() => {
-              if (orderData.bookingStatus === 'SAVED') {
+              if ( orderData && orderData.bookingStatus === 'SAVED') {
                 return (
                   <div>
                     <Divider />
@@ -677,7 +698,7 @@ const Payment = () => {
                     </Row>
                   </div>
                 );
-              } else if (orderData.bookingStatus === 'HISTORY') {
+              } else if ( orderData && orderData.bookingStatus === 'HISTORY') {
                 return (
                   <div style={{margin: '30px 0px'}}>
                     <Button type="primary" size={'large'} block>

@@ -1,0 +1,20 @@
+.item{
+    font-size: 12px;
+    color: black;
+    cursor: pointer;
+    padding: 2px 5px;
+    height: 25px;
+    text-align: center;
+    
+}
+.item:hover{
+    color: white;
+    /* background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%); */
+    background: linear-gradient(to right,  #0013D4, #00F9B8), linear-gradient(to right,  #0013D4, #00F9B8);
+    
+}
+.active{
+    color: white;
+    background: linear-gradient(to right,  #0013D4, #00F9B8), linear-gradient(to right,  #0013D4, #00F9B8);
+}
