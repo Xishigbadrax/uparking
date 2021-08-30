@@ -1,8 +1,6 @@
-<<<<<<< HEAD
-import {Row, Col, Button, Divider, Form, Input, Item, Upload, Spin, Select} from 'antd';
-=======
-import {Row, Col, Button, Divider, Form, Input, Upload, Spin} from 'antd';
->>>>>>> b7124eb6aa0ac3c60b700519d2d43ed14b562c12
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
+import {Row, Col, Button, Divider, Form, Input, Upload, Spin, Select} from 'antd';
 import {
   EditOutlined,
   LeftOutlined,
@@ -20,7 +18,7 @@ import PriceInfo from '@components/registerSpace/priceInfo';
 //   GoogleMap,
 // } from 'react-google-maps';
 import GoogleMapReact from 'google-map-react';
-import discount from '@components/registerSpace/discount';
+// import discount from '@components/registerSpace/discount';
 const mainImage = [{
   id: 1,
   image: '/car.png',
@@ -87,6 +85,7 @@ const Edit = ({data}) => {
   const [saleForm]= Form.useForm();
   const [lat, setLatitude]=useState();
   const [lng, setLongitude]=useState();
+  // eslint-disable-next-line no-unused-vars
   const [loading, setLoading]=useState(false);
   const [mainLoading, setMainLoading]= useState(false);
   const [loadingDiscount, setLoadingDiscount]= useState(false);
@@ -878,11 +877,6 @@ const Edit = ({data}) => {
         <Divider />
         <Row>
           {!mainImageValue ? (
-<<<<<<< HEAD
-            <Col offset={3}>
-              <div key={Item}>
-                <Image src={mainImage[current].image} height="400px" width='800px'/>
-=======
             <Col offset={2} style={{marginTop: '30px'}}>
               <div >
                 <Image
@@ -891,7 +885,6 @@ const Edit = ({data}) => {
                   height="600px"
                   style={{zIndex: '-1'}}
                 />
->>>>>>> b7124eb6aa0ac3c60b700519d2d43ed14b562c12
                 <div
                   style={{
                     display: 'flex',
