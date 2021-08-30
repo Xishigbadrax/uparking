@@ -88,6 +88,7 @@ const Dashboard = () => {
   const [searchedData, setSearchedData] = useState([]);
   const [dataSource, setDataSource] = useState([]);
   const [parkingUpDownArrow, setParkingUpDownArrow] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [transfer, setTransfer] = useState(null);
   const router = useRouter();
   const [defaultCenter, setDefaultCenter] = useState({
@@ -120,21 +121,21 @@ const Dashboard = () => {
   //   }
   // };
 
-  const showDrawer = async (item) => {
-    const res = await callGet(
-      `/parkingspace?parkingSpaceId=${item.park.parkingSpaceId}`,
+  // const showDrawer = async (item) => {
+  //   const res = await callGet(
+  //     `/parkingspace?parkingSpaceId=${item.park.parkingSpaceId}`,
 
-      setTransfer(item.park.parkingSpaceId),
+  //     setTransfer(item.park.parkingSpaceId),
 
-    );
-    if (!res || res === undefined) {
-      showMessage(messageType.FAILED.type, defaultMsg.dataError);
-      return;
-    }
-    const merged = {...res, ...item};
-    setParkingObject(merged);
-    setVisibleDrawerMore(true);
-  };
+  //   );
+  //   if (!res || res === undefined) {
+  //     showMessage(messageType.FAILED.type, defaultMsg.dataError);
+  //     return;
+  //   }
+  //   const merged = {...res, ...item};
+  //   setParkingObject(merged);
+  //   setVisibleDrawerMore(true);
+  // };
 
   const onCloseDrawerMore = () => {
     setVisibleDrawerMore(false);

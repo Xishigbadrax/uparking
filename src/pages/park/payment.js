@@ -74,7 +74,7 @@ const Payment = () => {
   // const [test, setTest] = useState(null);
   const [phoneNumber, setphoneNumber] = useState(null);
   const {id} = router.query;
-  const orderId = id;
+  // const orderId = id;
 
   // eslint-disable-next-line no-unused-vars
   const [formData, setformData] = useState({
