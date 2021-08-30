@@ -107,29 +107,29 @@ const Dashboard = () => {
 
   const [visibleDrawerMore, setVisibleDrawerMore] = useState(false);
   const [parkingObject, setParkingObject] = useState({});
-  const isBase64 = async (str) => {
-    if (str === '' || str.trim() === '') {
-      return false;
-    }
-    try {
-      return btoa(atob(str)) == str;
-    } catch (err) {
-      return false;
-    }
-  };
+  // const isBase64 = async (str) => {
+  //   if (str === '' || str.trim() === '') {
+  //     return false;
+  //   }
+  //   try {
+  //     return btoa(atob(str)) == str;
+  //   } catch (err) {
+  //     return false;
+  //   }
+  // };
 
-  const showDrawer = async (item) => {
-    const res = await callGet(
-      `/parkingspace?parkingSpaceId=${item.park.parkingSpaceId}`,
-    );
-    if (!res || res === undefined) {
-      showMessage(messageType.FAILED.type, defaultMsg.dataError);
-      return;
-    }
-    const merged = {...res, ...item};
-    setParkingObject(merged);
-    setVisibleDrawerMore(true);
-  };
+  // const showDrawer = async (item) => {
+  //   const res = await callGet(
+  //     `/parkingspace?parkingSpaceId=${item.park.parkingSpaceId}`,
+  //   );
+  //   if (!res || res === undefined) {
+  //     showMessage(messageType.FAILED.type, defaultMsg.dataError);
+  //     return;
+  //   }
+  //   const merged = {...res, ...item};
+  //   setParkingObject(merged);
+  //   setVisibleDrawerMore(true);
+  // };
 
   const onCloseDrawerMore = () => {
     setVisibleDrawerMore(false);

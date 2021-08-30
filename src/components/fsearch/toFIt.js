@@ -1310,12 +1310,13 @@ const tofit = ({data, lat, lng}) => {
                           height: '50px',
                           marginTop: '10px',
                         }}
+                        gutter={16}
                       >
                         <Col span={12}>
-                          <Button className={'buttonGo'}>Захиалга нэмэх</Button>
+                          <Button block type="primary" className={'buttonGo'}>Захиалга нэмэх</Button>
                         </Col>
                         <Col span={12}>
-                          <Button className={'buttonGo'}>Төлбөр төлөх</Button>
+                          <Button block type="primary" className={'buttonGo'}>Төлбөр төлөх</Button>
                         </Col>
                       </Row>
                     </TabPane>

@@ -16,7 +16,7 @@ import PriceInfo from '@components/registerSpace/priceInfo';
 //   GoogleMap,
 // } from 'react-google-maps';
 import GoogleMapReact from 'google-map-react';
-import discount from '@components/registerSpace/discount';
+// import discount from '@components/registerSpace/discount';
 const mainImage = [{
   id: 1,
   image: '/car.png',
@@ -83,6 +83,7 @@ const Edit = ({data}) => {
   const [saleForm]= Form.useForm();
   const [lat, setLatitude]=useState();
   const [lng, setLongitude]=useState();
+  // eslint-disable-next-line no-unused-vars
   const [loading, setLoading]=useState(false);
   const [mainLoading, setMainLoading]= useState(false);
   const [loadingDiscount, setLoadingDiscount]= useState(false);

@@ -1,4 +1,4 @@
-import {Row, Col, Button, Divider, Form, Input, Item, Upload, Spin} from 'antd';
+import {Row, Col, Button, Divider, Form, Input, Upload, Spin} from 'antd';
 import {
   EditOutlined,
   LeftOutlined,
@@ -322,7 +322,7 @@ const Edit = () => {
         <Row>
           {!mainImageValue ? (
             <Col offset={2} style={{marginTop: '30px'}}>
-              <div key={Item}>
+              <div >
                 <Image
                   src={data[current].image}
                   width="1400px"
