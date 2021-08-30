@@ -87,6 +87,7 @@ const MapWithAMarkerClusterer = compose(
 const Dashboard = () => {
   const [form] = Form.useForm();
   const [markers, setMarkers] = useState([]);
+  const [searchType, setSearchType] =useState();
   const [searchedData, setSearchedData] = useState([]);
   const [dataSource, setDataSource] = useState([]);
   const [parkingUpDownArrow, setParkingUpDownArrow] = useState(false);
@@ -275,6 +276,7 @@ const Dashboard = () => {
       )}&fullDay=false&startTime=${timeSplit.nightStart}&endTime=${
         timeSplit.nightEnd
       }`;
+      setSearchType(full);
     }
     if (url != '') {
       const res = await callGet(url);
@@ -558,7 +560,9 @@ const Dashboard = () => {
                 //     </Row>
                 //   </Card>
                 <div>
+                  {/* {searchType ==='full' ? */}
                   <ToFit data={searchedData} lat={defaultCenter.lat} lng={defaultCenter.lng} />
+                  {/* :<p>awdawdawdadaw</p>} */}
                 </div>
               ) : (
                 <Empty description={<span>Өгөгдөл байхгүй</span>} />

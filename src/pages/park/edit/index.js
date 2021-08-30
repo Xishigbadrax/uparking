@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import {Row, Col, Button, Divider, Form, Input, Upload, Spin, Select} from 'antd';
 import {
@@ -142,7 +141,9 @@ const Edit = ({data}) => {
   const [priceArray, setPriceArray]= useState([]);
   const [discountValue, setDiscountValue]=useState(false);
 
+  // eslint-disable-next-line no-unused-vars
   const [weekData, setWeekData] = useState();
+  // eslint-disable-next-line no-unused-vars
   const [checked, setChecked] = useState();
 
   const [mondayMorning, setmondayMorning] = useState('Боломжтой');
@@ -152,6 +153,7 @@ const Edit = ({data}) => {
   const [fridayMorning, setfridayMorning] = useState('Боломжтой');
   const [saturdayMorning, setsaturdayMorning] = useState('Боломжтой');
   const [sundayMorning, setsundayMorning] = useState('Боломжтой');
+  // eslint-disable-next-line no-unused-vars
   const [mondayNight, setondayNight] = useState('Боломжтой');
   const [tuesdayNight, settuesdayNight] = useState('Боломжтой');
   const [wednesdayNight, setwednesdayNight] = useState('Боломжтой');
@@ -729,7 +731,7 @@ const Edit = ({data}) => {
           {!mainImageValue ? (
             <Col style={{marginTop: '30px'}} offset={3}>
 
-              <div key={Item}>
+              <div>
                 <Image src={mainImage[current].image} height="400px" width='800px'/>
                 <div
                   style={{
@@ -877,14 +879,9 @@ const Edit = ({data}) => {
         <Divider />
         <Row>
           {!mainImageValue ? (
-            <Col offset={2} style={{marginTop: '30px'}}>
-              <div >
-                <Image
-                  src={data[current].image}
-                  width="1400px"
-                  height="600px"
-                  style={{zIndex: '-1'}}
-                />
+            <Col offset={3}>
+              <div>
+                <Image src={mainImage[current].image} height="400px" width='800px'/>
                 <div
                   style={{
                     display: 'flex',
