@@ -8,7 +8,7 @@ import {Row, Col} from 'antd';
 const {Step} = Steps;
 
 
-const verify = () => {
+const Verify = () => {
   const onFinish = (values) => {
     const res = callPost(apiList.userUpdate, values.user);
     console.log('success', res);
@@ -131,4 +131,4 @@ const verify = () => {
   );
 };
 
-export default verify;
+export default Verify;

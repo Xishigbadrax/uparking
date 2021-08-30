@@ -1,10 +1,8 @@
 import Footer from '../../components/Footer';
 import InforNavbar from '../../components/InforNavbar';
-import './style.module.css';
 import {Image} from 'antd';
 import Context from '@context/Context';
 import {useRouter} from 'next/router';
-
 import {useEffect, useState, useContext} from 'react';
 import {callGet} from '@api/api';
 
@@ -71,6 +69,47 @@ const News = () => {
               >
                 {item.createdDate}
               </p>
+              <p
+                style={{
+                  position: 'absolute',
+                  left: '8px',
+                  top: '10px',
+                  zIndex: '2',
+                  color: 'white',
+
+
+                }}
+              >
+                <Image preview= {false} src="/eye-24.png " />
+              </p>
+              <p
+                style={{
+                  position: 'absolute',
+                  left: '30px',
+                  top: '12px',
+                  zIndex: '2',
+                  color: 'white',
+                  fontSize: '10px',
+                  fontStyle: 'italic',
+
+                }}
+              >
+                11200
+              </p>
+
+              <p
+                style={{
+                  position: 'absolute',
+                  left: '62px',
+                  top: '10px',
+                  zIndex: '2',
+                  color: 'white',
+
+
+                }}
+              >
+                <Image preview= {false} src="/heart.png " />
+              </p>
 
 
               <div
@@ -113,7 +152,7 @@ const News = () => {
                 // style={{ zIndex: -1 }}
                 src={'https://uparking.mn' + item.image}
               />
-              {/* <Image style={{backgroundColor: 'red', position: 'absolute', zIndex: '2'}} src="/eye-24.png " /> */}
+
             </div>
 
 

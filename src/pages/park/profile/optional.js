@@ -8,7 +8,7 @@ import {Row, Col} from 'antd';
 
 const {Step} = Steps;
 
-const nemelt = () => {
+const Nemelt = () => {
   const [vehicles, setVehicles] = useState([]);
   useEffect(async () => {
     const data = await callGet('/user/vehicle/list');
@@ -118,4 +118,4 @@ const nemelt = () => {
     </div>
   );
 };
-export default nemelt;
+export default Nemelt;

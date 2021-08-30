@@ -10,6 +10,7 @@ import Helper from '@utils/helper';
 import Link from 'next/link';
 import {Tabs} from 'antd';
 import CustomCalendar from '@components/CustomCalendar';
+import moment from 'moment';
 moment.updateLocale('mn', {
   weekdaysMin: ['НЯ', 'ДА', 'МЯ', 'ЛХ', 'ПҮ', 'БА', 'БЯ'],
 });

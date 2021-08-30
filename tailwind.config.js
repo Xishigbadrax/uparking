@@ -1,11 +1,10 @@
-const colors = require("tailwindcss/colors");
 
 module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
       colors: {
-        navbarColor: "#0013D4",
+        navbarColor: '#0013D4',
       },
     },
   },
