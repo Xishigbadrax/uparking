@@ -1,7 +1,8 @@
-import {Row, Col, Card, Button, Rate, Image, Drawer, Radio} from 'antd';
+import {Row, Col, Card, Button, Rate, Image, Drawer, Radio, Modal, Alert} from 'antd';
 import {CloseOutlined, CheckCircleOutlined, DownOutlined, UpOutlined} from '@ant-design/icons';
-import {useState} from 'react';
+import {useState, useContext, useEffect} from 'react';
 import {callGet} from '@api/api';
+import Context from '@context/Context';
 import {Tabs} from 'antd';
 
 const callback = (key) =>{
@@ -24,13 +25,29 @@ const isBase64 = async (str) => {
 // eslint-disable-next-line react/prop-types
 const Search = ({data, startDate, endDate})=>{
   console.log(startDate, endDate);
+  const {userdata} = useContext(Context);
   const [spaceData, setSpaceData] = useState();
+  const [userRealData, setUserRealData] = useState();
   const [detailsVisible, setDetailsVisible] = useState(false);
   const [parkingUpDownArrow, setParkingUpDownArrow] = useState(false);
   const [vehicles, setVehiclesData]= useState([]);
+  const [spaceStatus, setSpaceStatus]= useState('');
+  const [parkingSpaceId, setParkingSpaceId]= useState(0);
   const [residenceDrawerItem, setResidenceDrawerItem] = useState(false);
+  const [message, setmessage] = useState('');
+  const [status, setstatus] = useState('');
+  const [title, settitle] = useState('');
+  const [messageShow, setmessageShow] = useState(false);
+
   const onChangeChooseVehicle = (e) => {
     console.log(e.target.value);
+  };
+  const handleOk = () => {
+    setmessageShow(false);
+  };
+
+  const handleCancel = () => {
+    setmessageShow(false);
   };
   const DetailsDrawerOpen = async (id) => {
     console.log(id);
@@ -38,6 +55,10 @@ const Search = ({data, startDate, endDate})=>{
     // eslint-disable-next-line react/prop-types
     const a = data.find((item) => item.park.parkingSpaceId === id);
     setResidenceDrawerItem(a.residence);
+    console.log(a, 'a-iin medeelel');
+    setSpaceStatus(a.park.spaceStatus);
+    setParkingSpaceId(a.park.parkingSpaceId);
+
     const space = await callGet(
       `/search/parkingspace/test?parkingSpaceId=${id}`,
     );
@@ -46,6 +67,56 @@ const Search = ({data, startDate, endDate})=>{
     setVehiclesData(vehicle);
     // console.log(spaceData, '<------------------spaceData ');
   };
+  useEffect(async () => {
+    if (typeof userdata.firstName != 'undefined') {
+      setUserRealData(userdata);
+    }
+  }, [userdata]);
+
+  const submit = async () => {
+    if (vehicles) {
+      // setisLoading(true);
+      const formData = {
+        endDateTime: 'string',
+        isDay: true,
+        isFullday: true,
+        isGift: false,
+        isNight: true,
+        parkingSpaceId: parkingSpaceId,
+        spaceStatus: spaceStatus,
+        startDateTime: 'string',
+        totalAllDay: 0,
+        totalAtDay: 0,
+        totalAtNight: 0,
+        totalPrice: 0,
+        userPhoneNumber: userRealData.phoneNumber,
+        vehicleId: 0,
+      };
+      console.log(formData);
+      await callPost('/booking/time', formData).then((res) => {
+        console.log(res);
+        if (res.status == 'success') {
+          setmessageShow(true);
+          setmessage(
+            'Таны захиалгын хүсэлт амжилттай илгээгдлээ. Хүсэлт баталгаажсаны дараа төлбөрөө төлнө',
+          );
+          settitle('Амжилттай');
+          setstatus('success');
+        } else {
+          setmessageShow(true);
+          setmessage(res);
+          settitle('Анхааруулга');
+          setstatus('warning');
+        }
+        // setisLoading(false);
+      });
+    } else {
+      setmessageShow(true);
+      setmessage('Тээврийн хэрэгсэл сонгоно уу ');
+      settitle('Анхааруулга');
+      setstatus('warning');
+    }
+  };
 
   const onClose = (e)=>{
     setDetailsVisible(false);
@@ -53,6 +124,7 @@ const Search = ({data, startDate, endDate})=>{
   return (
     <div>
       <div>
+        {/* eslint-disable-next-line react/prop-types */}
         {data.map((it) => (
           <Card
             key={it.park.parkingSpaceId}
@@ -937,7 +1009,7 @@ const Search = ({data, startDate, endDate})=>{
                         }}
                       >
                         <Col span={12}>
-                          <Button className={'buttonGo'}>Захиалга нэмэх</Button>
+                          <Button className={'buttonGo'} onClick={submit} >Захиалга нэмэх</Button>
                         </Col>
                         <Col span={12}>
                           <Button className={'buttonGo'}>Төлбөр төлөх</Button>
@@ -993,7 +1065,17 @@ const Search = ({data, startDate, endDate})=>{
           </div>
         </Drawer>}
       </div>
+      <Modal
+        visible={messageShow}
+        title="Мэдээлэл"
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={[]}
+      >
+        <Alert message={title} description={message} type={status} showIcon />
+      </Modal>
     </div>
+
   );
 };
 export default Search;

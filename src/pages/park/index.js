@@ -116,6 +116,7 @@ const Dashboard = () => {
   const [endDate, setEndDate] = useState(null);
   const [searchId, setSearchId] = useState(null);
   const [timeSplit, settimeSplit] = useState(null);
+  const [searchType, setSearchType] =useState('');
 
   const [visibleDrawerMore, setVisibleDrawerMore] = useState(false);
   const [parkingObject, setParkingObject] = useState({});
@@ -241,7 +242,6 @@ const Dashboard = () => {
   const onFinish = async (values) => {
     setGetDataLoading(true);
     let url = '';
-<<<<<<< HEAD
     if (tuneType !== null && startDate !== null && endDate!==null) {
       setSearchType('full');
       if (values.tuneType === 'Бүтэн өдөр') {
@@ -279,38 +279,6 @@ const Dashboard = () => {
       console.log('fsearch bolson');
       setSearchType('fsearch');
       url=`/search/input/test?keywordId=${searchId}`;
-=======
-    if (values.tuneType === 'Бүтэн өдөр') {
-      url = `/search/test/input?latitude=${position.latitude}&longitude=${
-        position.longitude
-      }&keywordId=${searchId}&startDate=${values.startdate.format(
-        'YYYY-MM-DD',
-      )}&endDate=${values.enddate.format(
-        'YYYY-MM-DD',
-      )}&fullDay=true&startTime=${timeSplit.dayStart}&endTime=${
-        timeSplit.nightEnd
-      }`;
-    } else if (values.tuneType === 'Өдөр') {
-      url = `/search/test/input?latitude=${position.latitude}&longitude=${
-        position.longitude
-      }&keywordId=${searchId}&startDate=${values.startdate.format(
-        'YYYY-MM-DD',
-      )}&endDate=${values.enddate.format(
-        'YYYY-MM-DD',
-      )}&fullDay=false&startTime=${timeSplit.dayStart}&endTime=${
-        timeSplit.dayEnd
-      }`;
-    } else if (values.tuneType === 'Шөнө') {
-      url = `/search/test/input?latitude=${position.latitude}&longitude=${
-        position.longitude
-      }&keywordId=${searchId}&startDate=${values.startdate.format(
-        'YYYY-MM-DD',
-      )}&endDate=${values.enddate.format(
-        'YYYY-MM-DD',
-      )}&fullDay=false&startTime=${timeSplit.nightStart}&endTime=${
-        timeSplit.nightEnd
-      }`;
->>>>>>> 5ca6aab1fe127fdd606393673110e650ce8c1a8d
     }
     if (url != '') {
       const res = await callGet(url);
@@ -595,7 +563,6 @@ const Dashboard = () => {
                 //       </Col>
                 //     </Row>
                 //   </Card>
-<<<<<<< HEAD
                   <div>
                     {searchType ==='full' && <Search data={searchedData} startDate={startDate} endDate={endDate}/>}
                     {searchType ==='fsearch' &&<ToFit data={searchedData} lat={defaultCenter.lat} lng={defaultCenter.lng} />}
@@ -605,16 +572,6 @@ const Dashboard = () => {
                 )}
               </TabPane>
               <TabPane tab="Хамгийн хямд" key="2">
-=======
-                <div>
-                  <ToFit data={searchedData} lat={defaultCenter.lat} lng={defaultCenter.lng} />
-                </div>
-              ) : (
-                <Empty description={<span>Өгөгдөл байхгүй</span>} />
-              )}
-            </TabPane>
-            <TabPane tab="Хамгийн хямд" key="2">
->>>>>>> 5ca6aab1fe127fdd606393673110e650ce8c1a8d
               Хамгийн хямд
               </TabPane>
               <TabPane tab="Хамгийн ойр" key="3">
