@@ -47,11 +47,8 @@ const tofit = ({data, lat, lng}) => {
   const [priceForRenter1, setpriceForRenter1] = useState(0);
   const [priceForRenter2, setpriceForRenter2] = useState(0);
   const [priceForRenter3, setpriceForRenter3] = useState(0);
-<<<<<<< HEAD
   const [messageShow2, setmessageShow2] = useState(false);
   const [dateValues, setDateValues]=useState();
-=======
->>>>>>> 3aaba74b8e821015f611e67923074590d5e53f4d
   const [message, setmessage] = useState('');
   const [status, setstatus] = useState('');
   const [title, settitle] = useState('');
@@ -1497,11 +1494,7 @@ const tofit = ({data, lat, lng}) => {
                         }}
                       >
                         <Col span={12}>
-<<<<<<< HEAD
                           <Button type='primary' onClick={totalValue > 0 ? () => timeSubmit(1) : () => submit() } className={'buttonGo'}>Захиалга нэмэх</Button>
-=======
-                          <Button onClick={totalValue > 0 ? () => timeSubmit() : () => submit() } className={'buttonGo'}>Захиалга нэмэх</Button>
->>>>>>> 3aaba74b8e821015f611e67923074590d5e53f4d
                         </Col>
                         <Col span={12}>
                           <Button type='primary' className={'buttonGo'}>Төлбөр төлөх</Button>

@@ -1,10 +1,6 @@
 import {Row, Col, Card, Button, Rate, Image, Drawer, Radio, Modal, Alert} from 'antd';
 import {CloseOutlined, CheckCircleOutlined, DownOutlined, UpOutlined} from '@ant-design/icons';
-<<<<<<< HEAD
 import {useEffect, useState} from 'react';
-=======
-import {useState, useContext, useEffect} from 'react';
->>>>>>> 3aaba74b8e821015f611e67923074590d5e53f4d
 import {callGet} from '@api/api';
 import Context from '@context/Context';
 import {Tabs} from 'antd';
@@ -1037,13 +1033,8 @@ const Search = ({data, startDate, endDate, tunetype})=>{
                           marginTop: '10px',
                         }}
                       >
-<<<<<<< HEAD
                         <Col span={12} >
                           <Button type='primary' style={{borderRadius: '10px', width: '100%'}} >Захиалга нэмэх</Button>
-=======
-                        <Col span={12}>
-                          <Button className={'buttonGo'} onClick={submit} >Захиалга нэмэх</Button>
->>>>>>> 3aaba74b8e821015f611e67923074590d5e53f4d
                         </Col>
                         <Col span={12} >
                           <Button type='primary' style={{borderRadius: '10px', width: '100%'}}>Төлбөр төлөх</Button>
