@@ -17,6 +17,7 @@ import {
   Drawer,
   AutoComplete,
   Form,
+
 } from 'antd';
 // import moment from 'moment';
 import Helper from '@utils/helper';
@@ -87,13 +88,14 @@ const MapWithAMarkerClusterer = compose(
 const Dashboard = () => {
   const [form] = Form.useForm();
   const [markers, setMarkers] = useState([]);
-  const [searchType, setSearchType] =useState();
   const [searchedData, setSearchedData] = useState([]);
   const [dataSource, setDataSource] = useState([]);
   const [getdataLoading, setGetDataLoading]= useState(false);
   const [parkingUpDownArrow, setParkingUpDownArrow] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const [transfer, setTransfer] = useState(null);
+  
+  const [messageShow, setmessageShow] = useState(false);
   const router = useRouter();
   const [defaultCenter, setDefaultCenter] = useState({
     lat: 47.91909306508191,
@@ -146,6 +148,13 @@ const Dashboard = () => {
 
   const onCloseDrawerMore = () => {
     setVisibleDrawerMore(false);
+  };
+  const handleOk = () => {
+    setmessageShow(false);
+  };
+
+  const handleCancel = () => {
+    setmessageShow(false);
   };
 
   useEffect(() => {
@@ -238,6 +247,7 @@ const Dashboard = () => {
   const onFinish = async (values) => {
     setGetDataLoading(true);
     let url = '';
+<<<<<<< HEAD
     if (tuneType !== null && startDate !== null && endDate!==null) {
       setSearchType('full');
       if (values.tuneType === 'Бүтэн өдөр') {
@@ -275,6 +285,38 @@ const Dashboard = () => {
       console.log('fsearch bolson');
       setSearchType('fsearch');
       url=`/search/input/test?keywordId=${searchId}`;
+=======
+    if (values.tuneType === 'Бүтэн өдөр') {
+      url = `/search/test/input?latitude=${position.latitude}&longitude=${
+        position.longitude
+      }&keywordId=${searchId}&startDate=${values.startdate.format(
+        'YYYY-MM-DD',
+      )}&endDate=${values.enddate.format(
+        'YYYY-MM-DD',
+      )}&fullDay=true&startTime=${timeSplit.dayStart}&endTime=${
+        timeSplit.nightEnd
+      }`;
+    } else if (values.tuneType === 'Өдөр') {
+      url = `/search/test/input?latitude=${position.latitude}&longitude=${
+        position.longitude
+      }&keywordId=${searchId}&startDate=${values.startdate.format(
+        'YYYY-MM-DD',
+      )}&endDate=${values.enddate.format(
+        'YYYY-MM-DD',
+      )}&fullDay=false&startTime=${timeSplit.dayStart}&endTime=${
+        timeSplit.dayEnd
+      }`;
+    } else if (values.tuneType === 'Шөнө') {
+      url = `/search/test/input?latitude=${position.latitude}&longitude=${
+        position.longitude
+      }&keywordId=${searchId}&startDate=${values.startdate.format(
+        'YYYY-MM-DD',
+      )}&endDate=${values.enddate.format(
+        'YYYY-MM-DD',
+      )}&fullDay=false&startTime=${timeSplit.nightStart}&endTime=${
+        timeSplit.nightEnd
+      }`;
+>>>>>>> 5ca6aab1fe127fdd606393673110e650ce8c1a8d
     }
     if (url != '') {
       const res = await callGet(url);
@@ -559,6 +601,7 @@ const Dashboard = () => {
                 //       </Col>
                 //     </Row>
                 //   </Card>
+<<<<<<< HEAD
                   <div>
                     {searchType ==='full' && <Search data={searchedData} startDate={startDate} endDate={endDate}/>}
                     {searchType ==='fsearch' &&<ToFit data={searchedData} lat={defaultCenter.lat} lng={defaultCenter.lng} />}
@@ -568,6 +611,16 @@ const Dashboard = () => {
                 )}
               </TabPane>
               <TabPane tab="Хамгийн хямд" key="2">
+=======
+                <div>
+                  <ToFit data={searchedData} lat={defaultCenter.lat} lng={defaultCenter.lng} />
+                </div>
+              ) : (
+                <Empty description={<span>Өгөгдөл байхгүй</span>} />
+              )}
+            </TabPane>
+            <TabPane tab="Хамгийн хямд" key="2">
+>>>>>>> 5ca6aab1fe127fdd606393673110e650ce8c1a8d
               Хамгийн хямд
               </TabPane>
               <TabPane tab="Хамгийн ойр" key="3">
@@ -922,7 +975,7 @@ const Dashboard = () => {
                         өдөр
                       </div>
                       <div style={{color: '#35446d', marginLeft: '10px'}}>
-                        0 ₮
+                        500 ₮
                       </div>
                     </div>
                   </Col>
@@ -950,7 +1003,9 @@ const Dashboard = () => {
           </Tabs>
         </div>
       </Drawer>
+
     </Layout>
+
   );
 };
 

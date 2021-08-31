@@ -1,16 +1,17 @@
 import {Row, Col, Card, Button} from 'antd';
 import {Rate} from 'antd';
 import {Drawer, Divider} from 'antd';
-import {useEffect, useState} from 'react';
-import {Radio} from 'antd';
+import {useEffect, useState, useContext} from 'react';
+import {Radio, Modal, Alert} from 'antd';
 import Image from 'next/image';
+import Context from '@context/Context';
 // import {Collapse} from 'antd';
 const IMG_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
 // const {Panel} = Collapse;
 import {CloseOutlined, ArrowLeftOutlined, CheckCircleOutlined, DownOutlined, UpOutlined, CloudFilled} from '@ant-design/icons';
 // import {Pagination} from 'antd';
 import {Tabs} from 'antd';
-import {callGet} from '@api/api';
+import {callGet, callPost} from '@api/api';
 import Calendar from '@components/CustomCalendar/index';
 
 const {TabPane} = Tabs;
@@ -28,6 +29,7 @@ const tofit = ({data, lat, lng}) => {
   const [dayOfNumber, setDayofNumber] = useState(0);
   const [nightOfNumber, setNightOfNumber] = useState(0);
   const [fullDayNumber, setFullDayNumber] = useState(0);
+  const [spaceStatus, setSpaceStatus] = useState('');
   const [completeDayOfNumber, setCompleteDayOfNumber] = useState(0);
   const [completeNightOfNumber, setCompleteNightOfNumber] = useState(0);
   const [completeFullDayNumber, setCompleteFullDayNumber] = useState(0);
@@ -43,6 +45,11 @@ const tofit = ({data, lat, lng}) => {
   const [priceForRenter1, setpriceForRenter1] = useState(0);
   const [priceForRenter2, setpriceForRenter2] = useState(0);
   const [priceForRenter3, setpriceForRenter3] = useState(0);
+  const [messageShow2, setmessageShow2] = useState(false);
+  const [message, setmessage] = useState('');
+  const [status, setstatus] = useState('');
+  const [title, settitle] = useState('');
+  const [messageShow, setmessageShow] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const [selectedDate2, setSelectedDate2] = useState([]);
   // const [fromSelectedDate2, setFromSelectedDate2] = useState([]);
@@ -53,13 +60,22 @@ const tofit = ({data, lat, lng}) => {
   const [totalValue, setTotalValue]= useState();
   // eslint-disable-next-line no-unused-vars
   const [selectedDate3, setSelectedDate3] = useState([]);
+  const {userdata} = useContext(Context);
+  const [userRealData, setUserRealData] = useState('');
   // const [fromSelectedDate3, setFromSelectedDate3] = useState([]);
   useEffect(()=>{
 
   }, []);
+  useEffect(async () => {
+    if (typeof userdata.firstName != 'undefined') {
+      setUserRealData(userdata);
+    }
+  }, [userdata]);
+  console.log(userRealData, 'Realdat');
   const DetailsDrawerOpen = async (id) => {
     setDetailsVisible(true);
     setId(id);
+
     const priceData = await callGet(`/parkingspace/price?parkingSpaceId=${id}`);
     // eslint-disable-next-line no-unused-vars
     const residenceData = await callGet(
@@ -67,7 +83,12 @@ const tofit = ({data, lat, lng}) => {
     );
     const a = data.find((item) => item.park.parkingSpaceId === id);
     setResidenceDrawerItem(a.residence);
+<<<<<<< HEAD
     console.log(a.park.spaceStatus, '');
+=======
+    setSpaceStatus(a.park.spaceStatus);
+
+>>>>>>> 5ca6aab1fe127fdd606393673110e650ce8c1a8d
     setSelected(priceData);
     {
       priceData.priceList.map((item) => {
@@ -93,10 +114,96 @@ const tofit = ({data, lat, lng}) => {
     // setweekSale(weekSale);
     const vehicle = await callGet('/user/vehicle/list');
     setVehiclesData(vehicle);
+<<<<<<< HEAD
+=======
+    console.log(vehicle, 'constiin medee');
+>>>>>>> 5ca6aab1fe127fdd606393673110e650ce8c1a8d
   };
   const onChangeChooseVehicle = (e) => {
     console.log(e.target.value);
   };
+  console.log(vehicles, 'mashinii');
+
+  const timeSubmit = async (item) => {
+    if (vehicles) {
+      // setisLoading(true);
+      const formData = {
+        userPhoneNumber: userRealData.phoneNumber,
+        // vehicleId: vehicles,
+        isGift: false,
+        parkingSpaceId: id,
+        // startDateTime: 'startDate',
+        // endDateTime: 'endDate',
+        // isDay: timeDate.tuneType == 'Өдөр' ? true : false,
+        // isNight: timeDate.tuneType == 'Шөнө' ? true : false,
+        // isFullday: timeDate.tuneType == 'Бүтэн өдөр' ? true : false,
+        spaceStatus: spaceStatus,
+        totalAllDay: fullDayNumber,
+        totalAtDay: dayOfNumber,
+        totalAtNight: nightOfNumber,
+        totalPrice: totalValue,
+      };
+      console.log(formData);
+      await callPost('/booking/time', formData).then((res) => {
+        console.log(res);
+        if (res.status == 'success') {
+          if (item == 1) {
+            setbookingId(res.bookingId);
+            setbookingNumber(res.bookingNumber);
+            if (data.isRequested) {
+              setmessageShow(true);
+              setmessage(
+                'Таны захиалгын хүсэлт амжилттай илгээгдлээ. Хүсэлт баталгаажсаны дараа төлбөрөө төлнө',
+              );
+              settitle('Амжилттай');
+              setstatus('success');
+            } else {
+              setmessageShow(true);
+              setmessage(
+                'Хүсэлт амжилтгүй',
+              );
+              settitle('Амжилтгүй');
+              setstatus('failed');
+            }
+
+            // setmessageShow(true);
+            // setmessage('Амжилттай захиалга үүслээ');
+            // settitle('Амжилттай');
+            // setstatus('success');
+          } else {
+            setmessageShow2(true);
+          }
+        } else {
+          setmessageShow(true);
+          setmessage(res);
+          settitle('Анхааруулга');
+          setstatus('warning');
+        }
+        // setisLoading(false);
+      });
+    } else {
+      setmessageShow(true);
+      setmessage('Тээврийн хэрэгсэл сонгоно уу ');
+      settitle('Анхааруулга');
+      setstatus('warning');
+    }
+  };
+
+  const handleOk = () => {
+    setmessageShow(false);
+  };
+
+  const handleCancel = () => {
+    setmessageShow(false);
+  };
+  const submit = () => {
+    setmessageShow(true);
+    setmessage('Сул цаг сонгоно уу ');
+    settitle('Анхааруулга');
+    setstatus('warning');
+  };
+
+
   const onClickSubmit = () => {
     console.log();
     setCompleteDayOfNumber(dayOfNumber);
@@ -1352,12 +1459,12 @@ const tofit = ({data, lat, lng}) => {
                       </div>
                       <Divider />
                       <Row>
-                        <Col span={22}>
+                        <Col span={21}>
                           <p>
                             <b>Нийт захиалгын төлбөр</b>
                           </p>
                         </Col>
-                        <Col span={2}>
+                        <Col span={3}>
                           {totalValue}
                           ₮
                         </Col>
@@ -1369,7 +1476,7 @@ const tofit = ({data, lat, lng}) => {
                         }}
                       >
                         <Col span={12}>
-                          <Button className={'buttonGo'}>Захиалга нэмэх</Button>
+                          <Button onClick={totalValue > 0 ? () => timeSubmit(1) : () => submit() } className={'buttonGo'}>Захиалга нэмэх</Button>
                         </Col>
                         <Col span={12}>
                           <Button className={'buttonGo'}>Төлбөр төлөх</Button>
@@ -1585,6 +1692,24 @@ const tofit = ({data, lat, lng}) => {
           </div>
         </Drawer>
       )}
+      <Modal
+        visible={messageShow}
+        title="Мэдээлэл"
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={[]}
+      >
+        <Alert message={title} description={message} type={status} showIcon />
+      </Modal>
+      <Modal
+        visible={messageShow2}
+        title="Мэдээлэл"
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={[]}
+      >
+        <Alert message={'Амжилттай'} description={'Таны захиалга амжилттай нэмэгдлээ'} type={'success'} showIcon />
+      </Modal>
     </div>
   );
 };
