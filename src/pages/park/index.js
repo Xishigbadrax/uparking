@@ -10,6 +10,7 @@ import {
   Select,
   Layout,
   Tabs,
+  Spin,
   Empty,
   Rate,
   Image,
@@ -17,9 +18,10 @@ import {
   AutoComplete,
   Form,
 } from 'antd';
-import moment from 'moment';
+// import moment from 'moment';
 import Helper from '@utils/helper';
 import ToFit from '@components/fsearch/toFIt.js';
+import Search from '@components/search/Search';
 import {
   DownOutlined,
   UpOutlined,
@@ -88,6 +90,7 @@ const Dashboard = () => {
   const [searchType, setSearchType] =useState();
   const [searchedData, setSearchedData] = useState([]);
   const [dataSource, setDataSource] = useState([]);
+  const [getdataLoading, setGetDataLoading]= useState(false);
   const [parkingUpDownArrow, setParkingUpDownArrow] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const [transfer, setTransfer] = useState(null);
@@ -103,9 +106,12 @@ const Dashboard = () => {
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   });
-  // const [tuneType, setTuneType] = useState(null);
-  // const [startDate, setStartDate] = useState(null);
-  // const [endDate, setEndDate] = useState(null);
+  // eslint-disable-next-line no-unused-vars
+  const [tuneType, setTuneType] = useState(null);
+  // eslint-disable-next-line no-unused-vars
+  const [startDate, setStartDate] = useState(null);
+  // eslint-disable-next-line no-unused-vars
+  const [endDate, setEndDate] = useState(null);
   const [searchId, setSearchId] = useState(null);
   const [timeSplit, settimeSplit] = useState(null);
 
@@ -166,6 +172,7 @@ const Dashboard = () => {
           mergedparks.push({residence, park});
         });
       });
+      console.log(mergedparks, 'wdawd');
       setMarkers(mergedparks);
       setDefaultCenter({
         lat: mergedparks[0].residence.latitude,
@@ -183,13 +190,13 @@ const Dashboard = () => {
   const onSelectAuto = async (val, option) => {
     if (option.id && option.id != '') {
       setSearchId(option.id);
-      const res = await callGet(`/search/input/test?keywordId=${option.id}`);
-      if (!res || res === undefined) {
-        showMessage(messageType.FAILED.type, defaultMsg.dataError);
-        return;
-      } else {
-        loadData(res);
-      }
+      // const res = await callGet(`/search/input/test?keywordId=${option.id}`);
+      // if (!res || res === undefined) {
+      //   showMessage(messageType.FAILED.type, defaultMsg.dataError);
+      //   return;
+      // } else {
+      //   loadData(res);
+      // }
     }
   };
   const searchResult = (list) =>
@@ -228,42 +235,46 @@ const Dashboard = () => {
         },
       });
   };
-
-
   const onFinish = async (values) => {
-    console.log(values, 'values');
+    setGetDataLoading(true);
     let url = '';
-    if (values.tuneType === 'Бүтэн өдөр') {
-      url = `/search/test/input?latitude=${position.latitude}&longitude=${
-        position.longitude
-      }&keywordId=${searchId}&startDate=${values.startdate.format(
-        'YYYY-MM-DD',
-      )}&endDate=${values.enddate.format(
-        'YYYY-MM-DD',
-      )}&fullDay=true&startTime=${timeSplit.dayStart}&endTime=${
-        timeSplit.nightEnd
-      }`;
-    } else if (values.tuneType === 'Өдөр') {
-      url = `/search/test/input?latitude=${position.latitude}&longitude=${
-        position.longitude
-      }&keywordId=${searchId}&startDate=${values.startdate.format(
-        'YYYY-MM-DD',
-      )}&endDate=${values.enddate.format(
-        'YYYY-MM-DD',
-      )}&fullDay=false&startTime=${timeSplit.dayStart}&endTime=${
-        timeSplit.dayEnd
-      }`;
-    } else if (values.tuneType === 'Шөнө') {
-      url = `/search/test/input?latitude=${position.latitude}&longitude=${
-        position.longitude
-      }&keywordId=${searchId}&startDate=${values.startdate.format(
-        'YYYY-MM-DD',
-      )}&endDate=${values.enddate.format(
-        'YYYY-MM-DD',
-      )}&fullDay=false&startTime=${timeSplit.nightStart}&endTime=${
-        timeSplit.nightEnd
-      }`;
-      setSearchType(full);
+    if (tuneType !== null && startDate !== null && endDate!==null) {
+      setSearchType('full');
+      if (values.tuneType === 'Бүтэн өдөр') {
+        url = `/search/test/input?latitude=${position.latitude}&longitude=${
+          position.longitude
+        }&keywordId=${searchId}&startDate=${values.startdate.format(
+          'YYYY-MM-DD',
+        )}&endDate=${values.enddate.format(
+          'YYYY-MM-DD',
+        )}&fullDay=true&startTime=${timeSplit.dayStart}&endTime=${
+          timeSplit.nightEnd
+        }`;
+      } else if (values.tuneType === 'Өдөр') {
+        url = `/search/test/input?latitude=${position.latitude}&longitude=${
+          position.longitude
+        }&keywordId=${searchId}&startDate=${values.startdate.format(
+          'YYYY-MM-DD',
+        )}&endDate=${values.enddate.format(
+          'YYYY-MM-DD',
+        )}&fullDay=false&startTime=${timeSplit.dayStart}&endTime=${
+          timeSplit.dayEnd
+        }`;
+      } else if (values.tuneType === 'Шөнө') {
+        url = `/search/test/input?latitude=${position.latitude}&longitude=${
+          position.longitude
+        }&keywordId=${searchId}&startDate=${values.startdate.format(
+          'YYYY-MM-DD',
+        )}&endDate=${values.enddate.format(
+          'YYYY-MM-DD',
+        )}&fullDay=false&startTime=${timeSplit.nightStart}&endTime=${
+          timeSplit.nightEnd
+        }`;
+      }
+    } else if (tuneType=== null || startDate === null || endDate===null) {
+      console.log('fsearch bolson');
+      setSearchType('fsearch');
+      url=`/search/input/test?keywordId=${searchId}`;
     }
     if (url != '') {
       const res = await callGet(url);
@@ -272,13 +283,16 @@ const Dashboard = () => {
         return;
       }
       loadData(res);
+      setGetDataLoading(false);
     }
   };
   const onFinishFailed = (values) => {
     console.log(values, 'onFinishFailed');
   };
-
   const onReset = () => {
+    setStartDate(null);
+    setEndDate(null);
+    setTuneType(null);
     form.resetFields();
     setSearchedData([]);
   };
@@ -296,7 +310,7 @@ const Dashboard = () => {
             <Col span={8}>
               <Form.Item
                 name="text"
-                rules={[{required: true, message: 'Хайх утга оруулна уу'}]}
+                // rules={[{required: true, message: 'Хайх утга оруулна уу'}]}
               >
                 <AutoComplete
                   // dataSource={dataSource}
@@ -323,7 +337,7 @@ const Dashboard = () => {
             <Col span={4}>
               <Form.Item
                 name="tuneType"
-                rules={[{required: true, message: 'Өдрийн төрөл сонгоно уу'}]}
+                // rules={[{required: true, message: 'Өдрийн төрөл сонгоно уу'}]}
               >
                 <Select
                   placeholder="Өдрийн төрөл"
@@ -339,12 +353,11 @@ const Dashboard = () => {
             <Col span={4}>
               <Form.Item
                 name="startdate"
-                rules={[{required: true, message: 'Эхлэх огноо сонгоно уу'}]}
+                // rules={[{required: true, message: 'Эхлэх огноо сонгоно уу'}]}
               >
                 <DatePicker
-                  format="YYYY-MM-DD HH:mm"
+                  format="YYYY-MM-DD"
                   placeholder="Эхлэх огноо"
-                  showTime={{defaultValue: moment('00:00', 'HH:mm')}}
                   className="selectdates"
                   onChange={onChangeStartDate}
                 />
@@ -353,12 +366,11 @@ const Dashboard = () => {
             <Col span={4}>
               <Form.Item
                 name="enddate"
-                rules={[{required: true, message: 'Дуусах огноо сонгоно уу'}]}
+                // rules={[{required: true, message: 'Дуусах огноо сонгоно уу'}]}
               >
                 <DatePicker
-                  format="YYYY-MM-DD HH:mm"
+                  format="YYYY-MM-DD"
                   placeholder="Дуусах огноо"
-                  showTime={{defaultValue: moment('00:00', 'HH:mm')}}
                   className="selectdates"
                   onChange={onChangeEndDate}
                 />
@@ -388,118 +400,119 @@ const Dashboard = () => {
             />
           </div>
         </Content>
-        <Sider width={550}>
-          <Tabs defaultActiveKey="1" className="searchTab" onChange={callback}>
-            <TabPane tab="Тохирох" key="1">
-              {searchedData.length > 0 ? (
-              // searchedData.map((item) => (
-              //   <Card
-              //     className="searchListItem"
-              //     key={item.residence.residenceBlockId}
-              //   >
-              //     <Row>
-              //       <Col span="12" className="imageSide">
-              //         <div>
-              //           <Image
-              //             src={
-              //               item.park.parkingSpaceImage ?
-              //                 IMG_URL + item.park.parkingSpaceImage :
-              //                 '/pexels-photo-3349460 1.png'
-              //             }
-              //             width="209.58px"
-              //             preview={false}
-              //           ></Image>
-              //         </div>
-              //         <Row>
-              //           <Col
-              //             span={24}
-              //             style={{
-              //               background: 'rgba(222, 226, 233, 0.2)',
-              //               borderRadius: '24px',
-              //               padding: '13px 23px',
-              //               display: 'inline-flex',
-              //               textAlign: 'center',
-              //               justifyContent: 'center',
-              //             }}
-              //           >
-              //             {item.park && item.park.floorNumber ? (
-              //               <div style={{marginRight: '13px'}}>
-              //                 {!isBase64(item.park.floorNumber) ? (
-              //                   <Image
-              //                     preview={false}
-              //                     width={18}
-              //                     src={IMG_URL + item.park.floorNumber}
-              //                   />
-              //                 ) : (
-              //                   <Image
-              //                     preview={false}
-              //                     width={18}
-              //                     fallback={
-              //                       'data:image/png;base64,' +
-              //                       item.park.floorNumber
-              //                     }
-              //                   />
-              //                 )}
-              //               </div>
-              //             ) : null}
-              //             {item.park && item.park.entranceLock ? (
-              //               <div style={{marginRight: '13px'}}>
-              //                 <Image
-              //                   preview={false}
-              //                   width={18}
-              //                   src={IMG_URL + item.park.entranceLock}
-              //                 />
-              //               </div>
-              //             ) : null}
-              //             {item.park && item.park.isNumbering ? (
-              //               <div style={{marginRight: '13px'}}>
-              //                 <Image
-              //                   preview={false}
-              //                   width={18}
-              //                   src={IMG_URL + item.park.isNumbering}
-              //                 />
-              //               </div>
-              //             ) : null}
-              //             {item.park && item.park.capacity ? (
-              //               <div style={{marginRight: '13px'}}>
-              //                 <Image
-              //                   preview={false}
-              //                   width={18}
-              //                   src={IMG_URL + item.park.capacity}
-              //                 />
-              //               </div>
-              //             ) : null}
-              //             {item.park && item.park.type ? (
-              //               <div style={{marginRight: '13px'}}>
-              //                 <Image
-              //                   preview={false}
-              //                   width={18}
-              //                   src={IMG_URL + item.park.type}
-              //                 />
-              //               </div>
-              //             ) : null}
-              //             {item.park && item.park.returnRoutes ? (
-              //               <div style={{marginRight: '13px'}}>
-              //                 <Image
-              //                   preview={false}
-              //                   width={18}
-              //                   src={IMG_URL + item.park.returnRoutes}
-              //                 />
-              //               </div>
-              //             ) : null}
-              //           </Col>
-              //         </Row>
-              //       </Col>
-              //       <Col span="12" className="descriptionSide">
-              //         <div className="title" style={{marginBottom: '5px'}}>
-              //           {item.residence.residenceName}
-              //         </div>
+        <Spin spinning={getdataLoading}>
+          <Sider width={550}>
+            <Tabs defaultActiveKey="1" className="searchTab" onChange={callback}>
+              <TabPane tab="Тохирох" key="1">
+                {searchedData.length > 0 ? (
+                // searchedData.map((item) => (
+                //   <Card
+                //     className="searchListItem"
+                //     key={item.residence.residenceBlockId}
+                //   >
+                //     <Row>
+                //       <Col span="12" className="imageSide">
+                //         <div>
+                //           <Image
+                //             src={
+                //               item.park.parkingSpaceImage ?
+                //                 IMG_URL + item.park.parkingSpaceImage :
+                //                 '/pexels-photo-3349460 1.png'
+                //             }
+                //             width="209.58px"
+                //             preview={false}
+                //           ></Image>
+                //         </div>
+                //         <Row>
+                //           <Col
+                //             span={24}
+                //             style={{
+                //               background: 'rgba(222, 226, 233, 0.2)',
+                //               borderRadius: '24px',
+                //               padding: '13px 23px',
+                //               display: 'inline-flex',
+                //               textAlign: 'center',
+                //               justifyContent: 'center',
+                //             }}
+                //           >
+                //             {item.park && item.park.floorNumber ? (
+                //               <div style={{marginRight: '13px'}}>
+                //                 {!isBase64(item.park.floorNumber) ? (
+                //                   <Image
+                //                     preview={false}
+                //                     width={18}
+                //                     src={IMG_URL + item.park.floorNumber}
+                //                   />
+                //                 ) : (
+                //                   <Image
+                //                     preview={false}
+                //                     width={18}
+                //                     fallback={
+                //                       'data:image/png;base64,' +
+                //                       item.park.floorNumber
+                //                     }
+                //                   />
+                //                 )}
+                //               </div>
+                //             ) : null}
+                //             {item.park && item.park.entranceLock ? (
+                //               <div style={{marginRight: '13px'}}>
+                //                 <Image
+                //                   preview={false}
+                //                   width={18}
+                //                   src={IMG_URL + item.park.entranceLock}
+                //                 />
+                //               </div>
+                //             ) : null}
+                //             {item.park && item.park.isNumbering ? (
+                //               <div style={{marginRight: '13px'}}>
+                //                 <Image
+                //                   preview={false}
+                //                   width={18}
+                //                   src={IMG_URL + item.park.isNumbering}
+                //                 />
+                //               </div>
+                //             ) : null}
+                //             {item.park && item.park.capacity ? (
+                //               <div style={{marginRight: '13px'}}>
+                //                 <Image
+                //                   preview={false}
+                //                   width={18}
+                //                   src={IMG_URL + item.park.capacity}
+                //                 />
+                //               </div>
+                //             ) : null}
+                //             {item.park && item.park.type ? (
+                //               <div style={{marginRight: '13px'}}>
+                //                 <Image
+                //                   preview={false}
+                //                   width={18}
+                //                   src={IMG_URL + item.park.type}
+                //                 />
+                //               </div>
+                //             ) : null}
+                //             {item.park && item.park.returnRoutes ? (
+                //               <div style={{marginRight: '13px'}}>
+                //                 <Image
+                //                   preview={false}
+                //                   width={18}
+                //                   src={IMG_URL + item.park.returnRoutes}
+                //                 />
+                //               </div>
+                //             ) : null}
+                //           </Col>
+                //         </Row>
+                //       </Col>
+                //       <Col span="12" className="descriptionSide">
+                //         <div className="title" style={{marginBottom: '5px'}}>
+                //           {item.residence.residenceName}
+                //         </div>
 
-              //         <Rate
-              //           className="rateing"
-              //           disabled
-              //           value={item.park.totalRating}
-              //         />
+                //         <Rate
+                //           className="rateing"
+                //           disabled
+                //           value={item.park.totalRating}
+                //         />
 
                 //         <Row>
                 //           <Col span={10} className="distance">
@@ -546,23 +559,23 @@ const Dashboard = () => {
                 //       </Col>
                 //     </Row>
                 //   </Card>
-                <div>
-                  {/* {searchType ==='full' ? */}
-                  <ToFit data={searchedData} lat={defaultCenter.lat} lng={defaultCenter.lng} />
-                  {/* :<p>awdawdawdadaw</p>} */}
-                </div>
-              ) : (
-                <Empty description={<span>Өгөгдөл байхгүй</span>} />
-              )}
-            </TabPane>
-            <TabPane tab="Хамгийн хямд" key="2">
+                  <div>
+                    {searchType ==='full' && <Search data={searchedData} startDate={startDate} endDate={endDate}/>}
+                    {searchType ==='fsearch' &&<ToFit data={searchedData} lat={defaultCenter.lat} lng={defaultCenter.lng} />}
+                  </div>
+                ) : (
+                  <Empty description={<span>Өгөгдөл байхгүй</span>} />
+                )}
+              </TabPane>
+              <TabPane tab="Хамгийн хямд" key="2">
               Хамгийн хямд
-            </TabPane>
-            <TabPane tab="Хамгийн ойр" key="3">
+              </TabPane>
+              <TabPane tab="Хамгийн ойр" key="3">
               Хамгийн ойр
-            </TabPane>
-          </Tabs>
-        </Sider>
+              </TabPane>
+            </Tabs>
+          </Sider>
+        </Spin>
       </Layout>
 
       <Drawer
