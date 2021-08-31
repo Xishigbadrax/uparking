@@ -1,7 +1,7 @@
 import {Row, Col, Card, Button, Rate, Image, Drawer, Radio, Modal, Alert} from 'antd';
 import {CloseOutlined, CheckCircleOutlined, DownOutlined, UpOutlined} from '@ant-design/icons';
 import {useState, useContext, useEffect} from 'react';
-import {callGet} from '@api/api';
+import {callGet, callPost} from '@api/api';
 import Context from '@context/Context';
 import {Tabs} from 'antd';
 
@@ -9,6 +9,7 @@ const callback = (key) =>{
   console.log(key);
 };
 const {TabPane} = Tabs;
+
 const IMG_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
 
 // eslint-disable-next-line no-unused-vars
@@ -25,7 +26,9 @@ const isBase64 = async (str) => {
 // eslint-disable-next-line react/prop-types
 const Search = ({data, startDate, endDate, tunetype})=>{
   console.log(startDate, endDate, tunetype);
+  const {userdata} = useContext(Context);
   const [spaceData, setSpaceData] = useState();
+  const [totalPrice, setTotalPrice] = useState(0);
   const [userRealData, setUserRealData] = useState();
   const [detailsVisible, setDetailsVisible] = useState(false);
   const [parkingUpDownArrow, setParkingUpDownArrow] = useState(false);
@@ -56,6 +59,9 @@ const Search = ({data, startDate, endDate, tunetype})=>{
     setResidenceDrawerItem(a.residence);
     console.log(a, 'a-iin medeelel');
     setSpaceStatus(a.park.spaceStatus);
+    setTotalPrice(a.park.price);
+    console.log(a.park.price, '<---------');
+    console.log('adadawdaw');
     setParkingSpaceId(a.park.parkingSpaceId);
 
     const space = await callGet(
@@ -76,23 +82,23 @@ const Search = ({data, startDate, endDate, tunetype})=>{
     if (vehicles) {
       // setisLoading(true);
       const formData = {
-        endDateTime: 'string',
-        isDay: true,
-        isFullday: true,
+        endDateTime: endDate,
+        isDay: tunetype == 'Өдөр' ? true : false,
+        isFullday: tunetype == 'Бүтэн өдөр' ? true : false,
         isGift: false,
-        isNight: true,
+        isNight: tunetype == 'Шөнө' ? true : false,
         parkingSpaceId: parkingSpaceId,
         spaceStatus: spaceStatus,
-        startDateTime: 'string',
+        startDateTime: startDate,
         totalAllDay: 0,
         totalAtDay: 0,
-        totalAtNight: 0,
-        totalPrice: 0,
+        totalAtNight: 6,
+        totalPrice: totalPrice,
         userPhoneNumber: userRealData.phoneNumber,
         vehicleId: 0,
       };
-      console.log(formData);
-      await callPost('/booking/time', formData).then((res) => {
+      console.log(formData, 'forom dadad');
+      await callPost('/booking/time', {formData}).then((res) => {
         console.log(res);
         if (res.status == 'success') {
           setmessageShow(true);

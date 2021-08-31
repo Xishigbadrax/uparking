@@ -1,4 +1,6 @@
 import Footer from '../../components/Footer';
+import Link from 'next/link';
+import {Image} from 'antd';
 const SpaceOwner = () => {
   return (
     <div>
@@ -44,10 +46,10 @@ const SpaceOwner = () => {
           засварлан баталгаажуулах, цуцлах боломжтой.
         </p>
       </div>
-      <div className={'howToUse md:ml-16 lg:ml-40'}>
+      <div className={' w-full bg-[#F8FAFC] '}>
         <div className={'flex flex-col '}>
           <div
-            className={'howToUseTitle lg:text-3xl md:text-xl sm:text-base sm:ml-4 lg:ml-32'}
+            className={' lg:text-3xl md:text-xl sm:text-base sm:ml-4 lg:ml-32 text-[#35446D]'}
           >
             Авто зогсоолдоо хэрхэн бүртгүүлэх вэ?
           </div>
@@ -70,9 +72,9 @@ const SpaceOwner = () => {
                 />
                 <div style={{height: '12px'}}></div>
                 <div
-                  className={'place-self-center text-center stepDesc'}
+                  className={'place-self-center text-center stepDesc text-[#0013D4]'}
                 >
-                  Алхам 1 | БҮРТГҮҮЛЭХ эсвэл НЭВТРЭХ
+                  Алхам 1 | МЭДЭЭЛЭЛ БҮРДҮҮЛЭХ
                 </div>
               </div>
             </div>
@@ -91,9 +93,9 @@ const SpaceOwner = () => {
                 />
                 <div style={{height: '12px'}}></div>
                 <div
-                  className={'place-self-center text-center stepDesc'}
+                  className={'place-self-center text-center stepDesc text-[#0013D4]'}
                 >
-                  Алхам 2 | ЗОГСООЛ ХАЙХ
+                  Алхам 2 | БҮРТГҮҮЛЭХ эсвэл НЭВТРЭХ
                 </div>
               </div>
             </div>
@@ -112,9 +114,9 @@ const SpaceOwner = () => {
                 />
                 <div style={{height: '12px'}}></div>
                 <div
-                  className={'place-self-center text-center stepDesc'}
+                  className={'place-self-center text-center stepDesc text-[#0013D4]'}
                 >
-                  Алхам 3 | СОНГОХ
+                  Алхам 3 | АВТО ЗОГСООЛ БҮРТГҮҮЛЭХ
                 </div>
               </div>
             </div>
@@ -133,9 +135,9 @@ const SpaceOwner = () => {
                 />
                 <div style={{height: '12px'}}></div>
                 <div
-                  className={'place-self-center text-center stepDesc'}
+                  className={'place-self-center text-center stepDesc text-[#0013D4]'}
                 >
-                  Алхам 4 | ТӨЛБӨР ТӨЛӨХ
+                  Алхам 4 | БАТАЛГААЖУУЛАХ
                 </div>
               </div>
             </div>
@@ -154,15 +156,88 @@ const SpaceOwner = () => {
                 />
                 <div style={{height: '12px'}}></div>
                 <div
-                  className={'place-self-center text-center stepDesc'}
+                  className={'place-self-center text-center stepDesc text-[#0013D4]'}
                 >
-                  Алхам 5 | ЗОГСООЛД БАЙРШУУЛАХ
+                  Алхам 5 | ЗОГСООЛ ТҮРЭЭСЛҮҮЛЭХ
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <div className='flex w-full  justify-around mt-[36px]'>
+        <div className="mt-[151px]">
+          <p className="w-[475px]">ТА ӨӨРИЙН АВТО ЗОГСООЛЫГ БҮРТГҮҮЛЭХИЙГ ХҮСЭЖ БАЙВАЛ ДАРААХ ШААРДЛАГЫГ ХАНГАСАН БАЙХ ЁСТОЙ.</p>
+          <div className="ml-[35px]">
+            <div className='flex justify-start mt-[38px]'>
+              <div className="mr-[32px]"> <Image preview={false} src="/images/icon/breakpoint.png" /> </div>
+              <div>Нийтийн зориулалттай авто зогсоол байх</div>
+            </div>
+            <div className='flex justify-start mt-[18px] mb-[18px] '>
+              <div className="mr-[32px]"> <Image preview={false} src="/images/icon/breakpoint.png" /> </div>
+              <div>Авто зогсоолын тэмдэг, тэмдэглэгээ хийгдсэн байх </div>
+            </div>
+            <div className='flex justify-start items-center'>
+              <div className="mr-[32px]"> <Image preview={false} src="/images/icon/breakpoint.png" /> </div>
+              <div className=" w-[350px]">Орох хаалга Чип, дугаар таньдаг, удирдлагатай тохиолдолд бүртгэл бүхий хотхон байх</div>
+            </div>
+
+          </div>
+          <div className="mt-[50px]">
+            <Link href="/spaceowner">
+              <a className="bodyBtn ">Бүртгүүлэх</a>
+            </Link>
+          </div>
+
+        </div>
+        <div>
+          <Image preview={false} width={555} height={555} src="/images/parking.png" />
+        </div>
+
+      </div>
+      <div className="h-[300px] w-full bg-[#F8FAFC]">
+        <div className=" text-[34px] mt-[36px] ml-[165px]">Үл хөдлөх хөрөнгө хөгжүүлэгчид</div>
+        <div className="flex  justify-around mt-[72px]">
+          <div> <Image src="/images/teso.png" /> </div>
+          <div> <Image src="/images/hurd.png" /> </div>
+          <div> <Image src="/images/camder.png" /> </div>
+          <div> <Image src="/images/const.png" /> </div>
+          <div> <Image src="/images/ncd.png" /> </div>
+          <div> <Image src="/images/im.png" /> </div>
+        </div>
+      </div>
+      <div className='flex w-full  justify-around mt-[36px]'>
+        <div>
+          <Image preview={false} width={555} height={555} src="/images/parking2.png" />
+        </div>
+        <div className="mt-[151px]">
+          <p className="w-[475px]">ХӨГЖҮҮЛСЭН БОЛОН ХӨГЖҮҮЛЖ БУЙ ТӨСЛҮҮДИЙНХЭЭ ТАЛААРХ МЭДЭЭЛИЙГ МАНАЙ СИСТЕМД НЭГТГЭСНЭЭР ТАНАЙ КОМПАНИД ДАРААХ БОЛОМЖУУД ҮҮСНЭ.</p>
+          <div className="ml-[35px]">
+            <div className='flex justify-start mt-[38px]'>
+              <div className="mr-[32px]"> <Image preview={false} src="/images/icon/breakpoint.png" /> </div>
+              <div>Зарагдаагүй зогсоолын орлогын урсгал бүхий бүтээгдэхүүн болгох</div>
+            </div>
+            <div className='flex justify-start mt-[18px] mb-[18px] '>
+              <div className="mr-[32px]"> <Image preview={false} src="/images/icon/breakpoint.png" /> </div>
+              <div>Оршин суугчдын авто зогсоолын хүрэлцээг нэмэгдүүлэх </div>
+            </div>
+            <div className='flex justify-start items-center'>
+              <div className="mr-[32px]"> <Image preview={false} src="/images/icon/breakpoint.png" /> </div>
+              <div className=" w-[350px]">Орон сууцны борлуулалтын дэмжлэг болгон ашиглах боломж үүснэ </div>
+            </div>
+
+          </div>
+          <div className="mt-[50px]">
+            <Link href="/spaceowner">
+              <a className="bodyBtn ">Бүртгүүлэх</a>
+            </Link>
+          </div>
+
+        </div>
+
+
+      </div>
+
       <div className="mt-64">
         <Footer />
       </div>

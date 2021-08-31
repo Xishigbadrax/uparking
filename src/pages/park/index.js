@@ -117,7 +117,7 @@ const Dashboard = () => {
   const [searchId, setSearchId] = useState(null);
   const [searchType, setSearchType]=useState('');
   const [timeSplit, settimeSplit] = useState(null);
-  const [searchType, setSearchType] =useState('');
+
 
   const [visibleDrawerMore, setVisibleDrawerMore] = useState(false);
   const [parkingObject, setParkingObject] = useState({});
@@ -151,10 +151,6 @@ const Dashboard = () => {
   const onCloseDrawerMore = () => {
     setVisibleDrawerMore(false);
   };
-<<<<<<< HEAD
-=======
-
->>>>>>> b62ad5aa5ecef6a29d7c27bef094bc6273cac1c1
 
   useEffect(() => {
     const fetchData = async () => {
@@ -196,7 +192,7 @@ const Dashboard = () => {
   };
 
   const onSelectAuto = async (val, option) => {
-    if (option.id && eoption.id != '') {
+    if (option.id && option.id != '') {
       setSearchId(option.id);
       // const res = await callGet(`/search/input/test?keywordId=${option.id}`);
       // if (!res || res === undefined) {
