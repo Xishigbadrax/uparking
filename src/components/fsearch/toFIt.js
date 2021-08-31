@@ -8,11 +8,12 @@ import Context from '@context/Context';
 // import {Collapse} from 'antd';
 const IMG_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
 // const {Panel} = Collapse;
-import {CloseOutlined, ArrowLeftOutlined, CheckCircleOutlined, DownOutlined, UpOutlined} from '@ant-design/icons';
+import {CloseOutlined, ArrowLeftOutlined, CheckCircleOutlined, DownOutlined, UpOutlined, CloudFilled} from '@ant-design/icons';
 // import {Pagination} from 'antd';
 import {Tabs} from 'antd';
 import {callGet, callPost} from '@api/api';
 import Calendar from '@components/CustomCalendar/index';
+
 const {TabPane} = Tabs;
 const callback = (key) =>{
   console.log(key, 'keyiin hevledee');
@@ -85,8 +86,12 @@ const tofit = ({data, lat, lng}) => {
     );
     const a = data.find((item) => item.park.parkingSpaceId === id);
     setResidenceDrawerItem(a.residence);
+<<<<<<< HEAD
+    console.log(a.park.spaceStatus, '');
+=======
     setSpaceStatus(a.park.spaceStatus);
 
+>>>>>>> 5ca6aab1fe127fdd606393673110e650ce8c1a8d
     setSelected(priceData);
     {
       priceData.priceList.map((item) => {
@@ -112,7 +117,10 @@ const tofit = ({data, lat, lng}) => {
     // setweekSale(weekSale);
     const vehicle = await callGet('/user/vehicle/list');
     setVehiclesData(vehicle);
+<<<<<<< HEAD
+=======
     console.log(vehicle, 'constiin medee');
+>>>>>>> 5ca6aab1fe127fdd606393673110e650ce8c1a8d
   };
   const onChangeChooseVehicle = (e) => {
     console.log(e.target.value);
@@ -200,6 +208,7 @@ const tofit = ({data, lat, lng}) => {
 
 
   const onClickSubmit = () => {
+    console.log();
     setCompleteDayOfNumber(dayOfNumber);
     setCompleteNightOfNumber(nightOfNumber);
     setCompleteFullDayNumber(fullDayNumber);
@@ -213,6 +222,7 @@ const tofit = ({data, lat, lng}) => {
   };
   const onclickPick = async () => {
     setChooseTimeVisible(true);
+
     const calValidateDate = await callGet(
       `/schedule/custom?parkingSpaceId=${id}`,
     );
@@ -221,6 +231,7 @@ const tofit = ({data, lat, lng}) => {
   };
   const getSelectedDate1 = (data) => {
     setDayofNumber(data.length);
+
     if (data.length === 7 || nightOfNumber === 7 ) {
       setTotalValue(data.length * priceForRenter1 +
         nightOfNumber * priceForRenter2 +
@@ -246,9 +257,11 @@ const tofit = ({data, lat, lng}) => {
     data.map((item) => {
       console.log(item.format('YYYY-MM-DD'), 'datyeeeeeeeeee');
     });
+    console.log(data, 'awdawdawdawdawd');
   };
   const getSelectedDate2 = (data) => {
     setNightOfNumber(data.length);
+
     if (dayOfNumber === 7 || data.length === 7 ) {
       setTotalValue(dayOfNumber * priceForRenter1 +
         data.length * priceForRenter2 +
@@ -296,7 +309,7 @@ const tofit = ({data, lat, lng}) => {
       } else {
         setTotalValue(dayOfNumber * priceForRenter1 +
             nightOfNumber * priceForRenter2 +
-            data.length * priceForRenter3);
+            fullDayNumber * priceForRenter3);
       }
     }
     data.map((item) => {
@@ -310,6 +323,7 @@ const tofit = ({data, lat, lng}) => {
   return (
     <div style={{height: '828px', width: '100%', overflow: true}}>
       {data.map((it) => (
+
         <Card
           key={it.park.parkingSpaceId}
           className={'ResidenceCardList'}
