@@ -87,9 +87,13 @@ const Dashboard = () => {
   // eslint-disable-next-line no-unused-vars
   const [transfer, setTransfer] = useState(null);
 
+<<<<<<< HEAD
   // eslint-disable-next-line no-unused-vars
   const [messageShow, setmessageShow] = useState(false);
   // const router = useRouter();
+=======
+  const router = useRouter();
+>>>>>>> 3aaba74b8e821015f611e67923074590d5e53f4d
   const [defaultCenter, setDefaultCenter] = useState({
     lat: 47.91909306508191,
     lng: 106.91761127921768,
@@ -110,6 +114,12 @@ const Dashboard = () => {
   const [searchId, setSearchId] = useState(null);
   const [searchType, setSearchType]=useState('');
   const [timeSplit, settimeSplit] = useState(null);
+<<<<<<< HEAD
+=======
+  const [searchType, setSearchType] =useState('');
+
+  const [visibleDrawerMore, setVisibleDrawerMore] = useState(false);
+>>>>>>> 3aaba74b8e821015f611e67923074590d5e53f4d
   const [parkingObject, setParkingObject] = useState({});
   // const isBase64 = async (str) => {
   //   if (str === '' || str.trim() === '') {

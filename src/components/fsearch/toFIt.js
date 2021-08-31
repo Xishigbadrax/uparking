@@ -20,7 +20,7 @@ const callback = (key) =>{
   console.log(key, 'keyiin hevledee');
 };
 const tofit = ({data, lat, lng}) => {
-  console.log({data, lat, lng});
+  console.log({data, lat, lng}, 'ehniii dataagaa haruul');
 
   // const [PickTimevisible, setPickTimeVisible] = useState(false);
   const [detailVisible, setDetailsVisible] = useState(false);
@@ -30,13 +30,10 @@ const tofit = ({data, lat, lng}) => {
   const [dayOfNumber, setDayofNumber] = useState(0);
   const [nightOfNumber, setNightOfNumber] = useState(0);
   const [fullDayNumber, setFullDayNumber] = useState(0);
-  const [spaceStatus, setSpaceStatus] = useState('');
   const [dayValues, setDayValues]= useState([]);
   const [nightValues, setNightValues]= useState([]);
   const [fullDayValues, setFullDayValues]= useState([]);
 
-  const [completeDayOfNumber, setCompleteDayOfNumber] = useState(0);
-  const [completeNightOfNumber, setCompleteNightOfNumber] = useState(0);
   const [completeFullDayNumber, setCompleteFullDayNumber] = useState(0);
   // const [saleDatas, setSaleData] = useState();
   const [vehicles, setVehiclesData] = useState([]);
@@ -50,8 +47,11 @@ const tofit = ({data, lat, lng}) => {
   const [priceForRenter1, setpriceForRenter1] = useState(0);
   const [priceForRenter2, setpriceForRenter2] = useState(0);
   const [priceForRenter3, setpriceForRenter3] = useState(0);
+<<<<<<< HEAD
   const [messageShow2, setmessageShow2] = useState(false);
   const [dateValues, setDateValues]=useState();
+=======
+>>>>>>> 3aaba74b8e821015f611e67923074590d5e53f4d
   const [message, setmessage] = useState('');
   const [status, setstatus] = useState('');
   const [title, settitle] = useState('');
@@ -68,7 +68,7 @@ const tofit = ({data, lat, lng}) => {
   const [selectedDate3, setSelectedDate3] = useState([]);
   const {userdata} = useContext(Context);
   const [userRealData, setUserRealData] = useState('');
-  const [parkingSpaceId, setParkingSpaceID] = useState(null);
+  const [parkingSpaceId, setParkingSpaceID] = useState(0);
 
 
   // const [fromSelectedDate3, setFromSelectedDate3] = useState([]);
@@ -123,55 +123,50 @@ const tofit = ({data, lat, lng}) => {
     console.log(e.target.value);
   };
 
-  const timeSubmit = async (item) => {
+  const timeSubmit = async () => {
     if (vehicles) {
       // setisLoading(true);
       const formData = {
-        userPhoneNumber: userRealData.phoneNumber,
-        // vehicleId: vehicles,
+
+        bookingList: [
+          {
+            startDate: 'string',
+            timeSplitDescription: 'string',
+          },
+        ],
         isGift: false,
         parkingSpaceId: parkingSpaceId,
-        // startDateTime: 'startDate',
-        // endDateTime: 'endDate',
-        // isDay: timeDate.tuneType == 'Өдөр' ? true : false,
-        // isNight: timeDate.tuneType == 'Шөнө' ? true : false,
-        // isFullday: timeDate.tuneType == 'Бүтэн өдөр' ? true : false,
-        spaceStatus: spaceStatus,
         totalAllDay: fullDayNumber,
         totalAtDay: dayOfNumber,
         totalAtNight: nightOfNumber,
         totalPrice: totalValue,
+        userPhoneNumber: userRealData.userPhoneNumber,
+        vehicleId: 0,
+
+        // userPhoneNumber: userRealData.phoneNumber,
+        // isGift: false,
+        // parkingSpaceId: parkingSpaceId,
+        // spaceStatus: spaceStatus,
+        // totalAllDay: fullDayNumber,
+        // totalAtDay: dayOfNumber,
+        // totalAtNight: nightOfNumber,
+        // totalPrice: totalValue,
       };
       console.log(formData);
       await callPost('/booking/time', formData).then((res) => {
         console.log(res);
         if (res.status == 'success') {
-          if (item == 1) {
-            setbookingId(res.bookingId);
-            setbookingNumber(res.bookingNumber);
-            if (data.isRequested) {
-              setmessageShow(true);
-              setmessage(
-                'Таны захиалгын хүсэлт амжилттай илгээгдлээ. Хүсэлт баталгаажсаны дараа төлбөрөө төлнө',
-              );
-              settitle('Амжилттай');
-              setstatus('success');
-            } else {
-              setmessageShow(true);
-              setmessage(
-                'Хүсэлт амжилтгүй',
-              );
-              settitle('Амжилтгүй');
-              setstatus('failed');
-            }
+          setmessageShow(true);
+          setmessage(
+            'Таны захиалгын хүсэлт амжилттай илгээгдлээ. Хүсэлт баталгаажсаны дараа төлбөрөө төлнө',
+          );
+          settitle('Амжилттай');
+          setstatus('success');
 
-            // setmessageShow(true);
-            // setmessage('Амжилттай захиалга үүслээ');
-            // settitle('Амжилттай');
-            // setstatus('success');
-          } else {
-            setmessageShow2(true);
-          }
+          // setmessageShow(true);
+          // setmessage('Амжилттай захиалга үүслээ');
+          // settitle('Амжилттай');
+          // setstatus('success');
         } else {
           setmessageShow(true);
           setmessage(res);
@@ -1502,7 +1497,11 @@ const tofit = ({data, lat, lng}) => {
                         }}
                       >
                         <Col span={12}>
+<<<<<<< HEAD
                           <Button type='primary' onClick={totalValue > 0 ? () => timeSubmit(1) : () => submit() } className={'buttonGo'}>Захиалга нэмэх</Button>
+=======
+                          <Button onClick={totalValue > 0 ? () => timeSubmit() : () => submit() } className={'buttonGo'}>Захиалга нэмэх</Button>
+>>>>>>> 3aaba74b8e821015f611e67923074590d5e53f4d
                         </Col>
                         <Col span={12}>
                           <Button type='primary' className={'buttonGo'}>Төлбөр төлөх</Button>
