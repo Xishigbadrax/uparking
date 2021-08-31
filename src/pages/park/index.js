@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import {callGet} from '@api/api';
 import {useRouter} from 'next/router';
 import {showMessage} from '../../utils/message';
+import moment from 'moment';
 import {
   Col,
   Row,
@@ -95,7 +96,6 @@ const Dashboard = () => {
   // eslint-disable-next-line no-unused-vars
   const [transfer, setTransfer] = useState(null);
 
-
   const router = useRouter();
   const [defaultCenter, setDefaultCenter] = useState({
     lat: 47.91909306508191,
@@ -115,6 +115,7 @@ const Dashboard = () => {
   // eslint-disable-next-line no-unused-vars
   const [endDate, setEndDate] = useState(null);
   const [searchId, setSearchId] = useState(null);
+  const [searchType, setSearchType]=useState('');
   const [timeSplit, settimeSplit] = useState(null);
   const [searchType, setSearchType] =useState('');
 
@@ -150,7 +151,10 @@ const Dashboard = () => {
   const onCloseDrawerMore = () => {
     setVisibleDrawerMore(false);
   };
+<<<<<<< HEAD
+=======
 
+>>>>>>> b62ad5aa5ecef6a29d7c27bef094bc6273cac1c1
 
   useEffect(() => {
     const fetchData = async () => {
@@ -192,7 +196,7 @@ const Dashboard = () => {
   };
 
   const onSelectAuto = async (val, option) => {
-    if (option.id && option.id != '') {
+    if (option.id && eoption.id != '') {
       setSearchId(option.id);
       // const res = await callGet(`/search/input/test?keywordId=${option.id}`);
       // if (!res || res === undefined) {
@@ -224,10 +228,14 @@ const Dashboard = () => {
     setTuneType(type);
   };
   const onChangeStartDate = (date) => {
-    setStartDate(date);
+    const a= moment(date).format('YYYY/MM/DD');
+    setStartDate(a);
+    console.log(a, 'start dtae->');
   };
   const onChangeEndDate = (date) => {
-    setEndDate(date);
+    const end = moment(date).format('YYYY/MM/DD');
+    setEndDate(end);
+    console.log(end, 'endDate end bnaa bandia');
   };
   const onTransfer = (id) => {
     console.log(id, 'ehnii id');
@@ -564,7 +572,7 @@ const Dashboard = () => {
                 //     </Row>
                 //   </Card>
                   <div>
-                    {searchType ==='full' && <Search data={searchedData} startDate={startDate} endDate={endDate}/>}
+                    {searchType ==='full' && <Search data={searchedData} startDate={startDate} endDate={endDate} tunetype={tuneType}/>}
                     {searchType ==='fsearch' &&<ToFit data={searchedData} lat={defaultCenter.lat} lng={defaultCenter.lng} />}
                   </div>
                 ) : (

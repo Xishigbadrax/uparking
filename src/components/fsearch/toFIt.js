@@ -85,8 +85,7 @@ const tofit = ({data, lat, lng}) => {
     );
     const a = data.find((item) => item.park.parkingSpaceId === id);
     setResidenceDrawerItem(a.residence);
-
-
+    setSpaceStatus(a.park.spaceStatus);
     setSelected(priceData);
     {
       priceData.priceList.map((item) => {
@@ -116,7 +115,6 @@ const tofit = ({data, lat, lng}) => {
   const onChangeChooseVehicle = (e) => {
     console.log(e.target.value);
   };
-  console.log(vehicles, 'mashinii');
 
   const timeSubmit = async () => {
     if (vehicles) {
@@ -320,7 +318,7 @@ const tofit = ({data, lat, lng}) => {
             background: '#FFFFFF',
           }}
         >
-          {it.residence.hourlySearch ? (
+          {it.park.spaceStatus==='AV' ? (
             <div
               style={{
                 width: '99px',
@@ -872,30 +870,31 @@ const tofit = ({data, lat, lng}) => {
                   <Tabs
                     defaultActiveKey="1"
                     onChange={callback}
+                    className={'tabPaneType'}
                     style={{width: '100% '}}
                   >
                     <TabPane
-                      tab={
-                        <div
-                          style={{
-                            width: '33%',
-                            height: '48px',
-                            marginLeft: '10%',
-                          }}
-                        >
-                          <p
+                      tab = {
+                        <Col span={7}>
+                          <div
                             style={{
-                              width: '110px',
-                              height: '24px',
-                              paddingTop: '12px',
-                              marginLeft: '20px',
-                              fontSize: '14px',
-                              color: '#0013D4',
+                              height: '48px',
+                              marginLeft: '10%',
                             }}
                           >
+                            <p
+                              style={{
+                                height: '24px',
+                                paddingTop: '12px',
+                                marginLeft: '20px',
+                                fontSize: '14px',
+                                color: '#0013D4',
+                              }}
+                            >
                             Танилцуулга
-                          </p>
-                        </div>
+                            </p>
+                          </div>
+                        </Col>
                       }
                       key="1"
                     >
@@ -1475,20 +1474,22 @@ const tofit = ({data, lat, lng}) => {
                     </TabPane>
                     <TabPane
                       tab={
-                        <div style={{width: '33%', height: '48px'}}>
-                          <p
-                            style={{
-                              width: '140px',
-                              height: '24px',
-                              paddingTop: '12px',
-                              fontSize: '14px',
-                              textAlign: 'center',
-                              color: '#0013D4',
-                            }}
-                          >
+                        <Col span={7}>
+                          <div style={{height: '48px'}}>
+                            <p
+                              style={{
+
+                                height: '24px',
+                                paddingTop: '12px',
+                                fontSize: '14px',
+                                textAlign: 'center',
+                                color: '#0013D4',
+                              }}
+                            >
                             Үнэлгээ
-                          </p>
-                        </div>
+                            </p>
+                          </div>
+                        </Col>
                       }
                       key="2"
                     >
@@ -1496,10 +1497,9 @@ const tofit = ({data, lat, lng}) => {
                     </TabPane>
                     <TabPane
                       tab={
-                        <div style={{width: '33%', height: '48px'}}>
+                        <div style={{height: '48px'}}>
                           <p
                             style={{
-                              width: '140px',
                               height: '24px',
                               textAlign: 'center',
                               paddingTop: '12px',

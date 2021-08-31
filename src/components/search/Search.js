@@ -23,9 +23,8 @@ const isBase64 = async (str) => {
   }
 };
 // eslint-disable-next-line react/prop-types
-const Search = ({data, startDate, endDate})=>{
-  console.log(startDate, endDate);
-  const {userdata} = useContext(Context);
+const Search = ({data, startDate, endDate, tunetype})=>{
+  console.log(startDate, endDate, tunetype);
   const [spaceData, setSpaceData] = useState();
   const [userRealData, setUserRealData] = useState();
   const [detailsVisible, setDetailsVisible] = useState(false);

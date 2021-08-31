@@ -641,6 +641,18 @@ body {
     border: none !important;
   }
 }
+.tabPaneType {
+  padding: 0px 15px;
+  .ant-tabs-nav-list{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100% !important;
+    .ant-tabs-tab + .ant-tabs-tab {
+      margin: 0 0 0 80px;
+    }
+  }
+}
 .searchTab {
   padding: 0px 25px;
   .ant-tabs-nav-list {
