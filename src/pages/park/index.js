@@ -96,8 +96,12 @@ const Dashboard = () => {
   // eslint-disable-next-line no-unused-vars
   const [transfer, setTransfer] = useState(null);
 
+<<<<<<< HEAD
   // eslint-disable-next-line no-unused-vars
   const [messageShow, setmessageShow] = useState(false);
+=======
+
+>>>>>>> b62ad5aa5ecef6a29d7c27bef094bc6273cac1c1
   const router = useRouter();
   const [defaultCenter, setDefaultCenter] = useState({
     lat: 47.91909306508191,
@@ -152,6 +156,10 @@ const Dashboard = () => {
   const onCloseDrawerMore = () => {
     setVisibleDrawerMore(false);
   };
+<<<<<<< HEAD
+=======
+
+>>>>>>> b62ad5aa5ecef6a29d7c27bef094bc6273cac1c1
 
   useEffect(() => {
     const fetchData = async () => {

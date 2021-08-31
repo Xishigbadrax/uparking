@@ -16,7 +16,7 @@ import Calendar from '@components/CustomCalendar/index';
 
 const {TabPane} = Tabs;
 const callback = (key) =>{
-  console.log(key);
+  console.log(key, 'keyiin hevledee');
 };
 const tofit = ({data, lat, lng}) => {
   console.log({data, lat, lng});
@@ -62,6 +62,9 @@ const tofit = ({data, lat, lng}) => {
   const [selectedDate3, setSelectedDate3] = useState([]);
   const {userdata} = useContext(Context);
   const [userRealData, setUserRealData] = useState('');
+  const [parkingSpaceId, setParkingSpaceID] = useState(null);
+
+
   // const [fromSelectedDate3, setFromSelectedDate3] = useState([]);
   useEffect(()=>{
 
@@ -121,7 +124,7 @@ const tofit = ({data, lat, lng}) => {
         userPhoneNumber: userRealData.phoneNumber,
         // vehicleId: vehicles,
         isGift: false,
-        parkingSpaceId: id,
+        parkingSpaceId: parkingSpaceId,
         // startDateTime: 'startDate',
         // endDateTime: 'endDate',
         // isDay: timeDate.tuneType == 'Өдөр' ? true : false,
@@ -214,6 +217,7 @@ const tofit = ({data, lat, lng}) => {
       `/schedule/custom?parkingSpaceId=${id}`,
     );
     console.log('Batalgaajsan udruud----->', calValidateDate);
+    calValidateDate && setParkingSpaceID(calValidateDate.parkingSpaceId);
   };
   const getSelectedDate1 = (data) => {
     setDayofNumber(data.length);
