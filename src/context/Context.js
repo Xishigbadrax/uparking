@@ -2,7 +2,7 @@ import {useState, createContext, useReducer, useEffect} from 'react';
 import reducers from './Reducers';
 import Auth from '@utils/auth';
 // eslint-disable-next-line camelcase
-import jwt_decode from 'jwt-decode';
+// import jwt_decode from 'jwt-decode';
 import {useRouter} from 'next/router';
 import {profileMenu} from '@constants/profilemenu';
 import {walletMenu} from '@constants/walletmenu';

@@ -13,6 +13,7 @@ import {CloseOutlined, ArrowLeftOutlined, CheckCircleOutlined, DownOutlined, UpO
 import {Tabs} from 'antd';
 import {callGet, callPost} from '@api/api';
 import Calendar from '@components/CustomCalendar/index';
+import moment from 'moment';
 
 const {TabPane} = Tabs;
 const callback = (key) =>{
@@ -30,6 +31,10 @@ const tofit = ({data, lat, lng}) => {
   const [nightOfNumber, setNightOfNumber] = useState(0);
   const [fullDayNumber, setFullDayNumber] = useState(0);
   const [spaceStatus, setSpaceStatus] = useState('');
+  const [dayValues, setDayValues]= useState([]);
+  const [nightValues, setNightValues]= useState([]);
+  const [fullDayValues, setFullDayValues]= useState([]);
+
   const [completeDayOfNumber, setCompleteDayOfNumber] = useState(0);
   const [completeNightOfNumber, setCompleteNightOfNumber] = useState(0);
   const [completeFullDayNumber, setCompleteFullDayNumber] = useState(0);
@@ -46,6 +51,7 @@ const tofit = ({data, lat, lng}) => {
   const [priceForRenter2, setpriceForRenter2] = useState(0);
   const [priceForRenter3, setpriceForRenter3] = useState(0);
   const [messageShow2, setmessageShow2] = useState(false);
+  const [dateValues, setDateValues]=useState();
   const [message, setmessage] = useState('');
   const [status, setstatus] = useState('');
   const [title, settitle] = useState('');
@@ -199,6 +205,20 @@ const tofit = ({data, lat, lng}) => {
 
   const onClickSubmit = () => {
     console.log();
+    console.log(dayValues, nightValues, fullDayValues, 'utdguuud');
+    const arr=[];
+    dayValues.map((item)=>{
+      arr.push(item);
+    });
+    nightValues.map((item)=>{
+      arr.push(item);
+    });
+    fullDayValues.map((item)=>{
+      arr.push(item);
+    });
+    setDateValues(arr);
+    console.log(arr, 'ene shvv');
+    console.log(dateValues, 'awdhgawidugawiduawdiu');
     setCompleteDayOfNumber(dayOfNumber);
     setCompleteNightOfNumber(nightOfNumber);
     setCompleteFullDayNumber(fullDayNumber);
@@ -221,7 +241,6 @@ const tofit = ({data, lat, lng}) => {
   };
   const getSelectedDate1 = (data) => {
     setDayofNumber(data.length);
-
     if (data.length === 7 || nightOfNumber === 7 ) {
       setTotalValue(data.length * priceForRenter1 +
         nightOfNumber * priceForRenter2 +
@@ -243,11 +262,12 @@ const tofit = ({data, lat, lng}) => {
             nightOfNumber * priceForRenter2 +
             fullDayNumber * priceForRenter3);
     }
-
+    const array=[];
     data.map((item) => {
-      console.log(item.format('YYYY-MM-DD'), 'datyeeeeeeeeee');
+      array.push({startDate: moment(item).format('YYYY-MM-DD'), timeSplitDescription: 'Өдөр'});
     });
-    console.log(data, 'awdawdawdawdawd');
+    console.log(array, 'awdawdawdawdawd');
+    setDayValues(array);
   };
   const getSelectedDate2 = (data) => {
     setNightOfNumber(data.length);
@@ -273,9 +293,12 @@ const tofit = ({data, lat, lng}) => {
         data.length * priceForRenter2 +
             fullDayNumber * priceForRenter3);
     }
+    const array=[];
     data.map((item) => {
-      console.log(item.format('YYYY-MM-DD'), 'datyeeeeeeeeee');
+      array.push({startDate: moment(item).format('YYYY-MM-DD'), timeSplitDescription: 'Шөнө'});
     });
+    console.log(array, 'ШӨнүүд');
+    setNightValues(array);
   };
   const getSelectedDate3 = (data) => {
     setFullDayNumber(data.length);
@@ -302,9 +325,12 @@ const tofit = ({data, lat, lng}) => {
             fullDayNumber * priceForRenter3);
       }
     }
+    const array=[];
     data.map((item) => {
-      console.log(item.format('YYYY-MM-DD'), 'datyeeeeeeeeee');
+      array.push({startDate: moment(item).format('YYYY-MM-DD'), timeSplitDescription: 'Бүтэн өдөр'});
     });
+    console.log(array, 'ШӨнүүд');
+    setFullDayValues(array);
   };
 
   const handleClickDayTab = (key) => {
@@ -372,6 +398,7 @@ const tofit = ({data, lat, lng}) => {
               <Col>
                 <Row>
                   <Image
+                    preview={false}
                     src="/pexels-photo-3349460 1.png"
                     height="140px"
                     width="209.58px"
@@ -637,6 +664,7 @@ const tofit = ({data, lat, lng}) => {
                       }}
                     >
                       <Image
+                        preview={false}
                         src="/directions_car_24px.png"
                         height="12px"
                         width="10.67px"
@@ -671,6 +699,7 @@ const tofit = ({data, lat, lng}) => {
                       }}
                     >
                       <Image
+                        preview={false}
                         src="/icons/location_on_24px.png"
                         height="16px"
                         width="16px"
@@ -793,6 +822,7 @@ const tofit = ({data, lat, lng}) => {
                     }}
                   >
                     <Image
+                      preview={false}
                       src="/directions_car_24px.png"
                       height="12px"
                       width="10.67px"
@@ -843,6 +873,7 @@ const tofit = ({data, lat, lng}) => {
                     }}
                   >
                     <Image
+                      preview={false}
                       src="/icons/location_on_24px.png"
                       height="12.98px"
                       width="9.33px"
@@ -1471,10 +1502,10 @@ const tofit = ({data, lat, lng}) => {
                         }}
                       >
                         <Col span={12}>
-                          <Button onClick={totalValue > 0 ? () => timeSubmit(1) : () => submit() } className={'buttonGo'}>Захиалга нэмэх</Button>
+                          <Button type='primary' onClick={totalValue > 0 ? () => timeSubmit(1) : () => submit() } className={'buttonGo'}>Захиалга нэмэх</Button>
                         </Col>
                         <Col span={12}>
-                          <Button className={'buttonGo'}>Төлбөр төлөх</Button>
+                          <Button type='primary' className={'buttonGo'}>Төлбөр төлөх</Button>
                         </Col>
                       </Row>
                     </TabPane>

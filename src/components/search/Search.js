@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import {Row, Col, Card, Button, Rate, Image, Drawer, Radio} from 'antd';
 import {CloseOutlined, CheckCircleOutlined, DownOutlined, UpOutlined} from '@ant-design/icons';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {callGet} from '@api/api';
 import {Tabs} from 'antd';
 
@@ -24,18 +24,44 @@ const isBase64 = async (str) => {
 };
 // eslint-disable-next-line react/prop-types
 const Search = ({data, startDate, endDate, tunetype})=>{
-  console.log(startDate, endDate, tunetype);
+  console.log(startDate, endDate);
+
+  // console.log(Number(Number(endDate)-Number(startDate)));
   const [spaceData, setSpaceData] = useState();
+  const [timeSplit, settimeSplit] = useState(null);
   const [detailsVisible, setDetailsVisible] = useState(false);
   const [parkingUpDownArrow, setParkingUpDownArrow] = useState(false);
+  // eslint-disable-next-line no-unused-vars
+  const [totalAtDay, setTotalAtDay] = useState(0);
+  // eslint-disable-next-line no-unused-vars
+  const [totalAtNight, setTotalAtNight]=useState(0);
+  // eslint-disable-next-line no-unused-vars
+  const [totalAllDay, setTotalAllDay] = useState(0);
   const [vehicles, setVehiclesData]= useState([]);
   const [residenceDrawerItem, setResidenceDrawerItem] = useState(false);
   const onChangeChooseVehicle = (e) => {
     console.log(e.target.value);
   };
+  useEffect(async ()=>{
+    const date1 = new Date(startDate);
+    const date2 = new Date(endDate);
+    const diffTime = Math.abs(date2 - date1);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    if (tunetype === 'Өдөр') {
+      setTotalAtDay(Number(diffDays));
+    } else if (tunetype === 'Шөнө') {
+      setTotalAtNight(Number(diffDays));
+    } else {
+      setTotalAllDay(Number(diffDays));
+    }
+    const time = await callGet('/config/timesplit');
+    settimeSplit(time);
+    console.log(time, '<-------------------------------');
+  }, []);
   const DetailsDrawerOpen = async (id) => {
     console.log(id);
     setDetailsVisible(true);
+
     // eslint-disable-next-line react/prop-types
     const a = data.find((item) => item.park.parkingSpaceId === id);
     setResidenceDrawerItem(a.residence);
@@ -435,10 +461,8 @@ const Search = ({data, startDate, endDate, tunetype})=>{
                   <Row>
                     <Col>
                       <div style={{fontSize: '12px'}}>Нийт үнэ</div>
-                      <div><b>{it.park.price}</b></div>
+                      <div><b>{it.park.price !==null ? <p>{it.park.price}</p>:<p>0₮</p>}</b></div>
                     </Col>
-
-
                     <Col span={10} offset={4}>
                       <Button
                         style={{
@@ -849,8 +873,17 @@ const Search = ({data, startDate, endDate, tunetype})=>{
                           </Col>
                         </div>
                       </Row>
+                      <Row style={{marginTop: '20px'}} offset={2}>
+                        <p style={{fontSize: '14px', fontWeight: '700', color: '#35446D'}}>Өдөр (09:00-19:00)</p>
+                      </Row>
                       <Row style={{marginTop: '20px'}}>
-                        <p style={{fontSize: '14px', fontWeight: '700'}}>Өдөр (09:00-19:00)</p>
+                        <Col span={8}>
+                          <div style={{fontSize: '12px', fontWeight: '400', width: '86px', height: '16px', color: '#0013D4'}}>Эхлэх хугацаа</div>
+                          <div><b>{startDate},{(tunetype === 'Өдөр'&& timeSplit.dayStart)||(tunetype ==='Шөнө'&& timeSplit.nightStart)}</b></div>
+                        </Col>
+                        <Col span={8} offset={6}>
+                          <div style={{fontSize: '12px', fontWeight: '400', width: '86px', height: '16px', color: '#0013D4'}}>Дуусах хугацаа</div>
+                          <div><b>{endDate},{(tunetype === 'Өдөр'&& timeSplit.dayEnd )||(tunetype==='Шөнө'&& timeSplit.nightEnd)}</b></div></Col>
                       </Row>
                       <Row
                         style={{
@@ -932,16 +965,17 @@ const Search = ({data, startDate, endDate, tunetype})=>{
                         </Col>
                       </Row>
                       <Row
+                        gutter={16}
                         style={{
                           height: '50px',
                           marginTop: '10px',
                         }}
                       >
-                        <Col span={12}>
-                          <Button className={'buttonGo'}>Захиалга нэмэх</Button>
+                        <Col span={12} >
+                          <Button type='primary' style={{borderRadius: '10px', width: '100%'}} >Захиалга нэмэх</Button>
                         </Col>
-                        <Col span={12}>
-                          <Button className={'buttonGo'}>Төлбөр төлөх</Button>
+                        <Col span={12} >
+                          <Button type='primary' style={{borderRadius: '10px', width: '100%'}}>Төлбөр төлөх</Button>
                         </Col>
                       </Row>
                     </TabPane>
