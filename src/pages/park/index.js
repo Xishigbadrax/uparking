@@ -91,8 +91,8 @@ const Dashboard = () => {
   const [parkingUpDownArrow, setParkingUpDownArrow] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const [transfer, setTransfer] = useState(null);
-  
-  const [messageShow, setmessageShow] = useState(false);
+
+
   const router = useRouter();
   const [defaultCenter, setDefaultCenter] = useState({
     lat: 47.91909306508191,
@@ -143,13 +143,7 @@ const Dashboard = () => {
   const onCloseDrawerMore = () => {
     setVisibleDrawerMore(false);
   };
-  const handleOk = () => {
-    setmessageShow(false);
-  };
 
-  const handleCancel = () => {
-    setmessageShow(false);
-  };
 
   useEffect(() => {
     const fetchData = async () => {
