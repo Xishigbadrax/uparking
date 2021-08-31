@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import {callGet} from '@api/api';
 import {useRouter} from 'next/router';
 import {showMessage} from '../../utils/message';
+import moment from 'moment';
 import {
   Col,
   Row,
@@ -94,7 +95,8 @@ const Dashboard = () => {
   const [parkingUpDownArrow, setParkingUpDownArrow] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const [transfer, setTransfer] = useState(null);
-  
+
+  // eslint-disable-next-line no-unused-vars
   const [messageShow, setmessageShow] = useState(false);
   const router = useRouter();
   const [defaultCenter, setDefaultCenter] = useState({
@@ -115,6 +117,7 @@ const Dashboard = () => {
   // eslint-disable-next-line no-unused-vars
   const [endDate, setEndDate] = useState(null);
   const [searchId, setSearchId] = useState(null);
+  const [searchType, setSearchType]=useState('');
   const [timeSplit, settimeSplit] = useState(null);
 
   const [visibleDrawerMore, setVisibleDrawerMore] = useState(false);
@@ -148,13 +151,6 @@ const Dashboard = () => {
 
   const onCloseDrawerMore = () => {
     setVisibleDrawerMore(false);
-  };
-  const handleOk = () => {
-    setmessageShow(false);
-  };
-
-  const handleCancel = () => {
-    setmessageShow(false);
   };
 
   useEffect(() => {
@@ -197,7 +193,7 @@ const Dashboard = () => {
   };
 
   const onSelectAuto = async (val, option) => {
-    if (option.id && option.id != '') {
+    if (option.id && eoption.id != '') {
       setSearchId(option.id);
       // const res = await callGet(`/search/input/test?keywordId=${option.id}`);
       // if (!res || res === undefined) {
@@ -229,10 +225,14 @@ const Dashboard = () => {
     setTuneType(type);
   };
   const onChangeStartDate = (date) => {
-    setStartDate(date);
+    const a= moment(date).format('YYYY/MM/DD');
+    setStartDate(a);
+    console.log(a, 'start dtae->');
   };
   const onChangeEndDate = (date) => {
-    setEndDate(date);
+    const end = moment(date).format('YYYY/MM/DD');
+    setEndDate(end);
+    console.log(end, 'endDate end bnaa bandia');
   };
   const onTransfer = (id) => {
     console.log(id, 'ehnii id');
@@ -247,7 +247,6 @@ const Dashboard = () => {
   const onFinish = async (values) => {
     setGetDataLoading(true);
     let url = '';
-<<<<<<< HEAD
     if (tuneType !== null && startDate !== null && endDate!==null) {
       setSearchType('full');
       if (values.tuneType === 'Бүтэн өдөр') {
@@ -285,38 +284,6 @@ const Dashboard = () => {
       console.log('fsearch bolson');
       setSearchType('fsearch');
       url=`/search/input/test?keywordId=${searchId}`;
-=======
-    if (values.tuneType === 'Бүтэн өдөр') {
-      url = `/search/test/input?latitude=${position.latitude}&longitude=${
-        position.longitude
-      }&keywordId=${searchId}&startDate=${values.startdate.format(
-        'YYYY-MM-DD',
-      )}&endDate=${values.enddate.format(
-        'YYYY-MM-DD',
-      )}&fullDay=true&startTime=${timeSplit.dayStart}&endTime=${
-        timeSplit.nightEnd
-      }`;
-    } else if (values.tuneType === 'Өдөр') {
-      url = `/search/test/input?latitude=${position.latitude}&longitude=${
-        position.longitude
-      }&keywordId=${searchId}&startDate=${values.startdate.format(
-        'YYYY-MM-DD',
-      )}&endDate=${values.enddate.format(
-        'YYYY-MM-DD',
-      )}&fullDay=false&startTime=${timeSplit.dayStart}&endTime=${
-        timeSplit.dayEnd
-      }`;
-    } else if (values.tuneType === 'Шөнө') {
-      url = `/search/test/input?latitude=${position.latitude}&longitude=${
-        position.longitude
-      }&keywordId=${searchId}&startDate=${values.startdate.format(
-        'YYYY-MM-DD',
-      )}&endDate=${values.enddate.format(
-        'YYYY-MM-DD',
-      )}&fullDay=false&startTime=${timeSplit.nightStart}&endTime=${
-        timeSplit.nightEnd
-      }`;
->>>>>>> 5ca6aab1fe127fdd606393673110e650ce8c1a8d
     }
     if (url != '') {
       const res = await callGet(url);
@@ -601,9 +568,8 @@ const Dashboard = () => {
                 //       </Col>
                 //     </Row>
                 //   </Card>
-<<<<<<< HEAD
                   <div>
-                    {searchType ==='full' && <Search data={searchedData} startDate={startDate} endDate={endDate}/>}
+                    {searchType ==='full' && <Search data={searchedData} startDate={startDate} endDate={endDate} tunetype={tuneType}/>}
                     {searchType ==='fsearch' &&<ToFit data={searchedData} lat={defaultCenter.lat} lng={defaultCenter.lng} />}
                   </div>
                 ) : (
@@ -611,16 +577,6 @@ const Dashboard = () => {
                 )}
               </TabPane>
               <TabPane tab="Хамгийн хямд" key="2">
-=======
-                <div>
-                  <ToFit data={searchedData} lat={defaultCenter.lat} lng={defaultCenter.lng} />
-                </div>
-              ) : (
-                <Empty description={<span>Өгөгдөл байхгүй</span>} />
-              )}
-            </TabPane>
-            <TabPane tab="Хамгийн хямд" key="2">
->>>>>>> 5ca6aab1fe127fdd606393673110e650ce8c1a8d
               Хамгийн хямд
               </TabPane>
               <TabPane tab="Хамгийн ойр" key="3">

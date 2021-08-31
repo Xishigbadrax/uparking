@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import {Row, Col, Card, Button, Rate, Image, Drawer, Radio} from 'antd';
 import {CloseOutlined, CheckCircleOutlined, DownOutlined, UpOutlined} from '@ant-design/icons';
 import {useState} from 'react';
@@ -22,8 +23,8 @@ const isBase64 = async (str) => {
   }
 };
 // eslint-disable-next-line react/prop-types
-const Search = ({data, startDate, endDate})=>{
-  console.log(startDate, endDate);
+const Search = ({data, startDate, endDate, tunetype})=>{
+  console.log(startDate, endDate, tunetype);
   const [spaceData, setSpaceData] = useState();
   const [detailsVisible, setDetailsVisible] = useState(false);
   const [parkingUpDownArrow, setParkingUpDownArrow] = useState(false);
