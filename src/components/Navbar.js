@@ -167,6 +167,11 @@ const Navbar = () => {
                   >
                     Бүртгүүлэх
                   </button>
+                  <button
+                    className={' py-2.5 px-3 ml-5 navbarBtn'}
+                  >
+                    MN
+                  </button>
                 </div> :
                 <div style={{height: '72px'}} className="hidden md:block">
                   <div className="flex flex-row">

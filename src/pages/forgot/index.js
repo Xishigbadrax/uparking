@@ -28,8 +28,7 @@ const ForgotPassword = () => {
   const [loading, setLoading] = useState(false);
   const [isOneTimePass, setIsOneTimePass] = useState(false);
   const [isTransactionCode, setIsTransactionCode] = useState(false);
-  const initialValue = 0;
-  const [phoneNumber, setPhoneNumber] = useState(initialValue);
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [havecode, setHaveCode] = useState(true);
   const [verifyCode, setVerifyCode] = useState('');
   const router = useRouter();
@@ -76,17 +75,18 @@ const ForgotPassword = () => {
   };
 
   const onFinishVerfication = async (values) => {
+    console.log(values);
     try {
-      setVerifyCode(values.verificationCode);
       const data = {
-        'confCode': values.verificationCode,
-        'phoneNumber': phoneNumber,
+        confCode: values.verificationCode,
+        phoneNumber: phoneNumber,
       };
       const result = await callPost('forgotPassword/checkAuth', data);
       if (result.status === 'failed') {
         showMessage(messageType.FAILED.type, result.error);
         return true;
-      } else {
+      } else if (result.status === 'success') {
+        setVerifyCode(result.authCode);
         setIsTransactionCode(true);
       }
     } catch (e) {
@@ -121,18 +121,20 @@ const ForgotPassword = () => {
     try {
       const data =
             {
-              'authCode': verifyCode,
-              'matchPassword': values.password,
-              'password': values.confirm,
-              'phoneNumber': phoneNumber,
+              authCode: verifyCode,
+              matchPassword: values.password,
+              password: values.confirm,
+              phoneNumber: phoneNumber,
             };
+
       const result = await callPost('/forgotPassword/changePass', data);
-      if (result.status === 'failed') {
-        showMessage(messageType.FAILED.type, result.error);
-        return true;
-      } else {
+      if (result.status == 'success') {
         showMessage(messageType.SUCCESS.type, 'Нууц үг амжилттай солигдлоо. Шинэ нууц үгээ ашиглан нэвтэрнэ үү');
         router.push('/login');
+      } else {
+        showMessage(messageType.FAILED.type, result.error );
+
+        return true;
       }
     } catch (e) {
       console.log('Хадгалахад алдаа гарлаа');
@@ -207,7 +209,7 @@ const ForgotPassword = () => {
                 </Form.Item>
                 <div className="getCodeAgain">
 
-                  <Countdown className="getCodeAgainCountDown" renderer={rendererCounter} ref={clockRef} date={Date.now() + 30000} onComplete={counterOnComplete} >
+                  <Countdown className="getCodeAgainCountDown" renderer={rendererCounter} ref={clockRef} date={Date.now() + 60000} onComplete={counterOnComplete} >
                   </Countdown>
                   <Button className="getCodeAgainButton" icon={<ReloadOutlined />} disabled={havecode} onClick={getCodeAgain}>Дахин код авах</Button>
                 </div>
@@ -247,7 +249,7 @@ const ForgotPassword = () => {
                 message: 'Нууц үгээ оруулна уу!',
               },
             ]}
-            hasFeedback
+
           >
             <Input.Password placeholder="Нууц үг" />
           </Form.Item>
@@ -255,7 +257,7 @@ const ForgotPassword = () => {
           <Form.Item
             name="confirm"
             dependencies={['password']}
-            hasFeedback
+
             rules={[
               {
                 required: true,
@@ -284,7 +286,7 @@ const ForgotPassword = () => {
             block
             className="loginBtn"
           >
-                        Үүсгэх
+                        Хадгалах
           </Button>
         </Form.Item>
       </Form>

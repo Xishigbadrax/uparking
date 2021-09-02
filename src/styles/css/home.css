@@ -472,6 +472,17 @@
   border-radius: 100px 0px;
   margin-top: 70px;
 }
+.howToUse2 {
+  width: 80%;
+  height: auto;
+  margin: 0px auto;
+
+  /* Brand Color/Secondary */
+
+  background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
+  border-radius: 0px 100px;
+  margin-top: 70px;
+}
 .howToUseTitle {
   position: relative;
   height: 40px;

@@ -493,7 +493,7 @@ const Login = () => {
                   </Form.Item>
                 </div>
 
-                <div className="forgotPassword">
+                <div className="forgotPassword mb-[24px]">
                   <Button type="link" onClick={handleClickForgotPassword}>
                     Нууц үг мартсан <RightOutlined />
                   </Button>

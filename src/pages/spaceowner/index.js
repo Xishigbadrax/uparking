@@ -7,10 +7,10 @@ const SpaceOwner = () => {
       <div className={'background '}>
         <img src="/zogsoolEzemshigch.png" height="600px" width="100%" />
       </div>
-      <div className={'textInfo mt-4'}>
+      <div className={'textInfo mt-10 mb-3'}>
         ТАНЫ АВТО ЗОГСООЛ НЭМЭЛТ ОРЛОГО ОЛОХ БОЛОМЖ
       </div>
-      <div className="textInfoDesc">
+      <div className="textInfoDesc mb-[52px]">
         Илүү үр ашигтай зогсоол ашиглалтын менежментийг энэхүү систем танд
         олгож, орлогын нэмэлт эх үүсгэвэрийг бий болгоно. Uparking нь зогсоол
         эзэмшигч танд өөрийн зогсоолыг ашиглахгүй байгаа үедээ бусдад түрээслэх
@@ -18,17 +18,17 @@ const SpaceOwner = () => {
         дээр Өдөр |09:00-18:30| болон Шөнийн |19:00-08:30| цагийн хуваарьт
         оруулснаар таны зогсоолыг тухайн өдрүүдэд зогсоол түрээслэгчид санал
         болгоно.
-        <p className="mt-4">
+        <p className="mt-4 mb-4">
           ТА ӨӨРИЙН ЗОГСООЛЫН ТӨЛВИЙГ ӨДӨР БҮРЭЭР 3 ТӨЛӨВТ АНГИЛНА.{' '}
         </p>
-        <p style={{textAlign: 'justify'}}>
+        <p style={{textAlign: 'justify'}} className="mb-4">
           1.<span style={{color: 'red'}}> Боломжгүй /Unavailable/</span> -
           энэхүү төлвөөр та өөрийн зогсдог цагийг долоо хоног болон сарын
           календарь дээр тохируулна. Систем{' '}
           <span style={{color: 'red'}}>Unavailable</span> төлөвтэй өдрүүдэд
           таны зогсоолд захиалга авах боломжгүйгээр тохируулна.
         </p>
-        <p>
+        <p className="mb-4">
           2.<span style={{color: 'green'}}> Боломжтой /Available/</span>-
           энэхүү төлвөөр та өөрийн зогсоолын сул байдаг цагийг долоо хоног болон
           сарын календарь дээр тохируулна.{' '}

@@ -25,7 +25,7 @@ import Context from '@context/Context';
 import {useRouter} from 'next/router';
 import {useEffect, useState, useContext} from 'react';
 import {callGet} from '@api/api';
-import css from './style.module.css';
+
 import {auto} from 'async';
 
 
@@ -72,31 +72,32 @@ const News = () => {
     <div>
 
       <InforNavbar onClick2={(e) =>setdata2(e)}/>
-      <div>
+      <div className="grid grid-cols-2 gap-5">
         {data &&
           data.map((item, index) => (
+
             <div
               key={index}
               onClick={() => newsDetails(item.id)}
-              className= { css['d' + index.toString()] }
+              className="scale-75 relative"
               // style={{
               //   position: 'relative',
               //   marginLeft: '150px',
               // }}
             >
-
               <p
-                style={{
-                  position: 'absolute',
-                  right: '0px',
-                  top: '8px',
-                  zIndex: '2',
-                  color: 'white',
-                  backgroundColor: '#0013D4',
-                  height: '16px',
-                  width: '100px',
-                  fontSize: '10px',
-                }}
+                // style={{
+
+                //   right: '0px',
+                //   top: '8px',
+                //   zIndex: '2',
+                //   color: 'white',
+                //   backgroundColor: '#0013D4',
+                //   height: '16px',
+                //   width: '100px',
+                //   fontSize: '10px',
+                // }}
+                className="bg-[#0013D4] w-[135px] text-white h-[16px] absolute z-50 self-end items-stretch right-1 top-[10px]"
               >
                 {item.createdDate}
               </p>

@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {callGet} from '@api/api';
-import {useRouter} from 'next/router';
+// import { Router } from 'next/router';
 import {showMessage} from '../../utils/message';
 import moment from 'moment';
 import {
@@ -13,27 +13,17 @@ import {
   Tabs,
   Spin,
   Empty,
-  Rate,
-  Image,
-  Drawer,
+
   AutoComplete,
   Form,
 
 } from 'antd';
 // import moment from 'moment';
-import Helper from '@utils/helper';
+
 import ToFit from '@components/fsearch/toFIt.js';
 import Search from '@components/search/Search';
-import {
-  DownOutlined,
-  UpOutlined,
-} from '@ant-design/icons';
-const IMG_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
-const style = {
-  border: '1px solid #DEE2E9',
-  borderRadius: '8px',
-  padding: '5px 10px',
-};
+// import Farthest from '@components/fsearch/farthest';
+
 
 const {compose, withProps, withHandlers} = require('recompose');
 const {
@@ -90,13 +80,14 @@ const Dashboard = () => {
   const [form] = Form.useForm();
   const [markers, setMarkers] = useState([]);
   const [searchedData, setSearchedData] = useState([]);
+  const [searchDataOfPosition, setSearchedDataOfPosition]=useState([]);
   const [dataSource, setDataSource] = useState([]);
   const [getdataLoading, setGetDataLoading]= useState(false);
-  const [parkingUpDownArrow, setParkingUpDownArrow] = useState(false);
+
   // eslint-disable-next-line no-unused-vars
   const [transfer, setTransfer] = useState(null);
 
-  const router = useRouter();
+  // const router = useRouter();
   const [defaultCenter, setDefaultCenter] = useState({
     lat: 47.91909306508191,
     lng: 106.91761127921768,
@@ -120,6 +111,7 @@ const Dashboard = () => {
 
 
   const [visibleDrawerMore, setVisibleDrawerMore] = useState(false);
+
   const [parkingObject, setParkingObject] = useState({});
   // const isBase64 = async (str) => {
   //   if (str === '' || str.trim() === '') {
@@ -190,17 +182,35 @@ const Dashboard = () => {
       });
     }
   };
+  const loadDataOfPosition = (res) => {
+    const parks = [];
+    setSearchedDataOfPosition([]);
+    setMarkers([]);
+    if (res.length > 0) {
+      res.map((residence) => {
+        residence.parkingSpaceList.content.map((park) => {
+          parks.push({residence, park});
+        });
+      });
+      console.log(parks, 'position search data');
+      setMarkers(parks);
+      setDefaultCenter({
+        lat: parks[0].residence.latitude,
+        lng: parks[0].residence.longitude,
+      });
+      setSearchedDataOfPosition(parks);
+    } else {
+      setDefaultCenter({
+        lat: 47.91909306508191,
+        lng: 106.91761127921768,
+      });
+    }
+  };
+
 
   const onSelectAuto = async (val, option) => {
     if (option.id && option.id != '') {
       setSearchId(option.id);
-      // const res = await callGet(`/search/input/test?keywordId=${option.id}`);
-      // if (!res || res === undefined) {
-      //   showMessage(messageType.FAILED.type, defaultMsg.dataError);
-      //   return;
-      // } else {
-      //   loadData(res);
-      // }
     }
   };
   const searchResult = (list) =>
@@ -233,16 +243,16 @@ const Dashboard = () => {
     setEndDate(end);
     console.log(end, 'endDate end bnaa bandia');
   };
-  const onTransfer = (id) => {
-    console.log(id, 'ehnii id');
-    id &&
-      router.push({
-        pathname: 'park/payment',
-        query: {
-          id: id,
-        },
-      });
-  };
+  // const onTransfer = (id) => {
+  //   console.log(id, 'ehnii id');
+  //   id &&
+  //     router.push({
+  //       pathname: 'park/payment',
+  //       query: {
+  //         id: id,
+  //       },
+  //     });
+  // };
   const onFinish = async (values) => {
     setGetDataLoading(true);
     let url = '';
@@ -291,6 +301,9 @@ const Dashboard = () => {
         return;
       }
       loadData(res);
+      const searchOfLocation = await callGet(`/search/location/test?latitude=${position.latitude}&longitude=${position.longitude}`);
+      console.log(searchOfLocation, 'searching locationnn');
+      loadDataOfPosition(searchOfLocation);
       setGetDataLoading(false);
     }
   };
@@ -322,7 +335,6 @@ const Dashboard = () => {
               >
                 <AutoComplete
                   // dataSource={dataSource}
-
                   // options={options}
                   style={{width: '100%'}}
                   onSelect={(value, option) => onSelectAuto(value, option)}
@@ -579,386 +591,12 @@ const Dashboard = () => {
               Хамгийн хямд
               </TabPane>
               <TabPane tab="Хамгийн ойр" key="3">
-              Хамгийн ойр
+                <Search data={searchDataOfPosition} startDate={startDate} endDate={endDate} />
               </TabPane>
             </Tabs>
           </Sider>
         </Spin>
       </Layout>
-
-      <Drawer
-        title="Зогсоолын дэлгэрэнгүй мэдээлэл"
-        placement="right"
-        width={600}
-        onClose={onCloseDrawerMore}
-        visible={visibleDrawerMore}
-      >
-        <div>
-          <div className="descriptionSide">
-            <div className="title" style={{marginBottom: '5px'}}>
-              {parkingObject.residence ?
-                parkingObject.residence.residenceName :
-                null}
-            </div>
-
-            <Rate
-              className="rateing"
-              disabled
-              value={parkingObject.park ? parkingObject.park.totalRating : null}
-            />
-
-            <Row>
-              <Col span={10} className="distance">
-                • 110m
-              </Col>
-              <Col span={14} className="id">
-                Байршил ID:{' '}
-                {parkingObject.residence ?
-                  parkingObject.residence.residenceBlockCode :
-                  null}
-              </Col>
-            </Row>
-            <Row className="addresss">
-              <Col
-                span="2"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Image
-                  preview={false}
-                  width="10px"
-                  src={'/images/icon/location_on.png'}
-                ></Image>
-              </Col>
-              <Col span="22">
-                {parkingObject.residence ?
-                  parkingObject.residence.address :
-                  null}
-              </Col>
-            </Row>
-          </div>
-          <Tabs
-            style={{marginTop: '10px'}}
-            defaultActiveKey="1"
-            onChange={callback}
-            centered
-          >
-            <TabPane tab="Танилцуулга" key="1">
-              <div>
-                <Row style={{padding: '20px 10px'}}>
-                  <Col
-                    span={24}
-                    style={{
-                      background: 'rgba(222, 226, 233, 0.2)',
-                      borderRadius: '24px',
-                      padding: '13px 23px',
-                      display: 'inline-flex',
-                      textAlign: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    {parkingObject.park && parkingObject.park.floorNumber ? (
-                      <div style={{marginRight: '13px'}}>
-                        <Image
-                          preview={false}
-                          width={24}
-                          src={IMG_URL + parkingObject.park.floorNumber}
-                        />
-                      </div>
-                    ) : null}
-                    {parkingObject.park && parkingObject.park.entranceLock ? (
-                      <div style={{marginRight: '13px'}}>
-                        <Image
-                          preview={false}
-                          width={24}
-                          src={IMG_URL + parkingObject.park.entranceLock}
-                        />
-                      </div>
-                    ) : null}
-                    {parkingObject.park && parkingObject.park.isNumbering ? (
-                      <div style={{marginRight: '13px'}}>
-                        <Image
-                          preview={false}
-                          width={24}
-                          src={IMG_URL + parkingObject.park.isNumbering}
-                        />
-                      </div>
-                    ) : null}
-                    {parkingObject.park && parkingObject.park.capacity ? (
-                      <div style={{marginRight: '13px'}}>
-                        <Image
-                          preview={false}
-                          width={24}
-                          src={IMG_URL + parkingObject.park.capacity}
-                        />
-                      </div>
-                    ) : null}
-                    {parkingObject.park && parkingObject.park.type ? (
-                      <div style={{marginRight: '13px'}}>
-                        <Image
-                          preview={false}
-                          width={24}
-                          src={IMG_URL + parkingObject.park.type}
-                        />
-                      </div>
-                    ) : null}
-                    {parkingObject.park && parkingObject.park.returnRoutes ? (
-                      <div style={{marginRight: '13px'}}>
-                        <Image
-                          preview={false}
-                          width={24}
-                          src={IMG_URL + parkingObject.park.returnRoutes}
-                        />
-                      </div>
-                    ) : null}
-                    <div>
-                      {!parkingUpDownArrow ? (
-                        <DownOutlined
-                          onClick={() => setParkingUpDownArrow(true)}
-                        />
-                      ) : (
-                        <UpOutlined
-                          onClick={() => setParkingUpDownArrow(false)}
-                        />
-                      )}
-                    </div>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col span={24}>
-                    {parkingUpDownArrow ? (
-                      <div>
-                        {parkingObject.park &&
-                        parkingObject.park.floorNumber ? (
-                            <div style={{marginRight: '13px', display: 'flex'}}>
-                              <Image
-                                preview={false}
-                                width={24}
-                                src={IMG_URL + parkingObject.park.floorNumber}
-                              />
-                              <div style={{marginLeft: '25px'}}>
-                                <span>{parkingObject.park.floorNumberLabel}</span>
-                              </div>
-                            </div>
-                          ) : null}
-                        {parkingObject.park &&
-                        parkingObject.park.entranceLock ? (
-                            <div style={{marginRight: '13px', display: 'flex'}}>
-                              <Image
-                                preview={false}
-                                width={24}
-                                src={IMG_URL + parkingObject.park.entranceLock}
-                              />
-                              <div style={{marginLeft: '25px'}}>
-                                <span>
-                                  {parkingObject.park.entranceLockLabel}
-                                </span>
-                              </div>
-                            </div>
-                          ) : null}
-                        {parkingObject.park &&
-                        parkingObject.park.isNumbering ? (
-                            <div style={{marginRight: '13px', display: 'flex'}}>
-                              <Image
-                                preview={false}
-                                width={24}
-                                src={IMG_URL + parkingObject.park.isNumbering}
-                              />
-                              <div style={{marginLeft: '25px'}}>
-                                <span>{parkingObject.park.isNumberingLabel}</span>
-                              </div>
-                            </div>
-                          ) : null}
-                        {parkingObject.park && parkingObject.park.capacity ? (
-                          <div style={{marginRight: '13px', display: 'flex'}}>
-                            <Image
-                              preview={false}
-                              width={24}
-                              src={IMG_URL + parkingObject.park.capacity}
-                            />
-                            <div style={{marginLeft: '25px'}}>
-                              <span>{parkingObject.park.capacityLabel}</span>
-                            </div>
-                          </div>
-                        ) : null}
-                        {parkingObject.park && parkingObject.park.type ? (
-                          <div style={{marginRight: '13px', display: 'flex'}}>
-                            <Image
-                              preview={false}
-                              width={24}
-                              src={IMG_URL + parkingObject.park.type}
-                            />
-                            <div style={{marginLeft: '25px'}}>
-                              <span>{parkingObject.park.typeLabel}</span>
-                            </div>
-                          </div>
-                        ) : null}
-                        {parkingObject.park &&
-                        parkingObject.park.returnRoutes ? (
-                            <div style={{marginRight: '13px', display: 'flex'}}>
-                              <Image
-                                preview={false}
-                                width={24}
-                                src={IMG_URL + parkingObject.park.returnRoutes}
-                              />
-                              <div style={{marginLeft: '25px'}}>
-                                <span>
-                                  {parkingObject.park.returnRoutesLabel}
-                                </span>
-                              </div>
-                            </div>
-                          ) : null}
-                      </div>
-                    ) : null}
-                  </Col>
-                </Row>
-
-                <Row gutter={16}>
-                  <Col className="gutter-row" span={12}>
-                    <div style={style}>
-                      <div style={{color: '#0013D4'}}>Эхлэх хугацаа</div>
-                      {parkingObject.park &&
-                      parkingObject.park.startDateTime ? (
-                          <div>
-                            {Helper.removeSec(parkingObject.park.startDateTime)}
-                          </div>
-                        ) : null}
-                    </div>
-                  </Col>
-                  <Col className="gutter-row" span={12}>
-                    <div style={style}>
-                      <div style={{color: '#0013D4'}}>Дуусах хугацаа</div>
-                      {parkingObject.park && parkingObject.park.endDateTime ? (
-                        <div>
-                          {Helper.removeSec(parkingObject.park.endDateTime)}
-                        </div>
-                      ) : null}
-                    </div>
-                  </Col>
-                </Row>
-                <Row style={{marginTop: '30px'}}>
-                  <Col
-                    span={24}
-                    style={{
-                      fontWeight: 'bold',
-                      fontSize: '14px',
-                      lineHeight: '24px',
-                    }}
-                  >
-                    <div style={{color: '#0013D4'}}>Өдөр</div>
-                    {parkingObject.park && parkingObject.park.totalAtDay ? (
-                      <div style={{margin: '10px 0px', display: 'flex'}}>
-                        <Image
-                          preview={false}
-                          width={24}
-                          src={'/images/icon/brightness_5_24px.png'}
-                        ></Image>
-                        <div style={{color: '#35446d', marginLeft: '10px'}}>
-                          Өдөр {parkingObject.park.totalAtDay}
-                        </div>
-                      </div>
-                    ) : null}
-                  </Col>
-                </Row>
-
-                <Row style={{marginTop: '30px'}}>
-                  <Col
-                    span={24}
-                    style={{
-                      fontWeight: 'bold',
-                      fontSize: '14px',
-                      lineHeight: '24px',
-                    }}
-                  >
-                    <div style={{color: '#0013D4'}}>
-                      Тээврийн хэрэгсэл сонгох
-                    </div>
-                    {parkingObject.park && parkingObject.park.totalAtDay ? (
-                      <Row style={{marginTop: '20px'}}>
-                        <Col
-                          style={{
-                            borderRadius: '8px',
-                            border: 'solid 1px #0013D4',
-                            display: 'flex',
-                            alignItems: 'center',
-                          }}
-                        >
-                          <div style={{padding: '20px'}}>
-                            <Image
-                              preview={false}
-                              width={24}
-                              src={'/images/icon/directions_car.png'}
-                            ></Image>
-                          </div>
-                          <div style={{paddingRight: '20px'}}>
-                            <div style={{color: '#000000'}}>
-                              {parkingObject.park.vehicleMaker},{' '}
-                              {parkingObject.park.vehicleModel}
-                            </div>
-                            <div
-                              style={{
-                                color: '#0013D4',
-                                fontFamily: 'Roboto-Bold',
-                                textTransform: 'uppercase',
-                              }}
-                            >
-                              {parkingObject.park.vehicleNumber}
-                            </div>
-                          </div>
-                        </Col>
-                      </Row>
-                    ) : null}
-                  </Col>
-                </Row>
-                <Row style={{marginTop: '30px'}}>
-                  <Col
-                    span={24}
-                    style={{
-                      fontWeight: 'bold',
-                      fontSize: '14px',
-                      lineHeight: '24px',
-                    }}
-                  >
-                    <div style={{color: '#0013D4'}}>
-                      Нийт захиалгын төлбөр
-                    </div>
-                    <div style={{margin: '10px 0px'}}>
-                      <div style={{color: '#35446d', marginLeft: '10px'}}>
-                        өдөр
-                      </div>
-                      <div style={{color: '#35446d', marginLeft: '10px'}}>
-                        500 ₮
-                      </div>
-                    </div>
-                  </Col>
-                </Row>
-                <Row style={{margin: '30px 0px'}} gutter={16}>
-                  <Col span={12}>
-                    <Button type="primary" size={'large'} block>
-                      Захиалга нэмэх
-                    </Button>
-                  </Col>
-                  <Col span={12}>
-                    <Button type="primary" size={'large'} block onClick={() => onTransfer(transfer)} >
-                      Төлбөр төлөх
-                    </Button>
-                  </Col>
-                </Row>
-              </div>
-            </TabPane>
-            <TabPane tab="Үнэлгээ" key="2">
-              Үнэлгээ
-            </TabPane>
-            <TabPane tab="Тусламж" key="3">
-              Тусламж
-            </TabPane>
-          </Tabs>
-        </div>
-      </Drawer>
-
     </Layout>
 
   );
