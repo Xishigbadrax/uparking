@@ -266,7 +266,7 @@ const Edit = ({data}) => {
   };
   const changeSpaceData = (e) => {
     setSpaceLoading(true);
-    + setSpaceValue(true);
+    setSpaceValue(true);
     setSpaceLoading(false);
   };
 
@@ -287,12 +287,11 @@ const Edit = ({data}) => {
     console.log(e);
   };
   const addCurrent = (e) => {
-    SSS;
     setCurrent(current + 1);
   };
   const divideCurrent = (e) => {
     setCurrent(current - 1);
-  }; S;
+  };
   const onsaveMainImage = () => {
     setMainImageValue(false);
   };

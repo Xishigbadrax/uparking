@@ -6,6 +6,7 @@ import {
   Image,
   Row,
   Col,
+  Rate,
   Divider,
   Modal,
   Alert,
@@ -13,6 +14,7 @@ import {
 } from 'antd';
 import {
   LeftOutlined,
+  CheckCircleOutlined,
   DownOutlined,
   UpOutlined,
   // CodeSandboxCircleFilled,
@@ -45,8 +47,24 @@ const style = {
   borderRadius: '8px',
   padding: '5px 10px',
 };
-
-const Payment = () => {
+const isBase64 = async (str) => {
+  if (str === '' || str.trim() === '') {
+    return false;
+  }
+  try {
+    return btoa(atob(str)) == str;
+  } catch (err) {
+    return false;
+  }
+};
+const image = [
+  {id: 1,
+    image: '/hunnu11.png'},
+  {id: 2,
+    image: '/medee2',
+  },
+];
+const Payment = ( ) => {
   const {userdata} = useContext(Context);
   const ctx = useContext(Context);
   const router = useRouter();
@@ -63,19 +81,20 @@ const Payment = () => {
   //   bookingStatus: 'SAVED',
   //   totalPrice: '16000',
   // });
-  const [orderData, setOrderData] = useState(null);
+  const [orderData, setOrderData] = useState();
   const [images, setImages] = useState([]);
   const [parkingUpDownArrow, setParkingUpDownArrow] = useState(false);
   const [bankData, setBankData] = useState(null);
   const [type, settype] = useState('KHANBANK');
   const [type2, settype2] = useState('MONGOLCHAT');
   const [amount, setamount] = useState(0);
-
+  const [startDateTime, setStartDateTime]= useState();
   // const [test, setTest] = useState(null);
   const [phoneNumber, setphoneNumber] = useState(null);
   const {id} = router.query;
+  // const {startDate}=router.query;
   // const orderId = id;
-
+  console.log(router.query, 'query ene bna');
   // eslint-disable-next-line no-unused-vars
   const [formData, setformData] = useState({
     amount: null,
@@ -86,8 +105,50 @@ const Payment = () => {
   const [title, settitle] = useState('');
   const [messageShow, setmessageShow] = useState(false);
 
-  useEffect(() => {
-    getData();
+  useEffect(async () => {
+    setStartDateTime(router.query.startDateTime);
+    ctx.setIsLoading(true);
+    console.log(id, 'id shuu');
+    await callGet(`/parkingspace?parkingSpaceId=${id}`).then((res) => {
+      console.log(res, 'resresres');
+      if (!res || res === undefined) {
+        showMessage(messageType.FAILED.type, defaultMsg.dataError);
+      } else {
+        setOrderData(res);
+        console.log(orderData, 'orderDatagiin medeelel');
+        setImages([]);
+        if (!Helper.isNullOrEmpty(res.imageFromGate)) {
+          setImages((images) => [...images, {id: 4, path: res.imageFromGate}]);
+        }
+
+        if (!Helper.isNullOrEmpty(res.imageParkingOverall)) {
+          setImages((images) => [
+            ...images,
+            {id: 5, path: res.imageParkingOverall},
+          ]);
+        }
+        if (!Helper.isNullOrEmpty(res.imageResidenceGate)) {
+          setImages((images) => [
+            ...images,
+            {id: 6, path: res.imageResidenceGate},
+          ]);
+        }
+        if (!Helper.isNullOrEmpty(res.imageSpaceNumber)) {
+          setImages((images) => [
+            ...images,
+            {id: 7, path: res.imageSpaceNumber},
+          ]);
+        }
+        if (!Helper.isNullOrEmpty(res.imageSpaceNumber)) {
+          setImages((images) => [
+            ...images,
+            {id: 8, path: res.imageSpaceNumber},
+          ]);
+        }
+      }
+      console.log(images, 'zurguuud');
+      ctx.setIsLoading(false);
+    });
   }, [id]);
   useEffect(() => {
     fetchData();
@@ -100,8 +161,6 @@ const Payment = () => {
     });
   };
 
-
-  console.log(id, 'id shuu');
 
   // useEffect(() => {
   //   const fetchData4 = async () => {
@@ -201,49 +260,7 @@ const Payment = () => {
   // await callGet(`/parkingspace?parkingSpaceId=${id}`).then((res) => {
   //       res && setOrderData(res);
   //     });
-  const getData = async () => {
-    // const orderId = router.query.id;
-    ctx.setIsLoading(true);
-    await callGet(`/parkingspace?parkingSpaceId=${id}`).then((res) => {
-      console.log(res, 'resresres');
-      if (!res || res === undefined) {
-        showMessage(messageType.FAILED.type, defaultMsg.dataError);
-      } else {
-        setOrderData(res);
-        setImages([]);
-        if (!Helper.isNullOrEmpty(res.imageFromGate)) {
-          setImages((images) => [...images, {id: 4, path: res.imageFromGate}]);
-        }
 
-        if (!Helper.isNullOrEmpty(res.imageParkingOverall)) {
-          setImages((images) => [
-            ...images,
-            {id: 5, path: res.imageParkingOverall},
-          ]);
-        }
-        if (!Helper.isNullOrEmpty(res.imageResidenceGate)) {
-          setImages((images) => [
-            ...images,
-            {id: 6, path: res.imageResidenceGate},
-          ]);
-        }
-        if (!Helper.isNullOrEmpty(res.imageSpaceNumber)) {
-          setImages((images) => [
-            ...images,
-            {id: 7, path: res.imageSpaceNumber},
-          ]);
-        }
-        if (!Helper.isNullOrEmpty(res.imageSpaceNumber)) {
-          setImages((images) => [
-            ...images,
-            {id: 8, path: res.imageSpaceNumber},
-          ]);
-        }
-      }
-      ctx.setIsLoading(false);
-    });
-  };
-  console.log(orderData, 'orderDatagiin medeelel');
 
   const handleClickBankLogo = (activekey) => {
     settype(activekey);
@@ -263,46 +280,50 @@ const Payment = () => {
     setmessageShow(false);
   };
   return (
+
     <DefaultLayout>
-      <Layout style={{overflow: 'hidden'}}>
-        <Header style={{padding: '0px'}}>
-          <Link href={{pathname: '/park/profile/order/'}} passHref>
-            <Button
-              type="primary"
-              shape="circle"
-              icon={<LeftOutlined />}
-              size={'large'}
-            />
-          </Link>
-          <span
-            style={{
-              fontSize: '20px',
-              lineHeight: '24px',
-              color: '#0013D4',
-              marginLeft: '20px',
-            }}
-          >
-            Хадгалсан захиалга
-          </span>
-        </Header>
-        <Layout style={{padding: '0px 0px 0px 60px'}}>
-          <Content>
-            {images.length > 0 ? (
-              <Carousel>
-                {images.map((image) => (
-                  <div key={image.id}>
-                    <Image
-                      preview={false}
-                      width={468}
-                      //   src={IMG_URL + image.path}
-                      src={image.path}
-                    />
-                  </div>
-                ))}
-              </Carousel>
-            ) : null}
-            <Row style={{marginTop: '24px'}}>
-              <Col span={12}>
+
+      <Header style={{padding: '0px'}}>
+        <Link href={{pathname: '/park/profile/order/'}} passHref>
+          <Button
+            type="primary"
+            shape="circle"
+            icon={<LeftOutlined />}
+            size={'large'}
+          />
+        </Link>
+        <span
+          style={{
+            fontSize: '20px',
+            lineHeight: '24px',
+            color: '#0013D4',
+            marginLeft: '20px',
+          }}
+        >
+          Хадгалсан захиалга
+        </span>
+      </Header>
+
+      <Row>
+        <Col span={14}>
+          {image.length > 0 ? (
+            <Carousel className='ImagesCarousel'>
+              {image.map((image) => (
+                <div key={image.id}>
+                  <Image
+                    preview={false}
+                    width='100%'
+                    height={468}
+                    //   src={IMG_URL + image.path}
+                    src={image.image}
+                  />
+                </div>
+              ))}
+            </Carousel>
+          ) : null}
+          <Row style={{marginTop: '24px'}}>
+            <Col span={8}>
+              <div style={{display: 'flex'}}>
                 <div style={{fontSize: '20px'}}>
                   <strong>
                     { orderData != null && !Helper.isNullOrEmpty(orderData.residenceName) ?
@@ -310,170 +331,235 @@ const Payment = () => {
                       null}
                   </strong>
                 </div>
-                {/* <div>rating</div> */}
-              </Col>
-              {/* <Col span={6}>2</Col> */}
-              <Col
-                span={12}
-              >{ orderData && `${orderData.provinceLabel}, ${orderData.districtLabel}, ${orderData.sectionLabel}, ${orderData.residenceName}, ${orderData.residenceBlockNumber}` }</Col>
-            </Row>
-            <Row justify="center" style={{padding: '20px 10px'}}>
-              <Col
-                span={10}
+                <div style={{marginLeft: '10px'}}><div style={{height: '15px', width: '15px'}}>
+                  <CheckCircleOutlined
+                    style={{
+                      color: 'white',
+                      backgroundColor: 'green',
+                      borderRadius: '10px',
+                      marginLeft: '1.5px',
+                    }}
+                  />
+                </div></div>
+              </div>
+              <div><Rate value={3}/></div>
+            </Col>
+            <Col span={6} >
+              <Row>
+                <div
+                  style={{
+                    height: '24px',
+                    width: '24px',
+                    marginTop: '5px',
+                  }}
+                >
+                  <Image
+                    src="/directions_car_24px.png"
+                    height="16px"
+                    width="16px"
+                  />
+                </div>
+                <p style={{marginTop: '5px'}}> 110 м</p>
+              </Row>
+              <p
                 style={{
-                  background: 'rgba(222, 226, 233, 0.2)',
-                  borderRadius: '24px',
-                  padding: '13px 23px',
-                  display: 'inline-flex',
+                  width: '75px',
+                  fontSize: '12px',
                   textAlign: 'center',
-                  justifyContent: 'center',
+                  marginTop: '5px',
+                  fontStyle: 'regular',
+                  color: '#7D8FC0',
                 }}
               >
-                {orderData && orderData.floorNumber ? (
-                  <div style={{marginRight: '13px'}}>
-                    <Image
-                      preview={false}
-                      width={24}
-                      src={IMG_URL + orderData.floorNumberImage}
-                    />
-                  </div>
-                ) : null}
-                {orderData && orderData.entranceLock ? (
-                  <div style={{marginRight: '13px'}}>
-                    <Image
-                      preview={false}
-                      width={24}
-                      src={IMG_URL + orderData.entranceLock}
-                    />
-                  </div>
-                ) : null}
-                {orderData && orderData.isNumbering ? (
-                  <div style={{marginRight: '13px'}}>
-                    <Image
-                      preview={false}
-                      width={24}
-                      src={IMG_URL + orderData.isNumbering}
-                    />
-                  </div>
-                ) : null}
-                {orderData && orderData.capacity ? (
-                  <div style={{marginRight: '13px'}}>
-                    <Image
-                      preview={false}
-                      width={24}
-                      src={IMG_URL + orderData.capacity}
-                    />
-                  </div>
-                ) : null}
-                {orderData && orderData.type ? (
-                  <div style={{marginRight: '13px'}}>
-                    <Image
-                      preview={false}
-                      width={24}
-                      src={IMG_URL + orderData.type}
-                    />
-                  </div>
-                ) : null}
-                {orderData && orderData.returnRoutes ? (
-                  <div style={{marginRight: '13px'}}>
-                    <Image
-                      preview={false}
-                      width={24}
-                      src={IMG_URL + orderData.returnRoutes}
-                      // src={orderData.returnRoutes}
-                    />
-                  </div>
-                ) : null}
-                <div>
-                  {!parkingUpDownArrow ? (
-                    <DownOutlined onClick={() => setParkingUpDownArrow(true)} />
-                  ) : (
-                    <UpOutlined onClick={() => setParkingUpDownArrow(false)} />
-                  )}
+                    Байршил ID
+              </p>
+              <p
+                style={{
+                  width: '43px',
+                  fontSize: '12px',
+                  marginTop: '12px',
+                }}
+              >
+                {/* {residenceDrawerItem.residenceBlockCode} */}
+              </p>
+            </Col>
+            <Col
+              span={8} style={{display: 'flex'}}
+            >
+              <div
+                style={{
+                  height: '24px',
+                  width: '24px',
+
+                }}
+              >
+                <Image
+                  src="/icons/location_on_24px.png"
+                  height="24px"
+                  width="24px"
+                />
+              </div>
+              <p>
+                { orderData && `${orderData.provinceLabel} ${orderData.districtLabel} ${orderData.sectionLabel} ${orderData.residenceName} ${orderData.residenceBlockNumber}` }</p></Col>
+          </Row>
+          <Row justify="center" style={{padding: '20px 10px'}}>
+            <Col
+              span={10}
+              style={{
+                background: 'rgba(222, 226, 233, 0.2)',
+                borderRadius: '24px',
+                padding: '13px 23px',
+                display: 'inline-flex',
+                textAlign: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              {orderData && orderData.floorNumber ? (
+                <div style={{marginRight: '13px'}}>
+                  <Image
+                    preview={false}
+                    width={24}
+                    src={IMG_URL + orderData.floorNumberImage}
+                  />
                 </div>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={24}>
-                {parkingUpDownArrow ? (
-                  <div>
-                    {orderData || orderData.floorNumber ? (
-                      <div style={{marginRight: '13px', display: 'flex'}}>
-                        <Image
-                          preview={false}
-                          width={24}
-                          src={IMG_URL + orderData.floorNumber}
-                        />
-                        <div style={{marginLeft: '25px'}}>
-                          <span>{orderData.floorNumberLabel}</span>
-                        </div>
+              ) : null}
+              {orderData && orderData.entranceLock ? (
+                <div style={{marginRight: '13px'}}>
+                  <Image
+                    preview={false}
+                    width={24}
+                    src={IMG_URL + orderData.entranceLock}
+                  />
+                </div>
+              ) : null}
+              {orderData && orderData.isNumbering ? (
+                <div style={{marginRight: '13px'}}>
+                  <Image
+                    preview={false}
+                    width={24}
+                    src={IMG_URL + orderData.isNumbering}
+                  />
+                </div>
+              ) : null}
+              {orderData && orderData.capacity ? (
+                <div style={{marginRight: '13px'}}>
+                  <Image
+                    preview={false}
+                    width={24}
+                    src={IMG_URL + orderData.capacity}
+                  />
+                </div>
+              ) : null}
+              {orderData && orderData.type ? (
+                <div style={{marginRight: '13px'}}>
+                  <Image
+                    preview={false}
+                    width={24}
+                    src={IMG_URL + orderData.type}
+                  />
+                </div>
+              ) : null}
+              {orderData && orderData.returnRoutes ? (
+                <div style={{marginRight: '13px'}}>
+                  <Image
+                    preview={false}
+                    width={24}
+                    src={IMG_URL + orderData.returnRoutes}
+                    // src={orderData.returnRoutes}
+                  />
+                </div>
+              ) : null}
+              <div>
+                {!parkingUpDownArrow ? (
+                  <DownOutlined onClick={() => setParkingUpDownArrow(true)} />
+                ) : (
+                  <UpOutlined onClick={() => setParkingUpDownArrow(false)} />
+                )}
+              </div>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={24}>
+              {parkingUpDownArrow ? (
+                <div>
+                  {orderData || orderData.floorNumber ? (
+                    <div style={{marginRight: '13px', display: 'flex'}}>
+                      <Image
+                        preview={false}
+                        width={24}
+                        src={IMG_URL + orderData.floorNumber}
+                      />
+                      <div style={{marginLeft: '25px'}}>
+                        <span>{orderData.floorNumberLabel}</span>
                       </div>
-                    ) : null}
-                    {orderData || orderData.entranceLock ? (
-                      <div style={{marginRight: '13px', display: 'flex'}}>
-                        <Image
-                          preview={false}
-                          width={24}
-                          src={IMG_URL + orderData.entranceLock}
-                        />
-                        <div style={{marginLeft: '25px'}}>
-                          <span>{orderData.entranceLockLabel}</span>
-                        </div>
+                    </div>
+                  ) : null}
+                  {orderData || orderData.entranceLock ? (
+                    <div style={{marginRight: '13px', display: 'flex'}}>
+                      <Image
+                        preview={false}
+                        width={24}
+                        src={IMG_URL + orderData.entranceLock}
+                      />
+                      <div style={{marginLeft: '25px'}}>
+                        <span>{orderData.entranceLockLabel}</span>
                       </div>
-                    ) : null}
-                    {orderData || orderData.isNumbering ? (
-                      <div style={{marginRight: '13px', display: 'flex'}}>
-                        <Image
-                          preview={false}
-                          width={24}
-                          src={IMG_URL + orderData.isNumbering}
-                        />
-                        <div style={{marginLeft: '25px'}}>
-                          <span>{orderData.isNumberingLabel}</span>
-                        </div>
+                    </div>
+                  ) : null}
+                  {orderData || orderData.isNumbering ? (
+                    <div style={{marginRight: '13px', display: 'flex'}}>
+                      <Image
+                        preview={false}
+                        width={24}
+                        src={IMG_URL + orderData.isNumbering}
+                      />
+                      <div style={{marginLeft: '25px'}}>
+                        <span>{orderData.isNumberingLabel}</span>
                       </div>
-                    ) : null}
-                    {orderData || orderData.capacity ? (
-                      <div style={{marginRight: '13px', display: 'flex'}}>
-                        <Image
-                          preview={false}
-                          width={24}
-                          src={IMG_URL + orderData.capacity}
-                        />
-                        <div style={{marginLeft: '25px'}}>
-                          <span>{orderData.capacityLabel}</span>
-                        </div>
+                    </div>
+                  ) : null}
+                  {orderData || orderData.capacity ? (
+                    <div style={{marginRight: '13px', display: 'flex'}}>
+                      <Image
+                        preview={false}
+                        width={24}
+                        src={IMG_URL + orderData.capacity}
+                      />
+                      <div style={{marginLeft: '25px'}}>
+                        <span>{orderData.capacityLabel}</span>
                       </div>
-                    ) : null}
-                    {orderData || orderData.type ? (
-                      <div style={{marginRight: '13px', display: 'flex'}}>
-                        <Image
-                          preview={false}
-                          width={24}
-                          src={IMG_URL + orderData.type}
-                        />
-                        <div style={{marginLeft: '25px'}}>
-                          <span>{orderData.typeLabel}</span>
-                        </div>
+                    </div>
+                  ) : null}
+                  {orderData || orderData.type ? (
+                    <div style={{marginRight: '13px', display: 'flex'}}>
+                      <Image
+                        preview={false}
+                        width={24}
+                        src={IMG_URL + orderData.type}
+                      />
+                      <div style={{marginLeft: '25px'}}>
+                        <span>{orderData.typeLabel}</span>
                       </div>
-                    ) : null}
-                    {orderData || orderData.returnRoutes ? (
-                      <div style={{marginRight: '13px', display: 'flex'}}>
-                        <Image
-                          preview={false}
-                          width={24}
-                          src={IMG_URL + orderData.returnRoutes}
-                        />
-                        <div style={{marginLeft: '25px'}}>
-                          <span>{orderData.returnRoutesLabel}</span>
-                        </div>
+                    </div>
+                  ) : null}
+                  {orderData || orderData.returnRoutes ? (
+                    <div style={{marginRight: '13px', display: 'flex'}}>
+                      <Image
+                        preview={false}
+                        width={24}
+                        src={IMG_URL + orderData.returnRoutes}
+                      />
+                      <div style={{marginLeft: '25px'}}>
+                        <span>{orderData.returnRoutesLabel}</span>
                       </div>
-                    ) : null}
-                  </div>
-                ) : null}
-              </Col>
-            </Row>
-          </Content>
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
+            </Col>
+          </Row>
+        </Col>
+        <Col offset={1}>
           <Sider style={{overflow: 'hidden'}} width={400}>
             <Row style={{marginTop: '30px'}}>
               <Col
@@ -487,7 +573,7 @@ const Payment = () => {
                 <div style={{color: '#0013D4'}}>Таны сонгосон захиалга:</div>
                 { orderData != null && orderData.totalAtDay ? (
                   <div style={{color: '#35446d', marginLeft: '10px'}}>
-                    Нийт {orderData.totalAtDay} өдөр
+                  Нийт {orderData.totalAtDay} өдөр
                   </div>
                 ) : null}
               </Col>
@@ -496,23 +582,25 @@ const Payment = () => {
               <Col className="gutter-row" span={12}>
                 <div style={style}>
                   <div style={{color: '#0013D4'}}>Эхлэх хугацаа</div>
-                  {orderData && orderData.startDateTime ? (
+                  {/* {orderData && orderData.startDateTime ? (
                     <div>{Helper.removeSec(orderData.startDateTime)}</div>
-                  ) : null}
+                  ) : } */}
+                  2021-09-09 09:00
                 </div>
               </Col>
               <Col className="gutter-row" span={12}>
                 <div style={style}>
                   <div style={{color: '#0013D4'}}>Дуусах хугацаа</div>
-                  {orderData || orderData.endDateTime ? (
+                  {/* {orderData || orderData.endDateTime ? (
                     <div>{Helper.removeSec(orderData.endDateTime)}</div>
-                  ) : null}
+                  ) : null} */}
+                  2021-09-18 18:30
                 </div>
               </Col>
             </Row>
 
             {(() => {
-              if ( orderData || orderData.bookingStatus === 'SAVED') {
+              if ( orderData) {
                 return (
                   <div>
                     <Divider />
@@ -540,23 +628,23 @@ const Payment = () => {
                         {orderData.totalPrice ?
                           Helper.formatValueReverse(orderData.totalPrice) :
                           0}
-                        ₮
+                    ₮
                       </Col>
                     </Row>
                     <Row style={{margin: '30px 0px'}}>
                       <Col span={24}>
                         <Tabs defaultActiveKey="1">
-                          <TabPane tab="Хэтэвч" key="1">
+                          <TabPane tab={<div style={{width: '100px'}}><p style={{marginLeft: '25px'}}>Хэтэвч</p></div>} key="1" >
                             <WalletCard />
                             <Row style={{marginTop: '35px'}}>
                               <Col span={24}>
                                 <Button type="primary" size={'large'} block>
-                                  Төлөх
+                              Төлөх
                                 </Button>
                               </Col>
                             </Row>
                           </TabPane>
-                          <TabPane tab="Дансаар" key="2">
+                          <TabPane tab={<div style={{width: '100px'}}><p style={{marginLeft: '25px'}}>Дансаар</p></div>} key="2">
                             <div>
                               <Tabs
                                 centered
@@ -585,7 +673,7 @@ const Payment = () => {
                                             0
                                         }
                                       >
-                                        Дансны дугаар
+                                    Дансны дугаар
                                       </WalletBankInfo>
                                       <WalletBankInfo
                                         value={
@@ -594,7 +682,7 @@ const Payment = () => {
                                             0
                                         }
                                       >
-                                        Хүлээн авагч
+                                    Хүлээн авагч
                                       </WalletBankInfo>
                                       <WalletBankInfo
                                         value={
@@ -603,7 +691,7 @@ const Payment = () => {
                                             0
                                         }
                                       >
-                                        Гүйлгээний утга
+                                    Гүйлгээний утга
                                       </WalletBankInfo>
                                     </div>
                                   </TabPane>
@@ -611,7 +699,7 @@ const Payment = () => {
                               </Tabs>
                             </div>
                           </TabPane>
-                          <TabPane tab="Нэхэмжлэх" key="3">
+                          <TabPane tab={<div style={{width: '100px'}}><p style={{marginLeft: '30px'}}>Нэхэмжлэх</p></div>} key="3">
                             <div>
                               <Tabs centered defaultActiveKey="1">
                                 <TabPane
@@ -635,7 +723,7 @@ const Payment = () => {
                                     <WalletBankInfo
                                       onChangeInput={onChangeInput}
                                     >
-                                      Цэнэглэх дүн
+                                  Цэнэглэх дүн
                                     </WalletBankInfo>
                                   </div>
                                 </TabPane>
@@ -659,7 +747,7 @@ const Payment = () => {
                                   <WalletBankInfo
                                     onChangeInput={onChangeInputPhone}
                                   >
-                                    Нэхэмжлэх илгээх утасны дугаар
+                                Нэхэмжлэх илгээх утасны дугаар
                                   </WalletBankInfo>
                                 </TabPane>
                                 <TabPane
@@ -680,7 +768,7 @@ const Payment = () => {
                                   key="3"
                                 >
                                   <WalletBankInfo onChangeInput={onChangeInput}>
-                                    Цэнэглэх дүн
+                                Цэнэглэх дүн
                                   </WalletBankInfo>
                                 </TabPane>
                               </Tabs>
@@ -689,7 +777,7 @@ const Payment = () => {
                                 type="primary"
                                 block
                               >
-                                Нэхэмжлэл илгээх
+                            Нэхэмжлэл илгээх
                               </Button>
                             </div>
                           </TabPane>
@@ -698,19 +786,19 @@ const Payment = () => {
                     </Row>
                   </div>
                 );
-              } else if ( orderData && orderData.bookingStatus === 'HISTORY') {
+              } else if ( orderData ) {
                 return (
                   <div style={{margin: '30px 0px'}}>
                     <Button type="primary" size={'large'} block>
-                      Зогсоолыг үнэлэх
+                  Зогсоолыг үнэлэх
                     </Button>
                   </div>
                 );
               }
             })()}
           </Sider>
-        </Layout>
-      </Layout>
+        </Col>
+      </Row>
 
       <Modal
         visible={messageShow}

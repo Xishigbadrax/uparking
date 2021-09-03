@@ -1,7 +1,7 @@
 import {apiList, callPost} from '@api/api';
 import Link from 'next/link';
-import ProfileLayout from '@components/layouts/ProfileLayout';
-import {Form, Button, Input} from 'antd';
+// import ProfileLayout from '@components/layouts/ProfileLayout';
+import {Form, Button, Divider, Input} from 'antd';
 import {Steps} from 'antd';
 import {Row, Col} from 'antd';
 
@@ -36,98 +36,118 @@ const Verify = () => {
 
 
   return (
-    <ProfileLayout className="" style={{width: '100%', height: '100vh'}}>
+    <div>
       <Row className="">
         <Col span={10} style={{marginTop: '150px'}} offset={2}>
-          <img src="/personal.png" />
-        </Col>
-        <Col span={10} offset={2}>
-          <Steps size="small" style={{fontSize: '15px'}} current={0}>
-            <Step title="Үндсэн мэдээлэл" size="middle" />
-            <Step title="Нэмэлт мэдээлэл" />
-          </Steps>
+          <Row>
+            <img src="/personal.png" />
+          </Row>
+          <Row style={{marginTop: '50px'}}>
+            <Link href="/park/profile/optional">
+              <Button type="link" color="primary">
+                <p>     <b>       Алгасах</b></p>
 
-          <Form
-            {...layout}
-            name="n,est-messages"
-            size={[8, 12]}
-            layout="vertical"
-            onFinish={onFinish}
-            validateMessages={validateMessages}
-            offset={4}
-            className="col-4"
-            style={{marginTop: '50px', marginLeft: '50px'}}
-          >
-            <Form.Item
-              name={['user', 'firstName']}
-              rules={[{required: true, message: 'Овгоо оруулна уу'}]}
-              label="Овог"
-            >
-              <Input />
-            </Form.Item>
-
-            <Form.Item
-              label="Нэр"
-              style={{marginTop: '-10px', fontSize: '10px'}}
-              name={['user', 'lastName']}
-              rules={[{required: true, message: 'Нэрээ оруулна уу'}]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name={['user', 'registerNumber']}
-              rules={[
-                {required: true, message: 'Регистрийн дугаараа оруулна уу?'},
-              ]}
-            >
-              <Input placeholder="Регистрийн дугаар" className="w-full h-10" />
-            </Form.Item>
-            <Form.Item name={['user']}>
-              <Input placeholder="88101010" />
-            </Form.Item>
-            <Form.Item name={['user', 'email']}>
-              <Input
-                placeholder="И-мейл"
-                style={{borderBottom: '1px solid gray'}}
-              />
-            </Form.Item>
-            <Form.Item
-              className="w-full flex"
-              wrapperCol={{...layout.wrapperCol}}
-            >
-              <div className="flex cursor-pointer justify-space-between w-full">
-                <div className="">
-                  <img src="/Frame.png"></img>
-                </div>
-                <button className="ml-4">Facebook холбох</button>
-                <div className="mt-2 ml-12">
-                  <img src="/icons/right.png"></img>
-                </div>
-              </div>
-            </Form.Item>
-            <Form.Item
-              className="lg:ml-64 lg:mt-16 sm:mt-4"
-              wrapperCol={{...layout.wrapperCol}}
-            >
-              <Button type="primary" htmlType="submit" className="flex">
-                <text>Үргэлжлүүлэх</text>
-                <img
-                  className="ml-8 mt-2 pr-2"
-                  src="/icons/arrow_forward_24px.png"
-                ></img>
               </Button>
-            </Form.Item>
-          </Form>
+            </Link>
+          </Row>
+        </Col>
+        <Col span={10} offset={1}>
+          <Row>
+            <Col span={16} offset={1}>
+              <Steps size="small" style={{fontSize: '15px', marginTop: '50px'}} current={0}>
+                <Step title="Үндсэн мэдээлэл" size="middle" />
+                <Step title="Нэмэлт мэдээлэл" />
+              </Steps>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={22} className='createUserDetail' offset={2}>
+              <Form
+                className=''
+                {...layout}
+                size={[8, 12]}
+                layout="vertical"
+                onFinish={onFinish}
+                validateMessages={validateMessages}
+                offset={4}
+                style={{marginTop: '50px', marginLeft: '50px'}}
+              >
+                <label style={{color: '#A2A4AA', fontWeight: '400'}}>Овог</label>
+                <Form.Item
+                  name={'firstName'}
+                  style={{marginTop: '10px', width: '327px'}}
+                  rules={[{required: true, message: 'Овгоо оруулна уу'}]}
+                >
+                  <Input style={{width: '327px'}}/>
+                </Form.Item>
+                <Divider style={{width: '327px'}}/>
+                <label style={{marginTop: '20px'}}>Нэр *</label>
+                <Form.Item
+                  style={{marginTop: '10px', width: '327px'}}
+                  name={'lastName'}
+                  rules={[{required: true, message: 'Нэрээ оруулна уу'}]}
+                >
+                  <Input style={{width: '327px'}}/>
+                </Form.Item>
+                <Divider style={{width: '327px'}}/>
+                <Form.Item
+                  style={{marginTop: '20px', width: '327px'}}
+                  name={'registerNumber'}
+                  rules={[
+                    {required: true, message: 'Регистрийн дугаараа зөв оруулна уу?',
+                      pattern: new RegExp('[А-Яа-я]{2}[0-9]{8}')},
+                  ]}
+                >
+                  <Input placeholder="Регистрийн дугаар" style={{width: '327px'}}/>
+                </Form.Item>
+                <Divider style={{width: '327px'}}/>
+                <Form.Item name={['user']} style={{marginTop: '20px', width: '327px'}}>
+                  <Input placeholder="88101010" disabled style={{width: '327px'}}/>
+                </Form.Item>
+                <Divider style={{width: '327px'}}/>
+                <Form.Item name={ 'email'} style={{marginTop: '20px', width: '327px'}} rules={[{required: true, message: 'Имейлээ зөв оруулна уу?', pattern: new RegExp( /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)}]}>
+                  <Input
+                    placeholder="И-мейл"
+                    style={{width: '327px'}}
+                  />
+                </Form.Item>
+                <Divider style={{width: '327px'}}/>
+                <Form.Item style={{marginTop: '20px'}}
+                  wrapperCol={{...layout.wrapperCol}}
+                >
+                  <div style={{display: 'inline-flex', width: '100%', flexWrap: 'wrap'}}>
+                    <div style={{width: '50px'}}>
+                      <img src="/Frame.png"></img>
+                    </div>
+                    <button style={{width: '230px'}} >Facebook холбох</button>
+                    <div style={{width: '30px', marginTop: '5px'}}>
+                      <img src="/icons/right.png"></img>
+                    </div>
+                  </div>
+                </Form.Item>
+                <Form.Item style={{marginTop: '20px'}}
+                  wrapperCol={{...layout.wrapperCol}}
+                >
+                  <Col span={10} offset={14} style={{marginTop: '50px'}}>
+                    <Button type="primary" htmlType="submit" className="flex">
+                      <text>Үргэлжлүүлэх</text>
+                      <div style={{marginTop: '4px', marginLeft: '5px'}}>
+                        <img
+                          src="/icons/arrow_forward_24px.png"
+                        ></img></div>
+                    </Button>
+                  </Col>
+                </Form.Item>
+              </Form>
+            </Col>
+          </Row>
+
         </Col>
       </Row>
       <div className="grid-cols-1 lg:-mt-16 sm:mt-2 mt-2 lg:ml-32 cursor-pointer">
-        <Link href="/park/profile/optional">
-          <Button type="link" color="primary">
-            Алгасах
-          </Button>
-        </Link>
+
       </div>
-    </ProfileLayout>
+    </div>
   );
 };
 

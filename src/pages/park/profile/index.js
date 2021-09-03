@@ -227,7 +227,6 @@ const Profile = () => {
     console.log(vehicleForm.validateFields());
     if (vehicleForm.validateFields()) {
       const a = vehicleForm.getFieldsValue();
-      console.log('boloh l ymdaaa------->');
       const res = await callPost('/user/vehicle', {
         vehicleNumber: a.vehicleNumber,
         maker: a.maker,
@@ -264,6 +263,7 @@ const Profile = () => {
   };
 
   const onClickContinue = async () => {
+    console.log('ajkhawdh');
     form.validateFields();
     const componentData = form.getFieldsValue();
     // Үндсэн мэдээллийн өгөгдлийг өгөгдлийн санруу

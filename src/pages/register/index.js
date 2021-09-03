@@ -48,6 +48,7 @@ const Login = () => {
   const router = useRouter();
   const [modalVisible, setModalVisible] = useState(false);
   const [confirmCode, setConfirmCode] = useState(null);
+  const [visible, setVisible]= useState(false);
   // eslint-disable-next-line no-unused-vars
   const [verifyCode, setVerifyCode] = useState('');
   const initialValue = 0;
@@ -123,6 +124,8 @@ const Login = () => {
         return true;
       } else {
         setIsPolicy(true);
+        console.log(result.error);
+        setVisible(true);
         setPolicyHtml(result.error);
       }
     } catch (e) {
@@ -141,18 +144,20 @@ const Login = () => {
   };
   // step5
   const onFinishTransaction = async (values) => {
+    console.log(values, 'values n ene bnaaa');
     try {
       const data =
             {
               'transactionPassword': values.OTP,
               'phoneNumber': phoneNumber,
             };
+      console.log(data);
       const result = await callPost('/register/transactionpass', data);
-      if (result.status === 'failed') {
-        showMessage(messageType.FAILED.type, result.error);
+      if (result.status !== 'failed') {
+        // showMessage(messageType.FAILED.type, result.error);
         return true;
       } else {
-        showMessage(messageType.SUCCESS.type, 'Бүртгэл амжилттай');
+        showMessage(messageType.SUCCESS.type, 'Бүртгэл амжилттай.Өөрийн бүртгэлээр нэвтэрнэ үү!');
         await delay(2000);
         router.push('/login');
       }
@@ -247,10 +252,11 @@ const Login = () => {
                   rules={[
                     {
                       required: true,
-                      message: 'Нууц үгээ оруулна уу!',
+                      message: 'Том жижиг үсэг болон тоо оруулна уу?',
+                      pattern: new RegExp('(?=.*[a-z])(?=.*[0-9])(?=.*[A-Z])'),
+
                     },
                   ]}
-                  hasFeedback
                 >
                   <Input.Password placeholder="Нууц үг" />
                 </Form.Item>
@@ -258,11 +264,10 @@ const Login = () => {
                 <Form.Item
                   name="confirm"
                   dependencies={['password']}
-                  hasFeedback
                   rules={[
                     {
                       required: true,
-                      message: 'Нууг үгээ оруулна уу!',
+                      message: 'Нууг үгээ дахин  оруулна уу!',
                     },
                     ({getFieldValue}) => ({
                       validator(_, value) {
@@ -329,7 +334,6 @@ const Login = () => {
                 </div>
 
               </div>
-
               <Form.Item {...tailLayout}>
                 <Button
                   loading={loading}
@@ -511,13 +515,9 @@ const Login = () => {
             </div>;
   } else {
     maindata =
-            <div>
-              <div className={'background '}>
-                <img src="/zogsoolEzemshigch.png" height="600px" width="100%" />
-              </div>
-              <div className="container mx-auto">
-
-                {renderHTML(policyHtml)}
+            <Modal visible={visible} width={1000}>
+              <div className="container mx-auto" style={{padding: '100px'}}>
+                <div>{renderHTML(policyHtml)}</div>
 
                 <Form
                   {...layout}
@@ -559,10 +559,8 @@ const Login = () => {
                   </div>
                 </Form>
               </div>
-              <div className="mt-64">
-                <Footer />
-              </div>
-            </div>;
+
+            </Modal>;
   }
 
   return (

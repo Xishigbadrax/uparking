@@ -1,16 +1,16 @@
 import {Row, Col, Card, Button, Rate, Image, Drawer, Radio, Modal, Alert} from 'antd';
 import {CloseOutlined, CheckCircleOutlined, DownOutlined, UpOutlined} from '@ant-design/icons';
-import {useEffect, useState} from 'react';
-import {callGet} from '@api/api';
+import {useContext, useEffect, useState} from 'react';
+import SettingPane from '@components/settingPane/setting';
+import {callGet, callPost} from '@api/api';
 import Context from '@context/Context';
+import {useRouter} from 'next/router';
 import {Tabs} from 'antd';
-
 const callback = (key) =>{
   console.log(key);
 };
 const {TabPane} = Tabs;
 const IMG_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
-
 // eslint-disable-next-line no-unused-vars
 const isBase64 = async (str) => {
   if (str === '' || str.trim() === '') {
@@ -25,7 +25,8 @@ const isBase64 = async (str) => {
 // eslint-disable-next-line react/prop-types
 const Search = ({data, startDate, endDate, tunetype})=>{
   console.log(startDate, endDate);
-
+  const {userdata} = useContext(Context);
+  const router = useRouter();
   // console.log(Number(Number(endDate)-Number(startDate)));
   const [spaceData, setSpaceData] = useState();
   const [timeSplit, settimeSplit] = useState(null);
@@ -38,6 +39,9 @@ const Search = ({data, startDate, endDate, tunetype})=>{
   // eslint-disable-next-line no-unused-vars
   const [totalAllDay, setTotalAllDay] = useState(0);
   const [vehicles, setVehiclesData]= useState([]);
+  // eslint-disable-next-line no-unused-vars
+  const [selectVehicles, setSelectVehicle] =useState();
+  const [startDateTime, setStartDateTime]= useState();
   const [spaceStatus, setSpaceStatus]= useState('');
   const [parkingSpaceId, setParkingSpaceId]= useState(0);
   const [residenceDrawerItem, setResidenceDrawerItem] = useState(false);
@@ -45,15 +49,24 @@ const Search = ({data, startDate, endDate, tunetype})=>{
   const [status, setstatus] = useState('');
   const [title, settitle] = useState('');
   const [messageShow, setmessageShow] = useState(false);
-
+  const [userRealData, setUserRealData]=useState();
+  const [diffDay, setDiffDays] = useState(0);
   const onChangeChooseVehicle = (e) => {
     console.log(e.target.value);
+    setSelectVehicle(e.target.value);
+  };
+  const handleOk = () => {
+    setmessageShow(false);
+  };
+  const handleCancel = () => {
+    setmessageShow(false);
   };
   useEffect(async ()=>{
     const date1 = new Date(startDate);
     const date2 = new Date(endDate);
     const diffTime = Math.abs(date2 - date1);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    setDiffDays(Number(diffDays));
     if (tunetype === 'Өдөр') {
       setTotalAtDay(Number(diffDays));
     } else if (tunetype === 'Шөнө') {
@@ -65,21 +78,32 @@ const Search = ({data, startDate, endDate, tunetype})=>{
     settimeSplit(time);
     console.log(time, '<-------------------------------');
   }, []);
+
+  const onClickPayment = (id)=>{
+    id &&
+    router.push({
+      pathname: 'park/payment',
+      query: {
+        id: 498,
+        startDateTime: '2021-09-09',
+
+      },
+    });
+  };
   const DetailsDrawerOpen = async (id) => {
     console.log(id);
     setDetailsVisible(true);
-
     // eslint-disable-next-line react/prop-types
     const a = data.find((item) => item.park.parkingSpaceId === id);
     setResidenceDrawerItem(a.residence);
     console.log(a, 'a-iin medeelel');
     setSpaceStatus(a.park.spaceStatus);
     setParkingSpaceId(a.park.parkingSpaceId);
-
     const space = await callGet(
       `/search/parkingspace/test?parkingSpaceId=${id}`,
     );
     setSpaceData(space);
+    console.log(space, 'space data');
     const vehicle = await callGet('/user/vehicle/list');
     setVehiclesData(vehicle);
     // console.log(spaceData, '<------------------spaceData ');
@@ -89,50 +113,64 @@ const Search = ({data, startDate, endDate, tunetype})=>{
       setUserRealData(userdata);
     }
   }, [userdata]);
-
   const submit = async () => {
-    if (vehicles) {
-      // setisLoading(true);
-      const formData = {
-        endDateTime: 'string',
-        isDay: true,
-        isFullday: true,
-        isGift: false,
-        isNight: true,
-        parkingSpaceId: parkingSpaceId,
-        spaceStatus: spaceStatus,
-        startDateTime: 'string',
-        totalAllDay: 0,
-        totalAtDay: 0,
-        totalAtNight: 0,
-        totalPrice: 0,
-        userPhoneNumber: userRealData.phoneNumber,
-        vehicleId: 0,
-      };
-      console.log(formData);
-      await callPost('/booking/time', formData).then((res) => {
-        console.log(res);
-        if (res.status == 'success') {
-          setmessageShow(true);
-          setmessage(
-            'Таны захиалгын хүсэлт амжилттай илгээгдлээ. Хүсэлт баталгаажсаны дараа төлбөрөө төлнө',
-          );
-          settitle('Амжилттай');
-          setstatus('success');
-        } else {
-          setmessageShow(true);
-          setmessage(res);
-          settitle('Анхааруулга');
-          setstatus('warning');
-        }
-        // setisLoading(false);
-      });
-    } else {
-      setmessageShow(true);
-      setmessage('Тээврийн хэрэгсэл сонгоно уу ');
-      settitle('Анхааруулга');
-      setstatus('warning');
-    }
+    // if (vehicles) {
+    // setisLoading(true);
+    setStartDateTime(
+      tunetype == 'Өдөр' ?
+        startDate + ' ' + timeSplit.dayStart :
+        tunetype == 'Шөнө' ?
+          startDate + ' ' + timeSplit.nightStart :
+          startDate + ' ' + timeSplit.dayStart);
+    const formData = {
+      endDateTime: tunetype == 'Өдөр' ?
+        endDate + ' ' + timeSplit.dayStart :
+        tunetype == 'Шөнө' ?
+          endDate + ' ' + timeSplit.nightStart :
+          endDate + ' ' + timeSplit.dayStart,
+      isDay: tunetype ==='Өдөр'?true:false,
+      isFullday: tunetype ==='Бүтэн өдөр'? true: false,
+      isGift: false,
+      isNight: tunetype ==='Шөнө'?true: false,
+      parkingSpaceId: parkingSpaceId,
+      spaceStatus: spaceStatus,
+      startDateTime:
+      tunetype == 'Өдөр' ?
+        startDate + ' ' + timeSplit.dayStart :
+        tunetype == 'Шөнө' ?
+          startDate + ' ' + timeSplit.nightStart :
+          startDate + ' ' + timeSplit.dayStart,
+      totalAllDay: totalAllDay,
+      totalAtDay: totalAtDay,
+      totalAtNight: totalAtNight,
+      totalPrice: 99999,
+      userPhoneNumber: userRealData.phoneNumber,
+      vehicleId: 231,
+    };
+    console.log(formData, 'form Data kono desu');
+    await callPost('/booking/time', formData).then((res) => {
+      console.log(res);
+      if (res.status == 'success') {
+        setmessageShow(true);
+        setmessage(
+          'Таны захиалгын хүсэлт амжилттай илгээгдлээ. Хүсэлт баталгаажсаны дараа төлбөрөө төлнө',
+        );
+        settitle('Амжилттай');
+        setstatus('success');
+      } else {
+        setmessageShow(true);
+        setmessage(res);
+        settitle('Анхааруулга');
+        setstatus('warning');
+      }
+      // setisLoading(false);
+    });
+    // } else {
+    //   setmessageShow(true);
+    //   setmessage('Тээврийн хэрэгсэл сонгоно уу ');
+    //   settitle('Анхааруулга');
+    //   setstatus('warning');
+    // }
   };
 
   const onClose = (e)=>{
@@ -1022,7 +1060,8 @@ const Search = ({data, startDate, endDate, tunetype})=>{
                           </p>
                         </Col>
                         <Col span={2}>
-                          {residenceDrawerItem.price}
+                          {spaceData ?
+                            (tunetype ==='Өдөр'&& Number(diffDay)*spaceData.priceForRent2):0}
                           ₮
                         </Col>
                       </Row>
@@ -1034,10 +1073,10 @@ const Search = ({data, startDate, endDate, tunetype})=>{
                         }}
                       >
                         <Col span={12} >
-                          <Button type='primary' style={{borderRadius: '10px', width: '100%'}} >Захиалга нэмэх</Button>
+                          <Button type='primary' style={{borderRadius: '10px', width: '100%'}} onClick={submit} >Захиалга нэмэх</Button>
                         </Col>
                         <Col span={12} >
-                          <Button type='primary' style={{borderRadius: '10px', width: '100%'}}>Төлбөр төлөх</Button>
+                          <Button type='primary' style={{borderRadius: '10px', width: '100%'}} onClick={()=>onClickPayment(parkingSpaceId)}>Төлбөр төлөх</Button>
                         </Col>
                       </Row>
                     </TabPane>
@@ -1081,7 +1120,7 @@ const Search = ({data, startDate, endDate, tunetype})=>{
                       }
                       key="3"
                     >
-                      Тусламж
+                      <SettingPane />
                     </TabPane>
                   </Tabs>
                 </div>

@@ -5,6 +5,9 @@ import {useEffect, useState, useContext} from 'react';
 import {Radio, Modal, Alert} from 'antd';
 import Image from 'next/image';
 import Context from '@context/Context';
+// import {useRouter} from 'next/router';
+
+import SettingPane from '@components/settingPane/setting';
 // import {Collapse} from 'antd';
 const IMG_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
 // const {Panel} = Collapse;
@@ -16,6 +19,7 @@ import Calendar from '@components/CustomCalendar/index';
 import moment from 'moment';
 
 const {TabPane} = Tabs;
+
 const callback = (key) =>{
   console.log(key, 'keyiin hevledee');
 };
@@ -35,6 +39,11 @@ const tofit = ({data, lat, lng}) => {
   const [fullDayValues, setFullDayValues]= useState([]);
 
   const [completeFullDayNumber, setCompleteFullDayNumber] = useState(0);
+  const [completeDayOfNumber, setCompleteDayOfNumber] =useState(0);
+  const [completeNightOfNumber, setCompleteNightOfNumber] =useState(0);
+  // eslint-disable-next-line no-unused-vars
+  const [spaceStatus, setSpaceStatus]= useState();
+
   // const [saleDatas, setSaleData] = useState();
   const [vehicles, setVehiclesData] = useState([]);
   const [chooseTimeVisible, setChooseTimeVisible] = useState(false);
@@ -47,6 +56,7 @@ const tofit = ({data, lat, lng}) => {
   const [priceForRenter1, setpriceForRenter1] = useState(0);
   const [priceForRenter2, setpriceForRenter2] = useState(0);
   const [priceForRenter3, setpriceForRenter3] = useState(0);
+  // eslint-disable-next-line no-unused-vars
   const [messageShow2, setmessageShow2] = useState(false);
   const [dateValues, setDateValues]=useState();
   const [message, setmessage] = useState('');
@@ -119,12 +129,19 @@ const tofit = ({data, lat, lng}) => {
   const onChangeChooseVehicle = (e) => {
     console.log(e.target.value);
   };
-
+  const onClickPayment = (id)=>{
+    id &&
+      router.push({
+        pathname: 'park/payment',
+        query: {
+          id: id,
+        },
+      });
+  };
   const timeSubmit = async () => {
     if (vehicles) {
       // setisLoading(true);
       const formData = {
-
         bookingList: [
           {
             startDate: 'string',
@@ -1491,13 +1508,15 @@ const tofit = ({data, lat, lng}) => {
                         style={{
                           height: '50px',
                           marginTop: '10px',
+                          width: '100%',
                         }}
+                        gutter={2}
                       >
                         <Col span={12}>
-                          <Button type='primary' onClick={totalValue > 0 ? () => timeSubmit(1) : () => submit() } className={'buttonGo'}>Захиалга нэмэх</Button>
+                          <Button type='primary' onClick={totalValue > 0 ? () => timeSubmit(1) : () => submit() } style={{width: '100%', borderRadius: '10px'}}>Захиалга нэмэх</Button>
                         </Col>
                         <Col span={12}>
-                          <Button type='primary' className={'buttonGo'}>Төлбөр төлөх</Button>
+                          <Button type='primary' className={'buttonGo'} style={{width: '100%', borderRadius: '10px'}} onClick={()=>onClickPayment(parkingSpaceId) }>Төлбөр төлөх</Button>
                         </Col>
                       </Row>
                     </TabPane>
@@ -1542,7 +1561,7 @@ const tofit = ({data, lat, lng}) => {
                       }
                       key="3"
                     >
-                      Тусламж
+                      <SettingPane/>
                     </TabPane>
                   </Tabs>
                 </div>
@@ -1589,14 +1608,13 @@ const tofit = ({data, lat, lng}) => {
             }}
           >
             <div style={{marginTop: '30px'}}>
-              <Tabs defaultActiveKey="day" onChange={handleClickDayTab}>
+              <Tabs defaultActiveKey="day" onChange={handleClickDayTab} style={{paddingLeft: '20px'}}>
                 <TabPane
                   key="day"
                   tab={
-                    <div style={{width: '120px', height: '32px'}}>
+                    <div style={{height: '32px'}}>
                       <p
                         style={{
-                          width: '78px',
                           height: '24px',
                           textAlign: 'center',
                           fontSize: '14px',
@@ -1619,10 +1637,9 @@ const tofit = ({data, lat, lng}) => {
                 <TabPane
                   key="night"
                   tab={
-                    <div style={{width: '150px', height: '32px'}}>
+                    <div style={{height: '32px'}}>
                       <p
                         style={{
-                          width: '78px',
                           height: '24px',
                           textAlign: 'center',
                           fontSize: '14px',
@@ -1644,10 +1661,10 @@ const tofit = ({data, lat, lng}) => {
                 </TabPane>
                 <TabPane
                   tab={
-                    <div style={{width: '150px', height: '32px'}}>
+                    <div style={{height: '32px'}}>
                       <p
                         style={{
-                          width: '78px',
+
                           height: '24px',
                           textAlign: 'center',
                           fontSize: '14px',
@@ -1699,15 +1716,18 @@ const tofit = ({data, lat, lng}) => {
                 ₮
               </Col>
             </Row>
-            <Button
-              style={{
-                width: '80%',
-              }}
-              className={'buttonGo'}
-              onClick={onClickSubmit}
-            >
+            <Row>
+              <Button
+                style={{
+                  width: '1000%',
+                }}
+                type='primary'
+                className={'buttonGo'}
+                onClick={onClickSubmit}
+              >
               Баталгаажуулах
-            </Button>
+              </Button>
+            </Row>
           </div>
         </Drawer>
       )}

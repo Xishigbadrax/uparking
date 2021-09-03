@@ -11,6 +11,7 @@ import {showMessage} from '@utils/message';
 import Context from '@context/Context';
 import MaskedInput from 'antd-mask-input';
 
+
 const layout = {
   labelCol: {},
   wrapperCol: {},
@@ -23,6 +24,7 @@ const tailLayout = {
 };
 
 const Login = () => {
+  const {userdata} = useContext(Context);
   const {state, dispatch, setMenuAndPermissions} = useContext(Context);
   const {auth} = state;
   const router = useRouter();
@@ -71,7 +73,9 @@ const Login = () => {
       Object.keys(auth).length,
       'Object.keys(auth).lengthObject.keys(auth).length',
     );
-    if (Object.keys(auth).length !== 0) router.push('/park');
+    if (Object.keys(auth).length !== 0 && userdata.firstName !== null) {
+      router.push('/park');
+    }
   }, [auth]);
 
   const handleConfirm = async () => {

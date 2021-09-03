@@ -13,7 +13,6 @@ import {
   Tabs,
   Spin,
   Empty,
-
   AutoComplete,
   Form,
 
@@ -87,13 +86,9 @@ const Dashboard = () => {
   // eslint-disable-next-line no-unused-vars
   const [transfer, setTransfer] = useState(null);
 
-<<<<<<< HEAD
   // eslint-disable-next-line no-unused-vars
   const [messageShow, setmessageShow] = useState(false);
   // const router = useRouter();
-=======
-  const router = useRouter();
->>>>>>> 3aaba74b8e821015f611e67923074590d5e53f4d
   const [defaultCenter, setDefaultCenter] = useState({
     lat: 47.91909306508191,
     lng: 106.91761127921768,
@@ -114,12 +109,9 @@ const Dashboard = () => {
   const [searchId, setSearchId] = useState(null);
   const [searchType, setSearchType]=useState('');
   const [timeSplit, settimeSplit] = useState(null);
-<<<<<<< HEAD
-=======
-  const [searchType, setSearchType] =useState('');
 
-  const [visibleDrawerMore, setVisibleDrawerMore] = useState(false);
->>>>>>> 3aaba74b8e821015f611e67923074590d5e53f4d
+
+  // const [visibleDrawerMore, setVisibleDrawerMore] = useState(false);
   const [parkingObject, setParkingObject] = useState({});
   // const isBase64 = async (str) => {
   //   if (str === '' || str.trim() === '') {
@@ -316,15 +308,13 @@ const Dashboard = () => {
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
         >
-          <Row className="mapheadersearch">
+          <Row >
             <Col span={8}>
               <Form.Item
+                className="mapheadersearch"
                 name="text"
-                // rules={[{required: true, message: 'Хайх утга оруулна уу'}]}
               >
                 <AutoComplete
-                  // dataSource={dataSource}
-                  // options={options}
                   style={{width: '100%'}}
                   onSelect={(value, option) => onSelectAuto(value, option)}
                   onSearch={onSearchAuto}
@@ -337,17 +327,13 @@ const Dashboard = () => {
                   ))}
                 </AutoComplete>
               </Form.Item>
-              {/* <Input
-              placeholder="Хаяг"
-              onChange={onChangeAddress}
-              prefix={<SearchOutlined />}
-            /> */}
             </Col>
             <Col span={4}>
               <Form.Item
-                name="tuneType"
-                // rules={[{required: true, message: 'Өдрийн төрөл сонгоно уу'}]}
-              >
+                style={{border: '1px solid #A2A4AA', paddingLeft: '10px', paddingRight: '10px', borderRadius: '20px', height: '60px'}}
+                className={'pickType'}
+                name="tuneType">
+                <label style={{color: '#A2A4AA'}}>Захиалгын төрөл</label>
                 <Select
                   placeholder="Өдрийн төрөл"
                   className="selectday"
@@ -361,9 +347,7 @@ const Dashboard = () => {
             </Col>
             <Col span={4}>
               <Form.Item
-                name="startdate"
-                // rules={[{required: true, message: 'Эхлэх огноо сонгоно уу'}]}
-              >
+                name="startdate" >
                 <DatePicker
                   format="YYYY-MM-DD"
                   placeholder="Эхлэх огноо"
@@ -374,9 +358,7 @@ const Dashboard = () => {
             </Col>
             <Col span={4}>
               <Form.Item
-                name="enddate"
-                // rules={[{required: true, message: 'Дуусах огноо сонгоно уу'}]}
-              >
+                name="enddate">
                 <DatePicker
                   format="YYYY-MM-DD"
                   placeholder="Дуусах огноо"
@@ -400,7 +382,7 @@ const Dashboard = () => {
           </Row>
         </Form>
       </Header>
-      <Layout style={{background: '#F8FAFC!important'}}>
+      <Layout style={{background: '#F8FAFC!important', marginTop: '30px'}}>
         <Content>
           <div style={{height: '100vh', width: '100%'}}>
             <MapWithAMarkerClusterer
@@ -414,160 +396,6 @@ const Dashboard = () => {
             <Tabs defaultActiveKey="1" className="searchTab" onChange={callback}>
               <TabPane tab="Тохирох" key="1">
                 {searchedData.length > 0 ? (
-                // searchedData.map((item) => (
-                //   <Card
-                //     className="searchListItem"
-                //     key={item.residence.residenceBlockId}
-                //   >
-                //     <Row>
-                //       <Col span="12" className="imageSide">
-                //         <div>
-                //           <Image
-                //             src={
-                //               item.park.parkingSpaceImage ?
-                //                 IMG_URL + item.park.parkingSpaceImage :
-                //                 '/pexels-photo-3349460 1.png'
-                //             }
-                //             width="209.58px"
-                //             preview={false}
-                //           ></Image>
-                //         </div>
-                //         <Row>
-                //           <Col
-                //             span={24}
-                //             style={{
-                //               background: 'rgba(222, 226, 233, 0.2)',
-                //               borderRadius: '24px',
-                //               padding: '13px 23px',
-                //               display: 'inline-flex',
-                //               textAlign: 'center',
-                //               justifyContent: 'center',
-                //             }}
-                //           >
-                //             {item.park && item.park.floorNumber ? (
-                //               <div style={{marginRight: '13px'}}>
-                //                 {!isBase64(item.park.floorNumber) ? (
-                //                   <Image
-                //                     preview={false}
-                //                     width={18}
-                //                     src={IMG_URL + item.park.floorNumber}
-                //                   />
-                //                 ) : (
-                //                   <Image
-                //                     preview={false}
-                //                     width={18}
-                //                     fallback={
-                //                       'data:image/png;base64,' +
-                //                       item.park.floorNumber
-                //                     }
-                //                   />
-                //                 )}
-                //               </div>
-                //             ) : null}
-                //             {item.park && item.park.entranceLock ? (
-                //               <div style={{marginRight: '13px'}}>
-                //                 <Image
-                //                   preview={false}
-                //                   width={18}
-                //                   src={IMG_URL + item.park.entranceLock}
-                //                 />
-                //               </div>
-                //             ) : null}
-                //             {item.park && item.park.isNumbering ? (
-                //               <div style={{marginRight: '13px'}}>
-                //                 <Image
-                //                   preview={false}
-                //                   width={18}
-                //                   src={IMG_URL + item.park.isNumbering}
-                //                 />
-                //               </div>
-                //             ) : null}
-                //             {item.park && item.park.capacity ? (
-                //               <div style={{marginRight: '13px'}}>
-                //                 <Image
-                //                   preview={false}
-                //                   width={18}
-                //                   src={IMG_URL + item.park.capacity}
-                //                 />
-                //               </div>
-                //             ) : null}
-                //             {item.park && item.park.type ? (
-                //               <div style={{marginRight: '13px'}}>
-                //                 <Image
-                //                   preview={false}
-                //                   width={18}
-                //                   src={IMG_URL + item.park.type}
-                //                 />
-                //               </div>
-                //             ) : null}
-                //             {item.park && item.park.returnRoutes ? (
-                //               <div style={{marginRight: '13px'}}>
-                //                 <Image
-                //                   preview={false}
-                //                   width={18}
-                //                   src={IMG_URL + item.park.returnRoutes}
-                //                 />
-                //               </div>
-                //             ) : null}
-                //           </Col>
-                //         </Row>
-                //       </Col>
-                //       <Col span="12" className="descriptionSide">
-                //         <div className="title" style={{marginBottom: '5px'}}>
-                //           {item.residence.residenceName}
-                //         </div>
-
-                //         <Rate
-                //           className="rateing"
-                //           disabled
-                //           value={item.park.totalRating}
-                //         />
-
-                //         <Row>
-                //           <Col span={10} className="distance">
-                //             • 110m
-                //           </Col>
-                //           <Col span={14} className="id">
-                //             Байршил ID: {item.residence.residenceBlockCode}
-                //           </Col>
-                //         </Row>
-                //         <Row className="addresss">
-                //           <Col
-                //             span="2"
-                //             style={{
-                //               display: 'flex',
-                //               alignItems: 'center',
-                //               justifyContent: 'center',
-                //             }}
-                //           >
-                //             <Image
-                //               preview={false}
-                //               width="10px"
-                //               src={'/images/icon/location_on.png'}
-                //             ></Image>
-                //           </Col>
-                //           <Col span="22">{item.residence.address}</Col>
-                //         </Row>
-                //         {/* <div>
-                //           <div className="totalText">Нийт үнэ</div>
-                //           <div className="totalAmount">
-                //             {item.park.price ? item.park.price : 0} ₮
-                //           </div>
-                //         </div> */}
-                //         <div
-                //           style={{
-                //             display: 'flex',
-                //             justifyContent: 'flex-end',
-                //           }}
-                //         >
-                //           <Button type="info" onClick={() => showDrawer(item)}>
-                //             Дэлгэрэнгүй
-                //           </Button>
-                //           {/* ))} */}
-                //         </div>
-                //       </Col>
-                //     </Row>
-                //   </Card>
                   <div>
                     {searchType ==='full' && <Search data={searchedData} startDate={startDate} endDate={endDate} tunetype={tuneType}/>}
                     {searchType ==='fsearch' &&<ToFit data={searchedData} lat={defaultCenter.lat} lng={defaultCenter.lng} />}

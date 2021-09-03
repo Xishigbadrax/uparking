@@ -14,7 +14,7 @@ const DefaultLayout = ({children, title, className}) => {
 
   return (
     <Spin indicator={antIcon} tip="Таны хүсэлтийг боловсруулж байна. Түр хүлээнэ үү..." spinning={isLoading}>
-      <Layout style={{maxWidth: '1200px', margin: 'auto'}} className={'profileLayout'}>
+      <Layout style={{maxWidth: '1600px', margin: 'auto'}} className={'profileLayout'}>
         <LoadingBar color='#109720' progress={isLoading ? 70 : 100} />
         {/* <Header /> */}
         <Content className={'profileContent'}>
