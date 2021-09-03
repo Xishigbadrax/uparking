@@ -281,12 +281,14 @@ const Transfer = () =>{
             <WalletChart />
           </div>
         </div>
-        <div style={{height: '480px', width: '327px', marginTop: 20}}>
-          <p style={{height: 24, width: 304, fontSize: 14, color: '#A2A4AA'}}>
-            Банкны данс руу
-          </p>
 
-          <div>
+        <div className="flex justify-between mt-[25px]" >
+
+
+          <div style={{height: '480px', width: '327px'}}>
+            <p style={{height: 24, width: 304, fontSize: 14, color: '#A2A4AA'}}>
+            Банкны данс руу
+            </p>
             <Tabs centered defaultActiveKey="1">
               {tabItems.map((tabitem) => (
                 <TabPane
@@ -336,12 +338,6 @@ const Transfer = () =>{
 
               onClick={async () => {
                 if (accountName && accountNumber) {
-                  // navigation.navigate("TransferSent", {
-                  //   accountName: accountName,
-                  //   accountNumber: accountNumber,
-                  //   type: type,
-                  // });
-
                   showModal();
                 } else {
                   setmessageShow(true);
@@ -354,8 +350,12 @@ const Transfer = () =>{
               Үргэлжлүүлэх
             </Button>
           </div>
+          <div>
+            <Image width={529} height={480} src="../../ad.png" />
+          </div>
         </div>
       </div>
+
     </WalletLayout>
   );
 };

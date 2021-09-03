@@ -7,7 +7,7 @@ import Helper from '@utils/helper';
 import WalletChart from '@components/WalletChart';
 import moment from 'moment';
 import {callGet} from '@api/api';
-import {Calendar, Tag} from 'antd';
+import {Calendar, Tag, Image} from 'antd';
 import Context from '@context/Context';
 
 const Wallet = () => {
@@ -102,13 +102,16 @@ const Wallet = () => {
             </text>
           </b>
         </div>
-        <div>
-          <Calendar
-            className="customCalendar"
-            locale={calendarLocale}
-            dateCellRender={dateCellRender}
-            monthCellRender={monthCellRender}
-          ></Calendar>
+        <div className="flex justify-between mt-[25px]">
+          <div className=" h-[480px] w-[613px] overflow-scroll">
+            <Calendar
+              className="customCalendar"
+              locale={calendarLocale}
+              dateCellRender={dateCellRender}
+              monthCellRender={monthCellRender}
+            ></Calendar>
+          </div>
+          <div><Image width={243} height={480} src="../../ad2.png" /></div>
         </div>
       </div>
     </WalletLayout>

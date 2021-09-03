@@ -49,7 +49,6 @@ const Login = () => {
       setLoading(false);
       return;
     }
-
     if (res.data.error === 'invalid_grant') {
       showMessage(messageType.FAILED.type, res.data.error_description);
       setLoading(false);
@@ -61,7 +60,6 @@ const Login = () => {
         user: res.data,
       },
     });
-
     showMessage(messageType.SUCCESS.type, defaultMsg.loginSuccessTxt);
     auth_cookie.setToken(res?.data?.access_token, res?.data?.expires_in);
     setMenuAndPermissions();
@@ -497,7 +495,7 @@ const Login = () => {
                   </Form.Item>
                 </div>
 
-                <div className="forgotPassword">
+                <div className="forgotPassword mb-[24px]">
                   <Button type="link" onClick={handleClickForgotPassword}>
                     Нууц үг мартсан <RightOutlined />
                   </Button>

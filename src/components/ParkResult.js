@@ -5,8 +5,8 @@ const ParkResult = ({image, title, count}) => {
   return (
     <div
       style={{
-        width: '185px',
-        height: '271px',
+        width: '210px',
+        height: '280px',
         zIndex: '0',
         position: 'relative',
         boxSizing: 'border-box',

@@ -1,8 +1,8 @@
 import {Row, Col, Card, Button, Rate, Image, Drawer, Radio, Modal, Alert} from 'antd';
 import {CloseOutlined, CheckCircleOutlined, DownOutlined, UpOutlined} from '@ant-design/icons';
-import {useContext, useEffect, useState} from 'react';
-import SettingPane from '@components/settingPane/setting';
+import {useState, useContext, useEffect} from 'react';
 import {callGet, callPost} from '@api/api';
+import SettingPane from '@components/settingPane/setting';
 import Context from '@context/Context';
 import {useRouter} from 'next/router';
 import {Tabs} from 'antd';
@@ -10,6 +10,7 @@ const callback = (key) =>{
   console.log(key);
 };
 const {TabPane} = Tabs;
+
 const IMG_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
 // eslint-disable-next-line no-unused-vars
 const isBase64 = async (str) => {
@@ -30,6 +31,7 @@ const Search = ({data, startDate, endDate, tunetype})=>{
   // console.log(Number(Number(endDate)-Number(startDate)));
   const [spaceData, setSpaceData] = useState();
   const [timeSplit, settimeSplit] = useState(null);
+  const [userRealData, setUserRealData] = useState(null);
   const [detailsVisible, setDetailsVisible] = useState(false);
   const [parkingUpDownArrow, setParkingUpDownArrow] = useState(false);
   // eslint-disable-next-line no-unused-vars
@@ -41,17 +43,21 @@ const Search = ({data, startDate, endDate, tunetype})=>{
   const [vehicles, setVehiclesData]= useState([]);
   // eslint-disable-next-line no-unused-vars
   const [selectVehicles, setSelectVehicle] =useState();
+  // eslint-disable-next-line no-unused-vars
   const [startDateTime, setStartDateTime]= useState();
   const [spaceStatus, setSpaceStatus]= useState('');
   const [parkingSpaceId, setParkingSpaceId]= useState(0);
+  // eslint-disable-next-line no-unused-vars
+  const [totalPrice, setTotalPrice]= useState(0);
   const [residenceDrawerItem, setResidenceDrawerItem] = useState(false);
   const [message, setmessage] = useState('');
   const [status, setstatus] = useState('');
   const [title, settitle] = useState('');
   const [messageShow, setmessageShow] = useState(false);
-  const [userRealData, setUserRealData]=useState();
+
   const [diffDay, setDiffDays] = useState(0);
   const onChangeChooseVehicle = (e) => {
+    setSelectVehicle(e.target.value);
     console.log(e.target.value);
     setSelectVehicle(e.target.value);
   };
@@ -61,6 +67,8 @@ const Search = ({data, startDate, endDate, tunetype})=>{
   const handleCancel = () => {
     setmessageShow(false);
   };
+
+
   useEffect(async ()=>{
     const date1 = new Date(startDate);
     const date2 = new Date(endDate);
@@ -97,7 +105,11 @@ const Search = ({data, startDate, endDate, tunetype})=>{
     const a = data.find((item) => item.park.parkingSpaceId === id);
     setResidenceDrawerItem(a.residence);
     console.log(a, 'a-iin medeelel');
+
     setSpaceStatus(a.park.spaceStatus);
+    setTotalPrice(a.park.price);
+    console.log(a.park.price, '<---------');
+    console.log('adadawdaw');
     setParkingSpaceId(a.park.parkingSpaceId);
     const space = await callGet(
       `/search/parkingspace/test?parkingSpaceId=${id}`,
@@ -111,6 +123,7 @@ const Search = ({data, startDate, endDate, tunetype})=>{
   useEffect(async () => {
     if (typeof userdata.firstName != 'undefined') {
       setUserRealData(userdata);
+      console.log(userdata, 'uuuuu');
     }
   }, [userdata]);
   const submit = async () => {

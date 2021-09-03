@@ -71,7 +71,7 @@ const Footer = () => {
       >
         <div className="flex justify-center my-auto py-5">
           <p className="footerEndText">
-            &copy; Uparking {new Date().getFullYear()}
+            &copy; Copyright Uparking {new Date().getFullYear()}
           </p>
         </div>
         <div className="flex flex-rows my-auto py-3">

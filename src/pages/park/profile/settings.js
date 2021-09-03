@@ -55,6 +55,7 @@ const Settings = () => {
       setvalue5(res.isTransactionPassBooking);
       setvalue6(res.isTransactionPassWallet);
       setvalue7(res.isTransactionPassTransfer);
+      console.log(res, 'Resrs');
 
       // setdatas(res)
     };
@@ -190,16 +191,19 @@ const Settings = () => {
         visible={isLoginModalVisible}
       >
         <Input
+          type="password"
           onChange={(e) => setoldPass(e.target.value)}
           style={input}
           placeholder="Хуучин нууц үг"
         />
         <Input
+          type="password"
           onChange={(e) => setpassword(e.target.value)}
           style={input}
           placeholder="Шинэ нууц үг"
         />
         <Input
+          type="password"
           onChange={(e) => setmatchPassword(e.target.value)}
           style={input}
           placeholder="Шинэ нууц үг давтах"

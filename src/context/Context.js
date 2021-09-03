@@ -46,7 +46,7 @@ export const ContextProvider = ({children}) => {
     //   router.pathname === "/aboutus" ||
     //   router.pathname === "/driver" ||
     //   router.pathname === "/spaceowner" ||
-    //   router.pathname === "/news"
+    router.pathname === '/news';
     // ) {
     //   return;
     // }

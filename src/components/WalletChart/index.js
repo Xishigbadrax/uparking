@@ -39,8 +39,20 @@ const WalletChart = () => {
     labels: ['1', '2', '3', '4', '5', '6'],
     datasets: [
       {
-        label: '# of Votes',
+        // label: '# of Votes',
         data: [12, 19, 3, 5, 2, 3],
+        fill: false,
+        backgroundColor: 'rgb(255, 99, 132)',
+        borderColor: 'rgba(255, 99, 132, 0.2)',
+      },
+    ],
+  };
+  const data2 = {
+    labels: ['1', '2', '3', '4', '5', '6'],
+    datasets: [
+      {
+        // label: '# of Votes',
+        data: [5, 9, 3, 5, 2, 3],
         fill: false,
         backgroundColor: 'rgb(255, 99, 132)',
         borderColor: 'rgba(255, 99, 132, 0.2)',
@@ -58,40 +70,40 @@ const WalletChart = () => {
         },
       ],
     },
+    height: 10,
   };
   return (
     <div
-      style={{
-        height: '199px',
-        width: '529px',
-        overflowWrap: 'break-word',
-      }}
+      className=" w-[529px] h-[199px]"
+      // style={{
+      //   height: '199px',
+      //   backgroundColor: 'red',
+      //   width: '529px',
+      //   overflowWrap: 'break-word',
+      //   // overflow: 'hidden',
+      // }}
     >
       <Tabs defaultActiveKey="1">
         <TabPane tab="Орлого" key="1">
-          <div style={{textAlign: 'right', lineHeight: '10px'}}>
-            <Button type="text">Өдөр</Button>
-            <Button type="text">Долоо хоног</Button>
-            <Button type="text">Сар</Button>
+          <div style={{textAlign: 'right', lineHeight: '10px', fontSize: '11px'}}>
+            <button className=" mr-[20px] text-[#35446D]">Өдөр</button>
+            <button className=" mr-[20px] text-[#35446D]">Долоо хоног</button>
+            <button className=" text-[#35446D]">Сар</button>
           </div>
           <div>
             {/* <Line {...config} /> */}
-            <Line data={data} options={options} />
+            <Line data={data} options={options} height="75"/>
           </div>
         </TabPane>
         <TabPane tab="Зарлага" key="2">
-          <div
-            style={{
-              textAlign: 'right',
-            }}
-          >
-            <Button type="text">Өдөр</Button>
-            <Button type="text">Долоо хоног</Button>
-            <Button type="text">Сар</Button>
+          <div style={{textAlign: 'right', lineHeight: '10px', fontSize: '11px'}}>
+            <button className="mr-[20px] text-[#35446D]"><p >Өдөр</p> </button>
+            <button className="mr-[20px] text-[#35446D]"> <p>Долоо хоног</p></button>
+            <button className=" text-[#35446D]"> <p>Сар</p></button>
           </div>
           <div>
             {/* <Line {...config} />; */}
-            <Line data={data} options={options} />
+            <Line data={data2} options={options} height="75"/>
           </div>
         </TabPane>
       </Tabs>

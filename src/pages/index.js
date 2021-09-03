@@ -692,7 +692,7 @@ const Home =()=> {
         </div>
       </div>
 
-      <div className="howToUse">
+      <div className="howToUse2">
         <div className="flex flex-col justify-center px-10">
           <div className="howToUseTitle">Хэрхэн хэрэглэх вэ?</div>
           <div style={{height: '20px'}}></div>
@@ -777,17 +777,20 @@ const Home =()=> {
               <div className="seeAllNews">Бүгдийг харах</div>
             </Link>
           </div>
-          <div className="flex flex-wrap lg:justify-start md:justify-between sm:justify-center justify-center ">
+          <div className="flex flex-wrap w-full lg:justify-start  md:justify-between sm:justify-center justify-center ">
             {news.map((item, index) => (
+
               <News
                 key={index}
-                head={item.head}
+                head={ <p className="text-white">{item.head}</p> }
                 image={item.image}
                 date={item.date}
                 title={item.title}
                 titlebold={item.titlebold}
                 desc={item.desc}
               />
+
+
             ))}
           </div>
         </div>

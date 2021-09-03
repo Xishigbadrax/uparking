@@ -56,8 +56,6 @@ const tofit = ({data, lat, lng}) => {
   const [priceForRenter1, setpriceForRenter1] = useState(0);
   const [priceForRenter2, setpriceForRenter2] = useState(0);
   const [priceForRenter3, setpriceForRenter3] = useState(0);
-  // eslint-disable-next-line no-unused-vars
-  const [messageShow2, setmessageShow2] = useState(false);
   const [dateValues, setDateValues]=useState();
   const [message, setmessage] = useState('');
   const [status, setstatus] = useState('');
@@ -99,7 +97,7 @@ const tofit = ({data, lat, lng}) => {
     );
     const a = data.find((item) => item.park.parkingSpaceId === id);
     setResidenceDrawerItem(a.residence);
-    setSpaceStatus(a.park.spaceStatus);
+
     setSelected(priceData);
     {
       priceData.priceList.map((item) => {
@@ -142,20 +140,17 @@ const tofit = ({data, lat, lng}) => {
     if (vehicles) {
       // setisLoading(true);
       const formData = {
-        bookingList: [
-          {
-            startDate: 'string',
-            timeSplitDescription: 'string',
-          },
-        ],
+
+        bookingList: dateValues,
         isGift: false,
         parkingSpaceId: parkingSpaceId,
         totalAllDay: fullDayNumber,
         totalAtDay: dayOfNumber,
         totalAtNight: nightOfNumber,
         totalPrice: totalValue,
-        userPhoneNumber: userRealData.userPhoneNumber,
+        userPhoneNumber: userRealData.phoneNumber,
         vehicleId: 0,
+
 
         // userPhoneNumber: userRealData.phoneNumber,
         // isGift: false,
@@ -1740,15 +1735,7 @@ const tofit = ({data, lat, lng}) => {
       >
         <Alert message={title} description={message} type={status} showIcon />
       </Modal>
-      <Modal
-        visible={messageShow2}
-        title="Мэдээлэл"
-        onOk={handleOk}
-        onCancel={handleCancel}
-        footer={[]}
-      >
-        <Alert message={'Амжилттай'} description={'Таны захиалга амжилттай нэмэгдлээ'} type={'success'} showIcon />
-      </Modal>
+
     </div>
   );
 };

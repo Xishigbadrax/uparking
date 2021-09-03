@@ -3,32 +3,38 @@ import Footer from '../../components/Footer';
 const staff = [
   {
     photo: '/ganbat.png',
-    name: 'Пунцаг Бямбадорж',
+    name1: 'Пунцаг ',
+    name2: 'Бямбадорж',
     position: 'Системийн инженер',
   },
   {
     photo: '/Davaanyan.png',
-    name: 'Дашдаваа Давааням',
+    name1: 'Дашдаваа ',
+    name2: 'Давааням',
     position: 'Зогсоолын системийн мэргэжилтэн',
   },
   {
     photo: '/Bat-ochir.png',
-    name: 'Дамдинсүрэн Бат-Очир',
+    name1: 'Дамдинсүрэн ',
+    name2: 'Бат-Очир',
     position: 'БИзнес хөгжлийн хариуцсан мэргэжилтэн',
   },
   {
     photo: '/Lkhagvajargal.png',
-    name: 'Ганхуяг Лхагважаргал',
+    name1: 'Ганхуяг ',
+    name2: 'Лхагважаргал',
     position: 'Маркетинг ,контент менежер',
   },
   {
     photo: '/tungaa.png',
-    name: 'Батцогт Бямбадорж  ',
+    name1: 'Батцогт ',
+    name2: 'Бямбадорж',
     position: 'Хамтран үүсгэн байгуулагч',
   },
   {
     photo: '/Adiyadorj.png',
-    name: 'Батцогт Адъяадорж',
+    name1: 'Батцогт ',
+    name2: 'Адъяадорж',
     position: 'Үүсгэн байгуулагч,Гүйцэтгэх захирал',
   },
 ];
@@ -43,7 +49,7 @@ const AboutUs = () => {
       </div>
       <div className={'line md:ml-32 sm:ml-4 lg:ml-64 '}></div>
       <div
-        className={'flex md:flex-row  flex-col box sm: pt-16 md :mt-32 lg:ml-64 lg:mt-16 md:ml-32 sm:ml-4'}
+        className={'flex md:flex-row  flex-col box sm: pt-16 md :mt-32 lg:ml-34 lg:mt-16 md:ml-32 sm:ml-4'}
       >
         <div className="flex sm:ml-32  ">
           <div
@@ -59,9 +65,10 @@ const AboutUs = () => {
             style={{width: '505px', height: 'auto'}}
             className="flex flex-wrap  "
           >
-            <div style={{width: '505px'}} className="block  flex-grow ">
-              <div className="py-2 text-justify mt-16 ">
-                <b> Uparking. Your parking </b> from <b>Uparking Int LLC</b>
+            <div style={{width: '505px'}} className="block  flex-grow  w-full">
+              <div className="py-2 text-justify mt-16  " style={{color: '#35446D'}}>
+                <p style={{fontSize: '18px', marginBottom: '20px'}}>  Uparking. Your parking  <span style={{fontStyle: 'italic'}}>from</span> <b>Uparking Int LLC</b></p>
+
                 “Юу Паркинг Инт” ХХК нь Монгол улсад анхдагч болох Авто
                 зогсоолын түрээсийн цахим peer to peer Uparking платформыг
                 хөгжүүлж байгаа юм.
@@ -104,21 +111,16 @@ const AboutUs = () => {
             >
               <Image src={item.photo} height="632px" width="460px" />
               <div
-                className="flex  h-20  "
-                style={{backgroundColor: 'blue', width: 'auto'}}
+                className="flex px-[38px] h-20 bg-[blue]"
               >
-                <div
-                  className="flex-1   h-16 ml-16 text-white  "
-                  style={{width: '400px'}}
-                >
-                  <span style={{color: 'white', width: '300px'}}>
-                    {item.name}
-                  </span>
-                  <br />
-                  <span style={{color: 'white'}}>{item.position}</span>
-                </div>
-                <div className="flex-1 pl-32 ml-32 mt-4">
-                  <img src="/u_linkedin.png" height="40px" width="40px" />
+                <div className="my-auto flex flex-row justify-between w-full">
+                  <div>
+                    <p className="text-white">{item.name1} <b>{item.name2}</b></p>
+                    <p className="text-white">{item.position}</p>
+                  </div>
+                  <div>
+                    <img src="/u_linkedin.png" height="40px" width="40px" />
+                  </div>
                 </div>
               </div>
             </div>
@@ -141,21 +143,21 @@ const AboutUs = () => {
           >
             <div
               style={{width: '505px'}}
-              className="block justify-center flex-grow "
+              className="block justify-center flex-grow  text-[#647189]"
             >
               <div className={'py-2 '}>
-                <p className="text-red-400" style={{color: 'gray'}}>
+                <p style={{color: '#647189'}}>
                   Удирдлага төвт бус
                 </p>
-                <span className="text-xl text-gray-600 ">
+                <span className="text-xl  ">
                   ЧӨЛӨӨТ ХАМТЫН АЖИЛЛАГААГ ЭРХЭМЛЭГЧ
                 </span>
-                <p style={{color: 'gray'}}>Зөвхөн өөрөөрөө байх</p>
-                <span className="text-xl text-gray-600 ">
+                <p className="mt-1">Зөвхөн өөрөөрөө байх</p>
+                <span className="text-xl font-bold 7 ">
                   ТАНЫГ Л БИД ХАЙЖ БАЙНА.
                 </span>
                 <br></br>
-                <button className={'buttonJoin mt-16'}>Нэгдэх</button>
+                <button className={'buttonJoin mt-16 text-[#0013D4]'}>Нэгдэх</button>
               </div>
             </div>
           </div>
