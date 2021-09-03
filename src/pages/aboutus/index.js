@@ -49,7 +49,7 @@ const AboutUs = () => {
       </div>
       <div className={'line md:ml-32 sm:ml-4 lg:ml-64 '}></div>
       <div
-        className={'flex md:flex-row  flex-col box sm: pt-16 md :mt-32 lg:ml-64 lg:mt-16 md:ml-32 sm:ml-4'}
+        className={'flex md:flex-row  flex-col box sm: pt-16 md :mt-32 lg:ml-34 lg:mt-16 md:ml-32 sm:ml-4'}
       >
         <div className="flex sm:ml-32  ">
           <div

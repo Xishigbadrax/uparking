@@ -777,8 +777,9 @@ const Home =()=> {
               <div className="seeAllNews">Бүгдийг харах</div>
             </Link>
           </div>
-          <div className="flex flex-wrap w-full lg:justify-start md:justify-between sm:justify-center justify-center ">
+          <div className="flex flex-wrap w-full lg:justify-start  md:justify-between sm:justify-center justify-center ">
             {news.map((item, index) => (
+
               <News
                 key={index}
                 head={ <p className="text-white">{item.head}</p> }
@@ -788,6 +789,8 @@ const Home =()=> {
                 titlebold={item.titlebold}
                 desc={item.desc}
               />
+
+
             ))}
           </div>
         </div>

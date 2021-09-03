@@ -39,7 +39,7 @@ const Driver = () => {
             <div className="flex flex-col ">
               <div className={'grid grid-row-2'}>
                 <img
-                  src="/alham-1.png"
+                  src="/1.png"
                   className="place-self-center"
                   style={{
                     maxWidth: '100%',
@@ -60,7 +60,7 @@ const Driver = () => {
             <div className="flex flex-col">
               <div className={'grid grid-row-2'}>
                 <img
-                  src="/alham-2.png"
+                  src="/6.png"
                   className="place-self-center"
                   style={{
                     maxWidth: '100%',
@@ -144,7 +144,7 @@ const Driver = () => {
             <div className="flex flex-col sm:pb-10 pb-10">
               <div className={'grid grid-row-2'}>
                 <img
-                  src="/alham-6.png"
+                  src="/7.png"
                   className="place-self-center"
                   style={{
                     maxWidth: '100%',

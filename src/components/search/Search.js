@@ -106,6 +106,7 @@ const Search = ({data, startDate, endDate, tunetype})=>{
   useEffect(async () => {
     if (typeof userdata.firstName != 'undefined') {
       setUserRealData(userdata);
+      console.log(userdata, 'uuuuu');
     }
   }, [userdata]);
 
@@ -113,23 +114,38 @@ const Search = ({data, startDate, endDate, tunetype})=>{
     if (selectVehicle ) {
       // setisLoading(true);
       const formData = {
-        endDateTime: endDate,
+        endDateTime: endDate+' '+' 18:30',
         isDay: tunetype == 'Өдөр' ? true : false,
         isFullday: tunetype == 'Бүтэн өдөр' ? true : false,
         isGift: false,
         isNight: tunetype == 'Шөнө' ? true : false,
         parkingSpaceId: parkingSpaceId,
         spaceStatus: spaceStatus,
-        startDateTime: startDate,
+        startDateTime: startDate+' '+'09:00',
         totalAllDay: totalAllDay,
         totalAtDay: totalAtDay,
         totalAtNight: totalAtNight,
         totalPrice: totalPrice,
         userPhoneNumber: userRealData.phoneNumber,
-        vehicleId: 12,
+        vehicleId: selectVehicle,
       };
       console.log(formData, 'forom dadad');
-      await callPost('/booking/time', formData).then((res) => {
+      await callPost('/booking/time', {
+        endDateTime: endDate+' '+' 18:30',
+        isDay: tunetype == 'Өдөр' ? true : false,
+        isFullday: tunetype == 'Бүтэн өдөр' ? true : false,
+        isGift: false,
+        isNight: tunetype == 'Шөнө' ? true : false,
+        parkingSpaceId: parkingSpaceId,
+        spaceStatus: spaceStatus,
+        startDateTime: startDate+' '+'09:00',
+        totalAllDay: totalAllDay,
+        totalAtDay: totalAtDay,
+        totalAtNight: totalAtNight,
+        totalPrice: totalPrice,
+        userPhoneNumber: userRealData.phoneNumber,
+        vehicleId: selectVehicle,
+      }).then((res) => {
         console.log(res);
         if (res.status == 'success') {
           setmessageShow(true);

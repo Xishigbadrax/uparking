@@ -46,72 +46,78 @@ const NewsId = () => {
         src="../../images/news.png"
       />
 
+      <div className="flex bg-yellow-300">
+        <div>
+          <p
+            // style={{
+            //   position: 'absolute',
+            //   left: '180px',
+            //   top: '271px',
+            //   // backgroundColor: 'red',
+            //   zIndex: '2',
+            //   color: 'blue',
+            // }}
+          >
+            <EyeOutlined />
 
-      <p
-        style={{
-          position: 'absolute',
-          left: '180px',
-          top: '271px',
-          // backgroundColor: 'red',
-          zIndex: '2',
-          color: 'blue',
-        }}
-      >
-        <EyeOutlined />
+          </p>
+          <p
+            // style={{
+            //   position: 'absolute',
+            //   left: '200px',
+            //   top: '275px',
+            //   zIndex: '2',
+            //   color: 'blue',
+            //   fontSize: '12px',
+            //   fontStyle: 'italic',
 
-      </p>
-      <p
-        style={{
-          position: 'absolute',
-          left: '200px',
-          top: '275px',
-          zIndex: '2',
-          color: 'blue',
-          fontSize: '12px',
-          fontStyle: 'italic',
-
-        }}
-      >
+            // }}
+          >
                 11200
-      </p>
-      <p
-        style={{
-          position: 'absolute',
-          left: '260px',
-          top: '271px',
-          // backgroundColor: 'red',
-          zIndex: '2',
-          color: 'blue',
-        }}
-      >
-        <HeartFilled />
+          </p>
+          <p
+            style={{
+              position: 'absolute',
+              left: '260px',
+              top: '271px',
+              // backgroundColor: 'red',
+              zIndex: '2',
+              color: 'blue',
+            }}
+          >
+            <HeartFilled />
 
-      </p>
-      <p
-        style={{
-          position: 'absolute',
-          left: '280px',
-          top: '275px',
-          zIndex: '2',
-          color: 'blue',
-          fontSize: '12px',
-          fontStyle: 'italic',
+          </p>
+          <p
+            style={{
+              position: 'absolute',
+              left: '280px',
+              top: '275px',
+              zIndex: '2',
+              color: 'blue',
+              fontSize: '12px',
+              fontStyle: 'italic',
 
-        }}
-      >
+            }}
+          >
                 110
-      </p>
+          </p>
+        </div>
+        <div>{data && data.createdDate}</div>
+
+      </div>
       <div style={{position: 'absolute', top: '250px'}}>
         <div
+          className="bg-blue-600"
           style={{
-
+            
             zIndex: '2',
             marginLeft: '10%',
             width: '1110px',
             display: 'flex',
             flexFlow: 'column',
             alignItems: 'center',
-            backgroundColor: 'white',
+            // backgroundColor: 'white',
           }}
         >
 

@@ -1,25 +1,15 @@
-// import {Tabs} from 'antd';
+
 // const Test = () =>{
-//   const {TabPane} = Tabs;
+
 //   return <div>
-//     <Tabs defaultActiveKey="1" >
-//       <TabPane style={{borderBottom: '2px solid red'}}tab="Tab 1" key="1">
-//       Content of Tab Pane 1
-//       </TabPane>
-//       <TabPane tab="Tab 2" key="2">
-//       Content of Tab Pane 2
-//       </TabPane>
-//       <TabPane tab="Tab 3" key="3">
-//       Content of Tab Pane 3
-//       </TabPane>
-//     </Tabs>
+
 //   </div>;
 // };
 // export default Test;
 
-
+import {Tabs} from 'antd';
 import Footer from '../../components/Footer';
-import InforNavbar from '../../components/InfoNavbar/InforNavbar';
+// import InforNavbar from '../../components/InfoNavbar/InforNavbar';
 import {Image} from 'antd';
 import Context from '@context/Context';
 import {useRouter} from 'next/router';
@@ -31,7 +21,8 @@ import {auto} from 'async';
 
 const News = () => {
   const [data, setdata] = useState(null);
-  const [data2, setdata2] = useState(null);
+  // const [data2, setdata2] = useState(null);
+  const {TabPane} = Tabs;
 
   const router = useRouter();
 
@@ -59,45 +50,34 @@ const News = () => {
       });
   };
 
-  useEffect(() => {
-    console.log('sss');
-    console.log(data2);
-  }, [data2]);
+  // useEffect(() => {
+  //   console.log('sss');
+  //   console.log(data2);
+  // }, [data2]);
   useEffect(() => {
     fetchData();
   }, []);
 
   return (
 
-    <div>
-
-      <InforNavbar onClick2={(e) =>setdata2(e)}/>
-      <div className="grid grid-cols-2 gap-5">
-        {data &&
+    <div className=" relative">
+      <p className="absolute right-[2%] text-[blue]">10/19/2020, <b>Даваа гариг</b></p>
+      <div className="ml-[100px] newsNavbar">
+        <Tabs defaultActiveKey="1" >
+          <TabPane tab="ШИНЭ МЭДЭЭ" key="1">
+            <div className="grid grid-cols-3 gap-5">
+              {data &&
           data.map((item, index) => (
 
             <div
               key={index}
               onClick={() => newsDetails(item.id)}
-              className="scale-75 relative"
-              // style={{
-              //   position: 'relative',
-              //   marginLeft: '150px',
-              // }}
+              className="relative"
+
             >
               <p
-                // style={{
 
-                //   right: '0px',
-                //   top: '8px',
-                //   zIndex: '2',
-                //   color: 'white',
-                //   backgroundColor: '#0013D4',
-                //   height: '16px',
-                //   width: '100px',
-                //   fontSize: '10px',
-                // }}
-                className="bg-[#0013D4] w-[135px] text-white h-[16px] absolute z-50 self-end items-stretch right-1 top-[10px]"
+                className="bg-[#0013D4] w-[135px] text-white h-[18px] absolute z-50 self-end items-stretch right-1 top-[10px]"
               >
                 {item.createdDate}
               </p>
@@ -162,18 +142,7 @@ const News = () => {
                 <p style={{marginLeft: '24px', marginTop: '12px'}}> {item.title}</p>
 
               </div>
-              {/* <p
-                style={{
-                  position: "absolute",
-                  top: "200px",
-                  left: "250px",
-                  color: "white",
-                  backgroundColor: "black",
-                  zIndex: "2",
-                }}
-              >
-                {item.title}
-              </p> */}
+
               <Image
                 alt="img"
                 preview={false}
@@ -186,10 +155,37 @@ const News = () => {
 
 
           )) }
+            </div>
+
+          </TabPane>
+          <TabPane tab="КОМПАНИЙН МЭДЭЭ" key="2">
+          КОМПАНИЙН МЭДЭЭ
+          </TabPane>
+          <TabPane tab="ЗӨВӨЛГӨӨ" key="3">
+          ЗӨВӨЛГӨӨ
+          </TabPane>
+          <TabPane tab="АВТОМАШИН" key="4">
+          АВТОМАШИН
+          </TabPane>
+          <TabPane tab="АВТОЗОГСООЛ" key="5">
+          АВТОЗОГСООЛ
+          </TabPane>
+          <TabPane tab="УРАМШУУЛАЛ" key="6">
+          УРАМШУУЛАЛ
+          </TabPane>
+          <TabPane tab="БУСАД МЭДЭЭ" key="7">
+          БУСАД МЭДЭЭ
+          </TabPane>
+
+        </Tabs>
       </div>
+
+
+      {/* <InforNavbar onClick2={(e) =>setdata2(e)}/> */}
 
       <Footer />
     </div>
+
   );
 };
 

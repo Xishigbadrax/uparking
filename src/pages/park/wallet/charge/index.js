@@ -210,139 +210,144 @@ const Charge = () => {
           <WalletChart />
         </div>
       </div>
-      <div style={{height: '480px', width: '327px'}}>
-        <Tabs defaultActiveKey="1" centered>
-          <TabPane tab="Дансаар" key="1">
-            <div>
-              <Tabs
-                centered
-                defaultActiveKey="1"
-                onChange={handleClickBankLogo}
-              >
-                {tabItems.map((tabitem) => (
+      <div className="flex justify-between mt-[25px]">
+        <div style={{height: '480px', width: '327px'}}>
+          <Tabs defaultActiveKey="1" centered>
+            <TabPane tab="Дансаар" key="1">
+              <div>
+                <Tabs
+                  centered
+                  defaultActiveKey="1"
+                  onChange={handleClickBankLogo}
+                >
+                  {tabItems.map((tabitem) => (
+                    <TabPane
+                      key={tabitem.type}
+                      tab={
+                        <span>
+                          <Image
+                            height={30}
+                            width={30}
+                            preview={false}
+                            src={tabitem.src}
+                          />
+                        </span>
+                      }
+                    >
+                      <div>
+                        <WalletBankInfo
+                          value={
+                            data && data.accountNumber ? data.accountNumber : 0
+                          }
+                        >
+                        Дансны дугаар
+                        </WalletBankInfo>
+                        <WalletBankInfo
+                          value={data && data.accountName ? data.accountName : 0}
+                        >
+                        Хүлээн авагч
+                        </WalletBankInfo>
+                        <WalletBankInfo
+                          value={data && data.description ? data.description : 0}
+                        >
+                        Гүйлгээний утга
+                        </WalletBankInfo>
+                      </div>
+                    </TabPane>
+                  ))}
+                </Tabs>
+              </div>
+            </TabPane>
+            <TabPane tab="Нэхэмжлэх" key="2">
+              <div>
+                <Tabs centered defaultActiveKey="1">
                   <TabPane
-                    key={tabitem.type}
                     tab={
-                      <span>
+                      <span
+                        onClick={() => {
+                          settype2('MONGOLCHAT');
+                        }}
+                      >
                         <Image
                           height={30}
                           width={30}
                           preview={false}
-                          src={tabitem.src}
+                          src="../../images/icon/mongolChat.png"
                         />
                       </span>
                     }
+                    key="1"
                   >
                     <div>
-                      <WalletBankInfo
-                        value={
-                          data && data.accountNumber ? data.accountNumber : 0
-                        }
-                      >
-                        Дансны дугаар
-                      </WalletBankInfo>
-                      <WalletBankInfo
-                        value={data && data.accountName ? data.accountName : 0}
-                      >
-                        Хүлээн авагч
-                      </WalletBankInfo>
-                      <WalletBankInfo
-                        value={data && data.description ? data.description : 0}
-                      >
-                        Гүйлгээний утга
+                      <WalletBankInfo onChangeInput={onChangeInput}>
+                      Цэнэглэх дүн
                       </WalletBankInfo>
                     </div>
                   </TabPane>
-                ))}
-              </Tabs>
-            </div>
-          </TabPane>
-          <TabPane tab="Нэхэмжлэх" key="2">
-            <div>
-              <Tabs centered defaultActiveKey="1">
-                <TabPane
-                  tab={
-                    <span
-                      onClick={() => {
-                        settype2('MONGOLCHAT');
-                      }}
-                    >
-                      <Image
-                        height={30}
-                        width={30}
-                        preview={false}
-                        src="../../images/icon/mongolChat.png"
-                      />
-                    </span>
-                  }
-                  key="1"
-                >
-                  <div>
-                    <WalletBankInfo onChangeInput={onChangeInput}>
-                      Цэнэглэх дүн
-                    </WalletBankInfo>
-                  </div>
-                </TabPane>
-                <TabPane
-                  tab={
-                    <span
-                      onClick={() => {
-                        settype2('LENDMN');
-                      }}
-                    >
-                      <Image
-                        height={30}
-                        width={30}
-                        preview={false}
-                        src="../../images/icon/lendMn.png"
-                      />
-                    </span>
-                  }
-                  key="2"
-                >
-                  <WalletBankInfo onChangeInput={onChangeInputPhone}>
+                  <TabPane
+                    tab={
+                      <span
+                        onClick={() => {
+                          settype2('LENDMN');
+                        }}
+                      >
+                        <Image
+                          height={30}
+                          width={30}
+                          preview={false}
+                          src="../../images/icon/lendMn.png"
+                        />
+                      </span>
+                    }
+                    key="2"
+                  >
+                    <WalletBankInfo onChangeInput={onChangeInputPhone}>
                     Утасны дугаар
-                  </WalletBankInfo>
-                  <WalletBankInfo onChangeInput={onChangeInput}>
+                    </WalletBankInfo>
+                    <WalletBankInfo onChangeInput={onChangeInput}>
                     Цэнэглэх дүн
-                  </WalletBankInfo>
-                </TabPane>
-                <TabPane
-                  tab={
-                    <span
-                      onClick={() => {
-                        settype2('SOCIALPAY');
-                      }}
-                    >
-                      <Image
-                        height={30}
-                        width={30}
-                        preview={false}
-                        src="../../images/icon/socialPay.png"
-                      />
-                    </span>
-                  }
-                  key="3"
-                >
-                  <WalletBankInfo onChangeInput={onChangeInput}>
+                    </WalletBankInfo>
+                  </TabPane>
+                  <TabPane
+                    tab={
+                      <span
+                        onClick={() => {
+                          settype2('SOCIALPAY');
+                        }}
+                      >
+                        <Image
+                          height={30}
+                          width={30}
+                          preview={false}
+                          src="../../images/icon/socialPay.png"
+                        />
+                      </span>
+                    }
+                    key="3"
+                  >
+                    <WalletBankInfo onChangeInput={onChangeInput}>
                     Цэнэглэх дүн
-                  </WalletBankInfo>
-                </TabPane>
-              </Tabs>
-              <Button onClick={() => fetchData2()} type="primary" block>
+                    </WalletBankInfo>
+                  </TabPane>
+                </Tabs>
+                <Button onClick={() => fetchData2()} type="primary" block>
                 Нэхэмжлэл илгээх
-              </Button>
-            </div>
-          </TabPane>
-          <TabPane tab="Промо код" key="3">
-            <WalletBankInfo onChangeInput={onChangePromo}>
+                </Button>
+              </div>
+            </TabPane>
+            <TabPane tab="Промо код" key="3">
+              <WalletBankInfo onChangeInput={onChangePromo}>
               Промо код
-            </WalletBankInfo>
-            <Button onClick={() => fetchData3()} type="primary" block>
+              </WalletBankInfo>
+              <Button onClick={() => fetchData3()} type="primary" block>
               Идэвхжүүлэх
-            </Button>
-          </TabPane>
-        </Tabs>
+              </Button>
+            </TabPane>
+          </Tabs>
+        </div>
+        <div>
+          <Image width={529} height={480} src="../../ad.png" />
+        </div>
       </div>
 
       <Modal

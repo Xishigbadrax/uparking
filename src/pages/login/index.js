@@ -47,7 +47,6 @@ const Login = () => {
       setLoading(false);
       return;
     }
-
     if (res.data.error === 'invalid_grant') {
       showMessage(messageType.FAILED.type, res.data.error_description);
       setLoading(false);
@@ -59,7 +58,6 @@ const Login = () => {
         user: res.data,
       },
     });
-
     showMessage(messageType.SUCCESS.type, defaultMsg.loginSuccessTxt);
     auth_cookie.setToken(res?.data?.access_token, res?.data?.expires_in);
     setMenuAndPermissions();
