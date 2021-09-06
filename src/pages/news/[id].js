@@ -46,80 +46,36 @@ const NewsId = () => {
         src="../../images/news.png"
       />
 
-      <div className="flex bg-yellow-300">
-        <div>
-          <p
-            // style={{
-            //   position: 'absolute',
-            //   left: '180px',
-            //   top: '271px',
-            //   // backgroundColor: 'red',
-            //   zIndex: '2',
-            //   color: 'blue',
-            // }}
-          >
-            <EyeOutlined />
 
-          </p>
-          <p
-            // style={{
-            //   position: 'absolute',
-            //   left: '200px',
-            //   top: '275px',
-            //   zIndex: '2',
-            //   color: 'blue',
-            //   fontSize: '12px',
-            //   fontStyle: 'italic',
-
-            // }}
-          >
-                11200
-          </p>
-          <p
-            style={{
-              position: 'absolute',
-              left: '260px',
-              top: '271px',
-              // backgroundColor: 'red',
-              zIndex: '2',
-              color: 'blue',
-            }}
-          >
-            <HeartFilled />
-
-          </p>
-          <p
-            style={{
-              position: 'absolute',
-              left: '280px',
-              top: '275px',
-              zIndex: '2',
-              color: 'blue',
-              fontSize: '12px',
-              fontStyle: 'italic',
-
-            }}
-          >
-                110
-          </p>
-        </div>
-        <div>{data && data.createdDate}</div>
-
-      </div>
       <div style={{position: 'absolute', top: '250px'}}>
         <div
-          className="bg-blue-600"
+          className=""
           style={{
-            
             zIndex: '2',
             marginLeft: '10%',
             width: '1110px',
             display: 'flex',
             flexFlow: 'column',
             alignItems: 'center',
-            // backgroundColor: 'white',
+            backgroundColor: 'white',
           }}
         >
+          <div className="flex w-full justify-between  mt-[18px] ">
+            <div className="flex items-center w-[15%] justify-around text-[#0013D4] ">
+              <div className="flex items-center">
+                <div className="mr-1"><EyeOutlined /></div>
+                <div className="pt-[4px]">11200</div>
+              </div>
+              <div className=" flex ">
+                <div className=" mr-1"><HeartFilled /></div>
+                <div className="pt-[2px]">110</div>
+              </div>
+
+
+            </div>
+            <div className="text-white bg-[#0013D4] pl-2 pr-2 h-[24px] ">{data && data.createdDate}</div>
+
+          </div>
 
           <div style={{marginTop: '64px', alignItems: 'center'}}>
             {data != [] && data != null ? (

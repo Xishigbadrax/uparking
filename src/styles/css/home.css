@@ -1167,7 +1167,7 @@
 }
 
 .line {
-  width: 1140.01px;
+  width: 70%;
   top: 932px;
   /* Stroke Color / Disabled */
   border: 1px solid #7e9ccf;
@@ -1219,7 +1219,7 @@
   color: #0013d4;
 }
 .lineTeam {
-  width: 1140.01px;
+  width: 70%;
   height: auto;
 
   /* Brand Color/Primary */
@@ -2259,7 +2259,7 @@
 .editSpaceDataButton {
   background: rgba(3, 54, 255, 0.08) !important;
 }
-<<<<<<< HEAD
+
 .settingPane .ant-divider-vertical{
   border-left:2px solid #0013D4 !important;
   margin-top: 5px !important;
@@ -2309,7 +2309,7 @@ width: 125px;
   padding-top: 10px !important;
   padding-left: 10px !important;
 }
-=======
+
 .newsNavbar{
   margin-top: 36px;
   color: white !important;
@@ -2364,4 +2364,4 @@ width: 125px;
   border-bottom:  none !important;
 
 }
->>>>>>> a959b7b0a4a93088ff67ae720e93685e6ddd4d5a
+

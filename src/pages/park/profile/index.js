@@ -268,12 +268,10 @@ const Profile = () => {
     const componentData = form.getFieldsValue();
     // Үндсэн мэдээллийн өгөгдлийг өгөгдлийн санруу
     if (current === 0) {
-      if (!form.validateFields()) {
-        const res = await callPost('/parkingfirst', mainData);
-        setResidenceBlockId(mainData.residenceBlockId);
-        if (res.status === 'success') {
-          setCurrent(current + 1);
-        }
+      const res = await callPost('/parkingfirst', mainData);
+      setResidenceBlockId(mainData.residenceBlockId);
+      if (res.status === 'success') {
+        setCurrent(current + 1);
       }
     } else if (current === 1) {
       const second = await callGet(
@@ -767,7 +765,7 @@ const Profile = () => {
           centered
           form={vehicleEditForm}
           style={{minHeight: '800px', height: 'auto'}}
-          visible={isVehicleEditVisible}
+          visible={isVehicleEditVisible}handleOk
           okButtonProps={{
             form: 'vehile-edit-form',
             key: 'submit',
