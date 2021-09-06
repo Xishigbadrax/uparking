@@ -49,7 +49,7 @@ const callGet = async (command) => {
   const result = await baseAxios.get(command);
   if (result.status === 200) return result.data;
   if (result.status === 201) return result.data;
-  else return [];
+  else return result.data;
 };
 
 const execData = async (code, data, child, deletedIds) => {

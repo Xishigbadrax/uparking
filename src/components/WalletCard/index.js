@@ -8,7 +8,6 @@ import Context from '@context/Context';
 const WalletCard = () => {
   const [orderData, setOrderData] = useState({});
   const ctx = useContext(Context);
-
   useEffect(() => {
     fetchData();
   }, []);
@@ -17,7 +16,6 @@ const WalletCard = () => {
     await callGet('/wallet/user', null).then((res) => {
       console.log(res, 'resres22222');
       setOrderData(res);
-
       ctx.setIsLoading(false);
     });
   };

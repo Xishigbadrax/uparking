@@ -4,6 +4,7 @@ const defaultMsg = {
   permissionEmpty: 'Эрх сонгоно уу.',
   formErrorTxt: 'Формын утгыг үнэн зөв бөглөнө үү.',
   loginSuccessTxt: 'Амжилттай.',
+  validateLocation: 'Газрын зураг дээр байршил тэмдэглэнэ үү.',
   loginErrorTxt: 'Нэвтрэх нэр эсвэл нууц үг буруу байна.',
   newDeviceConfirmErrorTxt:
     'Та шинэ төхөөрөмжөөс хандалт хийж байгаа тул баталгаажуулалт хийнэ үү.',

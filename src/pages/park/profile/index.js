@@ -27,6 +27,7 @@ import Discount from '@components/registerSpace/discount';
 import RentDate from '@components/registerSpace/rentDate';
 import Context from '@context/Context';
 import Edit from '../edit';
+import {showMessage} from '@utils/message';
 
 // import {
 //   withScriptjs,
@@ -94,8 +95,8 @@ const Profile = () => {
   const [selectedColor, setSelectedColor] = useState({});
   const [vehicles, setVehicles] = useState([]);
   // const [editId, setEditId] = useState();
-  const [current, setCurrent] = useState(0);
-  const [rentData, setRentData] = useState();
+  const [current, setCurrent] = useState(6);
+  const [dayOfWeek, setRentData] = useState([]);
   const [isProfileNotEdit, setIsProfileNotEdit] = useState(true);
   const [isVehileVisible, setIsVehileVisible] = useState(false);
   const [isParkVisible, setIsParkVisible] = useState(false);
@@ -146,7 +147,6 @@ const Profile = () => {
       console.log(parkSpaceList);
     }
   }, [userdata]);
-
   const onFinish123 = (values) => {};
   const onFinishSPace = (values) => {
     console.log(values);
@@ -211,7 +211,7 @@ const Profile = () => {
     console.log(e);
     const selectColor = color.find((item) => item.label === e);
     setSelectedColor(selectColor);
-    setFormdata({...formData, color: selectColor.value});
+    setFormdata({...formData, color: selectColor});
   };
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
@@ -224,18 +224,21 @@ const Profile = () => {
     }
   };
   const handleOk = async () => {
-    console.log(vehicleForm.validateFields());
-    if (vehicleForm.validateFields()) {
-      const a = vehicleForm.getFieldsValue();
+    vehicleForm.validateFields();
+    console.log(vehicleForm.getFieldsValue());
+    const a = vehicleForm.getFieldsValue();
+    if (a.vehicleNumber && a.maker && a.model && a.color ) {
+      console.log(a, 'awdawdawd');
       const res = await callPost('/user/vehicle', {
         vehicleNumber: a.vehicleNumber,
         maker: a.maker,
-        color: a.colorId,
+        color: a.color,
         model: a.model,
       });
       console.log(res);
       setIsVehileVisible(false);
     } else {
+      // showMessage(messageType.FAILED.type, defaultMsg.dataError +'Талбараа гүйцэт бөглөнө үү?');
     }
     // setIsVehileVisible(false);
   };
@@ -263,21 +266,29 @@ const Profile = () => {
   };
 
   const onClickContinue = async () => {
-    console.log('ajkhawdh');
-    form.validateFields();
+    // const fData = await form.validateFields();
+    console.log(await form.validateFields());
+    await form.isFieldsValidating();
     const componentData = form.getFieldsValue();
     // Үндсэн мэдээллийн өгөгдлийг өгөгдлийн санруу
-    if (current === 0) {
+    // console.log(form.errorFields(), 'awdawdwd');
+    if (current === 0 ) {
+      // if (form.validateFields() !== null && mainData.latitude !== null && mainData.longitude !==null) {
       const res = await callPost('/parkingfirst', mainData);
       setResidenceBlockId(mainData.residenceBlockId);
       if (res.status === 'success') {
         setCurrent(current + 1);
+      } else {
+        showMessage(messageType.defaultMsg.validateLocation);
       }
+      // }
     } else if (current === 1) {
       const second = await callGet(
         `/parkingsecond?parkingFloorId=${componentData.floorNumber}&residenceBlockId=${mainData.residenceBlockId}`,
       );
       setParkId(second.parkingId);
+      setParkingSpaceId(mainData.parkingSpaceId);
+
       console.log(second);
       const res = await callPost('/parkingspace', {
         entranceLock: componentData.entranceLock,
@@ -332,37 +343,37 @@ const Profile = () => {
       }
     } else if (current === 4) {
       const data = await callGet('/parkingspace/timesplit');
-      console.log(data);
-      console.log(componentData);
+      console.log(data, 'awsan dataaa');
+      console.log(componentData, 'ywah dataaa');
       const array = [
         {
-          dateSplitId: data.daySplit.winterId,
-          priceForRenter: componentData.daySplitWinterPrice,
+          dateSplitId: data.daySplit,
+          priceForRenter: Number(componentData.daySplitWinterPrice),
           timeSplitId: [data.daySplit.id],
         },
         {
-          dateSplitId: data.daySplit.summerId,
-          priceForRenter: componentData.daySplitSummerPrice,
+          dateSplitId: data.daySplit,
+          priceForRenter: Number(componentData.daySplitSummerPrice),
           timeSplitId: [data.daySplit.id],
         },
         {
-          dateSplitId: data.nightSplit.winterId,
-          priceForRenter: componentData.nightSplitWinterPrice,
+          dateSplitId: data.nightSplit,
+          priceForRenter: Number(componentData.nightSplitWinterPrice),
           timeSplitId: [data.nightSplit.id],
         },
         {
-          dateSplitId: data.nightSplit.summerId,
-          priceForRenter: componentData.nightSplitSummerPrice,
+          dateSplitId: data.nightSplit,
+          priceForRenter: Number(componentData.nightSplitSummerPrice),
           timeSplitId: [data.nightSplit.id],
         },
         {
-          dateSplitId: data.fullDaySplit.winterId,
-          priceForRenter: componentData.fullDaySplitWinterPrice,
+          dateSplitId: data.fullDaySplit,
+          priceForRenter: Number(componentData.fullDaySplitWinterPrice),
           timeSplitId: [data.fullDaySplit.id],
         },
         {
-          dateSplitId: data.fullDaySplit.summerId,
-          priceForRenter: componentData.fullDaySplitSummerPrice,
+          dateSplitId: data.fullDaySplit,
+          priceForRenter: Number(componentData.fullDaySplitSummerPrice),
           timeSplitId: [data.fullDaySplit.id],
         },
       ];
@@ -371,7 +382,7 @@ const Profile = () => {
         parkingSpaceId: 522,
         parkingSpacePriceInstance: array,
       };
-      console.log(formData);
+      console.log(formData, 'awhdgawdgawiudg');
       const res = await callPost('/parkingspace/price', formData);
       console.log(res);
       setCurrent(current + 1);
@@ -410,19 +421,28 @@ const Profile = () => {
           },
         ],
       });
-      console.log(ress);
+      // console.log(ress);
       if (!ress || ress === undefined) {
         showMessage(messageType.FAILED.type, ress.error);
         return true;
       } else {
-        console.log(ress, 'res11111111111111');
         setCurrent(current + 1);
       }
     } else if (current === 6) {
-      console.log(rentData);
+      console.log(dayOfWeek);
+      const newGeneralScheduleDto = {
+        parkingSpaceId: 522,
+        dayOfWeek,
+        holiday: [{
+          spaceStatusCode: 'Төрсөн өдөр',
+          timeSplitId: 2,
+        }],
+      };
+      console.log(newGeneralScheduleDto, 'sdaaaaaaa');
+      const res = await callPost('/schedule/general', newGeneralScheduleDto );
+      console.log(res.error);
     }
   };
-
   const goBack = () => {
     console.log('Bye');
     setCurrent(current - 1);
@@ -431,7 +451,7 @@ const Profile = () => {
     console.log('Failed:', errorInfo);
   };
 
-  // console.log(userdata.firstName)
+
   return (
     <ProfileLayout>
       <Spin tip="Уншиж байна..." spinning={loading}>
@@ -538,7 +558,7 @@ const Profile = () => {
                 <Col span={3} style={{textAlign: 'right'}}></Col>
               </Row>
               <Row style={{minHeight: '200px', paddingTop: '30px'}}>
-                {vehicles.map((item) => (
+                {vehicles && vehicles.length> 0 ? vehicles.map((item) => (
                   <div
                     key={item.value}
                     className="mt-4 width-auto  rounded flex shadow-sm"
@@ -547,14 +567,15 @@ const Profile = () => {
                     <div className="mt-4 ml-4">
                       <img src="/directions_car_24px.png"></img>
                     </div>
-                    <div className="ml-4">
-                      {/* <div class="text-sm">{item.label}</div> */}
+                    <div className="ml-4"style={{width: '150px'}}>
+                      <div className="text-sm">{item.label.split(' ')[0]},  {item.label.split(' ')[1]}</div>
                       <div className="text-base" style={{color: 'blue '}}>
-                        {item.label}
+                        {item.label.split(' ')[2]}
                       </div>
                     </div>
                     <div className="ml-40 mt-2 ">
                       <div
+                        style={{}}
                         onClick={(key) => {
                           setVehicleId(item.value);
                           onChangeisVehicleEditVisible(item.value);
@@ -564,7 +585,7 @@ const Profile = () => {
                       </div>
                     </div>
                   </div>
-                ))}
+                )):<div>Машин олдсонгүй</div>}
               </Row>
               <Row>
                 <Button
@@ -679,7 +700,8 @@ const Profile = () => {
                       rules={[
                         {
                           required: true,
-                          message: 'Улсын дугаар оруулна уу',
+                          message: 'Улсын дугаараа форматын дагуу  оруулна уу.',
+                          pattern: new RegExp('[0-9]{4}[АБВГДЕЁЖЗИЙКЛМНОӨПРСТУҮФХЦЧШЩЬЫЬЭЮЯабвгдеёжзийклмноөпрстуүфхцчшщъыьэюя]{3}'),
                         },
                       ]}
                     >
@@ -736,7 +758,7 @@ const Profile = () => {
                     >
                       <Select onChange={onChangeColor}>
                         {color.map((item) => (
-                          <Option key={item.value} value={item.label}>
+                          <Option key={item.value} value={item.value}>
                             {item.label}
                           </Option>
                         ))}
@@ -816,7 +838,8 @@ const Profile = () => {
                       rules={[
                         {
                           required: true,
-                          message: 'Улсын дугаар оруулна уу',
+                          message: 'Улсын дугаар 0000ААА форматын дагуу оруулна уу?',
+                          pattern: new RegExp('[0-9]{4}[А-Яа-я]{3}'),
                         },
                       ]}
                     >
@@ -967,7 +990,7 @@ const Profile = () => {
                 <Discount form={form} onFinish={onFinishSale} />
               )) ||
               (steps[current].title === 'Түрээслэх өдрүүд' && (
-                <RentDate setRentData={setRentData} />
+                <RentDate onchangeRentData = {()=>onchangeRentData} setRentData={setRentData} />
               ))}
             </Col>
           </Row>
@@ -1013,7 +1036,7 @@ const Profile = () => {
         <Edit data={spaceEditData}/>
 
       </Modal>}
-      );
+
       </Spin>
     </ProfileLayout>
   );

@@ -86,6 +86,8 @@ const Dashboard = () => {
   // eslint-disable-next-line no-unused-vars
   const [transfer, setTransfer] = useState(null);
 
+  // eslint-disable-next-line no-unused-vars
+  const [messageShow, setmessageShow] = useState(false);
   // const router = useRouter();
   const [defaultCenter, setDefaultCenter] = useState({
     lat: 47.91909306508191,
@@ -109,8 +111,7 @@ const Dashboard = () => {
   const [timeSplit, settimeSplit] = useState(null);
 
 
-  const [visibleDrawerMore, setVisibleDrawerMore] = useState(false);
-
+  // const [visibleDrawerMore, setVisibleDrawerMore] = useState(false);
   const [parkingObject, setParkingObject] = useState({});
   // const isBase64 = async (str) => {
   //   if (str === '' || str.trim() === '') {
@@ -139,9 +140,9 @@ const Dashboard = () => {
   //   setVisibleDrawerMore(true);
   // };
 
-  const onCloseDrawerMore = () => {
-    setVisibleDrawerMore(false);
-  };
+  // const onCloseDrawerMore = () => {
+  //   setVisibleDrawerMore(false);
+  // };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -254,6 +255,9 @@ const Dashboard = () => {
   // };
   const onFinish = async (values) => {
     setGetDataLoading(true);
+    console.log('activing');
+    console.log(values);
+    console.log(searchId);
     let url = '';
     if (tuneType !== null && startDate !== null && endDate!==null) {
       setSearchType('full');
@@ -309,25 +313,19 @@ const Dashboard = () => {
   const onFinishFailed = (values) => {
     console.log(values, 'onFinishFailed');
   };
-  const onReset = () => {
-    setStartDate(null);
-    setEndDate(null);
-    setTuneType(null);
-    form.resetFields();
-    setSearchedData([]);
-  };
   return (
     <Layout>
       <Header>
         <Form
           form={form}
+          className='searchFormControl'
           style={{marginTop: '10px'}}
           name="basic"
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
         >
           <Row >
-            <Col span={8}>
+            <Col span={7}>
               <Form.Item
                 className="mapheadersearch"
                 name="text"
@@ -346,55 +344,50 @@ const Dashboard = () => {
                 </AutoComplete>
               </Form.Item>
             </Col>
-            <Col span={4}>
-              <Form.Item
-                style={{border: '1px solid #A2A4AA', paddingLeft: '10px', paddingRight: '10px', borderRadius: '20px', height: '60px'}}
-                className={'pickType'}
-                name="tuneType">
-                <label style={{color: '#A2A4AA'}}>Захиалгын төрөл</label>
-                <Select
-                  placeholder="Өдрийн төрөл"
-                  className="selectday"
-                  onChange={onChangeDay}
-                >
-                  <Option value="Бүтэн өдөр">Бүтэн өдөр</Option>
-                  <Option value="Өдөр">Өдөр</Option>
-                  <Option value="Шөнө">Шөнө</Option>
-                </Select>
-              </Form.Item>
+            <Col span={4} >
+              <div style={{border: '1px solid #A2A4AA', paddingLeft: '20px', paddingRight: '10px', borderRadius: '20px'}} className={'pickType'}>
+                <label style={{color: '#A2A4AA', fontSize: '12px'}}>Захиалгын төрөл</label>
+                <Form.Item
+                  name="tuneType">
+                  <Select
+                    placeholder="Өдрийн төрөл"
+                    style={{borderRadius: '40px'}}
+                    onChange={onChangeDay}
+                  >
+                    <Option value="Бүтэн өдөр">Бүтэн өдөр</Option>
+                    <Option value="Өдөр">Өдөр</Option>
+                    <Option value="Шөнө">Шөнө</Option>
+                  </Select>
+                </Form.Item>
+              </div>
             </Col>
-            <Col span={4}>
+            <Col span={4} className={'pickType'} style={{border: '1px solid #A2A4AA', borderRadius: '20px'}}>
+              <label style={{color: '#A2A4AA', fontSize: '12px', paddingLeft: '20px'}}>Эхлэх хугацаа</label>
               <Form.Item
                 name="startdate" >
                 <DatePicker
-                  format="YYYY-MM-DD"
-                  placeholder="Эхлэх огноо"
+                  style={{width: '80%', borderRadius: '30px', marginLeft: '10%'}}
+                  format="YYYY/MM/DD"
                   className="selectdates"
                   onChange={onChangeStartDate}
                 />
               </Form.Item>{' '}
             </Col>
-            <Col span={4}>
+            <Col span={4} className={'pickType'} style={{border: '1px solid #A2A4AA', borderRadius: '20px'}}>
+              <label style={{color: '#A2A4AA', fontSize: '12px', paddingLeft: '20px'}}>Дуусах хугацаа</label>
               <Form.Item
                 name="enddate">
                 <DatePicker
-                  format="YYYY-MM-DD"
-                  placeholder="Дуусах огноо"
+                  format="YYYY/MM/DD"
+                  style={{width: '80%', borderRadius: '30px', marginLeft: '10%'}}
                   className="selectdates"
                   onChange={onChangeEndDate}
                 />
               </Form.Item>
             </Col>
-            <Col span={4}>
-              <Button htmlType="submit" type="primary" style={{width: '63%'}}>
+            <Col span={4} >
+              <Button htmlType="submit" type="primary" style={{width: '90%', height: '50px', borderRadius: '20px', marginLeft: '10px'}} >
                 Хайх
-              </Button>
-              <Button
-                htmlType="button"
-                onClick={onReset}
-                style={{width: '35%'}}
-              >
-                Цэвэрлэх
               </Button>
             </Col>
           </Row>
