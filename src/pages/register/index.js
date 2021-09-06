@@ -149,17 +149,17 @@ const Login = () => {
       const data =
             {
               'transactionPassword': values.OTP,
-              'phoneNumber': phoneNumber,
+              'userPhoneNumber': phoneNumber,
             };
       console.log(data);
       const result = await callPost('/register/transactionpass', data);
       if (result.status !== 'failed') {
-        // showMessage(messageType.FAILED.type, result.error);
-        return true;
-      } else {
         showMessage(messageType.SUCCESS.type, 'Бүртгэл амжилттай.Өөрийн бүртгэлээр нэвтэрнэ үү!');
         await delay(2000);
         router.push('/login');
+        return true;
+      } else {
+        showMessage(messageType.FAILED.type, result.error);
       }
     } catch (e) {
       console.log('Хадгалахад алдаа гарлаа');

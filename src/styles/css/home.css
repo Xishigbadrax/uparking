@@ -472,17 +472,6 @@
   border-radius: 100px 0px;
   margin-top: 70px;
 }
-.howToUse2 {
-  width: 80%;
-  height: auto;
-  margin: 0px auto;
-
-  /* Brand Color/Secondary */
-
-  background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
-  border-radius: 0px 100px;
-  margin-top: 70px;
-}
 .howToUseTitle {
   position: relative;
   height: 40px;
@@ -2010,8 +1999,12 @@
 }
 .pickType .ant-select:not(.ant-select-customize-input) .ant-select-selector {
   border: none !important;
-  border-radius: 20px;
-  margin-top: -10px;
+}
+.pickType .ant-select-selector{
+  height: 20px !important;
+}
+.pickType .ant-picker-suffix{
+  margin-top: -15px;
 }
 .pickType
   .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input)
@@ -2020,13 +2013,30 @@
   border-right-width: none !important;
   box-shadow: none !important;
 }
+.pickType{
+  height: 50px !important;
+  margin-left:10px ;
+}
+.pickType .ant-select-arrow{
+  margin-top: -15px;
+}
 .pickType .ant-picker {
   border: none !important;
+  height: 20px !important;
+  
 }
+/* .pickType .ant-select-arrow{
+  margin-top: -20px ;
+} */
 .pickType .ant-picker-focused {
   border-color: none !important;
   box-shadow: none !important;
 }
+
+.searchFormControl .ant-form-item-control-input{
+  min-height: 20px !important;
+}
+
 .locationBackground {
   background: url("/icons/locationBackground.png") !important;
   height: 28px;
@@ -2259,7 +2269,6 @@
 .editSpaceDataButton {
   background: rgba(3, 54, 255, 0.08) !important;
 }
-<<<<<<< HEAD
 .settingPane .ant-divider-vertical{
   border-left:2px solid #0013D4 !important;
   margin-top: 5px !important;
@@ -2290,7 +2299,9 @@ border-radius: 8px;
 height: 36px;
 width: 125px;
 }
-
+.mapheadersearch{
+   height: 50px !important;
+}
 .mapheadersearch .ant-select-selector{
   align-content: center !important;
   height: 50px !important;
@@ -2309,59 +2320,3 @@ width: 125px;
   padding-top: 10px !important;
   padding-left: 10px !important;
 }
-=======
-.newsNavbar{
-  margin-top: 36px;
-  color: white !important;
-}
-.newsNavbar .ant-tabs-tab-btn{
-  padding: 0px 3px !important;
-  font-size: 12px;
-  
-}
-.newsNavbar .ant-tabs-tab{
-  padding: 0px 0px!important;
-}
-.newsNavbar  .ant-tabs-tab :hover{
-  background: linear-gradient(to right,  #0013D4, #00F9B8);
-  padding: none !important ;
-  color: white;
-  border:none !important;
-    border-bottom: none !important;
-    padding: none !important ;
-    transition: none !important;
-    z-index: 2;
-
-}
-
-.newsNavbar .ant-tabs-tab-btn:focus, .ant-tabs-tab-remove:focus, .ant-tabs-tab-btn:active, .ant-tabs-tab-remove:active{
-  color: white !important;
-}
-.newsNavbar  .ant-tabs-tab-active {
-  background: linear-gradient(to right,  #0013D4, #00F9B8);
-  color: white;
-  border:none !important;
-    border-bottom: none !important;
-    padding: none !important ;
-    transition: none !important;
-    z-index: 2;
-  
-}
-.newsNavbar  .ant-tabs-tab-active ::after {
-  /* background-color: linear-gradient(to right,  #0013D4, #00F9B8), linear-gradient(to right,  #0013D4, #00F9B8); */
-  border:none !important;
-    /* border-bottom: 2px solid #BF2D30 !important; */
-    transition: none !important;
-
-   
-  
-}
-.newsNavbar .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
-  color: white;
-  font-size: 12px;
-}
-.newsNavbar .ant-tabs-top > .ant-tabs-nav::before, .ant-tabs-bottom > .ant-tabs-nav::before, .ant-tabs-top > div > .ant-tabs-nav::before, .ant-tabs-bottom > div > .ant-tabs-nav::before{
-  border-bottom:  none !important;
-
-}
->>>>>>> a959b7b0a4a93088ff67ae720e93685e6ddd4d5a

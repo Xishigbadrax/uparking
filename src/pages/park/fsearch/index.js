@@ -24,6 +24,7 @@ import {Tabs} from 'antd';
 import ToFit from '@components/fsearch/toFIt';
 import Closest from '@components/fsearch/closest';
 import Farthest from '@components/fsearch/farthest';
+import Search from 'antd/lib/input/Search';
 // import GoogleMapReact from 'google-map-react';
 // import {useRouter} from 'next/router';
 const {Content} = Layout;
@@ -512,7 +513,7 @@ const fsearch = () => {
                   }
                   key="3"
                 >
-                  <Farthest data={spaceData} />
+                  <Search data={spaceData} />
                 </TabPane>
               </Tabs>
             </Card>

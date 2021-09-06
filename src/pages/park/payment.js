@@ -39,7 +39,7 @@ moment.updateLocale('mn', {
 
 const {TabPane} = Tabs;
 
-const {Header, Sider, Content} = Layout;
+const {Header, Sider} = Layout;
 
 const IMG_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
 const style = {
@@ -47,16 +47,16 @@ const style = {
   borderRadius: '8px',
   padding: '5px 10px',
 };
-const isBase64 = async (str) => {
-  if (str === '' || str.trim() === '') {
-    return false;
-  }
-  try {
-    return btoa(atob(str)) == str;
-  } catch (err) {
-    return false;
-  }
-};
+// const isBase64 = async (str) => {
+//   if (str === '' || str.trim() === '') {
+//     return false;
+//   }
+//   try {
+//     return btoa(atob(str)) == str;
+//   } catch (err) {
+//     return false;
+//   }
+// };
 const image = [
   {id: 1,
     image: '/hunnu11.png'},
@@ -88,6 +88,7 @@ const Payment = ( ) => {
   const [type, settype] = useState('KHANBANK');
   const [type2, settype2] = useState('MONGOLCHAT');
   const [amount, setamount] = useState(0);
+  // eslint-disable-next-line no-unused-vars
   const [startDateTime, setStartDateTime]= useState();
   // const [test, setTest] = useState(null);
   const [phoneNumber, setphoneNumber] = useState(null);

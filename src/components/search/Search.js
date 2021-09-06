@@ -1013,7 +1013,7 @@ const Search = ({data, startDate, endDate, tunetype})=>{
                           onChange={onChangeChooseVehicle}
                         >
                           <Col span={11}>
-                            {vehicles.map((item) => (
+                            {vehicles && vehicles.length > 0 && vehicles.map((item) => (
                               <Radio.Button
                                 key={item.value}
                                 value={item.value}

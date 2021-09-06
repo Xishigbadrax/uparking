@@ -11,8 +11,7 @@ moment.updateLocale('mn', {
 });
 
 const rentDate = (props) => {
-  console.log(props);
-  const [weekData, setWeekData] = useState();
+  // const [weekData, setWeekData] = useState();
   const [checked, setChecked] = useState();
 
   const [mondayMorning, setmondayMorning] = useState('Боломжтой');
@@ -32,98 +31,95 @@ const rentDate = (props) => {
 
   const [daySplitId, setDaySplitId] = useState();
   const [nightSplitId, setNightSplit] = useState();
-
+  const dayOfWeek= [
+    {
+      day: 1,
+      // timeSplitDescription: 'Өдөр',
+      timeSplitId: Number(daySplitId),
+      spaceStatusCode: mondayMorning,
+    },
+    {
+      day: 1,
+      // timeSplitDescription: 'Шөнө',
+      timeSplitId: Number(nightSplitId),
+      spaceStatusCode: mondayNight,
+    },
+    {
+      day: 2,
+      // timeSplitDescription: 'Өдөр',
+      timeSplitId: Number(daySplitId),
+      spaceStatusCode: tuesdayMorning,
+    },
+    {
+      day: 2,
+      // timeSplitDescription: 'Шөнө',
+      timeSplitId: Number(nightSplitId),
+      spaceStatusCode: tuesdayNight,
+    },
+    {
+      day: 3,
+      // timeSplitDescription: 'Өдөр',
+      timeSplitId: Number(daySplitId),
+      spaceStatusCode: wednesdayMorning,
+    },
+    {
+      day: 3,
+      // timeSplitDescription: 'Шөнө',
+      timeSplitId: Number(nightSplitId),
+      spaceStatusCode: wednesdayNight,
+    },
+    {
+      day: 4,
+      // timeSplitDescription: 'Өдөр',
+      timeSplitId: Number(daySplitId),
+      spaceStatusCode: thursdayMorning,
+    },
+    {
+      day: 4,
+      // timeSplitDescription: 'Шөнө',
+      timeSplitId: Number(nightSplitId),
+      spaceStatusCode: thursdayNight,
+    },
+    {
+      day: 5,
+      // timeSplitDescription: 'Өдөр',
+      timeSplitId: Number(daySplitId),
+      spaceStatusCode: fridayMorning,
+    },
+    {
+      day: 5,
+      // timeSplitDescription: 'Шөнө',
+      timeSplitId: Number(nightSplitId),
+      spaceStatusCode: fridayNight,
+    },
+    {
+      day: 6,
+      // timeSplitDescription: 'Өдөр',
+      timeSplitId: Number(daySplitId),
+      spaceStatusCode: saturdayMorning,
+    },
+    {
+      day: 6,
+      // timeSplitDescription: 'Шөнө',
+      timeSplitId: Number(nightSplitId),
+      spaceStatusCode: saturdayNight,
+    },
+    {
+      day: 0,
+      // timeSplitDescription: 'Өдөр',
+      timeSplitId: Number(daySplitId),
+      spaceStatusCode: sundayMorning,
+    },
+    {
+      day: 0,
+      // timeSplitDescription: 'Шөнө',
+      timeSplitId: Number(nightSplitId),
+      spaceStatusCode: sundayNight,
+    },
+  ];
   const onChangeViewCalendar = (e) => {
     setChecked(e.target.value);
-    const data = {
-      dayOfWeek: [
-        {
-          day: 1,
-          timeSplitDescription: 'Өдөр',
-          timeSplitId: Number(daySplitId),
-          spaceStatusDescription: mondayMorning,
-        },
-        {
-          day: 1,
-          timeSplitDescription: 'Шөнө',
-          timeSplitId: Number(nightSplitId),
-          spaceStatusDescription: mondayNight,
-        },
-        {
-          day: 2,
-          timeSplitDescription: 'Өдөр',
-          timeSplitId: Number(daySplitId),
-          spaceStatusDescription: tuesdayMorning,
-        },
-        {
-          day: 2,
-          timeSplitDescription: 'Шөнө',
-          timeSplitId: Number(nightSplitId),
-          spaceStatusDescription: tuesdayNight,
-        },
-        {
-          day: 3,
-          timeSplitDescription: 'Өдөр',
-          timeSplitId: Number(daySplitId),
-          spaceStatusDescription: wednesdayMorning,
-        },
-        {
-          day: 3,
-          timeSplitDescription: 'Шөнө',
-          timeSplitId: Number(nightSplitId),
-          spaceStatusDescription: wednesdayNight,
-        },
-        {
-          day: 4,
-          timeSplitDescription: 'Өдөр',
-          timeSplitId: Number(daySplitId),
-          spaceStatusDescription: thursdayMorning,
-        },
-        {
-          day: 4,
-          timeSplitDescription: 'Шөнө',
-          timeSplitId: Number(nightSplitId),
-          spaceStatusDescription: thursdayNight,
-        },
-        {
-          day: 5,
-          timeSplitDescription: 'Өдөр',
-          timeSplitId: Number(daySplitId),
-          spaceStatusDescription: fridayMorning,
-        },
-        {
-          day: 5,
-          timeSplitDescription: 'Шөнө',
-          timeSplitId: Number(nightSplitId),
-          spaceStatusDescription: fridayNight,
-        },
-        {
-          day: 6,
-          timeSplitDescription: 'Өдөр',
-          timeSplitId: Number(daySplitId),
-          spaceStatusDescription: saturdayMorning,
-        },
-        {
-          day: 6,
-          timeSplitDescription: 'Шөнө',
-          timeSplitId: Number(nightSplitId),
-          spaceStatusDescription: saturdayNight,
-        },
-        {
-          day: 0,
-          timeSplitDescription: 'Өдөр',
-          timeSplitId: Number(daySplitId),
-          spaceStatusDescription: sundayMorning,
-        },
-        {
-          day: 0,
-          timeSplitDescription: 'Шөнө',
-          timeSplitId: Number(nightSplitId),
-          spaceStatusDescription: sundayNight,
-        },
-      ],
-    };
-    setWeekData(data);
+    // setWeekData(dayofweek);
   };
   const timeSplit = [
     {id: 1, name: 'Боломжтой'},
@@ -131,19 +127,18 @@ const rentDate = (props) => {
   ];
   const getListData = (value) =>{
     const array = [];
-
-    weekData.dayOfWeek.map((item) => {
+    dayOfWeek.map((item) => {
       switch (item.day) {
       case value.day():
-        if (item.spaceStatusDescription === 'Боломжтой') {
+        if (item.spaceStatusCode === 'Боломжтой') {
           array.push({
-            type: item.spaceStatusDescription,
+            type: item.spaceStatusCode,
             content: item.timeSplitDescription,
           });
         }
-        if (item.spaceStatusDescription === 'Боломжгүй') {
+        if (item.spaceStatusCode === 'Боломжгүй') {
           array.push({
-            type: item.spaceStatusDescription,
+            type: item.spaceStatusCode,
             content: item.timeSplitDescription,
           });
         }
@@ -177,7 +172,11 @@ const rentDate = (props) => {
       return 1394;
     }
   };
-
+  const onChangeBla = (e) => {
+    console.log(dayOfWeek);
+    props.setRentData(dayOfWeek);
+    setsundayMorning(e), setChecked(2);
+  };
   const monthCellRender = (value) => {
     const num = getMonthData(value);
     return num ? (
@@ -194,6 +193,8 @@ const rentDate = (props) => {
     setNightSplit(data.nightSplit.id);
     console.log(daySplitId, nightSplitId);
   }, []);
+
+  console.log('am your props', props);
   return (
     <div>
       <Row offset={4}>
@@ -270,10 +271,7 @@ const rentDate = (props) => {
             </Col>
             <Col span={5} offset={1}>
               <Select
-                onChange={(e) => {
-                  props.setRentData(weekData);
-                  setsundayMorning(e), setChecked(2);
-                }}
+                onChange={onChangeBla}
                 value={sundayMorning}
                 className={
                   sundayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
@@ -289,7 +287,8 @@ const rentDate = (props) => {
             <Col span={5} offset={2}>
               <Select
                 onChange={(e) => {
-                  props.setRentData(weekData);
+                  props.setRentData(dayOfWeek);
+                  // console.log(weekData);
                   setsundayNight(e), setChecked(2);
                 }}
                 value={sundayNight}
@@ -316,7 +315,7 @@ const rentDate = (props) => {
             <Col span={5} offset={1}>
               <Select
                 onChange={(e) => {
-                  props.setRentData(weekData);
+                  props.setRentData(dayOfWeek);
                   setmondayMorning(e), setChecked(2);
                 }}
                 value={mondayMorning}
@@ -335,7 +334,7 @@ const rentDate = (props) => {
               <Select
                 onChange={(e) => {
                   setmondayNight(e), setChecked(2);
-                  props.setRentData(weekData);
+                  props.setRentData(dayOfWeek);
                 }}
                 value={mondayNight}
                 className={
@@ -360,10 +359,9 @@ const rentDate = (props) => {
             </Col>
             <Col span={5} offset={1}>
               <Select
-                s
                 onChange={(e) => {
                   settuesdayMorning(e), setChecked(2);
-                  props.setRentData(weekData);
+                  props.setRentData(dayOfWeek);
                 }}
                 value={tuesdayMorning}
                 className={
@@ -381,7 +379,7 @@ const rentDate = (props) => {
               <Select
                 onChange={(e) => {
                   settuesdayNight(e), setChecked(2);
-                  props.setRentData(weekData);
+                  props.setRentData(dayOfWeek);
                 }}
                 value={tuesdayNight}
                 className={
@@ -409,7 +407,7 @@ const rentDate = (props) => {
                 span={6}
                 onChange={(e) => {
                   setwednesdayMorning(e), setChecked(2);
-                  props.setRentData(weekData);
+                  props.setRentData(dayOfWeek);
                 }}
                 value={wednesdayMorning}
                 className={
@@ -428,7 +426,7 @@ const rentDate = (props) => {
             <Col span={5} offset={2}>
               <Select
                 onChange={(e) => {
-                  props.setRentData(weekData);
+                  props.setRentData(dayOfWeek);
                   setwednesdayNight(e), setChecked(2);
                 }}
                 value={wednesdayNight}
@@ -456,7 +454,7 @@ const rentDate = (props) => {
               <Select
                 onChange={(e) => {
                   setthursdayMorning(e), setChecked(2);
-                  props.setRentData(weekData);
+                  props.setRentData(dayOfWeek);
                 }}
                 value={thursdayMorning}
                 className={
@@ -474,7 +472,7 @@ const rentDate = (props) => {
               <Select
                 onChange={(e) => {
                   setthursdayNight(e), setChecked(2);
-                  props.setRentData(weekData);
+                  props.setRentData(dayOfWeek);
                 }}
                 value={thursdayNight}
                 className={
@@ -501,7 +499,7 @@ const rentDate = (props) => {
               <Select
                 onChange={(e) => {
                   setfridayMorning(e), setChecked(2);
-                  props.setRentData(weekData);
+                  props.setRentData(dayOfWeek);
                 }}
                 value={fridayMorning}
                 className={
@@ -518,7 +516,7 @@ const rentDate = (props) => {
             <Col span={5} offset={2}>
               <Select
                 onChange={(e) => {
-                  setfridayNight(e), setChecked(2), props.setRentData(weekData);
+                  setfridayNight(e), setChecked(2), props.setRentData(dayOfWeek);
                 }}
                 value={fridayNight}
                 className={
@@ -546,7 +544,7 @@ const rentDate = (props) => {
                 onChange={(e) => {
                   setsaturdayMorning(e),
                   setChecked(2),
-                  props.setRentData(weekData);
+                  props.setRentData(dayOfWeek);
                 }}
                 value={saturdayMorning}
                 className={
@@ -565,7 +563,7 @@ const rentDate = (props) => {
                 onChange={(e) => {
                   setsaturdayNight(e),
                   setChecked(2),
-                  props.setRentData(weekData);
+                  props.setRentData(dayOfWeek);
                 }}
                 value={saturdayNight}
                 className={
