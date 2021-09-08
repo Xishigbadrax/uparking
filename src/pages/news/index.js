@@ -7,33 +7,49 @@
 // };
 // export default Test;
 
-import {Tabs} from 'antd';
+import {Tabs, Divider} from 'antd';
 import Footer from '../../components/Footer';
 // import InforNavbar from '../../components/InfoNavbar/InforNavbar';
-import {Image} from 'antd';
+// import {Image} from 'antd';
+import Image from 'next/image';
 import Context from '@context/Context';
 import {useRouter} from 'next/router';
 import {useEffect, useState, useContext} from 'react';
 import {callGet} from '@api/api';
+import eye from '../../../public/eye-24.png';
+import heart from '../../../public/heart.png';
 
-import {auto} from 'async';
+// import {auto} from 'async';
+// import {data} from 'autoprefixer';
 
 
 const News = () => {
-  const [data, setdata] = useState(null);
-  // const [data2, setdata2] = useState(null);
+  const [data1, setData1] = useState(null);
+  const [data2, setData2] = useState(null);
+  // const [data3, setData3] = useState(null);
+  // const [data4, setData4] = useState(null);
+  // const [data5, setData5] = useState(null);
+  // const [data6, setData6] = useState(null);
   const {TabPane} = Tabs;
 
   const router = useRouter();
 
   const ctx = useContext(Context);
+  const myLoader = ({src, width, quality}) => {
+    return `https://uparking.mn/${src}?w=${width}&q=${quality || 75}`;
+  };
 
   const fetchData = async () => {
     ctx.setIsLoading(true);
     await callGet('/news/list/app/test', null).then((res) => {
       if (res && res.length > 0) {
-        setdata(res);
         console.log(res, 'news iin res');
+        setData1(res[0]);
+        setData2(res[1]);
+        // setData3(res[2]);
+        // setData4(res[3]);
+        // setData5(res[4]);
+        // setData6(res[5]);
       }
       ctx.setIsLoading(false);
     });
@@ -55,6 +71,7 @@ const News = () => {
   //   console.log(data2);
   // }, [data2]);
   useEffect(() => {
+    console.log('hewlelee');
     fetchData();
   }, []);
 
@@ -65,101 +82,170 @@ const News = () => {
       <div className="ml-[100px] newsNavbar">
         <Tabs defaultActiveKey="1" >
           <TabPane tab="ШИНЭ МЭДЭЭ" key="1">
-            <div className="grid grid-cols-3 gap-5">
-              {data &&
-          data.map((item, index) => (
-
-            <div
-              key={index}
-              onClick={() => newsDetails(item.id)}
-              className="relative"
-
-            >
-              <p
-
-                className="bg-[#0013D4] w-[135px] text-white h-[18px] absolute z-50 self-end items-stretch right-1 top-[10px]"
-              >
-                {item.createdDate}
-              </p>
-              <p
-                style={{
-                  position: 'absolute',
-                  left: '8px',
-                  top: '10px',
-                  zIndex: '2',
-                  color: 'white',
-                }}
-              >
-                <Image preview= {false} src="/eye-24.png " />
-              </p>
-              <p
-                style={{
-                  position: 'absolute',
-                  left: '30px',
-                  top: '12px',
-                  zIndex: '2',
-                  color: 'white',
-                  fontSize: '10px',
-                  fontStyle: 'italic',
-
-                }}
-              >
-                11200
-              </p>
-
-              <p
-                style={{
-                  position: 'absolute',
-                  left: '62px',
-                  top: '10px',
-                  zIndex: '2',
-                  color: 'white',
 
 
-                }}
-              >
-                <Image preview= {false} src="/heart.png " />
-              </p>
+            <div className="flex w-full ">
+              <div>
+                <div onClick={() =>newsDetails(data1.id)} className="w-[542px] h-[360px]  cursor-pointer">
+                  <div className=" w-full h-full relative">
+                    {data1 && <Image className="object-cover " layout="fill" height="100px" loader={myLoader} src={data1.image} />}
+                    {data1 && <p className="absolute text-[white] text-[10px] bg-[#0013D4] right-[0px] top-[10px] pl-[5px] pr-[5px] ">{data1.createdDate}</p>}
+                    <div className=" absolute  flex">
+                      <div className="flex items-center pl-[5px]">
+                        <Image className=" ml-[8px] " src={eye} />
+                        <p className=" text-[10px] ml-[3px] text-[white]">11200</p>
+                      </div>
+                      <div className=" pt-[5px] pl-[3px]">
+                        <Image width="16px" height="16px" src={heart} />
+                      </div>
+                    </div>
+                    <div className="w-[542px] h-[80px] bg-black  bg-opacity-[50%] absolute bottom-0">
+                      {data1 && <p className="absolute text-[white] text-[24px] right-[24px] top-[16px]">{data1.title}</p>}
+                    </div>
 
-
-              <div
-
-
-                style={{
-
-                  backgroundColor: 'rgba(0, 0,0,0.5)',
-                  height: '60px',
-                  position: 'absolute',
-                  zIndex: '2',
-                  width: '100%',
-                  bottom: '6px',
-                  textAlign: 'left',
-                  cursor: 'pointer',
-                  color: 'white',
-                  fontSize: '18px',
-                }}
-              >
-                <p style={{marginLeft: '24px', marginTop: '12px'}}> {item.title}</p>
-
+                  </div>
+                </div>
+                <div className="flex mt-[28px] mb-[65px]">
+                  <div onClick={() =>newsDetails(data2.id)} className="w-[255px] h-[323px]  mr-[30px] cursor-pointer">
+                    <div className="h-full w-full relative">
+                      {data2 && <Image className="object-cover" layout="fill" height="100px" loader={myLoader} src={data2.image} />}
+                      {data2 && <p className="absolute text-[white] text-[10px] bg-[#0013D4] right-[0px] top-[10px] pl-[5px] pr-[5px] ">{data2.createdDate}</p>}
+                      <div className="w-full h-[80px] bg-black  bg-opacity-[50%] absolute bottom-0">
+                        {data2 && <p className="absolute text-[white] text-[24px] right-[24px] top-[16px]">{data2.title}</p>}
+                      </div>
+                    </div>
+                  </div>
+                  <div onClick={() =>newsDetails(data2.id)} className="w-[255px] h-[323px]  mr-[30px] cursor-pointer">
+                    <div className="h-full w-full relative">
+                      {data2 && <Image className="object-cover" layout="fill" height="100px" loader={myLoader} src={data2.image} />}
+                      {data2 && <p className="absolute text-[white] text-[10px] bg-[#0013D4] right-[0px] top-[10px] pl-[5px] pr-[5px] ">{data2.createdDate}</p>}
+                      <div className="w-full h-[80px] bg-black  bg-opacity-[50%] absolute bottom-0">
+                        {data2 && <p className="absolute text-[white] text-[24px] right-[24px] top-[16px]">{data2.title}</p>}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-
-              <Image
-                alt="img"
-                preview={false}
-
-                height={auto}
-                src={'https://uparking.mn' + item.image}
-              />
-
-            </div>
-
-
-          )) }
+              <div>
+                <div className="flex mb-[28px]">
+                  <div onClick={() =>newsDetails(data2.id)} className="w-[255px] h-[323px]  mr-[30px] cursor-pointer">
+                    <div className="h-full w-full relative">
+                      {data2 && <Image className="object-cover" layout="fill" height="100px" loader={myLoader} src={data2.image} />}
+                      {data2 && <p className="absolute text-[white] text-[10px] bg-[#0013D4] right-[0px] top-[10px] pl-[5px] pr-[5px] ">{data2.createdDate}</p>}
+                      <div className="w-full h-[80px] bg-black  bg-opacity-[50%] absolute bottom-0">
+                        {data2 && <p className="absolute text-[white] text-[24px] right-[24px] top-[16px]">{data2.title}</p>}
+                      </div>
+                    </div></div>
+                  <div onClick={() =>newsDetails(data2.id)} className="w-[255px] h-[323px] cursor-pointer">
+                    <div className="h-full w-full relative">
+                      {data2 && <Image className="object-cover" layout="fill" height="100px" loader={myLoader} src={data2.image} />}
+                      {data2 && <p className="absolute text-[white] text-[10px] bg-[#0013D4] right-[0px] top-[10px] pl-[5px] pr-[5px] ">{data2.createdDate}</p>}
+                      <div className="w-full h-[80px] bg-black bg-opacity-[50%] absolute bottom-0">
+                        {data2 && <p className="absolute text-[white] text-[24px] right-[24px] top-[16px]">{data2.title}</p>}
+                      </div>
+                    </div></div>
+                </div>
+                <div onClick={() =>newsDetails(data2.id)} className="w-full h-[360px]  cursor-pointer">
+                  <div className="h-full w-full relative">
+                    {data2 && <Image className="object-cover" layout="fill" height="100px" loader={myLoader} src={data2.image} />}
+                    {data2 && <p className="absolute text-[white] text-[10px] bg-[#0013D4] right-[0px] top-[10px] pl-[5px] pr-[5px] ">{data2.createdDate}</p>}
+                    <div className="w-full h-[80px] bg-black  bg-opacity-[50%] absolute bottom-0">
+                      {data2 && <p className="absolute text-[white] text-[24px] right-[24px] top-[16px]">{data2.title}</p>}
+                    </div>
+                  </div></div>
+              </div>
             </div>
 
           </TabPane>
           <TabPane tab="КОМПАНИЙН МЭДЭЭ" key="2">
-          КОМПАНИЙН МЭДЭЭ
+            <div className="mr-4 mb-[71px]">
+              <div>
+                <div onClick={() =>newsDetails(data2.id)} className=" bg-red-500 w-full h-[500px] relative cursor-pointer">
+                  {data2 && <Image className="object-cover" layout="fill" height="100px" loader={myLoader} src={data2.image} />}
+                  {data2 && <p className="absolute text-[white] text-[10px] bg-[#0013D4] right-[0px] top-[10px] pl-[5px] pr-[5px] ">{data2.createdDate}</p>}
+
+                  <div className="w-[300px] h-[80px] bg-black  bg-opacity-[50%] absolute bottom-[150px] right-0">
+                    {data2 && <p className="absolute text-[white]  text-[24px] right-[24px] top-[16px]">{data2.title}</p>}
+                  </div>
+
+                </div>
+                <div onClick={() =>newsDetails(data2.id)} className="flex justify-between mt-[10px] cursor-pointer">
+                  <div className="w-[256px] h-[308px] ">
+                    {data2 && <Image className="bg-green-400" width="256px" height="166px" loader={myLoader} src={data2.image} />}
+                    {data2 && <p className=" text-[white] text-[10px] bg-[#0013D4] pl-[5px] pr-[5px] w-[110px] ">{data2.createdDate}</p>}
+                    {
+                      data2 && <p className=" text-[#35446D]  text-[24px] ">{data2.title}</p>}
+                    { data2 && <p className="text-[8px] text-[#647189]">Бүх автозогсоолын таны утсанд. Энэ бол  Uparking онлайн автозогсоолын платформ. Хаана ч хэзээ ч өөрт тохирох зогсоолыг түрээслэн өөрийн машинаа байршуулах боломжийг олгож ...</p>}
+
+
+                  </div>
+                  <div onClick={() =>newsDetails(data2.id)} className="w-[256px] h-[308px] cursor-pointer ">
+                    {data2 && <Image className="bg-green-400" width="256px" height="166px" loader={myLoader} src={data2.image} />}
+                    {data2 && <p className=" text-[white] text-[10px] bg-[#0013D4] pl-[5px] pr-[5px] w-[110px] ">{data2.createdDate}</p>}
+                    {
+                      data2 && <p className=" text-[#35446D]  text-[24px] ">{data2.title}</p>}
+                    { data2 && <p className="text-[8px] text-[#647189]">Бүх автозогсоолын таны утсанд. Энэ бол  Uparking онлайн автозогсоолын платформ. Хаана ч хэзээ ч өөрт тохирох зогсоолыг түрээслэн өөрийн машинаа байршуулах боломжийг олгож ...</p>}
+
+
+                  </div>
+                  <div onClick={() =>newsDetails(data2.id)} className="w-[256px] h-[308px] cursor-pointer ">
+                    {data2 && <Image className="bg-green-400" width="256px" height="166px" loader={myLoader} src={data2.image} />}
+                    {data2 && <p className=" text-[white] text-[10px] bg-[#0013D4] pl-[5px] pr-[5px] w-[110px] ">{data2.createdDate}</p>}
+                    {
+                      data2 && <p className=" text-[#35446D]  text-[24px] ">{data2.title}</p>}
+                    { data2 && <p className="text-[8px] text-[#647189]">Бүх автозогсоолын таны утсанд. Энэ бол  Uparking онлайн автозогсоолын платформ. Хаана ч хэзээ ч өөрт тохирох зогсоолыг түрээслэн өөрийн машинаа байршуулах боломжийг олгож ...</p>}
+
+
+                  </div>
+                  <div onClick={() =>newsDetails(data2.id)} className="w-[256px] h-[308px] cursor-pointer ">
+                    {data2 && <Image className="bg-green-400" width="256px" height="166px" loader={myLoader} src={data2.image} />}
+                    {data2 && <p className=" text-[white] text-[10px] bg-[#0013D4] pl-[5px] pr-[5px] w-[110px] ">{data2.createdDate}</p>}
+                    {
+                      data2 && <p className=" text-[#35446D]  text-[24px] ">{data2.title}</p>}
+                    { data2 && <p className="text-[8px] text-[#647189]">Бүх автозогсоолын таны утсанд. Энэ бол  Uparking онлайн автозогсоолын платформ. Хаана ч хэзээ ч өөрт тохирох зогсоолыг түрээслэн өөрийн машинаа байршуулах боломжийг олгож ...</p>}
+
+
+                  </div>
+                </div>
+              </div>
+              <Divider className="bg-[#0013D4]" />
+              {/* <div className="flex justify-between">
+                <div className=" w-[323px] h-[80vh] flex  flex-col justify-between">
+                  <div className="bg-green-300 w-[323px] h-[100px]"></div>
+                  <div className="bg-green-300 w-[323px] h-[100px]"></div>
+                  <div className="bg-green-300 w-[323px] h-[100px]"></div>
+                  <div className="bg-green-300 w-[323px] h-[100px]"></div>
+                </div>
+                <div className=" w-[323px] h-[80vh] flex  flex-col justify-between">
+                  <div className="bg-green-300 w-[323px] h-[100px]"></div>
+                  <div className="bg-green-300 w-[323px] h-[100px]"></div>
+                  <div className="bg-green-300 w-[323px] h-[100px]"></div>
+                  <div className="bg-green-300 w-[323px] h-[100px]"></div>
+                </div>
+                <div className=" w-[323px] h-[80vh] flex  flex-col justify-between">
+                  <div className="bg-green-300 w-[323px] h-[100px]"></div>
+                  <div className="bg-green-300 w-[323px] h-[100px]"></div>
+                  <div className="bg-green-300 w-[323px] h-[100px]"></div>
+                  <div className="bg-green-300 w-[323px] h-[100px]"></div>
+                </div>
+
+              </div> */}
+
+              <div className="grid grid-flow-col grid-cols-3 grid-rows-3 gap-4">
+                {data1 && <NewsItem img={data1.image} loader={myLoader} title={data1.title} createdDate={data1.createdDate} click={() =>newsDetails(data1.id)} /> }
+                {data1 && <NewsItem img={data1.image} loader={myLoader} title={data1.title} createdDate={data1.createdDate} click={() =>newsDetails(data1.id)} /> }
+                {data1 && <NewsItem img={data1.image} loader={myLoader} title={data1.title} createdDate={data1.createdDate} click={() =>newsDetails(data1.id)} /> }
+                {data1 && <NewsItem img={data1.image} loader={myLoader} title={data1.title} createdDate={data1.createdDate} click={() =>newsDetails(data1.id)} /> }
+                {data1 && <NewsItem img={data1.image} loader={myLoader} title={data1.title} createdDate={data1.createdDate} click={() =>newsDetails(data1.id)} /> }
+                {data1 && <NewsItem img={data1.image} loader={myLoader} title={data1.title} createdDate={data1.createdDate} click={() =>newsDetails(data1.id)} /> }
+                {data1 && <NewsItem img={data1.image} loader={myLoader} title={data1.title} createdDate={data1.createdDate} click={() =>newsDetails(data1.id)} /> }
+                {data1 && <NewsItem img={data1.image} loader={myLoader} title={data1.title} createdDate={data1.createdDate} click={() =>newsDetails(data1.id)} /> }
+                {data1 && <NewsItem img={data1.image} loader={myLoader} title={data1.title} createdDate={data1.createdDate} click={() =>newsDetails(data1.id)} /> }
+
+
+              </div>
+
+            </div>
           </TabPane>
           <TabPane tab="ЗӨВӨЛГӨӨ" key="3">
           ЗӨВӨЛГӨӨ
@@ -191,369 +277,18 @@ const News = () => {
 
 export default News;
 
-
-{/* ////////////////////////////////////////////////// */}
-
-
-{/* /////////////////////// */}
-
-{/* <div className="mt-8">
-
+const NewsItem =(props) => {
+  return <div onClick={props.click} className=" w-[323px] h-[100px] cursor-pointer ">
+    <div className=" flex relative">
+      <div className="mr-[10px] flex-shrink-0"><Image height="98" width="150" loader={props.loader} src={props.img} /></div>
+      <div className="flex-grow">
+        <p className=" text-[#35446D]  text-[16px] ">{props.title}</p>
+        <p className=" text-[white] text-[10px] bg-[#0013D4] pl-[5px] pr-[5px] w-[110px] ">{props.createdDate}</p>
+        <p className="text-[8px] text-[#647189]">Бүх автозогсоолын таны утсанд. Энэ бол  Uparking онлайн автозогсоолын платформ. Хаана ч хэзээ ч өөрт тохирох зогсоолыг түрээслэн өөрийн машинаа байршуулах боломжийг олгож ...</p>
       </div>
-      <div className="px-36">
-        <div className="grid lg:grid-cols-2">
-          <div>
-            <div
-              className={'Information grid-cols-1 mt-8 flex justify-between'}
-            >
-              <div className="flex mt-2">
-                <img
-                  src="/eye-24.png "
-                  className="ml-4"
-                  style={{
-                    height: '30px',
-                    width: '30px',
-                  }}
-                ></img>
-                <img
-                  src="../heart.png "
-                  className="ml-2 "
-                  style={{
-                    height: '30px',
-                    width: '30px',
-                  }}
-                ></img>
-              </div>
-              <div
-                className=" w-32 h-6 mt-2"
-                style={{backgroundColor: 'blue', color: 'white'}}
-              >
-                2020/06/05 12:40
-              </div>
-            </div>
-            <div
-              style={{
-                backgroundColor: 'black',
-                opacity: '0.6',
-                color: 'white',
-                fontSize: '25px',
-              }}
-              className="grid justify-items-end -mt-20 pt-1 "
-            >
-              <span className="text-gray-300" style={{marginRight: '8px'}}>
-                Авто зогсооолын
-              </span>
-              <p style={{color: 'white', opacity: '1', marginRight: '8px'}}>
-                <b>Шинэ ЭРИН</b>
-              </p>
-            </div>
-          </div>
-          <div className="grid lg:grid-cols-2 bg-blue-300 md ml-4 mt-8 ">
-            <div>
-              <div className={`grid-cols-1 Information1 flex justify-between`}>
-                <div className="flex  mt-2">
-                  <img
-                    src="/eye-24.png "
-                    className="ml-4"
-                    style={{
-                      height: '30px',
-                      width: '30px',
-                    }}
-                  ></img>
-                  <span style={{color: 'white', marginTop: '3px'}}>
-                    11,200
-                  </span>
-                  <img
-                    src="/heart.png "
-                    className="ml-2 "
-                    style={{
-                      height: '30px',
-                      width: '30px',
-                    }}
-                  ></img>
-                </div>
-                <div
-                  className=" w-32 h-6 mt-2"
-                  style={{backgroundColor: 'blue', color: 'white'}}
-                >
-                  2020/06/05 12:40
-                </div>
-              </div>
-              <div
-                style={{
-                  backgroundColor: 'black',
-                  opacity: '0.6',
-                  color: 'white',
-                  fontSize: '25px',
-                }}
-                className="grid justify-items-end -mt-20 pt-1 "
-              >
-                <span className="text-gray-300" style={{marginRight: '8px'}}>
-                  Авто зогсооолын
-                </span>{' '}
-                <p style={{color: 'white', opacity: '1', marginRight: '8px'}}>
-                  <b>Шинэ ЭРИН</b>
-                </p>
-              </div>
-            </div>
-            <div>
-              <div
-                className={'grid-cols-1 Information2 flex justify-between lg:mt-0 sm:mt-8 ml-4'}
-              >
-                <div className="flex mt-2">
-                  <img
-                    src="/eye-24.png "
-                    className="ml-4"
-                    style={{
-                      height: '30px',
-                      width: '30px',
-                    }}
-                  ></img>
-                  <span style={{color: 'white', marginTop: '3px'}}></span>
-                  <img
-                    src="/heart.png "
-                    className="ml-2 "
-                    style={{
-                      height: '30px',
-                      width: '30px',
-                    }}
-                  ></img>
-                </div>
-                <div
-                  className=" w-32 h-6 mt-2"
-                  style={{backgroundColor: 'blue', color: 'white'}}
-                >
-                  2020/06/05 12:40
-                </div>
-              </div>
-              <div
-                style={{
-                  backgroundColor: 'black',
-                  opacity: '0.6',
-                  color: 'white',
-                  fontSize: '25px',
-                }}
-                className="grid justify-items-end -mt-20 pt-1 ml-4"
-              >
-                <span className="text-gray-300" style={{marginRight: '8px'}}>
-                  Авто зогсооолын
-                </span>{' '}
-                <p style={{color: 'white', opacity: '1', marginRight: '8px'}}>
-                  <b>Шинэ ЭРИН</b>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="grid lg:grid-cols-2 sm:grid-cols-1">
-          <div className="grid lg:grid-cols-2 bg-blue-300 md: ml-4 mt-8 lg:ml-0">
-            <div>
-              <div className={`grid-cols-1 Information3 flex justify-between`}>
-                <div className="flex mt-2">
-                  <img
-                    src="/eye-24.png "
-                    className="ml-4"
-                    style={{
-                      height: '30px',
-                      width: '30px',
-                    }}
-                  ></img>
-                  <span style={{color: 'white', marginTop: '3px'}}>
-                    11,200
-                  </span>
-                  <img
-                    src="/heart.png "
-                    className="ml-2 "
-                    style={{
-                      height: '30px',
-                      width: '30px',
-                    }}
-                  ></img>
-                </div>
-                <div
-                  className=" w-32 h-6 mt-2"
-                  style={{backgroundColor: 'blue', color: 'white'}}
-                >
-                  2020/06/05 12:40
-                </div>
-              </div>
-              <div
-                style={{
-                  backgroundColor: 'black',
-                  opacity: '0.6',
-                  color: 'white',
-                  fontSize: '25px',
-                }}
-                className="grid justify-items-end -mt-20 pt-1 "
-              >
-                <span className="text-gray-300" style={{marginRight: '8px'}}>
-                  Авто зогсооолын
-                </span>{' '}
-                <p style={{color: 'white', opacity: '1', marginRight: '8px'}}>
-                  <b>Шинэ ЭРИН</b>
-                </p>
-              </div>
-            </div>
-            <div>
-              <div
-                className={'grid-cols-1 Information4 flex justify-between lg:mt-0 sm:mt-8 ml-4'}
-              >
-                <div className="flex mt-2">
-                  <img
-                    src="/eye-24.png "
-                    className="ml-4"
-                    style={{
-                      height: '30px',
-                      width: '30px',
-                    }}
-                  ></img>
-                  <span style={{color: 'white', marginTop: '3px'}}></span>
-                  <img
-                    src="/heart.png "
-                    className="ml-2 "
-                    style={{
-                      height: '30px',
-                      width: '30px',
-                    }}
-                  ></img>
-                </div>
-                <div
-                  className=" w-32 h-6 mt-2"
-                  style={{backgroundColor: 'blue', color: 'white'}}
-                >
-                  2020/06/05 12:40
-                </div>
-              </div>
-              <div
-                style={{
-                  backgroundColor: 'black',
-                  opacity: '0.6',
-                  color: 'white',
-                  fontSize: '25px',
-                }}
-                className="grid justify-items-end -mt-20 pt-1 ml-4 "
-              >
-                <span className="text-gray-300" style={{marginRight: '8px'}}>
-                  Авто зогсооолын
-                </span>{' '}
-                <p style={{color: 'white', opacity: '1', marginRight: '8px'}}>
-                  <b>Шинэ ЭРИН</b>
-                </p>
-              </div>
-            </div>
-          </div>
-          <div>
-            <div
-              className={'grid-cols-1 Information6 ml-4 lg:-mt-16 flex justify-between sm: mt-4'}
-            >
-              <div className="flex mt-2">
-                <img
-                  src="/eye-24.png "
-                  className="ml-4"
-                  style={{
-                    height: '30px',
-                    width: '30px',
-                  }}
-                ></img>
-                <img
-                  src="/heart.png "
-                  className="ml-2 "
-                  style={{
-                    height: '30px',
-                    width: '30px',
-                  }}
-                ></img>
-              </div>
-              <div
-                className=" w-32 h-6 mt-2"
-                style={{backgroundColor: 'blue', color: 'white'}}
-              >
-                2020/06/05 12:40
-              </div>
-            </div>
-            <div
-              style={{
-                backgroundColor: 'black',
-                opacity: '0.6',
-                color: 'white',
-                fontSize: '25px',
-              }}
-              className="grid justify-items-end -mt-20 pt-1 ml-4 "
-            >
-              <span className="text-gray-300" style={{marginRight: '8px'}}>
-                Авто зогсооолын
-              </span>{' '}
-              <p style={{color: 'white', opacity: '1', marginRight: '8px'}}>
-                <b>Шинэ ЭРИН</b>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div> */}
-{/* {news.map((item, index) => ({
-        if(   =  "0") {
-          <div
-            className={`${styles.backgroundInformation} ml-16`}
-            style={{ background: `url(${item.image})` }}
-          ></div>;
-        },
-      }))}
-      <div className="mt-16"> */}
 
+    </div>
 
-// const news = [
-//   {
-//     id: 0,
-//     head: "Урамшуулал",
-//     image: "/news/news-1.png",
-//     date: "2020/10/10 12:40",
-//     title: "Зогсоолын",
-//     titlebold: "Шинэ ЭРИН",
-//     desc: "Бүх автозогсоолын таны утсанд. Энэ бол Uparking онлайн автозогсоолын платформ. Хаана ч хэзээ ч өөрт тохирох зогсоолыг түрээслэн өөрийн машинаа байршуулах боломжийг олгож ...",
-//   },
-//   {
-//     id: 1,
-//     head: "Зөвөлгөө",
-//     image: "/news/news-2.png",
-//     date: "2020/12/10 12:40",
-//     title: "Хэрхэн",
-//     titlebold: "Ашиглэх Вэ ?",
-//     desc: "Бүх автозогсоолын таны утсанд. Энэ бол Uparking онлайн автозогсоолын платформ. Хаана ч хэзээ ч өөрт тохирох зогсоолыг түрээслэн өөрийн машинаа байршуулах боломжийг олгож ...",
-//   },
-//   {
-//     id: 2,
-//     head: "Компанийн мэдээ",
-//     image: "/medee3.png",
-//     date: "2020/12/10 12:40",
-//     title: "Uparking",
-//     titlebold: "Your PARKING ?",
-//     desc: "Бүх автозогсоолын таны утсанд. Энэ бол Uparking онлайн автозогсоолын платформ. Хаана ч хэзээ ч өөрт тохирох зогсоолыг түрээслэн өөрийн машинаа байршуулах боломжийг олгож ...",
-//   },
-//   {
-//     id: 3,
-//     head: "Компанийн мэдээ",
-//     image: "/medee4.png",
-//     date: "2020/12/10 12:40",
-//     title: "Uparking",
-//     titlebold: "Your PARKING ?",
-//     desc: "Бүх автозогсоолын таны утсанд. Энэ бол Uparking онлайн автозогсоолын платформ. Хаана ч хэзээ ч өөрт тохирох зогсоолыг түрээслэн өөрийн машинаа байршуулах боломжийг олгож ...",
-//   },
-//   {
-//     id: 4,
-//     head: "Компанийн мэдээ",
-//     image: "/medee6.png",
-//     date: "2020/12/10 12:40",
-//     title: "Uparking",
-//     titlebold: "Your PARKING ?",
-//     desc: "Бүх автозогсоолын таны утсанд. Энэ бол Uparking онлайн автозогсоолын платформ. Хаана ч хэзээ ч өөрт тохирох зогсоолыг түрээслэн өөрийн машинаа байршуулах боломжийг олгож ...",
-//   },
-//   {
-//     id: 5,
-//     head: "Компанийн мэдээ",
-//     image: "/medee7.png",
-//     date: "2020/12/10 12:40",
-//     title: "Uparking",
-//     titlebold: "Your PARKING ?",
-//     desc: "Бүх автозогсоолын таны утсанд. Энэ бол Uparking онлайн автозогсоолын платформ. Хаана ч хэзээ ч өөрт тохирох зогсоолыг түрээслэн өөрийн машинаа байршуулах боломжийг олгож ...",
-//   },
-// ];
+  </div>;
+};
+

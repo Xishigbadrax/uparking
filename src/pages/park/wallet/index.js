@@ -59,12 +59,17 @@ const Wallet = () => {
     );
   };
 
+  const getMonthData = (value) => {
+    if (value.month() === 8) {
+      return 1394;
+    }
+  };
   const monthCellRender = (value) => {
     const num = getMonthData(value);
     return num ? (
       <div className="notes-month">
         <section>{num}</section>
-        <span>Backlog number</span>
+        {/* <span>Backlog number</span> */}
       </div>
     ) : null;
   };
@@ -111,7 +116,7 @@ const Wallet = () => {
               monthCellRender={monthCellRender}
             ></Calendar>
           </div>
-          <div><Image width={243} height={480} src="../../ad2.png" /></div>
+          <div><Image preview={false} width={243} height={480} src="../../ad2.png" /></div>
         </div>
       </div>
     </WalletLayout>

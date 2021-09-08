@@ -218,37 +218,37 @@ const Nemelt = () => {
       }
     } else if (current === 4) {
       const data = await callGet('/parkingspace/timesplit');
-      console.log(data);
-      console.log(componentData);
+      console.log(data, 'awsan dataaa');
+      console.log(componentData, 'ywah dataaa');
       const array = [
         {
-          dateSplitId: data.daySplit.winterId,
-          priceForRenter: componentData.daySplitWinterPrice,
+          dateSplitId: data.daySplit,
+          priceForRenter: Number(componentData.daySplitWinterPrice),
           timeSplitId: [data.daySplit.id],
         },
         {
-          dateSplitId: data.daySplit.summerId,
-          priceForRenter: componentData.daySplitSummerPrice,
+          dateSplitId: data.daySplit,
+          priceForRenter: Number(componentData.daySplitSummerPrice),
           timeSplitId: [data.daySplit.id],
         },
         {
-          dateSplitId: data.nightSplit.winterId,
-          priceForRenter: componentData.nightSplitWinterPrice,
+          dateSplitId: data.nightSplit,
+          priceForRenter: Number(componentData.nightSplitWinterPrice),
           timeSplitId: [data.nightSplit.id],
         },
         {
-          dateSplitId: data.nightSplit.summerId,
-          priceForRenter: componentData.nightSplitSummerPrice,
+          dateSplitId: data.nightSplit,
+          priceForRenter: Number(componentData.nightSplitSummerPrice),
           timeSplitId: [data.nightSplit.id],
         },
         {
-          dateSplitId: data.fullDaySplit.winterId,
-          priceForRenter: componentData.fullDaySplitWinterPrice,
+          dateSplitId: data.fullDaySplit,
+          priceForRenter: Number(componentData.fullDaySplitWinterPrice),
           timeSplitId: [data.fullDaySplit.id],
         },
         {
-          dateSplitId: data.fullDaySplit.summerId,
-          priceForRenter: componentData.fullDaySplitSummerPrice,
+          dateSplitId: data.fullDaySplit,
+          priceForRenter: Number(componentData.fullDaySplitSummerPrice),
           timeSplitId: [data.fullDaySplit.id],
         },
       ];
@@ -257,7 +257,7 @@ const Nemelt = () => {
         parkingSpaceId: 522,
         parkingSpacePriceInstance: array,
       };
-      console.log(formData);
+      console.log(formData, 'awhdgawdgawiudg');
       const res = await callPost('/parkingspace/price', formData);
       console.log(res);
       setCurrent(current + 1);
@@ -369,7 +369,7 @@ const Nemelt = () => {
           </Row>
           <Row>
             <Col offset={1}>
-              {vehicles.map((item) => (
+              {/* {vehicles.length > 0 ? vehicles.map((item) => (
                 <div
                   key={item.value}
                   className="mt-4 width-auto  rounded flex shadow-sm"
@@ -383,7 +383,7 @@ const Nemelt = () => {
                     ></img>
                   </div>
                   <div className="ml-4">
-                    {/* <div class="text-sm">{item.label}</div> */}
+                    <div class="text-sm">{item.label}</div>
                     <div className="text-base" style={{color: 'blue '}}>
                       {item.label}
                     </div>
@@ -394,7 +394,7 @@ const Nemelt = () => {
                     </Link>
                   </div>
                 </div>
-              ))}
+              )):<div>nullll</div>} */}
               <div className="mt-4">
 
                 <button onClick={() => {

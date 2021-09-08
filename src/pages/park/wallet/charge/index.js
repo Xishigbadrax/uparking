@@ -346,7 +346,7 @@ const Charge = () => {
           </Tabs>
         </div>
         <div>
-          <Image width={529} height={480} src="../../ad.png" />
+          <Image preview={false} width={529} height={480} src="../../ad.png" />
         </div>
       </div>
 

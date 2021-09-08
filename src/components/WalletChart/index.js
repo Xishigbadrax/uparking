@@ -3,6 +3,7 @@ import React from 'react';
 // import {Line} from '@ant-design/charts';
 import {Line} from 'react-chartjs-2';
 import {Button, Tabs} from 'antd';
+import {Legend} from 'chart.js';
 
 const WalletChart = () => {
   const {TabPane} = Tabs;
@@ -36,32 +37,42 @@ const WalletChart = () => {
   //   },
   // };
   const data = {
-    labels: ['1', '2', '3', '4', '5', '6'],
+    labels: ['1 сар', '2 сар', '3 сар', '4 сар', '5 сар', '6 сар', '7 сар', '8 сар', '9 сар', '10 сар', '11 сар', '12 сар'],
     datasets: [
       {
-        // label: '# of Votes',
+        label: 'null',
         data: [12, 19, 3, 5, 2, 3],
         fill: false,
-        backgroundColor: 'rgb(255, 99, 132)',
-        borderColor: 'rgba(255, 99, 132, 0.2)',
+        backgroundColor: '#00F9B8',
+        borderColor: '#35446D',
       },
     ],
   };
   const data2 = {
-    labels: ['1', '2', '3', '4', '5', '6'],
+    labels: ['1 сар', '2 сар', '3 сар', '4 сар', '5 сар', '6 сар', '7 сар', '8 сар', '9 сар', '10 сар', '11 сар', '12 сар'],
+
+
     datasets: [
+
       {
-        // label: '# of Votes',
+        label: false,
         data: [5, 9, 3, 5, 2, 3],
         fill: false,
-        backgroundColor: 'rgb(255, 99, 132)',
-        borderColor: 'rgba(255, 99, 132, 0.2)',
+        backgroundColor: '#00F9B8',
+        borderColor: '#35446D',
       },
     ],
   };
 
   const options = {
+    plugins: {
+      legend: {
+        display: false,
+      },
+    },
+
     scales: {
+
       yAxes: [
         {
           ticks: {
@@ -71,6 +82,8 @@ const WalletChart = () => {
       ],
     },
     height: 10,
+
+
   };
   return (
     <div

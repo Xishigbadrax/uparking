@@ -85,7 +85,7 @@ const Settings = () => {
     ctx.setIsLoading(true);
     formData.label = label;
     formData.state = state;
-    // const res = await callPost('/user/config', formData);
+    const res = await callPost('/user/config', formData);
 
     ctx.setIsLoading(false);
   };
