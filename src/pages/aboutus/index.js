@@ -41,7 +41,7 @@ const staff = [
 const AboutUs = () => {
   return (
     <div>
-      <div className="background">
+      <div className="background ">
         <img src="/about_back.png" height="600px" width="100%"></img>
       </div>
       <div className={'aboutus mt-16 md:ml-32 sm:ml-8 lg:ml-64'}>

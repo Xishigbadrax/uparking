@@ -8,10 +8,12 @@ import {
   Col,
   Rate,
   Divider,
+  Calendar,
   Modal,
   Alert,
   // Calendar,
 } from 'antd';
+import {calendarLocale} from '@constants/constants.js';
 import {
   LeftOutlined,
   CheckCircleOutlined,
@@ -19,10 +21,12 @@ import {
   UpOutlined,
   // CodeSandboxCircleFilled,
 } from '@ant-design/icons';
+import DayNightColumn from '@components/DayNightColumn';
 import {useEffect, useState, useContext} from 'react';
 import {callGet, callPost} from '@api/api';
 import {useRouter} from 'next/router';
 import Context from '@context/Context';
+
 // import {useRouter} from 'next/router';
 import Helper from '@utils/helper';
 import Link from 'next/link';
@@ -90,6 +94,7 @@ const Payment = ( ) => {
   const [type, settype] = useState('KHANBANK');
   const [type2, settype2] = useState('MONGOLCHAT');
   const [amount, setamount] = useState(0);
+  const [FreeTimeVisible, setFreeTimeVisible] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const [startDateTime, setStartDateTime]= useState();
   // const [test, setTest] = useState(null);
@@ -107,6 +112,71 @@ const Payment = ( ) => {
   const [status, setstatus] = useState('');
   const [title, settitle] = useState('');
   const [messageShow, setmessageShow] = useState(false);
+
+  const getListData = (value) =>{
+    const array = [];
+    // dayOfWeek.map((item) => {
+    //   switch (item.day) {
+    //   case value.day():
+    //     if (item.spaceStatusCode === 'Боломжтой') {
+    //       array.push({
+    //         type: item.spaceStatusCode,
+    //         content: item.timeSplitDescription,
+    //       });
+    //     }
+    //     if (item.spaceStatusCode === 'Боломжгүй') {
+    //       array.push({
+    //         type: item.spaceStatusCode,
+    //         content: item.timeSplitDescription,
+    //       });
+    //     }
+    //     break;
+    //   default:
+    //   }
+    // });
+    return array || [];
+  };
+  const dateCellRender = (value) => {
+    const listData = getListData(value);
+    console.log(listData);
+    return (
+      <ul className="events">
+        {listData.map((item) => (
+          <li key={item.content} style={{height: '15px'}}>
+            <span
+              style={{fontSize: '10px'}}
+              className={item.type === 'Боломжтой' ? 'Success' : 'NotSuccess'}
+            >
+              {item.type}
+            </span>
+          </li>
+        ))}
+      </ul>
+    );
+  };
+
+  const getMonthData = (value) => {
+    if (value.month() === 8) {
+      return 1394;
+    }
+  };
+  // const onChangeBla = (e) => {
+  //   console.log(dayOfWeek);
+  //   props.setRentData(dayOfWeek);
+  //   setsundayMorning(e), setChecked(2);
+  // };
+  const monthCellRender = (value) => {
+    const num = getMonthData(value);
+    return num ? (
+      <div className="notes-month" style={{height: '50px'}}>
+        <section>{num}</section>
+        <span>Backlog number</span>
+      </div>
+    ) : null;
+  };
+  const handleCancel = () => {
+    setmessageShow(false);
+  };
 
   useEffect(async () => {
     setStartDateTime(router.query.startDateTime);
@@ -280,9 +350,7 @@ const Payment = ( ) => {
     setmessageShow(false);
   };
 
-  const handleCancel = () => {
-    setmessageShow(false);
-  };
+
   return (
 
     <DefaultLayout>
@@ -574,43 +642,24 @@ const Payment = ( ) => {
                   lineHeight: '24px',
                 }}
               >
-                <div>Таны сонгосон захиалга:</div>
-                {/* { orderData != null && orderData.totalAtDay ? (
+                <div style={{color: '#0013D4'}}>Таны сонгосон захиалга:</div>
+                { orderData != null && orderData.totalAtDay ? (
                   <div style={{color: '#35446d', marginLeft: '10px'}}>
-                    Нийт {orderData.totalAtDay} өдөр
+                  Өдөр: {orderData.totalAtDay}
+                  </div>,
+                  <div style={{color: '#35446d', marginLeft: '10px'}}>
+                   Шөнө: {orderData.totalAtDay}
+                  </div>,
+                  <div style={{color: '#35446d', marginLeft: '10px'}}>
+                    Бүтэн өдөр: {orderData.totalAtDay}
                   </div>
-                ) : null} */}
-                <div className=" text-[#35446D]">
-                    Нийт 2 өдөр
-                </div>
-                <div className=" text-[#A2A4AA] ml-[16px] mt-[25px] mb-[5px]">Өдөр (09:00-19:00)</div>
+                ) : null}
               </Col>
             </Row>
-            <Row gutter={16}>
 
-              <Col className="gutter-row" span={12}>
-
-                <div style={style}>
-                  <div style={{color: '#0013D4'}}>Эхлэх хугацаа</div>
-                  {/* {orderData && orderData.startDateTime ? (
-                    <div>{Helper.removeSec(orderData.startDateTime)}</div>
-                  ) : } */}
-                  2021-09-09 09:00
-                </div>
-              </Col>
-              <Col className="gutter-row" span={12}>
-                <div style={style}>
-                  <div style={{color: '#0013D4'}}>Дуусах хугацаа</div>
-                  {/* {orderData || orderData.endDateTime ? (
-                    <div>{Helper.removeSec(orderData.endDateTime)}</div>
-                  ) : null} */}
-                  2021-09-18 18:30
-                </div>
-              </Col>
-            </Row>
 
             {(() => {
-              if (!orderData) {
+              if (orderData) {
                 return (
                   <div>
                     <Divider />
@@ -640,15 +689,24 @@ const Payment = ( ) => {
                           0}
                     ₮
                       </Col>
+
                     </Row>
+                    <Col>
+                      <Button onClick={()=>setFreeTimeVisible(true)} className=" mt-[19px] rounded-[8px] bg-[#0013D4]  bg-opacity-[8%] text-[#0013D4] border-[#0013D4]" size={'large'} block>
+                      Сонгосон цаг харах
+                      </Button>
+
+                    </Col>
                     <Row style={{margin: '30px 0px'}}>
                       <Col span={24}>
                         <Tabs defaultActiveKey="1">
                           <TabPane tab={<div style={{width: '100px'}}><p style={{marginLeft: '25px'}}>Хэтэвч</p></div>} key="1" >
-                            <WalletCard />
+                            <div className="ml-[24px]">
+                              <WalletCard />
+                            </div>
                             <Row style={{marginTop: '35px'}}>
                               <Col span={24}>
-                                <Button type="primary" size={'large'} block>
+                                <Button className="rounded-[8px] w-[372px]" type="primary" size={'large'} block>
                               Төлөх
                                 </Button>
                               </Col>
@@ -818,6 +876,29 @@ const Payment = ( ) => {
         footer={[]}
       >
         <Alert message={title} description={message} type={status} showIcon />
+      </Modal>
+      <Modal visible={FreeTimeVisible}
+        title='сул цаг харах'
+        width={1000}
+        onOk={handleCancel}
+        onCancel={handleCancel}
+        footer={[]}>
+
+        <Col>
+          <Row style={{width: '720px'}} className={'rentDate'}>
+            <Col span={2}>
+              <DayNightColumn className={'rentCalendarDayNightText'} />
+            </Col>
+            <Col span={20}>
+              <Calendar
+                className={'rentDateCalendar'}
+                dateCellRender={dateCellRender}
+                locale={calendarLocale}
+                monthCellRender={monthCellRender}
+              />
+            </Col>
+          </Row>
+        </Col>
       </Modal>
     </DefaultLayout>
   );

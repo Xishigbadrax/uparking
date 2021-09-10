@@ -794,7 +794,7 @@ const Profile = () => {
           title="Тээврийн хэрэгсэл шинэчлэх"
           centered
           style={{minHeight: '800px', height: 'auto'}}
-          visible={isVehicleEditVisible}
+          visible={isVehicleEditVisible}handleOk
           okButtonProps={{
             form: 'vehile-edit-form',
             key: 'submit',

@@ -95,7 +95,7 @@ const Transfer = () =>{
     setDescription(value);
   };
 
-  const BankImage = (value) => {
+  const BankImage = () => {
     switch (type) {
     case 'KHANBANK':
       return (
@@ -151,7 +151,7 @@ const Transfer = () =>{
 
           setmessage(res.error);
           settitle('Амжилтгүй');
-          setstatus(res.status);
+          setstatus('error');
         }
         // setisLoading(false);
       },
@@ -166,7 +166,7 @@ const Transfer = () =>{
         <div>
           <p>Та өөрийн гүйлгээний нууц үгээ оруулна уу</p>
           <Input
-            type="text"
+            type="password"
             onChange={(e) => onchangeee(e)}
             placeholder="Гүйлгээний нууц үг"
           />
@@ -212,7 +212,8 @@ const Transfer = () =>{
         >
           <div style={{display: 'flex', justifyContent: 'center'}}>
             <div style={{margin: '5px'}}>
-              {BankImage}
+              {/*  eslint-disable-next-line new-cap */}
+              {BankImage()}
               {/* <Image width={32} src="../../images/icon/xac.png" /> */}
             </div>
             <div>
@@ -231,8 +232,10 @@ const Transfer = () =>{
               bordered={false}
               placeholder="0₮"
             /> */}
-            <div style={{textAlign: 'center', fontSize: '48px'}}>
-              <WalletBankInfo2 onChangeInput={onChangeAmount} place="0₮" />
+            <div>
+              {/* <WalletBankInfo2 onChangeInput={onChangeAmount} place="0₮" /> */}
+              {/* <Input className=" text-[48px] text-center" bordered={false} onClick={onChangeAmount} placeholder="0₮" /> */}
+              <Input className="text-[48px] text-center" bordered={false} placeholder="0₮" />
             </div>
 
             {!isTransactionDesc ? (
@@ -312,6 +315,7 @@ const Transfer = () =>{
                     <WalletBankInfo2
                       onChangeInput={onChangeAccountNumber}
                       place="Дансны дугаар"
+
                     />
                     <WalletBankInfo2
                       onChangeInput={onChangeAccountName}
@@ -336,11 +340,14 @@ const Transfer = () =>{
             <Button
               // onClick={showModal}
 
-              onClick={async () => {
+              onClick={ async () => {
                 if (accountName && accountNumber) {
                   showModal();
                 } else {
                   setmessageShow(true);
+                  settitle('Анхааруулга');
+                  setstatus('warning');
+                  setmessage('Мэдээллээ оруулна уу!');
                 }
               }}
               style={{marginTop: '20px'}}
@@ -351,7 +358,7 @@ const Transfer = () =>{
             </Button>
           </div>
           <div>
-            <Image width={529} height={480} src="../../ad.png" />
+            <Image preview={false} width={529} height={480} src="../../ad.png" />
           </div>
         </div>
       </div>
@@ -361,3 +368,5 @@ const Transfer = () =>{
 };
 
 export default Transfer;
+
+
