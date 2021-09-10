@@ -18,7 +18,7 @@ moment.updateLocale('mn', {
 
 const {TabPane} = Tabs;
 
-const {Header, Sider, Content} = Layout;
+const {Header} = Layout;
 
 const IMG_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
 const style = {
@@ -41,7 +41,14 @@ const OrderId = () => {
   const [fromSelectedDate, setFromSelectedDate] = useState([]);
   // eslint-disable-next-line no-unused-vars
   const [time, settime] = useState(null);
-
+  const compareDate=(date1, date2)=>{
+    const fromDatetime = new Date(date1);
+    const toDatetime = new Date(date2);
+    console.log(fromDatetime, toDatetime);
+    if (fromDatetime.getTime() > toDatetime.getTime()) {
+      return 1;
+    } else return 0;
+  };
   useEffect(() => {
     getData();
   }, []);
@@ -440,7 +447,7 @@ const OrderId = () => {
                         </Button>
                       </div>
                     );
-                  } else if (orderData.bookingStatus === 'SAVED') {
+                  } else if (orderData.bookingStatus === 'PENDING_PAYMENT') {
                     return (
                       <div>
                         <Divider />
@@ -502,11 +509,12 @@ const OrderId = () => {
                           </Col>
                         </Row></div>
                     );
-                  } else if (orderData.bookingStatus === 'HISTORY') {
+                  } else if (orderData.bookingStatus === 'CONFIRMED' && (compareDate(moment().format('YYYY-MM-DD HH-mm-ss'), orderData.startDateTime) === 1)) {
+                    console.log(orderData.startDateTime, 'timeeeeeeeeeeeee');
                     return (
                       <div style={{margin: '30px 0px'}}>
                         <Button type="primary" size={'large'} block>
-                                                    Зогсоолыг үнэлэх
+                                Зогсоолыг үнэлэх
                         </Button>
                       </div>
                     );

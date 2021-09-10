@@ -2393,12 +2393,15 @@ width: 125px;
   border: none !important;
   color: #0013D4 !important;
 }
-.orderCalendar .daynighttext .item{
+/* .orderCalendar .daynighttext .item{
    margin-top: 60px ;
-}
-/* .orderCalendar .daynighttext .item ul{
-  margin-top: 100px ;
 } */
+.orderCalendar .daynighttext {
+  margin-top: 20px !important;
+}
+.orderCalendar .daynighttext .item ul{
+  margin-top: 60px ;
+}
 .OrdePagination{
   margin-left: 70% !important;
 }
@@ -2479,7 +2482,14 @@ width: 125px;
   border: none !important;
   color: blue;
 }
+.dropdown{
+  width: 200px!important;
+  padding: 0px !important;
 
+}
+.selectMonthDate .ant-picker-panel{
+    width: 300px !important;
+}
 .orderDayType{
   background:rgba(222, 226, 233, 0.2); 
   border-radius: 16px;

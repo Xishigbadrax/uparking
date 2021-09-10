@@ -10,7 +10,7 @@ import {showMessage} from '@utils/message';
 import moment, {locale} from 'moment';
 import {calendarLocale} from '@constants/constants.js';
 import DayNightColumn from '@components/DayNightColumns';
-import {DownOutlined, ArrowRightOutlined, EyeTwoTone, DeleteTwoTone} from '@ant-design/icons';
+import {DownOutlined, ArrowRightOutlined, EyeTwoTone, DeleteTwoTone, OrderedListOutlined} from '@ant-design/icons';
 import Helper from '@utils/helper';
 import Link from 'next/link';
 
@@ -22,7 +22,7 @@ moment.updateLocale('mn', {
   weekdaysMin: ['НЯМ', 'ДАВ', 'МЯГ', 'ЛХА', 'ПҮР', 'БАА', 'БЯМ'],
 });
 moment.updateLocale('mn', {
-  months: ['Нэгдүгээр сар', 'Хоёрдугаар сар', 'Гуравдугаар сар', 'Дөрөвдүгээр сар', 'Тавдугаар сар', 'Зургаадугаар сар', 'Долоодугаар сар', 'Наймдугаар сар', 'Есдүгээр сар', 'Аравдугаар сар', 'Арваннэгдүгээр сар', 'Арванхоёрдугаар сар'],
+  months: ['1 сар', '2 сар', '3 сар', '4 сар', '5 сар', '6 сар', '7 сар', '8 сар', '9 сар', '10 сар', '11 сар', '12 сар'],
 });
 const Order = () => {
   const ctx = useContext(Context);
@@ -32,50 +32,58 @@ const Order = () => {
   const [calendarData, setCalendarData] = useState([]);
   const [dataViewType, setDataViewType] = useState('calendar');
   const [currentPage, setCurrentPage]= useState(1);
+  const [vehicles, setVehicles] = useState([]);
+  const [selectVehicle, setSelecteVehicle]= useState();
+  const [selectDate, setSelectDate] = useState();
 
+  // Tab solih function
   const onClickTab = async (key) => {
     setAsWho(key);
     setIsConfirmed(false);
     await getData();
   };
+  // dotorh tab solih function
   const onClickInnerTab = (key) => {
-    // setDataViewType('calendar');
-    // if (dataViewType === 'list') {
-    //   setDataViewType('calendar');
-    //   return;
-    // }
-    if (key == 1) {
+    if (key ==1) {
       setCalendarStatus(key);
-      // setIsConfirmed(true);
+      setIsConfirmed(false);
+      setCalendarData([]);
+      getSavedData();
     } else if (key == 2) {
       setCalendarStatus(key);
       setIsConfirmed(true);
     } else if (key == 3) {
       setCalendarStatus(key);
-      // setIsConfirmed(true);
       getHistroy();
     }
   };
+
+  // sar songoh function
   const onChangeOrderDate = (e)=>{
     console.log(moment(e).format('YYYY/MM/DD'));
   };
+  // pagination solih
   const onChangePage = (page)=>{
     console.log(page);
     setCurrentPage(page);
   };
   useEffect(async () => {
     const vehicle = await callGet('/user/vehicle/list');
-    console.log(vehicle, 'awdaw');
+    setVehicles(vehicle);
     getData();
   }, []);
+  // batlagdsan zahialgin medee awah function
   useEffect(() => {
-    if (isConfirmed !== null) {
-      getData();
-    }
+    getData();
   }, [isConfirmed]);
+  const getSavedData=(async ()=>{
+    const result = await callGet(`/booking?asWho=${asWho}&isConfirmed=false`);
+    console.log( result, 'saved--------->');
+    setCalendarData(result);
+  });
   const getData = async () => {
     ctx.setIsLoading(true);
-    if (isConfirmed === true) {
+    if (isConfirmed) {
       const res = await callGet(`/booking?asWho=${asWho}&isConfirmed=${isConfirmed}`);
       if (!res || res === undefined) {
         showMessage(messageType.FAILED.type, defaultMsg.dataError);
@@ -84,8 +92,8 @@ const Order = () => {
         setIsConfirmed(false);
         console.log(res, 'ene nuguu data');
       }
-      ctx.setIsLoading(false);
     }
+    ctx.setIsLoading(false);
   };
   const getHistroy = async () => {
     ctx.setIsLoading(true);
@@ -120,14 +128,6 @@ const Order = () => {
     }
     return listData || [];
   };
-  const getTagColor = (item) => {
-    if (item.bookingStatus === 'CONFIRMED') {
-      if (calendarStatus == 3) {
-        return 'cyan';
-      }
-      return 'green';
-    }
-  };
   const onChangeDropDown = (e)=>{
     console.log(e, 'hjhghghg');
   };
@@ -139,10 +139,22 @@ const Order = () => {
       setDataViewType('list');
     }
   };
+  const handleVehicle = (e)=>{
+    console.log(e, 'vehiclee tmaa');
+  };
   const menu =(
     <Menu className="calendarViewer" onClick={(value)=>handleChangeView(value)} style={{width: '100%'}}>
       <Menu.Item key='calendar' value={'calendar'}>Календарь</Menu.Item>
       <Menu.Item key='list' value={'list'}>Жагсаалт</Menu.Item>
+    </Menu>
+  );
+  const vehicleMenu = (
+    <Menu onClick={(value)=>handleVehicle(value)} style={{width: '100%'}}>
+      {vehicles.map((item)=>(
+        <Menu.Item key={item.value}>
+          {item.label}
+        </Menu.Item>
+      ))}
     </Menu>
   );
   const dateCellRender = (value) => {
@@ -152,7 +164,7 @@ const Order = () => {
         {listData && listData.map((item) => (
           <li key={item.bookingId}>
             {/* <Badge status={item.type} text={item.content} /> */}
-            {calendarStatus === '1' &&<div> <Tag color='#C6231A' className="eventText">{item.bookingNumber}</Tag>
+            {calendarStatus === '1' && <div> <Tag color='#C6231A' className="eventText">{item.bookingNumber}</Tag>
               <Tag color='gray' style={{borderRadius: '20px', border: ' 1px solid black',
                 fontSize: '10px',
                 lineHeight: '16px',
@@ -165,6 +177,9 @@ const Order = () => {
         {listData === [] && <Tag color='#C6231A' className="eventText" style={{background: 'pink', height: '20px'}}></Tag>}
       </ul>
     );
+  };
+  const memorize =(e)=>{
+
   };
   const getMonthData = (value) => {
     if (value.month() === 8) {
@@ -200,12 +215,21 @@ const Order = () => {
                 </div>}
               key={tab.key}>
                 <Row>
-                  <Col span={6} offset={12}>
+                  <Col span={4} offset={14}>
                     <DatePicker
+                      className='selectMonthDate'
+                      bordered={false}
+                      clearIcon={false}
                       locale={calendarLocale}
-                      defaultvalue={moment()}
+                      placeholder='Сараа сонгоно уу?'
+                      picker='month'
                       onChange={onChangeOrderDate}
                     />
+                  </Col>
+                  <Col>
+                    <Dropdown overlay={vehicleMenu} o className='dropdown'>
+                      <Button>Бүх автомашин<OrderedListOutlined /></Button>
+                    </Dropdown>
                   </Col>
 
                 </Row>
@@ -234,7 +258,8 @@ const Order = () => {
                         <List.Item
                         >
                           <div className="calendarListStatus">
-                            {item.bookingStatus}
+                            {item.bookingStatusDescription}{'   '}
+                            {item.expireDateDriver}
                           </div>
                           <Row style={{width: '100%'}}>
                             <Col span={7}>
