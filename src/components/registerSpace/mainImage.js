@@ -88,8 +88,11 @@ const mainImage = (props) => {
     }
   };
   return (
-    <div className="MainImage" height="600px">
-      <Form form={props.form}>
+    <div className="MainImage">
+      <Form form={props.form}
+        onFinish={(values) => props.onFinish(form, values)}
+        // onFinishFailed={onFinishFailed}
+      >
         <Row offset={4}>
           <p
             style={{
@@ -110,9 +113,11 @@ const mainImage = (props) => {
         </Row>
         <Row style={{marginTop: '25px'}}>
           <Col offset={3} span={6}>
-            <p style={{fontSize: '15px'}}>Хотхоны ойр орчмын зураг</p>
+            <p style={{fontSize: '14px', height: '30px'}}>Хотхоны ойр орчмын зураг</p>
             <Form.Item
+              style={{marginTop: '10px'}}
               name="imageResidenceSurrounding"
+              initialValue={selectedPositionImage}
               rules={[
                 {
                   required: true,
@@ -121,8 +126,8 @@ const mainImage = (props) => {
               ]}
             >
               <Upload
-                style={{width: '327px', height: '134px'}}
                 name="avatar"
+                accept='.png , .jpg'
                 listType="picture-card"
                 className="avatar-uploader"
                 showUploadList={false}
@@ -134,15 +139,15 @@ const mainImage = (props) => {
                     <img
                       src={selectedPositionImage}
                       alt="avatar"
-                      style={{width: '327px', height: '134px'}}
+                      style={{width: '380px', height: '180px', borderRadius: '10px'}}
                     />
                     <div
-                      className={'buttonGo'}
+                      className={'UploadAgainButton'}
                       style={{
                         marginTop: '-40px',
                         zIndex: 5,
                         position: 'absolute',
-                        marginLeft: '150px',
+                        marginLeft: '200px',
                         height: '28px',
                         width: '150px',
                         display: 'flex',
@@ -185,8 +190,9 @@ const mainImage = (props) => {
             </Form.Item>
           </Col>
           <Col offset={4}>
-            <p style={{fontSize: '15px'}}>Хотхоны орц гарцын зураг</p>
+            <p style={{fontSize: '14px', height: '30px'}}>Хотхоны орц гарцын зураг</p>
             <Form.Item
+              style={{marginTop: '10px'}}
               name="imageParkingGate"
               rules={[
                 {
@@ -208,15 +214,15 @@ const mainImage = (props) => {
                     <img
                       src={selectResidenceEXitImage}
                       alt="avatar"
-                      style={{width: '327px', height: '134px'}}
+                      style={{width: '380px', height: '180px', borderRadius: '10px'}}
                     />
                     <div
-                      className={'buttonGo'}
+                      className={'UploadAgainButton'}
                       style={{
                         marginTop: '-40px',
                         zIndex: 5,
                         position: 'absolute',
-                        marginLeft: '150px',
+                        marginLeft: '200px',
                         height: '28px',
                         width: '150px',
                         display: 'flex',
@@ -239,7 +245,7 @@ const mainImage = (props) => {
                 ) : (
                   <div>
                     {loadingExit ? (
-                      <Spin indicator={LoadIcon} tip="зургийг хуулж байна." />
+                      <Spin indicator={LoadIcon} tip = "зургийг хуулж байна." />
                     ) : (
                       <PlusOutlined
                         style={{
@@ -263,10 +269,11 @@ const mainImage = (props) => {
         {/* Доод талын 2 зураг*/}
         <Row style={{marginTop: '50px'}}>
           <Col offset={3} span={6}>
-            <p style={{fontSize: '15px'}}>
+            <p style={{fontSize: '14px', height: '30px', width: '100%'}}>
               Зогсоолын хаалганы ,орох гарах хэсгийн зураг
             </p>
             <Form.Item
+              style={{marginTop: '10px'}}
               name="imageResidenceGate"
               rules={[
                 {
@@ -288,15 +295,15 @@ const mainImage = (props) => {
                     <img
                       src={selectedNumberingImage}
                       alt="avatar"
-                      style={{width: '327px', height: '134px'}}
+                      style={{width: '380px', height: '180px', borderRadius: '10px'}}
                     />
                     <div
-                      className={'buttonGo'}
+                      className={'UploadAgainButton'}
                       style={{
                         marginTop: '-40px',
                         zIndex: 5,
                         position: 'absolute',
-                        marginLeft: '150px',
+                        marginLeft: '200px',
                         height: '28px',
                         width: '150px',
                         display: 'flex',
@@ -339,8 +346,9 @@ const mainImage = (props) => {
             </Form.Item>
           </Col>
           <Col offset={4}>
-            <p style={{fontSize: '15px'}}>Зогсоолын ерөнхий зураглал</p>
+            <p style={{fontSize: '14px', height: '30px'}}>Зогсоолын ерөнхий зураглал</p>
             <Form.Item
+              style={{marginTop: '10px'}}
               name="imageParkingOverall"
               rules={[
                 {required: true, message: 'Ерөнхий зураглалаа сонгоно уу?'},
@@ -355,21 +363,21 @@ const mainImage = (props) => {
                 onChange={onChangeMainImage}
               >
                 {selectedDirectionImage ? (
-                  <div style={{height: '134px', width: '327px'}}>
+                  <div>
                     <div>
                       <img
                         src={selectedDirectionImage}
                         alt="avatar"
-                        style={{width: '327px', height: '143px', zIndex: 0}}
+                        style={{width: '380px', height: '180px', borderRadius: '10px'}}
                       ></img>
                     </div>
                     <div
-                      className={'buttonGo'}
+                      className={'UploadAgainButton'}
                       style={{
                         marginTop: '-40px',
                         zIndex: 5,
                         position: 'absolute',
-                        marginLeft: '150px',
+                        marginLeft: '200px',
                         height: '28px',
                         width: '150px',
                         display: 'flex',

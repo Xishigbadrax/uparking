@@ -179,7 +179,7 @@ const mainInfo = (props) => {
       <div style={{display: 'flex'}}>
         <div className={'address'}>
           <Form
-            form={props.form}
+            form = {props.form}
             layout="horizontal"
             // initialValues={residenceData}
             style={{marginTop: '20px'}}
@@ -366,30 +366,32 @@ const mainInfo = (props) => {
           </Form>
         </div>
         <div style={{marginLeft: '163px'}}>
-          <div width={690} style={{fontSize: '12px'}}>
+          <div width={690} style={{fontSize: '14px', fontWeight: '400', color: '#A2A4AA'}}>
             Хамгийн нарийвчлалтайгаар авто зогсоолын орох хаалгыг{' '}
-            <b>“Google Map” дээр</b> тэмдэглэнэ үү!
+            <b style={{color: 'black'}}>“Google Map” дээр</b> тэмдэглэнэ үү!
           </div>
           <div>
             <div
               className="flex"
               style={{
-                border: '1px solid yellow',
+                border: '1px solid #F8C40C',
                 borderRadius: '10px',
                 marginTop: '10px',
+                height: '40px',
+                width: '359px',
               }}
             >
               <div style={{padding: '5px'}}>
                 <img src="/icons/info_outline_24px.png"></img>
               </div>
               <div
-                style={{fontSize: '15px', color: 'yellow', padding: '5px'}}
+                style={{fontSize: '14px', color: '#F8C40C', padding: '5px'}}
               >
                 Та зогсоолын орох хаалгын зааж өгнө үү!!
               </div>
             </div>
           </div>
-          <div style={{height: '342.5px', width: '688px'}}>
+          <div style={{height: '342.5px', width: '688px', marginTop: '30px'}}>
             <GoogleMapReact
               bootstrapURLKeys={{key: GOOGLE_API}}
               center={{lat: latitude, lng: longitude}}

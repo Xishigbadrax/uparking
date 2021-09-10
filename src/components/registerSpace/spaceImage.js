@@ -98,6 +98,7 @@ const spaceImage = (props) => {
               Зогсоолын байршлын зураг (хаалга хэсгээс)
             </p>
             <Form.Item
+              style={{marginTop: '10px'}}
               name="imageFromGate"
               rules={[
                 {
@@ -119,15 +120,15 @@ const spaceImage = (props) => {
                     <img
                       src={selectedPositionImage}
                       alt="avatar"
-                      style={{width: '327px', height: '134px'}}
+                      style={{width: '380px', height: '180px', borderRadius: '10px'}}
                     />
                     <div
-                      className={'buttonGo'}
+                      className={'UploadAgainButton'}
                       style={{
                         marginTop: '-40px',
                         zIndex: 5,
                         position: 'absolute',
-                        marginLeft: '150px',
+                        marginLeft: '200px',
                         height: '28px',
                         width: '150px',
                         display: 'flex',
@@ -174,6 +175,7 @@ const spaceImage = (props) => {
               Зогсоолын эргэх урсгал харагдах зураг
             </p>
             <Form.Item
+              style={{marginTop: '10px'}}
               name="imageRouting"
               rules={[
                 {
@@ -196,15 +198,15 @@ const spaceImage = (props) => {
                     <img
                       src={selectedDirectionImage}
                       alt="avatar"
-                      style={{height: '134px', width: '327px'}}
+                      style={{height: '180px', width: '380px', borderRadius: '10px'}}
                     />
                     <div
-                      className={'buttonGo'}
+                      className={'UploadAgainButton'}
                       style={{
                         marginTop: '-40px',
                         zIndex: 5,
                         position: 'absolute',
-                        marginLeft: '150px',
+                        marginLeft: '200px',
                         height: '28px',
                         width: '150px',
                         display: 'flex',
@@ -253,6 +255,7 @@ const spaceImage = (props) => {
               Дугаарлалтын харагдах байдлын зураг
             </p>
             <Form.Item
+              style={{marginTop: '10px'}}
               name="imageSpaceNumber"
               rules={[
                 {
@@ -274,15 +277,15 @@ const spaceImage = (props) => {
                     <img
                       src={selectedNumberingImage}
                       alt="avatar"
-                      style={{width: '327px', height: '134px'}}
+                      style={{width: '380px', height: '180px', borderRadius: '10px'}}
                     />
                     <div
-                      className={'buttonGo'}
+                      className={'UploadAgainButton'}
                       style={{
                         marginTop: '-40px',
                         zIndex: 5,
                         position: 'absolute',
-                        marginLeft: '150px',
+                        marginLeft: '200px',
                         height: '28px',
                         width: '150px',
                         display: 'flex',

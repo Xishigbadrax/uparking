@@ -77,7 +77,7 @@ const calendar = (props) => {
         onSelect={onselect}
         locale={calendarLocale}
         fullscreen={false}
-        // headerRender={({ value, type, onChange, onTypeChange }) => {
+        // headerRender={({value, type, onChange, onTypeChange}) => {
         //   const current = value.clone();
         //   const localeData = value.localeData();
         //   const year = value.year();
@@ -86,12 +86,12 @@ const calendar = (props) => {
         //     month.push(localeData.months(current));
         //   }
         //   return (
-        //     <div style={{ padding: 16 }}>
+        //     <div style={{padding: 16}}>
         //       <Row gutter={8}>
         //         <Col span={2}>
         //           <LeftOutlined
         //             onClick={onChangeLeft}
-        //             style={{ cursor: "pointer" }}
+        //             style={{cursor: 'pointer'}}
         //           />
         //         </Col>
         //         <Col span={12}>
@@ -100,7 +100,7 @@ const calendar = (props) => {
         //         <Col
         //           span={2}
         //           onClick={onClickRight}
-        //           style={{ cursor: "pointer" }}
+        //           style={{cursor: 'pointer'}}
         //         >
         //           <RightOutlined />
         //         </Col>

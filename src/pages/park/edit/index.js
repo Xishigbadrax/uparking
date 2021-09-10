@@ -1,9 +1,11 @@
 /* eslint-disable react/prop-types */
-import {Row, Col, Button, Divider, Form, Input, Upload, Spin, Select} from 'antd';
+import {Row, Col, Button, Divider, Form, Input, Upload, Spin, Select, Carousel} from 'antd';
 import {
   EditOutlined,
-  LeftOutlined,
-  RightOutlined,
+  // LeftOutlined,
+  RedoOutlined,
+  // RightOutlined,
+  InfoCircleOutlined,
   PlusOutlined,
   LoadingOutlined,
 } from '@ant-design/icons';
@@ -11,25 +13,7 @@ import {useEffect, useState} from 'react';
 import Image from 'next/image';
 import {callGet, callPost} from '@api/api';
 import PriceInfo from '@components/registerSpace/priceInfo';
-// import {
-//   withScriptjs,
-//   withGoogleMap,
-//   GoogleMap,
-// } from 'react-google-maps';
 import GoogleMapReact from 'google-map-react';
-// import discount from '@components/registerSpace/discount';
-const mainImage = [{
-  id: 1,
-  image: '/car.png',
-},
-{
-  id: 2,
-  image: '/car-1.png',
-},
-{
-  id: 3,
-  image: '/driver.png',
-}];
 const AnyReactComponent = ({text}) => (
   <div
     className={'locationBackground'}
@@ -46,11 +30,11 @@ const AnyReactComponent = ({text}) => (
     </p>
   </div>
 );
-// const getBase64=(img, callback)=> {
-//   const reader = new FileReader();
-//   reader.addEventListener('load', () => callback(reader.result));
-//   reader.readAsDataURL(img);
-// };
+const getBase64=(img, callback)=> {
+  const reader = new FileReader();
+  reader.addEventListener('load', () => callback(reader.result));
+  reader.readAsDataURL(img);
+};
 const beforeUpload = (file)=> {
   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
   if (!isJpgOrPng) {
@@ -68,14 +52,16 @@ const timeSplit = [
 ];
 // eslint-disable-next-line react/prop-types
 const Edit = ({data}) => {
+  console.log(data, 'dataaaaaaaaa');
   const GOOGLE_API = process.env.NEXT_GOOGLE_API;
   // const router = useRouter();
-  const [current, setCurrent] = useState(0);
+  // const [current, setCurrent] = useState(0);
   // const {id} = router.query;
   const [Mainvalue, setValue] = useState(false);
   const [spaceValue, setSpaceValue] = useState(false);
   const [editData, setEditData] = useState({});
   const [mainImageValue, setMainImageValue] = useState(false);
+  const [spaceImage, setSpaceImage]= useState(false);
   const [priceValue, setPriceValue]=useState(false);
   const LoadIcon = <LoadingOutlined />;
   const [addressForm] = Form.useForm();
@@ -90,14 +76,24 @@ const Edit = ({data}) => {
   const [loadingDiscount, setLoadingDiscount]= useState(false);
   const [loadingSale, setLoadingSale] = useState(false);
   const [spaceLoading, setSpaceLoading] = useState(false);
+  const [MainImageSpin, setMainImageSpin] = useState(false);
+  const [spaceImageSpin, setSpaceImageSpin] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const [selectedPositionImage, setSelectedResidenceSideImage] = useState();
-  // const [selectedDirectionImage, setSelectedMainImage] = useState();
-  // const [selectedNumberingImage, setSelectedDoorExitImage] = useState();
+  const [selectedDirectionImage, setSelectedDirectionImage] = useState();
+  const [selectedExitImage, setSelectedExitImage] = useState();
+  const [imageFromGate, setImageFromGate]= useState();
+  const [imageSpaceNumber, setImageSpaceNumber] = useState();
   // eslint-disable-next-line no-unused-vars
   const [selectResidenceEXitImage, setSelectedResidenceExitImage] = useState();
+  const [imageParkingOverall, setImageParkingOverall]=useState();
   // eslint-disable-next-line no-unused-vars
   const [loadingPosition, setLoadingPosition] = useState(false);
+  const [loadingExitImage, setLoadingExitImage] = useState(false);
+  const [loadingExit, setLoadingExit] = useState(false);
+  const [loadingOverall, setOverallLoading]=useState(false);
+  const [loadingFromGate, setLoadingFromGate] = useState(false);
+  const [loadingSpaceNumber, setLoadingSpaceNumber] =useState(false);
   // eslint-disable-next-line no-unused-vars
   const [loadingDirect, setLoadingDirect] = useState(false);
   const [aimag, setAimag]= useState([]);
@@ -153,6 +149,7 @@ const Edit = ({data}) => {
   const [fridayMorning, setfridayMorning] = useState('Боломжтой');
   const [saturdayMorning, setsaturdayMorning] = useState('Боломжтой');
   const [sundayMorning, setsundayMorning] = useState('Боломжтой');
+  // const [statusValue, setStatusValue]=useState('CANCELLED');
   // eslint-disable-next-line no-unused-vars
   const [mondayNight, setondayNight] = useState('Боломжтой');
   const [tuesdayNight, settuesdayNight] = useState('Боломжтой');
@@ -250,10 +247,32 @@ const Edit = ({data}) => {
     setMainData({...mainData, parkingGateNumber: e.target.value});
     console.log(e.target.value);
   };
-  const changeMainValue = (e) => {
-    setMainLoading(true);
+  const onChangeMainImageState = (e) => {
+    setMainImageSpin(true);
+    if (data.imageResidenceSurrounding) {
+      setSelectedResidenceSideImage(`data:image/jpeg;base64,${data.imageResidenceSurrounding}`);
+    }
+    if (data.imageResidenceGate !==null) {
+      setSelectedResidenceExitImage(`data:image/jpeg;base64,${data.imageResidenceGate}`);
+    }
+    if (data.imageParkingOverall) {
+      setImageParkingOverall(`data:image/jpeg;base64,${data.imageParkingOverall}`);
+    }
     setMainImageValue(true);
+    setMainImageSpin(false);
   };
+  const onChangeSpaceImageState =(e)=>{
+    setSpaceImageSpin(true);
+    if (data.imageFromGate) {
+      setImageFromGate(`data:image/jpeg;base64,${data.imageFromGate}`);
+    }
+    if (data.imageSpaceNumber) {
+      setImageSpaceNumber(`data:image/jpeg;base64,${data.imageSpaceNumber}`);
+    }
+    setSpaceImage(true);
+    setSpaceImageSpin(false);
+  };
+
   const onMapClick = (e)=>{
     setLongitude(e.lng);
     setLatitude(e.lat);
@@ -286,14 +305,126 @@ const Edit = ({data}) => {
   const onChangeFloorNumber = (e)=>{
     console.log(e);
   };
-  const addCurrent = (e) => {
-    setCurrent(current + 1);
-  };
-  const divideCurrent = (e) => {
-    setCurrent(current - 1);
-  };
+  {/* Үндсэн зургийн мэдээлэлтэй холбоотой STATE*/}
   const onsaveMainImage = () => {
     setMainImageValue(false);
+  };
+  {/* Хотхоны ой орчмын зураг оруулах хэсэг*/}
+  const onChangeResidenceSideImage = (info)=>{
+    if (info.file.status === 'uploading') {
+      setLoadingPosition(true);
+      return;
+    }
+    if (info.file.status === 'done') {
+      getBase64(
+        info.file.originFileObj,
+        (image3) => (
+          console.log(image3),
+          setLoadingPosition(false),
+          setSelectedResidenceSideImage(image3)
+        ),
+      );
+    }
+  };
+  {/* Хотхоны орц гарцын зураг оруулах хэсэг*/}
+  const onChangeResidenceExitImage = (info) => {
+    if (info.file.status === 'uploading') {
+      setLoadingExit(true);
+      return;
+    }
+    if (info.file.status === 'done') {
+      getBase64(
+        info.file.originFileObj,
+        (image2) => (
+          setLoadingExit(false), setSelectedResidenceExitImage(image2)
+        ),
+      );
+    }
+  };
+  {/* Зогсоолын хаалганы ,орох гарах хэсгийн зураг*/}
+  const onChangeDoorExitImage =(info)=>{
+    if (info.file.status === 'uploading') {
+      setLoadingExitImage(true);
+      return;
+    }
+    if (info.file.status === 'done') {
+      getBase64(
+        info.file.originFileObj,
+        (image3) => (
+          console.log(image3),
+          setLoadingExitImage(false),
+          setSelectedExitImage(image3)
+        ),
+      );
+    }
+  };
+  {/* ЗОгсоолын ерөнхий зураглал*/}
+  const onChangeOverallImage = (info)=>{
+    if (info.file.status === 'uploading') {
+      setOverallLoading(true);
+      return;
+    }
+    if (info.file.status === 'done') {
+      getBase64(
+        info.file.originFileObj,
+        (image3) => (
+          console.log(image3),
+          setOverallLoading(false),
+          setImageParkingOverall(image3)
+        ),
+      );
+    }
+  };
+  const onChangeSpaceNumber = ()=>{
+    if (info.file.status === 'uploading') {
+      setLoadingSpaceNumber(true);
+      return;
+    }
+    if (info.file.status === 'done') {
+      getBase64(
+        info.file.originFileObj,
+        (image3) => (
+          console.log(image3),
+          setLoadingSpaceNumber(false),
+          setImageSpaceNumber(image3)
+        ),
+      );
+    }
+  };
+  const onChangeFromGate = (info)=>{
+    if (info.file.status === 'uploading') {
+      setLoadingFromGate(true);
+      return;
+    }
+    if (info.file.status === 'done') {
+      getBase64(
+        info.file.originFileObj,
+        (image3) => (
+          console.log(image3),
+          setLoadingFromGate(false),
+          setImageFromGate(image3)
+        ),
+      );
+    }
+  };
+  const onChangeDirectionImage =(info)=>{
+    if (info.file.status === 'uploading') {
+      setLoadingDirect(true);
+      return;
+    }
+    if (info.file.status === 'done') {
+      getBase64(
+        info.file.originFileObj,
+        (image3) => (
+          console.log(image3),
+          setLoadingDirect(false),
+          setSelectedDirectionImage(image3)
+        ),
+      );
+    }
+  };
+  const onSaveSpaceImage = ()=>{
+    setSpaceImage(false);
   };
   const changePriceValue = ()=>{
     setLoadingSale(true);
@@ -328,11 +459,49 @@ const Edit = ({data}) => {
   return (
     <div>
       <Row
-        style={{
-          fontSize: '20px',
-        }}
+
       >
+        <Col span={10} offset={1} style={{
+          fontSize: '20px',
+          color: '#35446D',
+          lineHeight: '24px',
+          fontWeight: '700',
+          fontStyle: 'Helvetica',
+        }} >
         Авто зогсоол бүртгүүлэх
+        </Col>
+      </Row>
+      <Row>
+        <Col span={10} offset={1}>
+          {data.requestStatusCode === 'PENDING' && < div style={{
+            border: '1px solid #F8C40C',
+            height: '64px',
+            width: '475px',
+            marginTop: '20px',
+            display: 'flex',
+            borderRadius: '8px'}}>
+            <div style={{marginTop: '18px', marginLeft: '18px'}}>
+              <Image src='/icons/timer_24px.png' height="24px" width='24px'/>
+            </div>
+            <div style={{color: '#F8C40C', marginTop: '10px', fontSize: '14px', lineHeight: '20px', fontWeight: '400', fontStyle: 'Roboto', textAlign: 'left', width: '415px', marginLeft: '10px'}}>
+            Зогсоолын мэдээллийг шалгаж байна. Мэдээлэл баталгаажсаны дараа түрээсийн захиалга авах боломжтой.
+            </div>
+          </div>}
+          {data.requestStatusCode === 'CANCELLED' && < div style={{
+            border: '1px solid #C6231A',
+            height: '64px',
+            width: '475px',
+            marginTop: '20px',
+            display: 'flex',
+            borderRadius: '8px'}}>
+            <div style={{marginTop: '18px', marginLeft: '18px'}}>
+              <InfoCircleOutlined style={{height: '24px', width: '24px'}} />
+            </div>
+            <div style={{color: '#C6231A', marginTop: '10px', fontSize: '14px', lineHeight: '20px', fontWeight: '400', fontStyle: 'Roboto', textAlign: 'left', width: '415px', marginLeft: '10px'}}>
+            Зогсоол бүртгүүлэх хүсэлтийг админаас татгалзан хариу өгсөн байна.
+            </div>
+          </div>}
+        </Col>
       </Row>
       <div >
         <Row>
@@ -349,16 +518,19 @@ const Edit = ({data}) => {
             </p>
           </Col>
           <Col style={{marginTop: '50px '}} span={2} offset={14}>
-            <Button
-              className='editSpaceDataButton'
-              onClick={changeMaindata}
-              title="Засах"
-              style={{borderRadius: '10px'}}
-              icon={<EditOutlined />}
-              shape="rounded"
-            >
+            {data.requestStatusCode !=='PENDING'?
+              <div>
+                <Button
+                  className='editSpaceDataButton'
+                  onClick={changeMaindata}
+                  title="Засах"
+                  style={{borderRadius: '10px'}}
+                  icon={<EditOutlined />}
+                  shape="rounded"
+                >
               засах
-            </Button>
+                </Button>
+              </div>: null}
           </Col>
         </Row>
         <Divider />
@@ -510,16 +682,17 @@ const Edit = ({data}) => {
               </p>
             </Col>
             <Col style={{marginTop: '50px '}} span={2} offset={14} >
-              <Button
-                onClick={changeSpaceData}
-                title="Засах"
-                className='editSpaceDataButton'
-                style={{borderRadius: '10px'}}
-                icon={<EditOutlined style={{fontSize: '12px'}} />}
-                shape="rounded"
-              >
+              {data.requestStatusCode !=='PENDING'?
+                <Button
+                  onClick={changeSpaceData}
+                  title="Засах"
+                  className='editSpaceDataButton'
+                  style={{borderRadius: '10px'}}
+                  icon={<EditOutlined style={{fontSize: '12px'}} />}
+                  shape="rounded"
+                >
               засах
-              </Button>
+                </Button>:null}
             </Col>
           </Row>
           <Divider />
@@ -698,304 +871,586 @@ const Edit = ({data}) => {
           )}
         </Spin>
       </div>
+      {/* Зогсоолын үндсэн зургийн мэдээлэл болон түүнийг өөрчлөх хэсэг UPDATE*/}
       <div >
-        <Row>
-          <Col span={6} offset={1}>
-            <p
-              style={{
-                color: 'blue',
-                fontSize: '17px',
-                marginTop: '50px',
-              }}
-            >
-              <b>Үндсэн зураг </b>
-              <p style={{color: 'gray', fontSize: '12px'}}>Алхам 3/7</p>
-            </p>
-          </Col>
-          <Col style={{marginTop: '50px '}} span={2} offset={14}>
-            <Button
-              onClick={changeMainValue}
-              title="Засах"
-              className='editSpaceDataButton'
-              style={{borderRadius: '10px'}}
-              icon={<EditOutlined style={{fontSize: '12px'}} />}
-              shape="rounded"
-            >
+        <Spin spinning ={MainImageSpin}>
+          <Row>
+            <Col span={6} offset={1}>
+              <p
+                style={{
+                  color: 'blue',
+                  fontSize: '17px',
+                  marginTop: '50px',
+                }}
+              >
+                <b>Үндсэн зураг </b>
+                <p style={{color: 'gray', fontSize: '12px'}}>Алхам 3/7</p>
+              </p>
+            </Col>
+            <Col style={{marginTop: '50px '}} span={2} offset={14}>
+              {data.requestStatusCode !=='PENDING'?
+                <Button
+                  onClick={onChangeMainImageState}
+                  title="Засах"
+                  className='editSpaceDataButton'
+                  style={{borderRadius: '10px'}}
+                  icon={<EditOutlined style={{fontSize: '12px'}} />}
+                  shape="rounded"
+                >
               засах
-            </Button>
-          </Col>
-        </Row>
-        <Divider />
-        <Row>
-          {!mainImageValue ? (
-            <Col style={{marginTop: '30px'}} offset={3}>
+                </Button>:null}
+            </Col>
+          </Row>
+          <Divider />
+          <Row>
+            {!mainImageValue ? (
+              <Col style={{marginTop: '30px'}} offset={3}>
+                {/* ЗОгсоолын зураг харагдах хэсэг*/}
+                <Carousel autoplay>
+                  {data.imageParkingGate ?
+                    <div>
+                      <div>
+                        <Image src={`data:image/jpeg;base64,${data.imageParkingGate}`} height="400px" width='800px' style={{zIndex: '-1', position: 'absolute'}}/>
+                        {/* <h8 style={{position: 'relative', color: 'red'}}>adwadawdaw</h8> */}
+                      </div>
+                    </div>:null}
+                  {data.imageParkingOverall ?<div>
+                    <Image src={`data:image/jpeg;base64,${data.imageParkingOverall}`} height="400px" width='800px'/>
+                  </div>:null}
+                  {data.imageResidenceGate ?<div>
+                    <Image src={`data:image/jpeg;base64,${data.imageResidenceGate}`} height="400px" width='800px'/>
+                  </div>:null}
+                </Carousel>
+              </Col>
+            ) : (
+              <Col span={24}>
+                <Row style={{marginTop: '50px'}} className='MainImage'>
+                  <Col offset={2} span={8}>
+                    <p style={{fontSize: '15px'}}>Хотхоны ойр орчмын зураг</p>
+                    <Upload
+                      name="avatar"
+                      accept='.png , .jpg'
+                      listType="picture-card"
+                      className="avatar-uploader"
+                      showUploadList={false}
+                      beforeUpload={beforeUpload}
+                      onChange={onChangeResidenceSideImage}
+                    >
+                      {selectedPositionImage ? (
+                        <div>
+                          <img
+                            src={selectedPositionImage}
+                            alt="avatar"
+                            style={{width: '380px', height: '180px', borderRadius: '10px'}}
+                          />
+                          <div
+                            className={'UploadAgainButton'}
+                            style={{
+                              marginTop: '-40px',
+                              zIndex: 5,
+                              position: 'absolute',
+                              marginLeft: '200px',
+                              height: '28px',
+                              width: '150px',
+                              display: 'flex',
+                            }}
+                          >
+                            <p style={{marginLeft: '30px', color: 'white'}}>
+                        Дахин авах{' '}
+                            </p>
+                            <RedoOutlined
+                              style={{
+                                color: 'white',
+                                marginLeft: '10px',
+                                marginTop: '5px',
+                                height: '20px',
+                                width: '20px',
+                              }}
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <div>
+                          {loadingPosition ? (
+                            <Spin indicator={LoadIcon} tip="зургийг хуулж байна." />
+                          ) : (
+                            <PlusOutlined
+                              style={{
+                                justifyContent: 'center',
+                                alignContent: 'center',
+                                backgroundColor: 'blue',
+                                color: 'white',
+                                height: '20px',
+                                width: '20px',
+                                borderRadius: '10px',
+                              }}
+                            />
+                          )}
+                        </div>
+                      )}
+                    </Upload>
+                    <p style={{fontSize: '14px', height: '30px', width: '100%'}}>
+                        Зогсоолын хаалганы ,орох гарах хэсгийн зураг
+                    </p>
+                    <Upload
+                      name="avatar"
+                      listType="picture-card"
+                      className="avatar-uploader"
+                      showUploadList={false}
+                      beforeUpload={beforeUpload}
+                      onChange={onChangeDoorExitImage}
+                    >
+                      {selectedExitImage ? (
+                        <div>
+                          <img
+                            src={selectedExitImage}
+                            alt="avatar"
+                            style={{width: '380px', height: '180px', borderRadius: '10px'}}
+                          />
+                          <div
+                            className={'UploadAgainButton'}
+                            style={{
+                              marginTop: '-40px',
+                              zIndex: 5,
+                              position: 'absolute',
+                              marginLeft: '200px',
+                              height: '28px',
+                              width: '150px',
+                              display: 'flex',
+                            }}
+                          >
+                            <p style={{marginLeft: '30px', color: 'white'}}>
+                              Дахин авах{' '}
+                            </p>
+                            <RedoOutlined
+                              style={{
+                                color: 'white',
+                                marginLeft: '10px',
+                                marginTop: '5px',
+                                height: '20px',
+                                width: '20px',
+                              }}
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <div>
+                          {loadingExitImage ? (
+                            <Spin indicator={LoadIcon} tip="зургийг хуулж байна." />
+                          ) : (
+                            <PlusOutlined
+                              style={{
+                                justifyContent: 'center',
+                                alignContent: 'center',
+                                backgroundColor: 'blue',
+                                color: 'white',
+                                height: '20px',
+                                width: '20px',
+                                borderRadius: '10px',
+                              }}
+                            />
+                          )}
+                        </div>
+                      )}
+                    </Upload>
+                  </Col>
+                  <Col offset={2}>
+                    <p style={{fontSize: '15px'}}>Хотхоны орц гарцын зураг</p>
+                    <Upload
+                      name="avatar"
+                      listType="picture-card"
+                      className="avatar-uploader"
+                      showUploadList={false}
+                      style={{width: '400px'}}
+                      action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                      beforeUpload={beforeUpload}
+                      onChange={onChangeResidenceExitImage}
+                    >
+                      {selectResidenceEXitImage ? (
+                        <div>
+                          <img
+                            src={selectResidenceEXitImage}
+                            alt="avatar"
+                            style={{width: '380px', height: '180px', borderRadius: '10px'}}
+                          />
+                          <div
+                            className={'UploadAgainButton'}
+                            style={{
+                              marginTop: '-40px',
+                              zIndex: 5,
+                              position: 'absolute',
+                              marginLeft: '200px',
+                              height: '28px',
+                              width: '150px',
+                              display: 'flex',
+                            }}
+                          >
+                            <p style={{marginLeft: '30px', color: 'white'}}>
+                            Дахин авах{' '}
+                            </p>
+                            <RedoOutlined
+                              style={{
+                                color: 'white',
+                                marginLeft: '10px',
+                                marginTop: '5px',
+                                height: '20px',
+                                width: '20px',
+                              }}
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <div>
+                          {loadingExit ? (
+                            <Spin
+                              indicator={LoadIcon}
+                              tip="зургийг хуулж байна."
+                            />
+                          ) : (
+                            <PlusOutlined
+                              style={{
+                                justifyContent: 'center',
+                                alignContent: 'center',
+                                backgroundColor: 'blue',
+                                color: 'white',
+                                height: '20px',
+                                width: '20px',
+                                borderRadius: '10px',
+                              }}
+                            />
+                          )}
+                        </div>
+                      )}
+                    </Upload>
+                    <p style={{fontSize: '14px', height: '30px'}}>Зогсоолын ерөнхий зураглал</p>
+                    <Upload
+                      name="avatar"
+                      listType="picture-card"
+                      className="avatar-uploader"
+                      showUploadList={false}
+                      beforeUpload={beforeUpload}
+                      onChange={onChangeOverallImage}
+                    >
+                      {imageParkingOverall ? (
+                        <div>
+                          <div>
+                            <img
+                              src={imageParkingOverall}
+                              alt="avatar"
+                              style={{width: '380px', height: '180px', borderRadius: '10px'}}
+                            ></img>
+                          </div>
+                          <div
+                            className={'UploadAgainButton'}
+                            style={{
+                              marginTop: '-40px',
+                              zIndex: 5,
+                              position: 'absolute',
+                              marginLeft: '200px',
+                              height: '28px',
+                              width: '150px',
+                              display: 'flex',
+                            }}
+                          >
+                            <p style={{marginLeft: '30px', color: 'white'}}>
+                        Дахин авах{' '}
+                            </p>
+                            <RedoOutlined
+                              style={{
+                                color: 'white',
+                                marginLeft: '10px',
+                                marginTop: '5px',
+                                height: '20px',
+                                width: '20px',
+                              }}
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <div>
+                          {loadingOverall ? (
+                            <Spin indicator={LoadIcon} tip="зургийг хуулж байна." />
+                          ) : (
+                            <PlusOutlined
+                              style={{
+                                justifyContent: 'center',
+                                alignContent: 'center',
+                                backgroundColor: 'blue',
+                                color: 'white',
+                                height: '20px',
+                                width: '20px',
+                                borderRadius: '10px',
+                              }}
+                            />
+                          )}
+                        </div>
+                      )}
+                    </Upload>
 
-              <div>
-                <Image src={mainImage[current].image} height="400px" width='800px'/>
-                <div
-                  style={{
-                    display: 'flex',
-                    color: 'white',
-                    marginTop: '-30px',
-                    position: 'absolute',
-                  }}
-                >
-                  <p>Зогсоолын орц гарцын зураг</p>
-                  {current >= 1 && (
-                    <LeftOutlined
-                      onClick={divideCurrent}
-                      style={{marginLeft: '10px'}}
-                    />
-                  )}
-                  <p style={{marginLeft: '10px'}}>{current + 1}/3</p>
-                  {current < 2 && (
-                    <RightOutlined
-                      onClick={addCurrent}
-                      style={{fontSize: '12px', marginLeft: '10px'}}
-                    />
-                  )}
-                </div>
-              </div>
-            </Col>
-          ) : (
-            <div>
-              <Row style={{marginTop: '50px'}}>
-                <Col offset={4}>
-                  <p style={{fontSize: '15px'}}>Хотхоны ойр орчмын зураг</p>
-                  <Upload
-                    name="avatar"
-                    listType="picture-card"
-                    className="avatar-uploader"
-                    showUploadList={false}
-                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                    beforeUpload={beforeUpload}
-                  >
-                    {selectedPositionImage ? (
-                      <img
-                        src={selectedPositionImage}
-                        alt="avatar"
-                        style={{width: '100%', height: '240px'}}
-                      />
-                    ) : (
-                      <div>
-                        {loadingPosition ? (
-                          <Spin
-                            indicator={LoadIcon}
-                            tip="зургийг хуулж байна."
-                          />
-                        ) : (
-                          <PlusOutlined
-                            style={{
-                              justifyContent: 'center',
-                              alignContent: 'center',
-                              backgroundColor: 'blue',
-                              color: 'white',
-                              height: '20px',
-                              width: '20px',
-                              borderRadius: '10px',
-                            }}
-                          />
-                        )}
-                      </div>
-                    )}
-                  </Upload>
-                </Col>
-                <Col offset={4}>
-                  <p style={{fontSize: '15px'}}>Хотхоны орц гарцын зураг</p>
-                  <Upload
-                    name="avatar"
-                    listType="picture-card"
-                    className="avatar-uploader"
-                    showUploadList={false}
-                    style={{width: '400px'}}
-                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                    beforeUpload={beforeUpload}
-                  >
-                    {selectResidenceEXitImage ? (
-                      // <Image
-                      //   src={selectResidenceEXitImage}
-                      //   alt="avatar"
-                      //   style={{height: '240px'}}
-                      // />
-                      <div>as</div>
-                    ) : (
-                      <div>
-                        {loadingDirect ? (
-                          <Spin
-                            indicator={LoadIcon}
-                            tip="зургийг хуулж байна."
-                          />
-                        ) : (
-                          <PlusOutlined
-                            style={{
-                              justifyContent: 'center',
-                              alignContent: 'center',
-                              backgroundColor: 'blue',
-                              color: 'white',
-                              height: '20px',
-                              width: '20px',
-                              borderRadius: '10px',
-                            }}
-                          />
-                        )}
-                      </div>
-                    )}
-                  </Upload>
-                </Col>
-              </Row>
-              <Button onClick={onsaveMainImage}>Svaeaee</Button>
-            </div>
-          )}
-        </Row>
+                  </Col>
+                </Row>
+                <Button type='primary' onClick={onsaveMainImage}>Хадгалах</Button>
+              </Col>
+            )}
+          </Row>
+        </Spin>
       </div>
+      {/* Зосоолын зураг засварлах хэсэг*/}
       <div>
-        <Row>
-          <Col span={6} offset={1}>
-            <p
-              style={{
-                color: 'blue',
-                fontSize: '17px',
-                marginTop: '50px',
-              }}
-            >
-              <b>Зогсоолын зураг </b>
-              <p style={{color: 'gray', fontSize: '12px'}}>Алхам 4/7</p>
-            </p>
-          </Col>
-          <Col style={{marginTop: '50px '}} span={2} offset={14}>
-            <Button
-              style={{borderRadius: '10px'}}
-              onClick={changeMainValue}
-              title="Засах"
-              className='editSpaceDataButton'
-              icon={<EditOutlined style={{fontSize: '12px'}} />}
-              shape="rounded"
-            >
-              засах
-            </Button>
-          </Col>
-        </Row>
-        <Divider />
-        <Row>
-          {!mainImageValue ? (
-            <Col offset={3}>
-              <div>
-                <Image src={mainImage[current].image} height="400px" width='800px'/>
-                <div
-                  style={{
-                    display: 'flex',
-                    color: 'white',
-                    marginTop: '-30px',
-                    position: 'absolute',
-                  }}
-                >
-                  <p>Зогсоолын орц гарцын зураг</p>
-                  {current >= 1 && (
-                    <LeftOutlined
-                      onClick={divideCurrent}
-                      style={{marginLeft: '10px'}}
-                    />
-                  )}
-                  <p style={{marginLeft: '10px'}}>{current + 1}/3</p>
-                  {current < 2 && (
-                    <RightOutlined
-                      onClick={addCurrent}
-                      style={{fontSize: '12px', marginLeft: '10px'}}
-                    />
-                  )}
-                </div>
-              </div>
+        <Spin spinning={spaceImageSpin}>
+          <Row>
+            <Col span={6} offset={1}>
+              <p
+                style={{
+                  color: 'blue',
+                  fontSize: '17px',
+                  marginTop: '50px',
+                }}
+              >
+                <b>Зогсоолын зураг </b>
+                <p style={{color: 'gray', fontSize: '12px'}}>Алхам 4/7</p>
+              </p>
             </Col>
-          ) : (
-            <div>
-              <Row style={{marginTop: '50px'}}>
-                <Col offset={4}>
-                  <p style={{fontSize: '15px'}}>Хотхоны ойр орчмын зураг</p>
-                  <Upload
-                    name="avatar"
-                    listType="picture-card"
-                    className="avatar-uploader"
-                    showUploadList={false}
-                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                    beforeUpload={beforeUpload}
-                  >
-                    {selectedPositionImage ? (
-                      <img
-                        src={selectedPositionImage}
-                        alt="avatar"
-                        style={{width: '100%', height: '240px'}}
-                      />
-                    ) : (
-                      <div>
-                        {loadingPosition ? (
-                          <Spin
-                            indicator={LoadIcon}
-                            tip="зургийг хуулж байна."
+            <Col style={{marginTop: '50px '}} span={2} offset={14}>
+              {data.requestStatusCode !=='PENDING'?
+                <Button
+                  style={{borderRadius: '10px'}}
+                  onClick={onChangeSpaceImageState}
+                  title="Засах"
+                  className='editSpaceDataButton'
+                  icon={<EditOutlined style={{fontSize: '12px'}} />}
+                  shape="rounded"
+                >
+              засах
+                </Button>:null}
+            </Col>
+          </Row>
+          <Divider />
+          <Row>
+            {!spaceImage ? (
+              <Col offset={3}>
+                <Carousel autoplay>
+                  {data.imageResidenceGate ? <div>
+                    <Image src={`data:image/jpeg;base64,${data.imageResidenceGate}`} height="400px" width='800px'/>
+                  </div>:null}
+                  {data.imageSpaceNumber ? <div>
+                    <Image src={`data:image/jpeg;base64,${data.imageSpaceNumber}`} height="400px" width='800px'/>
+                  </div>:null}
+                  {data.imageFromGate ? <div>
+                    <Image src={`data:image/jpeg;base64,${data.imageFromGate}`} height="400px" width='800px'/>
+                  </div>:null}
+                </Carousel>
+              </Col>
+            ) : (
+              <Col span={24}>
+                <Row style={{marginTop: '50px'}} className='spaceImage'>
+                  <Col offset={2} span={8}>
+                    <p style={{fontSize: '15px'}}>
+                      Зогсоолын байршлын зураг (хаалга хэсгээс)
+                    </p>
+                    <Upload
+                      name="avatar"
+                      listType="picture-card"
+                      className="avatar-uploader"
+                      showUploadList={false}
+                      beforeUpload={beforeUpload}
+                      onChange={onChangeFromGate}
+                    >
+                      {imageFromGate ? (
+                        <div>
+                          <img
+                            src={imageFromGate}
+                            alt="avatar"
+                            style={{width: '380px', height: '180px', borderRadius: '10px'}}
                           />
-                        ) : (
-                          <PlusOutlined
+                          <div
+                            className={'UploadAgainButton'}
                             style={{
-                              justifyContent: 'center',
-                              alignContent: 'center',
-                              backgroundColor: 'blue',
-                              color: 'white',
-                              height: '20px',
-                              width: '20px',
-                              borderRadius: '10px',
+                              marginTop: '-40px',
+                              zIndex: 5,
+                              position: 'absolute',
+                              marginLeft: '200px',
+                              height: '28px',
+                              width: '150px',
+                              display: 'flex',
                             }}
+                          >
+                            <p style={{marginLeft: '30px', color: 'white'}}>
+                        Дахин авах{' '}
+                            </p>
+                            <RedoOutlined
+                              style={{
+                                color: 'white',
+                                marginLeft: '10px',
+                                marginTop: '5px',
+                                height: '20px',
+                                width: '20px',
+                              }}
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <div>
+                          {loadingFromGate ? (
+                            <Spin indicator={LoadIcon} tip="зургийг хуулж байна." />
+                          ) : (
+                            <PlusOutlined
+                              style={{
+                                justifyContent: 'center',
+                                alignContent: 'center',
+                                backgroundColor: 'blue',
+                                color: 'white',
+                                height: '20px',
+                                width: '20px',
+                                borderRadius: '10px',
+                              }}
+                            />
+                          )}
+                        </div>
+                      )}
+                    </Upload>
+                    <p style={{fontSize: '15px'}}>
+              Дугаарлалтын харагдах байдлын зураг
+                    </p>
+                    <Upload
+                      name="avatar"
+                      listType="picture-card"
+                      className="avatar-uploader"
+                      showUploadList={false}
+                      beforeUpload={beforeUpload}
+                      onChange={onChangeSpaceNumber}
+                    >
+                      {imageSpaceNumber ? (
+                        <div>
+                          <img
+                            src={imageSpaceNumber}
+                            alt="avatar"
+                            style={{width: '380px', height: '180px', borderRadius: '10px'}}
                           />
-                        )}
-                      </div>
-                    )}
-                  </Upload>
-                </Col>
-                <Col offset={4}>
-                  <p style={{fontSize: '15px'}}>Хотхоны орц гарцын зураг</p>
-                  <Upload
-                    name="avatar"
-                    listType="picture-card"
-                    className="avatar-uploader"
-                    showUploadList={false}
-                    style={{width: '400px'}}
-                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                    beforeUpload={beforeUpload}
-                  >
-                    {selectResidenceEXitImage ? (
-                      // <Image
-                      //   src={selectResidenceEXitImage}
-                      //   alt="avatar"
-                      //   style={{height: '240px'}}
-                      // />
-                      <div>as</div>
-                    ) : (
-                      <div>
-                        {loadingDirect ? (
-                          <Spin
-                            indicator={LoadIcon}
-                            tip="зургийг хуулж байна."
-                          />
-                        ) : (
-                          <PlusOutlined
+                          <div
+                            className={'UploadAgainButton'}
                             style={{
-                              justifyContent: 'center',
-                              alignContent: 'center',
-                              backgroundColor: 'blue',
-                              color: 'white',
-                              height: '20px',
-                              width: '20px',
-                              borderRadius: '10px',
+                              marginTop: '-40px',
+                              zIndex: 5,
+                              position: 'absolute',
+                              marginLeft: '200px',
+                              height: '28px',
+                              width: '150px',
+                              display: 'flex',
                             }}
+                          >
+                            <p style={{marginLeft: '30px', color: 'white'}}>
+                        Дахин авах{' '}
+                            </p>
+                            <RedoOutlined
+                              style={{
+                                color: 'white',
+                                marginLeft: '10px',
+                                marginTop: '5px',
+                                height: '20px',
+                                width: '20px',
+                              }}
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <div>
+                          {loadingSpaceNumber ? (
+                            <Spin indicator={LoadIcon} tip="зургийг хуулж байна." />
+                          ) : (
+                            <PlusOutlined
+                              style={{
+                                justifyContent: 'center',
+                                alignContent: 'center',
+                                backgroundColor: 'blue',
+                                color: 'white',
+                                height: '20px',
+                                width: '20px',
+                                borderRadius: '10px',
+                              }}
+                            />
+                          )}
+                        </div>
+                      )}
+                    </Upload>
+                  </Col>
+                  <Col offset={2}>
+                    <p style={{fontSize: '15px'}}>
+              Зогсоолын эргэх урсгал харагдах зураг
+                    </p>
+                    <Upload
+                      name="avatar"
+                      listType="picture-card"
+                      className="avatar-uploader"
+                      showUploadList={false}
+                      style={{width: '400px'}}
+                      beforeUpload={beforeUpload}
+                      onChange={onChangeDirectionImage}
+                    >
+                      {selectedDirectionImage ? (
+                        <div>
+                          <img
+                            src={selectedDirectionImage}
+                            alt="avatar"
+                            style={{height: '180px', width: '380px', borderRadius: '10px'}}
                           />
-                        )}
-                      </div>
-                    )}
-                  </Upload>
-                </Col>
-              </Row>
-              <Button onClick={onsaveMainImage}>Хадгалах</Button>
-            </div>
-          )}
-        </Row>
+                          <div
+                            className={'UploadAgainButton'}
+                            style={{
+                              marginTop: '-40px',
+                              zIndex: 5,
+                              position: 'absolute',
+                              marginLeft: '200px',
+                              height: '28px',
+                              width: '150px',
+                              display: 'flex',
+                            }}
+                          >
+                            <p style={{marginLeft: '30px', color: 'white'}}>
+                        Дахин авах{' '}
+                            </p>
+                            <RedoOutlined
+                              style={{
+                                color: 'white',
+                                marginLeft: '10px',
+                                marginTop: '5px',
+                                height: '20px',
+                                width: '20px',
+                              }}
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <div>
+                          {loadingDirect ? (
+                            <Spin indicator={LoadIcon} tip="зургийг хуулж байна." />
+                          ) : (
+                            <PlusOutlined
+                              style={{
+                                justifyContent: 'center',
+                                alignContent: 'center',
+                                backgroundColor: 'blue',
+                                color: 'white',
+                                height: '20px',
+                                width: '20px',
+                                borderRadius: '10px',
+                              }}
+                            />
+                          )}
+                        </div>
+                      )}
+                    </Upload>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col offset={3} span={10}>
+                    <Button type='primary' onClick={onSaveSpaceImage}>Хадгалах</Button>
+                  </Col>
+                </Row>
+              </Col>
+            )}
+          </Row>
+        </Spin>
       </div>
       <div style={{marginTop: '10px'}}>
         <Row>
@@ -1011,16 +1466,17 @@ const Edit = ({data}) => {
             </p>
           </Col>
           <Col span={2} offset={14}>
-            <Button
-              style={{borderRadius: '10px'}}
-              onClick={changePriceValue}
-              title="Засах"
-              className='editSpaceDataButton'
-              icon={<EditOutlined style={{fontSize: '12px'}} />}
-              shape="rounded"
-            >
+            {data.requestStatusCode !=='PENDING'?
+              <Button
+                style={{borderRadius: '10px'}}
+                onClick={changePriceValue}
+                title="Засах"
+                className='editSpaceDataButton'
+                icon={<EditOutlined style={{fontSize: '12px'}} />}
+                shape="rounded"
+              >
               засах
-            </Button>
+              </Button>:null}
           </Col>
         </Row>
         <Divider />
@@ -1100,16 +1556,17 @@ const Edit = ({data}) => {
                 </p>
               </Col>
               <Col span={2} offset={14}>
-                <Button
-                  style={{borderRadius: '10px'}}
-                  onClick={changeDiscountValue}
-                  title="Засах"
-                  className='editSpaceDataButton'
-                  icon={<EditOutlined style={{fontSize: '12px'}} />}
-                  shape="rounded"
-                >
+                {data.requestStatusCode !=='PENDING'?
+                  <Button
+                    style={{borderRadius: '10px'}}
+                    onClick={changeDiscountValue}
+                    title="Засах"
+                    className='editSpaceDataButton'
+                    icon={<EditOutlined style={{fontSize: '12px'}} />}
+                    shape="rounded"
+                  >
               засах
-                </Button>
+                  </Button>:null}
               </Col>
             </Row>
             <Divider />
@@ -1154,16 +1611,17 @@ const Edit = ({data}) => {
               </p>
             </Col>
             <Col style={{marginTop: '50px'}} span={2} offset={14}>
-              <Button
-                style={{borderRadius: '10px'}}
-                onClick={changeDiscountValue}
-                title="Засах"
-                className='editSpaceDataButton'
-                icon={<EditOutlined style={{fontSize: '12px'}} />}
-                shape="rounded"
-              >
+              {data.requestStatusCode !=='PENDING'?
+                <Button
+                  style={{borderRadius: '10px'}}
+                  onClick={changeDiscountValue}
+                  title="Засах"
+                  className='editSpaceDataButton'
+                  icon={<EditOutlined style={{fontSize: '12px'}} />}
+                  shape="rounded"
+                >
               засах
-              </Button>
+                </Button>:null}
             </Col>
           </Row>
           <Divider />
@@ -1192,7 +1650,7 @@ const Edit = ({data}) => {
                     sundayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {timeSplit.map((item) => (
+                  {data.requestStatusCode !=='PENDING' &&timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -1210,7 +1668,7 @@ const Edit = ({data}) => {
                     sundayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {timeSplit.map((item) => (
+                  {data.requestStatusCode !=='PENDING' &&timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -1231,7 +1689,7 @@ const Edit = ({data}) => {
                     mondayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {timeSplit.map((item) => (
+                  { data.requestStatusCode !=='PENDING' &&timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -1249,7 +1707,7 @@ const Edit = ({data}) => {
                     mondayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {timeSplit.map((item) => (
+                  { data.requestStatusCode !=='PENDING' &&timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -1270,7 +1728,7 @@ const Edit = ({data}) => {
                     tuesdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {timeSplit.map((item) => (
+                  { data.requestStatusCode !=='PENDING' &&timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -1288,7 +1746,7 @@ const Edit = ({data}) => {
                     tuesdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {timeSplit.map((item) => (
+                  { data.requestStatusCode !=='PENDING' && timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -1309,7 +1767,7 @@ const Edit = ({data}) => {
                     wednesdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {timeSplit.map((item) => (
+                  {data.requestStatusCode !=='PENDING' && timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -1327,7 +1785,7 @@ const Edit = ({data}) => {
                     wednesdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {timeSplit.map((item) => (
+                  {data.requestStatusCode !=='PENDING' &&timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -1348,7 +1806,7 @@ const Edit = ({data}) => {
                     thursdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {timeSplit.map((item) => (
+                  {data.requestStatusCode !=='PENDING' &&timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -1366,7 +1824,7 @@ const Edit = ({data}) => {
                     thursdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {timeSplit.map((item) => (
+                  {data.requestStatusCode !=='PENDING' &&timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -1387,7 +1845,7 @@ const Edit = ({data}) => {
                     fridayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {timeSplit.map((item) => (
+                  {data.requestStatusCode !=='PENDING' &&timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -1405,7 +1863,7 @@ const Edit = ({data}) => {
                     fridayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {timeSplit.map((item) => (
+                  {data.requestStatusCode !=='PENDING' &&timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -1426,7 +1884,7 @@ const Edit = ({data}) => {
                     saturdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {timeSplit.map((item) => (
+                  {data.requestStatusCode !=='PENDING' &&timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -1444,7 +1902,7 @@ const Edit = ({data}) => {
                     saturdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {timeSplit.map((item) => (
+                  {data.requestStatusCode !=='PENDING' && timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>

@@ -52,7 +52,7 @@ const priceInfo = (props) => {
           style={{
             color: 'blue',
             fontSize: '20px',
-            marginTop: '20px',
+            marginTop: '50px',
             marginLeft: '100px',
           }}
         >
@@ -68,10 +68,11 @@ const priceInfo = (props) => {
           remember: true,
         }}
       >
-        <Row style={{marginTop: '30px'}}>
-          <Col offset={4} span={6}>
+        <Row style={{marginTop: '100px'}}>
+          <Col offset={4} span={6} style={{width: '375px'}}>
             <Row>
-              Өдрийн цагаар түрээслэх үнэ
+              <b style={{color: '#A2A4AA'}}>
+              Өдрийн цагаар түрээслэх үнэ</b>
               <p style={{color: 'blue'}}>
                 |
                 {priceData ? (
@@ -83,7 +84,7 @@ const priceInfo = (props) => {
                 |
               </p>
             </Row>
-            <label style={{fontSize: '14px', color: 'gray'}}>
+            <Row style={{fontSize: '14px', color: 'gray', marginTop: '23px'}}>
               Өвөл |{' '}
               {priceData ? (
                 <>
@@ -91,7 +92,7 @@ const priceInfo = (props) => {
                   {priceData.daySplit.winterEnd}
                 </>
               ) : null}
-            </label>
+            </Row>
             <Form.Item
               name="daySplitWinterPrice"
               style={{marginTop: '10px'}}
@@ -103,13 +104,14 @@ const priceInfo = (props) => {
               ]}
             >
               <Input
+                style={{fontSize: '16px'}}
                 type="text"
                 onChange={(e) => setdayWinterValue(Number(e.target.value))}
               />
             </Form.Item>
             <Divider />
-            <label
-              style={{fontSize: '14px', color: 'gray', marginTop: '10px'}}
+            <Row
+              style={{fontSize: '14px', color: 'gray', marginTop: '20px'}}
             >
               Зун |{' '}
               {priceData ? (
@@ -119,7 +121,7 @@ const priceInfo = (props) => {
                   {priceData.daySplit.summerEnd}
                 </>
               ) : null}
-            </label>
+            </Row>
             <Form.Item
               name="daySplitSummerPrice"
               style={{marginTop: '10px'}}
@@ -131,13 +133,15 @@ const priceInfo = (props) => {
               ]}
             >
               <Input
+                style={{fontSize: '16px'}}
                 type="text"
                 onChange={(e) => setdaySummerValue(Number(e.target.value))}
               ></Input>
             </Form.Item>
             <Divider />
             <Row style={{marginTop: '20px'}}>
-              Шөнийн цагаар түрээслэх үнэ
+              <b style={{color: '#A2A4AA'}}>
+              Шөнийн цагаар түрээслэх үнэ</b>
               <p style={{color: 'blue'}}>
                 {priceData ? (
                   <b>
@@ -146,7 +150,7 @@ const priceInfo = (props) => {
                 ) : null}
               </p>
             </Row>
-            <label style={{fontSize: '14px', color: 'gray'}}>
+            <Row style={{fontSize: '14px', color: 'gray', marginTop: '20px'}}>
               Өвөл|
               {priceData ? (
                 <>
@@ -155,7 +159,7 @@ const priceInfo = (props) => {
                   {priceData.nightSplit.winterEnd}
                 </>
               ) : null}
-            </label>
+            </Row>
             <Form.Item
               style={{marginTop: '10px'}}
               name="nightSplitWinterPrice"
@@ -167,12 +171,13 @@ const priceInfo = (props) => {
               ]}
             >
               <Input
+                style={{fontSize: '16px'}}
                 type="text"
                 onChange={(e) => setnightWinterValue(Number(e.target.value))}
               ></Input>
             </Form.Item>
             <Divider />
-            <label style={{fontSize: '14px', color: 'gray'}}>
+            <Row style={{fontSize: '14px', color: 'gray', marginTop: '20px'}}>
               Зун|
               {priceData ? (
                 <>
@@ -181,7 +186,7 @@ const priceInfo = (props) => {
                   {priceData.nightSplit.summerEnd}
                 </>
               ) : null}
-            </label>
+            </Row>
             <Form.Item
               style={{marginTop: '10px'}}
               name="nightSplitSummerPrice"
@@ -193,6 +198,7 @@ const priceInfo = (props) => {
               ]}
             >
               <Input
+                style={{fontSize: '16px'}}
                 type="text"
                 onChange={(e) => setnightSummerValue(Number(e.target.value))}
               ></Input>
@@ -201,12 +207,13 @@ const priceInfo = (props) => {
           </Col>
           <Col offset={4} span={6}>
             <Row>
-              Бүтэн өдрийн түрээслэх үнэ
+              <b style={{color: '#A2A4AA'}}>
+              Бүтэн өдрийн түрээслэх үнэ</b>
               <p style={{color: 'blue'}}>
                 <b>|24 цаг|</b>
               </p>
             </Row>
-            <label style={{fontSize: '14px', color: 'gray'}}>
+            <Row style={{fontSize: '14px', color: 'gray', marginTop: '20px'}}>
               Өвөл|
               {priceData ? (
                 <>
@@ -214,7 +221,7 @@ const priceInfo = (props) => {
                   {priceData.fullDaySplit.winterEnd}
                 </>
               ) : null}
-            </label>
+            </Row>
             <Form.Item
               name="fullDaySplitWinterPrice"
               style={{marginTop: '10px'}}
@@ -226,12 +233,13 @@ const priceInfo = (props) => {
               ]}
             >
               <Input
+                style={{fontSize: '16px'}}
                 type="text"
                 onChange={(e) => setfullDayWinterValue(Number(e.target.value))}
               ></Input>
             </Form.Item>
             <Divider />
-            <label style={{fontSize: '14px', color: 'gray'}}>
+            <Row style={{fontSize: '14px', color: 'gray', marginTop: '20px'}}>
               Зун|{' '}
               {priceData ? (
                 <>
@@ -239,7 +247,7 @@ const priceInfo = (props) => {
                   {priceData.fullDaySplit.summerEnd}
                 </>
               ) : null}
-            </label>
+            </Row>
             <Form.Item
               style={{marginTop: '10px'}}
               name="fullDaySplitSummerPrice"
@@ -251,21 +259,22 @@ const priceInfo = (props) => {
               ]}
             >
               <Input
+                style={{fontSize: '16px'}}
                 type="text"
                 onChange={(e) => setfullDaySummerValue(Number(e.target.value))}
               ></Input>
             </Form.Item>
             <Divider />
-
-            <Row>
-              Цагийн түрээслэх үнэ
+            <Row style={{marginTop: '20px'}}>
+              <b style={{color: '#A2A4AA'}}>
+              Цагийн түрээслэх үнэ</b>
               <p style={{color: 'blue'}}>
                 <b>|1 цаг|</b>
               </p>
             </Row>
-            <label style={{fontSize: '14px', color: 'gray'}}>
+            <Row style={{fontSize: '14px', color: 'gray', marginTop: '20px'}}>
               1 цаг түрээслэх
-            </label>
+            </Row>
             <Form.Item
               style={{marginTop: '10px'}}
               name="hourlyPrice"
@@ -277,17 +286,18 @@ const priceInfo = (props) => {
               ]}
             >
               <Input
+                style={{fontSize: '16px'}}
                 type="text"
                 onChange={(value) => sethourlyPrice(Number(value.target.value))}
               ></Input>
             </Form.Item>
             <Divider />
-            <Row>
-              <Col>
-                <p style={{fontSize: '12px'}}>
+            <Row style={{marginTop: '20px'}}>
+              <Col span={6} offset={2}>
+                <p style={{fontSize: '12px', color: '#35446D'}}>
                   Багц 1 | {priceData ? priceData.timeSet1.description : null}|
                 </p>
-                <p>
+                <p style={{marginLeft: '20%', fontSize: '16px'}}>
                   {hourlyPrice ?
                     Helper.formatValueReverse(
                       hourlyPrice * priceData.timeSet1.value,
@@ -295,11 +305,11 @@ const priceInfo = (props) => {
                     null}
                 </p>
               </Col>
-              <Col style={{marginLeft: '15px'}}>
-                <p style={{fontSize: '12px'}}>
+              <Col span={6} offset={2}>
+                <p style={{fontSize: '12px', color: '#35446D'}}>
                   Багц 2 | {priceData ? priceData.timeSet2.description : null} |
                 </p>
-                <p>
+                <p style={{marginLeft: '20%', fontSize: '16px', fontFamily: 'Helvetica'}}>
                   {hourlyPrice ?
                     Helper.formatValueReverse(
                       hourlyPrice * priceData.timeSet2.value,
@@ -307,11 +317,11 @@ const priceInfo = (props) => {
                     null}
                 </p>
               </Col>
-              <Col style={{marginLeft: '15px'}}>
-                <p style={{fontSize: '12px'}}>
+              <Col span={6} offset={2}>
+                <p style={{fontSize: '12px', color: '#35446D', fontWeight: '400'}}>
                   Багц 3 | {priceData ? priceData.timeSet3.description : null}|
                 </p>
-                <p>
+                <p style={{marginLeft: '20%', fontSize: '16px'}}>
                   {hourlyPrice ?
                     Helper.formatValueReverse(
                       hourlyPrice * priceData.timeSet3.value,

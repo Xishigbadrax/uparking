@@ -8,7 +8,7 @@ import {showMessage} from '@utils/message';
 import MaskedInput from 'antd-mask-input';
 import Countdown from 'react-countdown';
 import renderHTML from 'react-render-html';
-import Footer from '../../components/Footer';
+// import Footer from '../../components/Footer';
 import OTPInput from 'otp-input-react';
 const layout = {
   labelCol: {
@@ -157,7 +157,6 @@ const Login = () => {
         showMessage(messageType.SUCCESS.type, 'Бүртгэл амжилттай.Өөрийн бүртгэлээр нэвтэрнэ үү!');
         await delay(2000);
         router.push('/login');
-        return true;
       } else {
         showMessage(messageType.FAILED.type, result.error);
       }
@@ -515,7 +514,7 @@ const Login = () => {
             </div>;
   } else {
     maindata =
-            <Modal visible={visible} width={1000}>
+            <Modal visible={visible} width={1000} footer={null}>
               <div className="container mx-auto" style={{padding: '100px'}}>
                 <div>{renderHTML(policyHtml)}</div>
 
@@ -559,7 +558,6 @@ const Login = () => {
                   </div>
                 </Form>
               </div>
-
             </Modal>;
   }
 

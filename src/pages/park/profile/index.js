@@ -243,16 +243,18 @@ const Profile = () => {
     // setIsVehileVisible(false);
   };
   const handleEditOk = async () => {
-    const a = vehicleForm.getFieldsValue();
-    console.log(a);
-    console.log(vehicleId);
-    const res = await callPost('/user/vehicle/update', {
+    const a = vehicleEditForm.getFieldsValue();
+    const colorId = color.find((item)=>item.label === a.color);
+    console.log(colorId);
+    const editFormData={
       vehicleNumber: a.vehicleNumber,
       maker: a.maker,
-      color: a.colorId,
+      color: colorId.value,
       model: a.model,
       vehicleId: vehicleId,
-    });
+    };
+    console.log(editFormData);
+    const res = await callPost('/user/vehicle/update', editFormData );
     setUpdatedData(res.data);
   };
   const handleCancel = () => {
@@ -326,6 +328,7 @@ const Profile = () => {
         setCurrent(current + 1);
       }
     } else if (current === 3) {
+      {/* ЗОгсоолын зураг өгөгдлийн санруу шидэх*/}
       getBase64(componentData.imageFromGate.file.originFileObj, (image2) => {
         setImageFromGate(image2.substring(24));
       });
@@ -345,36 +348,38 @@ const Profile = () => {
       const data = await callGet('/parkingspace/timesplit');
       console.log(data, 'awsan dataaa');
       console.log(componentData, 'ywah dataaa');
+      console.log(data.daySplit, 'daySpliiiiiiiiiiiit');
       const array = [
         {
-          dateSplitId: data.daySplit,
+          dateSplitId: data.daySplit.winterId,
+          timeSplitId: [data.daySplit.id],
           priceForRenter: Number(componentData.daySplitWinterPrice),
-          timeSplitId: [data.daySplit.id],
         },
         {
-          dateSplitId: data.daySplit,
+          dateSplitId: data.daySplit.summerId,
+          timeSplitId: [data.daySplit.id],
           priceForRenter: Number(componentData.daySplitSummerPrice),
-          timeSplitId: [data.daySplit.id],
+
         },
         {
-          dateSplitId: data.nightSplit,
+          dateSplitId: data.nightSplit.winterId,
+          timeSplitId: [data.nightSplit.id],
           priceForRenter: Number(componentData.nightSplitWinterPrice),
-          timeSplitId: [data.nightSplit.id],
         },
         {
-          dateSplitId: data.nightSplit,
+          dateSplitId: data.nightSplit.summerId,
+          timeSplitId: [data.nightSplit.id],
           priceForRenter: Number(componentData.nightSplitSummerPrice),
-          timeSplitId: [data.nightSplit.id],
         },
         {
-          dateSplitId: data.fullDaySplit,
+          dateSplitId: data.fullDaySplit.winterId,
           priceForRenter: Number(componentData.fullDaySplitWinterPrice),
-          timeSplitId: [data.fullDaySplit.id],
+          timeSplitId: data.fullDaySplit.id,
         },
         {
-          dateSplitId: data.fullDaySplit,
+          dateSplitId: data.fullDaySplit.summerId,
           priceForRenter: Number(componentData.fullDaySplitSummerPrice),
-          timeSplitId: [data.fullDaySplit.id],
+          timeSplitId: data.fullDaySplit.id,
         },
       ];
       const formData = {
@@ -434,8 +439,8 @@ const Profile = () => {
         parkingSpaceId: 522,
         dayOfWeek,
         holiday: [{
-          spaceStatusCode: 'Төрсөн өдөр',
-          timeSplitId: 2,
+          // spaceStatusCode: '',
+          // timeSplitId: 2,
         }],
       };
       console.log(newGeneralScheduleDto, 'sdaaaaaaa');
@@ -557,39 +562,41 @@ const Profile = () => {
                 </Col>
                 <Col span={3} style={{textAlign: 'right'}}></Col>
               </Row>
-              <Row style={{minHeight: '200px', paddingTop: '30px'}}>
-                {vehicles && vehicles.length> 0 ? vehicles.map((item) => (
-                  <div
-                    key={item.value}
-                    className="mt-4 width-auto  rounded flex shadow-sm"
-                    style={{backgroundColor: 'white', width: '325px'}}
-                  >
-                    <div className="mt-4 ml-4">
-                      <img src="/directions_car_24px.png"></img>
-                    </div>
-                    <div className="ml-4"style={{width: '150px'}}>
-                      <div className="text-sm">{item.label.split(' ')[0]},  {item.label.split(' ')[1]}</div>
-                      <div className="text-base" style={{color: 'blue '}}>
-                        {item.label.split(' ')[2]}
-                      </div>
-                    </div>
-                    <div className="ml-40 mt-2 ">
-                      <div
-                        style={{}}
-                        onClick={(key) => {
-                          setVehicleId(item.value);
-                          onChangeisVehicleEditVisible(item.value);
-                        }}
-                      >
-                        <img src="/mode_24px.png" />
-                      </div>
-                    </div>
-                  </div>
-                )):<div>Машин олдсонгүй</div>}
+              <Row style={{paddingTop: '30px', width: '100%'}}>
+                <Col span={24} >
+                  {vehicles && vehicles.length> 0 ? vehicles.map((item) => (
+                    <Row className="mt-4 rounded flex shadow-sm" key={item.value}
+                      style={{backgroundColor: 'white'}}>
+                      <Col span={2} offset={1} className='mt-4'>
+                        <img src="/directions_car_24px.png" height='16px' width='16px'></img>
+                      </Col>
+                      <Col className="ml-4" span={16}>
+                        <div className="text-sm">{item.label.split(' ')[0]},  {item.label.split(' ')[1]}</div>
+                        <div className="text-base" style={{color: 'blue '}}>
+                          {item.label.split(' ')[2]}
+                        </div>
+                      </Col>
+                      <Col className=' mt-2' span={2} offset={1}>
+                        <div
+                          style={{}}
+                          onClick={(key) => {
+                            setVehicleId(item.value);
+                            onChangeisVehicleEditVisible(item.value);
+                          }}
+                        >
+                          <img src="/mode_24px.png" />
+                        </div>
+                      </Col>
+                    </Row>
+
+                  )):<div>Машин олдсонгүй</div>}
+                </Col>
               </Row>
+
               <Row>
                 <Button
-                  type="dashed"
+                  type="solid"
+                  style={{marginTop: '10px', borderRadius: '10px'}}
                   block
                   onClick={() => {
                     onchangeNewVehicle(), setIsVehileVisible(true);
@@ -631,8 +638,9 @@ const Profile = () => {
               </Row>
               <Row>
                 <Button
-                  type="dashed"
+                  type="solid"
                   block
+                  style={{marginTop: '10px', borderRadius: '10px'}}
                   onClick={() => setIsParkVisible(true)}
                 >
                 +
@@ -785,7 +793,6 @@ const Profile = () => {
           className="fullModal "
           title="Тээврийн хэрэгсэл шинэчлэх"
           centered
-          form={vehicleEditForm}
           style={{minHeight: '800px', height: 'auto'}}
           visible={isVehicleEditVisible}
           okButtonProps={{
@@ -931,13 +938,12 @@ const Profile = () => {
           width={1000}
           footer={[
             <>
-              {current > 0 && <Button onClick={goBack}>Буцах</Button>}</>,
+              {current > 0 ? <Button onClick={goBack}>Буцах</Button>:<div></div>}</>,
             <>
               {current < steps.length - 0 && (
                 <Button
                   onClick={onClickContinue}
                   type="primary"
-                // className="buttonGo"
                 >
                 Үргэлжлүүлэх
                 </Button>
@@ -994,38 +1000,6 @@ const Profile = () => {
               ))}
             </Col>
           </Row>
-          {/* <Row
-          style={{
-            marginLeft: "100px",
-            paddingBottom: "10px",
-          }}
-        >
-          {/* <Col>
-            {current > 0 && (
-              <Button
-                onClick={goBack}
-                style={{
-                  color: "blue",
-                  position: "absolute",
-                }}
-              >
-                Буцах
-              </Button>
-            )}
-          </Col>
-          <Col offset={20}>
-            {current < steps.length - 0 && (
-              <Button onClick={onClickContinue} className="buttonGo">
-                Үргэлжлүүлэх
-              </Button>
-            )} */}
-          {/* {current === steps.length - 1 && (
-              <Button onClick={onSavedSpaceFormData} className="buttonGo">
-                Дуусгах
-              </Button>
-            )}
-          </Col>
-        </Row> */}
         </Modal>
         {!loading &&
       <Modal
@@ -1034,7 +1008,6 @@ const Profile = () => {
         onOk= {()=>setVisibleParkingSpaceEdit(false)}
         onCancel={()=>setVisibleParkingSpaceEdit(false)}>
         <Edit data={spaceEditData}/>
-
       </Modal>}
 
       </Spin>

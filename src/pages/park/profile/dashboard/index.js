@@ -1,15 +1,17 @@
 import ProfileLayout from '@components/layouts/ProfileLayout';
 import {Tabs} from 'antd';
-import CustomCalendar from '@components/Calendar';
+// import CustomCalendar from '@components/CustomCalendar/index';
 import {Row, Col, Card, Calendar, Tag} from 'antd';
-import {Radar, Bar} from 'react-chartjs-2';
+import {Radar} from 'react-chartjs-2';
+import Bar from '@components/BarChart';
 import {callGet} from '@api/api';
 import {useContext, useState, useEffect} from 'react';
 import Context from '@context/Context';
 import Helper from '@utils/helper';
 import {calendarLocale} from '@constants/constants.js';
+import {LeftOutlined, RightOutlined} from '@ant-design/icons';
 import moment from 'moment';
-import DayNightColumn from '@components/DayNightColumn';
+import DayNightColumn from '@components/DayNightColumns';
 
 const {TabPane} = Tabs;
 const callback = (key) => {
@@ -32,76 +34,39 @@ const monthCellRender = (value) => {
     </div>
   ) : null;
 };
-const data = [];
+
+// const data = [];
 const data1 = {
-  labels: ['Thing 1', 'Thing 2', 'Thing 3', 'Thing 4', 'Thing 5', 'Thing 6'],
+  labels: ['Орц гарц', 'Нэвтрэх хаалга', 'Байршил', 'Зогсоол'],
   datasets: [
     {
-      label: '# of Votes',
-      data: [2, 9, 3, 5, 2, 3],
-      backgroundColor: 'rgba(255, 99, 132, 0.2)',
-      borderColor: 'rgba(255, 99, 132, 1)',
+      label: '',
+      data: [4, 3, 5, 5],
+      backgroundColor: '#ffff',
+      borderColor: '#00F9B8',
       borderWidth: 1,
     },
   ],
+  options: {
+    plugins: {
+      legend: {
+        display: false,
+      },
+    },
+  },
 };
 const options = {
   scale: {
     ticks: {beginAtZero: true},
   },
 };
-const data2 = {
-  labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-  datasets: [
-    {
-      label: '# of Votes',
-      data: [12, 19, 3, 5, 2, 3],
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(255, 159, 64, 0.2)',
-      ],
-      borderColor: [
-        'rgba(255, 99, 132, 1)',
-        'rgba(54, 162, 235, 1)',
-        'rgba(255, 206, 86, 1)',
-        'rgba(75, 192, 192, 1)',
-        'rgba(153, 102, 255, 1)',
-        'rgba(255, 159, 64, 1)',
-      ],
-      borderWidth: 1,
-    },
-  ],
-};
 
-const options2 = {
-  indexAxis: 'y',
-  // Elements options apply to all of the options unless overridden in a dataset
-  // In this case, we are setting the border of each horizontal bar to be 2px wide
-  elements: {
-    bar: {
-      borderWidth: 2,
-    },
-  },
-  responsive: true,
-  plugins: {
-    legend: {
-      position: 'right',
-    },
-    title: {
-      display: true,
-      text: 'Chart.js Horizontal Bar Chart',
-    },
-  },
-};
 
 const Dashboard = () => {
   const ctx = useContext(Context);
   const [userData, setuserData] = useState(null);
   // const [markedDate, setmarkedDate] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [calendarData, setCalendarData] = useState([]);
   useEffect(() => {
     fetchData();
@@ -113,43 +78,31 @@ const Dashboard = () => {
       setuserData(res);
       if (res && res.pendingList && res.pendingList.length > 0) {
         setCalendarData(res.pendingList);
-        // let acc = {};
-        // let array = [];
-        // res.pendingList.forEach((c) => {
-        //     (acc[c.date] = {
-        //         marked: true,
-        //         selected: true,
-        //         selectedColor: '#0013D4',
-        //         money: c.amount,
-        //     }),
-        //         array.push(acc);
-        // });
-        // setmarkedDate(Object.assign({}, ...array));
       }
       ctx.setIsLoading(false);
     });
   };
-
   const getListData = (value) => {
-    const listData = [];
-    if (calendarData.length > 0) {
-      calendarData.forEach(function(element) {
-        const currentMoment = moment(element.date, 'YYYY/MM/DD');
-        if (value.format('YYYY-MM-DD') === currentMoment.format('YYYY-MM-DD')) {
-          listData.push(element);
-        }
-      });
-    }
+    const listData = [{name: 'AV', type: 'AV'},
+      {name: 'UN', type: 'UN'}];
+    // if (calendarData.length > 0) {
+    // calendarData.forEach(function(element) {
+    //   const currentMoment = moment(element.date, 'YYYY/MM/DD');
+    //   if (value.format('YYYY-MM-DD') === currentMoment.format('YYYY-MM-DD')) {
+    //     listData.push(element);
+    //   }
+    // });
+    // }
+
     return listData || [];
   };
   const dateCellRender = (value) => {
     const listData = getListData(value);
     return (
-      <ul className="events">
+      <ul className="events" style={{marginTop: '30px', borderRadius: '10px'}}>
         {listData.map((item) => (
-          <li key={item.date}>
-            {/* <Badge status={item.type} text={item.content} /> */}
-            <Tag color="green" className="eventText">
+          <li key={item.name}>
+            <Tag color="green" className="eventText" >
               {item.amount}
             </Tag>
           </li>
@@ -160,105 +113,198 @@ const Dashboard = () => {
 
   return (
     <ProfileLayout>
-      <Tabs
-        defaultActiveKey="1"
-        onChange={callback}
-        type="card"
-        className={'profileTab'}
-      >
-        <TabPane tab="Түрээслэгч" key="1">
-          <Row className={'status'}>
-            <Col span={9}>
-              <div className="totalSpentAmount">
-                <span>
-                  {userData ?
-                    Helper.formatValueReverse(userData.totalIncome) :
-                    0}
-                  ₮
-                </span>
-              </div>
-              <div className="totalSpentText">
-                <span>Нийт заруулалт</span>
-              </div>
-            </Col>
-            <Col span={8}>
-              <div className="levelAmount">
-                <span>0%</span>
-              </div>
-              <div className="levelText">
-                <span>Ашиглалтын түвшин</span>
-              </div>
-            </Col>
-            <Col span={7}>
-              <div className="daystatuses">
-                <span>Өдөр 0</span>
-              </div>
-              <div className="daystatuses">
-                <span>Шөнө 0</span>
-              </div>
-              <div className="daystatuses">
-                <span>Бүтэн өдөр 0</span>
-              </div>
-            </Col>
-          </Row>
-          {/* <CustomCalendar data={data} ></CustomCalendar> */}
-          <DayNightColumn />
-          <Calendar
-            className="customCalendar"
-            locale={calendarLocale}
-            dateCellRender={dateCellRender}
-            monthCellRender={monthCellRender}
-          />
-          <Row>
-            <Col span={12}></Col>
-            <Col span={12}></Col>
-          </Row>
-        </TabPane>
-        <TabPane tab="Түрээслүүлэгч" key="2">
-          <Row className={'status'}>
-            <Col span={9}>
-              <div className="totalSpentAmount">
-                <span>0₮</span>
-              </div>
-              <div className="totalSpentText">
-                <span>Нийт түрээсийн орлого</span>
-              </div>
-            </Col>
-            <Col span={8}>
-              <div className="levelAmount">
-                <span>0%</span>
-              </div>
-              <div className="levelText">
-                <span>Ашиглалтын түвшин</span>
-              </div>
-            </Col>
-            <Col span={7}>
-              <div className="daystatuses">
-                <span>Өдөр 0</span>
-              </div>
-              <div className="daystatuses">
-                <span>Шөнө 0</span>
-              </div>
-              <div className="daystatuses">
-                <span>Бүтэн өдөр 0</span>
-              </div>
-            </Col>
-          </Row>
-          <CustomCalendar data={data}></CustomCalendar>
-          <Row>
-            <Col span={12}>
-              <Card>
-                <Radar data={data1} options={options} />
-              </Card>
-            </Col>
-            <Col span={12}>
-              <Card>
-                <Bar data={data2} options={options2} />
-              </Card>
-            </Col>
-          </Row>
-        </TabPane>
-      </Tabs>
+      <Card style={{borderRadius: '50px'}}>
+        <Tabs
+          defaultActiveKey="1"
+          onChange={callback}
+          type="card"
+          className={'profileTab'}
+        >
+          <TabPane tab="Түрээслэгч" key="1" className={'DashboardCalendar1'}>
+            <DayNightColumn />
+            <Calendar
+              locale={calendarLocale}
+              className={'dashboardCalendar'}
+              // format='YYYY/MM/DD'
+              defaultValue={moment()}
+              dateCellRender={dateCellRender}
+              monthCellRender={monthCellRender}
+              headerRender={({value, type, onChange, onTypeChange}) => {
+                const current = value.clone();
+                const localeData = value.localeData();
+                const year = value.year();
+                const month = [];
+                console.log(localeData, 'awdawd');
+                for (let i = 0; i < 12; i++) {
+                  month.push(localeData.months(current));
+                }
+
+                return (
+                  <div style={{padding: '16px'}}>
+                    <Row >
+                      <Col span={1}>
+                        <LeftOutlined
+                          onClick={()=>{}}
+                          style={{cursor: 'pointer', color: '#0013D4'}}
+                        />
+                      </Col>
+                      <Col span={4} style={{marginTop: '5px'}}>
+                        Есдүгээр сар,{year}
+                      </Col>
+                      <Col
+                        span={1}
+                        // onClick={onClickRight}
+                        style={{cursor: 'pointer', color: '#0013D4'}}
+                      >
+                        <RightOutlined />
+                      </Col>
+                    </Row>
+                    <Row className={'status'}>
+                      <Col span={9}>
+                        <div className="totalSpentAmount">
+                          <span>
+                            {userData ?
+                              Helper.formatValueReverse(userData.totalSpent) :
+                              0}
+            ₮
+                          </span>
+                        </div>
+                        <div className="totalSpentText">
+                          <span>Нийт зарцуулалт</span>
+                        </div>
+                      </Col>
+                      <Col span={8}>
+                        <div className="levelAmount">
+                          <span>0%</span>
+                        </div>
+                        <div className="levelText">
+                          <span>Ашиглалтын түвшин</span>
+                        </div>
+                      </Col>
+                      <Col span={7}>
+                        <div className="daystatuses">
+                          <div style={{paddingTop: '2px'}}><img src='/icons/brightness_5_24px.png' height='12px' width='18px'/></div>
+                          <span style={{marginLeft: '5px'}}>Өдөр 0</span>
+                        </div>
+                        <div className="daystatuses">
+                          <div style={{paddingTop: '2px'}}><img src='/icons/brightness_3_24px.png' height='12px' width='18px'/></div>
+                          <span style={{marginLeft: '5px'}}>Шөнө 0</span>
+                        </div>
+                        <div className="daystatuses">
+                          <div style={{paddingTop: '2px'}}><img src='/icons/brightness_4_24px.png' height='12px' width='16px'/></div>
+                          <span style={{marginLeft: '5px'}}> Бүтэн өдөр </span>
+                          <span style={{marginLeft: '5px'}}>0</span>
+                        </div>
+                      </Col>
+                    </Row>
+                  </div>
+                );
+              }}
+            />
+            <Row>
+              <Col span={12}></Col>
+              <Col span={12}></Col>
+            </Row>
+          </TabPane>
+          <TabPane tab="Түрээслүүлэгч" key="2" className='DashboardCalendar1'>
+            <DayNightColumn />
+            <Calendar
+              locale={calendarLocale}
+              className={'dashboardCalendar'}
+              // format='YYYY/MM/DD'
+              defaultValue={moment()}
+              dateCellRender={dateCellRender}
+              monthCellRender={monthCellRender}
+              headerRender={({value, type, onChange, onTypeChange}) => {
+                const current = value.clone();
+                const localeData = value.localeData();
+                const year = value.year();
+                const month = [];
+                console.log(localeData, 'awdawd');
+                for (let i = 0; i < 12; i++) {
+                  month.push(localeData.months(current));
+                }
+
+                return (
+                  <div style={{padding: '16px'}}>
+                    <Row >
+                      <Col span={1}>
+                        <LeftOutlined
+                          onClick={()=>{}}
+                          style={{cursor: 'pointer', color: '#0013D4'}}
+                        />
+                      </Col>
+                      <Col span={4} style={{marginTop: '5px'}}>
+                        Есдүгээр сар,{year}
+                      </Col>
+                      <Col
+                        span={1}
+                        // onClick={onClickRight}
+                        style={{cursor: 'pointer', color: '#0013D4'}}
+                      >
+                        <RightOutlined />
+                      </Col>
+                    </Row>
+                    <Row className={'status'}>
+                      <Col span={9}>
+                        <div className="totalSpentAmount">
+                          <span>
+                            {userData ?
+                              Helper.formatValueReverse(userData.totalSpent) :
+                              0}
+            ₮
+                          </span>
+                        </div>
+                        <div className="totalSpentText">
+                          <span>Нийт түрээсийн орлого</span>
+                        </div>
+                      </Col>
+                      <Col span={8}>
+                        <div className="levelAmount">
+                          <span>0%</span>
+                        </div>
+                        <div className="levelText">
+                          <span>Ашиглалтын түвшин</span>
+                        </div>
+                      </Col>
+                      <Col span={7}>
+                        <div className="daystatuses">
+                          <div style={{paddingTop: '2px'}}><img src='/icons/brightness_5_24px.png' height='12px' width='18px'/></div>
+                          <span style={{marginLeft: '5px'}}>Өдөр 0</span>
+                        </div>
+                        <div className="daystatuses">
+                          <div style={{paddingTop: '2px'}}><img src='/icons/brightness_3_24px.png' height='12px' width='18px'/></div>
+                          <span style={{marginLeft: '5px'}}>Шөнө 0</span>
+                        </div>
+                        <div className="daystatuses">
+                          <div style={{paddingTop: '2px'}}><img src='/icons/brightness_4_24px.png' height='12px' width='16px'/></div>
+                          <span style={{marginLeft: '5px'}}> Бүтэн өдөр </span>
+                          <span style={{marginLeft: '5px'}}>0</span>
+                        </div>
+                      </Col>
+                    </Row>
+                  </div>
+                );
+              }}
+            />
+            {/* <CustomCalendar data={data}></CustomCalendar> */}
+            <Row>
+              <Col span={10}>
+                <Row style={{color: '#35446D', fontWeight: 'bold', fontSize: '14px', lineHeight: '24px'}}>Таны зогсоолын үнэлгээ</Row>
+                <Card style={{borderRadius: '20px', marginTop: '10px'}} className={'RadarChart'}>
+                  <Radar data={data1} options={options} />
+                </Card>
+              </Col>
+              <Col span={10} offset={2} className='BarChart'>
+                <Row style={{color: '#35446D', fontWeight: 'bold', fontSize: '14px', lineHeight: '24px'}}>Таны зогсоолын хандалт</Row>
+                <Card style={{borderRadius: '20px', marginTop: '10px'}}>
+                  <Bar />
+                </Card>
+              </Col>
+            </Row>
+          </TabPane>
+        </Tabs>
+      </Card>
     </ProfileLayout>
   );
 };
