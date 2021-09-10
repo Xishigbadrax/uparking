@@ -1,16 +1,16 @@
 import ProfileLayout from '@components/layouts/ProfileLayout';
-import {Tabs, Select, List, Row, Col, DatePicker, Button} from 'antd';
-import {Calendar, Tag, Pagination, LocaleProvider, Dropdown, Menu} from 'antd';
+import {Tabs, List, Row, Col, DatePicker, Button} from 'antd';
+import {Calendar, Tag, Pagination, Dropdown, Menu} from 'antd';
 import {callPost} from '@api/api';
 import {useEffect, useState, useContext} from 'react';
 import {callGet} from '@api/api';
 import Context from '@context/Context';
 import {messageType, defaultMsg} from '@constants/constants';
 import {showMessage} from '@utils/message';
-import moment, {locale} from 'moment';
+import moment from 'moment';
 import {calendarLocale} from '@constants/constants.js';
 import DayNightColumn from '@components/DayNightColumns';
-import {DownOutlined, ArrowRightOutlined, EyeTwoTone, DeleteTwoTone, OrderedListOutlined} from '@ant-design/icons';
+import {DownOutlined, ArrowRightOutlined, EyeTwoTone, DeleteTwoTone, OrderedListOutlined, RightOutlined, LeftOutlined} from '@ant-design/icons';
 import Helper from '@utils/helper';
 import Link from 'next/link';
 
@@ -33,14 +33,14 @@ const Order = () => {
   const [dataViewType, setDataViewType] = useState('calendar');
   const [currentPage, setCurrentPage]= useState(1);
   const [vehicles, setVehicles] = useState([]);
-  const [selectVehicle, setSelecteVehicle]= useState();
+  // const [selectVehicle, setSelecteVehicle]= useState();
   const [selectDate, setSelectDate] = useState();
 
   // Tab solih function
   const onClickTab = async (key) => {
     setAsWho(key);
     setIsConfirmed(false);
-    await getData();
+    await getConfirmData();
   };
   // dotorh tab solih function
   const onClickInnerTab = (key) => {
@@ -60,28 +60,32 @@ const Order = () => {
 
   // sar songoh function
   const onChangeOrderDate = (e)=>{
-    console.log(moment(e).format('YYYY/MM/DD'));
+    console.log(moment(e).format('YYYY-MM-DD'));
+    setSelectDate(moment(e).format('YYYY-MM-DD'));
   };
   // pagination solih
   const onChangePage = (page)=>{
     console.log(page);
     setCurrentPage(page);
   };
+  // mashinii list awah
   useEffect(async () => {
     const vehicle = await callGet('/user/vehicle/list');
     setVehicles(vehicle);
-    getData();
+    getConfirmData();
   }, []);
   // batlagdsan zahialgin medee awah function
   useEffect(() => {
-    getData();
+    getConfirmData();
   }, [isConfirmed]);
+  // hadgalagdsan data awah
   const getSavedData=(async ()=>{
     const result = await callGet(`/booking?asWho=${asWho}&isConfirmed=false`);
     console.log( result, 'saved--------->');
     setCalendarData(result);
   });
-  const getData = async () => {
+  // batalgaajsan turliin data awah
+  const getConfirmData = async () => {
     ctx.setIsLoading(true);
     if (isConfirmed) {
       const res = await callGet(`/booking?asWho=${asWho}&isConfirmed=${isConfirmed}`);
@@ -95,6 +99,7 @@ const Order = () => {
     }
     ctx.setIsLoading(false);
   };
+  // history paned haragdah list duudah
   const getHistroy = async () => {
     ctx.setIsLoading(true);
     const formData = {
@@ -112,6 +117,7 @@ const Order = () => {
     }
     ctx.setIsLoading(false);
   };
+  // calendar der haragdah data awah
   const getListData = (value) => {
     const listData = [];
     if (calendarData.length > 0) {
@@ -129,7 +135,7 @@ const Order = () => {
     return listData || [];
   };
   const onChangeDropDown = (e)=>{
-    console.log(e, 'hjhghghg');
+
   };
   const handleChangeView = (value) => {
     console.log(value, 'glg wee');
@@ -139,8 +145,34 @@ const Order = () => {
       setDataViewType('list');
     }
   };
-  const handleVehicle = (e)=>{
-    console.log(e, 'vehiclee tmaa');
+  const handleVehicle = async (e)=>{
+    console.log(calendarStatus, 'awdawd');
+    console.log(e.key);
+    ctx.setIsLoading(true);
+    if (calendarStatus ==1) {
+      const res = await callGet(`/booking?asWho=${asWho}&isConfirmed=false&vehicleId=${e.key}`);
+      setCalendarData(res);
+    } else if (calendarStatus == 2) {
+      const res = await callGet(`/booking?asWho=${asWho}&isConfirmed=true&vehicleId=${e.key}`);
+      setCalendarData(res);
+    } else if (calendarStatus == 3 ) {
+      const formData = {
+        asWho: 1,
+        dateList: selectDate ? [selectDate]: null,
+        vehicleId: e.key,
+      };
+      console.log(formData);
+      const res = await callPost('/booking/history', formData);
+      if (!res || res === undefined) {
+        showMessage(messageType.FAILED.type, defaultMsg.dataError);
+      } else {
+        console.log(res.history);
+        setCalendarData(res.history);
+      }
+    }
+    // console.log(e, 'vehiclee tmaa');
+
+    ctx.setIsLoading(false);
   };
   const menu =(
     <Menu className="calendarViewer" onClick={(value)=>handleChangeView(value)} style={{width: '100%'}}>
@@ -177,9 +209,6 @@ const Order = () => {
         {listData === [] && <Tag color='#C6231A' className="eventText" style={{background: 'pink', height: '20px'}}></Tag>}
       </ul>
     );
-  };
-  const memorize =(e)=>{
-
   };
   const getMonthData = (value) => {
     if (value.month() === 8) {
@@ -219,7 +248,6 @@ const Order = () => {
                     <DatePicker
                       className='selectMonthDate'
                       bordered={false}
-                      clearIcon={false}
                       locale={calendarLocale}
                       placeholder='Сараа сонгоно уу?'
                       picker='month'
@@ -238,13 +266,39 @@ const Order = () => {
                     <DayNightColumn />
                     <Calendar className="customCalendar"
                       locale={calendarLocale}
-                      headerRender={ ()=>{
+                      headerRender={({value, type, onChange, onTypeChange}) => {
+                        const current = value.clone();
+                        const localeData = value.localeData();
+                        const year = value.year();
+                        const month = [];
+                        console.log(localeData, 'awdawd');
+                        for (let i = 0; i < 12; i++) {
+                          month.push(localeData.months(current));
+                        }
                         return (
-                          <div>
-                          sdsas
-                          </div>);
-                      }
-                      }
+                          <div style={{padding: '16px'}}>
+                            <Row >
+                              <Col span={1}>
+                                <LeftOutlined
+                                  onClick={()=>{}}
+                                  style={{cursor: 'pointer', color: '#0013D4'}}
+                                />
+                              </Col>
+                              <Col span={4} style={{marginTop: '5px'}}>
+                                {month[moment()]},{year}
+                              </Col>
+                              <Col
+                                span={1}
+                                // onClick={onClickRight}
+                                style={{cursor: 'pointer', color: '#0013D4'}}
+                              >
+                                <RightOutlined />
+                              </Col>
+                            </Row>
+                          </div>
+                        )
+                        ;
+                      }}
                       dateCellRender={dateCellRender}
                       monthCellRender={monthCellRender} />
                   </div>:

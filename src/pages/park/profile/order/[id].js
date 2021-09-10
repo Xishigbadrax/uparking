@@ -433,6 +433,7 @@ const OrderId = () => {
                 </Row>
                 {(() => {
                   if (orderData.bookingStatus === 'CONFIRMED') {
+                    compareDate(moment().format('YYYY-MM-DD HH-mm-ss'), orderData.startDateTime) === 1;
                     return (
                       <div style={{margin: '30px 0px'}}>
                         <Button type="danger" size={'large'} block onClick={handleClickCancelOrder}>
