@@ -144,12 +144,12 @@ const OrderId = () => {
               </Carousel> :
               null}
             <Row style={{marginTop: '24px'}}>
-              <Col span={6} offset={2}>
-                <div style={{fontSize: '20px'}}><strong>{!Helper.isNullOrEmpty(orderData.residenceName) ? orderData.residenceName : null}</strong></div>
+              <Col span={9} offset={0}>
+                <div className="text-[20px] flex items-center"><strong>{!Helper.isNullOrEmpty(orderData.residenceName) ? orderData.residenceName : null}</strong> <Image className=" w-[15px] h-[15px] ml-[5.5px]" src="../../../images/darias_icon/checkCircle.png" /></div>
                 {/* <div>rating</div> */}
               </Col>
               {/* <Col span={6}>2</Col> */}
-              <Col span={12}>{`${orderData.province}, ${orderData.district}, ${orderData.section}, ${orderData.residenceName}, ${orderData.residenceBlockNumber}`}</Col>
+              <Col span={12} offset={2}>{`${orderData.province}, ${orderData.district}, ${orderData.section}, ${orderData.residenceName}, ${orderData.residenceBlockNumber}`}</Col>
             </Row>
             {/* </Content> */}
           </Col>
