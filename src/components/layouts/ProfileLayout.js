@@ -15,21 +15,21 @@ const ProfileLayout = ({children, title, className}) => {
   const antIcon = <LoadingOutlined style={{fontSize: 40}} spin />;
 
   return (
-    <Spin indicator={antIcon} tip="Таны хүсэлтийг боловсруулж байна. Түр хүлээнэ үү..." spinning={isLoading}>
-      <Layout style={{maxWidth: '1400px', margin: 'auto'}} className={'profileLayout'}>
-        <LoadingBar color='#109720' progress={isLoading ? 70 : 100} />
-        <Card style={{borderRadius: '50px', height: '800px'}}>
-          <Sidebar />
-        </Card>
-        <Layout style={{background: 'none'}}>
-          {/* <Header /> */}
-          <Content className={'profileContent'}>
-            {title && <h1 className="main-title">{title}</h1>}
-            {children}
-          </Content>
-        </Layout>
+    // <Spin indicator={antIcon} tip="Таны хүсэлтийг боловсруулж байна. Түр хүлээнэ үү..." spinning={isLoading}>
+    <Layout style={{maxWidth: '1400px', margin: 'auto'}} className={'profileLayout'}>
+      <LoadingBar color='#109720' progress={isLoading ? 70 : 100} />
+      <Card style={{borderRadius: '50px', height: '800px'}}>
+        <Sidebar />
+      </Card>
+      <Layout style={{background: 'none'}}>
+        {/* <Header /> */}
+        <Content className={'profileContent'}>
+          {title && <h1 className="main-title">{title}</h1>}
+          {children}
+        </Content>
       </Layout>
-    </Spin>
+    </Layout>
+    // </Spin>
   );
 };
 
