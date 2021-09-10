@@ -5,6 +5,7 @@ import {Table} from 'antd';
 import {callGet} from '@api/api';
 import Context from '@context/Context';
 
+
 const Header = {
   color: '#35446D',
   fontWeight: 'bold',
@@ -18,6 +19,7 @@ const History = () => {
   const [imgSrc, setImgSrc] = useState('');
   const [symbol, setSymbol] = useState('');
   const [color, setColor] = useState(false);
+  const ctx = useContext(Context);
 
 
   const columns = [
@@ -49,6 +51,7 @@ const History = () => {
 
   const fetchData = async () => {
     await callGet(`/wallet/user/history?userId=${id}`, null).then((res) => {
+      ctx.setIsLoading(true);
       const arr = [];
 
       if (res && typeof res.history != 'undefined') {
@@ -75,7 +78,7 @@ const History = () => {
       //     arr.push(item.list);
       //   }
       // });
-
+      ctx.setIsLoading(false);
       setdata(arr);
     });
   };

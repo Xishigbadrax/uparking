@@ -1,15 +1,12 @@
-
-
 /* eslint-disable react/prop-types */
 import React from 'react';
-import {Input, Divider, Image, message} from 'antd';
-import {useState, useEffect} from 'react';
+import {Input, Divider} from 'antd';
 
+import {useState, useEffect} from 'react';
 
 const WalletBankInfo = (props) => {
   // const [inputValue, setInputValue] = useState('');
   const [propData, setPropData] = useState('');
-
 
   useEffect(() => {
     // eslint-disable-next-line react/prop-types
@@ -26,9 +23,6 @@ const WalletBankInfo = (props) => {
     }
   };
 
-  const success = () => {
-    message.success('Амжилттай хуулагдлаа');
-  };
   return (
 
     <div>
@@ -40,18 +34,13 @@ const WalletBankInfo = (props) => {
       <div style={{display: 'flex', justifyContent: 'space-between'}}>
         <div style={{}}>
           {propData && propData !== '' ? (
-            <Input bordered={false} value={propData} />
+            <Input type="number" bordered={false} value={propData} />
           ) : (
-            <Input bordered={false} onChange={onChange} />
+            <Input type="number" bordered={false} onChange={onChange} />
           )}
         </div>
         <div>
-          {/* <CopyOutlined width={'20px'} /> */}
-          <div>
-            <Image onClick={() => {
-              navigator.clipboard.writeText(props.value), success();
-            }} className="cursor-pointer" preview={false} src="../../copy.png" />
-          </div>
+
         </div>
       </div>
       <Divider />
