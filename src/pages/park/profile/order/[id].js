@@ -11,13 +11,14 @@ import Link from 'next/link';
 import {Tabs} from 'antd';
 import CustomCalendar from '@components/CustomCalendar';
 import moment from 'moment';
+import SettingPane from '@components/settingPane/setting';
 moment.updateLocale('mn', {
   weekdaysMin: ['НЯ', 'ДА', 'МЯ', 'ЛХ', 'ПҮ', 'БА', 'БЯ'],
 });
 
 const {TabPane} = Tabs;
 
-const {Header, Sider, Content} = Layout;
+const {Header} = Layout;
 
 const IMG_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
 const style = {
@@ -125,30 +126,35 @@ const OrderId = () => {
           </Link>
           <span style={{fontSize: '20px', lineHeight: '24px', color: '#0013D4', marginLeft: '20px'}}>Миний захиалга</span>
         </Header>
-        <Layout style={{padding: '0px 0px 0px 60px'}}>
-          <Content>
+        {/* <Layout style={{padding: '0px 0px 0px 20px'}}>
+          <Content width={600}> */}
+        <Row>
+          <Col span={12} offset={1}>
             {images.length > 0 ?
-              <Carousel>
+              <Carousel style={{width: '600px'}}>
                 {images.map((image) => (
                   <div key={image.id}>
                     <Image
                       preview={false}
-                      width={468}
+                      width={700}
+                      height={468}
                       src={IMG_URL + image.path}
                     /></div>
                 ))}
               </Carousel> :
               null}
             <Row style={{marginTop: '24px'}}>
-              <Col span={12}>
-                <div style={{fontSize: '20px'}}><strong>{!Helper.isNullOrEmpty(orderData.residenceName) ? orderData.residenceName : null}</strong></div>
+              <Col span={9} offset={0}>
+                <div className="text-[20px] flex items-center"><strong>{!Helper.isNullOrEmpty(orderData.residenceName) ? orderData.residenceName : null}</strong> <Image className=" w-[15px] h-[15px] ml-[5.5px]" src="../../../images/darias_icon/checkCircle.png" /></div>
                 {/* <div>rating</div> */}
               </Col>
               {/* <Col span={6}>2</Col> */}
-              <Col span={12}>{`${orderData.province}, ${orderData.district}, ${orderData.section}, ${orderData.residenceName}, ${orderData.residenceBlockNumber}`}</Col>
+              <Col span={12} offset={2}>{`${orderData.province}, ${orderData.district}, ${orderData.section}, ${orderData.residenceName}, ${orderData.residenceBlockNumber}`}</Col>
             </Row>
-          </Content>
-          <Sider width={400}>
+            {/* </Content> */}
+          </Col>
+          {/* <Sider width={400}> */}
+          <Col span={8} offset={1}>
             <Tabs defaultActiveKey="1" onChange={callback}>
               <TabPane tab="Танилцуулга" key="1">
                 {orderData.bookingStatus === 'CONFIRMED' || orderData.bookingStatus === 'HISTORY ' ?
@@ -315,10 +321,11 @@ const OrderId = () => {
                 </Row>
 
                 <div style={{margin: '30px 0px'}}>
-                  <Button type="default" size={'large'} block>
+                  <Button className=" bg-[#0336FF14] bg-opacity-[8%] rounded-[8px] text-[#0013D4] w-[328px] h-[48px]" type="default">
                                         Зогсоолыг харах
                   </Button>
                 </div>
+                <div className=" text-[#A2A4AA] font-bold text-[14px] mb-[10px]">Өдөр (09:00-19:00)</div>
                 <Row gutter={16}>
                   <Col className="gutter-row" span={12} >
                     <div style={style}>
@@ -436,8 +443,8 @@ const OrderId = () => {
                     compareDate(moment().format('YYYY-MM-DD HH-mm-ss'), orderData.startDateTime) === 1;
                     return (
                       <div style={{margin: '30px 0px'}}>
-                        <Button type="danger" size={'large'} block onClick={handleClickCancelOrder}>
-                                 Захиалга цуцлах
+                        <Button className="bg-[#FF026614] bg-opacity-[8%] text-[#C6231A] rounded-[8px] w-[328px] h-[48px]" size={'large'} onClick={handleClickCancelOrder}>
+                                                    Захиалга цуцлах
                         </Button>
                       </div>
                     );
@@ -519,11 +526,15 @@ const OrderId = () => {
                                 Үнэлгээ
               </TabPane>
               <TabPane tab="Тусламж" key="3">
-                                Тусламж
+                <div className="mb-[30px]"><SettingPane /></div>
+
               </TabPane>
             </Tabs>
-          </Sider>
-        </Layout>
+          </Col>
+          {/* </Sider>
+          </Col> */}
+          {/* </Layout> */}
+        </Row>
       </Layout>
       <Modal title="Захиалга цуцлах" visible={isModalVisibleCancelOrder} onOk={handleOkCancelOrder} onCancel={handleCancelCancelOrder} footer={[
         <Button key="back" type="primary" size="large" onClick={handleClickCancelOrderContinue} block>

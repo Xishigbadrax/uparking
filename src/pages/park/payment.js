@@ -307,7 +307,6 @@ const Payment = ( ) => {
           Хадгалсан захиалга
         </span>
       </Header>
-
       <Row>
         <Col span={14}>
           {image.length > 0 ? (
