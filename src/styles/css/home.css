@@ -2484,3 +2484,11 @@ width: 125px;
   background:rgba(222, 226, 233, 0.2); 
   border-radius: 16px;
 }
+.walletCal .ant-picker-calendar-header{
+  display: none !important;
+}
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none !important; 
+  margin: 0; 
+}

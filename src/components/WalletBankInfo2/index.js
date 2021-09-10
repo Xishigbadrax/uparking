@@ -14,6 +14,7 @@ const WalletBankInfo2 = (props) => {
       <div style={{display: 'flex', justifyContent: 'space-between'}}>
         <div style={{}}>
           <Input
+
             bordered={false}
             placeholder={props.place}
             onChange={onChange}

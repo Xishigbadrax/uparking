@@ -8,6 +8,7 @@ import WalletBankInfo from '@components/WalletBankInfo';
 import {Tabs, Image, Button, Modal, Alert} from 'antd';
 import {callGet, callPost} from '@api/api';
 import Context from '@context/Context';
+import WalletInput from '../../../../components/WalletInput';
 
 const tabItems = [
   {
@@ -243,7 +244,9 @@ const Charge = () => {
                         Дансны дугаар
                         </WalletBankInfo>
                         <WalletBankInfo
-                          value={data && data.accountName ? data.accountName : 0}
+                          value={
+                            data && data.accountName ? data.accountName : 0
+                          }
                         >
                         Хүлээн авагч
                         </WalletBankInfo>
@@ -279,9 +282,9 @@ const Charge = () => {
                     key="1"
                   >
                     <div>
-                      <WalletBankInfo onChangeInput={onChangeInput}>
+                      <WalletInput onChangeInput={onChangeInput}>
                       Цэнэглэх дүн
-                      </WalletBankInfo>
+                      </WalletInput>
                     </div>
                   </TabPane>
                   <TabPane
@@ -301,12 +304,12 @@ const Charge = () => {
                     }
                     key="2"
                   >
-                    <WalletBankInfo onChangeInput={onChangeInputPhone}>
+                    <WalletInput onChangeInput={onChangeInputPhone}>
                     Утасны дугаар
-                    </WalletBankInfo>
-                    <WalletBankInfo onChangeInput={onChangeInput}>
+                    </WalletInput>
+                    <WalletInput onChangeInput={onChangeInput}>
                     Цэнэглэх дүн
-                    </WalletBankInfo>
+                    </WalletInput>
                   </TabPane>
                   <TabPane
                     tab={
@@ -325,9 +328,9 @@ const Charge = () => {
                     }
                     key="3"
                   >
-                    <WalletBankInfo onChangeInput={onChangeInput}>
+                    <WalletInput onChangeInput={onChangeInput}>
                     Цэнэглэх дүн
-                    </WalletBankInfo>
+                    </WalletInput>
                   </TabPane>
                 </Tabs>
                 <Button onClick={() => fetchData2()} type="primary" block>
@@ -336,9 +339,9 @@ const Charge = () => {
               </div>
             </TabPane>
             <TabPane tab="Промо код" key="3">
-              <WalletBankInfo onChangeInput={onChangePromo}>
+              <WalletInput onChangeInput={onChangePromo}>
               Промо код
-              </WalletBankInfo>
+              </WalletInput>
               <Button onClick={() => fetchData3()} type="primary" block>
               Идэвхжүүлэх
               </Button>

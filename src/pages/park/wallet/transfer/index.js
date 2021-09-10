@@ -5,6 +5,7 @@ import WalletCard from '../../../../components/WalletCard';
 import WalletChart from '@components/WalletChart';
 import WalletBankInfo2 from '@components/WalletBankInfo2';
 
+import MaskedInput from 'antd-mask-input';
 import {Tabs, Image, Button, Modal, Divider, Input, Alert} from 'antd';
 import {callGet, callPost} from '@api/api';
 
@@ -83,6 +84,7 @@ const Transfer = () =>{
   };
   const onChangeAccountNumber = (value) => {
     setAccountNumber(value);
+    console.log(accountNumber, ' account number' );
   };
   const onChangeAccountName = (value) => {
     setAccountName(value);
@@ -165,11 +167,12 @@ const Transfer = () =>{
       content: (
         <div>
           <p>Та өөрийн гүйлгээний нууц үгээ оруулна уу</p>
-          <Input
+          {/* <Input
             type="password"
             onChange={(e) => onchangeee(e)}
             placeholder="Гүйлгээний нууц үг"
-          />
+          /> */}
+          <MaskedInput mask="1111" onChange={(e) => onchangeee(e)} name="Гүйлгээний нууц үг" />
         </div>
       ),
       onOk() {
@@ -235,7 +238,7 @@ const Transfer = () =>{
             <div>
               {/* <WalletBankInfo2 onChangeInput={onChangeAmount} place="0₮" /> */}
               {/* <Input className=" text-[48px] text-center" bordered={false} onClick={onChangeAmount} placeholder="0₮" /> */}
-              <Input className="text-[48px] text-center" bordered={false} placeholder="0₮" />
+              <Input type="number" className="text-[48px] text-center" onChange={onChangeAmount} bordered={false} placeholder="0₮" />
             </div>
 
             {!isTransactionDesc ? (
@@ -293,7 +296,7 @@ const Transfer = () =>{
             Банкны данс руу
             </p>
             <Tabs centered defaultActiveKey="1">
-              {tabItems.map((tabitem) => (
+              {tabItems.map((tabitem, index) => (
                 <TabPane
                   key={tabitem.type}
                   tab={
@@ -312,15 +315,43 @@ const Transfer = () =>{
                   }
                 >
                   <div>
-                    <WalletBankInfo2
+                    {/* <WalletBankInfo2
                       onChangeInput={onChangeAccountNumber}
                       place="Дансны дугаар"
 
-                    />
-                    <WalletBankInfo2
+                    /> */}
+                    {/* <MaskedInput bordered={false} mask="1111111111" onChange={(e) => onChangeAccountNumber(e.target.value)} placeholder="Дансны дугаар" />
+                    <Divider /> */}
+                    {/* <WalletBankInfo2
                       onChangeInput={onChangeAccountName}
                       place="Эзэмшигчийн нэр"
-                    />
+                    /> */}
+                    {/* <MaskedInput bordered={false} mask="aaaaaaaaaaaaaaaaaaaa" onChange={(e) => onChangeAccountName(e.target.value)} placeholder="Эзэмшигчийн нэр" />
+                    <Divider /> */}
+
+
+                    <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                      <div style={{}}>
+                        <Input
+                          type="number"
+                          bordered={false}
+                          placeholder="Дансны дугаар"
+                          onChange={(e) => onChangeAccountNumber(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <Divider />
+                    <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                      <div style={{}}>
+                        <Input
+                          type="text"
+                          bordered={false}
+                          placeholder="Эзэмшигчийн нэр"
+                          onChange={(e) => onChangeAccountName(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <Divider />
                   </div>
                 </TabPane>
               ))}
