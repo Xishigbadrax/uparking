@@ -81,12 +81,13 @@ const spaceIndicator = (props) => {
       <Row style={{height: '360px'}}>
         <Col span={24}>
           <Form
+            className='spaceIndicator'
             form={props.form}
             onFinish={(values) => props.onFinish(values, form)}
             style={{marginTop: '50px'}}
           >
             <div style={{display: 'flex'}}>
-              <Col offset={2} span={6}>
+              <Col offset={2} span={6} className='indicator'>
                 <Form.Item
                   name="entranceLock"
                   span={4}
@@ -163,7 +164,7 @@ const spaceIndicator = (props) => {
                 <Form.Item
                   span={6}
                   name="isNumbering"
-                  rules={[{required: true, message: 'Сонгоно уу?'}]}
+                  rules={[{required: true, message: 'Зогсоолын дугаарын тэмдэглэгээ сонгоно уу?'}]}
                 >
                   <Select
                     placeholder="Зогсоолын дугаарын тэмдэглэгээ*"
@@ -249,8 +250,8 @@ const spaceIndicator = (props) => {
                 </Form.Item>
                 <Divider />
               </Col>
-              <Col offset={4} span={6}>
-                <p style={{fontSize: '12px'}}>
+              <Col offset={4} span={6} style={{width: '375px', height: '224px'}}>
+                <p style={{fontSize: '14px'}}>
                   Зогсоолын эргэж гарах боломжтой чиглэл
                 </p>
                 <Form.Item
@@ -275,7 +276,7 @@ const spaceIndicator = (props) => {
                                 width="20px"
                               ></img>
                             </div>
-                            <p style={{fontSize: '16px', marginTop: '5px'}}>
+                            <p style={{fontSize: '16px', marginTop: '5px', lineHeight: '24px'}}>
                               {item.label}
                             </p>
                           </div>

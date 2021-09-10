@@ -1,6 +1,6 @@
 import {useContext} from 'react';
 import LoadingBar from 'react-top-loading-bar';
-import {Layout, Spin} from 'antd';
+import {Layout, Spin, Card} from 'antd';
 // import Header from './Header';
 import Sidebar from './Sidebar';
 import Context from '@context/Context';
@@ -16,9 +16,11 @@ const ProfileLayout = ({children, title, className}) => {
 
   return (
     <Spin indicator={antIcon} tip="Таны хүсэлтийг боловсруулж байна. Түр хүлээнэ үү..." spinning={isLoading}>
-      <Layout style={{maxWidth: '1200px', margin: 'auto'}} className={'profileLayout'}>
+      <Layout style={{maxWidth: '1400px', margin: 'auto'}} className={'profileLayout'}>
         <LoadingBar color='#109720' progress={isLoading ? 70 : 100} />
-        <Sidebar />
+        <Card style={{borderRadius: '50px', height: '800px'}}>
+          <Sidebar />
+        </Card>
         <Layout style={{background: 'none'}}>
           {/* <Header /> */}
           <Content className={'profileContent'}>

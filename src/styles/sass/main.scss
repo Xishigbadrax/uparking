@@ -153,6 +153,7 @@ body {
         }
       }
       .ant-menu-item-selected {
+        margin-left: 50px !important;
         background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 
@@ -285,7 +286,6 @@ body {
             font-weight: bold;
             font-size: 16px;
             line-height: 24px;
-
             align-items: center;
             text-align: center;
             letter-spacing: 0.15px;
@@ -327,6 +327,7 @@ body {
       }
       .daystatuses {
         padding-left: 40px;
+        display: flex;
         text-align: left;
         font-style: normal;
         font-weight: normal;
@@ -376,8 +377,12 @@ body {
                     text-align: center;
                     .eventText {
                       font-weight: normal;
+                      border-radius: 10px;
+                      border: 1px solid black;
                       font-size: 10px;
                       line-height: 16px;
+                      height: 20px;
+                      width: 100px;
                       // color: #76E8AA;
                     }
                   }
@@ -403,7 +408,7 @@ body {
           .ant-tabs-tab-btn {
             font-weight: bold;
             font-size: 14px;
-            line-height: 24px;
+            line-height: 30px;
 
             align-items: center;
             text-align: center;
@@ -485,7 +490,7 @@ body {
 }
 
 .calendarViewer {
-  position: absolute !important;
+  // position: absolute !important;
   margin-top: 20px;
 }
 .calendarListStatus {

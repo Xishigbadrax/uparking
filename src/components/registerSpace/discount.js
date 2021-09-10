@@ -32,42 +32,48 @@ const discount = (props) => {
   });}
 
   return (
-    <div className={'h-4/5'}>
+    <div>
       <Form form={props.form} className={'Sale'} onFinish={props.onFinish}>
-        <Row offset={4}>
-          <p
-            style={{
-              color: 'blue',
-              fontSize: '20px',
-              marginTop: '50px',
-              marginLeft: '100px',
-            }}
-          >
-            <b> Хөнгөлөлтийн хувь</b>
-          </p>
+        <Row>
+          <Col offset={3}>
+            <p
+              style={{
+                color: 'blue',
+                fontSize: '20px',
+                marginTop: '50px',
+              }}
+            >
+              <b> Хөнгөлөлтийн хувь</b>
+            </p>
+          </Col>
         </Row>
         <Row>
-          <p
+          <Col
+            offset={3}
             style={{
-              marginLeft: '100px',
               fontSize: '14px',
+              fontWeight: '400',
+              marginTop: '10px',
+              lineHeight: '20px',
+              color: '#A2A4AA',
             }}
           >
             1 удаагийн захиалгаар урт хугацааны захиалга үүсгэхэд олгох
             хөнгөлөлт
-          </p>
+          </Col>
         </Row>
         <Row style={{marginTop: '100px'}}>
           <Col offset={5}>
-            <label style={{fontSize: '14px'}}>
+            <Row style={{fontSize: '14px', fontWeight: '700', color: '#A2A4AA', fontStyle: 'Helvetica', width: ' 400px'}}>
               7 хоногын захиалга - Хөнгөлөлтийн %
-            </label>
+            </Row>
             <Form.Item
               name="weekSale"
               rules={[
                 {
                   required: true,
-                  message: '7 хоногийн хөнгөлөлтийн хувиа оруулна уу?',
+                  type: 'number',
+                  message: '7 хоногийн хөнгөлөлтийн хувиа оруулна уу?(зөвхөн тоон утга оруулна !)',
                 },
               ]}
             >
@@ -76,20 +82,20 @@ const discount = (props) => {
                 onChange={(e) => {
                   setweekSale(e.target.value);
                 }}
-                style={{marginTop: '20px', width: '295px', height: '44px'}}
+                style={{marginTop: '20px', width: '400px', height: '44px'}}
               />
             </Form.Item>
             <Divider style={{color: 'black'}} />
-            <label style={{fontSize: '14px', marginTop: '20px'}}>
+            <Row style={{fontSize: '14px', marginTop: '20px', color: '#A2A4AA', fontStyle: 'Helvetica', width: ' 400px', fontWeight: '700'}}>
               1 сарын захиалга - Хөнгөлөлтийн %
-            </label>
+            </Row>
             <Form.Item
-              style={{marginTop: '20px'}}
               name="monthSale"
               rules={[
                 {
                   required: true,
-                  message: '1 сарын хөнгөлөлтийн хувиа оруулна уу?',
+                  type: 'number',
+                  message: '1 сарын хөнгөлөлтийн хувиа оруулна уу?(зөвхөн тоон утга оруулна !)',
                 },
               ]}
             >

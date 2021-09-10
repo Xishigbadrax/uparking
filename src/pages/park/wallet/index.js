@@ -117,7 +117,7 @@ const Wallet = () => {
 
           <div className=" h-[480px] w-[613px] overflow-scroll">
             <Calendar
-              className="customCalendar"
+              className="walletCal"
               locale={calendarLocale}
               dateCellRender={dateCellRender}
               // headerRender={}

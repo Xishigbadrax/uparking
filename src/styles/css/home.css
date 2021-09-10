@@ -2076,12 +2076,20 @@
   border: none !important;
 }
 .MainImage .ant-upload.ant-upload-select-picture-card {
-  height: 134px !important;
-  width: 327px !important;
+  height: 200px !important;
+  width: 400px !important;
+  border-radius: 20px;
 }
 .spaceImage .ant-upload.ant-upload-select-picture-card {
-  height: 134px !important;
-  width: 327px !important;
+  height: 200px !important;
+  width:400px !important;
+  border-radius: 20px;
+}
+.spaceImage .anticon .anticon-plus svg{
+  margin-top: 2px !important;
+}
+.MainImage .anticon .anticon-plus svg{
+  margin-top: 2px !important;
 }
 .address {
   height: 456px !important;
@@ -2116,6 +2124,7 @@
 }
 .priceInfo .ant-input {
   border: none !important;
+  padding:  0px !important;
 }
 .priceInfo .ant-input:focus,
 .ant-input-focused {
@@ -2135,6 +2144,7 @@
 }
 .Sale .ant-input {
   border: none !important;
+  padding: 0px !important;
 }
 .Sale .ant-input:focus,
 .ant-input-focused {
@@ -2149,12 +2159,19 @@
 .Sale .ant-form-item {
   margin-bottom: 0px !important;
 }
+.dashboardCalendar .ant-picker-cell .ant-picker-cell-in-view{
+  height: 50px !important;
+   width: auto !important;
+}
 .rentDateCalendar .ant-picker-cell .ant-picker-cell-in-view {
   height: 42px !important;
   width: auto !important;
 }
 .rentDateCalendar {
   width: 720px !important;
+}
+.rentDate.ant-fullcalendar-header{
+  display:none !important;
 }
 .rentDateCalendar
   .ant-picker-panel
@@ -2169,7 +2186,7 @@
   height: 52px !important;
 }
 .rentDate .daynighttext .item {
-  margin-top: 28px !important;
+  margin-top: 29px !important;
 }
 .rentDate .daynighttext .item ul li {
   height: 10px !important;
@@ -2189,6 +2206,9 @@
   .ant-select-selector {
   border-radius: 10px !important;
 }
+.pickWeekDayState .ant-select-arrow{
+   color: #0013D4;
+}
 .Surrender .ant-select-selector {
   background: rgba(0, 249, 184, 0.08) !important;
   color: #76e8aa;
@@ -2203,7 +2223,7 @@
   color: blueviolet;
 }
 .stateDivider {
-  margin: 12px !important;
+  margin-top: 12px !important;
 }
 .addVehicleForm .ant-form-item-control-input {
   height: 24px !important ;
@@ -2218,7 +2238,7 @@
 
 .addVehicleForm .ant-form-item {
   margin-bottom: 0px !important  ;
-}
+} 
 .addVehicleForm
   .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input)
   .ant-select-selector {
@@ -2243,6 +2263,7 @@
   height: 10px;
   margin-left: 10px;
   border-radius: 5px;
+  /* width: 200pz; */
   padding: 1px;
 }
 .NotSuccess {
@@ -2306,10 +2327,9 @@ width: 125px;
   align-content: center !important;
   height: 50px !important;
   border-radius: 20px !important;
-
 }
 .mapheadersearch .ant-select-selection-search-input{
-  padding-top: 10px !important;
+  padding-top: 20px !important;
   padding-left: 10px !important;
 }
 .mapheadersearch .ant-select-selection-placeholder{
@@ -2320,6 +2340,86 @@ width: 125px;
   padding-top: 10px !important;
   padding-left: 10px !important;
 }
+.address.ant-form-item-explain .ant-form-item-explain-error{
+  height: 20px !important;
+  margin-left: 30px !important;
+  margin-top: 30px !important ;
+} 
+.address .ant-form-item{
+  margin-bottom: 0px!important ;
+  margin-top: 10px !important;
+  /* height: 62px !important; */
+}
+.address .ant-select-selection-placeholder{
+  color: #35446D !important;
+  /* height: 62px !important; */
+}
+.address .ant-input::placeholder{
+  color: #35446D !important;
+}
+.address .ant-form-item-control-input-content{
+  margin-top: 12px !important;
+}
+.indicator{
+  width: 350px !important;
+  height: 360px !important;
+}
+.spaceIndicator .ant-select-selection-placeholder{
+  color: #35446D !important;
+}
+.UploadAgainButton{
+  background: linear-gradient(90deg, #0013D4 0%, #00F9B8 100%);
+  border-radius: 8px;
+}
+.DashboardCalendar1 .daynighttext {
+    margin-top: 210px !important;
+}
+.DashboardCalendar1 .daynighttext .item{
+  margin-top: 10px !important;
+}
+.DashboardCalendar1 .daynighttext .item ul{
+    margin-top:55px;
+}
+.BarChart .ant-card-body canvas{
+  height: 230px !important;
+}
+.RadarChart .ant-card-body canvas{
+  height: 230px !important;
+}
+.ListCalendarSelection  .ant-select-selector{
+  height: 40px !important;
+  width: 200px !important;
+  padding: 0px !important;
+  border: none !important;
+  color: #0013D4 !important;
+}
+.orderCalendar .daynighttext .item{
+   margin-top: 60px ;
+}
+/* .orderCalendar .daynighttext .item ul{
+  margin-top: 100px ;
+} */
+.OrdePagination{
+  margin-left: 70% !important;
+}
+.OrdePagination .ant-pagination-item-link{
+    height: 30px !important;
+    border-radius: 20px !important;
+    width: 30px !important;
+    background: #0013D4 ;
+}
+.OrdePagination .anticon  svg{
+  margin-top: -10px !important;
+  color: white;
+ 
+}
+.OrdePagination .ant-pagination-prev .ant-pagination-disabled{
+   margin-left:  40%;
+}
+.OrdePagination .ant-pagination-item {
+  border: none !important;
+}
+
 
 .newsNavbar{
   margin-top: 36px;
@@ -2376,7 +2476,7 @@ width: 125px;
 
 }
 
-.ant-picker-calendar-header{
+.walletCal .ant-picker-calendar-header{
   display: none !important;
 }
 input[type=number]::-webkit-inner-spin-button, 

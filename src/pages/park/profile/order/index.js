@@ -1,29 +1,35 @@
 import ProfileLayout from '@components/layouts/ProfileLayout';
-import {Tabs, Select, List, Row, Col} from 'antd';
-import {Calendar, Tag} from 'antd';
+import {Tabs, Select, List, Row, Col, DatePicker} from 'antd';
+import {Calendar, Tag, Pagination, LocaleProvider} from 'antd';
 import {callPost} from '@api/api';
 import {useEffect, useState, useContext} from 'react';
 import {callGet} from '@api/api';
 import Context from '@context/Context';
 import {messageType, defaultMsg} from '@constants/constants';
 import {showMessage} from '@utils/message';
-import moment from 'moment';
+import moment, {locale} from 'moment';
 import {calendarLocale} from '@constants/constants.js';
-import DayNightColumn from '@components/DayNightColumn';
+import DayNightColumn from '@components/DayNightColumns';
 import {CalendarOutlined, UnorderedListOutlined, ArrowRightOutlined, EyeTwoTone, DeleteTwoTone} from '@ant-design/icons';
 import Helper from '@utils/helper';
 import Link from 'next/link';
+
 const {TabPane} = Tabs;
 const {Option} = Select;
-
+moment.updateLocale('mn', {
+  weekdaysMin: ['НЯМ', 'ДАВ', 'МЯГ', 'ЛХА', 'ПҮР', 'БАА', 'БЯМ'],
+});
+moment.updateLocale('mn', {
+  months: ['Нэгдүгээр сар', 'Хоёрдугаар сар', 'Гуравдугаар сар', 'Дөрөвдүгээр сар', 'Тавдугаар сар', 'Зургаадугаар сар', 'Долоодугаар сар', 'Наймдугаар сар', 'Есдүгээр сар', 'Аравдугаар сар', 'Арваннэгдүгээр сар', 'Арванхоёрдугаар сар'],
+});
 const Order = () => {
   const ctx = useContext(Context);
-
   const [asWho, setAsWho] = useState(1);
   const [isConfirmed, setIsConfirmed] = useState(null);
-  const [calendarStatus, setCalendarStatus] = useState('');
+  const [calendarStatus, setCalendarStatus] = useState();
   const [calendarData, setCalendarData] = useState([]);
   const [dataViewType, setDataViewType] = useState('calendar');
+  const [currentPage, setCurrentPage]= useState(1);
 
   const onClickTab = async (key) => {
     setAsWho(key);
@@ -31,18 +37,29 @@ const Order = () => {
     await getData();
   };
   const onClickInnerTab = (key) => {
-    setDataViewType('calendar');
+    // setDataViewType('calendar');
+    if (dataViewType === 'list') {
+      setDataViewType('calendar');
+      return;
+    }
     if (key == 1) {
       setCalendarStatus(key);
-      setIsConfirmed(false);
+      setIsConfirmed(true);
     } else if (key == 2) {
       setCalendarStatus(key);
       setIsConfirmed(true);
     } else if (key == 3) {
       setCalendarStatus(key);
-      setIsConfirmed(null);
+      setIsConfirmed(true);
       getHistroy();
     }
+  };
+  const onChangeOrderDate = (e)=>{
+    console.log(moment(e).format('YYYY/MM/DD'));
+  };
+  const onChangePage = (page)=>{
+    console.log(page);
+    setCurrentPage(page);
   };
   useEffect(() => {
     getData();
@@ -52,7 +69,6 @@ const Order = () => {
       getData();
     }
   }, [isConfirmed]);
-
   const getData = async () => {
     ctx.setIsLoading(true);
     if (isConfirmed === null) {
@@ -64,11 +80,11 @@ const Order = () => {
         showMessage(messageType.FAILED.type, defaultMsg.dataError);
       } else {
         setCalendarData(res);
+        console.log(res, 'ene nuguu data');
       }
       ctx.setIsLoading(false);
     }
   };
-
   const getHistroy = async () => {
     ctx.setIsLoading(true);
     const formData = {
@@ -82,13 +98,11 @@ const Order = () => {
       showMessage(messageType.FAILED.type, result.error);
       return true;
     } else {
-      console.log(res.history, 'resres');
+      console.log(res.history, 'history');
       setCalendarData(res.history);
     }
     ctx.setIsLoading(false);
   };
-
-
   const getListData = (value) => {
     const listData = [];
     if (calendarData.length > 0) {
@@ -117,23 +131,29 @@ const Order = () => {
   const dateCellRender = (value) => {
     const listData = getListData(value);
     return (
-      <ul className="events">
-        {listData.map((item) => (
+      <ul className="events" style={{marginTop: '10px'}}>
+        {listData && listData.map((item) => (
           <li key={item.bookingId}>
             {/* <Badge status={item.type} text={item.content} /> */}
-            <Tag color={getTagColor(item)} className="eventText">{item.bookingNumber}</Tag>
+            {calendarStatus === '1' &&<div> <Tag color='#C6231A' className="eventText">{item.bookingNumber}</Tag>
+              <Tag color='gray' style={{borderRadius: '20px', border: ' 1px solid black',
+                fontSize: '10px',
+                lineHeight: '16px',
+                height: '20px',
+                width: '100px'}}></Tag></div>}
+            {calendarStatus === '2' && <Tag color='green' className="eventText">{item.bookingNumber}</Tag>}
+            {calendarStatus === '3' && <Tag color='yellow' className="eventText">{item.bookingNumber}</Tag>}
           </li>
         ))}
+        {listData === [] && <Tag color='#C6231A' className="eventText" style={{background: 'pink', height: '20px'}}></Tag>}
       </ul>
     );
   };
-
   const getMonthData = (value) => {
     if (value.month() === 8) {
       return 1394;
     }
   };
-
   const monthCellRender = (value) => {
     const num = getMonthData(value);
     return num ? (
@@ -143,7 +163,6 @@ const Order = () => {
       </div>
     ) : null;
   };
-
   const handleChangeView = (value) => {
     setDataViewType(value);
   };
@@ -152,77 +171,101 @@ const Order = () => {
     {title: 'Баталгаажсан', key: '2'},
     {title: 'Түүх', key: '3'},
   ];
-
-
   return (
     <ProfileLayout>
       <Tabs defaultActiveKey="1" onChange={onClickTab} type="card" className={'profileTab'}>
         <TabPane tab="Түрээслэгч" key="1">
           <Tabs defaultActiveKey="1" onChange={onClickInnerTab} className="profileSubTab">
             {innerTabs.map((tab) => (
-              <TabPane tab={tab.title} key={tab.key}>
-                {tab.title !== 'Түүх' ?
-                  <Select className="calendarViewer" defaultValue={dataViewType} style={{width: 120}} onChange={handleChangeView}>
-                    <Option value="calendar"><CalendarOutlined /> <span>Календарь</span></Option>
-                    <Option value="list"><UnorderedListOutlined /> <span>Жагсаалт</span></Option>
-                  </Select> : null}
+              <TabPane tab={
 
-                {dataViewType === 'calendar' ?
-                  <div>
+                <div className='ListCalendarSelection'>
+                  <Select className="calendarViewer" defaultValue={dataViewType} onChange={handleChangeView} style={{width: '100%'}}>
+                    <Option value="calendar" defaultValue><span>Календарь</span></Option>
+                    <Option value="list"><span>Жагсаалт</span></Option>
+                  </Select>
+                </div>}
+              key={tab.key}>
+                <Row>
+                  <DatePicker
+                    locale={calendarLocale}
+                    defaultvalue={moment()}
+                    onChange={onChangeOrderDate}
+                  />
+                </Row>
+                {dataViewType ==='calendar'?
+                  <div className='orderCalendar'>
                     <DayNightColumn />
-                    <Calendar className="customCalendar" locale={calendarLocale} dateCellRender={dateCellRender} monthCellRender={monthCellRender} />
-                  </div> :
-                  <List
-                    className="calendarList"
-                    style={{marginTop: 30}}
-                    itemLayout="horizontal"
-                    dataSource={calendarData}
-                    renderItem={(item) => (
-                      <List.Item
-                      >
-                        <div className="calendarListStatus">
-                          {item.bookingStatus}
-                        </div>
+                    <Calendar className="customCalendar"
+                      locale={calendarLocale}
+                      headerRender={ ()=>{
+                        return (
+                          <div>
+                          sdsas
+                          </div>);
+                      }
+                      }
+                      dateCellRender={dateCellRender}
+                      monthCellRender={monthCellRender} />
+                  </div>:
+                  <div>
+                    <List
+                      className="calendarList"
+                      style={{marginTop: 30}}
+                      itemLayout="horizontal"
+                      dataSource={calendarData}
+                      renderItem={(item) => (
+                        <List.Item
+                        >
+                          <div className="calendarListStatus">
+                            {item.bookingStatus}
+                          </div>
+                          <Row style={{width: '100%'}}>
+                            <Col span={7}>
+                              <div className="listtitle"><strong>{item.residenceName}</strong></div>
+                              <div className="listdescription">{`${item.province}, ${item.district}, ${item.section}, ${item.residenceName}, ${item.residenceBlockNumber}`}</div>
+                            </Col>
+                            <Col span={4} className="listdaynight">
+                              {item.totalAtDay ? item.totalAtDay + ' өдөр,' : null}
+                              {item.totalAtNight ? item.totalAtNight + ' шөнө,' : null}
+                              {item.totalAllDay ? item.totalAllDay + ' бүтэн өдөр' : null}
+                              {item.totalAllDay ? item.totalAllDay + ' бүтэн өдөр' : null}
+                              {item.totalAllDay ? item.totalAllDay + ' бүтэн өдөр' : null}
+                            </Col>
+                            <Col span={7} className="liststartenddate">
+                              <div style={{display: 'inline-flex'}}>
+                                <div >
+                                  <div> <strong>{Helper.date(item.startDateTime)}</strong></div>
+                                  <div> {Helper.time(item.endDateTime)}</div>
+                                </div>
+                                <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '30px'}} ><ArrowRightOutlined /></div>
+                                <div >
+                                  <div> <strong>{Helper.date(item.startDateTime)}</strong></div>
+                                  <div> {Helper.time(item.endDateTime)}</div>
+                                </div>
 
-                        <Row style={{width: '100%'}}>
-                          <Col span={7}>
-                            <div className="listtitle"><strong>{item.residenceName}</strong></div>
-                            <div className="listdescription">{`${item.province}, ${item.district}, ${item.section}, ${item.residenceName}, ${item.residenceBlockNumber}`}</div>
-                          </Col>
-                          <Col span={4} className="listdaynight">
-                            {item.totalAtDay ? item.totalAtDay + ' өдөр,' : null}
-                            {item.totalAtNight ? item.totalAtNight + ' шөнө,' : null}
-                            {item.totalAllDay ? item.totalAllDay + ' бүтэн өдөр' : null}
-                          </Col>
-                          <Col span={7} className="liststartenddate">
-                            <div style={{display: 'inline-flex'}}>
-                              <div >
-                                <div> <strong>{Helper.date(item.startDateTime)}</strong></div>
-                                <div> {Helper.time(item.endDateTime)}</div>
                               </div>
-                              <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '30px'}} ><ArrowRightOutlined /></div>
-                              <div >
-                                <div> <strong>{Helper.date(item.startDateTime)}</strong></div>
-                                <div> {Helper.time(item.endDateTime)}</div>
-                              </div>
+                            </Col>
+                            <Col span={3} className="listpay">
+                              <div style={{textAlign: 'right'}}> Нийт төлбөр</div>
+                              <div style={{textAlign: 'right'}} className="totalprice"> <strong>
+                                {item.totalPrice ? Helper.formatValueReverse(item.totalPrice) : 0}₮</strong></div>
+                            </Col>
+                            <Col span={3} className="listactions">
+                              <Link href={{pathname: `/park/profile/order/${item.bookingId}`, query: {page: '1'}}} passHref>
+                                <EyeTwoTone twoToneColor="#0013D4" style={{fontSize: 20}} />
+                              </Link>
+                              {item.title === 'Баталгаажсан' ? <DeleteTwoTone style={{marginLeft: '15px'}} twoToneColor="#C6231A" /> : null}
+                            </Col>
+                          </Row>
+                        </List.Item>
 
-                            </div>
-                          </Col>
-                          <Col span={3} className="listpay">
-                            <div style={{textAlign: 'right'}}> Нийт төлбөр</div>
-                            <div style={{textAlign: 'right'}} className="totalprice"> <strong>
-                              {item.totalPrice ? Helper.formatValueReverse(item.totalPrice) : 0}₮</strong></div>
-                          </Col>
-                          <Col span={3} className="listactions">
-                            <Link href={{pathname: `/park/profile/order/${item.bookingId}`, query: {page: '1'}}} passHref>
-                              <EyeTwoTone twoToneColor="#0013D4" style={{fontSize: 20}} />
-                            </Link>
-                            {item.title === 'Баталгаажсан' ? <DeleteTwoTone style={{marginLeft: '15px'}} twoToneColor="#C6231A" /> : null}
-                          </Col>
-                        </Row>
-                      </List.Item>
-                    )}
-                  />}
+                      )}
+                    />
+                    <Row style={{height: '50px'}}>
+                      <Pagination current={currentPage} onChange={onChangePage} total={50} className='OrdePagination'/>
+                    </Row>
+                  </div>}
               </TabPane>
             ))}
 

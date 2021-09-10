@@ -4,8 +4,9 @@ import {useState, useEffect} from 'react';
 import {callGet} from '@api/api';
 import {calendarLocale} from '@constants/constants.js';
 import DayNightColumn from '@components/DayNightColumn';
-import {InfoCircleOutlined} from '@ant-design/icons';
+import {InfoCircleOutlined, LeftOutlined, RightOutlined} from '@ant-design/icons';
 import moment from 'moment';
+
 moment.updateLocale('mn', {
   weekdaysMin: ['Ням', 'Даваа', 'Мягмар', 'Лхагва', 'Пүрэв', 'Баасан', 'Бямба'],
 });
@@ -30,6 +31,7 @@ const rentDate = (props) => {
   const [sundayNight, setsundayNight] = useState('Боломжтой');
 
   const [daySplitId, setDaySplitId] = useState();
+  // const [date, setDate] = useState(moment.setDate());
   const [nightSplitId, setNightSplit] = useState();
   const dayOfWeek= [
     {
@@ -117,6 +119,110 @@ const rentDate = (props) => {
       spaceStatusCode: sundayNight,
     },
   ];
+  const dayWeek= [
+    {
+      day: 1,
+      // timeSplitDescription: 'Өдөр',
+      timeSplitId: Number(daySplitId),
+      spaceStatusCode: mondayMorning==='Боломжтой'?'AV' :'UN',
+    },
+    {
+      day: 1,
+      // timeSplitDescription: 'Шөнө',
+      timeSplitId: Number(nightSplitId),
+      spaceStatusCode: mondayNight==='Боломжтой'?'AV' :'UN',
+    },
+    {
+      day: 2,
+      // timeSplitDescription: 'Өдөр',
+      timeSplitId: Number(daySplitId),
+      spaceStatusCode: tuesdayMorning==='Боломжтой'?'AV' :'UN',
+    },
+    {
+      day: 2,
+      // timeSplitDescription: 'Шөнө',
+      timeSplitId: Number(nightSplitId),
+      spaceStatusCode: tuesdayNight==='Боломжтой'?'AV' :'UN',
+    },
+    {
+      day: 3,
+      // timeSplitDescription: 'Өдөр',
+      timeSplitId: Number(daySplitId),
+      spaceStatusCode: wednesdayMorning==='Боломжтой'?'AV' :'UN',
+    },
+    {
+      day: 3,
+      // timeSplitDescription: 'Шөнө',
+      timeSplitId: Number(nightSplitId),
+      spaceStatusCode: wednesdayNight==='Боломжтой'?'AV' :'UN',
+    },
+    {
+      day: 4,
+      // timeSplitDescription: 'Өдөр',
+      timeSplitId: Number(daySplitId),
+      spaceStatusCode: thursdayMorning==='Боломжтой'?'AV' :'UN',
+    },
+    {
+      day: 4,
+      // timeSplitDescription: 'Шөнө',
+      timeSplitId: Number(nightSplitId),
+      spaceStatusCode: thursdayNight==='Боломжтой'?'AV' :'UN',
+    },
+    {
+      day: 5,
+      // timeSplitDescription: 'Өдөр',
+      timeSplitId: Number(daySplitId),
+      spaceStatusCode: fridayMorning==='Боломжтой'?'AV' :'UN',
+    },
+    {
+      day: 5,
+      // timeSplitDescription: 'Шөнө',
+      timeSplitId: Number(nightSplitId),
+      spaceStatusCode: fridayNight==='Боломжтой'?'AV' :'UN',
+    },
+    {
+      day: 6,
+      // timeSplitDescription: 'Өдөр',
+      timeSplitId: Number(daySplitId),
+      spaceStatusCode: saturdayMorning==='Боломжтой'?'AV' :'UN',
+    },
+    {
+      day: 6,
+      // timeSplitDescription: 'Шөнө',
+      timeSplitId: Number(nightSplitId),
+      spaceStatusCode: saturdayNight==='Боломжтой'?'AV' :'UN',
+    },
+    {
+      day: 0,
+      // timeSplitDescription: 'Өдөр',
+      timeSplitId: Number(daySplitId),
+      spaceStatusCode: sundayMorning==='Боломжтой'?'AV' :'UN',
+    },
+    {
+      day: 0,
+      // timeSplitDescription: 'Шөнө',
+      timeSplitId: Number(nightSplitId),
+      spaceStatusCode: sundayNight==='Боломжтой'?'AV' :'UN',
+    },
+  ];
+  // const headerRender = () => {
+  //   return (
+  //     <Row className="p-1">
+  //       <Col>
+  //         <img src="/icons/arrow_back_ios_24px.png" height='16px' width='16px'/>
+  //       </Col>
+  //       <Button>
+
+  //       </Button>
+  //       <Col>
+  //         <img src="/icons/arrow_forward_ios_24px.png" height='16px' width='16px'/>
+  //       </Col>
+  //     </Row>);
+  // };
+  const disabledDate = (current)=> {
+    // const customDate = moment().format('YYYY-MM-DD');
+    // return current && current < moment(customDate, 'YYYY-MM-DD');
+  };
   const onChangeViewCalendar = (e) => {
     setChecked(e.target.value);
     // setWeekData(dayofweek);
@@ -150,7 +256,6 @@ const rentDate = (props) => {
   };
   const dateCellRender = (value) => {
     const listData = getListData(value);
-    console.log(listData);
     return (
       <ul className="events">
         {listData.map((item) => (
@@ -166,35 +271,16 @@ const rentDate = (props) => {
       </ul>
     );
   };
-
-  const getMonthData = (value) => {
-    if (value.month() === 8) {
-      return 1394;
-    }
-  };
   const onChangeBla = (e) => {
-    console.log(dayOfWeek);
-    props.setRentData(dayOfWeek);
+    props.setRentData(dayWeek);
     setsundayMorning(e), setChecked(2);
-  };
-  const monthCellRender = (value) => {
-    const num = getMonthData(value);
-    return num ? (
-      <div className="notes-month" style={{height: '50px'}}>
-        <section>{num}</section>
-        <span>Backlog number</span>
-      </div>
-    ) : null;
   };
   useEffect(async () => {
     const data = await callGet('/parkingspace/timesplit');
-    console.log(data);
     setDaySplitId(data.daySplit.id);
     setNightSplit(data.nightSplit.id);
-    console.log(daySplitId, nightSplitId);
+    console.log(data.daySplit.id, data.nightSplit.id, 'id nuud chn ene ba');
   }, []);
-
-  console.log('am your props', props);
   return (
     <div>
       <Row offset={4}>
@@ -206,7 +292,7 @@ const rentDate = (props) => {
             marginLeft: '100px',
           }}
         >
-          <b> Түрээслэх өдөр</b>
+          <b>Түрээслэх өдөр</b>
         </p>
       </Row>
       <Row>
@@ -215,11 +301,12 @@ const rentDate = (props) => {
           тохиромжтой олоход тохиромжтой зураг хийнэ.
         </p>
       </Row>
-      <Row>
-        <Col span={10}>
+      <Row style={{marginLeft: '5%'}}>
+        <Col span={9}>
           <Row
             style={{
-              marginLeft: '100px',
+              marginLeft: '50px',
+              marginTop: '20px',
             }}
           >
             <Button
@@ -231,6 +318,7 @@ const rentDate = (props) => {
                 backgroundColor: '#33FFFC',
                 color: '#76E8AA',
                 border: '1px solid #00F9B8',
+                borderRadius: '20px',
               }}
             >
               AV
@@ -243,6 +331,7 @@ const rentDate = (props) => {
               style={{
                 marginLeft: '10px',
                 backgroundColor: 'gray',
+                borderRadius: '20px',
               }}
             >
               UN
@@ -253,21 +342,22 @@ const rentDate = (props) => {
             </p>
             <Divider className={'stateDivider'} />
           </Row>
-          <Row style={{marginLeft: '100px'}}>
+
+          <Row style={{marginLeft: '50px'}}>
             <Col span={6} offset={1}></Col>
-            <Col span={6} offset={1}>
+            <Col span={6} offset={1} style={{color: '#647189', fontWeight: '500'}}>
               Өдөр|08:00-18:30
             </Col>
-            <Col span={6} offset={1}>
+            <Col span={6} offset={1} style={{color: '#647189', fontWeight: '500'}}>
               Шөнө|08:00-18:30
             </Col>
           </Row>
           <Row
-            style={{marginLeft: '100px', marginTop: '5px'}}
+            style={{marginLeft: '50px', marginTop: '5px'}}
             className={'pickWeekDayState'}
           >
-            <Col span={4} offset={3} style={{fontSize: '15px'}}>
-              Ням
+            <Col span={4} offset={3} style={{color: '#647189', fontWeight: '500'}}>
+              НЯМ
             </Col>
             <Col span={5} offset={1}>
               <Select
@@ -287,7 +377,7 @@ const rentDate = (props) => {
             <Col span={5} offset={2}>
               <Select
                 onChange={(e) => {
-                  props.setRentData(dayOfWeek);
+                  props.setRentData(dayWeek);
                   // console.log(weekData);
                   setsundayNight(e), setChecked(2);
                 }}
@@ -306,16 +396,16 @@ const rentDate = (props) => {
           </Row>
           {/* Даваа гараг*/}
           <Row
-            style={{marginLeft: '100px', marginTop: '5px'}}
+            style={{marginLeft: '50px', marginTop: '5px'}}
             className={'pickWeekDayState'}
           >
             <Col span={4} offset={3} style={{fontSize: '15px'}}>
-              Даваа
+              ДАВАА
             </Col>
             <Col span={5} offset={1}>
               <Select
                 onChange={(e) => {
-                  props.setRentData(dayOfWeek);
+                  props.setRentData(dayWeek);
                   setmondayMorning(e), setChecked(2);
                 }}
                 value={mondayMorning}
@@ -334,7 +424,7 @@ const rentDate = (props) => {
               <Select
                 onChange={(e) => {
                   setmondayNight(e), setChecked(2);
-                  props.setRentData(dayOfWeek);
+                  props.setRentData(dayWeek);
                 }}
                 value={mondayNight}
                 className={
@@ -351,17 +441,17 @@ const rentDate = (props) => {
           </Row>
           {/* Мягмар гараг */}
           <Row
-            style={{marginLeft: '100px', marginTop: '5px'}}
+            style={{marginLeft: '50px', marginTop: '5px'}}
             className={'pickWeekDayState'}
           >
             <Col span={4} offset={3} style={{fontSize: '15px'}}>
-              Мягмар
+              МЯГМАР
             </Col>
             <Col span={5} offset={1}>
               <Select
                 onChange={(e) => {
                   settuesdayMorning(e), setChecked(2);
-                  props.setRentData(dayOfWeek);
+                  props.setRentData(dayWeek);
                 }}
                 value={tuesdayMorning}
                 className={
@@ -379,7 +469,7 @@ const rentDate = (props) => {
               <Select
                 onChange={(e) => {
                   settuesdayNight(e), setChecked(2);
-                  props.setRentData(dayOfWeek);
+                  props.setRentData(dayWeek);
                 }}
                 value={tuesdayNight}
                 className={
@@ -396,18 +486,18 @@ const rentDate = (props) => {
           </Row>
           {/* Лхагва гараг  */}
           <Row
-            style={{marginLeft: '100px', marginTop: '5px'}}
+            style={{marginLeft: '50px', marginTop: '5px'}}
             className={'pickWeekDayState'}
           >
             <Col span={4} offset={3} style={{fontSize: '15px'}}>
-              Лхагва
+              ЛХАГВА
             </Col>
             <Col span={5} offset={1}>
               <Select
                 span={6}
                 onChange={(e) => {
                   setwednesdayMorning(e), setChecked(2);
-                  props.setRentData(dayOfWeek);
+                  props.setRentData(dayWeek);
                 }}
                 value={wednesdayMorning}
                 className={
@@ -426,7 +516,7 @@ const rentDate = (props) => {
             <Col span={5} offset={2}>
               <Select
                 onChange={(e) => {
-                  props.setRentData(dayOfWeek);
+                  props.setRentData(dayWeek);
                   setwednesdayNight(e), setChecked(2);
                 }}
                 value={wednesdayNight}
@@ -444,17 +534,17 @@ const rentDate = (props) => {
           </Row>
           {/* Пүрэв гараг */}
           <Row
-            style={{marginLeft: '100px', marginTop: '5px'}}
+            style={{marginLeft: '50px', marginTop: '5px'}}
             className={'pickWeekDayState'}
           >
             <Col span={4} offset={3} style={{fontSize: '15px'}}>
-              Пүрэв
+              ПҮРЭВ
             </Col>
             <Col span={5} offset={1}>
               <Select
                 onChange={(e) => {
                   setthursdayMorning(e), setChecked(2);
-                  props.setRentData(dayOfWeek);
+                  props.setRentData(dayWeek);
                 }}
                 value={thursdayMorning}
                 className={
@@ -472,7 +562,7 @@ const rentDate = (props) => {
               <Select
                 onChange={(e) => {
                   setthursdayNight(e), setChecked(2);
-                  props.setRentData(dayOfWeek);
+                  props.setRentData(dayWeek);
                 }}
                 value={thursdayNight}
                 className={
@@ -489,17 +579,17 @@ const rentDate = (props) => {
           </Row>
           {/* Баасан гараг */}
           <Row
-            style={{marginLeft: '100px', marginTop: '5px'}}
+            style={{marginLeft: '50px', marginTop: '5px'}}
             className={'pickWeekDayState'}
           >
             <Col span={4} offset={3} style={{fontSize: '15px'}}>
-              Баасан
+              БААСАН
             </Col>
             <Col span={5} offset={1}>
               <Select
                 onChange={(e) => {
                   setfridayMorning(e), setChecked(2);
-                  props.setRentData(dayOfWeek);
+                  props.setRentData(dayWeek);
                 }}
                 value={fridayMorning}
                 className={
@@ -516,7 +606,7 @@ const rentDate = (props) => {
             <Col span={5} offset={2}>
               <Select
                 onChange={(e) => {
-                  setfridayNight(e), setChecked(2), props.setRentData(dayOfWeek);
+                  setfridayNight(e), setChecked(2), props.setRentData(dayWeek);
                 }}
                 value={fridayNight}
                 className={
@@ -533,18 +623,18 @@ const rentDate = (props) => {
           </Row>
           {/* Бямба гараг*/}
           <Row
-            style={{marginLeft: '100px', marginTop: '5px'}}
+            style={{marginLeft: '50px', marginTop: '5px'}}
             className={'pickWeekDayState'}
           >
             <Col span={4} offset={3} style={{fontSize: '15px'}}>
-              Бямба
+              БЯМБА
             </Col>
             <Col span={5} offset={1}>
               <Select
                 onChange={(e) => {
                   setsaturdayMorning(e),
                   setChecked(2),
-                  props.setRentData(dayOfWeek);
+                  props.setRentData(dayWeek);
                 }}
                 value={saturdayMorning}
                 className={
@@ -563,7 +653,7 @@ const rentDate = (props) => {
                 onChange={(e) => {
                   setsaturdayNight(e),
                   setChecked(2),
-                  props.setRentData(dayOfWeek);
+                  props.setRentData(dayWeek);
                 }}
                 value={saturdayNight}
                 className={
@@ -578,7 +668,7 @@ const rentDate = (props) => {
               </Select>
             </Col>
           </Row>
-          <Row style={{marginLeft: '100px', marginTop: '20px'}}>
+          <Row style={{marginLeft: '50px', marginTop: '20px'}}>
             <p
               style={{
                 color: '#141A29',
@@ -607,7 +697,7 @@ const rentDate = (props) => {
               </p>
             </Col>
           </Row>
-          <Row style={{marginLeft: '100px', marginTop: '10px'}}>
+          <Row style={{marginLeft: '50px', marginTop: '20px'}}>
             <Radio.Group onChange={onChangeViewCalendar} value={checked}>
               <Radio value={1}>Тийм</Radio>
               <Radio value={2}>Үгүй</Radio>
@@ -623,17 +713,53 @@ const rentDate = (props) => {
           }}
         />
         {checked === 1 && (
-          <Col>
+          <Col span={12} offset={1}>
             <Row style={{width: '720px'}} className={'rentDate'}>
               <Col span={2}>
                 <DayNightColumn className={'rentCalendarDayNightText'} />
               </Col>
-              <Col span={20}>
+              <Col span={20} >
                 <Calendar
+                  disabledDate={disabledDate}
+                  headerRender={({value, type, onChange, onTypeChange}) => {
+                    const current = value.clone();
+                    const localeData = value.localeData();
+                    const year = value.year();
+                    const month = [];
+                    console.log(localeData, 'awdawd');
+                    for (let i = 0; i < 12; i++) {
+                      month.push(localeData.months(current));
+                    }
+
+                    return (
+                      <div style={{padding: '16px'}}>
+                        <Row >
+                          <Col span={2}>
+                            <LeftOutlined
+                              onClick={()=>{}}
+                              style={{cursor: 'pointer'}}
+                            />
+                          </Col>
+                          <Col span={6}>
+                            Есдүгээр сар,{year}
+                          </Col>
+                          <Col
+                            span={2}
+                            // onClick={onClickRight}
+                            style={{cursor: 'pointer'}}
+                          >
+                            <RightOutlined />
+                          </Col>
+                        </Row>
+                      </div>
+                    );
+                  }}
+                  // value={moment().format('YYYY/MM/DD')}
                   className={'rentDateCalendar'}
                   dateCellRender={dateCellRender}
+                  // validRange={[dayjs(props.params.startDate), dayjs(props.params.endDate)]}
                   locale={calendarLocale}
-                  monthCellRender={monthCellRender}
+                  // monthCellRender={monthCellRender}
                 />
               </Col>
             </Row>
