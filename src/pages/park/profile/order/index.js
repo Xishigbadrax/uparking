@@ -1,6 +1,6 @@
 import ProfileLayout from '@components/layouts/ProfileLayout';
-import {Tabs, Select, List, Row, Col, DatePicker} from 'antd';
-import {Calendar, Tag, Pagination, LocaleProvider} from 'antd';
+import {Tabs, Select, List, Row, Col, DatePicker, Button} from 'antd';
+import {Calendar, Tag, Pagination, LocaleProvider, Dropdown, Menu} from 'antd';
 import {callPost} from '@api/api';
 import {useEffect, useState, useContext} from 'react';
 import {callGet} from '@api/api';
@@ -10,12 +10,14 @@ import {showMessage} from '@utils/message';
 import moment, {locale} from 'moment';
 import {calendarLocale} from '@constants/constants.js';
 import DayNightColumn from '@components/DayNightColumns';
-import {CalendarOutlined, UnorderedListOutlined, ArrowRightOutlined, EyeTwoTone, DeleteTwoTone} from '@ant-design/icons';
+import {DownOutlined, ArrowRightOutlined, EyeTwoTone, DeleteTwoTone} from '@ant-design/icons';
 import Helper from '@utils/helper';
 import Link from 'next/link';
 
+// import {MenuIcon} from '@heroicons/react/outline';
+
 const {TabPane} = Tabs;
-const {Option} = Select;
+// const {Option} = Select;
 moment.updateLocale('mn', {
   weekdaysMin: ['НЯМ', 'ДАВ', 'МЯГ', 'ЛХА', 'ПҮР', 'БАА', 'БЯМ'],
 });
@@ -25,7 +27,7 @@ moment.updateLocale('mn', {
 const Order = () => {
   const ctx = useContext(Context);
   const [asWho, setAsWho] = useState(1);
-  const [isConfirmed, setIsConfirmed] = useState(null);
+  const [isConfirmed, setIsConfirmed] = useState(false);
   const [calendarStatus, setCalendarStatus] = useState();
   const [calendarData, setCalendarData] = useState([]);
   const [dataViewType, setDataViewType] = useState('calendar');
@@ -38,19 +40,19 @@ const Order = () => {
   };
   const onClickInnerTab = (key) => {
     // setDataViewType('calendar');
-    if (dataViewType === 'list') {
-      setDataViewType('calendar');
-      return;
-    }
+    // if (dataViewType === 'list') {
+    //   setDataViewType('calendar');
+    //   return;
+    // }
     if (key == 1) {
       setCalendarStatus(key);
-      setIsConfirmed(true);
+      // setIsConfirmed(true);
     } else if (key == 2) {
       setCalendarStatus(key);
       setIsConfirmed(true);
     } else if (key == 3) {
       setCalendarStatus(key);
-      setIsConfirmed(true);
+      // setIsConfirmed(true);
       getHistroy();
     }
   };
@@ -61,7 +63,9 @@ const Order = () => {
     console.log(page);
     setCurrentPage(page);
   };
-  useEffect(() => {
+  useEffect(async () => {
+    const vehicle = await callGet('/user/vehicle/list');
+    console.log(vehicle, 'awdaw');
     getData();
   }, []);
   useEffect(() => {
@@ -71,15 +75,13 @@ const Order = () => {
   }, [isConfirmed]);
   const getData = async () => {
     ctx.setIsLoading(true);
-    if (isConfirmed === null) {
-      setIsConfirmed(false);
-    }
-    if (isConfirmed !== null) {
+    if (isConfirmed === true) {
       const res = await callGet(`/booking?asWho=${asWho}&isConfirmed=${isConfirmed}`);
       if (!res || res === undefined) {
         showMessage(messageType.FAILED.type, defaultMsg.dataError);
       } else {
         setCalendarData(res);
+        setIsConfirmed(false);
         console.log(res, 'ene nuguu data');
       }
       ctx.setIsLoading(false);
@@ -92,7 +94,6 @@ const Order = () => {
       dateList: null,
       vehicleId: null,
     };
-
     const res = await callPost('/booking/history', formData);
     if (!res || res === undefined) {
       showMessage(messageType.FAILED.type, result.error);
@@ -127,7 +128,23 @@ const Order = () => {
       return 'green';
     }
   };
-
+  const onChangeDropDown = (e)=>{
+    console.log(e, 'hjhghghg');
+  };
+  const handleChangeView = (value) => {
+    console.log(value, 'glg wee');
+    if (value.key==='calendar') {
+      setDataViewType('calendar');
+    } else {
+      setDataViewType('list');
+    }
+  };
+  const menu =(
+    <Menu className="calendarViewer" onClick={(value)=>handleChangeView(value)} style={{width: '100%'}}>
+      <Menu.Item key='calendar' value={'calendar'}>Календарь</Menu.Item>
+      <Menu.Item key='list' value={'list'}>Жагсаалт</Menu.Item>
+    </Menu>
+  );
   const dateCellRender = (value) => {
     const listData = getListData(value);
     return (
@@ -163,9 +180,7 @@ const Order = () => {
       </div>
     ) : null;
   };
-  const handleChangeView = (value) => {
-    setDataViewType(value);
-  };
+
   const innerTabs = [
     {title: 'Хадгалсан', key: '1'},
     {title: 'Баталгаажсан', key: '2'},
@@ -178,20 +193,21 @@ const Order = () => {
           <Tabs defaultActiveKey="1" onChange={onClickInnerTab} className="profileSubTab">
             {innerTabs.map((tab) => (
               <TabPane tab={
-
-                <div className='ListCalendarSelection'>
-                  <Select className="calendarViewer" defaultValue={dataViewType} onChange={handleChangeView} style={{width: '100%'}}>
-                    <Option value="calendar" defaultValue><span>Календарь</span></Option>
-                    <Option value="list"><span>Жагсаалт</span></Option>
-                  </Select>
+                <div>
+                  <Dropdown overlay={menu} onChange={onChangeDropDown } className='dropdown'>
+                    <Button >{tab.title} <DownOutlined /></Button>
+                  </Dropdown>
                 </div>}
               key={tab.key}>
                 <Row>
-                  <DatePicker
-                    locale={calendarLocale}
-                    defaultvalue={moment()}
-                    onChange={onChangeOrderDate}
-                  />
+                  <Col span={6} offset={12}>
+                    <DatePicker
+                      locale={calendarLocale}
+                      defaultvalue={moment()}
+                      onChange={onChangeOrderDate}
+                    />
+                  </Col>
+
                 </Row>
                 {dataViewType ==='calendar'?
                   <div className='orderCalendar'>
@@ -226,11 +242,29 @@ const Order = () => {
                               <div className="listdescription">{`${item.province}, ${item.district}, ${item.section}, ${item.residenceName}, ${item.residenceBlockNumber}`}</div>
                             </Col>
                             <Col span={4} className="listdaynight">
-                              {item.totalAtDay ? item.totalAtDay + ' өдөр,' : null}
-                              {item.totalAtNight ? item.totalAtNight + ' шөнө,' : null}
-                              {item.totalAllDay ? item.totalAllDay + ' бүтэн өдөр' : null}
-                              {item.totalAllDay ? item.totalAllDay + ' бүтэн өдөр' : null}
-                              {item.totalAllDay ? item.totalAllDay + ' бүтэн өдөр' : null}
+                              <Row>
+                                {item.totalAtDay > 0 && item.totalAtNight === 0 && item.totalAllDay ===0 ?
+                                  <div className='orderDayType' style={{display: ' flex', height: '30px', background: '', width: '120px', alignItems: 'center'}}>
+                                    <div style={{marginTop: '5px', marginLeft: '20%'}}>
+                                      <img src='/icons/brightness_5_24px.png' height='12px' width='18px'/>
+                                    </div>
+                                    <p style={{marginLeft: '5px', marginTop: '3px'}}>Өдөр</p>
+                                  </div> : null}
+                                {item.totalAtNight > 0 && item.totalAtNight === 0 && item.totalAllDay === 0 ?
+                                  <div className='orderDayType' style={{display: ' flex', height: '30px', background: '', width: '120px', alignItems: 'center'}}>
+                                    <div style={{marginTop: '5px', marginLeft: '20%'}}>
+                                      <img src='/icons/brightness_3_24px.png' height='12px' width='18px'/>
+                                    </div>
+                                    <p style={{marginLeft: '5px', marginTop: '3px'}}>Шөнө</p>
+                                  </div> : null}
+                                {item.totalAllDay > 0 && item.totalAtNight === 0 && item.totalAllDay ===0 ?
+                                  <div className='orderDayType' style={{display: ' flex', height: '30px', background: '', width: '120px', alignItems: 'center'}}>
+                                    <div style={{marginTop: '5px', marginLeft: '20%'}}>
+                                      <img src='/icons/brightness_4_24px.png' height='12px' width='16px'/>
+                                    </div>
+                                    <p style={{marginLeft: '5px', marginTop: '3px'}}>Бүтэн өдөр</p>
+                                  </div> : null}
+                              </Row>
                             </Col>
                             <Col span={7} className="liststartenddate">
                               <div style={{display: 'inline-flex'}}>

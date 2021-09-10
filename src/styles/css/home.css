@@ -2290,10 +2290,6 @@
 .editSpaceDataButton {
   background: rgba(3, 54, 255, 0.08) !important;
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> 1bcea26fe029d67d0fd6ec27c4a7a65e99f3877e
 .settingPane .ant-divider-vertical{
   border-left:2px solid #0013D4 !important;
   margin-top: 5px !important;
@@ -2391,9 +2387,9 @@ width: 125px;
   height: 230px !important;
 }
 .ListCalendarSelection  .ant-select-selector{
-  height: 40px !important;
-  width: 200px !important;
-  padding: 0px !important;
+  /* height: 40px !important; */
+  width: 20px !important;
+  /* padding: 0px !important; */
   border: none !important;
   color: #0013D4 !important;
 }
@@ -2479,5 +2475,12 @@ width: 125px;
   border-bottom:  none !important;
 
 }
+.dropdown.ant-btn  {
+  border: none !important;
+  color: blue;
+}
 
-
+.orderDayType{
+  background:rgba(222, 226, 233, 0.2); 
+  border-radius: 16px;
+}
