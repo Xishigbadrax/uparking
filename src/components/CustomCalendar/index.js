@@ -16,6 +16,7 @@ export const AcademicYearEnd = moment(today)
   .date(18);
 
 const CustomCalendar = (props) => {
+  console.log(props, 'sdaaa');
   const [selectedDate, setselectedDate] = useState([]);
   const [selectType, setSelectType] = useState('multi');
   // eslint-disable-next-line no-unused-vars
@@ -34,6 +35,7 @@ const CustomCalendar = (props) => {
   useEffect(() => {
     props.getSelectedDate(selectedDate);
   }, [selectedDate]);
+
 
   const onPanelChange = (value, mode) => {
     // setselectedDate([]);

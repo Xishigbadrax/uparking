@@ -6,6 +6,7 @@ const defaultMsg = {
   loginSuccessTxt: 'Амжилттай.',
   validateLocation: 'Газрын зураг дээр байршил тэмдэглэнэ үү.',
   loginErrorTxt: 'Нэвтрэх нэр эсвэл нууц үг буруу байна.',
+  chooseDate: 'Цуцлах огноо сонгоно уу?',
   newDeviceConfirmErrorTxt:
     'Та шинэ төхөөрөмжөөс хандалт хийж байгаа тул баталгаажуулалт хийнэ үү.',
   dataError: 'Мэдээлэл дуудахад алдаа гарлаа',

@@ -10,12 +10,10 @@ import {showMessage} from '@utils/message';
 import moment from 'moment';
 import {calendarLocale} from '@constants/constants.js';
 import DayNightColumn from '@components/DayNightColumns';
+import Lessor from '@components/OrderPanes/lessor';
 import {DownOutlined, ArrowRightOutlined, EyeTwoTone, DeleteTwoTone, OrderedListOutlined, RightOutlined, LeftOutlined} from '@ant-design/icons';
 import Helper from '@utils/helper';
 import Link from 'next/link';
-
-// import {MenuIcon} from '@heroicons/react/outline';
-
 const {TabPane} = Tabs;
 // const {Option} = Select;
 moment.updateLocale('mn', {
@@ -33,6 +31,7 @@ const Order = () => {
   const [dataViewType, setDataViewType] = useState('calendar');
   const [currentPage, setCurrentPage]= useState(1);
   const [vehicles, setVehicles] = useState([]);
+  const [historyValue, setHistoryValue] =useState(false);
   // const [selectVehicle, setSelecteVehicle]= useState();
   const [selectDate, setSelectDate] = useState();
 
@@ -46,18 +45,20 @@ const Order = () => {
   const onClickInnerTab = (key) => {
     if (key ==1) {
       setCalendarStatus(key);
+      setHistoryValue(false);
       setIsConfirmed(false);
       setCalendarData([]);
       getSavedData();
     } else if (key == 2) {
       setCalendarStatus(key);
+      setHistoryValue(false);
       setIsConfirmed(true);
     } else if (key == 3) {
       setCalendarStatus(key);
+      setHistoryValue(true);
       getHistroy();
     }
   };
-
   // sar songoh function
   const onChangeOrderDate = (e)=>{
     console.log(moment(e).format('YYYY-MM-DD'));
@@ -68,6 +69,7 @@ const Order = () => {
     console.log(page);
     setCurrentPage(page);
   };
+
   // mashinii list awah
   useEffect(async () => {
     const vehicle = await callGet('/user/vehicle/list');
@@ -81,7 +83,6 @@ const Order = () => {
   // hadgalagdsan data awah
   const getSavedData=(async ()=>{
     const result = await callGet(`/booking?asWho=${asWho}&isConfirmed=false`);
-    console.log( result, 'saved--------->');
     setCalendarData(result);
   });
   // batalgaajsan turliin data awah
@@ -102,6 +103,7 @@ const Order = () => {
   // history paned haragdah list duudah
   const getHistroy = async () => {
     ctx.setIsLoading(true);
+
     const formData = {
       asWho: 1,
       dateList: null,
@@ -141,18 +143,21 @@ const Order = () => {
     console.log(value, 'glg wee');
     if (value.key==='calendar') {
       setDataViewType('calendar');
+      setHistoryValue(false);
     } else {
       setDataViewType('list');
     }
   };
+  // mashinii id bolon on saraar shuult hiih
   const handleVehicle = async (e)=>{
-    console.log(calendarStatus, 'awdawd');
-    console.log(e.key);
+    // console.log(selectDate, 'dateeee');
     ctx.setIsLoading(true);
     if (calendarStatus ==1) {
       const res = await callGet(`/booking?asWho=${asWho}&isConfirmed=false&vehicleId=${e.key}`);
       setCalendarData(res);
+      setHistoryValue(false);
     } else if (calendarStatus == 2) {
+      setHistoryValue(false);
       const res = await callGet(`/booking?asWho=${asWho}&isConfirmed=true&vehicleId=${e.key}`);
       setCalendarData(res);
     } else if (calendarStatus == 3 ) {
@@ -170,8 +175,6 @@ const Order = () => {
         setCalendarData(res.history);
       }
     }
-    // console.log(e, 'vehiclee tmaa');
-
     ctx.setIsLoading(false);
   };
   const menu =(
@@ -237,12 +240,12 @@ const Order = () => {
           <Tabs defaultActiveKey="1" onChange={onClickInnerTab} className="profileSubTab">
             {innerTabs.map((tab) => (
               <TabPane tab={
-                <div>
+                <div className={`${calendarStatus === tab.key}`?'activeKey':'notActiveKey'}>
                   <Dropdown overlay={menu} onChange={onChangeDropDown } className='dropdown'>
                     <Button >{tab.title} <DownOutlined /></Button>
                   </Dropdown>
                 </div>}
-              key={tab.key}>
+              key={tab.key} >
                 <Row>
                   <Col span={4} offset={14}>
                     <DatePicker
@@ -255,8 +258,8 @@ const Order = () => {
                     />
                   </Col>
                   <Col>
-                    <Dropdown overlay={vehicleMenu} o className='dropdown'>
-                      <Button>Бүх автомашин<OrderedListOutlined /></Button>
+                    <Dropdown overlay={vehicleMenu} className='dropdown'>
+                      <Button style={{color: '#35446D'}}>Бүх автомашин<OrderedListOutlined /></Button>
                     </Dropdown>
                   </Col>
 
@@ -311,10 +314,16 @@ const Order = () => {
                       renderItem={(item) => (
                         <List.Item
                         >
-                          <div className="calendarListStatus">
+                          {item.bookingStatus ==='PENDING' && <div className="calendarListStatus">
                             {item.bookingStatusDescription}{'   '}
                             {item.expireDateDriver}
-                          </div>
+                          </div> }
+                          {item.bookingStatus === 'CONFIRMED'&& historyValue===true && <div className="calendarListStatus">
+                            {'Үнэлгээ'}
+                          </div>}
+                          {item.bookingStatus ==='CONFIRMED' && ! historyValue && <div className="calendarListStatus">
+                            {item.bookingStatusDescription}{'   '}
+                          </div> }
                           <Row style={{width: '100%'}}>
                             <Col span={7}>
                               <div className="listtitle"><strong>{item.residenceName}</strong></div>
@@ -345,7 +354,7 @@ const Order = () => {
                                   </div> : null}
                               </Row>
                             </Col>
-                            <Col span={7} className="liststartenddate">
+                            <Col span={6} className="liststartenddate">
                               <div style={{display: 'inline-flex'}}>
                                 <div >
                                   <div> <strong>{Helper.date(item.startDateTime)}</strong></div>
@@ -368,7 +377,10 @@ const Order = () => {
                               <Link href={{pathname: `/park/profile/order/${item.bookingId}`, query: {page: '1'}}} passHref>
                                 <EyeTwoTone twoToneColor="#0013D4" style={{fontSize: 20}} />
                               </Link>
-                              {item.title === 'Баталгаажсан' ? <DeleteTwoTone style={{marginLeft: '15px'}} twoToneColor="#C6231A" /> : null}
+
+                            </Col>
+                            <Col>
+                              {calendarStatus != 2 && <button> <DeleteTwoTone style={{marginLeft: '10px', marginTop: '18px'}} twoToneColor="#C6231A" /></button>}
                             </Col>
                           </Row>
                         </List.Item>
@@ -385,7 +397,9 @@ const Order = () => {
           </Tabs>
         </TabPane>
         <TabPane tab="Түрээслүүлэгч" key="2">
-          <DayNightColumn />  <Calendar className="customCalendar" locale={calendarLocale} dateCellRender={dateCellRender} monthCellRender={monthCellRender} />
+          {/* <DayNightColumn />
+          <Calendar className="customCalendar" locale={calendarLocale} dateCellRender={dateCellRender} monthCellRender={monthCellRender} /> */}
+          <Lessor />
         </TabPane>
       </Tabs>
     </ProfileLayout>

@@ -1,14 +1,14 @@
 import {notification} from 'antd';
-import {messageType} from '@constants/constants';
+import {messageType, defaultMsg} from '@constants/constants';
 
 const showMessage = (type, description) => {
   const t = messageType[type.toUpperCase()];
   notification[t.msgType]({
-    message: t.title,
+    messageType: t.title,
+    defaultMsg,
     description,
   });
 };
-
 export {
   showMessage,
 };
