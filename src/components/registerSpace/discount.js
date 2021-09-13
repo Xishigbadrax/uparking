@@ -72,7 +72,7 @@ const discount = (props) => {
               rules={[
                 {
                   required: true,
-                  type: 'number',
+                  // type: 'number',
                   message: '7 хоногийн хөнгөлөлтийн хувиа оруулна уу?(зөвхөн тоон утга оруулна !)',
                 },
               ]}
@@ -94,7 +94,7 @@ const discount = (props) => {
               rules={[
                 {
                   required: true,
-                  type: 'number',
+                  // type: 'number',
                   message: '1 сарын хөнгөлөлтийн хувиа оруулна уу?(зөвхөн тоон утга оруулна !)',
                 },
               ]}

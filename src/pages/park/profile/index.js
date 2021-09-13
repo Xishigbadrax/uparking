@@ -438,14 +438,11 @@ const Profile = () => {
       const newGeneralScheduleDto = {
         parkingSpaceId: 522,
         dayOfWeek,
-        holiday: [{
-          // spaceStatusCode: '',
-          // timeSplitId: 2,
-        }],
+        holiday: [],
       };
-      console.log(newGeneralScheduleDto, 'sdaaaaaaa');
       const res = await callPost('/schedule/general', newGeneralScheduleDto );
-      console.log(res.error);
+      console.log(res.status);
+      setIsParkVisible(false);
     }
   };
   const goBack = () => {
@@ -940,7 +937,7 @@ const Profile = () => {
             <>
               {current > 0 ? <Button onClick={goBack}>Буцах</Button>:<div></div>}</>,
             <>
-              {current < steps.length - 0 && (
+              {current < steps.length - 1 && (
                 <Button
                   onClick={onClickContinue}
                   type="primary"
@@ -948,11 +945,11 @@ const Profile = () => {
                 Үргэлжлүүлэх
                 </Button>
               )}
-              {/* {current === steps.length - 1 && (
-              <Button onClick={onSavedSpaceFormData} className="buttonGo">
+              {current === steps.length - 1 && (
+                <Button onClick={onClickContinue} className="buttonGo" type='primary'>
                 Дуусгах
-              </Button>
-            )} */}
+                </Button>
+              )}
             </>,
           ]}
         >

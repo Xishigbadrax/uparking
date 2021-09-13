@@ -599,6 +599,7 @@ body {
   }
 }
 
+
 .customCalendarMini {
   .ant-picker-calendar-header {
     float: left;
@@ -626,9 +627,15 @@ body {
             border-radius: 5px;
           }
           .onclickeddate {
-            background: rgb(24, 144, 255);
+            background: #76E8AA;
+            border: 1px solid #0013D4;
             color: white;
           }
+          .customFullCellRender1{
+          .onDoubleClickDate{
+            background: red !important;
+          } 
+        }
           .onclickeddate:hover {
             background: rgba(24, 144, 255, 0.8) !important;
           }
@@ -636,6 +643,40 @@ body {
       }
     }
   }
+  .customCalendarMini {
+    .ant-picker-calendar-header {
+      float: left;
+  
+      .ant-picker-calendar-mode-switch {
+        display: none;
+      }
+    }
+    .ant-picker-content {
+      thead {
+        text-transform: uppercase;
+      }
+      tbody {
+        tr {
+          td {
+            // align-items: center;
+            // justify-content: center;
+            .customFullCellRender1{
+              margin: 0;
+              height: 60px;
+              width: 60px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              border-radius: 5px;
+            } 
+            .onDoubleClickDate{
+              background: red !important;
+          }
+           
+          }
+        }}
+      }
+    }
   .ant-picker-cell:hover:not(.ant-picker-cell-in-view) .ant-picker-cell-inner,
   .ant-picker-cell:hover:not(.ant-picker-cell-selected):not(.ant-picker-cell-range-start):not(.ant-picker-cell-range-end):not(.ant-picker-cell-range-hover-start):not(.ant-picker-cell-range-hover-end)
     .ant-picker-cell-inner {
@@ -727,6 +768,15 @@ body {
   &:active , &:focus, &:hover{
     color: #fff;
     background:linear-gradient(90deg, #0012d4be 0%, #00f9b7d0 100%);
+    border:none !important;
+  }
+}
+.ant-btn-none{
+  color: #7D8FC0;
+  background:  #DEE2E9;
+  border:none !important;
+  &:active , &:focus, &:hover{
+    
     border:none !important;
   }
 }
