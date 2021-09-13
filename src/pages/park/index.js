@@ -55,7 +55,9 @@ const MapWithAMarkerClusterer = compose(
   withScriptjs,
   withGoogleMap,
 )((props) => (
+
   <GoogleMap defaultZoom={13} defaultCenter={props.defaultCenter}>
+
     <MarkerClusterer
       onClick={props.onMarkerClustererClick}
       averageCenter
@@ -157,7 +159,9 @@ const Dashboard = () => {
   }, [parkingObject]);
 
   const callback = (key) => {};
-
+  const onClickMap =(e)=>{
+    console.log(e, 'darsaaaa');
+  };
   const loadData = (res) => {
     const mergedparks = [];
     setSearchedData([]);
@@ -351,7 +355,7 @@ const Dashboard = () => {
                   name="tuneType">
                   <Select
                     placeholder="Өдрийн төрөл"
-                    style={{borderRadius: '40px'}}
+                    className=" rounded-[40px] mt-[-7px]"
                     onChange={onChangeDay}
                   >
                     <Option value="Бүтэн өдөр">Бүтэн өдөр</Option>
@@ -398,6 +402,7 @@ const Dashboard = () => {
           <div style={{height: '100vh', width: '100%'}}>
             <MapWithAMarkerClusterer
               markers={markers}
+              onClick={onClickMap}
               defaultCenter={defaultCenter}
             />
           </div>

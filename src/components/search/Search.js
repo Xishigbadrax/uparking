@@ -252,6 +252,7 @@ const Search = ({data, startDate, endDate, tunetype})=>{
                 <Col>
                   <Row>
                     <Image
+                      preview={false}
                       src="/pexels-photo-3349460 1.png"
                       height="140px"
                       width="209.58px"
@@ -574,7 +575,7 @@ const Search = ({data, startDate, endDate, tunetype})=>{
                   <Row>
                     <Col>
                       <div style={{fontSize: '12px'}}>Нийт үнэ</div>
-                      <div><b>{it.park.price !==null ? <p>{it.park.price}</p>:<p>0₮</p>}</b></div>
+                      <div><b>{it.park.price !==null ? <p>{it.park.price}₮</p>:<p>0₮</p>}</b></div>
                     </Col>
                     <Col span={10} offset={4}>
                       <Button
@@ -585,6 +586,7 @@ const Search = ({data, startDate, endDate, tunetype})=>{
                           height: '32px',
                           marginTop: '10px',
                           fontSize: '11px',
+                          fontWeight: 'bold',
                         }}
                         className={'freeTimePick'}
                         onClick={() =>
