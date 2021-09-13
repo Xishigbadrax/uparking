@@ -262,7 +262,6 @@ const Order = () => {
                       <Button style={{color: '#35446D'}}>Бүх автомашин<OrderedListOutlined /></Button>
                     </Dropdown>
                   </Col>
-
                 </Row>
                 {dataViewType ==='calendar'?
                   <div className='orderCalendar'>

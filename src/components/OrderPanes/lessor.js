@@ -365,8 +365,189 @@ const Lessor = () =>{
         </div>
       }>
         <Row>
-          <Col> </Col>
+          <Col span={4} offset={14}>
+            <DatePicker
+              // className='selectMonthDate'
+              bordered={false}
+              locale={calendarLocale}
+              placeholder='Сараа сонгоно уу?'
+              picker='month'
+
+              // onChange={onChangeOrderDate}
+            />
+          </Col>
+          <Col>
+            <Dropdown overlay={vehicleMenu} className='dropdown' >
+              <Button style={{color: '#35446D'}}>Бүх автомашин<OrderedListOutlined /></Button>
+            </Dropdown>
+          </Col>
         </Row>
+        {dataViewType === 'calendar' ?
+          <div className='orderCalendar'>
+            <DayNightColumn />
+            <Calendar className="customCalendar"
+              locale={calendarLocale}
+              headerRender={({value, type, onChange, onTypeChange}) => {
+                const current = value.clone();
+                const localeData = value.localeData();
+                const year = value.year();
+                const month = [];
+                console.log(localeData, 'awdawd');
+                for (let i = 0; i < 12; i++) {
+                  month.push(localeData.months(current));
+                }
+                return (
+                  <div style={{padding: '16px'}}>
+                    <Row >
+                      <Col span={1}>
+                        <LeftOutlined
+                          onClick={()=>{}}
+                          style={{cursor: 'pointer', color: '#0013D4'}}
+                        />
+                      </Col>
+                      <Col span={4} style={{marginTop: '5px'}}>
+                        {month[moment()]},{year}
+                      </Col>
+                      <Col
+                        span={1}
+                        // onClick={onClickRight}
+                        style={{cursor: 'pointer', color: '#0013D4'}}
+                      >
+                        <RightOutlined />
+                      </Col>
+                    </Row>
+                  </div>
+                )
+                ;
+              }}
+              dateCellRender={dateCellRender}
+              monthCellRender={monthCellRender} />
+            <Row>
+              <Col offset={18} span={6}>
+                <Row style={{fontWeight: '700', fontSize: '12px', lineHeight: '24px'}}>Түрээслэх өдрүүдийн үндсэн календарь</Row>
+                <Row>
+                  <Col span={6} offset={14}>
+                    <Button style={{alignItems: 'right', border: '1px solid #0013D4', borderRadius: '20px', height: '32px', marginTop: '10px', marginBottom: '10px'}}> Шинэчлэх </Button>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+          </div>:
+          <div>
+            <List
+              className="calendarList"
+              style={{marginTop: 30}}
+              itemLayout="horizontal"
+              dataSource={calendarStaticData}
+              renderItem={(calendarStaticData) => (
+                <List.Item >
+                  {calendarStaticData.bookingStatus ==='PENDING' && <div className="calendarListStatus">
+                    {calendarStaticData.bookingStatusDescription}{'  БАТАЛГААЖСАН   '}
+                    {/* {calendarStaticData.expireDateDriver} */}
+                  </div>}
+                  <Row style={{width: '100%'}}>
+                    <Col span={3}>
+                      <div className="listtitle"><strong>{calendarStaticData.vehicleNumber}</strong>
+                      </div>
+                      <div style={{color: '#35446D', fontSize: '10px', lineHeight: '16px', fontWeight: '400', fontStyle: 'Normal'}}>{calendarStaticData.vehicleModel},{calendarStaticData.VehicleMark}</div>
+                      {/* <div className="listdescription">{`${item.province}, ${item.district}, ${item.section}, ${item.residenceName}, ${item.residenceBlockNumber}`}</div> */}
+                    </Col>
+                    <Col span={4} className="listdaynight">
+                      <Row>
+                        {calendarStaticData.totalAtDay > 0 && calendarStaticData.totalAtNight === 0 && calendarStaticData.totalAllDay ===0 ?
+                          <div className='orderDayType' style={{display: ' flex', alignItems: 'center', height: '30px', background: '', width: '120px', alignItems: 'center'}}>
+                            <div style={{marginTop: '2px', marginLeft: '20%'}}>
+                              <img src='/icons/brightness_5_24px.png' height='12px' width='18px'/>
+                            </div>
+                            <p style={{marginLeft: '2px', marginTop: '3px', color: '#35446D', fontStyle: '12px'}}>Өдөр</p>
+                          </div> : null}
+                        {calendarStaticData.totalAtNight > 0 && calendarStaticData.totalAtDay === 0 && calendarStaticData.totalAllDay === 0 ?
+                          <div className='orderDayType' style={{display: ' flex', alignItems: 'center', height: '30px', background: '', width: '120px', alignItems: 'center'}}>
+                            <div style={{marginTop: '2px', marginLeft: '20%'}}>
+                              <img src='/icons/brightness_3_24px.png' height='12px' width='18px'/>
+                            </div>
+                            <p style={{marginLeft: '5px', marginTop: '3px', color: '#35446D', fontStyle: '12px'}}>Шөнө</p>
+                          </div> : null}
+                        {calendarStaticData.totalAllDay > 0 && calendarStaticData.totalAtNight === 0 && calendarStaticData.totalAtDay ===0 ?
+                          <div className='orderDayType' style={{display: ' flex', alignItems: 'center', height: '30px', background: '', width: '120px', alignItems: 'center'}}>
+                            <div style={{marginTop: '2px', marginLeft: '10%'}}>
+                              <img src='/icons/brightness_4_24px.png' height='12px' width='16px'/>
+                            </div>
+                            <p style={{marginLeft: '2px', marginTop: '3px', color: '#35446D', fontStyle: '12px'}}>Бүтэн өдөр</p>
+                          </div> : null}
+                        {calendarStaticData.totalAtDay > 0 && calendarStaticData.totalAtNight > 0 && calendarStaticData.totalAllDay ===0 ?
+                          <div className='orderDayType' style={{display: ' flex', height: '30px', background: '', width: '120px', alignItems: 'center'}}>
+                            <div style={{marginTop: '2px', marginLeft: '20%'}}>
+                              <img src='/icons/brightness_5_24px.png' height='12px' width='16px'/>
+                            </div>
+                            <div style={{marginTop: '2px', marginLeft: '20%'}}>
+                              <img src='/icons/brightness_3_24px.png' height='12px' width='16px'/>
+                            </div>
+                          </div> : null}
+                        {calendarStaticData.totalAtDay > 0 && calendarStaticData.totalAtNight === 0 && calendarStaticData.totalAllDay > 0 ?
+                          <div className='orderDayType' style={{display: ' flex', height: '30px', background: '', width: '120px', alignItems: 'center'}}>
+                            <div style={{marginTop: '2px', marginLeft: '20%'}}>
+                              <img src='/icons/brightness_5_24px.png' height='12px' width='16px'/>
+                            </div>
+                            <div style={{marginTop: '2px', marginLeft: '20%'}}>
+                              <img src='/icons/brightness_4_24px.png' height='12px' width='16px'/>
+                            </div>
+                          </div> : null}
+                        {calendarStaticData.totalAtDay === 0 && calendarStaticData.totalAtNight> 0 && calendarStaticData.totalAllDay > 0 ?
+                          <div className='orderDayType' style={{display: ' flex', height: '30px', background: '', width: '120px', alignItems: 'center'}}>
+                            <div style={{marginTop: '2px', marginLeft: '20%'}}>
+                              <img src='/icons/brightness_3_24px.png' height='12px' width='16px'/>
+                            </div>
+                            <div style={{marginTop: '2px', marginLeft: '20%'}}>
+                              <img src='/icons/brightness_4_24px.png' height='12px' width='16px'/>
+                            </div>
+                          </div> : null}
+                        {calendarStaticData.totalAtDay > 0 && calendarStaticData.totalAtNight > 0 && calendarStaticData.totalAllDay > 0 ?
+                          <div className='orderDayType' style={{display: ' flex', height: '30px', width: '120px', alignItems: 'center'}}>
+                            <div style={{marginTop: '2px', marginLeft: '10%'}}>
+                              <img src='/icons/brightness_3_24px.png' height='12px' width='16px'/>
+                            </div>
+                            <div style={{marginTop: '2px', marginLeft: '20%'}}>
+                              <img src='/icons/brightness_4_24px.png' height='12px' width='16px'/>
+                            </div>
+                            <div style={{marginTop: '2px', marginLeft: '20%'}}>
+                              <img src='/icons/brightness_5_24px.png' height='12px' width='16px'/>
+                            </div>
+                          </div> : null}
+                      </Row>
+                    </Col>
+                    <Col span={8} offset={1} className="liststartenddate">
+                      <div style={{display: 'inline-flex'}}>
+                        <div >
+                          <div> <strong>{Helper.date(calendarStaticData.startDateTime)}</strong></div>
+                          <div> {Helper.time(calendarStaticData.startDateTime)}</div>
+                        </div>
+                        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '30px', marginLeft: '20px'}} ><ArrowRightOutlined /></div>
+                        <div style={{marginLeft: '20px'}}>
+                          <div> <strong>{Helper.date(calendarStaticData.startDateTime)}</strong></div>
+                          <div> {Helper.time(calendarStaticData.endDateTime)}</div>
+                        </div>
+
+                      </div>
+                    </Col>
+                    <Col span={4} className="listpay">
+                      <div style={{textAlign: 'right', color: '#35446D', fontSize: '12px'}}> Нийт захиалгын төлбөр</div>
+                      <div style={{textAlign: 'right'}} className="totalprice"> <strong>
+                        {calendarStaticData.totalPrice ? Helper.formatValueReverse(calendarStaticData.totalPrice) : 0}₮</strong></div>
+                    </Col>
+                    <Col span={3} className="listactions">
+                      {/* <Link href={{pathname: `/park/profile/order/${calendarStaticData.bookingId}`, query: {page: '1'}}} passHref> */}
+                      <EyeTwoTone twoToneColor="#0013D4" style={{fontSize: 20}} />
+                      {/* </Link> */}
+
+                    </Col>
+                    <Col>
+                      {calendarStatus != 2 && <button> <DeleteTwoTone style={{marginLeft: '10px', marginTop: '18px'}} twoToneColor="#C6231A" /></button>}
+                    </Col>
+                  </Row>
+                </List.Item>)}
+            />
+          </div>}
       </TabPane>
       <TabPane key='3' tab={
         <div className={`${calendarStatus === 2 }`?'activeKey':'notActiveKey'}>
