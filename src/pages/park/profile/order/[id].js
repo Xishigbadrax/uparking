@@ -1,32 +1,22 @@
 import {CheckOutlined, DownOutlined, LeftOutlined, UpOutlined} from '@ant-design/icons';
 import {callGet, callPost} from '@api/api';
 import DefaultLayout from '@components/layouts/DefaultLayout';
-import {Layout, Button, Carousel, Image, Row, Col, Divider, Modal, Alert} from 'antd';
-import {LeftOutlined, DownOutlined, UpOutlined} from '@ant-design/icons';
+;
 import {showMessage} from '@utils/message';
 import {useEffect, useState, useContext} from 'react';
-import {callGet} from '@api/api';
 import CustomCalendar from '@components/orderEditCalendar';
 import SettingPane from '@components/settingPane/setting';
 import {defaultMsg, messageType} from '@constants/constants';
 import Context from '@context/Context';
 import Helper from '@utils/helper';
-import {showMessage} from '@utils/message';
-import {Button, Carousel, Checkbox, Col, Divider, Form, Image, Input, Layout, Modal, Rate, Row, Tabs} from 'antd';
+import {Button, Carousel, Checkbox, Col, Divider, Form, Image, Input, Layout, Modal, Rate, Row, Tabs, Alert} from 'antd';
 import moment from 'moment';
-import SettingPane from '@components/settingPane/setting';
 import WalletInput from '../../../../components/WalletInput';
 import WalletBankInfo from '@components/WalletBankInfo';
 import WalletCard from '../../../../components/WalletCard';
-import {callPost} from '@api/api';
 
-import {
-  messageType,
-  defaultMsg,
-} from '@constants/constants';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
-import {useContext, useEffect, useState} from 'react';
 import renderHTML from 'react-render-html';
 
 moment.updateLocale('mn', {
@@ -233,6 +223,7 @@ const OrderId = () => {
 
   const handleClickBankLogo = (activekey) => {
     settype(activekey);
+  };
   useEffect(()=>{
     const endDate = Date.parse(orderData.endDateTime);
     const nowDate = Date.parse(moment().format('YYYY-MM-DD HH:mm:ss'));
@@ -364,9 +355,10 @@ const OrderId = () => {
     console.log(res, 'rateeeeeee');
     setIsUnelgeeVisible(false);
   };
-  const handleClickConfirm = (value, mode) => {
-    console.log(value, mode);
-  };
+
+  // const handleClickConfirm = (value, mode) => {
+  //   console.log(value, mode);
+  // };
   const getSelectedDate = (data) =>{
     console.log(data, 'datadatadata');
     setFromSelectedDate(data);
@@ -417,7 +409,7 @@ const OrderId = () => {
             </Row>
           </Col>
           <Col span={8} offset={1}>
-            <Tabs defaultActiveKey="1" onChange={callback} className='OrderDetail'>
+            <Tabs defaultActiveKey="1">
               <TabPane tab="Танилцуулга" key="1">
                 {orderData.bookingStatus === 'CONFIRMED' || orderData.bookingStatus === 'HISTORY ' ?
                   <div>
@@ -734,7 +726,7 @@ const OrderId = () => {
                         </Col>
                       </Row>
                     );
-                  } else if (orderData.bookingStatus !== 'PENDING_PAYMENT') {
+                  } else if (orderData.bookingStatus === 'PENDING_PAYMENT') {
                     return (
                       <div>
                         <Divider />
@@ -1130,5 +1122,4 @@ const OrderId = () => {
 
   );
 };
-
 export default OrderId;
