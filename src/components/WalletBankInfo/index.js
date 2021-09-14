@@ -50,7 +50,7 @@ const WalletBankInfo = (props) => {
           <div>
             <Image onClick={() => {
               navigator.clipboard.writeText(props.value), success();
-            }} className="cursor-pointer" preview={false} src="../../copy.png" />
+            }} className="cursor-pointer" preview={false} src="../../../copy.png" />
           </div>
         </div>
       </div>

@@ -1,17 +1,23 @@
 import {CheckOutlined, DownOutlined, LeftOutlined, UpOutlined} from '@ant-design/icons';
 import {callGet, callPost} from '@api/api';
 import DefaultLayout from '@components/layouts/DefaultLayout';
+;
+import {showMessage} from '@utils/message';
+import {useEffect, useState, useContext} from 'react';
 import CustomCalendar from '@components/orderEditCalendar';
 import SettingPane from '@components/settingPane/setting';
 import {defaultMsg, messageType} from '@constants/constants';
 import Context from '@context/Context';
 import Helper from '@utils/helper';
-import {showMessage} from '@utils/message';
-import {Button, Carousel, Checkbox, Col, Divider, Form, Image, Input, Layout, Modal, Rate, Row, Tabs} from 'antd';
+import {Button, Carousel, Checkbox, Col, Divider, Form, Image, Input, Layout, Modal, Rate, Row, Tabs, Alert} from 'antd';
 import moment from 'moment';
+import WalletInput from '../../../../components/WalletInput';
+import WalletBankInfo from '@components/WalletBankInfo';
+import WalletCard from '../../../../components/WalletCard';
+
 import Link from 'next/link';
 import {useRouter} from 'next/router';
-import {useContext, useEffect, useState} from 'react';
+import { useEffect, useState} from 'react';
 // import WalletCard from '@components/WalletCard';
 import WalletBankInfo from '@components/WalletBankInfo';
 import renderHTML from 'react-render-html';
@@ -30,8 +36,50 @@ const style = {
   borderRadius: '8px',
   padding: '5px 10px',
 };
+const tabItems = [
+  {
+    id: 1,
+    name: 'Хаан банк',
+    type: 'KHANBANK',
+    src: '../../../images/icon/khanbank.png',
+  },
+  {
+    id: 2,
+    name: 'Хас банк',
+    type: 'KHASBANK',
+    src: '../../../images/icon/xac.png',
+  },
+  {
+    id: 3,
+    name: 'Голомт банк',
+    type: 'GOLOMTBANK',
+    src: '../../../images/icon/golomt.png',
+  },
+  {
+    id: 4,
+    name: 'Худалдаа хөгжлийн банк',
+    type: 'TDB',
+    src: '../../../images/icon/tdb.png',
+  },
+];
+
 
 const OrderId = () => {
+  const [type, settype] = useState('KHANBANK');
+  const [type2, settype2] = useState('MONGOLCHAT');
+  const [data, setdata] = useState(null);
+  const [amount, setamount] = useState(0);
+  const [formData] = useState({
+    amount: null,
+    phoneNumber: null,
+  });
+  const [userData, setuserData] = useState(null);
+  const [message, setmessage] = useState('');
+  const [status, setstatus] = useState('');
+  const [title, settitle] = useState('');
+  const [messageShow, setmessageShow] = useState(false);
+
+
   const router = useRouter();
   const ctx = useContext(Context);
   const [orderData, setOrderData] = useState({});
@@ -61,6 +109,124 @@ const OrderId = () => {
     getData();
     // const startDate = Date.parse(orderData.startDateTime);
   }, []);
+  const onChangeInput = (value) => {
+    setamount(value);
+  };
+  const onChangeInputPhone = (value) => {
+    setphoneNumber(value);
+  };
+  useEffect(() => {
+    fetchData4();
+  }, []);
+
+  const fetchData4 = async () => {
+    ctx.setIsLoading(true);
+    await callGet('/wallet/user', null).then((res) => {
+      setuserData(res);
+      if (res && res.pendingList && res.pendingList.length > 0) {
+        setCalendarData(res.pendingList);
+      }
+      ctx.setIsLoading(false);
+    });
+  };
+
+  const fetchData2 = async () => {
+    if (amount != 0) {
+      const formData2 = {
+        amount: +amount,
+        bookingId: null,
+        topUp: true,
+      };
+      formData.amount = amount;
+      formData.phoneNumber =
+        type2 == 'LENDMN' ? phoneNumber : userData.phoneNumber;
+      {
+        type2 == 'MONGOLCHAT' ?
+          await callPost('/mongolchat/wallet', formData).then((res) => {
+            if (res.code == 1000) {
+              settitle('Амжилтай');
+              setmessage('Амжилттай. Нэхэмжлэх үүсгэлээ.');
+              setstatus('success');
+              setmessageShow(true);
+              try {
+                const win = window.open(res.dynamic_link, '_blank');
+                win.focus();
+              } catch (e) {
+                settitle('Анхааруулга');
+                setmessage('Нэхэмжлэх үүсгэхэд алдаа гарлаа');
+                setstatus('warning');
+                setmessageShow(true);
+              }
+            } else {
+              settitle('Анхааруулга');
+              setmessage('Нэхэмжлэх үүсгэхэд алдаа гарлаа');
+              setstatus('warning');
+              setmessageShow(true);
+            }
+          }) :
+          type2 == 'LENDMN' ?
+            await callPost('/lend/qr/wallettopup', formData).then((res) => {
+              if (res.qr_string) {
+                settitle('Амжилтай');
+                setmessage('Амжилттай. Нэхэмжлэх үүсгэлээ.');
+                setstatus('success');
+                setmessageShow(true);
+              } else {
+                settitle('Анхааруулга');
+                setmessage('Нэхэмжлэх үүсгэхэд алдаа гарлаа');
+                setstatus('warning');
+                setmessageShow(true);
+              }
+            }) :
+            type2 == 'SOCIALPAY' ?
+              await callPost('/invoice', formData2).then((res) => {
+                if (res && res.invoice) {
+                  settitle('Амжилтай');
+                  setmessage('Амжилттай. Нэхэмжлэх үүсгэлээ.');
+                  setstatus('success');
+                  setmessageShow(true);
+                  try {
+                    const win = window.open(
+                      'https://ecommerce.golomtbank.com/socialpay/mn/' +
+                      res.invoice,
+                      '_blank',
+                    );
+                    win.focus();
+                  } catch (e) {
+                    settitle('Анхааруулга');
+                    setmessage('Нэхэмжлэх үүсгэхэд алдаа гарлаа');
+                    setstatus('warning');
+                    setmessageShow(true);
+                  }
+                } else {
+                  settitle('Анхааруулга');
+                  setmessage('Нэхэмжлэх үүсгэхэд алдаа гарлаа');
+                  setstatus('warning');
+                  setmessageShow(true);
+                }
+              }) :
+              null;
+      }
+    } else {
+      settitle('Анхааруулга');
+      setmessage('Үнийн дүн хоосон байна');
+      setstatus('warning');
+      setmessageShow(true);
+    }
+  };
+
+  const fetchData = async () => {
+    await callGet(`/payment/bankinfo?bankName=${type}`).then((res) => {
+      setdata(res);
+    });
+  };
+  useEffect(() => {
+    fetchData();
+  }, [type]);
+
+  const handleClickBankLogo = (activekey) => {
+    settype(activekey);
+  };
   useEffect(()=>{
     const endDate = Date.parse(orderData.endDateTime);
     const nowDate = Date.parse(moment().format('YYYY-MM-DD HH:mm:ss'));
@@ -166,6 +332,13 @@ const OrderId = () => {
   const handleOkCancelOrder = () => {
     setIsModalVisibleCancelOrder(false);
   };
+  const handleOk = () => {
+    setmessageShow(false);
+  };
+
+  const handleCancel = () => {
+    setmessageShow(false);
+  };
 
   const handleCancelCancelOrder = () => {
     setIsModalVisibleCancelOrder(false);
@@ -198,6 +371,12 @@ const OrderId = () => {
     setIsUnelgeeVisible(false);
   };
 
+<<<<<<< HEAD
+=======
+  // const handleClickConfirm = (value, mode) => {
+  //   console.log(value, mode);
+  // };
+>>>>>>> 0e439bb594d18cca9660ed668b9334786beaa169
   const getSelectedDate = (data) =>{
     console.log(data, 'datadatadata');
     setFromSelectedDate(data);
@@ -248,7 +427,7 @@ const OrderId = () => {
             </Row>
           </Col>
           <Col span={8} offset={1}>
-            <Tabs defaultActiveKey="1" onChange={callback} className='OrderDetail'>
+            <Tabs defaultActiveKey="1">
               <TabPane tab="Танилцуулга" key="1">
                 {orderData.bookingStatus === 'CONFIRMED' || orderData.bookingStatus === 'HISTORY ' ?
                   <div>
@@ -582,47 +761,21 @@ const OrderId = () => {
                           <Col span={24} >
                             <Tabs defaultActiveKey="1">
                               <TabPane tab="Хэтэвч" key="1">
-                                <div
-                                  style={{
-                                    backgroundImage: 'url(/images/wallet-background.png',
-                                    width: '100%',
-                                    height: '244px',
-                                    backgroundRepeat: 'no-repeat',
-                                    backgroundSize: 'cover',
-                                  }}
-                                >
-                                  <div style={{padding: '25px'}}>
-
-                                    <Image
-                                      src={'/images/logo-white.png'}
-                                      width="94px"
-                                    />
-                                    <div style={{marginTop: '50px'}}>
-                                      <div style={{fontSize: '16px', lineHeight: '16px', textAlign: 'right', letterSpacing: '0.4px', color: '#FFFFFF'}}>Нийт дүн:</div>
-                                      <div style={{fontSize: '26px', lineHeight: '28px', textAlign: 'right', letterSpacing: '0.4px', color: '#FFFFFF'}}>
-                                        {orderData.totalPrice ? Helper.formatValueReverse(orderData.totalPrice) : 0}
-                                      </div>
-                                      <div style={{fontSize: '16px', lineHeight: '16px', textAlign: 'right', letterSpacing: '0.4px', color: '#FFFFFF'}}>Бонус:</div>
-                                      <div style={{fontSize: '26px', lineHeight: '28px', textAlign: 'right', letterSpacing: '0.4px', color: '#FFFFFF'}}>
-                                        {orderData.totalPrice ? Helper.formatValueReverse(orderData.totalPrice) : 0}
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
+                                <div className=" ml-[24px]"> <WalletCard /></div>
                                 <Row style={{marginTop: '35px'}}>
                                   <Col span={24}>
-                                    <Button type="primary" size={'large'} block onClick={onClickPayPayment}>
+                                    <Button className="w-[372px] rounded-[8px]" type="primary" size={'large'} >
                                                                             Төлөх
                                     </Button>
                                   </Col>
                                 </Row>
                               </TabPane>
-                              <TabPane tab={<div style={{width: '100px'}}><p style={{marginLeft: '25px'}}>Дансаар</p></div>} key="2">
+                              <TabPane tab="Дансаар" key="2">
                                 <div>
                                   <Tabs
                                     centered
-                                    onChange={handleClickBankLogo}
                                     defaultActiveKey="1"
+                                    onChange={handleClickBankLogo}
                                   >
                                     {tabItems.map((tabitem) => (
                                       <TabPane
@@ -641,30 +794,22 @@ const OrderId = () => {
                                         <div>
                                           <WalletBankInfo
                                             value={
-                                              bankData != null && bankData.accountNumber ?
-                                                bankData.accountNumber :
-                                                0
+                                              data && data.accountNumber ? data.accountNumber : 0
                                             }
                                           >
-                                    Дансны дугаар
+                                                Дансны дугаар
                                           </WalletBankInfo>
                                           <WalletBankInfo
                                             value={
-                                              bankData && bankData.accountName ?
-                                                bankData.accountName :
-                                                0
+                                              data && data.accountName ? data.accountName : 0
                                             }
                                           >
-                                    Хүлээн авагч
+                                                 Хүлээн авагч
                                           </WalletBankInfo>
                                           <WalletBankInfo
-                                            value={
-                                              bankData && bankData.description ?
-                                                bankData.description :
-                                                0
-                                            }
+                                            value={data && data.description ? data.description : 0}
                                           >
-                                    Гүйлгээний утга
+                        Гүйлгээний утга
                                           </WalletBankInfo>
                                         </div>
                                       </TabPane>
@@ -672,7 +817,7 @@ const OrderId = () => {
                                   </Tabs>
                                 </div>
                               </TabPane>
-                              <TabPane tab={<div style={{width: '100px'}}><p style={{marginLeft: '30px'}}>Нэхэмжлэх</p></div>} key="3">
+                              <TabPane tab="Нэхэмжлэх" key="3">
                                 <div>
                                   <Tabs centered defaultActiveKey="1">
                                     <TabPane
@@ -686,18 +831,16 @@ const OrderId = () => {
                                             height={30}
                                             width={30}
                                             preview={false}
-                                            src="../../images/icon/mongolChat.png"
+                                            src="../../../images/icon/mongolChat.png"
                                           />
                                         </span>
                                       }
                                       key="1"
                                     >
                                       <div>
-                                        <WalletBankInfo
-                                          onChangeInput={onChangeInput}
-                                        >
-                                  Цэнэглэх дүн
-                                        </WalletBankInfo>
+                                        <WalletInput onChangeInput={onChangeInput}>
+                      Цэнэглэх дүн
+                                        </WalletInput>
                                       </div>
                                     </TabPane>
                                     <TabPane
@@ -711,17 +854,18 @@ const OrderId = () => {
                                             height={30}
                                             width={30}
                                             preview={false}
-                                            src="../../images/icon/lendMn.png"
+                                            src="../../../images/icon/lendMn.png"
                                           />
                                         </span>
                                       }
                                       key="2"
                                     >
-                                      <WalletBankInfo
-                                        onChangeInput={onChangeInputPhone}
-                                      >
-                                Нэхэмжлэх илгээх утасны дугаар
-                                      </WalletBankInfo>
+                                      <WalletInput onChangeInput={onChangeInputPhone}>
+                    Утасны дугаар
+                                      </WalletInput>
+                                      <WalletInput onChangeInput={onChangeInput}>
+                    Цэнэглэх дүн
+                                      </WalletInput>
                                     </TabPane>
                                     <TabPane
                                       tab={
@@ -734,23 +878,19 @@ const OrderId = () => {
                                             height={30}
                                             width={30}
                                             preview={false}
-                                            src="../../images/icon/socialPay.png"
+                                            src="../../../images/icon/socialPay.png"
                                           />
                                         </span>
                                       }
                                       key="3"
                                     >
-                                      <WalletBankInfo onChangeInput={onChangeInput}>
-                                Цэнэглэх дүн
-                                      </WalletBankInfo>
+                                      <WalletInput onChangeInput={onChangeInput}>
+                                            Цэнэглэх дүн
+                                      </WalletInput>
                                     </TabPane>
                                   </Tabs>
-                                  <Button
-                                    onClick={() => fetchData2()}
-                                    type="primary"
-                                    block
-                                  >
-                            Нэхэмжлэл илгээх
+                                  <Button className="rounded-[8px]" onClick={() => fetchData2()} type="primary" block>
+                                                 Нэхэмжлэл илгээх
                                   </Button>
                                 </div>
                               </TabPane>
@@ -987,8 +1127,17 @@ const OrderId = () => {
           </Col>
         </Row>
       </Modal>
+      <Modal
+        visible={messageShow}
+        title="Мэдээлэл"
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={[]}
+      >
+        <Alert message={title} description={message} type={status} showIcon />
+      </Modal>
     </DefaultLayout >
+
   );
 };
-
 export default OrderId;
