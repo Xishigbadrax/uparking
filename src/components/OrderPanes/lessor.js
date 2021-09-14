@@ -29,14 +29,13 @@ const Lessor = () =>{
   const [dateVisible, setDateVisible] =useState(false);
   const [historyData, setHistoryValue] =useState([]);
   const [dataViewType, setDataViewType] = useState('calendar');
-
   useEffect(async ()=>{
     const vehicle = await callGet('/user/vehicle/list');
     setVehicles(vehicle);
   }, []);
-  const onChangeOrderDate =(e)=>{
+  // const onChangeOrderDate =(e)=>{
 
-  };
+  // };
   const getSavedData =async ()=>{
     const result = await callGet('/booking?asWho=2&isConfirmed=false');
     setCalendarData(result);

@@ -12,6 +12,8 @@ import moment from 'moment';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 import {useContext, useEffect, useState} from 'react';
+// import WalletCard from '@components/WalletCard';
+import WalletBankInfo from '@components/WalletBankInfo';
 import renderHTML from 'react-render-html';
 
 moment.updateLocale('mn', {
@@ -615,11 +617,142 @@ const OrderId = () => {
                                   </Col>
                                 </Row>
                               </TabPane>
-                              <TabPane tab="Дансаар" key="2">
-                                                                Дансаар
+                              <TabPane tab={<div style={{width: '100px'}}><p style={{marginLeft: '25px'}}>Дансаар</p></div>} key="2">
+                                <div>
+                                  <Tabs
+                                    centered
+                                    onChange={handleClickBankLogo}
+                                    defaultActiveKey="1"
+                                  >
+                                    {tabItems.map((tabitem) => (
+                                      <TabPane
+                                        key={tabitem.type}
+                                        tab={
+                                          <span>
+                                            <Image
+                                              height={30}
+                                              width={30}
+                                              preview={false}
+                                              src={tabitem.src}
+                                            />
+                                          </span>
+                                        }
+                                      >
+                                        <div>
+                                          <WalletBankInfo
+                                            value={
+                                              bankData != null && bankData.accountNumber ?
+                                                bankData.accountNumber :
+                                                0
+                                            }
+                                          >
+                                    Дансны дугаар
+                                          </WalletBankInfo>
+                                          <WalletBankInfo
+                                            value={
+                                              bankData && bankData.accountName ?
+                                                bankData.accountName :
+                                                0
+                                            }
+                                          >
+                                    Хүлээн авагч
+                                          </WalletBankInfo>
+                                          <WalletBankInfo
+                                            value={
+                                              bankData && bankData.description ?
+                                                bankData.description :
+                                                0
+                                            }
+                                          >
+                                    Гүйлгээний утга
+                                          </WalletBankInfo>
+                                        </div>
+                                      </TabPane>
+                                    ))}
+                                  </Tabs>
+                                </div>
                               </TabPane>
-                              <TabPane tab="Нэхэмжлэх" key="3">
-                                      Нэхэмжлэх
+                              <TabPane tab={<div style={{width: '100px'}}><p style={{marginLeft: '30px'}}>Нэхэмжлэх</p></div>} key="3">
+                                <div>
+                                  <Tabs centered defaultActiveKey="1">
+                                    <TabPane
+                                      tab={
+                                        <span
+                                          onClick={() => {
+                                            settype2('MONGOLCHAT');
+                                          }}
+                                        >
+                                          <Image
+                                            height={30}
+                                            width={30}
+                                            preview={false}
+                                            src="../../images/icon/mongolChat.png"
+                                          />
+                                        </span>
+                                      }
+                                      key="1"
+                                    >
+                                      <div>
+                                        <WalletBankInfo
+                                          onChangeInput={onChangeInput}
+                                        >
+                                  Цэнэглэх дүн
+                                        </WalletBankInfo>
+                                      </div>
+                                    </TabPane>
+                                    <TabPane
+                                      tab={
+                                        <span
+                                          onClick={() => {
+                                            settype2('LENDMN');
+                                          }}
+                                        >
+                                          <Image
+                                            height={30}
+                                            width={30}
+                                            preview={false}
+                                            src="../../images/icon/lendMn.png"
+                                          />
+                                        </span>
+                                      }
+                                      key="2"
+                                    >
+                                      <WalletBankInfo
+                                        onChangeInput={onChangeInputPhone}
+                                      >
+                                Нэхэмжлэх илгээх утасны дугаар
+                                      </WalletBankInfo>
+                                    </TabPane>
+                                    <TabPane
+                                      tab={
+                                        <span
+                                          onClick={() => {
+                                            settype2('SOCIALPAY');
+                                          }}
+                                        >
+                                          <Image
+                                            height={30}
+                                            width={30}
+                                            preview={false}
+                                            src="../../images/icon/socialPay.png"
+                                          />
+                                        </span>
+                                      }
+                                      key="3"
+                                    >
+                                      <WalletBankInfo onChangeInput={onChangeInput}>
+                                Цэнэглэх дүн
+                                      </WalletBankInfo>
+                                    </TabPane>
+                                  </Tabs>
+                                  <Button
+                                    onClick={() => fetchData2()}
+                                    type="primary"
+                                    block
+                                  >
+                            Нэхэмжлэл илгээх
+                                  </Button>
+                                </div>
                               </TabPane>
                             </Tabs>
                           </Col>
