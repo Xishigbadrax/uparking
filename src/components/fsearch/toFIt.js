@@ -20,6 +20,7 @@ import moment from 'moment';
 
 const {TabPane} = Tabs;
 
+
 const callback = (key) =>{
   console.log(key, 'keyiin hevledee');
 };
@@ -28,6 +29,7 @@ const tofit = ({data, lat, lng}) => {
 
   // const [PickTimevisible, setPickTimeVisible] = useState(false);
   const [detailVisible, setDetailsVisible] = useState(false);
+  // const router =useRouter();
   // eslint-disable-next-line no-unused-vars
   const [selectItem, setSelected] = useState([]);
   const [ResidenceItem, setResidenceDrawerItem] = useState({});
@@ -56,6 +58,7 @@ const tofit = ({data, lat, lng}) => {
   const [priceForRenter1, setpriceForRenter1] = useState(0);
   const [priceForRenter2, setpriceForRenter2] = useState(0);
   const [priceForRenter3, setpriceForRenter3] = useState(0);
+  const [selectVehicle, setSelectedVehicle] =useState();
   const [dateValues, setDateValues]=useState();
   const [message, setmessage] = useState('');
   const [status, setstatus] = useState('');
@@ -120,11 +123,11 @@ const tofit = ({data, lat, lng}) => {
       } else setMonthSale(item.salePercent);
     });
 
-    // setweekSale(weekSale);
     const vehicle = await callGet('/user/vehicle/list');
     setVehiclesData(vehicle);
   };
   const onChangeChooseVehicle = (e) => {
+    setSelectedVehicle(e.target.value, 'mashineee');
     console.log(e.target.value);
   };
   const onClickPayment = (id)=>{
@@ -137,73 +140,57 @@ const tofit = ({data, lat, lng}) => {
       });
   };
   const timeSubmit = async () => {
-    if (vehicles) {
+    if (totalValue > 0 ) {
+      if (selectVehicle) {
       // setisLoading(true);
-      const formData = {
-
-        bookingList: dateValues,
-        isGift: false,
-        parkingSpaceId: parkingSpaceId,
-        totalAllDay: fullDayNumber,
-        totalAtDay: dayOfNumber,
-        totalAtNight: nightOfNumber,
-        totalPrice: totalValue,
-        userPhoneNumber: userRealData.phoneNumber,
-        vehicleId: 0,
-
-
-        // userPhoneNumber: userRealData.phoneNumber,
-        // isGift: false,
-        // parkingSpaceId: parkingSpaceId,
-        // spaceStatus: spaceStatus,
-        // totalAllDay: fullDayNumber,
-        // totalAtDay: dayOfNumber,
-        // totalAtNight: nightOfNumber,
-        // totalPrice: totalValue,
-      };
-      console.log(formData);
-      await callPost('/booking/time', formData).then((res) => {
-        console.log(res);
-        if (res.status == 'success') {
-          setmessageShow(true);
-          setmessage(
-            'Таны захиалгын хүсэлт амжилттай илгээгдлээ. Хүсэлт баталгаажсаны дараа төлбөрөө төлнө',
-          );
-          settitle('Амжилттай');
-          setstatus('success');
-
-          // setmessageShow(true);
-          // setmessage('Амжилттай захиалга үүслээ');
-          // settitle('Амжилттай');
-          // setstatus('success');
-        } else {
-          setmessageShow(true);
-          setmessage(res);
-          settitle('Анхааруулга');
-          setstatus('warning');
-        }
+        const formData = {
+          bookingList: dateValues,
+          isGift: false,
+          parkingSpaceId: parkingSpaceId,
+          totalAllDay: fullDayNumber,
+          totalAtDay: dayOfNumber,
+          totalAtNight: nightOfNumber,
+          totalPrice: totalValue,
+          userPhoneNumber: userRealData.phoneNumber,
+          vehicleId: selectVehicle,
+        };
+        console.log(formData);
+        await callPost('/booking', formData).then((res) => {
+          console.log(res);
+          if (res.status == 'success') {
+            setmessageShow(true);
+            setmessage(
+              'Таны захиалгын хүсэлт амжилттай илгээгдлээ. Хүсэлт баталгаажсаны дараа төлбөрөө төлнө',
+            );
+            settitle('Амжилттай');
+            setstatus('success');
+          } else {
+            setmessageShow(true);
+            setmessage(res);
+            settitle('Анхааруулга');
+            setstatus('warning');
+          }
         // setisLoading(false);
-      });
+        });
+      } else {
+        setmessageShow(true);
+        setmessage('Тээврийн хэрэгсэл сонгоно уу ');
+        settitle('Анхааруулга');
+        setstatus('warning');
+      }
     } else {
       setmessageShow(true);
-      setmessage('Тээврийн хэрэгсэл сонгоно уу ');
+      setmessage('Сул цаг сонгоно уу ');
       settitle('Анхааруулга');
       setstatus('warning');
     }
   };
-
   const handleOk = () => {
     setmessageShow(false);
   };
 
   const handleCancel = () => {
     setmessageShow(false);
-  };
-  const submit = () => {
-    setmessageShow(true);
-    setmessage('Сул цаг сонгоно уу ');
-    settitle('Анхааруулга');
-    setstatus('warning');
   };
 
 
@@ -236,11 +223,10 @@ const tofit = ({data, lat, lng}) => {
   };
   const onclickPick = async () => {
     setChooseTimeVisible(true);
-
     const calValidateDate = await callGet(
       `/schedule/custom?parkingSpaceId=${id}`,
     );
-    console.log('Batalgaajsan udruud----->', calValidateDate);
+    console.log('Batalgaajsan udruud--еееее--->', calValidateDate);
     calValidateDate && setParkingSpaceID(calValidateDate.parkingSpaceId);
   };
   const getSelectedDate1 = (data) => {
@@ -268,7 +254,7 @@ const tofit = ({data, lat, lng}) => {
     }
     const array=[];
     data.map((item) => {
-      array.push({startDate: moment(item).format('YYYY-MM-DD'), timeSplitDescription: 'Өдөр'});
+      array.push({startDate: moment(item).format('YYYY-MM-DD'), timeSplitDescription: 'DAY'});
     });
     console.log(array, 'awdawdawdawdawd');
     setDayValues(array);
@@ -299,7 +285,7 @@ const tofit = ({data, lat, lng}) => {
     }
     const array=[];
     data.map((item) => {
-      array.push({startDate: moment(item).format('YYYY-MM-DD'), timeSplitDescription: 'Шөнө'});
+      array.push({startDate: moment(item).format('YYYY-MM-DD'), timeSplitDescription: 'NIGHT'});
     });
     console.log(array, 'ШӨнүүд');
     setNightValues(array);
@@ -331,7 +317,7 @@ const tofit = ({data, lat, lng}) => {
     }
     const array=[];
     data.map((item) => {
-      array.push({startDate: moment(item).format('YYYY-MM-DD'), timeSplitDescription: 'Бүтэн өдөр'});
+      array.push({startDate: moment(item).format('YYYY-MM-DD'), timeSplitDescription: 'FULL_DAY'});
     });
     console.log(array, 'ШӨнүүд');
     setFullDayValues(array);
@@ -1408,58 +1394,58 @@ const tofit = ({data, lat, lng}) => {
                           buttonStyle="solid"
                           onChange={onChangeChooseVehicle}
                         >
-                          <Col span={11}>
-                            {vehicles.map((item) => (
-                              <Radio.Button
-                                key={item.value}
-                                value={item.value}
-                                className={'pickVehicle'}
-                              >
-                                <div style={{display: 'flex'}}>
-                                  <div
-                                    style={{
-                                      height: '24px',
-                                      width: '24px',
-                                      marginTop: '16px',
-                                      marginLeft: '16px',
-                                    }}
-                                  >
-                                    <img
-                                      src="/directions_car_24px.png"
-                                      height="16px"
-                                      width="18px"
-                                    />
-                                  </div>
-                                  <div
-                                    style={{
-                                      marginLeft: '10px',
-                                      height: '40px',
-                                      width: '75px',
-                                    }}
-                                  >
-                                    <p
-                                      style={{
-                                        fontSize: '12px',
-                                        height: '16px',
-                                      }}
-                                    >
-                                      {item.label.split(' ')[0]}
-                                      {item.label.split(' ')[1]}
-                                    </p>
-                                    <p
-                                      style={{
-                                        fontSize: '12px',
-                                        height: '16px',
-                                        color: '#0013D4',
-                                      }}
-                                    >
-                                      <b>{item.label.split(' ')[2]}</b>
-                                    </p>
-                                  </div>
+
+                          {vehicles.map((item) => (
+                            <Radio.Button
+                              key={item.value}
+                              value={item.value}
+                              className={'pickVehicle'}
+                            >
+                              <div style={{display: 'flex'}}>
+                                <div
+                                  style={{
+                                    height: '24px',
+                                    width: '24px',
+                                    marginTop: '16px',
+                                    marginLeft: '16px',
+                                  }}
+                                >
+                                  <img
+                                    src="/directions_car_24px.png"
+                                    height="16px"
+                                    width="18px"
+                                  />
                                 </div>
-                              </Radio.Button>
-                            ))}
-                          </Col>
+                                <div
+                                  style={{
+                                    marginLeft: '10px',
+                                    height: '40px',
+                                    width: '75px',
+                                  }}
+                                >
+                                  <p
+                                    style={{
+                                      fontSize: '12px',
+                                      height: '16px',
+                                    }}
+                                  >
+                                    {item.label.split(' ')[0]}
+                                    {item.label.split(' ')[1]}
+                                  </p>
+                                  <p
+                                    style={{
+                                      fontSize: '12px',
+                                      height: '16px',
+                                      color: '#0013D4',
+                                    }}
+                                  >
+                                    <b>{item.label.split(' ')[2]}</b>
+                                  </p>
+                                </div>
+                              </div>
+                            </Radio.Button>
+                          ))}
+
                         </Radio.Group>
                       </Row>
                       <Row style={{marginTop: '10px'}}>
@@ -1508,7 +1494,7 @@ const tofit = ({data, lat, lng}) => {
                         gutter={2}
                       >
                         <Col span={12}>
-                          <Button type='primary' onClick={totalValue > 0 ? () => timeSubmit(1) : () => submit() } style={{width: '100%', borderRadius: '10px'}}>Захиалга нэмэх</Button>
+                          <Button type='primary' onClick={()=> timeSubmit(1)} style={{width: '100%', borderRadius: '10px'}}>Захиалга нэмэх</Button>
                         </Col>
                         <Col span={12}>
                           <Button type='primary' className={'buttonGo'} style={{width: '100%', borderRadius: '10px'}} onClick={()=>onClickPayment(parkingSpaceId) }>Төлбөр төлөх</Button>

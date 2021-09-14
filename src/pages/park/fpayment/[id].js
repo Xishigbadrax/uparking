@@ -48,11 +48,11 @@ const {TabPane} = Tabs;
 const {Header, Sider} = Layout;
 
 const IMG_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
-const style = {
-  border: '1px solid #DEE2E9',
-  borderRadius: '8px',
-  padding: '5px 10px',
-};
+// const style = {
+//   border: '1px solid #DEE2E9',
+//   borderRadius: '8px',
+//   padding: '5px 10px',
+// };
 // const isBase64 = async (str) => {
 //   if (str === '' || str.trim() === '') {
 //     return false;

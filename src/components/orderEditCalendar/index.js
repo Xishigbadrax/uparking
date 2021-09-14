@@ -1,10 +1,11 @@
 /* eslint-disable react/prop-types */
-import {Calendar, Col, Row, Select} from 'antd';
+import {Calendar, Col, Row} from 'antd';
 import {calendarLocale} from '@constants/constants.js';
-import moment, {now} from 'moment';
+import {RightOutlined, LeftOutlined} from '@ant-design/icons';
+import moment from 'moment';
 import {useState, useEffect} from 'react';
-import {differenceInCalendarDays} from 'date-fns';
-import Item from '@components/Card';
+// import {differenceInCalendarDays} from 'date-fns';
+// import Item from '@components/Card';
 // import Item from '@components/Card';
 
 const today = moment();
@@ -21,9 +22,11 @@ const CustomCalendar = (props) => {
   console.log(props, 'sdaaa');
   const [fromDate, setFromDate] = useState([]);
   const [selectedDate, setselectedDate] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [selectType, setSelectType] = useState('multi');
   // eslint-disable-next-line no-unused-vars
   const [value, setValue] = useState(null);
+  const [current, setCurrent]= useState(moment().format('MM'));
 
   const test = (date, date2, day2)=>{
     const startDate = Date.parse(date);
@@ -56,10 +59,11 @@ const CustomCalendar = (props) => {
 
   const onPanelChange = (value, mode) => {
     // setselectedDate([]);
+  // };
   };
-  const isSameDay = (a, b) => {
-    return differenceInCalendarDays(a, b) === 0;
-  };
+  // const isSameDay = (a, b) => {
+  //   return differenceInCalendarDays(a, b) === 0;
+  // };
   const dateFullCellRender = (value) => {
     const day = moment(value).format('D');
     const day2 = moment(value).format('YYYY-MM-DD HH:mm:ss').toString();
@@ -94,7 +98,65 @@ const CustomCalendar = (props) => {
     <div className="site-calendar-customize-header-wrapper">
       <Calendar fullscreen={false} onPanelChange={onPanelChange}
         locale={calendarLocale}
-        value={value}
+        headerRender={({value, type, onChange, onTypeChange}) => {
+          const localeData = value.localeData();
+          const year = value.year();
+          const month = [];
+          console.log(localeData, 'awdawd');
+          for (let i = 0; i < 12; i++) {
+            month.push(localeData._months[i]);
+          }
+          return (
+            <div style={{padding: '16px'}}>
+              <Row >
+                <Col span={1}>
+                  <LeftOutlined
+                    onClick={()=>{
+                      setCurrent(current-1);
+                      console.log(current, 'ene harachde ');
+                      if (current === 1 ) {
+                        setCurrent(12);
+                        const newValue = value.clone();
+                        newValue.month(parseInt(current-1-1));
+                        onChange(newValue);
+                      } else {
+                        const newValue = value.clone();
+                        newValue.month(parseInt(current-1-1 ));
+                        onChange(newValue);
+                      }
+                    }}
+                    style={{cursor: 'pointer', color: '#0013D4'}}
+                  />
+                </Col>
+                <Col span={12} offset={1} style={{marginTop: '5px'}}>
+                  {month[current-1] },{year}
+                </Col>
+                <Col
+                  span={1}
+                  onClick={()=>{
+                    setCurrent(current+1);
+                    console.log(current, 'ene harachde ');
+                    if (current === 12) {
+                      setCurrent(1);
+                      const newValue = value.clone();
+                      newValue.month(parseInt(current +1));
+                      onChange(newValue);
+                    } else {
+                      const newValue = value.clone();
+                      newValue.month(parseInt(current +1));
+                      onChange(newValue);
+                    }
+                  }}
+
+                  style={{cursor: 'pointer', color: '#0013D4'}}
+                >
+                  <RightOutlined />
+                </Col>
+              </Row>
+            </div>
+          )
+          ;
+        }}
         dateFullCellRender={dateFullCellRender}
         className="customCalendarMini"
         onSelect={onSelect}/>

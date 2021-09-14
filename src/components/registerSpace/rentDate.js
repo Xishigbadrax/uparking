@@ -10,7 +10,9 @@ import moment from 'moment';
 moment.updateLocale('mn', {
   weekdaysMin: ['Ням', 'Даваа', 'Мягмар', 'Лхагва', 'Пүрэв', 'Баасан', 'Бямба'],
 });
-
+moment.updateLocale('mn', {
+  months: ['Нэгдүгээр сар', 'Хоёрдугаар сар', 'Гуравдугаар сар', 'Дөрөвдүгээр сар', 'Тавдугаар сар', 'Зургаадугаар сар', 'Долоодугаар сар', 'Наймдугаар сар', 'Есдүгээр сар', 'Аравдугаар сар', 'Арван нэгдүгээр сар', 'Арван хоёрдугаар сар'],
+});
 const rentDate = (props) => {
   // const [weekData, setWeekData] = useState();
   const [checked, setChecked] = useState();
@@ -31,6 +33,7 @@ const rentDate = (props) => {
   const [sundayNight, setsundayNight] = useState('Боломжтой');
 
   const [daySplitId, setDaySplitId] = useState();
+  const [current, setCurrent] = useState(parseInt(moment().format('M')));
   // const [date, setDate] = useState(moment.setDate());
   const [nightSplitId, setNightSplit] = useState();
   const dayOfWeek= [
@@ -722,37 +725,63 @@ const rentDate = (props) => {
                 <Calendar
                   disabledDate={disabledDate}
                   headerRender={({value, type, onChange, onTypeChange}) => {
-                    const current = value.clone();
                     const localeData = value.localeData();
                     const year = value.year();
                     const month = [];
                     console.log(localeData, 'awdawd');
                     for (let i = 0; i < 12; i++) {
-                      month.push(localeData.months(current));
+                      month.push(localeData._months[i]);
                     }
-
                     return (
                       <div style={{padding: '16px'}}>
                         <Row >
-                          <Col span={2}>
+                          <Col span={1}>
                             <LeftOutlined
-                              onClick={()=>{}}
-                              style={{cursor: 'pointer'}}
+                              onClick={()=>{
+                                setCurrent(current-1);
+                                console.log(current, 'ene harachde ');
+                                if (current === 1 ) {
+                                  setCurrent(12);
+                                  const newValue = value.clone();
+                                  newValue.month(parseInt(current-1-1));
+                                  onChange(newValue);
+                                } else {
+                                  const newValue = value.clone();
+                                  newValue.month(parseInt(current-1-1 ));
+                                  onChange(newValue);
+                                }
+                              }}
+                              style={{cursor: 'pointer', color: '#0013D4'}}
                             />
                           </Col>
-                          <Col span={6}>
-                            Есдүгээр сар,{year}
+                          <Col span={7} style={{marginTop: '5px'}}>
+                            {month[current-1] },{year}
                           </Col>
                           <Col
-                            span={2}
-                            // onClick={onClickRight}
-                            style={{cursor: 'pointer'}}
+                            span={1}
+                            onClick={()=>{
+                              setCurrent(current+1);
+                              console.log(current, 'ene harachde ');
+                              if (current === 12) {
+                                setCurrent(1);
+                                const newValue = value.clone();
+                                newValue.month(parseInt(current));
+                                onChange(newValue);
+                              } else {
+                                const newValue = value.clone();
+                                newValue.month(parseInt(current ));
+                                onChange(newValue);
+                              }
+                            }}
+
+                            style={{cursor: 'pointer', color: '#0013D4'}}
                           >
                             <RightOutlined />
                           </Col>
                         </Row>
                       </div>
-                    );
+                    )
+                    ;
                   }}
                   // value={moment().format('YYYY/MM/DD')}
                   className={'rentDateCalendar'}

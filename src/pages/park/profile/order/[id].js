@@ -86,6 +86,18 @@ const OrderId = () => {
     console.log(e.target.value);
     setCommentReview(e.target.value);
   };
+  const onClickPayPayment =async (e)=>{
+    const paymentt = await callGet(`/payment?bookingId=${orderData.bookingId}`);
+    console.log(paymentt, 'wawdawaw');
+    console.log('tuluud ugii gulug xaxa');
+    const invokePaymentDto = {
+      amountToPay: orderData.totalPrice,
+      bookingId: orderData.bookingId,
+      bookingNumber: orderData.bookingNumber,
+    };
+    const res= await callPost('/payment/bywallet', invokePaymentDto);
+    console.log(res);
+  };
   const handleSubmitPolicy =(e)=>{
 
   };
@@ -134,8 +146,8 @@ const OrderId = () => {
         date: fromSelectedDate,
       };
       const res = await callPost('/booking/cancelrequest', formData);
-      setCancelData(res);
-      const data=
+
+      const data =
       {
         bookingId: orderData.bookingId,
         date: fromSelectedDate,
@@ -143,7 +155,7 @@ const OrderId = () => {
       };
       const res2 = await callPost('/booking/cancel', data);
       console.log(res2, 'awdawdadawdawd');
-
+      setCancelData(res);
       setIsModalVisibleCancelOrder(false);
       setIsModalVisibleCancelOrderConfirm(true);
     }
@@ -183,9 +195,7 @@ const OrderId = () => {
     console.log(res, 'rateeeeeee');
     setIsUnelgeeVisible(false);
   };
-  const handleClickConfirm = (value, mode) => {
-    console.log(value, mode);
-  };
+
   const getSelectedDate = (data) =>{
     console.log(data, 'datadatadata');
     setFromSelectedDate(data);
@@ -599,7 +609,7 @@ const OrderId = () => {
                                 </div>
                                 <Row style={{marginTop: '35px'}}>
                                   <Col span={24}>
-                                    <Button type="primary" size={'large'} block>
+                                    <Button type="primary" size={'large'} block onClick={onClickPayPayment}>
                                                                             Төлөх
                                     </Button>
                                   </Col>
