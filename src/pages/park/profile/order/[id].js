@@ -65,6 +65,9 @@ const OrderId = () => {
   const [type, settype] = useState('KHANBANK');
   const [type2, settype2] = useState('MONGOLCHAT');
   const [data, setdata] = useState(null);
+  const [modalData, setModalData] = useState(null);
+  const [tureeslegch, setTureeslegch] = useState(false);
+  const [calendarData, setCalendarData] = useState();
   const [amount, setamount] = useState(0);
   const [formData] = useState({
     amount: null,
@@ -112,6 +115,16 @@ const OrderId = () => {
   const onChangeInputPhone = (value) => {
     setphoneNumber(value);
   };
+  const onTureeslegch = async () => {
+    setTureeslegch(true);
+    // ctx.setIsLoading(true);
+    await callGet(`/booking/detail?id=${orderData.bookingId}`).then((res) => {
+      console.log(res, 'resee haryaa');
+      setModalData(res);
+      // ctx.setIsLoading(false);
+    });
+  };
+
   useEffect(() => {
     fetchData4();
   }, []);
@@ -126,6 +139,7 @@ const OrderId = () => {
       ctx.setIsLoading(false);
     });
   };
+
 
   const fetchData2 = async () => {
     if (amount != 0) {
@@ -323,6 +337,7 @@ const OrderId = () => {
 
   const handleCancel = () => {
     setmessageShow(false);
+    setTureeslegch(false);
   };
 
   const handleCancelCancelOrder = () => {
@@ -880,10 +895,19 @@ const OrderId = () => {
                           </Col>
                         </Row></div>
                     );
-                  } else if (orderData.bookingStatus === 'CONFIRMED'&& isUnelgee ) {
+                  // } else if (orderData.bookingStatus !== 'CONFIRMED'&& isUnelgee ) {
+                  } else {
                     return (
-                      <Col span={24} style={{marginTop: '20px'}}>
-                        <Button type="primary" size={'large'} onClick={()=>{
+                      <Col span={19} style={{marginTop: '20px'}}>
+                        <div className="flex justify-between">
+                          <div className="text-[#C6231A] font-bold text-[14px] mb-[29px]">Захиалга цуцлагдсан байна. </div>
+                          <div>
+                            <Button className=" bg-[#0336FF14] w-[96px] bg-opacity-[8%] rounded-[8px] text-[#0013D4] h-[32px]" type="default" onClick={onTureeslegch}>
+                            Харах
+                            </Button>
+                          </div>
+                        </div>
+                        <Button className="mb-[27px]" type="primary" size={'large'} onClick={()=>{
                           setIsUnelgeeVisible(true)
                           ;
                         }} style={{borderRadius: '10px', width: '100%'}}>
@@ -1117,6 +1141,67 @@ const OrderId = () => {
         footer={[]}
       >
         <Alert message={title} description={message} type={status} showIcon />
+      </Modal>
+      <Modal
+        visible={tureeslegch}
+        title="Захиалга цуцлалтын мэдээлэл"
+        onOk={handleOk}
+        className="tureesModal"
+        onCancel={handleCancel}
+        footer={[]}
+
+
+      >
+        <div>
+          <div className=" flex justify-between">
+            <div>Нийт цуцлах захиалгын төлбөр:</div>
+            <div>{modalData && modalData.total }</div>
+          </div>
+          <Divider />
+          <p className=" text-[14px] font-bold">Таны цуцлах захиалга:</p>
+          <p className=" text-[12px] text-[#35446D]">{modalData && modalData.expireDateDriver} хойшхи захиалга цуцлагдсан. </p>
+          <div className="flex justify-between mr-[75px] mt-2">
+            {modalData != null && modalData.day > 0 ? <div className="flex w-[84px] justify-between">
+              <Image className="mt-[3px]" src="../../../icons/brightness_5_24px.png" />
+              <p className=" text-[14px] text-[#35446D]">Өдөр  {modalData.day}</p>
+            </div> : null}
+
+            {modalData != null && modalData.night > 0 ? <div className="flex w-[84px] justify-between">
+              <Image src="../../../icons/brightness_3_24px.png" />
+              <p className=" text-[14px] text-[#35446D]">Шөнө  {modalData.night}</p>
+            </div> : null}
+            {modalData != null && modalData.fullDay > 0 ? <div className="flex w-[84px] justify-between">
+              <Image src="../../../icons/brightness_5_24px.png" />
+              <p className=" text-[14px] text-[#35446D]">Бүтэн өдөр  {modalData.fullDay}</p>
+            </div> : null}
+          </div>
+          <Divider />
+          <p className=" text-[14px] text-[#141A29] font-bold">Захиалга цуцлалтын шимтгэл</p>
+
+          <div className="flex justify-between">
+            <div>Нийт буцаалтын төлбөр </div>
+            <div className=" text-[14px] font-bold text-[#141A29]">{modalData && modalData.cancelTotal}₮</div>
+          </div>
+          <Divider />
+          <p className="text-[#141A29] font-bold">Буцаалтын төлбөр</p>
+          <p className=" text-[12px] text-[#35446D]">Буцаалтын төлбөр нь цуцлалтын бодлогын дагуу олгогдоно. </p>
+          <div className="flex justify-between">
+            <div className="flex  justify-between">
+              <div className=" mt-1 mr-[10px]"><Image preview={false} src="../../../icons/confirm.png" /></div>
+              <div>Захиалга цуцлалт </div>
+            </div>
+            <div className=" text-[#647189]">{modalData && modalData.walletCreatedDate}</div>
+          </div>
+          <div className="flex justify-between">
+            <div className="flex  justify-between">
+              <div className=" mt-1 mr-[10px]"><Image preview={false} src="../../../icons/time.png" /></div>
+              <div>Буцаалт </div>
+            </div>
+            {modalData != null && modalData.walletIsActive ? <div className=" text-[#647189]" >{modalData.walletUpdatedDate}</div> : <div className=" text-[#647189]">Хүлээгдэж байна</div>}
+
+
+          </div>
+        </div>
       </Modal>
     </DefaultLayout >
 

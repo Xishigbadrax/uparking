@@ -2535,3 +2535,21 @@ input[type=number]::-webkit-outer-spin-button {
 .commentRate .ant-rate {
    margin-left: -50px !important;
 }
+.tureesModal .ant-modal-header{
+  background-color: red;
+  
+}
+.tureesModal .ant-modal{
+ border-radius: 10px;
+  
+}
+
+.tureesModal .ant-modal-title{
+  color: white;
+  font-size: 20px;
+  text-align: center;
+}
+.tureesModal .ant-modal-close-x{
+  color: white;
+}
+
