@@ -77,7 +77,7 @@ const tofit = ({data, lat, lng}) => {
   const {userdata} = useContext(Context);
   const [userRealData, setUserRealData] = useState('');
   const [parkingSpaceId, setParkingSpaceID] = useState(0);
-
+  const [bookedDateList, setBookedDateList] = useState([]);
 
   // const [fromSelectedDate3, setFromSelectedDate3] = useState([]);
   useEffect(()=>{
@@ -88,7 +88,6 @@ const tofit = ({data, lat, lng}) => {
       setUserRealData(userdata);
     }
   }, [userdata]);
-  console.log(userRealData, 'Realdat');
   const DetailsDrawerOpen = async (id) => {
     setDetailsVisible(true);
     setId(id);
@@ -127,8 +126,7 @@ const tofit = ({data, lat, lng}) => {
     setVehiclesData(vehicle);
   };
   const onChangeChooseVehicle = (e) => {
-    setSelectedVehicle(e.target.value, 'mashineee');
-    console.log(e.target.value);
+    setSelectedVehicle(e.target.value);
   };
   const onClickPayment = (id)=>{
     id &&
@@ -157,7 +155,7 @@ const tofit = ({data, lat, lng}) => {
         console.log(formData);
         await callPost('/booking', formData).then((res) => {
           console.log(res);
-          if (res.status == 'success') {
+          if (res.status === 'success') {
             setmessageShow(true);
             setmessage(
               'Таны захиалгын хүсэлт амжилттай илгээгдлээ. Хүсэлт баталгаажсаны дараа төлбөрөө төлнө',
@@ -208,8 +206,6 @@ const tofit = ({data, lat, lng}) => {
       arr.push(item);
     });
     setDateValues(arr);
-    console.log(arr, 'ene shvv');
-    console.log(dateValues, 'awdhgawidugawiduawdiu');
     setCompleteDayOfNumber(dayOfNumber);
     setCompleteNightOfNumber(nightOfNumber);
     setCompleteFullDayNumber(fullDayNumber);
@@ -227,7 +223,8 @@ const tofit = ({data, lat, lng}) => {
       `/schedule/custom?parkingSpaceId=${id}`,
     );
     console.log('Batalgaajsan udruud--еееее--->', calValidateDate);
-    calValidateDate && setParkingSpaceID(calValidateDate.parkingSpaceId);
+    setBookedDateList(calValidateDate.bookedDateList);
+    setParkingSpaceID(calValidateDate.parkingSpaceId);
   };
   const getSelectedDate1 = (data) => {
     setDayofNumber(data.length);
@@ -322,7 +319,6 @@ const tofit = ({data, lat, lng}) => {
     console.log(array, 'ШӨнүүд');
     setFullDayValues(array);
   };
-
   const handleClickDayTab = (key) => {
     setSelectedDayTab(key);
   };
@@ -405,202 +401,72 @@ const tofit = ({data, lat, lng}) => {
                         marginLeft: '30px',
                       }}
                     >
-                      {spaceData && spaceData.floorNumber ? (
+                      {console.log(it.park.floorNumber, 'flooooooooooooooooooooooooooooooooooooooooooor')}
+                      {it.park && it.park.floorNumber ? (
+
                         <div style={{marginRight: '5px'}}>
                           <img
                             preview={false}
                             width={18}
                             height={18}
-                            src={IMG_URL + spaceData.floorNumber}
+                            src={IMG_URL + it.park.floorNumber}
                           />
                         </div>
                       ) : null}
-                      {spaceData && spaceData.entranceLock ? (
+                      {it.park && it.park.entranceLock ? (
                         <div style={{marginRight: '5px'}}>
                           <img
                             preview={false}
                             width={18}
                             height={18}
-                            src={IMG_URL + spaceData.entranceLock}
+                            src={IMG_URL + it.park.entranceLock}
                           />
                         </div>
                       ) : null}
-                      {spaceData && spaceData.isNumbering ? (
+                      {it.park && it.park.isNumbering ? (
                         <div style={{marginRight: '5px'}}>
                           <img
                             preview={false}
                             width={18}
                             height={18}
-                            src={IMG_URL + spaceData.isNumbering}
+                            src={`${IMG_URL + it.park.isNumbering}`}
                           />
                         </div>
                       ) : null}
-                      {spaceData && spaceData.capacity ? (
+                      {it.park && it.park.capacity ? (
                         <div style={{marginRight: '5px'}}>
                           <img
                             preview={false}
                             width={18}
                             height={18}
-                            src={IMG_URL + spaceData.capacity}
+                            src={IMG_URL + it.park.capacity}
                           />
                         </div>
                       ) : null}
-                      {spaceData && spaceData.type ? (
+                      {it.park && it.park.type ? (
                         <div style={{marginRight: '5px'}}>
                           <img
                             preview={false}
                             width={18}
                             height={18}
-                            src={IMG_URL + spaceData.type}
+                            src={IMG_URL + it.park.type}
                           />
                         </div>
                       ) : null}
-                      {spaceData && spaceData.returnRoutes ? (
+                      {it.park && it.park.returnRoutes ? (
                         <div style={{marginRight: '5px'}}>
                           <img
                             preview={false}
                             width={18}
                             height={18}
-                            src={IMG_URL + spaceData.returnRoutes}
+                            src={IMG_URL + it.park.returnRoutes}
                           />
                         </div>
                       ) : null}
                       <div>
-                        {!parkingUpDownArrow ? (
-                          <DownOutlined
-                            onClick={() => setParkingUpDownArrow(true)}
-                          />
-                        ) : (
-                          <UpOutlined
-                            onClick={() => setParkingUpDownArrow(false)}
-                          />
-                        )}
+                        <DownOutlined/>
                       </div>
                     </div>
-                    {parkingUpDownArrow ? (
-                      <div>
-                        {spaceData && spaceData.floorNumber ? (
-                          <div
-                            style={{
-                              marginRight: '13px',
-                              display: 'flex',
-                            }}
-                          >
-                            <div>
-                              <img
-                                preview={false}
-                                width={18}
-                                height={18}
-                                src={IMG_URL + spaceData.floorNumber}
-                              />
-                            </div>
-                            <div style={{marginLeft: '25px'}}>
-                              <span>{spaceData.floorNumberLabel}</span>
-                            </div>
-                          </div>
-                        ) : null}
-                        {spaceData && spaceData.entranceLock ? (
-                          <div
-                            style={{
-                              marginRight: '13px',
-                              display: 'flex',
-                            }}
-                          >
-                            <div>
-                              <img
-                                preview={false}
-                                width={18}
-                                height={18}
-                                src={IMG_URL + spaceData.entranceLock}
-                              />
-                            </div>
-                            <div style={{marginLeft: '25px'}}>
-                              <span>{spaceData.entranceLockLabel}</span>
-                            </div>
-                          </div>
-                        ) : null}
-                        {spaceData && spaceData.isNumbering ? (
-                          <div
-                            style={{
-                              marginRight: '13px',
-                              display: 'flex',
-                            }}
-                          >
-                            <div>
-                              <img
-                                preview={false}
-                                width={18}
-                                height={18}
-                                src={IMG_URL + spaceData.isNumbering}
-                              />
-                            </div>
-                            <div style={{marginLeft: '25px'}}>
-                              <span>{spaceData.isNumberingLabel}</span>
-                            </div>
-                          </div>
-                        ) : null}
-                        {spaceData && spaceData.capacity ? (
-                          <div
-                            style={{
-                              marginRight: '13px',
-                              display: 'flex',
-                            }}
-                          >
-                            <div>
-                              <img
-                                preview={false}
-                                width={18}
-                                height={18}
-                                src={IMG_URL + spaceData.capacity}
-                              />
-                            </div>
-                            <div style={{marginLeft: '25px'}}>
-                              <span>{spaceData.capacityLabel}</span>
-                            </div>
-                          </div>
-                        ) : null}
-                        {spaceData && spaceData.type ? (
-                          <div
-                            style={{
-                              marginRight: '13px',
-                              display: 'flex',
-                            }}
-                          >
-                            <div>
-                              <img
-                                preview={false}
-                                width={18}
-                                height={18}
-                                src={IMG_URL + spaceData.type}
-                              />
-                            </div>
-                            <div style={{marginLeft: '25px'}}>
-                              <span>{spaceData.typeLabel}</span>
-                            </div>
-                          </div>
-                        ) : null}
-                        {spaceData && spaceData.returnRoutes ? (
-                          <div
-                            style={{
-                              marginRight: '13px',
-                              display: 'flex',
-                            }}
-                          >
-                            <div>
-                              <img
-                                preview={false}
-                                width={18}
-                                height={18}
-                                src={IMG_URL + spaceData.returnRoutes}
-                              />
-                            </div>
-                            <div style={{marginLeft: '25px'}}>
-                              <span>{spaceData.returnRoutesLabel}</span>
-                            </div>
-                          </div>
-                        ) : null}
-                      </div>
-                    ) : null}
                   </div>
                 </Row>
               </Col>
@@ -1612,6 +1478,7 @@ const tofit = ({data, lat, lng}) => {
                     selectType="multi"
                     selectedDate={selectedDate1}
                     getSelectedDate={getSelectedDate1}
+                    bookedDate={bookedDateList}
                     className={'timePickCalendar'}
                   />
                 </TabPane>
@@ -1682,7 +1549,7 @@ const tofit = ({data, lat, lng}) => {
               <Col span={1}>{nightOfNumber}</Col>
             </Row>
             <Row>
-              <Col span={3}>Бүтэн өдөр</Col>
+              <Col span={5}>Бүтэн өдөр</Col>
               <Col span={1}>{fullDayNumber}</Col>
             </Row>
             <Divider />

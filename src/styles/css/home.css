@@ -2397,9 +2397,9 @@ width: 125px;
    margin-top: 60px ;
 } */
 .orderCalendar .daynighttext {
-  margin-top: 50px !important;
+  margin-top: 55px !important;
 }
-.orderCalendar .daynighttext .item ul{
+.orderCalendar .daynighttext .item {
   margin-top: 60px ;
 }
 .OrdePagination{

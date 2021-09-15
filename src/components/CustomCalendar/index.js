@@ -4,8 +4,12 @@ import {calendarLocale} from '@constants/constants.js';
 import moment from 'moment';
 import {useState, useEffect} from 'react';
 import {differenceInCalendarDays} from 'date-fns';
-import {RightOutlined, LeftOutlined} from '@ant-design/icons';
+import Helper from '@utils/helper';
+import {RightOutlined, LeftOutlined, HeartOutlined} from '@ant-design/icons';
 
+moment.updateLocale('mn', {
+  weekdaysMin: ['НЯМ', 'ДАВ', 'МЯГ', 'ЛХА', 'ПҮР', 'БАА', 'БЯМ'],
+});
 moment.updateLocale('mn', {
   months: ['Нэгдүгээр сар', 'Хоёрдугаар сар', 'Гуравдугаар сар', 'Дөрөвдүгээр сар', 'Тавдугаар сар', 'Зургаадугаар сар', 'Долоодугаар сар', 'Наймдугаар сар', 'Есдүгээр сар', 'Аравдугаар сар', 'Арван нэгдүгээр сар', 'Арван хоёрдугаар сар'],
 });
@@ -22,6 +26,7 @@ export const AcademicYearEnd = moment(today)
 const CustomCalendar = (props) => {
   console.log(props, 'sdaaa');
   const [selectedDate, setselectedDate] = useState([]);
+  const [bookedDate, setBookedDate] = useState([]);
   const [selectType, setSelectType] = useState('multi');
   // eslint-disable-next-line no-unused-vars
   // const [value, setValue] = useState(null);
@@ -40,7 +45,9 @@ const CustomCalendar = (props) => {
   useEffect(() => {
     props.getSelectedDate(selectedDate);
   }, [selectedDate]);
-
+  useEffect(()=>{
+    setBookedDate(props.bookedDate);
+  }, []);
 
   const onPanelChange = (value, mode) => {
     // setselectedDate([]);
@@ -49,8 +56,11 @@ const CustomCalendar = (props) => {
     return differenceInCalendarDays(a, b) === 0;
   };
   const dateFullCellRender = (value) => {
+    const notDay = moment(value).format('YYYY-MM-DD 09:00:00 ');
+    const month = moment(value).format('YYYY-MM');
+    console.log(month, 'shhhhhhhhhh');
     const day = moment(value).format('D');
-    const today = moment();
+    const current = moment(value);
     let onclickclass = '';
     let style;
     if (
@@ -58,13 +68,24 @@ const CustomCalendar = (props) => {
     ) {
       onclickclass = 'onclickeddate';
     }
-    if (isSameDay(today.toDate(), value.toDate())) {
+    if (moment(current).format('YYYY-MM-DD ')> moment(month).format('YYYY-MM-DD') ) {
       style = {
-        background: 'rgb(34 230 185)',
+        background: '#76E8AA',
         color: 'white',
         marginLeft: '5px',
       };
     }
+    bookedDate.map((item)=> {
+      console.log(item.startDate, 'ggggggggggg');
+      console.log(notDay, 'gg');
+      // console.log(Helper.notTimeDate(item.startDate), 'asdasdsd')
+    });
+    if (bookedDate.find((item)=> item.startDate == notDay)) {
+      onclickclass = 'Notonclickeddate';
+      console.log('111');
+    }
+    // moment(value).format('YYYY-MM-DD')
+    // }
     return <div className={`customFullCellRender ant-picker-cell-inner ${onclickclass}`} style={style}>
       <div className="ant-picker-calendar-date-value">{day}</div>
     </div>;
@@ -82,11 +103,17 @@ const CustomCalendar = (props) => {
       setselectedDate([value]);
     }
   };
+  // const disabledDate = (current)=> {
+  //   // Can not select days before today and today
+  //   return current && current < moment().endOf('day');
+  // };
+
   return (
     <div className="site-calendar-customize-header-wrapper">
       <Calendar
         fullscreen={false}
         locale={calendarLocale}
+        // disabledDate={disabledDate}
         headerRender={({value, type, onChange, onTypeChange}) => {
           const localeData = value.localeData();
           const year = value.year();

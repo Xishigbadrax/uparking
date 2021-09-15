@@ -25,7 +25,7 @@ const isBase64 = async (str) => {
 };
 // eslint-disable-next-line react/prop-types
 const Search = ({data, startDate, endDate, tunetype})=>{
-  console.log(startDate, endDate);
+  console.log(startDate, endDate, data);
   const {userdata} = useContext(Context);
   const router = useRouter();
   // console.log(Number(Number(endDate)-Number(startDate)));
@@ -84,9 +84,7 @@ const Search = ({data, startDate, endDate, tunetype})=>{
     }
     const time = await callGet('/config/timesplit');
     settimeSplit(time);
-    console.log(time, '<-------------------------------');
   }, []);
-
   const onClickPayment = (id)=>{
     id &&
     router.push({
@@ -94,7 +92,6 @@ const Search = ({data, startDate, endDate, tunetype})=>{
       query: {
         id: 498,
         startDateTime: '2021-09-09',
-
       },
     });
   };
@@ -104,8 +101,6 @@ const Search = ({data, startDate, endDate, tunetype})=>{
     // eslint-disable-next-line react/prop-types
     const a = data.find((item) => item.park.parkingSpaceId === id);
     setResidenceDrawerItem(a.residence);
-    console.log(a, 'a-iin medeelel');
-
     setSpaceStatus(a.park.spaceStatus);
     setTotalPrice(a.park.price);
     console.log(a.park.price, '<---------');
@@ -269,70 +264,70 @@ const Search = ({data, startDate, endDate, tunetype})=>{
                           marginLeft: '30px',
                         }}
                       >
-                        {spaceData && spaceData.floorNumber ? (
+                        {it.park && it.park.floorNumber ? (
                           <div style={{marginRight: '5px'}}>
                             <img
                               preview={false}
                               width={18}
                               height={18}
-                              src={IMG_URL + spaceData.floorNumber}
+                              src={`data:image/jpeg;base64,${it.park.floorNumber}`}
                             />
                           </div>
                         ) : null}
-                        {spaceData && spaceData.entranceLock ? (
+                        {it.park && it.park.entranceLock ? (
                           <div style={{marginRight: '5px'}}>
                             <img
                               preview={false}
                               width={18}
                               height={18}
-                              src={IMG_URL + spaceData.entranceLock}
+                              src={`data:image/jpeg;base64,${it.park.entranceLock}`}
                             />
                           </div>
                         ) : null}
-                        {spaceData && spaceData.isNumbering ? (
+                        {it.park && it.park.isNumbering ? (
                           <div style={{marginRight: '5px'}}>
                             <img
                               preview={false}
                               width={18}
                               height={18}
-                              src={IMG_URL + spaceData.isNumbering}
+                              src={`data:image/jpeg;base64,${it.park.isNumbering}`}
                             />
                           </div>
                         ) : null}
-                        {spaceData && spaceData.capacity ? (
+                        {it.park && it.park.capacity ? (
                           <div style={{marginRight: '5px'}}>
                             <img
                               preview={false}
                               width={18}
                               height={18}
-                              src={IMG_URL + spaceData.capacity}
+                              src={`data:image/jpeg;base64,${it.park.floorNumber}`}
                             />
                           </div>
                         ) : null}
-                        {spaceData && spaceData.type ? (
+                        {it.park && it.park.type ? (
                           <div style={{marginRight: '5px'}}>
                             <img
                               preview={false}
                               width={18}
                               height={18}
-                              src={IMG_URL + spaceData.type}
+                              src={`data:image/jpeg;base64,${it.park.type}`}
                             />
                           </div>
                         ) : null}
-                        {spaceData && spaceData.returnRoutes ? (
+                        {it.park && it.park.returnRoutes ? (
                           <div style={{marginRight: '5px'}}>
                             <img
                               preview={false}
                               width={18}
                               height={18}
-                              src={IMG_URL + spaceData.returnRoutes}
+                              src={`data:image/jpeg;base64,${it.park.returnRoutes}`}
                             />
                           </div>
                         ) : null}
                         <div>
                           {!parkingUpDownArrow ? (
                             <DownOutlined
-                              onClick={() => setParkingUpDownArrow(true)}
+                              // onClick={() => setParkingUpDownArrow(true)}
                             />
                           ) : (
                             <UpOutlined

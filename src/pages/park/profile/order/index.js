@@ -124,7 +124,7 @@ const Order = () => {
   // calendar der haragdah data awah
   const getListData = (value) => {
     const listData = [];
-    if (calendarData.length > 0) {
+    if (calendarData && calendarData.length > 0) {
       calendarData.forEach(function(element) {
         const currentMoment = moment(element.startDateTime, 'YYYY/MM/DD');
         const endMoment = moment(element.endDateTime, 'YYYY/MM/DD').add(1, 'days');
@@ -401,7 +401,7 @@ const Order = () => {
                                 {item.totalPrice ? Helper.formatValueReverse(item.totalPrice) : 0}₮</strong></div>
                             </Col>
                             <Col span={3} className="listactions">
-                              <Link href={{pathname: `/park/profile/order/${item.bookingId}`, query: {page: '1'}}} passHref>
+                              <Link href={{pathname: `/park/profile/order/${item.bookingId}`, query: {page: '1', asWho: 1}}} passHref>
                                 <EyeTwoTone twoToneColor="#0013D4" style={{fontSize: 20}} />
                               </Link>
 

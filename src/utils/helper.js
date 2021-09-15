@@ -64,6 +64,20 @@ const date = (input) => {
   }
   return input;
 };
+const notTimeDate =(input)=>{
+  if (input ) {
+    input=input.split(' ');
+    const t = new Date(input[0]);
+    //   var t = new Date(input);
+    //   var t = Date.parse(input);
+    //   console.log(t);
+    const year = '0000' + (t.getFullYear()+1).slice(-2);
+    const month = ('00' + (t.getMonth() + 1)).slice(-2);
+    const day = ('00' + t.getDate()).slice(-2);
+    return `${year}-${month}-${day}`;
+  }
+};
+
 const yearDate = (input) => {
   if (input) {
     input = input.split('+')[0];
@@ -554,6 +568,7 @@ export default {
   isNullOrEmpty,
   isNullOrWhitespace,
   getRouteTitles,
+  notTimeDate,
   downloadExcel,
   viewPdf,
   viewURI,
