@@ -2403,10 +2403,22 @@ width: 125px;
    margin-top: 60px ;
 } */
 .orderCalendar .daynighttext {
-  margin-top: 55px !important;
+  margin-top: 70px !important;
+}
+.orderCalendarAsWho2 .daynighttext {
+  margin-top: 100px !important;
+}
+.orderCalendar .ant-picker-panel .ant-picker-calendar-date{
+  height: 70px !important;
+}
+.orderCalendarAsWho2 .ant-picker-panel .ant-picker-calendar-date{
+  height: 80px !important;
+}
+.orderCalendarAsWho2 .daynighttext .item{
+  margin-top: 32px !important;
 }
 .orderCalendar .daynighttext .item {
-  margin-top: 60px ;
+  margin-top: 40px ;
 }
 .OrdePagination{
   margin-left: 70% !important;
@@ -2541,6 +2553,7 @@ input[type=number]::-webkit-outer-spin-button {
 .commentRate .ant-rate {
    margin-left: -50px !important;
 }
+<<<<<<< HEAD
 .tureesModal .ant-modal-header{
   background-color: red;
   
@@ -2559,3 +2572,15 @@ input[type=number]::-webkit-outer-spin-button {
   color: white;
 }
 
+=======
+.warningIcon .anticon  svg {
+  height: 40px !important;
+   width: 40px !important;
+}
+.warningModal.ant-modal-content{
+   border-radius: 20px !important;
+}
+.cancelBooking .antd-modal-header{
+  background-color: red !important;
+}
+>>>>>>> 9504ec0901abc9165b041a821176d7d04b012a07

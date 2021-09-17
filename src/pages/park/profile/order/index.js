@@ -307,7 +307,6 @@ const Order = () => {
                                 span={1}
                                 onClick={()=>{
                                   setCurrent(current+1);
-                                  console.log(current, 'ene harachde ');
                                   if (current === 12) {
                                     setCurrent(1);
                                     const newValue = value.clone();

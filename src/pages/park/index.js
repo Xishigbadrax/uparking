@@ -149,6 +149,7 @@ const Dashboard = () => {
         lng: mergedparks[0].residence.longitude,
       });
       setSearchedData(mergedparks);
+      console.log(searchedData, 'eneeeeeeeeeeeeeeeeeeeeeeeeeeee');
     } else {
       setDefaultCenter({
         lat: 47.91909306508191,
@@ -397,8 +398,8 @@ const Dashboard = () => {
               Хамгийн хямд
               </TabPane>
               <TabPane tab="Хамгийн ойр" key="3">
-                {searchType ==='full' && <Search data={searchedData} startDate={startDate} endDate={endDate} tunetype={tuneType}/>}
-                {searchType ==='fsearch' &&<ToFit data={searchedData} lat={defaultCenter.lat} lng={defaultCenter.lng} />}
+                {searchType ==='full' && <Search data={searchDataOfPosition} startDate={startDate} endDate={endDate} tunetype={tuneType}/>}
+                {searchType ==='fsearch' &&<ToFit data={searchDataOfPosition} lat={defaultCenter.lat} lng={defaultCenter.lng} />}
               </TabPane>
             </Tabs>
           </Sider>

@@ -4,8 +4,8 @@ import {calendarLocale} from '@constants/constants.js';
 import moment from 'moment';
 import {useState, useEffect} from 'react';
 import {differenceInCalendarDays} from 'date-fns';
-import Helper from '@utils/helper';
-import {RightOutlined, LeftOutlined, HeartOutlined} from '@ant-design/icons';
+// import Helper from '@utils/helper';
+import {RightOutlined, LeftOutlined} from '@ant-design/icons';
 
 moment.updateLocale('mn', {
   weekdaysMin: ['НЯМ', 'ДАВ', 'МЯГ', 'ЛХА', 'ПҮР', 'БАА', 'БЯМ'],
@@ -26,6 +26,7 @@ export const AcademicYearEnd = moment(today)
 const CustomCalendar = (props) => {
   console.log(props, 'sdaaa');
   const [selectedDate, setselectedDate] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [bookedDate, setBookedDate] = useState([]);
   const [selectType, setSelectType] = useState('multi');
   // eslint-disable-next-line no-unused-vars
@@ -47,16 +48,20 @@ const CustomCalendar = (props) => {
   }, [selectedDate]);
   useEffect(()=>{
     setBookedDate(props.bookedDate);
-  }, []);
+  }, [props.bookedDate]);
 
   const onPanelChange = (value, mode) => {
     // setselectedDate([]);
   };
+  // const compareDate = (date1, date2)=>{
+  //   const x = new Date(date1);
+  //   const y= new Date(date2);
+  // };
   const isSameDay = (a, b) => {
     return differenceInCalendarDays(a, b) === 0;
   };
   const dateFullCellRender = (value) => {
-    const notDay = moment(value).format('YYYY-MM-DD 09:00:00 ');
+    // const notDay = moment(value).format('YYYY-MM-DD 09:00:00 ');
     const month = moment(value).format('YYYY-MM');
     console.log(month, 'shhhhhhhhhh');
     const day = moment(value).format('D');
@@ -75,15 +80,18 @@ const CustomCalendar = (props) => {
         marginLeft: '5px',
       };
     }
-    bookedDate.map((item)=> {
-      console.log(item.startDate, 'ggggggggggg');
-      console.log(notDay, 'gg');
-      // console.log(Helper.notTimeDate(item.startDate), 'asdasdsd')
-    });
-    if (bookedDate.find((item)=> item.startDate == notDay)) {
-      onclickclass = 'Notonclickeddate';
-      console.log('111');
-    }
+    // bookedDate.map((item)=> {
+    //   console.log(item.startDate, 'ggggggggggg');
+    //   console.log(notDay, 'gg');
+    //   // console.log(Helper.notTimeDate(item.startDate), 'asdasdsd')
+    // });
+    // if (bookedDate.find((item)=>isSameDay(item.startDate, notDay))) {
+    //   onclickclass = 'Notonclickeddate';
+    //   style={
+    //     background: 'black',
+    //   };
+    //   console.log('111');
+    // }
     // moment(value).format('YYYY-MM-DD')
     // }
     return <div className={`customFullCellRender ant-picker-cell-inner ${onclickclass}`} style={style}>
