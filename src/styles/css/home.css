@@ -2553,7 +2553,6 @@ input[type=number]::-webkit-outer-spin-button {
 .commentRate .ant-rate {
    margin-left: -50px !important;
 }
-<<<<<<< HEAD
 .tureesModal .ant-modal-header{
   background-color: red;
   
@@ -2572,7 +2571,6 @@ input[type=number]::-webkit-outer-spin-button {
   color: white;
 }
 
-=======
 .warningIcon .anticon  svg {
   height: 40px !important;
    width: 40px !important;
@@ -2583,4 +2581,3 @@ input[type=number]::-webkit-outer-spin-button {
 .cancelBooking .antd-modal-header{
   background-color: red !important;
 }
->>>>>>> 9504ec0901abc9165b041a821176d7d04b012a07

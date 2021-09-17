@@ -80,7 +80,7 @@ const tofit = ({data, lat, lng}) => {
   const [userRealData, setUserRealData] = useState('');
   const [parkingSpaceId, setParkingSpaceID] = useState(0);
   const [bookedDateList, setBookedDateList] = useState([]);
-  const [bookingId, setBookingId] = useState('');
+  const [bookingId, setBookingId] = useState(0);
   // const [fromSelectedDate3, setFromSelectedDate3] = useState([]);
   useEffect(async () => {
     if (typeof userdata.firstName != 'undefined') {
@@ -151,8 +151,9 @@ const tofit = ({data, lat, lng}) => {
           vehicleId: selectVehicle,
         };
         console.log(formData);
-        const res = await ('/booking', formData);
+        const res = await callPost('/booking', formData);
         console.log(res, 'awdadawd');
+        setBookingId(res.bookingId);
         showMessage(
           messageType.SUCCESS.type,
           'Амжлттай. Таны захиалгын хүсэлт амжилттай илгээгдлээ. Хүсэлт баталгаажсаны дараа төлбөрөө төлнө',
