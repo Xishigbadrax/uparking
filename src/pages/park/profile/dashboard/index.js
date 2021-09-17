@@ -14,9 +14,7 @@ import moment from 'moment';
 import DayNightColumn from '@components/DayNightColumns';
 
 const {TabPane} = Tabs;
-const callback = (key) => {
-  // console.log(key);
-};
+
 moment.updateLocale('mn', {
   weekdaysMin: ['Ням', 'Даваа', 'Мягмар', 'Лхагва', 'Пүрэв', 'Баасан', 'Бямба'],
 });
@@ -61,16 +59,19 @@ const options = {
   },
 };
 
-
 const Dashboard = () => {
   const ctx = useContext(Context);
   const [userData, setuserData] = useState(null);
   // const [markedDate, setmarkedDate] = useState(null);
   // eslint-disable-next-line no-unused-vars
   const [calendarData, setCalendarData] = useState([]);
+  const [current, setCurrent] = useState(moment().format('MM'));
   useEffect(() => {
     fetchData();
   }, []);
+  const callback = (key) => {
+    // console.log(key);
+  };
   const fetchData = async () => {
     ctx.setIsLoading(true);
     await callGet('/wallet/user', null).then((res) => {
@@ -130,30 +131,55 @@ const Dashboard = () => {
               dateCellRender={dateCellRender}
               monthCellRender={monthCellRender}
               headerRender={({value, type, onChange, onTypeChange}) => {
-                const current = value.clone();
                 const localeData = value.localeData();
                 const year = value.year();
                 const month = [];
                 console.log(localeData, 'awdawd');
                 for (let i = 0; i < 12; i++) {
-                  month.push(localeData.months(current));
+                  month.push(localeData._months[i]);
                 }
-
                 return (
                   <div style={{padding: '16px'}}>
                     <Row >
                       <Col span={1}>
                         <LeftOutlined
-                          onClick={()=>{}}
+                          onClick={()=>{
+                            setCurrent(current-1);
+                            console.log(current, 'ene harachde ');
+                            if (current === 1 ) {
+                              setCurrent(12);
+                              const newValue = value.clone();
+                              newValue.month(parseInt(current-1-1));
+                              onChange(newValue);
+                            } else {
+                              const newValue = value.clone();
+                              newValue.month(parseInt(current-1-1 ));
+                              onChange(newValue);
+                            }
+                          }}
                           style={{cursor: 'pointer', color: '#0013D4'}}
                         />
                       </Col>
-                      <Col span={4} style={{marginTop: '5px'}}>
-                        Есдүгээр сар,{year}
+                      <Col span={5} style={{marginTop: '5px'}}>
+                        {month[current-1] },{year}
                       </Col>
                       <Col
                         span={1}
-                        // onClick={onClickRight}
+                        onClick={()=>{
+                          setCurrent(current+1);
+                          console.log(current, 'ene harachde ');
+                          if (current === 12) {
+                            setCurrent(1);
+                            const newValue = value.clone();
+                            newValue.month(parseInt(current));
+                            onChange(newValue);
+                          } else {
+                            const newValue = value.clone();
+                            newValue.month(parseInt(current ));
+                            onChange(newValue);
+                          }
+                        }}
+
                         style={{cursor: 'pointer', color: '#0013D4'}}
                       >
                         <RightOutlined />
@@ -216,30 +242,55 @@ const Dashboard = () => {
               dateCellRender={dateCellRender}
               monthCellRender={monthCellRender}
               headerRender={({value, type, onChange, onTypeChange}) => {
-                const current = value.clone();
                 const localeData = value.localeData();
                 const year = value.year();
                 const month = [];
                 console.log(localeData, 'awdawd');
                 for (let i = 0; i < 12; i++) {
-                  month.push(localeData.months(current));
+                  month.push(localeData._months[i]);
                 }
-
                 return (
                   <div style={{padding: '16px'}}>
                     <Row >
                       <Col span={1}>
                         <LeftOutlined
-                          onClick={()=>{}}
+                          onClick={()=>{
+                            setCurrent(current-1);
+                            console.log(current, 'ene harachde ');
+                            if (current === 1 ) {
+                              setCurrent(12);
+                              const newValue = value.clone();
+                              newValue.month(parseInt(current-1-1));
+                              onChange(newValue);
+                            } else {
+                              const newValue = value.clone();
+                              newValue.month(parseInt(current-1-1 ));
+                              onChange(newValue);
+                            }
+                          }}
                           style={{cursor: 'pointer', color: '#0013D4'}}
                         />
                       </Col>
-                      <Col span={4} style={{marginTop: '5px'}}>
-                        Есдүгээр сар,{year}
+                      <Col span={5} style={{marginTop: '5px'}}>
+                        {month[current-1] },{year}
                       </Col>
                       <Col
                         span={1}
-                        // onClick={onClickRight}
+                        onClick={()=>{
+                          setCurrent(current+1);
+                          console.log(current, 'ene harachde ');
+                          if (current === 12) {
+                            setCurrent(1);
+                            const newValue = value.clone();
+                            newValue.month(parseInt(current));
+                            onChange(newValue);
+                          } else {
+                            const newValue = value.clone();
+                            newValue.month(parseInt(current ));
+                            onChange(newValue);
+                          }
+                        }}
+
                         style={{cursor: 'pointer', color: '#0013D4'}}
                       >
                         <RightOutlined />

@@ -95,7 +95,7 @@ const Profile = () => {
   const [selectedColor, setSelectedColor] = useState({});
   const [vehicles, setVehicles] = useState([]);
   // const [editId, setEditId] = useState();
-  const [current, setCurrent] = useState(6);
+  const [current, setCurrent] = useState(0);
   const [dayOfWeek, setRentData] = useState([]);
   const [isProfileNotEdit, setIsProfileNotEdit] = useState(true);
   const [isVehileVisible, setIsVehileVisible] = useState(false);

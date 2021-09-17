@@ -5,7 +5,7 @@ import {useEffect, useState, useContext} from 'react';
 import {Radio, Modal, Alert} from 'antd';
 import Image from 'next/image';
 import Context from '@context/Context';
-// import {useRouter} from 'next/router';
+import {useRouter} from 'next/router';
 
 import SettingPane from '@components/settingPane/setting';
 // import {Collapse} from 'antd';
@@ -20,6 +20,7 @@ import moment from 'moment';
 
 const {TabPane} = Tabs;
 
+
 const callback = (key) =>{
   console.log(key, 'keyiin hevledee');
 };
@@ -28,6 +29,7 @@ const tofit = ({data, lat, lng}) => {
 
   // const [PickTimevisible, setPickTimeVisible] = useState(false);
   const [detailVisible, setDetailsVisible] = useState(false);
+  const router =useRouter();
   // eslint-disable-next-line no-unused-vars
   const [selectItem, setSelected] = useState([]);
   const [ResidenceItem, setResidenceDrawerItem] = useState({});
@@ -56,6 +58,7 @@ const tofit = ({data, lat, lng}) => {
   const [priceForRenter1, setpriceForRenter1] = useState(0);
   const [priceForRenter2, setpriceForRenter2] = useState(0);
   const [priceForRenter3, setpriceForRenter3] = useState(0);
+  const [selectVehicle, setSelectedVehicle] =useState();
   const [dateValues, setDateValues]=useState();
   const [message, setmessage] = useState('');
   const [status, setstatus] = useState('');
@@ -74,8 +77,8 @@ const tofit = ({data, lat, lng}) => {
   const {userdata} = useContext(Context);
   const [userRealData, setUserRealData] = useState('');
   const [parkingSpaceId, setParkingSpaceID] = useState(0);
-
-
+  const [bookedDateList, setBookedDateList] = useState([]);
+  const [bookingId, setBookingId] = useState('');
   // const [fromSelectedDate3, setFromSelectedDate3] = useState([]);
   useEffect(()=>{
 
@@ -85,7 +88,6 @@ const tofit = ({data, lat, lng}) => {
       setUserRealData(userdata);
     }
   }, [userdata]);
-  console.log(userRealData, 'Realdat');
   const DetailsDrawerOpen = async (id) => {
     setDetailsVisible(true);
     setId(id);
@@ -120,90 +122,75 @@ const tofit = ({data, lat, lng}) => {
       } else setMonthSale(item.salePercent);
     });
 
-    // setweekSale(weekSale);
     const vehicle = await callGet('/user/vehicle/list');
     setVehiclesData(vehicle);
   };
   const onChangeChooseVehicle = (e) => {
-    console.log(e.target.value);
+    setSelectedVehicle(e.target.value);
   };
-  const onClickPayment = (id)=>{
+  const onClickPayment = (id, bookingId)=>{
     id &&
       router.push({
-        pathname: 'park/payment',
+        pathname: `park/fpayment/${id}`,
         query: {
           id: id,
+          bookingId: bookingId,
         },
       });
   };
   const timeSubmit = async () => {
-    if (vehicles) {
+    if (totalValue > 0 ) {
+      if (selectVehicle) {
       // setisLoading(true);
-      const formData = {
-
-        bookingList: dateValues,
-        isGift: false,
-        parkingSpaceId: parkingSpaceId,
-        totalAllDay: fullDayNumber,
-        totalAtDay: dayOfNumber,
-        totalAtNight: nightOfNumber,
-        totalPrice: totalValue,
-        userPhoneNumber: userRealData.phoneNumber,
-        vehicleId: 0,
-
-
-        // userPhoneNumber: userRealData.phoneNumber,
-        // isGift: false,
-        // parkingSpaceId: parkingSpaceId,
-        // spaceStatus: spaceStatus,
-        // totalAllDay: fullDayNumber,
-        // totalAtDay: dayOfNumber,
-        // totalAtNight: nightOfNumber,
-        // totalPrice: totalValue,
-      };
-      console.log(formData);
-      await callPost('/booking/time', formData).then((res) => {
-        console.log(res);
-        if (res.status == 'success') {
-          setmessageShow(true);
-          setmessage(
-            'Таны захиалгын хүсэлт амжилттай илгээгдлээ. Хүсэлт баталгаажсаны дараа төлбөрөө төлнө',
-          );
-          settitle('Амжилттай');
-          setstatus('success');
-
-          // setmessageShow(true);
-          // setmessage('Амжилттай захиалга үүслээ');
-          // settitle('Амжилттай');
-          // setstatus('success');
-        } else {
-          setmessageShow(true);
-          setmessage(res);
-          settitle('Анхааруулга');
-          setstatus('warning');
-        }
+        const formData = {
+          bookingList: dateValues,
+          isGift: false,
+          parkingSpaceId: parkingSpaceId,
+          totalAllDay: fullDayNumber,
+          totalAtDay: dayOfNumber,
+          totalAtNight: nightOfNumber,
+          totalPrice: totalValue,
+          userPhoneNumber: userRealData.phoneNumber,
+          vehicleId: selectVehicle,
+        };
+        console.log(formData);
+        await callPost('/booking', formData).then((res) => {
+          console.log(res, 'Booking res');
+          if (res.status === 'success') {
+            setBookingId(res.bookingId);
+            setmessageShow(true);
+            setmessage(
+              'Таны захиалгын хүсэлт амжилттай илгээгдлээ. Хүсэлт баталгаажсаны дараа төлбөрөө төлнө',
+            );
+            settitle('Амжилттай');
+            setstatus('success');
+          } else {
+            setmessageShow(true);
+            setmessage(res);
+            settitle('Анхааруулга');
+            setstatus('warning');
+          }
         // setisLoading(false);
-      });
+        });
+      } else {
+        setmessageShow(true);
+        setmessage('Тээврийн хэрэгсэл сонгоно уу ');
+        settitle('Анхааруулга');
+        setstatus('warning');
+      }
     } else {
       setmessageShow(true);
-      setmessage('Тээврийн хэрэгсэл сонгоно уу ');
+      setmessage('Сул цаг сонгоно уу ');
       settitle('Анхааруулга');
       setstatus('warning');
     }
   };
-
   const handleOk = () => {
     setmessageShow(false);
   };
 
   const handleCancel = () => {
     setmessageShow(false);
-  };
-  const submit = () => {
-    setmessageShow(true);
-    setmessage('Сул цаг сонгоно уу ');
-    settitle('Анхааруулга');
-    setstatus('warning');
   };
 
 
@@ -221,8 +208,6 @@ const tofit = ({data, lat, lng}) => {
       arr.push(item);
     });
     setDateValues(arr);
-    console.log(arr, 'ene shvv');
-    console.log(dateValues, 'awdhgawidugawiduawdiu');
     setCompleteDayOfNumber(dayOfNumber);
     setCompleteNightOfNumber(nightOfNumber);
     setCompleteFullDayNumber(fullDayNumber);
@@ -236,12 +221,12 @@ const tofit = ({data, lat, lng}) => {
   };
   const onclickPick = async () => {
     setChooseTimeVisible(true);
-
     const calValidateDate = await callGet(
       `/schedule/custom?parkingSpaceId=${id}`,
     );
-    console.log('Batalgaajsan udruud----->', calValidateDate);
-    calValidateDate && setParkingSpaceID(calValidateDate.parkingSpaceId);
+    console.log('Batalgaajsan udruud--еееее--->', calValidateDate);
+    setBookedDateList(calValidateDate.bookedDateList);
+    setParkingSpaceID(calValidateDate.parkingSpaceId);
   };
   const getSelectedDate1 = (data) => {
     setDayofNumber(data.length);
@@ -268,7 +253,7 @@ const tofit = ({data, lat, lng}) => {
     }
     const array=[];
     data.map((item) => {
-      array.push({startDate: moment(item).format('YYYY-MM-DD'), timeSplitDescription: 'Өдөр'});
+      array.push({startDate: moment(item).format('YYYY-MM-DD'), timeSplitDescription: 'DAY'});
     });
     console.log(array, 'awdawdawdawdawd');
     setDayValues(array);
@@ -299,7 +284,7 @@ const tofit = ({data, lat, lng}) => {
     }
     const array=[];
     data.map((item) => {
-      array.push({startDate: moment(item).format('YYYY-MM-DD'), timeSplitDescription: 'Шөнө'});
+      array.push({startDate: moment(item).format('YYYY-MM-DD'), timeSplitDescription: 'NIGHT'});
     });
     console.log(array, 'ШӨнүүд');
     setNightValues(array);
@@ -331,12 +316,11 @@ const tofit = ({data, lat, lng}) => {
     }
     const array=[];
     data.map((item) => {
-      array.push({startDate: moment(item).format('YYYY-MM-DD'), timeSplitDescription: 'Бүтэн өдөр'});
+      array.push({startDate: moment(item).format('YYYY-MM-DD'), timeSplitDescription: 'FULL_DAY'});
     });
     console.log(array, 'ШӨнүүд');
     setFullDayValues(array);
   };
-
   const handleClickDayTab = (key) => {
     setSelectedDayTab(key);
   };
@@ -419,202 +403,72 @@ const tofit = ({data, lat, lng}) => {
                         marginLeft: '30px',
                       }}
                     >
-                      {spaceData && spaceData.floorNumber ? (
+                      {console.log(it.park.floorNumber, 'flooooooooooooooooooooooooooooooooooooooooooor')}
+                      {it.park && it.park.floorNumber ? (
+
                         <div style={{marginRight: '5px'}}>
                           <img
                             preview={false}
                             width={18}
                             height={18}
-                            src={IMG_URL + spaceData.floorNumber}
+                            src={IMG_URL + it.park.floorNumber}
                           />
                         </div>
                       ) : null}
-                      {spaceData && spaceData.entranceLock ? (
+                      {it.park && it.park.entranceLock ? (
                         <div style={{marginRight: '5px'}}>
                           <img
                             preview={false}
                             width={18}
                             height={18}
-                            src={IMG_URL + spaceData.entranceLock}
+                            src={IMG_URL + it.park.entranceLock}
                           />
                         </div>
                       ) : null}
-                      {spaceData && spaceData.isNumbering ? (
+                      {it.park && it.park.isNumbering ? (
                         <div style={{marginRight: '5px'}}>
                           <img
                             preview={false}
                             width={18}
                             height={18}
-                            src={IMG_URL + spaceData.isNumbering}
+                            src={`${IMG_URL + it.park.isNumbering}`}
                           />
                         </div>
                       ) : null}
-                      {spaceData && spaceData.capacity ? (
+                      {it.park && it.park.capacity ? (
                         <div style={{marginRight: '5px'}}>
                           <img
                             preview={false}
                             width={18}
                             height={18}
-                            src={IMG_URL + spaceData.capacity}
+                            src={IMG_URL + it.park.capacity}
                           />
                         </div>
                       ) : null}
-                      {spaceData && spaceData.type ? (
+                      {it.park && it.park.type ? (
                         <div style={{marginRight: '5px'}}>
                           <img
                             preview={false}
                             width={18}
                             height={18}
-                            src={IMG_URL + spaceData.type}
+                            src={IMG_URL + it.park.type}
                           />
                         </div>
                       ) : null}
-                      {spaceData && spaceData.returnRoutes ? (
+                      {it.park && it.park.returnRoutes ? (
                         <div style={{marginRight: '5px'}}>
                           <img
                             preview={false}
                             width={18}
                             height={18}
-                            src={IMG_URL + spaceData.returnRoutes}
+                            src={IMG_URL + it.park.returnRoutes}
                           />
                         </div>
                       ) : null}
                       <div>
-                        {!parkingUpDownArrow ? (
-                          <DownOutlined
-                            onClick={() => setParkingUpDownArrow(true)}
-                          />
-                        ) : (
-                          <UpOutlined
-                            onClick={() => setParkingUpDownArrow(false)}
-                          />
-                        )}
+                        <DownOutlined/>
                       </div>
                     </div>
-                    {parkingUpDownArrow ? (
-                      <div>
-                        {spaceData && spaceData.floorNumber ? (
-                          <div
-                            style={{
-                              marginRight: '13px',
-                              display: 'flex',
-                            }}
-                          >
-                            <div>
-                              <img
-                                preview={false}
-                                width={18}
-                                height={18}
-                                src={IMG_URL + spaceData.floorNumber}
-                              />
-                            </div>
-                            <div style={{marginLeft: '25px'}}>
-                              <span>{spaceData.floorNumberLabel}</span>
-                            </div>
-                          </div>
-                        ) : null}
-                        {spaceData && spaceData.entranceLock ? (
-                          <div
-                            style={{
-                              marginRight: '13px',
-                              display: 'flex',
-                            }}
-                          >
-                            <div>
-                              <img
-                                preview={false}
-                                width={18}
-                                height={18}
-                                src={IMG_URL + spaceData.entranceLock}
-                              />
-                            </div>
-                            <div style={{marginLeft: '25px'}}>
-                              <span>{spaceData.entranceLockLabel}</span>
-                            </div>
-                          </div>
-                        ) : null}
-                        {spaceData && spaceData.isNumbering ? (
-                          <div
-                            style={{
-                              marginRight: '13px',
-                              display: 'flex',
-                            }}
-                          >
-                            <div>
-                              <img
-                                preview={false}
-                                width={18}
-                                height={18}
-                                src={IMG_URL + spaceData.isNumbering}
-                              />
-                            </div>
-                            <div style={{marginLeft: '25px'}}>
-                              <span>{spaceData.isNumberingLabel}</span>
-                            </div>
-                          </div>
-                        ) : null}
-                        {spaceData && spaceData.capacity ? (
-                          <div
-                            style={{
-                              marginRight: '13px',
-                              display: 'flex',
-                            }}
-                          >
-                            <div>
-                              <img
-                                preview={false}
-                                width={18}
-                                height={18}
-                                src={IMG_URL + spaceData.capacity}
-                              />
-                            </div>
-                            <div style={{marginLeft: '25px'}}>
-                              <span>{spaceData.capacityLabel}</span>
-                            </div>
-                          </div>
-                        ) : null}
-                        {spaceData && spaceData.type ? (
-                          <div
-                            style={{
-                              marginRight: '13px',
-                              display: 'flex',
-                            }}
-                          >
-                            <div>
-                              <img
-                                preview={false}
-                                width={18}
-                                height={18}
-                                src={IMG_URL + spaceData.type}
-                              />
-                            </div>
-                            <div style={{marginLeft: '25px'}}>
-                              <span>{spaceData.typeLabel}</span>
-                            </div>
-                          </div>
-                        ) : null}
-                        {spaceData && spaceData.returnRoutes ? (
-                          <div
-                            style={{
-                              marginRight: '13px',
-                              display: 'flex',
-                            }}
-                          >
-                            <div>
-                              <img
-                                preview={false}
-                                width={18}
-                                height={18}
-                                src={IMG_URL + spaceData.returnRoutes}
-                              />
-                            </div>
-                            <div style={{marginLeft: '25px'}}>
-                              <span>{spaceData.returnRoutesLabel}</span>
-                            </div>
-                          </div>
-                        ) : null}
-                      </div>
-                    ) : null}
                   </div>
                 </Row>
               </Col>
@@ -1408,58 +1262,58 @@ const tofit = ({data, lat, lng}) => {
                           buttonStyle="solid"
                           onChange={onChangeChooseVehicle}
                         >
-                          <Col span={11}>
-                            {vehicles.map((item) => (
-                              <Radio.Button
-                                key={item.value}
-                                value={item.value}
-                                className={'pickVehicle'}
-                              >
-                                <div style={{display: 'flex'}}>
-                                  <div
-                                    style={{
-                                      height: '24px',
-                                      width: '24px',
-                                      marginTop: '16px',
-                                      marginLeft: '16px',
-                                    }}
-                                  >
-                                    <img
-                                      src="/directions_car_24px.png"
-                                      height="16px"
-                                      width="18px"
-                                    />
-                                  </div>
-                                  <div
-                                    style={{
-                                      marginLeft: '10px',
-                                      height: '40px',
-                                      width: '75px',
-                                    }}
-                                  >
-                                    <p
-                                      style={{
-                                        fontSize: '12px',
-                                        height: '16px',
-                                      }}
-                                    >
-                                      {item.label.split(' ')[0]}
-                                      {item.label.split(' ')[1]}
-                                    </p>
-                                    <p
-                                      style={{
-                                        fontSize: '12px',
-                                        height: '16px',
-                                        color: '#0013D4',
-                                      }}
-                                    >
-                                      <b>{item.label.split(' ')[2]}</b>
-                                    </p>
-                                  </div>
+
+                          {vehicles.map((item) => (
+                            <Radio.Button
+                              key={item.value}
+                              value={item.value}
+                              className={'pickVehicle'}
+                            >
+                              <div style={{display: 'flex'}}>
+                                <div
+                                  style={{
+                                    height: '24px',
+                                    width: '24px',
+                                    marginTop: '16px',
+                                    marginLeft: '16px',
+                                  }}
+                                >
+                                  <img
+                                    src="/directions_car_24px.png"
+                                    height="16px"
+                                    width="18px"
+                                  />
                                 </div>
-                              </Radio.Button>
-                            ))}
-                          </Col>
+                                <div
+                                  style={{
+                                    marginLeft: '10px',
+                                    height: '40px',
+                                    width: '75px',
+                                  }}
+                                >
+                                  <p
+                                    style={{
+                                      fontSize: '12px',
+                                      height: '16px',
+                                    }}
+                                  >
+                                    {item.label.split(' ')[0]}
+                                    {item.label.split(' ')[1]}
+                                  </p>
+                                  <p
+                                    style={{
+                                      fontSize: '12px',
+                                      height: '16px',
+                                      color: '#0013D4',
+                                    }}
+                                  >
+                                    <b>{item.label.split(' ')[2]}</b>
+                                  </p>
+                                </div>
+                              </div>
+                            </Radio.Button>
+                          ))}
+
                         </Radio.Group>
                       </Row>
                       <Row style={{marginTop: '10px'}}>
@@ -1508,10 +1362,10 @@ const tofit = ({data, lat, lng}) => {
                         gutter={2}
                       >
                         <Col span={12}>
-                          <Button type='primary' onClick={totalValue > 0 ? () => timeSubmit(1) : () => submit() } style={{width: '100%', borderRadius: '10px'}}>Захиалга нэмэх</Button>
+                          <Button type='primary' onClick={()=> timeSubmit(1)} style={{width: '100%', borderRadius: '10px'}}>Захиалга нэмэх</Button>
                         </Col>
                         <Col span={12}>
-                          <Button type='primary' className={'buttonGo'} style={{width: '100%', borderRadius: '10px'}} onClick={()=>onClickPayment(parkingSpaceId) }>Төлбөр төлөх</Button>
+                          <Button type='primary' className={'buttonGo'} style={{width: '100%', borderRadius: '10px'}} onClick={()=>onClickPayment(parkingSpaceId, bookingId) }>Төлбөр төлөх</Button>
                         </Col>
                       </Row>
                     </TabPane>
@@ -1626,6 +1480,7 @@ const tofit = ({data, lat, lng}) => {
                     selectType="multi"
                     selectedDate={selectedDate1}
                     getSelectedDate={getSelectedDate1}
+                    bookedDate={bookedDateList}
                     className={'timePickCalendar'}
                   />
                 </TabPane>
@@ -1696,7 +1551,7 @@ const tofit = ({data, lat, lng}) => {
               <Col span={1}>{nightOfNumber}</Col>
             </Row>
             <Row>
-              <Col span={3}>Бүтэн өдөр</Col>
+              <Col span={5}>Бүтэн өдөр</Col>
               <Col span={1}>{fullDayNumber}</Col>
             </Row>
             <Divider />

@@ -1,10 +1,18 @@
 /* eslint-disable react/prop-types */
-import {Calendar} from 'antd';
+import {Calendar, Row, Col} from 'antd';
 import {calendarLocale} from '@constants/constants.js';
 import moment from 'moment';
 import {useState, useEffect} from 'react';
 import {differenceInCalendarDays} from 'date-fns';
+import Helper from '@utils/helper';
+import {RightOutlined, LeftOutlined, HeartOutlined} from '@ant-design/icons';
 
+moment.updateLocale('mn', {
+  weekdaysMin: ['НЯМ', 'ДАВ', 'МЯГ', 'ЛХА', 'ПҮР', 'БАА', 'БЯМ'],
+});
+moment.updateLocale('mn', {
+  months: ['Нэгдүгээр сар', 'Хоёрдугаар сар', 'Гуравдугаар сар', 'Дөрөвдүгээр сар', 'Тавдугаар сар', 'Зургаадугаар сар', 'Долоодугаар сар', 'Наймдугаар сар', 'Есдүгээр сар', 'Аравдугаар сар', 'Арван нэгдүгээр сар', 'Арван хоёрдугаар сар'],
+});
 const today = moment();
 export const AcademicYearStart = moment(today)
   .year(2021)
@@ -18,9 +26,11 @@ export const AcademicYearEnd = moment(today)
 const CustomCalendar = (props) => {
   console.log(props, 'sdaaa');
   const [selectedDate, setselectedDate] = useState([]);
+  const [bookedDate, setBookedDate] = useState([]);
   const [selectType, setSelectType] = useState('multi');
   // eslint-disable-next-line no-unused-vars
-  const [value, setValue] = useState(null);
+  // const [value, setValue] = useState(null);
+  const [current, setCurrent]=useState(parseInt(moment().format('M')));
 
   useEffect(() => {
     if (props.selectType || props.selectType === 'single' || props.selectType === 'multi') {
@@ -35,7 +45,9 @@ const CustomCalendar = (props) => {
   useEffect(() => {
     props.getSelectedDate(selectedDate);
   }, [selectedDate]);
-
+  useEffect(()=>{
+    setBookedDate(props.bookedDate);
+  }, []);
 
   const onPanelChange = (value, mode) => {
     // setselectedDate([]);
@@ -44,8 +56,11 @@ const CustomCalendar = (props) => {
     return differenceInCalendarDays(a, b) === 0;
   };
   const dateFullCellRender = (value) => {
+    const notDay = moment(value).format('YYYY-MM-DD 09:00:00 ');
+    const month = moment(value).format('YYYY-MM');
+    console.log(month, 'shhhhhhhhhh');
     const day = moment(value).format('D');
-    const today = moment();
+    const current = moment(value);
     let onclickclass = '';
     let style;
     if (
@@ -53,14 +68,27 @@ const CustomCalendar = (props) => {
     ) {
       onclickclass = 'onclickeddate';
     }
-    if (isSameDay(today.toDate(), value.toDate())) {
+    if (moment(current).format('YYYY-MM-DD ')> moment(month).format('YYYY-MM-DD') ) {
       style = {
-        background: 'rgb(34 230 185)',
+        background: '#76E8AA',
         color: 'white',
         marginLeft: '5px',
       };
     }
-    return <div className={`customFullCellRender ant-picker-cell-inner ${onclickclass}`} style={style}><div className="ant-picker-calendar-date-value">{day}</div></div>;
+    bookedDate.map((item)=> {
+      console.log(item.startDate, 'ggggggggggg');
+      console.log(notDay, 'gg');
+      // console.log(Helper.notTimeDate(item.startDate), 'asdasdsd')
+    });
+    if (bookedDate.find((item)=> item.startDate == notDay)) {
+      onclickclass = 'Notonclickeddate';
+      console.log('111');
+    }
+    // moment(value).format('YYYY-MM-DD')
+    // }
+    return <div className={`customFullCellRender ant-picker-cell-inner ${onclickclass}`} style={style}>
+      <div className="ant-picker-calendar-date-value">{day}</div>
+    </div>;
   };
   const onSelect = (value) => {
     let array = [];
@@ -75,79 +103,77 @@ const CustomCalendar = (props) => {
       setselectedDate([value]);
     }
   };
+  // const disabledDate = (current)=> {
+  //   // Can not select days before today and today
+  //   return current && current < moment().endOf('day');
+  // };
+
   return (
     <div className="site-calendar-customize-header-wrapper">
       <Calendar
         fullscreen={false}
-        // headerRender={({ value, type, onChange }) => {
-        //   const start = 0;
-        //   const end = 12;
-        //   const monthOptions = [];
-
-        //   const current = value.clone();
-        //   const localeData = value.localeData();
-        //   const months = [];
-        //   console.log(value.localeData(), 'localeData.monthsShort(current)')
-        //   for (let i = 0; i < 12; i++) {
-        //     current.month(i);
-        //     months.push(localeData.monthsShort(current));
-        //   }
-
-        //   for (let index = start; index < end; index++) {
-        //     monthOptions.push(
-        //       <Select.Option className="month-item" key={`${index}`}>
-        //         {months[index]}
-        //       </Select.Option>,
-        //     );
-        //   }
-        //   const month = value.month();
-
-        //   const year = value.year();
-        //   const options = [];
-        //   for (let i = year - 10; i < year + 10; i += 1) {
-        //     options.push(
-        //       <Select.Option key={i} value={i} className="year-item">
-        //         {i}
-        //       </Select.Option>,
-        //     );
-        //   }
-        //   return (
-        //     <div style={{ padding: 8 }}>
-        //       <Row gutter={8}>
-        //         <Col>
-        //           <Select
-        //             size="small"
-        //             dropdownMatchSelectWidth={false}
-        //             className="my-year-select"
-        //             onChange={newYear => {
-        //               const now = value.clone().year(newYear);
-        //               onChange(now);
-        //             }}
-        //             value={String(year)}
-        //           >
-        //             {options}
-        //           </Select>
-        //         </Col>
-        //         <Col>
-        //           <Select
-        //             size="small"
-        //             dropdownMatchSelectWidth={false}
-        //             value={String(month)}
-        //             onChange={selectedMonth => {
-        //               const newValue = value.clone();
-        //               newValue.month(parseInt(selectedMonth, 10));
-        //               onChange(newValue);
-        //             }}
-        //           >
-        //             {monthOptions}
-        //           </Select>
-        //         </Col>
-        //       </Row>
-        //     </div>
-        //   );
-        // }}
         locale={calendarLocale}
-        value={value}
+        // disabledDate={disabledDate}
+        headerRender={({value, type, onChange, onTypeChange}) => {
+          const localeData = value.localeData();
+          const year = value.year();
+          const month = [];
+          console.log(localeData, 'awdawd');
+          for (let i = 0; i < 12; i++) {
+            month.push(localeData._months[i]);
+          }
+          return (
+            <div style={{padding: '16px'}}>
+              <Row>
+                <Col span={1}>
+                  <LeftOutlined
+                    onClick={(e)=>{
+                      setCurrent(current-1);
+                      console.log(current, 'ene harachde ');
+                      if (current === 1 ) {
+                        setCurrent(12);
+                        const newValue = value.clone();
+                        newValue.month(parseInt(current-1-1));
+                        onChange(newValue);
+                      } else {
+                        const newValue = value.clone();
+                        newValue.month(parseInt(current-1-1 ));
+                        onChange(newValue);
+                      }
+                    }}
+                    style={{cursor: 'pointer', color: '#0013D4'}}
+                  />
+                </Col>
+                <Col span={10} offset={1} style={{marginTop: '2px'}}>
+                  {month[current-1] },{year}
+                </Col>
+                <Col
+                  span={1}
+                  offset={1}
+                  onClick={()=>{
+                    setCurrent(current+1);
+                    console.log(current, 'ene harachde ');
+                    if (current === 12) {
+                      setCurrent(1);
+                      const newValue = value.clone();
+                      newValue.month(parseInt(current));
+                      onChange(newValue);
+                    } else {
+                      const newValue = value.clone();
+                      newValue.month(parseInt(current ));
+                      onChange(newValue);
+                    }
+                  }}
+
+                  style={{cursor: 'pointer', color: '#0013D4'}}
+                >
+                  <RightOutlined />
+                </Col>
+              </Row>
+            </div>
+          )
+          ;
+        }}
         onPanelChange={onPanelChange}
         dateFullCellRender={dateFullCellRender}
         className="customCalendarMini"

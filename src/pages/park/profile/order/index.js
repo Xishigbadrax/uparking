@@ -20,7 +20,7 @@ moment.updateLocale('mn', {
   weekdaysMin: ['НЯМ', 'ДАВ', 'МЯГ', 'ЛХА', 'ПҮР', 'БАА', 'БЯМ'],
 });
 moment.updateLocale('mn', {
-  months: ['1 сар', '2 сар', '3 сар', '4 сар', '5 сар', '6 сар', '7 сар', '8 сар', '9 сар', '10 сар', '11 сар', '12 сар'],
+  months: ['Нэгдүгээр сар', 'Хоёрдугаар сар', 'Гуравдугаар сар', 'Дөрөвдүгээр сар', 'Тавдугаар сар', 'Зургаадугаар сар', 'Долоодугаар сар', 'Наймдугаар сар', 'Есдүгээр сар', 'Аравдугаар сар', 'Арван нэгдүгээр сар', 'Арван хоёрдугаар сар'],
 });
 const Order = () => {
   const ctx = useContext(Context);
@@ -30,6 +30,7 @@ const Order = () => {
   const [calendarData, setCalendarData] = useState([]);
   const [dataViewType, setDataViewType] = useState('calendar');
   const [currentPage, setCurrentPage]= useState(1);
+  const [current, setCurrent]= useState(parseInt(moment().format('M')));
   const [vehicles, setVehicles] = useState([]);
   const [historyValue, setHistoryValue] =useState(false);
   // const [selectVehicle, setSelecteVehicle]= useState();
@@ -43,6 +44,7 @@ const Order = () => {
   };
   // dotorh tab solih function
   const onClickInnerTab = (key) => {
+    setCurrent(parseInt(moment().format('MM')));
     if (key ==1) {
       setCalendarStatus(key);
       setHistoryValue(false);
@@ -122,7 +124,7 @@ const Order = () => {
   // calendar der haragdah data awah
   const getListData = (value) => {
     const listData = [];
-    if (calendarData.length > 0) {
+    if (calendarData && calendarData.length > 0) {
       calendarData.forEach(function(element) {
         const currentMoment = moment(element.startDateTime, 'YYYY/MM/DD');
         const endMoment = moment(element.endDateTime, 'YYYY/MM/DD').add(1, 'days');
@@ -262,7 +264,6 @@ const Order = () => {
                       <Button style={{color: '#35446D'}}>Бүх автомашин<OrderedListOutlined /></Button>
                     </Dropdown>
                   </Col>
-
                 </Row>
                 {dataViewType ==='calendar'?
                   <div className='orderCalendar'>
@@ -270,29 +271,55 @@ const Order = () => {
                     <Calendar className="customCalendar"
                       locale={calendarLocale}
                       headerRender={({value, type, onChange, onTypeChange}) => {
-                        const current = value.clone();
                         const localeData = value.localeData();
                         const year = value.year();
                         const month = [];
-                        console.log(localeData, 'awdawd');
+                        // console.log(localeData, 'awdawd');
                         for (let i = 0; i < 12; i++) {
-                          month.push(localeData.months(current));
+                          month.push(localeData._months[i]);
                         }
                         return (
                           <div style={{padding: '16px'}}>
                             <Row >
                               <Col span={1}>
                                 <LeftOutlined
-                                  onClick={()=>{}}
+                                  onClick={()=>{
+                                    setCurrent(current-1);
+                                    console.log(current, 'ene harachde ');
+                                    if (current === 1 ) {
+                                      setCurrent(12);
+                                      const newValue = value.clone();
+                                      newValue.month(parseInt(current-1-1));
+                                      onChange(newValue);
+                                    } else {
+                                      const newValue = value.clone();
+                                      newValue.month(parseInt(current-1-1 ));
+                                      onChange(newValue);
+                                    }
+                                  }}
                                   style={{cursor: 'pointer', color: '#0013D4'}}
                                 />
                               </Col>
-                              <Col span={4} style={{marginTop: '5px'}}>
-                                {month[moment()]},{year}
+                              <Col span={5} style={{marginTop: '5px'}}>
+                                {month[current-1] },{year}
                               </Col>
                               <Col
                                 span={1}
-                                // onClick={onClickRight}
+                                onClick={()=>{
+                                  setCurrent(current+1);
+                                  console.log(current, 'ene harachde ');
+                                  if (current === 12) {
+                                    setCurrent(1);
+                                    const newValue = value.clone();
+                                    newValue.month(parseInt(current));
+                                    onChange(newValue);
+                                  } else {
+                                    const newValue = value.clone();
+                                    newValue.month(parseInt(current +1 ));
+                                    onChange(newValue);
+                                  }
+                                }}
+
                                 style={{cursor: 'pointer', color: '#0013D4'}}
                               >
                                 <RightOutlined />
@@ -312,9 +339,9 @@ const Order = () => {
                       itemLayout="horizontal"
                       dataSource={calendarData}
                       renderItem={(item) => (
-                        <List.Item
-                        >
-                          {item.bookingStatus ==='PENDING' && <div className="calendarListStatus">
+                        <List.Item >
+                          {console.log(item.bookingStatus, 'awdawdw')}
+                          {item.bookingStatus ==='PENDING_PAYMENT' && <div className="calendarListStatus">
                             {item.bookingStatusDescription}{'   '}
                             {item.expireDateDriver}
                           </div> }
@@ -358,7 +385,7 @@ const Order = () => {
                               <div style={{display: 'inline-flex'}}>
                                 <div >
                                   <div> <strong>{Helper.date(item.startDateTime)}</strong></div>
-                                  <div> {Helper.time(item.endDateTime)}</div>
+                                  <div> {Helper.time(item.startDateTime)}</div>
                                 </div>
                                 <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '30px'}} ><ArrowRightOutlined /></div>
                                 <div >
@@ -374,7 +401,7 @@ const Order = () => {
                                 {item.totalPrice ? Helper.formatValueReverse(item.totalPrice) : 0}₮</strong></div>
                             </Col>
                             <Col span={3} className="listactions">
-                              <Link href={{pathname: `/park/profile/order/${item.bookingId}`, query: {page: '1'}}} passHref>
+                              <Link href={{pathname: `/park/profile/order/${item.bookingId}`, query: {page: '1', asWho: 1}}} passHref>
                                 <EyeTwoTone twoToneColor="#0013D4" style={{fontSize: 20}} />
                               </Link>
 

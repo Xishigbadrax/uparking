@@ -115,36 +115,6 @@ const Dashboard = () => {
 
   // const [visibleDrawerMore, setVisibleDrawerMore] = useState(false);
   const [parkingObject, setParkingObject] = useState({});
-  // const isBase64 = async (str) => {
-  //   if (str === '' || str.trim() === '') {
-  //     return false;
-  //   }
-  //   try {
-  //     return btoa(atob(str)) == str;
-  //   } catch (err) {
-  //     return false;
-  //   }
-  // };
-
-  // const showDrawer = async (item) => {
-  //   const res = await callGet(
-  //     `/parkingspace?parkingSpaceId=${item.park.parkingSpaceId}`,
-
-  //     setTransfer(item.park.parkingSpaceId),
-
-  //   );
-  //   if (!res || res === undefined) {
-  //     showMessage(messageType.FAILED.type, defaultMsg.dataError);
-  //     return;
-  //   }
-  //   const merged = {...res, ...item};
-  //   setParkingObject(merged);
-  //   setVisibleDrawerMore(true);
-  // };
-
-  // const onCloseDrawerMore = () => {
-  //   setVisibleDrawerMore(false);
-  // };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -172,7 +142,7 @@ const Dashboard = () => {
           mergedparks.push({residence, park});
         });
       });
-      console.log(mergedparks, 'wdawd');
+      // console.log(mergedparks, 'wdawd');
       setMarkers(mergedparks);
       setDefaultCenter({
         lat: mergedparks[0].residence.latitude,
@@ -245,21 +215,20 @@ const Dashboard = () => {
   const onChangeEndDate = (date) => {
     const end = moment(date).format('YYYY/MM/DD');
     setEndDate(end);
-    console.log(end, 'endDate end bnaa bandia');
+    // console.log(end, 'endDate end bnaa bandia');
   };
-  // const onTransfer = (id) => {
-  //   console.log(id, 'ehnii id');
-  //   id &&
-  //     router.push({
-  //       pathname: 'park/payment',
-  //       query: {
-  //         id: id,
-  //       },
-  //     });
-  // };
+  const onTransfer = (id) => {
+    console.log(id, 'ehnii id');
+    id &&
+      router.push({
+        pathname: 'park/payment',
+        query: {
+          id: id,
+        },
+      });
+  };
   const onFinish = async (values) => {
     setGetDataLoading(true);
-    console.log('activing');
     console.log(values);
     console.log(searchId);
     let url = '';
@@ -301,6 +270,8 @@ const Dashboard = () => {
       setSearchType('fsearch');
       url=`/search/input/test?keywordId=${searchId}`;
     }
+    console.log(searchType, 'typeeeeeeeeeeeeeee');
+    console.log(url, 'urlllllllllllllllllllllllll');
     if (url != '') {
       const res = await callGet(url);
       if (!res || res === undefined) {
@@ -370,6 +341,7 @@ const Dashboard = () => {
               <Form.Item
                 name="startdate" >
                 <DatePicker
+                  placeholder="Сонгох"
                   style={{width: '80%', borderRadius: '30px', marginLeft: '10%'}}
                   format="YYYY/MM/DD"
                   className="selectdates"
@@ -382,6 +354,7 @@ const Dashboard = () => {
               <Form.Item
                 name="enddate">
                 <DatePicker
+                  placeholder="Сонгох"
                   format="YYYY/MM/DD"
                   style={{width: '80%', borderRadius: '30px', marginLeft: '10%'}}
                   className="selectdates"
@@ -424,7 +397,8 @@ const Dashboard = () => {
               Хамгийн хямд
               </TabPane>
               <TabPane tab="Хамгийн ойр" key="3">
-                <Search data={searchDataOfPosition} startDate={startDate} endDate={endDate} />
+                {searchType ==='full' && <Search data={searchedData} startDate={startDate} endDate={endDate} tunetype={tuneType}/>}
+                {searchType ==='fsearch' &&<ToFit data={searchedData} lat={defaultCenter.lat} lng={defaultCenter.lng} />}
               </TabPane>
             </Tabs>
           </Sider>
