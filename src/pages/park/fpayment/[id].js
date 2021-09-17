@@ -180,7 +180,7 @@ const Payment = ( ) => {
   console.log(bookingId, 'booking idiiiiii');
   useEffect(async () => {
     // setStartDateTime(router.query.startDateTime);
-    // ctx.setIsLoading(true);
+    ctx.setIsLoading(true);
     console.log(id, 'id shuu');
     await callGet(`/parkingspace?parkingSpaceId=${id}`).then((res) => {
       console.log(res, 'resresres');
@@ -220,7 +220,7 @@ const Payment = ( ) => {
         }
       }
       console.log(images, 'zurguuud');
-      // ctx.setIsLoading(false);
+      ctx.setIsLoading(false);
     });
     const res = await callGet(`/booking/id/test?id=${bookingId}&asWho=1`);
     setBookingData(res);
