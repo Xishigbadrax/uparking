@@ -105,7 +105,6 @@ const OrderId = () => {
   const [time, settime] = useState(null);
   const urlString = window.location.href;
   const params = new URL(urlString);
-  // const asWho = params;
   const asWho = params.searchParams.get('asWho');
   const orderId = router.query.id;
 
@@ -244,14 +243,12 @@ const OrderId = () => {
   }, [orderData]);
   useEffect(async ()=>{
     const res = await callGet('reference/review');
-    console.log(res, 'review');
     setUnelgeeData(res);
   }, [isUnelgeeVisible]);
 
   const onFinishPolicy = async (value)=>{
     // setIsLoading(true);
     const res = await callPost(`/booking/cancelpolicy?isAccept=${value.agreement}`);
-    console.log( res, 'yesssssss');
     setIsModalVisibleCancelOrderConfirm(false);
     setIsConfirmVisible(true);
   };
@@ -263,7 +260,6 @@ const OrderId = () => {
   const onClickPayPayment =async (e)=>{
     const paymentt = await callGet(`/payment?bookingId=${orderData.bookingId}`);
     console.log(paymentt, 'wawdawaw');
-    console.log('tuluud ugii gulug xaxa');
     const invokePaymentDto = {
       amountToPay: orderData.totalPrice,
       bookingId: orderData.bookingId,
@@ -276,9 +272,8 @@ const OrderId = () => {
 
   };
   const getData = async () => {
-    const orderId = router.query.id;
     ctx.setIsLoading(true);
-    const res = await callGet(`/booking/id/test?id=${orderId}&asWho=1`);
+    const res = await callGet(`/booking/id/test?id=${orderId}&asWho=${asWho}`);
     console.log(res, 'resresres');
     if (!res || res === undefined) {
       showMessage(messageType.FAILED.type, defaultMsg.dataError);
@@ -359,7 +354,7 @@ const OrderId = () => {
     setIsModalVisibleCancelOrderConfirm(false);
   };
   const onSaveReview = async (e)=>{
-    const reviewData = {
+    const postParkingSpaceReview = {
       parkingSpaceId: orderData.parkingSpaceId,
       reviewList: [
         {questionId: 689,
@@ -373,7 +368,7 @@ const OrderId = () => {
       ],
       reviewText: commentReview,
     };
-    const res = await callPost('/parkingspace/review', reviewData);
+    const res = await callPost('/parkingspace/review', postParkingSpaceReview);
     console.log(res, 'rateeeeeee');
     setIsUnelgeeVisible(false);
   };
@@ -771,7 +766,7 @@ const OrderId = () => {
                                   <Row style={{marginTop: '35px'}}>
                                     <Col span={24}>
                                       <Button className="w-[372px] rounded-[8px]" type="primary" size={'large'} >
-                                                                            Төлөх
+                                        Төлөх
                                       </Button>
                                     </Col>
                                   </Row>
@@ -1143,7 +1138,7 @@ const OrderId = () => {
           <Alert message={title} description={message} type={status} showIcon />
         </Modal>
       </DefaultLayout > }
-      {asWho == 2 && <Booking orderId={orderId}/>}
+      {asWho == 2 && <Booking orderId={orderId} orderData={orderData} />}
     </div>
   );
 };

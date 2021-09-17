@@ -1,6 +1,6 @@
 
 import {callGet, callPost} from '@api/api';
-import {Row, Col, Tabs, Modal, Button, Dropdown, Menu, DatePicker, Calendar, Tag, List} from 'antd';
+import {Row, Col, Tabs, Modal, Button, Dropdown, Menu, DatePicker, Calendar, Tag, List, Pagination} from 'antd';
 import {useEffect, useState, useContext} from 'react';
 import {calendarLocale} from '@constants/constants';
 import Helper from '@utils/helper';
@@ -27,24 +27,25 @@ const Lessor = () =>{
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [calendarData, setCalendarData]= useState([]);
   const [dateVisible, setDateVisible] =useState(false);
-  const [historyData, setHistoryValue] =useState([]);
+  const [historyData, setHistoryData] =useState([]);
+  const [currentPage, setCurrentPage] = useState();
   const [dataViewType, setDataViewType] = useState('calendar');
   useEffect(async ()=>{
     const vehicle = await callGet('/user/vehicle/list');
     setVehicles(vehicle);
   }, []);
-  // const onChangeOrderDate =(e)=>{
-
-  // };
   const getSavedData =async ()=>{
     const result = await callGet('/booking?asWho=2&isConfirmed=false');
+    console.log(result, 'saveeeeeeeeeed Dataaaaaaaaaaaaaaa');
     setCalendarData(result);
   };
-  useEffect(async ()=>{
+  const getConfirmedData = async ()=>{
     const res = await callGet('booking?asWho=2&isConfirmed=true');
     console.log(res, 'confirm yesss');
-  }, [isConfirmed]);
-  const getHistroy = async ()=>{
+    setCalendarData(res);
+  };
+
+  const getHistory = async ()=>{
     ctx.setIsLoading(true);
     const formData = {
       asWho: 2,
@@ -53,40 +54,36 @@ const Lessor = () =>{
       parkingSpaceId: null,
     };
     const res = await callPost('/booking/history', formData);
-    console.log(res, 'sdaaaaaaaa');
     if (!res || res === undefined) {
       showMessage(messageType.FAILED.type, result.error);
       return true;
     } else {
-      console.log(res.history, 'history shvv broooo');
       setCalendarData(res.history);
     }
     ctx.setIsLoading(false);
   };
   // хүсэлт болон баталгаажсан Түүх гэсэн Tab солих
   const onClickInnerTab = (key) => {
+    setCalendarData([]);
     setCurrent(parseInt(moment().format('M')));
-    if (key ==1) {
+    if (key == 1) {
       setCalendarStatus(key);
-      setHistoryValue(false);
       setIsConfirmed(false);
-      setCalendarData([]);
       getSavedData();
     } else if (key == 2) {
       setCalendarStatus(key);
-      setHistoryValue(false);
+      getConfirmedData();
       setIsConfirmed(true);
     } else if (key == 3) {
       setCalendarStatus(key);
-      setHistoryValue(true);
-      getHistroy();
+      setIsConfirmed(false);
+
+      getHistory();
     }
   };
   const handleChangeView = (value) => {
-    console.log(value, 'glg wee');
     if (value.key==='calendar') {
       setDataViewType('calendar');
-      setHistoryValue(false);
     } else {
       setDataViewType('list');
     }
@@ -116,6 +113,10 @@ const Lessor = () =>{
         {listData === [] && <Tag color='#C6231A' className="eventText" style={{background: 'pink', height: '20px'}}></Tag>}
       </ul>
     );
+  };
+  const onChangePage = (page)=>{
+    console.log(page);
+    setCurrentPage(page);
   };
   const getMonthData = (value) => {
     if (value.month() === 8) {
@@ -154,21 +155,6 @@ const Lessor = () =>{
       <Menu.Item key='list' value={'list'}>Жагсаалт</Menu.Item>
     </Menu>
   );
-  const calendarStaticData=[{
-    vehicleNumber: '2001 БНА',
-    residenceName: 'áwdhagwdawgd',
-    bookingStatus: 'PENDING',
-    bookingStatusDescription: 'Хүлээгдэж буй',
-    parkingSpaceId: 222,
-    vehicleModel: 'Toyota',
-    VehicleMark: 'Pruis',
-    totalAtDay: 0,
-    totalAtNight: 0,
-    totalAllDay: 4,
-    startDateTime: '2021-09-23 09:00',
-    endDateTime: '2021-09-25 18:30',
-    totalPrice: 30000,
-  }];
 
   const vehicleMenu = (
     <Menu onClick={(value)=>handleVehicle(value)} style={{width: '100%'}}>
@@ -185,7 +171,7 @@ const Lessor = () =>{
         <TabPane key='1' tab={
           <div className={`${calendarStatus === 1 }`? 'activeKey':'notActiveKey'}>
             <Dropdown overlay={menu} onChange={onChangeDropDown } className='dropdown'>
-              <Button >Хадгалсан <DownOutlined /></Button>
+              <Button >Хүсэлт<DownOutlined /></Button>
             </Dropdown>
           </div>}>
           <Row>
@@ -278,44 +264,44 @@ const Lessor = () =>{
                 className="calendarList"
                 style={{marginTop: 30}}
                 itemLayout="horizontal"
-                dataSource={calendarStaticData}
-                renderItem={(calendarStaticData) => (
+                dataSource={calendarData}
+                renderItem={(item) => (
                   <List.Item >
-                    {calendarStaticData.bookingStatus ==='PENDING' && <div className="calendarListStatus">
-                      {calendarStaticData.bookingStatusDescription}{'  ХҮСЭЛТ   '}
+                    {item.bookingStatus ==='PENDING' && <div className="calendarListStatus">
+                      {item.bookingStatusDescription}
                       {/* {calendarStaticData.expireDateDriver} */}
                     </div>}
                     <Row style={{width: '100%'}}>
                       <Col span={3}>
-                        <div className="listtitle"><strong>{calendarStaticData.vehicleNumber}</strong>
+                        <div className="listtitle"><strong>{item.vehicleNumber}</strong>
                         </div>
-                        <div style={{color: '#35446D', fontSize: '10px', lineHeight: '16px', fontWeight: '400', fontStyle: 'Normal'}}>{calendarStaticData.vehicleModel},{calendarStaticData.VehicleMark}</div>
+                        <div style={{color: '#35446D', fontSize: '10px', lineHeight: '16px', fontWeight: '400', fontStyle: 'Normal'}}>{item.vehicle}</div>
                         {/* <div className="listdescription">{`${item.province}, ${item.district}, ${item.section}, ${item.residenceName}, ${item.residenceBlockNumber}`}</div> */}
                       </Col>
                       <Col span={4} className="listdaynight">
                         <Row>
-                          {calendarStaticData.totalAtDay > 0 && calendarStaticData.totalAtNight === 0 && calendarStaticData.totalAllDay ===0 ?
+                          {item.totalAtDay > 0 && item.totalAtNight === 0 && item.totalAllDay ===0 ?
                             <div className='orderDayType' style={{display: ' flex', alignItems: 'center', height: '30px', background: '', width: '120px', alignItems: 'center'}}>
                               <div style={{marginTop: '2px', marginLeft: '20%'}}>
                                 <img src='/icons/brightness_5_24px.png' height='12px' width='18px'/>
                               </div>
                               <p style={{marginLeft: '2px', marginTop: '3px', color: '#35446D', fontStyle: '12px'}}>Өдөр</p>
                             </div> : null}
-                          {calendarStaticData.totalAtNight > 0 && calendarStaticData.totalAtDay === 0 && calendarStaticData.totalAllDay === 0 ?
+                          {item.totalAtNight > 0 && item.totalAtDay === 0 && item.totalAllDay === 0 ?
                             <div className='orderDayType' style={{display: ' flex', alignItems: 'center', height: '30px', background: '', width: '120px', alignItems: 'center'}}>
                               <div style={{marginTop: '2px', marginLeft: '20%'}}>
                                 <img src='/icons/brightness_3_24px.png' height='12px' width='18px'/>
                               </div>
                               <p style={{marginLeft: '5px', marginTop: '3px', color: '#35446D', fontStyle: '12px'}}>Шөнө</p>
                             </div> : null}
-                          {calendarStaticData.totalAllDay > 0 && calendarStaticData.totalAtNight === 0 && calendarStaticData.totalAtDay ===0 ?
+                          {item.totalAllDay > 0 && item.totalAtNight === 0 && item.totalAtDay ===0 ?
                             <div className='orderDayType' style={{display: ' flex', alignItems: 'center', height: '30px', background: '', width: '120px', alignItems: 'center'}}>
                               <div style={{marginTop: '2px', marginLeft: '10%'}}>
                                 <img src='/icons/brightness_4_24px.png' height='12px' width='16px'/>
                               </div>
                               <p style={{marginLeft: '2px', marginTop: '3px', color: '#35446D', fontStyle: '12px'}}>Бүтэн өдөр</p>
                             </div> : null}
-                          {calendarStaticData.totalAtDay > 0 && calendarStaticData.totalAtNight > 0 && calendarStaticData.totalAllDay ===0 ?
+                          {item.totalAtDay > 0 && item.totalAtNight > 0 && item.totalAllDay ===0 ?
                             <div className='orderDayType' style={{display: ' flex', height: '30px', background: '', width: '120px', alignItems: 'center'}}>
                               <div style={{marginTop: '2px', marginLeft: '20%'}}>
                                 <img src='/icons/brightness_5_24px.png' height='12px' width='16px'/>
@@ -324,7 +310,7 @@ const Lessor = () =>{
                                 <img src='/icons/brightness_3_24px.png' height='12px' width='16px'/>
                               </div>
                             </div> : null}
-                          {calendarStaticData.totalAtDay > 0 && calendarStaticData.totalAtNight === 0 && calendarStaticData.totalAllDay > 0 ?
+                          {item.totalAtDay > 0 && item.totalAtNight === 0 && item.totalAllDay > 0 ?
                             <div className='orderDayType' style={{display: ' flex', height: '30px', background: '', width: '120px', alignItems: 'center'}}>
                               <div style={{marginTop: '2px', marginLeft: '20%'}}>
                                 <img src='/icons/brightness_5_24px.png' height='12px' width='16px'/>
@@ -333,7 +319,7 @@ const Lessor = () =>{
                                 <img src='/icons/brightness_4_24px.png' height='12px' width='16px'/>
                               </div>
                             </div> : null}
-                          {calendarStaticData.totalAtDay === 0 && calendarStaticData.totalAtNight> 0 && calendarStaticData.totalAllDay > 0 ?
+                          {item.totalAtDay === 0 && item.totalAtNight> 0 && item.totalAllDay > 0 ?
                             <div className='orderDayType' style={{display: ' flex', height: '30px', background: '', width: '120px', alignItems: 'center'}}>
                               <div style={{marginTop: '2px', marginLeft: '20%'}}>
                                 <img src='/icons/brightness_3_24px.png' height='12px' width='16px'/>
@@ -342,7 +328,7 @@ const Lessor = () =>{
                                 <img src='/icons/brightness_4_24px.png' height='12px' width='16px'/>
                               </div>
                             </div> : null}
-                          {calendarStaticData.totalAtDay > 0 && calendarStaticData.totalAtNight > 0 && calendarStaticData.totalAllDay > 0 ?
+                          {item.totalAtDay > 0 && item.totalAtNight > 0 && item.totalAllDay > 0 ?
                             <div className='orderDayType' style={{display: ' flex', height: '30px', width: '120px', alignItems: 'center'}}>
                               <div style={{marginTop: '2px', marginLeft: '10%'}}>
                                 <img src='/icons/brightness_3_24px.png' height='12px' width='16px'/>
@@ -359,13 +345,13 @@ const Lessor = () =>{
                       <Col span={8} offset={1} className="liststartenddate">
                         <div style={{display: 'inline-flex'}}>
                           <div >
-                            <div> <strong>{Helper.date(calendarStaticData.startDateTime)}</strong></div>
-                            <div> {Helper.time(calendarStaticData.startDateTime)}</div>
+                            <div> <strong>{Helper.date(item.startDateTime)}</strong></div>
+                            <div> {Helper.time(item.startDateTime)}</div>
                           </div>
                           <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '30px', marginLeft: '20px'}} ><ArrowRightOutlined /></div>
                           <div style={{marginLeft: '20px'}}>
-                            <div> <strong>{Helper.date(calendarStaticData.startDateTime)}</strong></div>
-                            <div> {Helper.time(calendarStaticData.endDateTime)}</div>
+                            <div> <strong>{Helper.date(item.startDateTime)}</strong></div>
+                            <div> {Helper.time(item.endDateTime)}</div>
                           </div>
 
                         </div>
@@ -373,10 +359,10 @@ const Lessor = () =>{
                       <Col span={4} className="listpay">
                         <div style={{textAlign: 'right', color: '#35446D', fontSize: '12px'}}> Нийт захиалгын төлбөр</div>
                         <div style={{textAlign: 'right'}} className="totalprice"> <strong>
-                          {calendarStaticData.totalPrice ? Helper.formatValueReverse(calendarStaticData.totalPrice) : 0}₮</strong></div>
+                          {item.totalPrice ? Helper.formatValueReverse(item.totalPrice) : 0}₮</strong></div>
                       </Col>
                       <Col span={3} className="listactions">
-                        <Link href={{pathname: `/park/profile/order/${calendarStaticData.bookingId}`, query: {page: '1', asWho: 2}}} passHref>
+                        <Link href={{pathname: `/park/profile/order/${item.bookingId}`, query: {page: '1', asWho: 2}}} passHref>
                           <EyeTwoTone twoToneColor="#0013D4" style={{fontSize: 20}} />
                         </Link>
 
@@ -500,219 +486,11 @@ const Lessor = () =>{
                 className="calendarList"
                 style={{marginTop: 30}}
                 itemLayout="horizontal"
-                dataSource={calendarStaticData}
-                renderItem={(calendarStaticData) => (
-                  <List.Item >
-                    {calendarStaticData.bookingStatus ==='PENDING' && <div className="calendarListStatus">
-                      {calendarStaticData.bookingStatusDescription}{'  БАТАЛГААЖСАН   '}
-                      {/* {calendarStaticData.expireDateDriver} */}
-                    </div>}
-                    <Row style={{width: '100%'}}>
-                      <Col span={3}>
-                        <div className="listtitle"><strong>{calendarStaticData.vehicleNumber}</strong>
-                        </div>
-                        <div style={{color: '#35446D', fontSize: '10px', lineHeight: '16px', fontWeight: '400', fontStyle: 'Normal'}}>{calendarStaticData.vehicleModel},{calendarStaticData.VehicleMark}</div>
-                        {/* <div className="listdescription">{`${item.province}, ${item.district}, ${item.section}, ${item.residenceName}, ${item.residenceBlockNumber}`}</div> */}
-                      </Col>
-                      <Col span={4} className="listdaynight">
-                        <Row>
-                          {calendarStaticData.totalAtDay > 0 && calendarStaticData.totalAtNight === 0 && calendarStaticData.totalAllDay ===0 ?
-                            <div className='orderDayType' style={{display: ' flex', alignItems: 'center', height: '30px', background: '', width: '120px', alignItems: 'center'}}>
-                              <div style={{marginTop: '2px', marginLeft: '20%'}}>
-                                <img src='/icons/brightness_5_24px.png' height='12px' width='18px'/>
-                              </div>
-                              <p style={{marginLeft: '2px', marginTop: '3px', color: '#35446D', fontStyle: '12px'}}>Өдөр</p>
-                            </div> : null}
-                          {calendarStaticData.totalAtNight > 0 && calendarStaticData.totalAtDay === 0 && calendarStaticData.totalAllDay === 0 ?
-                            <div className='orderDayType' style={{display: ' flex', alignItems: 'center', height: '30px', background: '', width: '120px', alignItems: 'center'}}>
-                              <div style={{marginTop: '2px', marginLeft: '20%'}}>
-                                <img src='/icons/brightness_3_24px.png' height='12px' width='18px'/>
-                              </div>
-                              <p style={{marginLeft: '5px', marginTop: '3px', color: '#35446D', fontStyle: '12px'}}>Шөнө</p>
-                            </div> : null}
-                          {calendarStaticData.totalAllDay > 0 && calendarStaticData.totalAtNight === 0 && calendarStaticData.totalAtDay ===0 ?
-                            <div className='orderDayType' style={{display: ' flex', alignItems: 'center', height: '30px', background: '', width: '120px', alignItems: 'center'}}>
-                              <div style={{marginTop: '2px', marginLeft: '10%'}}>
-                                <img src='/icons/brightness_4_24px.png' height='12px' width='16px'/>
-                              </div>
-                              <p style={{marginLeft: '2px', marginTop: '3px', color: '#35446D', fontStyle: '12px'}}>Бүтэн өдөр</p>
-                            </div> : null}
-                          {calendarStaticData.totalAtDay > 0 && calendarStaticData.totalAtNight > 0 && calendarStaticData.totalAllDay ===0 ?
-                            <div className='orderDayType' style={{display: ' flex', height: '30px', background: '', width: '120px', alignItems: 'center'}}>
-                              <div style={{marginTop: '2px', marginLeft: '20%'}}>
-                                <img src='/icons/brightness_5_24px.png' height='12px' width='16px'/>
-                              </div>
-                              <div style={{marginTop: '2px', marginLeft: '20%'}}>
-                                <img src='/icons/brightness_3_24px.png' height='12px' width='16px'/>
-                              </div>
-                            </div> : null}
-                          {calendarStaticData.totalAtDay > 0 && calendarStaticData.totalAtNight === 0 && calendarStaticData.totalAllDay > 0 ?
-                            <div className='orderDayType' style={{display: ' flex', height: '30px', background: '', width: '120px', alignItems: 'center'}}>
-                              <div style={{marginTop: '2px', marginLeft: '20%'}}>
-                                <img src='/icons/brightness_5_24px.png' height='12px' width='16px'/>
-                              </div>
-                              <div style={{marginTop: '2px', marginLeft: '20%'}}>
-                                <img src='/icons/brightness_4_24px.png' height='12px' width='16px'/>
-                              </div>
-                            </div> : null}
-                          {calendarStaticData.totalAtDay === 0 && calendarStaticData.totalAtNight> 0 && calendarStaticData.totalAllDay > 0 ?
-                            <div className='orderDayType' style={{display: ' flex', height: '30px', background: '', width: '120px', alignItems: 'center'}}>
-                              <div style={{marginTop: '2px', marginLeft: '20%'}}>
-                                <img src='/icons/brightness_3_24px.png' height='12px' width='16px'/>
-                              </div>
-                              <div style={{marginTop: '2px', marginLeft: '20%'}}>
-                                <img src='/icons/brightness_4_24px.png' height='12px' width='16px'/>
-                              </div>
-                            </div> : null}
-                          {calendarStaticData.totalAtDay > 0 && calendarStaticData.totalAtNight > 0 && calendarStaticData.totalAllDay > 0 ?
-                            <div className='orderDayType' style={{display: ' flex', height: '30px', width: '120px', alignItems: 'center'}}>
-                              <div style={{marginTop: '2px', marginLeft: '10%'}}>
-                                <img src='/icons/brightness_3_24px.png' height='12px' width='16px'/>
-                              </div>
-                              <div style={{marginTop: '2px', marginLeft: '20%'}}>
-                                <img src='/icons/brightness_4_24px.png' height='12px' width='16px'/>
-                              </div>
-                              <div style={{marginTop: '2px', marginLeft: '20%'}}>
-                                <img src='/icons/brightness_5_24px.png' height='12px' width='16px'/>
-                              </div>
-                            </div> : null}
-                        </Row>
-                      </Col>
-                      <Col span={8} offset={1} className="liststartenddate">
-                        <div style={{display: 'inline-flex'}}>
-                          <div >
-                            <div> <strong>{Helper.date(calendarStaticData.startDateTime)}</strong></div>
-                            <div> {Helper.time(calendarStaticData.startDateTime)}</div>
-                          </div>
-                          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '30px', marginLeft: '20px'}} ><ArrowRightOutlined /></div>
-                          <div style={{marginLeft: '20px'}}>
-                            <div> <strong>{Helper.date(calendarStaticData.startDateTime)}</strong></div>
-                            <div> {Helper.time(calendarStaticData.endDateTime)}</div>
-                          </div>
-
-                        </div>
-                      </Col>
-                      <Col span={4} className="listpay">
-                        <div style={{textAlign: 'right', color: '#35446D', fontSize: '12px'}}> Нийт захиалгын төлбөр</div>
-                        <div style={{textAlign: 'right'}} className="totalprice"> <strong>
-                          {calendarStaticData.totalPrice ? Helper.formatValueReverse(calendarStaticData.totalPrice) : 0}₮</strong></div>
-                      </Col>
-                      <Col span={3} className="listactions">
-                        <Link href={{pathname: `/park/profile/order/${calendarStaticData.bookingId}`, query: {page: '1', asWho: 2}}} passHref>
-                          <EyeTwoTone twoToneColor="#0013D4" style={{fontSize: 20}} />
-                        </Link>
-
-                      </Col>
-                      <Col>
-                        {calendarStatus != 2 && <button> <DeleteTwoTone style={{marginLeft: '10px', marginTop: '18px'}} twoToneColor="#C6231A" /></button>}
-                      </Col>
-                    </Row>
-                  </List.Item>)}
-              />
-            </div>}
-        </TabPane>
-        <TabPane key='3' tab={
-          <div className={`${calendarStatus === 2 }`?'activeKey':'notActiveKey'}>
-            <Dropdown overlay={menu} onChange={onChangeDropDown } className='dropdown'>
-              <Button >Түүх <DownOutlined /></Button>
-            </Dropdown>
-          </div>
-        }>
-          <Row>
-            <Col span={4} offset={14}>
-              <DatePicker
-              // className='selectMonthDate'
-                bordered={false}
-                locale={calendarLocale}
-                placeholder='Сараа сонгоно уу?'
-                picker='month'
-
-              // onChange={onChangeOrderDate}
-              />
-            </Col>
-            <Col>
-              <Dropdown overlay={vehicleMenu} className='dropdown' >
-                <Button style={{color: '#35446D'}}>Бүх автомашин<OrderedListOutlined /></Button>
-              </Dropdown>
-            </Col>
-          </Row>
-          {dataViewType === 'calendar' ?
-            <div className='orderCalendar'>
-              <DayNightColumn />
-              <Calendar className="customCalendar"
-                locale={calendarLocale}
-                headerRender={({value, type, onChange, onTypeChange}) => {
-                  const localeData = value.localeData();
-                  const year = value.year();
-                  const month = [];
-                  console.log(localeData, 'awdawd');
-                  for (let i = 0; i < 12; i++) {
-                    month.push(localeData._months[i]);
-                  }
-                  return (
-                    <div style={{padding: '16px'}}>
-                      <Row >
-                        <Col span={1}>
-                          <LeftOutlined
-                            onClick={()=>{
-                              setCurrent(current-1);
-                              console.log(current, 'ene harachde ');
-                              if (current === 1 ) {
-                                setCurrent(12);
-                                const newValue = value.clone();
-                                newValue.month(parseInt(current-1-1));
-                                onChange(newValue);
-                              } else {
-                                const newValue = value.clone();
-                                newValue.month(parseInt(current-1-1 ));
-                                onChange(newValue);
-                              }
-                            }}
-                            style={{cursor: 'pointer', color: '#0013D4'}}
-                          />
-                        </Col>
-                        <Col span={5} style={{marginTop: '5px'}}>
-                          {month[current-1] },{year}
-                        </Col>
-                        <Col
-                          span={1}
-                          onClick={()=>{
-                            setCurrent(current+1);
-                            console.log(current, 'ene harachde ');
-                            if (current === 12) {
-                              setCurrent(1);
-                              const newValue = value.clone();
-                              newValue.month(parseInt(current));
-                              onChange(newValue);
-                            } else {
-                              const newValue = value.clone();
-                              newValue.month(parseInt(current ));
-                              onChange(newValue);
-                            }
-                          }}
-
-                          style={{cursor: 'pointer', color: '#0013D4'}}
-                        >
-                          <RightOutlined />
-                        </Col>
-                      </Row>
-                    </div>
-                  )
-                  ;
-                }}
-                dateCellRender={dateCellRender}
-                monthCellRender={monthCellRender} />
-            </div>:
-            <div>
-              <List
-                className="calendarList"
-                style={{marginTop: 30}}
-                itemLayout="horizontal"
                 dataSource={calendarData}
                 renderItem={(item) => (
                   <List.Item >
-                    {item.bookingStatus ==='PENDING' && <div className="calendarListStatus">
-                      {item.bookingStatusDescription}{'  ХҮСЭЛТ   '}
+                    {item.bookingStatus ==='CONFIRMED' && <div className="calendarListStatus">
+                      {item.bookingStatusDescription}
                       {/* {calendarStaticData.expireDateDriver} */}
                     </div>}
                     <Row style={{width: '100%'}}>
@@ -817,6 +595,231 @@ const Lessor = () =>{
                     </Row>
                   </List.Item>)}
               />
+            </div>}
+        </TabPane>
+        <TabPane key='3' tab={
+          <div className={`${calendarStatus === 2 }`?'activeKey':'notActiveKey'}>
+            <Dropdown overlay={menu} onChange={onChangeDropDown } className='dropdown'>
+              <Button >Түүх <DownOutlined /></Button>
+            </Dropdown>
+          </div>
+        }>
+          <Row>
+            <Col span={4} offset={14}>
+              <DatePicker
+              // className='selectMonthDate'
+                bordered={false}
+                locale={calendarLocale}
+                placeholder='Сараа сонгоно уу?'
+                picker='month'
+
+              // onChange={onChangeOrderDate}
+              />
+            </Col>
+            <Col>
+              <Dropdown overlay={vehicleMenu} className='dropdown' >
+                <Button style={{color: '#35446D'}}>Бүх автомашин<OrderedListOutlined /></Button>
+              </Dropdown>
+            </Col>
+          </Row>
+          {dataViewType === 'calendar' ?
+            <div className='orderCalendar'>
+              <DayNightColumn />
+              <Calendar className="customCalendar"
+                locale={calendarLocale}
+                headerRender={({value, type, onChange, onTypeChange}) => {
+                  const localeData = value.localeData();
+                  const year = value.year();
+                  const month = [];
+                  console.log(localeData, 'awdawd');
+                  for (let i = 0; i < 12; i++) {
+                    month.push(localeData._months[i]);
+                  }
+                  return (
+                    <div style={{padding: '16px'}}>
+                      <Row >
+                        <Col span={1}>
+                          <LeftOutlined
+                            onClick={()=>{
+                              setCurrent(current-1);
+                              console.log(current, 'ene harachde ');
+                              if (current === 1 ) {
+                                setCurrent(12);
+                                const newValue = value.clone();
+                                newValue.month(parseInt(current-1-1));
+                                onChange(newValue);
+                              } else {
+                                const newValue = value.clone();
+                                newValue.month(parseInt(current-1-1 ));
+                                onChange(newValue);
+                              }
+                            }}
+                            style={{cursor: 'pointer', color: '#0013D4'}}
+                          />
+                        </Col>
+                        <Col span={5} style={{marginTop: '5px'}}>
+                          {month[current-1] },{year}
+                        </Col>
+                        <Col
+                          span={1}
+                          onClick={()=>{
+                            setCurrent(current+1);
+                            console.log(current, 'ene harachde ');
+                            if (current === 12) {
+                              setCurrent(1);
+                              const newValue = value.clone();
+                              newValue.month(parseInt(current));
+                              onChange(newValue);
+                            } else {
+                              const newValue = value.clone();
+                              newValue.month(parseInt(current ));
+                              onChange(newValue);
+                            }
+                          }}
+
+                          style={{cursor: 'pointer', color: '#0013D4'}}
+                        >
+                          <RightOutlined />
+                        </Col>
+                      </Row>
+                    </div>
+                  )
+                  ;
+                }}
+                dateCellRender={dateCellRender}
+                monthCellRender={monthCellRender} />
+              <Row>
+                <Col offset={18} span={6}>
+                  <Row style={{fontWeight: '700', fontSize: '12px', lineHeight: '24px'}}>Түрээслэх өдрүүдийн үндсэн календарь</Row>
+                  <Row>
+                    <Col span={6} offset={14}>
+                      <Button onClick={(e)=>{
+                        setDateVisible(true);
+                      }}
+                      style={{color: '#0013D4', alignItems: 'right', border: '1px solid #0013D4', borderRadius: '20px', height: '32px', marginTop: '10px', marginBottom: '10px'}}> Шинэчлэх </Button>
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
+            </div>:
+            <div>
+              <List
+                className="calendarList"
+                style={{marginTop: 30}}
+                itemLayout="horizontal"
+                dataSource={calendarData}
+                renderItem={(item) => (
+                  <List.Item >
+                    {item.bookingStatus ==='PENDING' && <div className="calendarListStatus">
+                      {item.bookingStatusDescription}
+                      {/* {calendarStaticData.expireDateDriver} */}
+                    </div>}
+                    <Row style={{width: '100%'}}>
+                      <Col span={3}>
+                        <div className="listtitle"><strong>{item.vehicleNumber}</strong>
+                        </div>
+                        <div style={{color: '#35446D', fontSize: '10px', lineHeight: '16px', fontWeight: '400', fontStyle: 'Normal'}}>{item.vehicle}</div>
+                        {/* <div className="listdescription">{`${item.province}, ${item.district}, ${item.section}, ${item.residenceName}, ${item.residenceBlockNumber}`}</div> */}
+                      </Col>
+                      <Col span={4} className="listdaynight">
+                        <Row>
+                          {item.totalAtDay > 0 && item.totalAtNight === 0 && item.totalAllDay ===0 ?
+                            <div className='orderDayType' style={{display: ' flex', alignItems: 'center', height: '30px', background: '', width: '120px', alignItems: 'center'}}>
+                              <div style={{marginTop: '2px', marginLeft: '20%'}}>
+                                <img src='/icons/brightness_5_24px.png' height='12px' width='18px'/>
+                              </div>
+                              <p style={{marginLeft: '2px', marginTop: '3px', color: '#35446D', fontStyle: '12px'}}>Өдөр</p>
+                            </div> : null}
+                          {item.totalAtNight > 0 && item.totalAtDay === 0 && item.totalAllDay === 0 ?
+                            <div className='orderDayType' style={{display: ' flex', alignItems: 'center', height: '30px', background: '', width: '120px', alignItems: 'center'}}>
+                              <div style={{marginTop: '2px', marginLeft: '20%'}}>
+                                <img src='/icons/brightness_3_24px.png' height='12px' width='18px'/>
+                              </div>
+                              <p style={{marginLeft: '5px', marginTop: '3px', color: '#35446D', fontStyle: '12px'}}>Шөнө</p>
+                            </div> : null}
+                          {item.totalAllDay > 0 && item.totalAtNight === 0 && item.totalAtDay ===0 ?
+                            <div className='orderDayType' style={{display: ' flex', alignItems: 'center', height: '30px', background: '', width: '120px', alignItems: 'center'}}>
+                              <div style={{marginTop: '2px', marginLeft: '10%'}}>
+                                <img src='/icons/brightness_4_24px.png' height='12px' width='16px'/>
+                              </div>
+                              <p style={{marginLeft: '2px', marginTop: '3px', color: '#35446D', fontStyle: '12px'}}>Бүтэн өдөр</p>
+                            </div> : null}
+                          {item.totalAtDay > 0 && item.totalAtNight > 0 && item.totalAllDay ===0 ?
+                            <div className='orderDayType' style={{display: ' flex', height: '30px', background: '', width: '120px', alignItems: 'center'}}>
+                              <div style={{marginTop: '2px', marginLeft: '20%'}}>
+                                <img src='/icons/brightness_5_24px.png' height='12px' width='16px'/>
+                              </div>
+                              <div style={{marginTop: '2px', marginLeft: '20%'}}>
+                                <img src='/icons/brightness_3_24px.png' height='12px' width='16px'/>
+                              </div>
+                            </div> : null}
+                          {item.totalAtDay > 0 && item.totalAtNight === 0 && item.totalAllDay > 0 ?
+                            <div className='orderDayType' style={{display: ' flex', height: '30px', background: '', width: '120px', alignItems: 'center'}}>
+                              <div style={{marginTop: '2px', marginLeft: '20%'}}>
+                                <img src='/icons/brightness_5_24px.png' height='12px' width='16px'/>
+                              </div>
+                              <div style={{marginTop: '2px', marginLeft: '20%'}}>
+                                <img src='/icons/brightness_4_24px.png' height='12px' width='16px'/>
+                              </div>
+                            </div> : null}
+                          {item.totalAtDay === 0 && item.totalAtNight> 0 && item.totalAllDay > 0 ?
+                            <div className='orderDayType' style={{display: ' flex', height: '30px', background: '', width: '120px', alignItems: 'center'}}>
+                              <div style={{marginTop: '2px', marginLeft: '20%'}}>
+                                <img src='/icons/brightness_3_24px.png' height='12px' width='16px'/>
+                              </div>
+                              <div style={{marginTop: '2px', marginLeft: '20%'}}>
+                                <img src='/icons/brightness_4_24px.png' height='12px' width='16px'/>
+                              </div>
+                            </div> : null}
+                          {item.totalAtDay > 0 && item.totalAtNight > 0 && item.totalAllDay > 0 ?
+                            <div className='orderDayType' style={{display: ' flex', height: '30px', width: '120px', alignItems: 'center'}}>
+                              <div style={{marginTop: '2px', marginLeft: '10%'}}>
+                                <img src='/icons/brightness_3_24px.png' height='12px' width='16px'/>
+                              </div>
+                              <div style={{marginTop: '2px', marginLeft: '20%'}}>
+                                <img src='/icons/brightness_4_24px.png' height='12px' width='16px'/>
+                              </div>
+                              <div style={{marginTop: '2px', marginLeft: '20%'}}>
+                                <img src='/icons/brightness_5_24px.png' height='12px' width='16px'/>
+                              </div>
+                            </div> : null}
+                        </Row>
+                      </Col>
+                      <Col span={8} offset={1} className="liststartenddate">
+                        <div style={{display: 'inline-flex'}}>
+                          <div >
+                            <div> <strong>{Helper.date(item.startDateTime)}</strong></div>
+                            <div> {Helper.time(item.startDateTime)}</div>
+                          </div>
+                          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '30px', marginLeft: '20px'}} ><ArrowRightOutlined /></div>
+                          <div style={{marginLeft: '20px'}}>
+                            <div> <strong>{Helper.date(item.startDateTime)}</strong></div>
+                            <div> {Helper.time(item.endDateTime)}</div>
+                          </div>
+
+                        </div>
+                      </Col>
+                      <Col span={4} className="listpay">
+                        <div style={{textAlign: 'right', color: '#35446D', fontSize: '12px'}}> Нийт захиалгын төлбөр</div>
+                        <div style={{textAlign: 'right'}} className="totalprice"> <strong>
+                          {item.totalPrice ? Helper.formatValueReverse(item.totalPrice) : 0}₮</strong></div>
+                      </Col>
+                      <Col span={3} className="listactions">
+                        <Link href={{pathname: `/park/profile/order/${item.bookingId}`, query: {page: '1', asWho: 2}}} passHref>
+                          <EyeTwoTone twoToneColor="#0013D4" style={{fontSize: 20}} />
+                        </Link>
+
+                      </Col>
+                      <Col>
+                        {calendarStatus != 2 && <button> <DeleteTwoTone style={{marginLeft: '10px', marginTop: '18px'}} twoToneColor="#C6231A" /></button>}
+                      </Col>
+                    </Row>
+
+                  </List.Item>)}
+              />
+              <Row style={{height: '50px'}}>
+                <Pagination current={currentPage} onChange={onChangePage} total={50} className='OrdePagination'/>
+              </Row>
             </div>}
         </TabPane>
       </Tabs>

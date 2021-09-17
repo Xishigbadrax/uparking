@@ -26,7 +26,7 @@ const CustomCalendar = (props) => {
   const [selectType, setSelectType] = useState('multi');
   // eslint-disable-next-line no-unused-vars
   const [value, setValue] = useState(null);
-  const [current, setCurrent]= useState(moment().format('MM'));
+  const [current, setCurrent]= useState(parseInt(moment().format('M')));
 
   const test = (date, date2, day2)=>{
     const startDate = Date.parse(date);
@@ -55,6 +55,7 @@ const CustomCalendar = (props) => {
   useEffect(()=>{
     console.log('ugluu');
     setFromDate(props.fromDate);
+    console.log(props.fromDate, 'gggggggggggggggggggggggg');
   }, [props.fromDate]);
 
   const onPanelChange = (value, mode) => {
@@ -139,7 +140,7 @@ const CustomCalendar = (props) => {
                     if (current === 12) {
                       setCurrent(1);
                       const newValue = value.clone();
-                      newValue.month(parseInt(current +1));
+                      newValue.month(parseInt(current));
                       onChange(newValue);
                     } else {
                       const newValue = value.clone();

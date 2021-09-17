@@ -2,7 +2,9 @@ import {Row, Col, Card, Button} from 'antd';
 import {Rate} from 'antd';
 import {Drawer, Divider} from 'antd';
 import {useEffect, useState, useContext} from 'react';
+import {messageType} from '@constants/constants';
 import {Radio, Modal, Alert} from 'antd';
+import {showMessage} from '../../utils/message';
 import Image from 'next/image';
 import Context from '@context/Context';
 // import {useRouter} from 'next/router';
@@ -80,9 +82,6 @@ const tofit = ({data, lat, lng}) => {
   const [bookedDateList, setBookedDateList] = useState([]);
 
   // const [fromSelectedDate3, setFromSelectedDate3] = useState([]);
-  useEffect(()=>{
-
-  }, []);
   useEffect(async () => {
     if (typeof userdata.firstName != 'undefined') {
       setUserRealData(userdata);
@@ -99,7 +98,6 @@ const tofit = ({data, lat, lng}) => {
     );
     const a = data.find((item) => item.park.parkingSpaceId === id);
     setResidenceDrawerItem(a.residence);
-
     setSelected(priceData);
     {
       priceData.priceList.map((item) => {
@@ -121,7 +119,6 @@ const tofit = ({data, lat, lng}) => {
         setweekSale(item.salePercent);
       } else setMonthSale(item.salePercent);
     });
-
     const vehicle = await callGet('/user/vehicle/list');
     setVehiclesData(vehicle);
   };
@@ -153,34 +150,18 @@ const tofit = ({data, lat, lng}) => {
           vehicleId: selectVehicle,
         };
         console.log(formData);
-        await callPost('/booking', formData).then((res) => {
-          console.log(res);
-          if (res.status === 'success') {
-            setmessageShow(true);
-            setmessage(
-              'Таны захиалгын хүсэлт амжилттай илгээгдлээ. Хүсэлт баталгаажсаны дараа төлбөрөө төлнө',
-            );
-            settitle('Амжилттай');
-            setstatus('success');
-          } else {
-            setmessageShow(true);
-            setmessage(res);
-            settitle('Анхааруулга');
-            setstatus('warning');
-          }
-        // setisLoading(false);
-        });
+        const res = await ('/booking', formData);
+        console.log(res, 'awdadawd');
+        showMessage(
+          messageType.SUCCESS.type,
+          'Амжлттай. Таны захиалгын хүсэлт амжилттай илгээгдлээ. Хүсэлт баталгаажсаны дараа төлбөрөө төлнө',
+        );
       } else {
-        setmessageShow(true);
-        setmessage('Тээврийн хэрэгсэл сонгоно уу ');
-        settitle('Анхааруулга');
-        setstatus('warning');
+        showMessage(
+          messageType.FAILED.type,
+          'Аchoose car',
+        );
       }
-    } else {
-      setmessageShow(true);
-      setmessage('Сул цаг сонгоно уу ');
-      settitle('Анхааруулга');
-      setstatus('warning');
     }
   };
   const handleOk = () => {
@@ -519,8 +500,7 @@ const tofit = ({data, lat, lng}) => {
                         marginTop: '10px',
                       }}
                     >
-                      <Image
-                        preview={false}
+                      <img
                         src="/directions_car_24px.png"
                         height="12px"
                         width="10.67px"
@@ -677,8 +657,7 @@ const tofit = ({data, lat, lng}) => {
                       marginTop: '10px',
                     }}
                   >
-                    <Image
-                      preview={false}
+                    <img
                       src="/directions_car_24px.png"
                       height="12px"
                       width="10.67px"
@@ -728,8 +707,7 @@ const tofit = ({data, lat, lng}) => {
                       marginTop: '8px',
                     }}
                   >
-                    <Image
-                      preview={false}
+                    <img
                       src="/icons/location_on_24px.png"
                       height="12.98px"
                       width="9.33px"
@@ -1360,7 +1338,7 @@ const tofit = ({data, lat, lng}) => {
                         gutter={2}
                       >
                         <Col span={12}>
-                          <Button type='primary' onClick={()=> timeSubmit(1)} style={{width: '100%', borderRadius: '10px'}}>Захиалга нэмэх</Button>
+                          <Button type='primary' onClick={timeSubmit} style={{width: '100%', borderRadius: '10px'}}>Захиалга нэмэх</Button>
                         </Col>
                         <Col span={12}>
                           <Button type='primary' className={'buttonGo'} style={{width: '100%', borderRadius: '10px'}} onClick={()=>onClickPayment(parkingSpaceId) }>Төлбөр төлөх</Button>
