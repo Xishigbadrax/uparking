@@ -96,7 +96,7 @@ const tofit = ({data, lat, lng}) => {
   const [userRealData, setUserRealData] = useState('');
   const [parkingSpaceId, setParkingSpaceID] = useState(0);
   const [bookedDateList, setBookedDateList] = useState([]);
-
+  const [bookingId, setBookingId] = useState(0);
   // const [fromSelectedDate3, setFromSelectedDate3] = useState([]);
   useEffect(async () => {
     if (typeof userdata.firstName != 'undefined') {
@@ -142,12 +142,13 @@ const tofit = ({data, lat, lng}) => {
   const onChangeChooseVehicle = (e) => {
     setSelectedVehicle(e.target.value);
   };
-  const onClickPayment = (id)=>{
+  const onClickPayment = (id, bookingId)=>{
     id &&
       router.push({
-        pathname: 'park/payment',
+        pathname: `park/fpayment/${id}`,
         query: {
           id: id,
+          bookingId: bookingId,
         },
       });
   };
@@ -167,8 +168,9 @@ const tofit = ({data, lat, lng}) => {
           vehicleId: selectVehicle,
         };
         console.log(formData);
-        const res = await ('/booking', formData);
+        const res = await callPost('/booking', formData);
         console.log(res, 'awdadawd');
+        setBookingId(res.bookingId);
         showMessage(
           messageType.SUCCESS.type,
           'Амжлттай. Таны захиалгын хүсэлт амжилттай илгээгдлээ. Хүсэлт баталгаажсаны дараа төлбөрөө төлнө',
@@ -1358,7 +1360,7 @@ const tofit = ({data, lat, lng}) => {
                           <Button type='primary' onClick={timeSubmit} style={{width: '100%', borderRadius: '10px'}}>Захиалга нэмэх</Button>
                         </Col>
                         <Col span={12}>
-                          <Button type='primary' className={'buttonGo'} style={{width: '100%', borderRadius: '10px'}} onClick={()=>onClickPayment(parkingSpaceId) }>Төлбөр төлөх</Button>
+                          <Button type='primary' className={'buttonGo'} style={{width: '100%', borderRadius: '10px'}} onClick={()=>onClickPayment(parkingSpaceId, bookingId) }>Төлбөр төлөх</Button>
                         </Col>
                       </Row>
                     </TabPane>

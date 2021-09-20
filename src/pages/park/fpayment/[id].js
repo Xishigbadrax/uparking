@@ -63,13 +63,11 @@ const IMG_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
 //     return false;
 //   }
 // };
-const image = [
-  {id: 1,
-    image: '/hunnu11.png'},
-  {id: 2,
-    image: '/medee2',
-  },
-];
+// const image = [
+//   {id: 1,
+//     image: '/hunnu11.png'},
+
+// ];
 const Payment = ( ) => {
   const {userdata} = useContext(Context);
   const ctx = useContext(Context);
@@ -87,19 +85,20 @@ const Payment = ( ) => {
   //   bookingStatus: 'SAVED',
   //   totalPrice: '16000',
   // });
-  const [orderData, setOrderData] = useState();
+  const [orderData, setOrderData] = useState(null);
   const [images, setImages] = useState([]);
   const [parkingUpDownArrow, setParkingUpDownArrow] = useState(false);
   const [bankData, setBankData] = useState(null);
   const [type, settype] = useState('KHANBANK');
   const [type2, settype2] = useState('MONGOLCHAT');
   const [amount, setamount] = useState(0);
+  const [bookingData, setBookingData] = useState(null);
   const [FreeTimeVisible, setFreeTimeVisible] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const [startDateTime, setStartDateTime]= useState();
   // const [test, setTest] = useState(null);
   const [phoneNumber, setphoneNumber] = useState(null);
-  const {id} = router.query;
+  const {id, bookingId} = router.query;
   // const {startDate}=router.query;
   // const orderId = id;
   console.log(router.query, 'query ene bna');
@@ -175,11 +174,12 @@ const Payment = ( ) => {
     ) : null;
   };
   const handleCancel = () => {
+    setFreeTimeVisible(false);
     setmessageShow(false);
   };
-
+  console.log(bookingId, 'booking idiiiiii');
   useEffect(async () => {
-    setStartDateTime(router.query.startDateTime);
+    // setStartDateTime(router.query.startDateTime);
     ctx.setIsLoading(true);
     console.log(id, 'id shuu');
     await callGet(`/parkingspace?parkingSpaceId=${id}`).then((res) => {
@@ -222,7 +222,10 @@ const Payment = ( ) => {
       console.log(images, 'zurguuud');
       ctx.setIsLoading(false);
     });
-  }, [id]);
+    const res = await callGet(`/booking/id/test?id=${bookingId}&asWho=1`);
+    setBookingData(res);
+    console.log(res, 'suuliin datagaaa haruuullaaa');
+  }, [id, bookingId]);
   useEffect(() => {
     fetchData();
   }, [type]);
@@ -231,7 +234,6 @@ const Payment = ( ) => {
   const fetchData = async () => {
     await callGet(`/payment/bankinfo?bankName=${type}`).then((res) => {
       setBankData(res);
-      console.log(res, 'banknii res');
     });
   };
 
@@ -378,16 +380,16 @@ const Payment = ( ) => {
 
       <Row>
         <Col span={14}>
-          {image.length > 0 ? (
+          {images.length > 0 ? (
             <Carousel className='ImagesCarousel'>
-              {image.map((image) => (
+              {images.map((image) => (
                 <div key={image.id}>
                   <Image
                     preview={false}
                     width='100%'
                     height={468}
-                    //   src={IMG_URL + image.path}
-                    src={image.image}
+                    // src={IMG_URL + image.path}
+                    src={'data:image/jpeg;base64,' + image.path}
                   />
                 </div>
               ))}
@@ -426,6 +428,7 @@ const Payment = ( ) => {
                   }}
                 >
                   <Image
+                    preview={false}
                     src="/directions_car_24px.png"
                     height="16px"
                     width="16px"
@@ -433,27 +436,32 @@ const Payment = ( ) => {
                 </div>
                 <p style={{marginTop: '5px'}}> 110 м</p>
               </Row>
-              <p
-                style={{
-                  width: '75px',
-                  fontSize: '12px',
-                  textAlign: 'center',
-                  marginTop: '5px',
-                  fontStyle: 'regular',
-                  color: '#7D8FC0',
-                }}
-              >
-                    Байршил ID
-              </p>
-              <p
+              <div className=" flex items-center">
+                <div
+                  style={{
+                    width: '75px',
+                    fontSize: '12px',
+                    textAlign: 'center',
+                    marginTop: '5px',
+                    fontStyle: 'regular',
+                    color: '#7D8FC0',
+                  }}
+                >
+                    Байршил ID:
+                </div>
+                <div className=" text-[12px] text-[#35446D] mt-[4px]"> {bookingData && bookingData.residenceBlockId}</div>
+              </div>
+
+
+              {/* <p
                 style={{
                   width: '43px',
                   fontSize: '12px',
                   marginTop: '12px',
                 }}
               >
-                {/* {residenceDrawerItem.residenceBlockCode} */}
-              </p>
+                {bookingData.residenceBlockId}
+              </p> */}
             </Col>
             <Col
               span={8} style={{display: 'flex'}}
@@ -466,6 +474,7 @@ const Payment = ( ) => {
                 }}
               >
                 <Image
+                  preview={false}
                   src="/icons/location_on_24px.png"
                   height="24px"
                   width="24px"
@@ -486,57 +495,57 @@ const Payment = ( ) => {
                 justifyContent: 'center',
               }}
             >
-              {orderData && orderData.floorNumber ? (
+              {bookingData && bookingData.floorNumber ? (
                 <div style={{marginRight: '13px'}}>
                   <Image
                     preview={false}
                     width={24}
-                    src={IMG_URL + orderData.floorNumberImage}
+                    src={IMG_URL + bookingData.floorNumber}
                   />
                 </div>
               ) : null}
-              {orderData && orderData.entranceLock ? (
+              {bookingData && bookingData.entranceLock ? (
                 <div style={{marginRight: '13px'}}>
                   <Image
                     preview={false}
                     width={24}
-                    src={IMG_URL + orderData.entranceLock}
+                    src={IMG_URL + bookingData.entranceLock}
                   />
                 </div>
               ) : null}
-              {orderData && orderData.isNumbering ? (
+              {bookingData && bookingData.isNumbering ? (
                 <div style={{marginRight: '13px'}}>
                   <Image
                     preview={false}
                     width={24}
-                    src={IMG_URL + orderData.isNumbering}
+                    src={IMG_URL + bookingData.isNumbering}
                   />
                 </div>
               ) : null}
-              {orderData && orderData.capacity ? (
+              {bookingData && bookingData.capacity ? (
                 <div style={{marginRight: '13px'}}>
                   <Image
                     preview={false}
                     width={24}
-                    src={IMG_URL + orderData.capacity}
+                    src={IMG_URL + bookingData.capacity}
                   />
                 </div>
               ) : null}
-              {orderData && orderData.type ? (
+              {bookingData && bookingData.type ? (
                 <div style={{marginRight: '13px'}}>
                   <Image
                     preview={false}
                     width={24}
-                    src={IMG_URL + orderData.type}
+                    src={IMG_URL + bookingData.type}
                   />
                 </div>
               ) : null}
-              {orderData && orderData.returnRoutes ? (
+              {bookingData && bookingData.returnRoutes ? (
                 <div style={{marginRight: '13px'}}>
                   <Image
                     preview={false}
                     width={24}
-                    src={IMG_URL + orderData.returnRoutes}
+                    src={IMG_URL + bookingData.returnRoutes}
                     // src={orderData.returnRoutes}
                   />
                 </div>
@@ -554,75 +563,75 @@ const Payment = ( ) => {
             <Col span={24}>
               {parkingUpDownArrow ? (
                 <div>
-                  {orderData || orderData.floorNumber ? (
+                  {orderData || bookingData.floorNumber ? (
                     <div style={{marginRight: '13px', display: 'flex'}}>
                       <Image
                         preview={false}
                         width={24}
-                        src={IMG_URL + orderData.floorNumber}
+                        src={IMG_URL + bookingData.floorNumber}
                       />
                       <div style={{marginLeft: '25px'}}>
-                        <span>{orderData.floorNumberLabel}</span>
+                        <span>{bookingData.floorNumberLabel}</span>
                       </div>
                     </div>
                   ) : null}
-                  {orderData || orderData.entranceLock ? (
+                  {bookingData || bookingData.entranceLock ? (
                     <div style={{marginRight: '13px', display: 'flex'}}>
                       <Image
                         preview={false}
                         width={24}
-                        src={IMG_URL + orderData.entranceLock}
+                        src={IMG_URL + bookingData.entranceLock}
                       />
                       <div style={{marginLeft: '25px'}}>
-                        <span>{orderData.entranceLockLabel}</span>
+                        <span>{bookingData.entranceLockLabel}</span>
                       </div>
                     </div>
                   ) : null}
-                  {orderData || orderData.isNumbering ? (
+                  {bookingData || bookingData.isNumbering ? (
                     <div style={{marginRight: '13px', display: 'flex'}}>
                       <Image
                         preview={false}
                         width={24}
-                        src={IMG_URL + orderData.isNumbering}
+                        src={IMG_URL + bookingData.isNumbering}
                       />
                       <div style={{marginLeft: '25px'}}>
-                        <span>{orderData.isNumberingLabel}</span>
+                        <span>{bookingData.isNumberingLabel}</span>
                       </div>
                     </div>
                   ) : null}
-                  {orderData || orderData.capacity ? (
+                  {bookingData || bookingData.capacity ? (
                     <div style={{marginRight: '13px', display: 'flex'}}>
                       <Image
                         preview={false}
                         width={24}
-                        src={IMG_URL + orderData.capacity}
+                        src={IMG_URL + bookingData.capacity}
                       />
                       <div style={{marginLeft: '25px'}}>
-                        <span>{orderData.capacityLabel}</span>
+                        <span>{bookingData.capacityLabel}</span>
                       </div>
                     </div>
                   ) : null}
-                  {orderData || orderData.type ? (
+                  {bookingData || bookingData.type ? (
                     <div style={{marginRight: '13px', display: 'flex'}}>
                       <Image
                         preview={false}
                         width={24}
-                        src={IMG_URL + orderData.type}
+                        src={IMG_URL + bookingData.type}
                       />
                       <div style={{marginLeft: '25px'}}>
-                        <span>{orderData.typeLabel}</span>
+                        <span>{bookingData.typeLabel}</span>
                       </div>
                     </div>
                   ) : null}
-                  {orderData || orderData.returnRoutes ? (
+                  {bookingData || bookingData.returnRoutes ? (
                     <div style={{marginRight: '13px', display: 'flex'}}>
                       <Image
                         preview={false}
                         width={24}
-                        src={IMG_URL + orderData.returnRoutes}
+                        src={IMG_URL + bookingData.returnRoutes}
                       />
                       <div style={{marginLeft: '25px'}}>
-                        <span>{orderData.returnRoutesLabel}</span>
+                        <span>{bookingData.returnRoutesLabel}</span>
                       </div>
                     </div>
                   ) : null}
@@ -643,17 +652,22 @@ const Payment = ( ) => {
                 }}
               >
                 <div style={{color: '#0013D4'}}>Таны сонгосон захиалга:</div>
-                { orderData != null && orderData.totalAtDay ? (
-                  <div style={{color: '#35446d', marginLeft: '10px'}}>
-                  Өдөр: {orderData.totalAtDay}
-                  </div>,
-                  <div style={{color: '#35446d', marginLeft: '10px'}}>
-                   Шөнө: {orderData.totalAtDay}
-                  </div>,
-                  <div style={{color: '#35446d', marginLeft: '10px'}}>
-                    Бүтэн өдөр: {orderData.totalAtDay}
+
+                { bookingData != null &&
+                  <div>
+                    <div style={{color: '#35446d'}}>
+                    Өдөр: {bookingData.totalAtDay}
+                    </div>
+                    <div style={{color: '#35446d'}}>
+                   Шөнө: {bookingData.totalAtNight}
+                    </div>
+                    <div style={{color: '#35446d'}}>
+                    Бүтэн өдөр: {bookingData.totalAllDay}
+                    </div>
                   </div>
-                ) : null}
+
+
+                }
               </Col>
             </Row>
 
@@ -684,8 +698,8 @@ const Payment = ( ) => {
                           fontSize: '20px',
                         }}
                       >
-                        {orderData && orderData.totalPrice ?
-                          Helper.formatValueReverse(orderData.totalPrice) :
+                        {bookingData && bookingData.totalPrice ?
+                          Helper.formatValueReverse(bookingData.totalPrice) :
                           0}
                     ₮
                       </Col>
@@ -725,6 +739,7 @@ const Payment = ( ) => {
                                     tab={
                                       <span>
                                         <Image
+
                                           height={30}
                                           width={30}
                                           preview={false}
@@ -841,6 +856,7 @@ const Payment = ( ) => {
                                 </TabPane>
                               </Tabs>
                               <Button
+                                className=" rounded-[8px] h-[48px]"
                                 onClick={() => fetchData2()}
                                 type="primary"
                                 block

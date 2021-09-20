@@ -2322,23 +2322,29 @@ width: 125px;
 }
 .mapheadersearch{
    height: 50px !important;
+   
 }
 .mapheadersearch .ant-select-selector{
   align-content: center !important;
   height: 50px !important;
   border-radius: 20px !important;
+  
 }
 .mapheadersearch .ant-select-selection-search-input{
-  padding-top: 20px !important;
+  padding-top: 15px !important;
   padding-left: 10px !important;
+  
+ 
 }
 .mapheadersearch .ant-select-selection-placeholder{
   padding-top: 10px !important;
   padding-left: 10px !important;
+ 
 }
 .mapheadersearch .ant-select-selection-item{
   padding-top: 10px !important;
   padding-left: 10px !important;
+
 }
 .address.ant-form-item-explain .ant-form-item-explain-error{
   height: 20px !important;
@@ -2547,6 +2553,24 @@ input[type=number]::-webkit-outer-spin-button {
 .commentRate .ant-rate {
    margin-left: -50px !important;
 }
+.tureesModal .ant-modal-header{
+  background-color: red;
+  
+}
+.tureesModal .ant-modal{
+ border-radius: 10px;
+  
+}
+
+.tureesModal .ant-modal-title{
+  color: white;
+  font-size: 20px;
+  text-align: center;
+}
+.tureesModal .ant-modal-close-x{
+  color: white;
+}
+
 .warningIcon .anticon  svg {
   height: 40px !important;
    width: 40px !important;
@@ -2557,9 +2581,12 @@ input[type=number]::-webkit-outer-spin-button {
 .cancelBooking .antd-modal-header{
   background-color: red !important;
 }
+<<<<<<< HEAD
 .reviewRate .ant-rate svg {
   height: 15.903876304626465px !important;
   width: 13.409276962280273px !important;
   margin-top: 2.3px !important;
   border-radius: 0px;
 }
+=======
+>>>>>>> 1fe18c5386e997968099f9ff2a3417368fe75c29

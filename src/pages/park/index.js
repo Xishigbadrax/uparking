@@ -328,6 +328,7 @@ const Dashboard = () => {
               <Form.Item
                 name="startdate" >
                 <DatePicker
+                  placeholder="Сонгох"
                   style={{width: '80%', borderRadius: '30px', marginLeft: '10%'}}
                   format="YYYY/MM/DD"
                   className="selectdates"
@@ -340,6 +341,7 @@ const Dashboard = () => {
               <Form.Item
                 name="enddate">
                 <DatePicker
+                  placeholder="Сонгох"
                   format="YYYY/MM/DD"
                   style={{width: '80%', borderRadius: '30px', marginLeft: '10%'}}
                   className="selectdates"
