@@ -66,14 +66,15 @@ const spaceImage = (props) => {
       getBase64(
         info.file.originFileObj,
         (image3) => (
-          setLoadingPosition(false), setSelectedPositionImage(image3)
+          setLoadingPosition(false),
+          setSelectedPositionImage(image3)
         ),
       );
     }
   };
   return (
     <div className={'spaceImage'}>
-      <Form form={props.form}>
+      <Form form={props.form} onFinish={(values)=>props.onFinish()}>
         <Row offset={4}>
           <p
             style={{

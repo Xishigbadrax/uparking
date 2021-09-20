@@ -28,6 +28,7 @@ import RentDate from '@components/registerSpace/rentDate';
 import Context from '@context/Context';
 import Edit from '../edit';
 import {showMessage} from '@utils/message';
+import {messageType} from '@constants/constants';
 
 // import {
 //   withScriptjs,
@@ -124,6 +125,7 @@ const Profile = () => {
   // eslint-disable-next-line no-unused-vars
   const [spaceData, setSpaceData] = useState(null);
   const [vehicleId, setVehicleId] = useState();
+  const [editData1, setEditData1]=useState();
   // eslint-disable-next-line no-unused-vars
   const [updatedData, setUpdatedData] = useState();
   const [loading, setLoading] = useState(false);
@@ -148,9 +150,15 @@ const Profile = () => {
     }
   }, [userdata]);
   const onFinish123 = (values) => {};
+  const onFinishMainImage = (values) =>{
+    console.log(values, 'mainImageee');
+  };
+  const onFinishSpaceImage = (values)=>{
+    console.log(values, 'spaceeeeeeeeeeeeeeeeeeeeeeeeeeeeeeephotoooooooooooooooooooooos');
+  };
   const onFinishSPace = (values) => {
     console.log(values);
-    console.log(form.getFieldsValue());
+    console.log(form.getFieldsValue(), 'aaaaaaaaaaaaaaash');
   };
   const onchangeNewVehicle = () => {
     vehicleForm.setFieldsValue({
@@ -163,8 +171,11 @@ const Profile = () => {
   const onChangeisSpaceEditVisible = async (a)=>{
     setEditId(a);
     setLoading(true);
+    // const editDa
     console.log('id ymaa----------->', a);
     const spaceEdit = await callGet(`/parkingspace?parkingSpaceId=${a}`);
+    const res = await callGet(`parkingspace/update/1?parkingSpaceId=${a}`);
+    console.log(res, 'ediiiiiiiiiiiiiiiiiiiiiiiiiiiitttttttttttttttttttttt daaaaaaattttttttttttaaaaaaaaaaaa');
     setSpaceEditData(spaceEdit);
     setLoading(false);
   };
@@ -228,7 +239,6 @@ const Profile = () => {
     console.log(vehicleForm.getFieldsValue());
     const a = vehicleForm.getFieldsValue();
     if (a.vehicleNumber && a.maker && a.model && a.color ) {
-      console.log(a, 'awdawdawd');
       const res = await callPost('/user/vehicle', {
         vehicleNumber: a.vehicleNumber,
         maker: a.maker,
@@ -263,86 +273,102 @@ const Profile = () => {
   const onFinish = (values) => {
     console.log('Undesen dataaa yma');
   };
-  const onFinishSale = () => {
-    console.log('sale Data--->');
+  const onFinishSale = (values) => {
+    console.log('sale Data--->', values);
   };
 
   const onClickContinue = async () => {
-    // const fData = await form.validateFields();
     console.log(await form.validateFields());
     await form.isFieldsValidating();
     const componentData = form.getFieldsValue();
     // Үндсэн мэдээллийн өгөгдлийг өгөгдлийн санруу
-    // console.log(form.errorFields(), 'awdawdwd');
     if (current === 0 ) {
-      // if (form.validateFields() !== null && mainData.latitude !== null && mainData.longitude !==null) {
-      const res = await callPost('/parkingfirst', mainData);
-      setResidenceBlockId(mainData.residenceBlockId);
-      if (res.status === 'success') {
-        setCurrent(current + 1);
-      } else {
-        showMessage(messageType.defaultMsg.validateLocation);
+      if (mainData) {
+        const res = await callPost('/parkingfirst', mainData);
+        setResidenceBlockId(mainData.residenceBlockId);
+        console.log(residenceBlockId);
+        if (res.status === 'success') {
+          setCurrent(current + 1);
+        } else {
+          showMessage(messageType.defaultMsg.validateLocation);
+        }
       }
       // }
     } else if (current === 1) {
-      const second = await callGet(
-        `/parkingsecond?parkingFloorId=${componentData.floorNumber}&residenceBlockId=${mainData.residenceBlockId}`,
-      );
-      setParkId(second.parkingId);
-      setParkingSpaceId(mainData.parkingSpaceId);
+      if (componentData) {
+        const second = await callGet(
+          `/parkingsecond?parkingFloorId=${componentData.floorNumber}&residenceBlockId=${mainData.residenceBlockId}`,
+        );
+        setParkId(second.parkingId);
 
-      console.log(second);
-      const res = await callPost('/parkingspace', {
-        entranceLock: componentData.entranceLock,
-        floorNumber: componentData.floorNumber,
-        isNumbering: componentData.isNumbering,
-        parkingSpaceId: parkingSpaceId,
-        residenceBlockId: residenceBlockId,
-        returnRoutes: componentData.returnRoutes[0],
-        capacityId: componentData.capacityId,
-        parkingId: parkId,
-        typeId: componentData.typeId,
-        typeOther: ' ',
-      });
-      if (res.status === 'success') {
-        setCurrent(current + 1);
-      };
+        console.log(second);
+        const res = await callPost('/parkingspace', {
+          entranceLock: componentData.entranceLock,
+          floorNumber: componentData.floorNumber,
+          isNumbering: componentData.isNumbering,
+          parkingSpaceId: parkingSpaceId,
+          residenceBlockId: residenceBlockId,
+          returnRoutes: componentData.returnRoutes[0],
+          capacityId: componentData.capacityId,
+          parkingId: parkId,
+          typeId: componentData.typeId,
+          typeOther: ' ',
+        });
+        if (res.status === 'success') {
+          setParkingSpaceId(res.message);
+
+          setCurrent(current + 1);
+        };
+      }
     } else if (current === 2) {
       // Үндсэн зургийн мэдээллийг өгөгдлийн санруу бичих
-      getBase64(componentData.imageParkingGate.file.originFileObj, (image2) =>
-        setImageParkingGate(image2),
-      );
-      getBase64(
-        componentData.imageParkingOverall.file.originFileObj,
-        (image2) => {
-          setImageParkingOverall(image2), console.log(image2);
-        },
-      );
-      const res = await callPost('/parkingspace/parkingimage', {
-        imageParkingOverall: imageParkingOverall,
-        imageParkingGate: imageParkingGate,
-        parkingSpaceId: 522,
-      });
-      console.log(res);
-      if (res.status === 'success') {
-        setCurrent(current + 1);
+      if (componentData) {
+        getBase64(componentData.imageParkingGate.file.originFileObj, (image2) =>
+
+          setImageParkingGate(image2.slice(23)),
+        );
+        getBase64(
+          componentData.imageParkingOverall.file.originFileObj,
+          (image2) => {
+            setImageParkingOverall(image2.slice(23));
+          },
+        );
+      }
+      if (imageParkingOverall && imageParkingGate) {
+        const res = await callPost('/parkingspace/parkingimage', {
+          imageParkingOverall: String( imageParkingOverall),
+          imageResidenceGate: String( imageParkingGate),
+          parkingSpaceId: parkingSpaceId,
+        });
+        console.log(res);
+        if (res.status === 'success') {
+          setCurrent(current + 1);
+        }
+      } else {
+        showMessage(messageType.FAILED.type, 'Зургуудаа оруулна уу?');
       }
     } else if (current === 3) {
       {/* ЗОгсоолын зураг өгөгдлийн санруу шидэх*/}
-      getBase64(componentData.imageFromGate.file.originFileObj, (image2) => {
-        setImageFromGate(image2.substring(24));
-      });
-      getBase64(componentData.imageSpaceNumber.file.originFileObj, (image2) => {
-        setImageSpaceNUmbe(image2.substring(24)),
-        console.log(image2.substring(24));
-      });
-      const res = await callPost('/parkingspace/detail', {
-        imageFromGate: imageFromGate,
-        imageSpaceNumber: imageSpaceNumber,
-        parkingSpaceId: 522,
-      });
-      if (res.status === 'success') {
-        setCurrent(current + 1);
+      if (componentData) {
+        getBase64(componentData.imageFromGate.file.originFileObj, (image1) => {
+          setImageFromGate(image1.slice(23));
+        });
+        getBase64(componentData.imageSpaceNumber.file.originFileObj, (image4) => {
+          setImageSpaceNUmbe(image4.slice(23));
+        });
+      }
+      if (imageFromGate && imageSpaceNumber) {
+        const res = await callPost('/parkingspace/detail', {
+          imageFromGate: imageFromGate,
+          imageSpaceNumber: imageSpaceNumber,
+          parkingSpaceId: parkingSpaceId,
+        });
+
+        if (res.status === 'success') {
+          setCurrent(current + 1);
+        }
+      } else {
+        showMessage(messageType.FAILED.type, 'Зургуудаа оруулна уу?');
       }
     } else if (current === 4) {
       const data = await callGet('/parkingspace/timesplit');
@@ -384,7 +410,7 @@ const Profile = () => {
       ];
       const formData = {
         hourlyPrice: Number(componentData.hourlyPrice),
-        parkingSpaceId: 522,
+        parkingSpaceId: parkingSpaceId,
         parkingSpacePriceInstance: array,
       };
       console.log(formData, 'awhdgawdgawiudg');
@@ -398,45 +424,48 @@ const Profile = () => {
       console.log(res);
       if (res && res.saleSplit) {
         res.saleSplit.forEach((c) => {
-          if (c.code == 'WEEKLY_SALE') {
+          if (c.code === 'WEEKLY_SALE') {
             setweekId(c.id);
             setweekSale(Number(saleData.weekSale));
             setweekDescription(c.description);
           }
-          if (c.code == 'MONTHLY_SALE') {
+          if (c.code === 'MONTHLY_SALE') {
             setmonthId(c.id);
             setmonthSale(Number(saleData.monthSale));
             setMonthDescription(c.description);
           }
         });
       }
+      console.log(monthSale, weekSale, monthId, weekId, 'ggggggggggggggggggg');
+      // if (weekSale && monthSale &&weekId && monthId) {
+      //   const ress = await callPost('/parkingspace/sale', {
+      //     parkingSpaceId: parkingSpaceId,
+      //     parkingSpaceSale: [
+      //       {
+      //         salePercent: weekSale,
+      //         saleSplitId: weekId,
+      //         saleSplitDescription: weekDescription,
+      //       },
+      //       {
+      //         salePercent: monthSale,
+      //         saleSplitId: monthId,
+      //         saleSplitDescription: monthDescription,
+      //       },
+      //     ],
+      //   });
 
-      const ress = await callPost('/parkingspace/sale', {
-        parkingSpaceId: 522,
-        parkingSpaceSale: [
-          {
-            salePercent: weekSale,
-            saleSplitId: weekId,
-            saleSplitDescription: weekDescription,
-          },
-          {
-            salePercent: monthSale,
-            saleSplitId: monthId,
-            saleSplitDescription: monthDescription,
-          },
-        ],
-      });
-      // console.log(ress);
-      if (!ress || ress === undefined) {
-        showMessage(messageType.FAILED.type, ress.error);
-        return true;
-      } else {
-        setCurrent(current + 1);
-      }
+      //   // console.log(ress);
+      //   if (!ress || ress === undefined) {
+      //     showMessage(messageType.FAILED.type, ress.error);
+      //     return true;
+      //   } else {
+      //     setCurrent(current + 1);
+      //   }
+      // }
     } else if (current === 6) {
       console.log(dayOfWeek);
       const newGeneralScheduleDto = {
-        parkingSpaceId: 522,
+        parkingSpaceId: parkingSpaceId,
         dayOfWeek,
         holiday: [],
       };
@@ -978,10 +1007,10 @@ const Profile = () => {
                 />
               )) ||
               (steps[current].title === 'Үндсэн зураг' && (
-                <MainImage setImageData={setImageData} form={form} />
+                <MainImage setImageData={setImageData} form={form} onFinish={onFinishMainImage} />
               )) ||
               (steps[current].title === 'Зогсоолын зураг' && (
-                <SpaceImage setSpaceData={setSpaceData} form={form} />
+                <SpaceImage setSpaceData={setSpaceData} form={form} onFinish={onFinishSpaceImage}/>
               )) ||
               (steps[current].title === 'Зогсоолын үзүүлэлт' && (
                 <SpaceIndicator form={form} onFinish={onFinishSPace} />

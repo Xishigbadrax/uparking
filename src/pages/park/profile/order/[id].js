@@ -249,6 +249,7 @@ const OrderId = () => {
   const onFinishPolicy = async (value)=>{
     // setIsLoading(true);
     const res = await callPost(`/booking/cancelpolicy?isAccept=${value.agreement}`);
+    console.log(res);
     setIsModalVisibleCancelOrderConfirm(false);
     setIsConfirmVisible(true);
   };
@@ -295,6 +296,10 @@ const OrderId = () => {
       if (!Helper.isNullOrEmpty(res.imageSpaceNumber)) {
         setImages((images) => [...images, {id: 8, path: res.imageSpaceNumber}]);
       }
+    }
+    if (res.parkingSpaceId) {
+      const review = await callGet(`/parkingspace/review?parkingSpaceId=${res.parkingSpaceId}`);
+      console.log(review, 'unlgeeeeeeeeeeeeeeeeeeee');
     }
     ctx.setIsLoading(false);
   };
@@ -710,7 +715,7 @@ const OrderId = () => {
                   <Row style={{marginTop: '30px'}}>
                     <Col span={24} style={{fontWeight: 'bold', fontSize: '14px', lineHeight: '24px'}}>
                       <div style={{color: '#0013D4'}}>Тээврийн хэрэгсэл</div>
-                      {orderData.totalAtDay ? (
+                      {orderData.vehicleNumber ? (
                         <Row style={{marginTop: '20px'}}>
                           <Col style={{borderRadius: '8px', border: 'solid 1px #0013D4', display: 'flex', alignItems: 'center'}}>
                             <div style={{padding: '20px'}}>

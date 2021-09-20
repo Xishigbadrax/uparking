@@ -49,7 +49,8 @@ const MapWithAMarkerClusterer = compose(
   }),
   withHandlers({
     onMarkerClustererClick: () => (markerClusterer) => {
-      markerClusterer.getMarkers();
+      const clickedMarkers= markerClusterer.getMarkers();
+      console.log(clickedMarkers);
     },
   }),
   withScriptjs,
@@ -57,7 +58,6 @@ const MapWithAMarkerClusterer = compose(
 )((props) => (
 
   <GoogleMap defaultZoom={13} defaultCenter={props.defaultCenter}>
-
     <MarkerClusterer
       onClick={props.onMarkerClustererClick}
       averageCenter
@@ -142,33 +142,20 @@ const Dashboard = () => {
           mergedparks.push({residence, park});
         });
       });
-      // console.log(mergedparks, 'wdawd');
+      console.log(mergedparks, 'wdawd');
       setMarkers(mergedparks);
-      setDefaultCenter({
-        lat: mergedparks[0].residence.latitude,
-        lng: mergedparks[0].residence.longitude,
-      });
       setSearchedData(mergedparks);
-      console.log(searchedData, 'eneeeeeeeeeeeeeeeeeeeeeeeeeeee');
-    } else {
-      setDefaultCenter({
-        lat: 47.91909306508191,
-        lng: 106.91761127921768,
-      });
     }
   };
   const loadDataOfPosition = (res) => {
     const parks = [];
     setSearchedDataOfPosition([]);
-    setMarkers([]);
     if (res.length > 0) {
       res.map((residence) => {
         residence.parkingSpaceList.content.map((park) => {
           parks.push({residence, park});
         });
       });
-      console.log(parks, 'position search data');
-      setMarkers(parks);
       setDefaultCenter({
         lat: parks[0].residence.latitude,
         lng: parks[0].residence.longitude,
@@ -218,16 +205,16 @@ const Dashboard = () => {
     setEndDate(end);
     // console.log(end, 'endDate end bnaa bandia');
   };
-  const onTransfer = (id) => {
-    console.log(id, 'ehnii id');
-    id &&
-      router.push({
-        pathname: 'park/payment',
-        query: {
-          id: id,
-        },
-      });
-  };
+  // const onTransfer = (id) => {
+  //   console.log(id, 'ehnii id');
+  //   id &&
+  //     router.push({
+  //       pathname: 'park/payment',
+  //       query: {
+  //         id: id,
+  //       },
+  //     });
+  // };
   const onFinish = async (values) => {
     setGetDataLoading(true);
     console.log(values);
@@ -271,20 +258,19 @@ const Dashboard = () => {
       setSearchType('fsearch');
       url=`/search/input/test?keywordId=${searchId}`;
     }
-    console.log(searchType, 'typeeeeeeeeeeeeeee');
-    console.log(url, 'urlllllllllllllllllllllllll');
-    if (url != '') {
-      const res = await callGet(url);
-      if (!res || res === undefined) {
-        showMessage(messageType.FAILED.type, defaultMsg.dataError);
-        return;
-      }
-      loadData(res);
-      const searchOfLocation = await callGet(`/search/location/test?latitude=${position.latitude}&longitude=${position.longitude}`);
-      console.log(searchOfLocation, 'searching locationnn');
-      loadDataOfPosition(searchOfLocation);
-      setGetDataLoading(false);
+    console.log(url, 'typeeeeeeeeeeeeeee');
+
+    const res = await callGet(`${url}`);
+    console.log(res, 'resssssssssssssssssssssssssssssss');
+    if (!res || res === undefined) {
+      showMessage(messageType.FAILED.type, defaultMsg.dataError);
     }
+    console.log(res, 'hiiiiiiiiiiiiiiiiiiiiiiiii');
+    loadData(res);
+    const searchOfLocation = await callGet(`/search/location/test?latitude=${position.latitude}&longitude=${position.longitude}`);
+    console.log(searchOfLocation, 'searching locationnn');
+    loadDataOfPosition(searchOfLocation);
+    setGetDataLoading(false);
   };
   const onFinishFailed = (values) => {
     console.log(values, 'onFinishFailed');

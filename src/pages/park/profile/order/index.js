@@ -85,6 +85,7 @@ const Order = () => {
   // hadgalagdsan data awah
   const getSavedData=(async ()=>{
     const result = await callGet(`/booking?asWho=${asWho}&isConfirmed=false`);
+    console.log(result, 'saveeeeeeeeeeeeeeeeeeeeeeeeeddddddddddddddddddddddd');
     setCalendarData(result);
   });
   // batalgaajsan turliin data awah
@@ -268,7 +269,7 @@ const Order = () => {
                 {dataViewType ==='calendar'?
                   <div className='orderCalendar'>
                     <DayNightColumn />
-                    <Calendar className="customCalendar"
+                    <Calendar
                       locale={calendarLocale}
                       headerRender={({value, type, onChange, onTypeChange}) => {
                         const localeData = value.localeData();
@@ -344,7 +345,7 @@ const Order = () => {
                             {item.bookingStatusDescription}{'   '}
                             {item.expireDateDriver}
                           </div> }
-                          {item.bookingStatus === 'CONFIRMED'&& historyValue===true && <div className="calendarListStatus">
+                          {item.bookingStatus === 'CONFIRMED'&& historyValue === true && <div className="calendarListStatus">
                             {'Үнэлгээ'}
                           </div>}
                           {item.bookingStatus ==='CONFIRMED' && ! historyValue && <div className="calendarListStatus">

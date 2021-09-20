@@ -7,7 +7,7 @@ import {Radio, Modal, Alert} from 'antd';
 import {showMessage} from '../../utils/message';
 import Image from 'next/image';
 import Context from '@context/Context';
-// import {useRouter} from 'next/router';
+import {useRouter} from 'next/router';
 
 import SettingPane from '@components/settingPane/setting';
 // import {Collapse} from 'antd';
@@ -22,16 +22,32 @@ import moment from 'moment';
 
 const {TabPane} = Tabs;
 
-
+const review = [
+  {
+    id: 1,
+    proImage: '/ganbat.png',
+    user: 'ganbat.B',
+    date: '2020-10-06',
+    description: 'Энэ үнэхээр гоё зогсоол байна.Орц гарц нь их эвтэйхэн юм аа.Дараа заавал дахин захиалга өгнөө гшшш',
+    rate: 4,
+  },
+  {
+    id: 2,
+    proImage: '/ganbat.png',
+    user: 'Ariuk.D',
+    date: '2021-03-07',
+    description: 'Энэ үнэхээр гоё зогсоол байна.Орц гарц нь их эвтэйхэн юм аа.Дараа заавал дахин захиалга өгнөө гшшш',
+    rate: 3,
+  },
+];
 const callback = (key) =>{
-  console.log(key, 'keyiin hevledee');
 };
 const tofit = ({data, lat, lng}) => {
   console.log({data, lat, lng}, 'ehniii dataagaa haruul');
 
   // const [PickTimevisible, setPickTimeVisible] = useState(false);
   const [detailVisible, setDetailsVisible] = useState(false);
-  // const router =useRouter();
+  const router =useRouter();
   // eslint-disable-next-line no-unused-vars
   const [selectItem, setSelected] = useState([]);
   const [ResidenceItem, setResidenceDrawerItem] = useState({});
@@ -90,7 +106,8 @@ const tofit = ({data, lat, lng}) => {
   const DetailsDrawerOpen = async (id) => {
     setDetailsVisible(true);
     setId(id);
-
+    const review = await callGet(`/parkingspace/review?parkingSpaceId=${id}`);
+    console.log(review, 'unelegeeeeeeeeeeeeeeeeeeeeeee');
     const priceData = await callGet(`/parkingspace/price?parkingSpaceId=${id}`);
     // eslint-disable-next-line no-unused-vars
     const residenceData = await callGet(
@@ -1366,7 +1383,32 @@ const tofit = ({data, lat, lng}) => {
                       }
                       key="2"
                     >
-                      Хэрэглэгчийн үнэлгээ
+                      Хэрэглэгчдийн үнэлгээ
+                      {
+                        review.map((item)=>(
+                          <Card key={item.id} style={{background: 'rgba(222, 226, 233, 0.2)', marginTop: '20px', borderRadius: '16px', padding: '0'}}>
+                            <Row style={{padding: '0'}}>
+                              <Col span={2} >
+                                <div style={{borderRadius: '12px', height: '24px', width: '24px'}}>
+                                  <img src={item.proImage} height={24} width={24} style={{borderRadius: '12px'}} />
+                                </div>
+                              </Col>
+                              <Col span={10}>
+                                <div style={{fontSize: '14px', lineHeight: '24px'}}><b>{item.user}</b></div>
+                                <div style={{color: '#35446D', fontSize: '12px'}}>{item.date}</div>
+                              </Col>
+                              <Col offset={6} className='reviewRate' style={{marginTop: '-10px'}}>
+                                <Rate value={item.rate}/>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col offset={2}>
+                                <p style={{color: '#35446D', fontSize: '14px', textAlign: 'justify', marginBottom: '10px'}}>{item.description}</p>
+                              </Col>
+                            </Row>
+                          </Card>
+                        ))
+                      }
                     </TabPane>
                     <TabPane
                       tab={

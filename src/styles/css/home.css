@@ -2403,7 +2403,7 @@ width: 125px;
   margin-top: 100px !important;
 }
 .orderCalendar .ant-picker-panel .ant-picker-calendar-date{
-  height: 70px !important;
+  /* height: 70px !important; */
 }
 .orderCalendarAsWho2 .ant-picker-panel .ant-picker-calendar-date{
   height: 80px !important;
@@ -2412,7 +2412,7 @@ width: 125px;
   margin-top: 32px !important;
 }
 .orderCalendar .daynighttext .item {
-  margin-top: 40px ;
+  margin-top:55px ;
 }
 .OrdePagination{
   margin-left: 70% !important;
@@ -2556,4 +2556,10 @@ input[type=number]::-webkit-outer-spin-button {
 }
 .cancelBooking .antd-modal-header{
   background-color: red !important;
+}
+.reviewRate .ant-rate svg {
+  height: 15.903876304626465px !important;
+  width: 13.409276962280273px !important;
+  margin-top: 2.3px !important;
+  border-radius: 0px;
 }

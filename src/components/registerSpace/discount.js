@@ -4,28 +4,28 @@ import {useEffect, useState} from 'react';
 import {callGet} from '@api/api';
 const discount = (props) => {
   // eslint-disable-next-line no-unused-vars
-  const [weekId, setweekId] = useState(null);
+  const [weekId1, setweekId] = useState(null);
   // eslint-disable-next-line no-unused-vars
-  const [monthId, setmonthId] = useState(null);
-  const [weekSale1, setweekSale] = useState(null);
-  const [monthSale1, setmonthSale] = useState(null);
+  const [monthId1, setmonthId] = useState(null);
+  const [weekSale1, setweekSale1] = useState(null);
+  const [monthSale1, setmonthSale1] = useState(null);
+
 
   useEffect(async () => {
     const res = await callGet('/division/salesplit');
-    console.log(res);
     if (res && res.saleSplit) {
       res.saleSplit.forEach((c) => {
         if (c.code == 'WEEKLY_SALE') {
           setweekId(c.id);
-          setweekSale(c.value);
+          setweekSale1(c.value);
         }
         if (c.code == 'MONTHLY_SALE') {
           setmonthId(c.id);
-          setmonthSale(c.value);
+          setmonthSale1(c.value);
         }
       });
     }
-  }, []);
+  }, [discount]);
   {props.form.setFieldsValue({
     weekSale: weekSale1,
     monthSale: monthSale1,
@@ -33,7 +33,7 @@ const discount = (props) => {
 
   return (
     <div>
-      <Form form={props.form} className={'Sale'} onFinish={props.onFinish}>
+      <Form form={props.form} className={'Sale'} onFinish={()=>props.onFinish()}>
         <Row>
           <Col offset={3}>
             <p
@@ -79,9 +79,9 @@ const discount = (props) => {
             >
               <Input
                 placeholder="5%"
-                onChange={(e) => {
-                  setweekSale(e.target.value);
-                }}
+                // onChange={(e) => {
+                //   setweekSale(Number(e.target.value));
+                // }}
                 style={{marginTop: '20px', width: '400px', height: '44px'}}
               />
             </Form.Item>
@@ -102,10 +102,10 @@ const discount = (props) => {
               <Input
                 placeholder="10%"
                 style={{marginTop: '20px', width: '295px', height: '44px'}}
-                onChange={(e) => {
-                  setmonthSale(e.target.value);
-                  console.log(e.target.value);
-                }}
+                // onChange={(e) => {
+                //   setmonthSale(e.target.value);
+                //   console.log(e.target.value);
+                // }}
               />
             </Form.Item>
             <Divider />
