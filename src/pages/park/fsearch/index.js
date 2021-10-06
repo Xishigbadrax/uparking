@@ -25,7 +25,7 @@ import ToFit from '@components/fsearch/toFIt';
 import Closest from '@components/fsearch/closest';
 import Farthest from '@components/fsearch/farthest';
 import Search from 'antd/lib/input/Search';
-// import GoogleMapReact from 'google-map-react';
+import GoogleMapReact from 'google-map-react';
 // import {useRouter} from 'next/router';
 const {Content} = Layout;
 
@@ -75,36 +75,36 @@ const MapWithAMarkerClusterer = compose(
   </GoogleMap>
 ));
 const {Option} = Select;
-// const ClickLocation = () => (
-//   <div
-//     style={{
-//       height: '15px',
-//       width: '15px',
-//       backgroundColor: 'blue',
-//       borderRadius: '10px',
-//       marginTop: '-10px',
-//       marginLeft: '-15px',
-//       alignContent: 'center',
-//       border: '3px solid deepskyblue',
-//     }}
-//   ></div>
-// );
+const ClickLocation = () => (
+  <div
+    style={{
+      height: '15px',
+      width: '15px',
+      backgroundColor: 'blue',
+      borderRadius: '10px',
+      marginTop: '-10px',
+      marginLeft: '-15px',
+      alignContent: 'center',
+      border: '3px solid deepskyblue',
+    }}
+  ></div>
+);
 
-// const AnyReactComponent = (text) => (
-//   <div
-//     className={'locationBackground'}
-//     style={{marginTop: '-35px', marginLeft: '-27px'}}
-//   >
-//     <p
-//       style={{
-//         textAlign: 'center',
-//         fontSize: '16px',
-//       }}
-//     >
-//       <b>{text}</b>
-//     </p>
-//   </div>
-// );
+const AnyReactComponent = (text) => (
+  <div
+    className={'locationBackground'}
+    style={{marginTop: '-35px', marginLeft: '-27px'}}
+  >
+    <p
+      style={{
+        textAlign: 'center',
+        fontSize: '16px',
+      }}
+    >
+      <b>{text}</b>
+    </p>
+  </div>
+);
 const fsearch = () => {
   // const array = [];
   // eslint-disable-next-line no-unused-vars
@@ -122,6 +122,8 @@ const fsearch = () => {
   // eslint-disable-next-line no-unused-vars
   const [spaceData, setSpacedata] = useState([]);
   const [markers, setMarkers]= useState([]);
+  const [selectLat, setSelectLat] = useState();
+  const [selectLng, setSelectLng] = useState();
   const [defaultCenter, setDefaultCenter]=useState({
     lat: null,
     lng: null,
@@ -191,16 +193,16 @@ const fsearch = () => {
     setType(e);
     console.log(startDate, endDate, type);
   };
-  // const onMapClick = async (e) => {
-  //   console.log(e);
-  //   setSelectLate(e.lat);
-  //   setSelectLng(e.lng);
-  //   const locationsData = await callGet(
-  //     `/search/location/test?latitude=${e.lat}&longitude=${e.lng}`,
-  //   );
-  //   console.log(locationsData);
-  //   setSpacedata(locationsData);
-  // };
+  const onMapClick = async (e) => {
+    console.log(e);
+    setSelectLate(e.lat);
+    setSelectLng(e.lng);
+    const locationsData = await callGet(
+      `/search/location/test?latitude=${e.lat}&longitude=${e.lng}`,
+    );
+    console.log(locationsData);
+    setSpacedata(locationsData);
+  };
   const loadData = (res) => {
     const mergedparks = [];
     setSearchedData([]);
@@ -426,16 +428,16 @@ const fsearch = () => {
         </Row>
         <Row>
           <Col span={15}>
-            <Content>
+            {/* <Content>
               <div style={{height: '100vh', width: '100%'}}>
                 <MapWithAMarkerClusterer
                   markers={markers}
                   defaultCenter={defaultCenter}
                 />
               </div>
-            </Content>
+            </Content> */}
 
-            {/* <GoogleMapReact
+            <GoogleMapReact
               style={{height: '828px'}}
               bootstrapURLKeys={{key: GOOGLE_API}}
               center={{lat: latitude, lng: longitude}}
@@ -455,7 +457,7 @@ const fsearch = () => {
               ))}
 
 
-            </GoogleMapReact> */}
+            </GoogleMapReact>
           </Col>
           <Col span={9}>
             <Card>

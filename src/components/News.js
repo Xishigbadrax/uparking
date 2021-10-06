@@ -18,7 +18,7 @@ const News = ({head, image, date, title, titlebold, desc}) => {
         }}
         className="flex justify-end h-[48px] flex-wrap content-center pr-[20px]"
       >
-        <p className={'justify-self-end newsHeadTitle items-center'}>{head}</p>
+        <div className={'justify-self-end newsHeadTitle items-center'}>{head}</div>
       </div>
       <div
 
@@ -41,7 +41,7 @@ const News = ({head, image, date, title, titlebold, desc}) => {
           <div
             className={'newsDate'}
           >
-            <p className={'newsDateText w-[80px] text-[10px] bg-[#0013D4] text-[white]'}>{date}</p>
+            <div className={'newsDateText w-[80px] text-[10px] bg-[#0013D4] text-[white]'}>{date}</div>
           </div>
         </div>
         <div className="grid grid-rows-2 text-[24px] text-[#35446D]">

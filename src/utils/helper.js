@@ -96,6 +96,18 @@ const time = (input) => {
   }
   return input;
 };
+const formatDatetimeValue = (input) => {
+  if (input) {
+    input = input.split('+')[0];
+    const t = new Date(Date.parse(input));
+    const month = ('00' + (t.getMonth() + 1)).slice(-2);
+    const day = ('00' + t.getDate()).slice(-2);
+    // const minutes = ('00' + (t.getMinutes() + 1)).slice(-2);
+    // const seconds = ('00' + t.getSeconds()).slice(-2);
+    return `${month}/${day}/${t.getFullYear()}`;
+  }
+  return input;
+};
 const formatDatetimeT = (input) => {
   if (input) {
     input = input.split('+')[0];
@@ -581,4 +593,5 @@ export default {
   removeObject,
   removeArray,
   isEqualsArray,
+  formatDatetimeValue,
 };

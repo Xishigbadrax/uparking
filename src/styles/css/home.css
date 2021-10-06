@@ -1713,18 +1713,7 @@
 /*HHM bvrtgeh end*/
 
 /* Go button*/
-.buttonGooo {
-  /* background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
-  border-radius: 8px;
-  height: 40px !important;
-  width: 100% !important; */
-}
-.buttonGo {
-  /* background: linear-gradient(90deg, #0013d4 0%, #00f9b8 100%);
-  border-radius: 8px;
-  width: 100% !important */
-  /* position: absolute; */
-}
+
 .addButton {
   background-image: url("../../../public/add.png");
 }
@@ -1870,8 +1859,11 @@
 .timePickCalendar tbody tr .ant-picker-cell.ant-picker-cell-in-view {
   min-height: 50px !important;
   max-width: 50px !important;
-  background: #76e8aa;
+  /* background: #76e8aa; */
   border-radius: 10px !important;
+} 
+ .customCalendarMini .ant-picker-cell-disabled::before{
+  background: #fff !important;
 }
 .timePickCalendar .ant-picker-cell-selected {
   background-color: #00f9b8 !important;
@@ -1886,18 +1878,7 @@
   color: black !important;
 }
 
-.timePickCalendar tbody tr td:first-of-type {
-  color: white;
-  border-radius: 10px !important;
 
-  background-color: #141a29 !important;
-}
-.timePickCalendar tbody tr td:last-of-type {
-  border-radius: 20px !important;
-
-  color: white;
-  background: #141a29 !important;
-}
 .ResidenceCardList .ant-card-body {
   padding-top: 0px !important;
   align-items: center;
@@ -1964,9 +1945,9 @@
 } */
 
 .pickVehicle {
-  width: 192px;
-  height: 56px;
-  left: 0px;
+  width: 162px;
+  height: 56px !important;
+  padding-left: 10px;
   top: 0px;
 
   /* Base Color / White */
@@ -1975,11 +1956,16 @@
   /* Brand Color / Primary */
   border: 1px solid #0013d4 !important;
   box-sizing: border-box;
-  border-radius: 8px;
+  margin-left: 20px !important;
+  margin-top: 5px !important;
+  border-radius: 10px !important;
 }
 .ant-radio-button-wrapper .pickVehicle:hover {
   background: none !important;
   color: none !important;
+}
+.ant-radio-button-wrapper .pickVehicle{
+  border-radius: 10px;
 }
 
 .ant-radio-group-solid
@@ -2041,12 +2027,12 @@
   background: url("/icons/locationBackground.png") !important;
   height: 28px;
   width: 48px;
+  cursor:pointer;
+  margin-left: 5px;
   align-items: center;
   justify-items: center;
 }
-.spaceMainInfo .ant-form-item-control-input-content {
-  /* height: 32px !important; */
-}
+
 .spaceMainInfo .ant-divider-horizontal {
   /* margin: 0px 0px !important; */
   margin: 0px 0px !important;
@@ -2408,9 +2394,6 @@ width: 125px;
 .orderCalendarAsWho2 .daynighttext {
   margin-top: 100px !important;
 }
-.orderCalendar .ant-picker-panel .ant-picker-calendar-date{
-  /* height: 70px !important; */
-}
 .orderCalendarAsWho2 .ant-picker-panel .ant-picker-calendar-date{
   height: 80px !important;
 }
@@ -2555,7 +2538,6 @@ input[type=number]::-webkit-outer-spin-button {
 }
 .tureesModal .ant-modal-header{
   background-color: red;
-  
 }
 .tureesModal .ant-modal{
  border-radius: 10px;
@@ -2581,12 +2563,24 @@ input[type=number]::-webkit-outer-spin-button {
 .cancelBooking .antd-modal-header{
   background-color: red !important;
 }
-<<<<<<< HEAD
 .reviewRate .ant-rate svg {
   height: 15.903876304626465px !important;
   width: 13.409276962280273px !important;
   margin-top: 2.3px !important;
   border-radius: 0px;
 }
-=======
->>>>>>> 1fe18c5386e997968099f9ff2a3417368fe75c29
+.ant-notification  .ant-notification-notice .ant-notification-notice-error .ant-notification-notice-closable{
+  height: 60px !important;
+}
+
+.walletIput .ant-divider-horizontal {
+  margin: 0px !important;
+}
+
+.requestDelete  svg {
+  height: 20px !important;
+  color:red !important;
+}
+.requestConfirm svg {
+  color: #00f9b8 !important;
+}

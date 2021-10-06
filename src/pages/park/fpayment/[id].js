@@ -48,43 +48,10 @@ const {TabPane} = Tabs;
 const {Header, Sider} = Layout;
 
 const IMG_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
-// const style = {
-//   border: '1px solid #DEE2E9',
-//   borderRadius: '8px',
-//   padding: '5px 10px',
-// };
-// const isBase64 = async (str) => {
-//   if (str === '' || str.trim() === '') {
-//     return false;
-//   }
-//   try {
-//     return btoa(atob(str)) == str;
-//   } catch (err) {
-//     return false;
-//   }
-// };
-// const image = [
-//   {id: 1,
-//     image: '/hunnu11.png'},
-
-// ];
 const Payment = ( ) => {
   const {userdata} = useContext(Context);
   const ctx = useContext(Context);
   const router = useRouter();
-  // eslint-disable-next-line no-unused-vars
-  // const [orderData, setOrderData] = useState({
-  //   residenceName: 'Маршал хотхон',
-  //   province: 'Улаанбаатар',
-  //   district: 'Хан-Уул',
-  //   section: '5-р хороо',
-  //   residenceBlockNumber: '67',
-  //   totalAtDay: '2',
-  //   returnRoutes:
-  //     'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-  //   bookingStatus: 'SAVED',
-  //   totalPrice: '16000',
-  // });
   const [orderData, setOrderData] = useState(null);
   const [images, setImages] = useState([]);
   const [parkingUpDownArrow, setParkingUpDownArrow] = useState(false);
@@ -177,18 +144,14 @@ const Payment = ( ) => {
     setFreeTimeVisible(false);
     setmessageShow(false);
   };
-  console.log(bookingId, 'booking idiiiiii');
   useEffect(async () => {
     // setStartDateTime(router.query.startDateTime);
     ctx.setIsLoading(true);
-    console.log(id, 'id shuu');
     await callGet(`/parkingspace?parkingSpaceId=${id}`).then((res) => {
-      console.log(res, 'resresres');
       if (!res || res === undefined) {
         showMessage(messageType.FAILED.type, defaultMsg.dataError);
       } else {
         res && setOrderData(res);
-        console.log(orderData, 'orderDatagiin medeelel');
         setImages([]);
         if (!Helper.isNullOrEmpty(res.imageFromGate)) {
           setImages((images) => [...images, {id: 4, path: res.imageFromGate}]);
@@ -219,12 +182,11 @@ const Payment = ( ) => {
           ]);
         }
       }
-      console.log(images, 'zurguuud');
       ctx.setIsLoading(false);
     });
     const res = await callGet(`/booking/id/test?id=${bookingId}&asWho=1`);
     setBookingData(res);
-    console.log(res, 'suuliin datagaaa haruuullaaa');
+    console.log(res, 'zahialgiin medeelel');
   }, [id, bookingId]);
   useEffect(() => {
     fetchData();
@@ -337,7 +299,10 @@ const Payment = ( ) => {
   //       res && setOrderData(res);
   //     });
 
-
+  const onPaymentByWallet = async ()=>{
+    console.log(bookingId);
+    // const res = await callPost()
+  };
   const handleClickBankLogo = (activekey) => {
     settype(activekey);
   };
@@ -720,7 +685,7 @@ const Payment = ( ) => {
                             </div>
                             <Row style={{marginTop: '35px'}}>
                               <Col span={24}>
-                                <Button className="rounded-[8px] w-[372px]" type="primary" size={'large'} block>
+                                <Button className="rounded-[8px] w-[372px]" type="primary" size={'large'} block onClick={onPaymentByWallet}>
                               Төлөх
                                 </Button>
                               </Col>

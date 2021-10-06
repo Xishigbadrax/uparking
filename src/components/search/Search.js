@@ -5,7 +5,10 @@ import {callGet, callPost} from '@api/api';
 import SettingPane from '@components/settingPane/setting';
 import Context from '@context/Context';
 import {useRouter} from 'next/router';
+import moment from 'moment';
 import {Tabs} from 'antd';
+import {showMessage} from '@utils/message';
+import {messageType} from '@constants/constants';
 const callback = (key) =>{
   console.log(key);
 };
@@ -13,16 +16,7 @@ const {TabPane} = Tabs;
 
 const IMG_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
 // eslint-disable-next-line no-unused-vars
-const isBase64 = async (str) => {
-  if (str === '' || str.trim() === '') {
-    return false;
-  }
-  try {
-    return btoa(atob(str)) == str;
-  } catch (err) {
-    return false;
-  }
-};
+
 // eslint-disable-next-line react/prop-types
 const Search = ({data, startDate, endDate, tunetype})=>{
   console.log(startDate, endDate, data);
@@ -42,7 +36,7 @@ const Search = ({data, startDate, endDate, tunetype})=>{
   const [totalAllDay, setTotalAllDay] = useState(0);
   const [vehicles, setVehiclesData]= useState([]);
   // eslint-disable-next-line no-unused-vars
-  const [selectVehicles, setSelectVehicle] =useState();
+  const [selectVehicle, setSelectVehicle] =useState();
   // eslint-disable-next-line no-unused-vars
   const [startDateTime, setStartDateTime]= useState();
   const [spaceStatus, setSpaceStatus]= useState('');
@@ -50,15 +44,20 @@ const Search = ({data, startDate, endDate, tunetype})=>{
   // eslint-disable-next-line no-unused-vars
   const [totalPrice, setTotalPrice]= useState(0);
   const [residenceDrawerItem, setResidenceDrawerItem] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [message, setmessage] = useState('');
+  const [conFirmAddBookingVisible, setConfirmAddBookingVisible]= useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [status, setstatus] = useState('');
+  // eslint-disable-next-line no-unused-vars
   const [title, settitle] = useState('');
+  // eslint-disable-next-line no-unused-vars
+  const [bookingCount, setBookingCount]= useState(0);
   const [messageShow, setmessageShow] = useState(false);
 
+  // eslint-disable-next-line no-unused-vars
   const [diffDay, setDiffDays] = useState(0);
   const onChangeChooseVehicle = (e) => {
-    setSelectVehicle(e.target.value);
-    console.log(e.target.value);
     setSelectVehicle(e.target.value);
   };
   const handleOk = () => {
@@ -85,100 +84,120 @@ const Search = ({data, startDate, endDate, tunetype})=>{
     const time = await callGet('/config/timesplit');
     settimeSplit(time);
   }, []);
-  const onClickPayment = (id)=>{
-    id &&
-    router.push({
-      pathname: 'park/payment',
-      query: {
-        id: 498,
-        startDateTime: '2021-09-09',
-      },
-    });
+
+
+  const onClickPayment =async (id)=>{
+    if (selectVehicle) {
+      // Context.setisLoading(true);
+      setStartDateTime(
+        tunetype == 'Өдөр' ?
+          moment(startDate).format('YYYY-MM-DD') + ' ' + timeSplit.dayStart :
+          tunetype == 'Шөнө' ?
+            moment(startDate).format('YYYY-MM-DD') + ' ' + timeSplit.nightStart :
+            moment(startDate).format('YYYY-MM-DD') + ' ' + timeSplit.dayStart);
+      const formData = {
+        endDateTime: tunetype == 'Өдөр' ?
+          moment(endDate).format('YYYY-MM-DD') + ' ' + timeSplit.dayStart :
+          tunetype == 'Шөнө' ?
+            moment(endDate).format('YYYY-MM-DD') + ' ' + timeSplit.nightStart :
+            moment(endDate).format('YYYY-MM-DD') + ' ' + timeSplit.dayStart,
+        isDay: tunetype ==='Өдөр'?true:false,
+        isFullday: tunetype ==='Бүтэн өдөр'? true: false,
+        isGift: false,
+        isNight: tunetype ==='Шөнө'?true: false,
+        parkingSpaceId: parkingSpaceId,
+        spaceStatus: spaceStatus,
+        startDateTime:
+      tunetype == 'Өдөр' ?
+        moment(startDate).format('YYYY-MM-DD') + ' ' + timeSplit.dayStart :
+        tunetype == 'Шөнө' ?
+          moment(startDate).format('YYYY-MM-DD') + ' ' + timeSplit.nightStart :
+          moment(startDate).format('YYYY-MM-DD') + ' ' + timeSplit.dayStart,
+        totalAllDay: totalAllDay,
+        totalAtDay: totalAtDay,
+        totalAtNight: totalAtNight,
+        totalPrice: totalPrice,
+        userPhoneNumber: userRealData.phoneNumber,
+        vehicleId: selectVehicle,
+      };
+      await callPost('/booking/time', formData).then((res) => {
+        if (res.bookingId !== undefined) {
+          router.push({pathname: `/park/profile/order/${res.bookingId}`, query: {page: '1', asWho: 1, history: false}});
+        }
+      });
+    } else {
+      showMessage(messageType.FAILED.type, 'Машинаа сонгоно уу?');
+    }
   };
   const DetailsDrawerOpen = async (id) => {
-    console.log(id);
     setDetailsVisible(true);
     // eslint-disable-next-line react/prop-types
     const a = data.find((item) => item.park.parkingSpaceId === id);
     setResidenceDrawerItem(a.residence);
     setSpaceStatus(a.park.spaceStatus);
     setTotalPrice(a.park.price);
-    console.log(a.park.price, '<---------');
-    console.log('adadawdaw');
     setParkingSpaceId(a.park.parkingSpaceId);
     const space = await callGet(
       `/search/parkingspace/test?parkingSpaceId=${id}`,
     );
     setSpaceData(space);
-    console.log(space, 'space data');
     const vehicle = await callGet('/user/vehicle/list');
     setVehiclesData(vehicle);
-    // console.log(spaceData, '<------------------spaceData ');
+  };
+  const onClickPushOrder = ()=>{
+    router.push({pathname: '/park/profile/order'});
   };
   useEffect(async () => {
     if (typeof userdata.firstName != 'undefined') {
       setUserRealData(userdata);
-      console.log(userdata, 'uuuuu');
     }
   }, [userdata]);
   const submit = async () => {
-    // if (vehicles) {
-    // setisLoading(true);
-    setStartDateTime(
+    if (selectVehicle) {
+      // Context.setisLoading(true);
+      setStartDateTime(
+        tunetype == 'Өдөр' ?
+          moment(startDate).format('YYYY-MM-DD') + ' ' + timeSplit.dayStart :
+          tunetype == 'Шөнө' ?
+            moment(startDate).format('YYYY-MM-DD') + ' ' + timeSplit.nightStart :
+            moment(startDate).format('YYYY-MM-DD') + ' ' + timeSplit.dayStart);
+      const formData = {
+        endDateTime: tunetype == 'Өдөр' ?
+          moment(endDate).format('YYYY-MM-DD') + ' ' + timeSplit.dayStart :
+          tunetype == 'Шөнө' ?
+            moment(endDate).format('YYYY-MM-DD') + ' ' + timeSplit.nightStart :
+            moment(endDate).format('YYYY-MM-DD') + ' ' + timeSplit.dayStart,
+        isDay: tunetype ==='Өдөр'?true:false,
+        isFullday: tunetype ==='Бүтэн өдөр'? true: false,
+        isGift: false,
+        isNight: tunetype ==='Шөнө'?true: false,
+        parkingSpaceId: parkingSpaceId,
+        spaceStatus: spaceStatus,
+        startDateTime:
       tunetype == 'Өдөр' ?
-        startDate + ' ' + timeSplit.dayStart :
+        moment(startDate).format('YYYY-MM-DD') + ' ' + timeSplit.dayStart :
         tunetype == 'Шөнө' ?
-          startDate + ' ' + timeSplit.nightStart :
-          startDate + ' ' + timeSplit.dayStart);
-    const formData = {
-      endDateTime: tunetype == 'Өдөр' ?
-        endDate + ' ' + timeSplit.dayStart :
-        tunetype == 'Шөнө' ?
-          endDate + ' ' + timeSplit.nightStart :
-          endDate + ' ' + timeSplit.dayStart,
-      isDay: tunetype ==='Өдөр'?true:false,
-      isFullday: tunetype ==='Бүтэн өдөр'? true: false,
-      isGift: false,
-      isNight: tunetype ==='Шөнө'?true: false,
-      parkingSpaceId: parkingSpaceId,
-      spaceStatus: spaceStatus,
-      startDateTime:
-      tunetype == 'Өдөр' ?
-        startDate + ' ' + timeSplit.dayStart :
-        tunetype == 'Шөнө' ?
-          startDate + ' ' + timeSplit.nightStart :
-          startDate + ' ' + timeSplit.dayStart,
-      totalAllDay: totalAllDay,
-      totalAtDay: totalAtDay,
-      totalAtNight: totalAtNight,
-      totalPrice: 99999,
-      userPhoneNumber: userRealData.phoneNumber,
-      vehicleId: 231,
-    };
-    console.log(formData, 'form Data kono desu');
-    await callPost('/booking/time', formData).then((res) => {
-      console.log(res);
-      if (res.status == 'success') {
-        setmessageShow(true);
-        setmessage(
-          'Таны захиалгын хүсэлт амжилттай илгээгдлээ. Хүсэлт баталгаажсаны дараа төлбөрөө төлнө',
-        );
-        settitle('Амжилттай');
-        setstatus('success');
-      } else {
-        setmessageShow(true);
-        setmessage(res);
-        settitle('Анхааруулга');
-        setstatus('warning');
-      }
-      // setisLoading(false);
-    });
-    // } else {
-    //   setmessageShow(true);
-    //   setmessage('Тээврийн хэрэгсэл сонгоно уу ');
-    //   settitle('Анхааруулга');
-    //   setstatus('warning');
-    // }
+          moment(startDate).format('YYYY-MM-DD') + ' ' + timeSplit.nightStart :
+          moment(startDate).format('YYYY-MM-DD') + ' ' + timeSplit.dayStart,
+        totalAllDay: totalAllDay,
+        totalAtDay: totalAtDay,
+        totalAtNight: totalAtNight,
+        totalPrice: totalPrice,
+        userPhoneNumber: userRealData.phoneNumber,
+        vehicleId: selectVehicle,
+      };
+      await callPost('/booking/time', formData).then((res) => {
+        if (res.status==='success') {
+          setConfirmAddBookingVisible(true);
+          showMessage(
+            messageType.SUCCESS.type,
+            'Амжилттай. Таны захиалгын хүсэлт амжилттай илгээгдлээ. Хүсэлт баталгаажсаны дараа төлбөрөө төлнө',
+          );
+        }
+      });
+    } else {
+      showMessage(messageType.FAILED.type, 'Машинаа сонгоно уу?');
+    }
   };
 
   const onClose = (e)=>{
@@ -270,7 +289,7 @@ const Search = ({data, startDate, endDate, tunetype})=>{
                               preview={false}
                               width={18}
                               height={18}
-                              src={`data:image/jpeg;base64,${it.park.floorNumber}`}
+                              src={IMG_URL + it.park.floorNumber}
                             />
                           </div>
                         ) : null}
@@ -280,7 +299,7 @@ const Search = ({data, startDate, endDate, tunetype})=>{
                               preview={false}
                               width={18}
                               height={18}
-                              src={`data:image/jpeg;base64,${it.park.entranceLock}`}
+                              src={IMG_URL + it.park.entranceLock}
                             />
                           </div>
                         ) : null}
@@ -290,7 +309,7 @@ const Search = ({data, startDate, endDate, tunetype})=>{
                               preview={false}
                               width={18}
                               height={18}
-                              src={`data:image/jpeg;base64,${it.park.isNumbering}`}
+                              src={IMG_URL + it.park.isNumbering}
                             />
                           </div>
                         ) : null}
@@ -300,7 +319,7 @@ const Search = ({data, startDate, endDate, tunetype})=>{
                               preview={false}
                               width={18}
                               height={18}
-                              src={`data:image/jpeg;base64,${it.park.floorNumber}`}
+                              src={IMG_URL + it.park.capacity}
                             />
                           </div>
                         ) : null}
@@ -310,7 +329,7 @@ const Search = ({data, startDate, endDate, tunetype})=>{
                               preview={false}
                               width={18}
                               height={18}
-                              src={`data:image/jpeg;base64,${it.park.type}`}
+                              src={IMG_URL + it.park.type}
                             />
                           </div>
                         ) : null}
@@ -320,7 +339,7 @@ const Search = ({data, startDate, endDate, tunetype})=>{
                               preview={false}
                               width={18}
                               height={18}
-                              src={`data:image/jpeg;base64,${it.park.returnRoutes}`}
+                              src={IMG_URL + it.park.returnRoutes}
                             />
                           </div>
                         ) : null}
@@ -500,7 +519,7 @@ const Search = ({data, startDate, endDate, tunetype})=>{
                     <Rate
                       style={{width: '80px', height: '14px', order: '1'}}
                       disabled
-                      defaultValue={2}
+                      value={it.park.totalRating}
                     />
                   </Row>
                   <Row>
@@ -637,7 +656,7 @@ const Search = ({data, startDate, endDate, tunetype})=>{
                 fontSize: '12px',
                 lineHeight: '1.2px',
               }}
-              defaultValue={3}
+              value ={residenceDrawerItem.totalRating}
             />
             <Row style={{height: '16px', display: 'flex', width: '100%'}}>
               <Col span={22} offset={1}>
@@ -1004,12 +1023,12 @@ const Search = ({data, startDate, endDate, tunetype})=>{
                       >
                         <b>Тээврийн хэрэгсэл сонгох</b>
                       </Row>
-                      <Row>
+                      <Row style={{marginTop: '20px'}}>
                         <Radio.Group
                           buttonStyle="solid"
                           onChange={onChangeChooseVehicle}
                         >
-                          <Col span={11}>
+                          <Col span={24} style={{overflowY: 'scroll', height: '80px'}}>
                             {vehicles && vehicles.length > 0 && vehicles.map((item) => (
                               <Radio.Button
                                 key={item.value}
@@ -1063,16 +1082,19 @@ const Search = ({data, startDate, endDate, tunetype})=>{
                           </Col>
                         </Radio.Group>
                       </Row>
-                      <Row>
-                        <Col span={22}>
-                          <p>
+                      <Row style={{marginTop: '20px'}}>
+                        <Col span={20}>
+                          <div>
                             <b>Нийт захиалгын төлбөр</b>
-                          </p>
-                        </Col>
-                        <Col span={2}>
-                          {spaceData ?
-                            (tunetype ==='Өдөр'&& Number(diffDay)*spaceData.priceForRent2):0}
-                          ₮
+                          </div>
+                          <div>
+                            {diffDay} {tunetype}
+                          </div>
+                          <div style={{color: '#141A29', fontSize: '20px'}}>
+                            <b>
+                              {totalPrice}
+                          ₮</b>
+                          </div>
                         </Col>
                       </Row>
                       <Row
@@ -1147,6 +1169,28 @@ const Search = ({data, startDate, endDate, tunetype})=>{
         footer={[]}
       >
         <Alert message={title} description={message} type={status} showIcon />
+      </Modal>
+      <Modal visible={conFirmAddBookingVisible} footer={null} onCancel={()=>setConfirmAddBookingVisible(false)}>
+        <div>
+          <Row>
+            <Col span={10} offset={10}>
+              <CheckCircleOutlined style={{height: '30px'}} className="confirmIcon"/>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={6} offset={8}><div style={{color: 'green', fontSize: '20px'}}>Амжилттай</div></Col>
+          </Row>
+          <Row style={{marginTop: '20px'}}>
+            <Col offset={5}>
+              <Button type='primary' onClick={onClickPushOrder}>Төлбөр төлөх хэсэг рүү шилжих</Button>
+            </Col>
+          </Row>
+          <Row style={{marginTop: '10px'}}>
+            <Col offset={9}>
+              <Button type='primary' onClick={()=>setConfirmAddBookingVisible(false)}>Буцах</Button>
+            </Col>
+          </Row>
+        </div>
       </Modal>
     </div>
 

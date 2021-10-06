@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import {callGet} from '@api/api';
 // import { Router } from 'next/router';
 import {showMessage} from '../../utils/message';
+import {messageType, defaultMsg} from '@constants/constants';
 import moment from 'moment';
 import {
   Col,
@@ -10,7 +11,6 @@ import {
   DatePicker,
   Select,
   Layout,
-  Tabs,
   Spin,
   Empty,
   AutoComplete,
@@ -18,64 +18,83 @@ import {
 
 } from 'antd';
 // import moment from 'moment';
-
+import GoogleMapReact from 'google-map-react';
 import ToFit from '@components/fsearch/toFIt.js';
 import Search from '@components/search/Search';
 // import Farthest from '@components/fsearch/farthest';
 
 
-const {compose, withProps, withHandlers} = require('recompose');
-const {
-  withScriptjs,
-  withGoogleMap,
-  GoogleMap,
-  Marker,
-} = require('react-google-maps');
-const {
-  MarkerClusterer,
-} = require('react-google-maps/lib/components/addons/MarkerClusterer');
+// const {compose, withProps, withHandlers} = require('recompose');
+// const {
+//   withScriptjs,
+//   withGoogleMap,
+//   GoogleMap,
+//   Marker,
+// } = require('react-google-maps');
+// const {
+//   MarkerClusterer,
+// } = require('react-google-maps/lib/components/addons/MarkerClusterer');
 
-const {TabPane} = Tabs;
+
+// const {TabPane} = Tabs;
 // const { Option } = Select;
 const {Option} = AutoComplete;
 const {Header, Sider, Content} = Layout;
+// const MapWithAMarkerClusterer = compose(
+//   withProps({
+//     googleMapURL: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyD15334amUTZVfPVXv7p989Mew8iMmAoA0&v=3.exp&libraries=geometry,drawing,places',
+//     loadingElement: <div style={{height: '100%'}} />,
+//     containerElement: <div style={{height: '100%'}} />,
+//     mapElement: <div style={{height: '100%'}} />,
+//   }),
+//   withHandlers({
+//     onMarkerClustererClick: () => (markerClusterer) => {
+//       const clickedMarkers= markerClusterer.getMarkers();
+//       console.log(clickedMarkers);
+//     },
+//   }),
+//   withScriptjs,
+//   withGoogleMap,
+// )((props) => (
 
-const MapWithAMarkerClusterer = compose(
-  withProps({
-    googleMapURL: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyD15334amUTZVfPVXv7p989Mew8iMmAoA0&v=3.exp&libraries=geometry,drawing,places',
-    loadingElement: <div style={{height: '100%'}} />,
-    containerElement: <div style={{height: '100%'}} />,
-    mapElement: <div style={{height: '100%'}} />,
-  }),
-  withHandlers({
-    onMarkerClustererClick: () => (markerClusterer) => {
-      const clickedMarkers= markerClusterer.getMarkers();
-      console.log(clickedMarkers);
-    },
-  }),
-  withScriptjs,
-  withGoogleMap,
-)((props) => (
-
-  <GoogleMap defaultZoom={13} defaultCenter={props.defaultCenter}>
-    <MarkerClusterer
-      onClick={props.onMarkerClustererClick}
-      averageCenter
-      enableRetinaIcons
-      gridSize={60}
+//   <GoogleMap defaultZoom={13} defaultCenter={props.defaultCenter}>
+//     <MarkerClusterer
+//       onClick={props.onMarkerClustererClick}
+//       averageCenter
+//       enableRetinaIcons
+//       gridSize={60}
+//     >
+//       {props.markers.map((marker) => (
+//         <Marker
+//           key={marker.residence.residenceBlockCode}
+//           position={{
+//             lat: marker.residence.latitude,
+//             lng: marker.residence.longitude,
+//           }}
+//         />
+//       ))}
+//       <Marker/>
+//     </MarkerClusterer>
+//   </GoogleMap>
+// ));
+// eslint-disable-next-line react/prop-types
+const AnyReactComponent = ({text}) => (
+  <div
+    className={'locationBackground'}
+    style={{marginTop: '-35px', marginLeft: '-27px'}}
+  >
+    <p
+      style={{
+        textAlign: 'center',
+        color: '#fff',
+        fontSize: '12px',
+        paddingTop: '5px',
+      }}
     >
-      {props.markers.map((marker) => (
-        <Marker
-          key={marker.residence.residenceBlockCode}
-          position={{
-            lat: marker.residence.latitude,
-            lng: marker.residence.longitude,
-          }}
-        />
-      ))}
-    </MarkerClusterer>
-  </GoogleMap>
-));
+      <b>{text}</b>
+    </p>
+  </div>
+);
 
 const Dashboard = () => {
   const [form] = Form.useForm();
@@ -84,6 +103,7 @@ const Dashboard = () => {
   const [searchDataOfPosition, setSearchedDataOfPosition]=useState([]);
   const [dataSource, setDataSource] = useState([]);
   const [getdataLoading, setGetDataLoading]= useState(false);
+  const GOOGLE_API = process.env.NEXT_GOOGLE_API;
 
   // eslint-disable-next-line no-unused-vars
   const [transfer, setTransfer] = useState(null);
@@ -111,8 +131,8 @@ const Dashboard = () => {
   const [searchId, setSearchId] = useState(null);
   const [searchType, setSearchType]=useState('');
   const [timeSplit, settimeSplit] = useState(null);
-
-
+  const [selectLat, setSelectLate] = useState();
+  const [selectLng, setSelectLng] = useState();
   // const [visibleDrawerMore, setVisibleDrawerMore] = useState(false);
   const [parkingObject, setParkingObject] = useState({});
 
@@ -128,21 +148,28 @@ const Dashboard = () => {
     setParkingObject(parkingObject);
   }, [parkingObject]);
 
+  // const Markers = (props) => {
+  //   console.log(props, 'aaaaaaas');
+  //   return <Marker className="SuperAwesomePin" style={{background: 'red'}} position={{
+  //     lat: props.lat,
+  //     lng: props.lng,
+  //   }}>aaaaaaaaaaaa</Marker>;
+  // };
+
+  // eslint-disable-next-line no-unused-vars
   const callback = (key) => {};
-  const onClickMap =(e)=>{
-    console.log(e, 'darsaaaa');
-  };
   const loadData = (res) => {
     const mergedparks = [];
     setSearchedData([]);
     setMarkers([]);
-    if (res.length > 0) {
+    if (res && res.length > 0) {
       res.map((residence) => {
-        residence.parkingSpaceList.content.map((park) => {
-          mergedparks.push({residence, park});
-        });
+        if (residence.parkingSpaceList) {
+          residence.parkingSpaceList.content.map((park) => {
+            mergedparks.push({residence, park});
+          });
+        }
       });
-      console.log(mergedparks, 'wdawd');
       setMarkers(mergedparks);
       setSearchedData(mergedparks);
     }
@@ -150,26 +177,24 @@ const Dashboard = () => {
   const loadDataOfPosition = (res) => {
     const parks = [];
     setSearchedDataOfPosition([]);
-    if (res.length > 0) {
+    setMarkers([]);
+    if (res && res.length > 0) {
       res.map((residence) => {
         residence.parkingSpaceList.content.map((park) => {
           parks.push({residence, park});
         });
       });
-      setDefaultCenter({
-        lat: parks[0].residence.latitude,
-        lng: parks[0].residence.longitude,
-      });
+
       setSearchedDataOfPosition(parks);
+      console.log(searchDataOfPosition, 'gg');
+      setMarkers(parks);
     } else {
       setDefaultCenter({
-        lat: 47.91909306508191,
-        lng: 106.91761127921768,
+        lat: selectLat,
+        lng: selectLng,
       });
     }
   };
-
-
   const onSelectAuto = async (val, option) => {
     if (option.id && option.id != '') {
       setSearchId(option.id);
@@ -185,14 +210,12 @@ const Dashboard = () => {
   const onSearchAuto = async (searchText) => {
     if (searchText.length > 0) {
       const data = await callGet(`/search/keyword?syllable=${searchText}`);
-      const cutData = data.slice(0, 20);
-      setDataSource(searchText ? searchResult(cutData, searchText) : []);
+      setDataSource(searchText ? searchResult(data, searchText) : []);
     } else {
       setDataSource([]);
     }
   };
   const onChangeDay = (type) => {
-    console.log(type, 'type');
     setTuneType(type);
   };
   const onChangeStartDate = (date) => {
@@ -217,8 +240,6 @@ const Dashboard = () => {
   // };
   const onFinish = async (values) => {
     setGetDataLoading(true);
-    console.log(values);
-    console.log(searchId);
     let url = '';
     if (tuneType !== null && startDate !== null && endDate!==null) {
       setSearchType('full');
@@ -258,20 +279,41 @@ const Dashboard = () => {
       setSearchType('fsearch');
       url=`/search/input/test?keywordId=${searchId}`;
     }
-    console.log(url, 'typeeeeeeeeeeeeeee');
-
     const res = await callGet(`${url}`);
-    console.log(res, 'resssssssssssssssssssssssssssssss');
     if (!res || res === undefined) {
       showMessage(messageType.FAILED.type, defaultMsg.dataError);
     }
-    console.log(res, 'hiiiiiiiiiiiiiiiiiiiiiiiii');
     loadData(res);
-    const searchOfLocation = await callGet(`/search/location/test?latitude=${position.latitude}&longitude=${position.longitude}`);
-    console.log(searchOfLocation, 'searching locationnn');
-    loadDataOfPosition(searchOfLocation);
+    loadDataOfPosition(res);
     setGetDataLoading(false);
   };
+  const onClickMap = async (e) => {
+    setSearchType('fsearch');
+    console.log(e, 'ggggggggggggggggg');
+    setGetDataLoading(true);
+    setSelectLate(e.lat);
+    setSelectLng(e.lng);
+    const searchOfLocation = await callGet(`/search/location/test?latitude=${e.lat}&longitude=${e.lng}`);
+    loadDataOfPosition(searchOfLocation);
+    loadData(searchOfLocation);
+    setGetDataLoading(false);
+  };
+
+  const ClickLocation = () => (
+    <div
+      // style={{
+      //   height: '20px',
+      //   width: '20px',
+      //   backgroundColor: 'blue',
+      //   borderRadius: '10px',
+      //   marginTop: '-10px',
+      //   marginLeft: '-15px',
+      //   alignContent: 'center',
+      //   border: '3px solid deepskyblue',
+      // }}
+    ></div>
+  );
+
   const onFinishFailed = (values) => {
     console.log(values, 'onFinishFailed');
   };
@@ -330,11 +372,11 @@ const Dashboard = () => {
                 <DatePicker
                   placeholder="Сонгох"
                   style={{width: '80%', borderRadius: '30px', marginLeft: '10%'}}
-                  format="YYYY/MM/DD"
+                  format="YYYY-MM-DD"
                   className="selectdates"
                   onChange={onChangeStartDate}
                 />
-              </Form.Item>{' '}
+              </Form.Item>{''}
             </Col>
             <Col span={4} className={'pickType'} style={{border: '1px solid #A2A4AA', borderRadius: '20px'}}>
               <label style={{color: '#A2A4AA', fontSize: '12px', paddingLeft: '20px'}}>Дуусах хугацаа</label>
@@ -359,22 +401,65 @@ const Dashboard = () => {
       </Header>
       <Layout style={{background: '#F8FAFC!important', marginTop: '30px'}}>
         <Content>
-          <div style={{height: '100vh', width: '100%'}}>
+          {/* <div style={{height: '100vh', width: '100%'}}>
             <MapWithAMarkerClusterer
               markers={markers}
               onClick={onClickMap}
               defaultCenter={defaultCenter}
             />
-          </div>
+          </div> */}
+          <Row>
+            <Col span={24} >
+              <GoogleMapReact
+                style={{height: '828px'}}
+                bootstrapURLKeys={{key: GOOGLE_API}}
+                center={{lat: defaultCenter.lat, lng: defaultCenter.lng}}
+                defaultZoom={16}
+                onClick={onClickMap}
+                yesIWantToUseGoogleMapApiInternals
+                // onGoogleApiLoaded={({map, markers}) => renderMarkers(map, markers)}
+              >
+
+                <div
+                  className={'locationBackground'}
+                  style={{color: 'white', paddingTop: '5px'}}
+                >
+                    Энд хайх
+                </div>
+                {selectLat & selectLng ? (
+                  <ClickLocation lat={selectLat} lng={selectLng} />
+                ) : null}
+                {markers && markers.length && markers.map((item)=>(
+                  // <Marker key={item.park.parkingSpaceId}
+                  //   latitude={item.residence.latitude}
+                  //   longitude={item.residence.longitude}
+                  // >aaaaaaaaaaaa</Marker>
+                  <AnyReactComponent
+                    key={item.park.parkingSpaceId}
+                    lat={item.residence.latitude}
+                    lng={item.residence.longitude}
+                    text="1p"
+                    onClick={()=>nClickMarkeditem(item.park)}
+                  />
+                ))}
+              </GoogleMapReact>
+            </Col>
+          </Row>
         </Content>
         <Spin spinning={getdataLoading}>
           <Sider width={550}>
-            <Tabs defaultActiveKey="1" className="searchTab" onChange={callback}>
+            {searchDataOfPosition && searchDataOfPosition.length > 0 ? (
+              <div style={{height: '100vh'}}>
+                {searchType ==='full' && <Search data={searchedData} startDate={startDate} endDate={endDate} tunetype={tuneType}/>}
+                {searchType ==='fsearch' && <ToFit data={searchDataOfPosition} lat={selectLat} lng={selectLng} />}</div>):(
+              <Empty description={<span>Өгөгдөл байхгүй</span>} />
+            )}
+            {/* <Tabs defaultActiveKey="1" className="searchTab" onChange={callback}>
               <TabPane tab="Тохирох" key="1">
-                {searchedData.length > 0 ? (
+                { searchedData && searchedData.length > 0 ? (
                   <div>
                     {searchType ==='full' && <Search data={searchedData} startDate={startDate} endDate={endDate} tunetype={tuneType}/>}
-                    {searchType ==='fsearch' &&<ToFit data={searchedData} lat={defaultCenter.lat} lng={defaultCenter.lng} />}
+                    {searchType ==='fsearch' &&<ToFit data={searchedData}/>}
                   </div>
                 ) : (
                   <Empty description={<span>Өгөгдөл байхгүй</span>} />
@@ -384,10 +469,14 @@ const Dashboard = () => {
               Хамгийн хямд
               </TabPane>
               <TabPane tab="Хамгийн ойр" key="3">
-                {searchType ==='full' && <Search data={searchDataOfPosition} startDate={startDate} endDate={endDate} tunetype={tuneType}/>}
-                {searchType ==='fsearch' &&<ToFit data={searchDataOfPosition} lat={defaultCenter.lat} lng={defaultCenter.lng} />}
+                {searchDataOfPosition && searchDataOfPosition.length > 0 ? (
+                  <div>
+                    {searchType ==='full' && <Search data={searchDataOfPosition} startDate={startDate} endDate={endDate} tunetype={tuneType}/>}
+                    {<ToFit data={searchDataOfPosition} lat={selectLat} lng={selectLng} />}</div>):(
+                  <Empty description={<span>Өгөгдөл байхгүй</span>} />
+                )}
               </TabPane>
-            </Tabs>
+            </Tabs> */}
           </Sider>
         </Spin>
       </Layout>

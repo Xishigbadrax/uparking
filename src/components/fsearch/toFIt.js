@@ -5,7 +5,6 @@ import {useEffect, useState, useContext} from 'react';
 import {messageType} from '@constants/constants';
 import {Radio, Modal, Alert} from 'antd';
 import {showMessage} from '../../utils/message';
-import Image from 'next/image';
 import Context from '@context/Context';
 import {useRouter} from 'next/router';
 
@@ -17,34 +16,33 @@ import {CloseOutlined, ArrowLeftOutlined, CheckCircleOutlined, DownOutlined, UpO
 // import {Pagination} from 'antd';
 import {Tabs} from 'antd';
 import {callGet, callPost} from '@api/api';
-import Calendar from '@components/CustomCalendar/index';
+import CalendarView from '@components/CalendarView';
+import Calendar from '@components/CustomCalendar';
 import moment from 'moment';
 
 const {TabPane} = Tabs;
 
-const review = [
-  {
-    id: 1,
-    proImage: '/ganbat.png',
-    user: 'ganbat.B',
-    date: '2020-10-06',
-    description: 'Энэ үнэхээр гоё зогсоол байна.Орц гарц нь их эвтэйхэн юм аа.Дараа заавал дахин захиалга өгнөө гшшш',
-    rate: 4,
-  },
-  {
-    id: 2,
-    proImage: '/ganbat.png',
-    user: 'Ariuk.D',
-    date: '2021-03-07',
-    description: 'Энэ үнэхээр гоё зогсоол байна.Орц гарц нь их эвтэйхэн юм аа.Дараа заавал дахин захиалга өгнөө гшшш',
-    rate: 3,
-  },
-];
+// const review = [
+//   {
+//     id: 1,
+//     proImage: '/ganbat.png',
+//     user: 'ganbat.B',
+//     date: '2020-10-06',
+//     description: 'Энэ үнэхээр гоё зогсоол байна.Орц гарц нь их эвтэйхэн юм аа.Дараа заавал дахин захиалга өгнөө гшшш',
+//     rate: 4,
+//   },
+//   {
+//     id: 2,
+//     proImage: '/ganbat.png',
+//     user: 'Ariuk.D',
+//     date: '2021-03-07',
+//     description: 'Энэ үнэхээр гоё зогсоол байна.Орц гарц нь их эвтэйхэн юм аа.Дараа заавал дахин захиалга өгнөө гшшш',
+//     rate: 3,
+//   },
+// ];
 const callback = (key) =>{
 };
 const tofit = ({data, lat, lng}) => {
-  console.log({data, lat, lng}, 'ehniii dataagaa haruul');
-
   // const [PickTimevisible, setPickTimeVisible] = useState(false);
   const [detailVisible, setDetailsVisible] = useState(false);
   const router =useRouter();
@@ -63,10 +61,11 @@ const tofit = ({data, lat, lng}) => {
   const [completeNightOfNumber, setCompleteNightOfNumber] =useState(0);
   // eslint-disable-next-line no-unused-vars
   const [spaceStatus, setSpaceStatus]= useState();
-
+  const [conFirmAddBookingVisible, setConfirmAddBookingVisible]= useState(false);
   // const [saleDatas, setSaleData] = useState();
   const [vehicles, setVehiclesData] = useState([]);
   const [chooseTimeVisible, setChooseTimeVisible] = useState(false);
+  const [chooseTimeView, setChooseTimeView] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const [selectedDayTab, setSelectedDayTab] = useState('day');
   const [parkingUpDownArrow, setParkingUpDownArrow] = useState(false);
@@ -76,10 +75,17 @@ const tofit = ({data, lat, lng}) => {
   const [priceForRenter1, setpriceForRenter1] = useState(0);
   const [priceForRenter2, setpriceForRenter2] = useState(0);
   const [priceForRenter3, setpriceForRenter3] = useState(0);
+  const [priceForRenterWinter1, setpriceForRenterWinter1] = useState(0);
+  const [priceForRenterWinter2, setpriceForRenterWinter2] = useState(0);
+  const [priceForRenterWinter3, setpriceForRenterWinter3] = useState(0);
   const [selectVehicle, setSelectedVehicle] =useState();
+  const [dayOfWeek, setDayOfWeek] = useState([]);
   const [dateValues, setDateValues]=useState();
+  // eslint-disable-next-line no-unused-vars
   const [message, setmessage] = useState('');
+  // eslint-disable-next-line no-unused-vars
   const [status, setstatus] = useState('');
+  // eslint-disable-next-line no-unused-vars
   const [title, settitle] = useState('');
   const [messageShow, setmessageShow] = useState(false);
   // eslint-disable-next-line no-unused-vars
@@ -94,25 +100,29 @@ const tofit = ({data, lat, lng}) => {
   const [selectedDate3, setSelectedDate3] = useState([]);
   const {userdata} = useContext(Context);
   const [userRealData, setUserRealData] = useState('');
+  const [userPhoneNumber, setUserPhoneNumber]=useState();
   const [parkingSpaceId, setParkingSpaceID] = useState(0);
   const [bookedDateList, setBookedDateList] = useState([]);
-  const [bookingId, setBookingId] = useState(0);
+  const [bookingId, setBookingId] = useState();
+  const [nightOfWeek, setNightOfWeek]=useState([]);
+  const [fullDayOfWeek, setFullDayOfWeek] = useState([]);
+  const [review, setReview] = useState([]);
   // const [fromSelectedDate3, setFromSelectedDate3] = useState([]);
   useEffect(async () => {
     if (typeof userdata.firstName != 'undefined') {
       setUserRealData(userdata);
+      setUserPhoneNumber(userdata.phoneNumber);
     }
   }, [userdata]);
   const DetailsDrawerOpen = async (id) => {
     setDetailsVisible(true);
     setId(id);
+    // eslint-disable-next-line no-unused-vars
     const review = await callGet(`/parkingspace/review?parkingSpaceId=${id}`);
-    console.log(review, 'unelegeeeeeeeeeeeeeeeeeeeeeee');
+    console.log(review, 'ggg');
+    setReview(review.content);
     const priceData = await callGet(`/parkingspace/price?parkingSpaceId=${id}`);
     // eslint-disable-next-line no-unused-vars
-    const residenceData = await callGet(
-      `/search/input/test?keywordId=${id}&latitude=${lat}&longitude=${lng}`,
-    );
     const a = data.find((item) => item.park.parkingSpaceId === id);
     setResidenceDrawerItem(a.residence);
     setSelected(priceData);
@@ -122,15 +132,37 @@ const tofit = ({data, lat, lng}) => {
           setpriceForRenter1(item.priceForRenter1);
           setpriceForRenter2(item.priceForRenter2);
           setpriceForRenter3(item.priceForRenter3);
+        } else if (item.dateString ==='Өвлийн хуваарь') {
+          setpriceForRenterWinter1(item.priceForRenter1);
+          setpriceForRenterWinter2(item.priceForRenter2);
+          setpriceForRenterWinter3(item.priceForRenter3);
         }
       });
     }
-    const sale = await callGet(`/parkingSpace/sale?parkingSpaceId=${id}`);
-    console.log(sale);
     const space = await callGet(
       `/search/parkingspace/test?parkingSpaceId=${id}`,
     );
+    console.log(space, 'gg');
     setSpaceData(space);
+    if (space ) {
+      const dayArray=[];
+      const nightArray=[];
+      const fullDayArray=[];
+      console.log(space.dayOfWeek);
+      space.dayOfWeek.find((item)=>{
+        if (item.timeSplitDescription =='Өдөр') {
+          dayArray.push(item);
+        } else if (item.timeSplitDescription == 'Шөнө') {
+          nightArray.push(item);
+        } else if (item.timeSplitDescription == 'Бүтэн өдөр') {
+          fullDayArray.push(item);
+        }
+      });
+      setDayOfWeek(dayArray);
+      setNightOfWeek(nightArray);
+      setFullDayOfWeek(fullDayArray);
+    }
+
     space.salePercent.map((item) => {
       if (item.saleSplitCode === 'WEEKLY_SALE') {
         setweekSale(item.salePercent);
@@ -142,17 +174,45 @@ const tofit = ({data, lat, lng}) => {
   const onChangeChooseVehicle = (e) => {
     setSelectedVehicle(e.target.value);
   };
-  const onClickPayment = (id, bookingId)=>{
-    id &&
-      router.push({
-        pathname: `park/fpayment/${id}`,
-        query: {
-          id: id,
-          bookingId: bookingId,
-        },
-      });
+  const onClickPushOrder = ()=>{
+    router.push({pathname: '/park/profile/order'});
+  };
+  const onClickPayment = async () =>{
+    if (totalValue > 0 ) {
+      if (selectVehicle) {
+        if (userRealData) {
+          // setisLoading(true);
+          const formData = {
+            bookingList: dateValues,
+            isGift: false,
+            parkingSpaceId: parkingSpaceId,
+            totalAllDay: fullDayNumber,
+            totalAtDay: dayOfNumber,
+            totalAtNight: nightOfNumber,
+            totalPrice: totalValue,
+            userPhoneNumber: String(userPhoneNumber),
+            vehicleId: selectVehicle,
+          };
+          console.log(formData, 'ysssssssssss');
+          const res = await callPost('/booking', formData);
+          setBookingId(res.bookingId);
+          if (res.bookingId !== undefined) {
+            console.log(bookingId, 'haana bna');
+            router.push({pathname: `/park/profile/order/${res.bookingId}`, query: {page: '1', asWho: 1, history: false}});
+          }
+        } else {
+          showMessage(messageType.FAILED.type, 'Хэрэглэгчийн мэдээлэл олдсонгүй');
+        }
+      } else {
+        showMessage(
+          messageType.FAILED.type,
+          'Машинаа сонгоно уу ?',
+        );
+      }
+    }
   };
   const timeSubmit = async () => {
+    console.log(userPhoneNumber);
     if (totalValue > 0 ) {
       if (selectVehicle) {
       // setisLoading(true);
@@ -164,23 +224,27 @@ const tofit = ({data, lat, lng}) => {
           totalAtDay: dayOfNumber,
           totalAtNight: nightOfNumber,
           totalPrice: totalValue,
-          userPhoneNumber: userRealData.phoneNumber,
+          userPhoneNumber: String(userPhoneNumber),
           vehicleId: selectVehicle,
         };
-        console.log(formData);
+        console.log(formData, 'awdawd');
         const res = await callPost('/booking', formData);
-        console.log(res, 'awdadawd');
         setBookingId(res.bookingId);
-        showMessage(
-          messageType.SUCCESS.type,
-          'Амжлттай. Таны захиалгын хүсэлт амжилттай илгээгдлээ. Хүсэлт баталгаажсаны дараа төлбөрөө төлнө',
-        );
+        if (res.status === 'success') {
+          setConfirmAddBookingVisible(true);
+          showMessage(
+            messageType.SUCCESS.type,
+            'Амжилттай. Таны захиалгын хүсэлт амжилттай илгээгдлээ. Хүсэлт баталгаажсаны дараа төлбөрөө төлнө',
+          );
+        }
       } else {
         showMessage(
           messageType.FAILED.type,
-          'Аchoose car',
+          'Машинаа сонгоно уу ?',
         );
       }
+    } else {
+      showMessage(messageType.FAILED.type, 'Сул цагаа сонгоно уу?');
     }
   };
   const handleOk = () => {
@@ -190,11 +254,7 @@ const tofit = ({data, lat, lng}) => {
   const handleCancel = () => {
     setmessageShow(false);
   };
-
-
   const onClickSubmit = () => {
-    console.log();
-    console.log(dayValues, nightValues, fullDayValues, 'utdguuud');
     const arr=[];
     dayValues.map((item)=>{
       arr.push(item);
@@ -222,69 +282,65 @@ const tofit = ({data, lat, lng}) => {
     const calValidateDate = await callGet(
       `/schedule/custom?parkingSpaceId=${id}`,
     );
-    console.log('Batalgaajsan udruud--еееее--->', calValidateDate);
-    setBookedDateList(calValidateDate.bookedDateList);
+    setBookedDateList(spaceData.bookedDate);
     setParkingSpaceID(calValidateDate.parkingSpaceId);
   };
   const getSelectedDate1 = (data) => {
     setDayofNumber(data.length);
     if (data.length === 7 || nightOfNumber === 7 ) {
       setTotalValue(data.length * priceForRenter1 +
-        nightOfNumber * priceForRenter2 +
-        fullDayNumber * priceForRenter3 -
-        (data.length * priceForRenter1 +
+          nightOfNumber * priceForRenter2 +
+          fullDayNumber * priceForRenter3 -
+          (data.length * priceForRenter1 +
           nightOfNumber * priceForRenter2 +
           fullDayNumber * priceForRenter3) *
           0.05);
     } else if (data.length === 30 || nightOfNumber === 30 ) {
       setTotalValue(data.length * priceForRenter1 +
-        nightOfNumber * priceForRenter2 +
-        fullDayNumber * priceForRenter3 -
-        (data.length * priceForRenter1 +
+          nightOfNumber * priceForRenter2 +
+          fullDayNumber * priceForRenter3 -
+          (data.length * priceForRenter1 +
           nightOfNumber * priceForRenter2 +
           fullDayNumber * priceForRenter3) *
           0.1 );
     } else {
       setTotalValue( data.length * priceForRenter1 +
-            nightOfNumber * priceForRenter2 +
-            fullDayNumber * priceForRenter3);
+          nightOfNumber * priceForRenter2 +
+          fullDayNumber * priceForRenter3);
     }
     const array=[];
     data.map((item) => {
       array.push({startDate: moment(item).format('YYYY-MM-DD'), timeSplitDescription: 'DAY'});
     });
-    console.log(array, 'awdawdawdawdawd');
     setDayValues(array);
   };
   const getSelectedDate2 = (data) => {
     setNightOfNumber(data.length);
-
     if (dayOfNumber === 7 || data.length === 7 ) {
       setTotalValue(dayOfNumber * priceForRenter1 +
-        data.length * priceForRenter2 +
-        fullDayNumber * priceForRenter3 -
-        (dayOfNumber * priceForRenter1 +
+          data.length * priceForRenter2 +
+          fullDayNumber * priceForRenter3 -
+          (dayOfNumber * priceForRenter1 +
           data.length * priceForRenter2 +
           fullDayNumber * priceForRenter3) *
           0.05);
     } else if (dayOfNumber === 30 || data.length === 30 ) {
       setTotalValue(dayOfNumber * priceForRenter1 +
-        data.length * priceForRenter2 +
-        fullDayNumber * priceForRenter3 -
-        (dayOfNumber * priceForRenter1 +
+          data.length * priceForRenter2 +
+          fullDayNumber * priceForRenter3 -
+          (dayOfNumber * priceForRenter1 +
           data.length * priceForRenter2 +
           fullDayNumber * priceForRenter3) *
           0.1 );
     } else {
       setTotalValue( dayOfNumber * priceForRenter1 +
-        data.length * priceForRenter2 +
-            fullDayNumber * priceForRenter3);
+          data.length * priceForRenter2 +
+          fullDayNumber * priceForRenter3);
     }
     const array=[];
     data.map((item) => {
       array.push({startDate: moment(item).format('YYYY-MM-DD'), timeSplitDescription: 'NIGHT'});
     });
-    console.log(array, 'ШӨнүүд');
     setNightValues(array);
   };
   const getSelectedDate3 = (data) => {
@@ -292,40 +348,38 @@ const tofit = ({data, lat, lng}) => {
     if (data.length!==0 ) {
       if (dayOfNumber === 7 || nightOfNumber === 7 ) {
         setTotalValue(dayOfNumber * priceForRenter1 +
-        nightOfNumber * priceForRenter2 +
-        data.length * priceForRenter3 -
-        (dayOfNumber* priceForRenter1 +
+          nightOfNumber * priceForRenter2 +
+          data.length * priceForRenter3 -
+          (dayOfNumber* priceForRenter1 +
           nightOfNumber * priceForRenter2 +
           data.length * priceForRenter3) *
           0.05);
       } if (dayOfNumber === 30 || nightOfNumber === 30 ) {
         setTotalValue(dayOfNumber * priceForRenter1 +
-        nightOfNumber * priceForRenter2 +
-        data.length * priceForRenter3 -
-        (dayOfNumber * priceForRenter1 +
+          nightOfNumber * priceForRenter2 +
+          data.length * priceForRenter3 -
+          (dayOfNumber * priceForRenter1 +
           nightOfNumber * priceForRenter2 +
           data.length * priceForRenter3) *
           0.1 );
       } else {
         setTotalValue(dayOfNumber * priceForRenter1 +
-            nightOfNumber * priceForRenter2 +
-            fullDayNumber * priceForRenter3);
+          nightOfNumber * priceForRenter2 +
+          fullDayNumber * priceForRenter3);
       }
     }
     const array=[];
     data.map((item) => {
       array.push({startDate: moment(item).format('YYYY-MM-DD'), timeSplitDescription: 'FULL_DAY'});
     });
-    console.log(array, 'ШӨнүүд');
     setFullDayValues(array);
   };
   const handleClickDayTab = (key) => {
     setSelectedDayTab(key);
   };
   return (
-    <div style={{height: '828px', width: '100%', overflow: true}}>
+    <div style={{height: '100vh', width: '100%', overflow: 'scroll', scrollBar: 'none'}}>
       {data.map((it) => (
-
         <Card
           key={it.park.parkingSpaceId}
           className={'ResidenceCardList'}
@@ -379,12 +433,11 @@ const tofit = ({data, lat, lng}) => {
               </p>
             </div>
           )}
-          <div style={{marginLeft: '10px', marginTop: '19px'}}>
+          <div style={{marginTop: '19px'}}>
             <Row>
               <Col>
                 <Row>
-                  <Image
-                    preview={false}
+                  <img
                     src="/pexels-photo-3349460 1.png"
                     height="140px"
                     width="209.58px"
@@ -401,12 +454,10 @@ const tofit = ({data, lat, lng}) => {
                         marginLeft: '30px',
                       }}
                     >
-                      {console.log(it.park.floorNumber, 'flooooooooooooooooooooooooooooooooooooooooooor')}
                       {it.park && it.park.floorNumber ? (
 
                         <div style={{marginRight: '5px'}}>
                           <img
-                            preview={false}
                             width={18}
                             height={18}
                             src={IMG_URL + it.park.floorNumber}
@@ -416,7 +467,6 @@ const tofit = ({data, lat, lng}) => {
                       {it.park && it.park.entranceLock ? (
                         <div style={{marginRight: '5px'}}>
                           <img
-                            preview={false}
                             width={18}
                             height={18}
                             src={IMG_URL + it.park.entranceLock}
@@ -426,7 +476,6 @@ const tofit = ({data, lat, lng}) => {
                       {it.park && it.park.isNumbering ? (
                         <div style={{marginRight: '5px'}}>
                           <img
-                            preview={false}
                             width={18}
                             height={18}
                             src={`${IMG_URL + it.park.isNumbering}`}
@@ -436,7 +485,6 @@ const tofit = ({data, lat, lng}) => {
                       {it.park && it.park.capacity ? (
                         <div style={{marginRight: '5px'}}>
                           <img
-                            preview={false}
                             width={18}
                             height={18}
                             src={IMG_URL + it.park.capacity}
@@ -446,7 +494,6 @@ const tofit = ({data, lat, lng}) => {
                       {it.park && it.park.type ? (
                         <div style={{marginRight: '5px'}}>
                           <img
-                            preview={false}
                             width={18}
                             height={18}
                             src={IMG_URL + it.park.type}
@@ -456,7 +503,6 @@ const tofit = ({data, lat, lng}) => {
                       {it.park && it.park.returnRoutes ? (
                         <div style={{marginRight: '5px'}}>
                           <img
-                            preview={false}
                             width={18}
                             height={18}
                             src={IMG_URL + it.park.returnRoutes}
@@ -553,8 +599,7 @@ const tofit = ({data, lat, lng}) => {
                         marginTop: '10px',
                       }}
                     >
-                      <Image
-                        preview={false}
+                      <img
                         src="/icons/location_on_24px.png"
                         height="16px"
                         width="16px"
@@ -585,7 +630,7 @@ const tofit = ({data, lat, lng}) => {
                         marginTop: '10px',
                         borderRadius: '10px',
                       }}
-                      onClick={() => setChooseTimeVisible(true)}
+                      onClick={() => setChooseTimeView(true)}
                     >
                       Сул цаг харах
                     </Button>
@@ -682,7 +727,7 @@ const tofit = ({data, lat, lng}) => {
                       width="10.67px"
                     />
                   </div>
-                  <p
+                  <div
                     style={{
                       width: '40px',
                       height: '16px',
@@ -692,8 +737,8 @@ const tofit = ({data, lat, lng}) => {
                     }}
                   >
                     ● 110m
-                  </p>
-                  <p
+                  </div>
+                  <div
                     style={{
                       width: '75px',
                       fontSize: '12px',
@@ -703,8 +748,8 @@ const tofit = ({data, lat, lng}) => {
                     }}
                   >
                     Байршил ID
-                  </p>
-                  <p
+                  </div>
+                  <div
                     style={{
                       width: '43px',
                       fontSize: '12px',
@@ -712,7 +757,7 @@ const tofit = ({data, lat, lng}) => {
                     }}
                   >
                     {/* {drawerItem.locationId} */}
-                  </p>
+                  </div>
                 </div>
               </Col>
             </Row>
@@ -732,7 +777,7 @@ const tofit = ({data, lat, lng}) => {
                       width="9.33px"
                     />
                   </div>
-                  <p
+                  <div
                     style={{
                       color: '#35446D',
                       fontSize: '12px',
@@ -743,7 +788,7 @@ const tofit = ({data, lat, lng}) => {
                     }}
                   >
                     {ResidenceItem.address}
-                  </p>
+                  </div>
                 </div>
               </Col>
             </Row>
@@ -813,7 +858,6 @@ const tofit = ({data, lat, lng}) => {
                               {spaceData && spaceData.floorNumber ? (
                                 <div style={{marginRight: '13px'}}>
                                   <img
-                                    preview={false}
                                     width={24}
                                     height={24}
                                     src={IMG_URL + spaceData.floorNumber}
@@ -823,7 +867,6 @@ const tofit = ({data, lat, lng}) => {
                               {spaceData && spaceData.entranceLock ? (
                                 <div style={{marginRight: '13px'}}>
                                   <img
-                                    preview={false}
                                     width={24}
                                     height={24}
                                     src={IMG_URL + spaceData.entranceLock}
@@ -833,7 +876,6 @@ const tofit = ({data, lat, lng}) => {
                               {spaceData && spaceData.isNumbering ? (
                                 <div style={{marginRight: '13px'}}>
                                   <img
-                                    preview={false}
                                     width={24}
                                     height={24}
                                     src={IMG_URL + spaceData.isNumbering}
@@ -843,7 +885,6 @@ const tofit = ({data, lat, lng}) => {
                               {spaceData && spaceData.capacity ? (
                                 <div style={{marginRight: '13px'}}>
                                   <img
-                                    preview={false}
                                     width={24}
                                     height={24}
                                     src={IMG_URL + spaceData.capacity}
@@ -853,7 +894,6 @@ const tofit = ({data, lat, lng}) => {
                               {spaceData && spaceData.type ? (
                                 <div style={{marginRight: '13px'}}>
                                   <img
-                                    preview={false}
                                     width={24}
                                     height={24}
                                     src={IMG_URL + spaceData.type}
@@ -863,7 +903,6 @@ const tofit = ({data, lat, lng}) => {
                               {spaceData && spaceData.returnRoutes ? (
                                 <div style={{marginRight: '13px'}}>
                                   <img
-                                    preview={false}
                                     width={24}
                                     height={24}
                                     src={IMG_URL + spaceData.returnRoutes}
@@ -893,7 +932,6 @@ const tofit = ({data, lat, lng}) => {
                                   >
                                     <div>
                                       <img
-                                        preview={false}
                                         width={24}
                                         height={24}
                                         src={IMG_URL + spaceData.floorNumber}
@@ -913,7 +951,6 @@ const tofit = ({data, lat, lng}) => {
                                   >
                                     <div>
                                       <img
-                                        preview={false}
                                         width={24}
                                         height={24}
                                         src={IMG_URL + spaceData.entranceLock}
@@ -933,7 +970,6 @@ const tofit = ({data, lat, lng}) => {
                                   >
                                     <div>
                                       <img
-                                        preview={false}
                                         width={24}
                                         height={24}
                                         src={IMG_URL + spaceData.isNumbering}
@@ -953,7 +989,6 @@ const tofit = ({data, lat, lng}) => {
                                   >
                                     <div>
                                       <img
-                                        preview={false}
                                         width={24}
                                         height={24}
                                         src={IMG_URL + spaceData.capacity}
@@ -973,7 +1008,6 @@ const tofit = ({data, lat, lng}) => {
                                   >
                                     <div>
                                       <img
-                                        preview={false}
                                         width={24}
                                         height={24}
                                         src={IMG_URL + spaceData.type}
@@ -993,7 +1027,6 @@ const tofit = ({data, lat, lng}) => {
                                   >
                                     <div>
                                       <img
-                                        preview={false}
                                         width={24}
                                         height={24}
                                         src={IMG_URL + spaceData.returnRoutes}
@@ -1009,173 +1042,343 @@ const tofit = ({data, lat, lng}) => {
                           </Col>
                         </div>
                       </Row>
-                      <Row
-                        height=" 24px"
-                        style={{
-                          width: '3100',
-                          marginTop: '10px',
+                      {/* Зуны болон өвлийн цагийн хуваарь харуулах */}
+                      {moment().format('MM-DD') >='10-01' || moment().format('MM-DD') <='03-31' ?
+                        <div>
+                          <Row style={{
+                            height: ' 24px',
+                            width: '3100',
+                            marginTop: '10px',
 
-                          justifyItems: 'center',
-                        }}
-                      >
-                        <div
-                          style={{
-                            color: '#35446D',
-                            fontSize: '14px',
-                            fontStyle: 'normal',
-                            fontFamily: 'Roboto',
-                            fontWeight: '700',
+                            justifyItems: 'center',
                           }}
-                        >
-                          Зун цагийн хуваарь /04.01-09.31
-                        </div>
-                      </Row>
-                      <Row
-                        className={'SpaceIcons'}
-                        style={{
-                          height: '50px',
-                          display: 'flex',
-                          marginLeft: '8%',
-                          marginTop: '20px',
-                          width: '84%',
-                          height: '50px',
-                          justifyItems: 'center',
-                        }}
-                      >
-                        <Col
-                          span={7}
-                          style={{
-                            height: '50px',
-                            alignItems: 'center',
-                          }}
-                        >
-                          <div className={'priceInfoOfOneDay'}>
+                          >
                             <div
                               style={{
-                                color: '#141A29',
+                                color: '#35446D',
+                                fontSize: '14px',
+                                fontStyle: 'normal',
+                                fontFamily: 'Roboto',
+                                fontWeight: '700',
                               }}
                             >
-                              <p
-                                style={{
-                                  fontFamily: 'Roboto',
-                                  fontSize: '14px',
-                                  textAlign: 'center',
-                                  fontStyle: 'normal',
-                                  fontWeight: '700',
-                                }}
-                              >
-                                <p
+                          Өвлийн цагийн хуваарь /10.01-03.31
+                            </div>
+                          </Row>
+                          <Row
+                            className={'SpaceIcons'}
+                            style={{
+                              height: '50px',
+                              display: 'flex',
+                              marginLeft: '8%',
+                              marginTop: '20px',
+                              width: '84%',
+                              height: '50px',
+                              justifyItems: 'center',
+                            }}
+                          >
+                            <Col
+                              span={7}
+                              style={{
+                                height: '50px',
+                                alignItems: 'center',
+                              }}
+                            >
+                              <div className={'priceInfoOfOneDay'}>
+                                <div
                                   style={{
-                                    fontFamily: 'Roboto',
-                                    fontSize: '14px',
-                                    textAlign: 'center',
-                                    fontStyle: 'normal',
-                                    fontWeight: '700',
+                                    color: '#141A29',
                                   }}
                                 >
-                                  {priceForRenter1}
-                                </p>
-                              </p>
-                            </div>
-                            <div>
-                              <p
-                                style={{
-                                  fontStyle: 'normal',
-                                  fontSize: '12px',
-                                  textAlign: 'center',
-                                  color: '#35446D',
-                                }}
-                              >
+                                  <p
+                                    style={{
+                                      fontFamily: 'Roboto',
+                                      fontSize: '14px',
+                                      textAlign: 'center',
+                                      fontStyle: 'normal',
+                                      fontWeight: '700',
+                                    }}
+                                  >
+                                    <p
+                                      style={{
+                                        fontFamily: 'Roboto',
+                                        fontSize: '14px',
+                                        textAlign: 'center',
+                                        fontStyle: 'normal',
+                                        fontWeight: '700',
+                                      }}
+                                    >
+                                      {priceForRenterWinter1}
+                                    </p>
+                                  </p>
+                                </div>
+                                <div>
+                                  <p
+                                    style={{
+                                      fontStyle: 'normal',
+                                      fontSize: '12px',
+                                      textAlign: 'center',
+                                      color: '#35446D',
+                                    }}
+                                  >
                                 1 Өдөр
-                              </p>
-                            </div>
-                          </div>
-                        </Col>
-                        <Divider
-                          style={{
-                            background: '#0013D4',
-                            width: '2px',
-                            height: '8.33px',
-                            marginTop: '21px',
-                          }}
-                          type="vertical"
-                        />
-                        <Col
-                          span={7}
-                          style={{
-                            height: '50px',
-                            alignItems: 'center',
-                          }}
-                        >
-                          <div style={{width: '100%'}}>
-                            <div style={{color: '#141A29'}}>
-                              <p
-                                style={{
-                                  marginLeft: '10%',
-                                  width: '80%',
-                                  fontFamily: 'Roboto',
-                                  fontSize: '14px',
-                                  textAlign: 'center',
-                                  fontStyle: 'normal',
-                                  fontWeight: '700',
-                                }}
-                              >
-                                {priceForRenter2}
-                              </p>
-                            </div>
-                            <p
+                                  </p>
+                                </div>
+                              </div>
+                            </Col>
+                            <Divider
                               style={{
-                                fontStyle: 'normal',
-                                fontSize: '12px',
-                                textAlign: 'center',
-                                height: '16px',
-                                color: '#35446D',
+                                background: '#0013D4',
+                                width: '2px',
+                                height: '8.33px',
+                                marginTop: '21px',
+                              }}
+                              type="vertical"
+                            />
+                            <Col
+                              span={7}
+                              style={{
+                                height: '50px',
+                                alignItems: 'center',
                               }}
                             >
+                              <div style={{width: '100%'}}>
+                                <div style={{color: '#141A29'}}>
+                                  <p
+                                    style={{
+                                      marginLeft: '10%',
+                                      width: '80%',
+                                      fontFamily: 'Roboto',
+                                      fontSize: '14px',
+                                      textAlign: 'center',
+                                      fontStyle: 'normal',
+                                      fontWeight: '700',
+                                    }}
+                                  >
+                                    {priceForRenterWinter2}
+                                  </p>
+                                </div>
+                                <p
+                                  style={{
+                                    fontStyle: 'normal',
+                                    fontSize: '12px',
+                                    textAlign: 'center',
+                                    height: '16px',
+                                    color: '#35446D',
+                                  }}
+                                >
                               1 Шөнө
-                            </p>
-                          </div>
-                        </Col>
-                        <Divider
-                          style={{
-                            background: '#0013D4',
-                            width: '2px',
-                            height: '8.33px',
-                            marginTop: '21px',
-                          }}
-                          type="vertical"
-                        />
-                        <Col span={7}>
-                          <div style={{width: '100%'}}>
-                            <div style={{color: '#141A29'}}>
-                              <p
-                                style={{
-                                  marginLeft: '10%',
-                                  width: '80%',
-                                  fontFamily: 'Roboto',
-                                  fontSize: '14px',
-                                  textAlign: 'center',
-                                  fontStyle: 'normal',
-                                  fontWeight: '700',
-                                }}
-                              >
-                                {priceForRenter3}
-                              </p>
-                            </div>
-                            <p
+                                </p>
+                              </div>
+                            </Col>
+                            <Divider
                               style={{
-                                fontStyle: 'normal',
-                                fontSize: '12px',
-                                textAlign: 'center',
-                                height: '16px',
+                                background: '#0013D4',
+                                width: '2px',
+                                height: '8.33px',
+                                marginTop: '21px',
+                              }}
+                              type="vertical"
+                            />
+                            <Col span={7}>
+                              <div style={{width: '100%'}}>
+                                <div style={{color: '#141A29'}}>
+                                  <p
+                                    style={{
+                                      marginLeft: '10%',
+                                      width: '80%',
+                                      fontFamily: 'Roboto',
+                                      fontSize: '14px',
+                                      textAlign: 'center',
+                                      fontStyle: 'normal',
+                                      fontWeight: '700',
+                                    }}
+                                  >
+                                    {priceForRenterWinter3}
+                                  </p>
+                                </div>
+                                <p
+                                  style={{
+                                    fontStyle: 'normal',
+                                    fontSize: '12px',
+                                    textAlign: 'center',
+                                    height: '16px',
+                                    color: '#35446D',
+                                  }}
+                                >
+                              Бүтэн өдөр
+                                </p>
+                              </div>
+                            </Col>
+                          </Row>
+                        </div>:<div>
+                          <Row style={{
+                            height: ' 24px',
+                            width: '3100',
+                            marginTop: '10px',
+
+                            justifyItems: 'center',
+                          }}
+                          >
+                            <div
+                              style={{
                                 color: '#35446D',
+                                fontSize: '14px',
+                                fontStyle: 'normal',
+                                fontFamily: 'Roboto',
+                                fontWeight: '700',
                               }}
                             >
+                          Зун цагийн хуваарь /04.01-09.31
+                            </div>
+                          </Row>
+                          <Row
+                            className={'SpaceIcons'}
+                            style={{
+                              height: '50px',
+                              display: 'flex',
+                              marginLeft: '8%',
+                              marginTop: '20px',
+                              width: '84%',
+                              height: '50px',
+                              justifyItems: 'center',
+                            }}
+                          >
+                            <Col
+                              span={7}
+                              style={{
+                                height: '50px',
+                                alignItems: 'center',
+                              }}
+                            >
+                              <div className={'priceInfoOfOneDay'}>
+                                <div
+                                  style={{
+                                    color: '#141A29',
+                                  }}
+                                >
+                                  <p
+                                    style={{
+                                      fontFamily: 'Roboto',
+                                      fontSize: '14px',
+                                      textAlign: 'center',
+                                      fontStyle: 'normal',
+                                      fontWeight: '700',
+                                    }}
+                                  >
+                                    <p
+                                      style={{
+                                        fontFamily: 'Roboto',
+                                        fontSize: '14px',
+                                        textAlign: 'center',
+                                        fontStyle: 'normal',
+                                        fontWeight: '700',
+                                      }}
+                                    >
+                                      {priceForRenter1}
+                                    </p>
+                                  </p>
+                                </div>
+                                <div>
+                                  <p
+                                    style={{
+                                      fontStyle: 'normal',
+                                      fontSize: '12px',
+                                      textAlign: 'center',
+                                      color: '#35446D',
+                                    }}
+                                  >
+                                1 Өдөр
+                                  </p>
+                                </div>
+                              </div>
+                            </Col>
+                            <Divider
+                              style={{
+                                background: '#0013D4',
+                                width: '2px',
+                                height: '8.33px',
+                                marginTop: '21px',
+                              }}
+                              type="vertical"
+                            />
+                            <Col
+                              span={7}
+                              style={{
+                                height: '50px',
+                                alignItems: 'center',
+                              }}
+                            >
+                              <div style={{width: '100%'}}>
+                                <div style={{color: '#141A29'}}>
+                                  <p
+                                    style={{
+                                      marginLeft: '10%',
+                                      width: '80%',
+                                      fontFamily: 'Roboto',
+                                      fontSize: '14px',
+                                      textAlign: 'center',
+                                      fontStyle: 'normal',
+                                      fontWeight: '700',
+                                    }}
+                                  >
+                                    {priceForRenter2}
+                                  </p>
+                                </div>
+                                <p
+                                  style={{
+                                    fontStyle: 'normal',
+                                    fontSize: '12px',
+                                    textAlign: 'center',
+                                    height: '16px',
+                                    color: '#35446D',
+                                  }}
+                                >
+                              1 Шөнө
+                                </p>
+                              </div>
+                            </Col>
+                            <Divider
+                              style={{
+                                background: '#0013D4',
+                                width: '2px',
+                                height: '8.33px',
+                                marginTop: '21px',
+                              }}
+                              type="vertical"
+                            />
+                            <Col span={7}>
+                              <div style={{width: '100%'}}>
+                                <div style={{color: '#141A29'}}>
+                                  <p
+                                    style={{
+                                      marginLeft: '10%',
+                                      width: '80%',
+                                      fontFamily: 'Roboto',
+                                      fontSize: '14px',
+                                      textAlign: 'center',
+                                      fontStyle: 'normal',
+                                      fontWeight: '700',
+                                    }}
+                                  >
+                                    {priceForRenter3}
+                                  </p>
+                                </div>
+                                <p
+                                  style={{
+                                    fontStyle: 'normal',
+                                    fontSize: '12px',
+                                    textAlign: 'center',
+                                    height: '16px',
+                                    color: '#35446D',
+                                  }}
+                                >
                               Бүтэн өдөр
-                            </p>
-                          </div>
-                        </Col>
-                      </Row>
+                                </p>
+                              </div>
+                            </Col>
+                          </Row>
+                        </div>}
                       {/* Хөнгөлөлтийн хэсэг*/}
                       <Row>
                         <div
@@ -1252,16 +1455,17 @@ const tofit = ({data, lat, lng}) => {
                       >
                         <b>Тээврийн хэрэгсэл сонгох</b>
                       </Row>
-                      <Row>
+                      <Row >
                         <Radio.Group
+                          style={{height: '80px', overflowY: 'scroll '}}
                           buttonStyle="solid"
                           onChange={onChangeChooseVehicle}
                         >
-
                           {vehicles.map((item) => (
                             <Radio.Button
                               key={item.value}
                               value={item.value}
+                              // style={{margin: '5px'}}
                               className={'pickVehicle'}
                             >
                               <div style={{display: 'flex'}}>
@@ -1337,11 +1541,11 @@ const tofit = ({data, lat, lng}) => {
                         </Row>
                       </div>
                       <Divider />
-                      <Row>
+                      <Row >
                         <Col span={21}>
-                          <p>
-                            <b>Нийт захиалгын төлбөр</b>
-                          </p>
+
+                          <b>Нийт захиалгын төлбөр</b>
+
                         </Col>
                         <Col span={3}>
                           {totalValue}
@@ -1388,24 +1592,24 @@ const tofit = ({data, lat, lng}) => {
                       Хэрэглэгчдийн үнэлгээ
                       {
                         review.map((item)=>(
-                          <Card key={item.id} style={{background: 'rgba(222, 226, 233, 0.2)', marginTop: '20px', borderRadius: '16px', padding: '0'}}>
+                          <Card key={item.name} style={{background: 'rgba(222, 226, 233, 0.2)', marginTop: '20px', borderRadius: '16px', padding: '0'}}>
                             <Row style={{padding: '0'}}>
                               <Col span={2} >
                                 <div style={{borderRadius: '12px', height: '24px', width: '24px'}}>
-                                  <img src={item.proImage} height={24} width={24} style={{borderRadius: '12px'}} />
+                                  <img src={item.profileImage} height={24} width={24} style={{borderRadius: '12px'}} />
                                 </div>
                               </Col>
                               <Col span={10}>
-                                <div style={{fontSize: '14px', lineHeight: '24px'}}><b>{item.user}</b></div>
+                                <div style={{fontSize: '14px', lineHeight: '24px'}}><b>{item.name}</b></div>
                                 <div style={{color: '#35446D', fontSize: '12px'}}>{item.date}</div>
                               </Col>
                               <Col offset={6} className='reviewRate' style={{marginTop: '-10px'}}>
-                                <Rate value={item.rate}/>
+                                <Rate value={item.rating}/>
                               </Col>
                             </Row>
                             <Row>
                               <Col offset={2}>
-                                <p style={{color: '#35446D', fontSize: '14px', textAlign: 'justify', marginBottom: '10px'}}>{item.description}</p>
+                                <p style={{color: '#35446D', fontSize: '14px', textAlign: 'justify', marginBottom: '10px'}}>{item.text}</p>
                               </Col>
                             </Row>
                           </Card>
@@ -1485,10 +1689,11 @@ const tofit = ({data, lat, lng}) => {
                       <p
                         style={{
                           height: '24px',
+                          width: '100px',
                           textAlign: 'center',
                           fontSize: '14px',
                           fontWeight: '700',
-                          marginLeft: '20px',
+                          marginLeft: '10px',
                         }}
                       >
                         Өдөр
@@ -1501,7 +1706,9 @@ const tofit = ({data, lat, lng}) => {
                     selectedDate={selectedDate1}
                     getSelectedDate={getSelectedDate1}
                     bookedDate={bookedDateList}
-                    className={'timePickCalendar'}
+                    dayOfWeek={dayOfWeek}
+                    dayType='Өдөр'
+                    // className={'timePickCalendar'}
                   />
                 </TabPane>
                 <TabPane
@@ -1511,10 +1718,11 @@ const tofit = ({data, lat, lng}) => {
                       <p
                         style={{
                           height: '24px',
+                          width: '100px',
                           textAlign: 'center',
                           fontSize: '14px',
                           fontWeight: '700',
-                          marginLeft: '20px',
+                          marginLeft: '10px',
                         }}
                       >
                         Шөнө
@@ -1523,10 +1731,12 @@ const tofit = ({data, lat, lng}) => {
                   }
                 >
                   <Calendar
-                    selectType="multi"
                     selectedDate={selectedDate2}
                     getSelectedDate={getSelectedDate2}
                     className={'timePickCalendar'}
+                    dayOfWeek={nightOfWeek}
+                    dayType='Шөнө'
+                    bookedDate={bookedDateList}
                   />
                 </TabPane>
                 <TabPane
@@ -1536,10 +1746,11 @@ const tofit = ({data, lat, lng}) => {
                         style={{
 
                           height: '24px',
+                          width: '100px',
                           textAlign: 'center',
                           fontSize: '14px',
                           fontWeight: '700',
-                          marginLeft: '20px',
+                          marginLeft: '10px',
                         }}
                       >
                         Бүтэн өдөр
@@ -1549,18 +1760,20 @@ const tofit = ({data, lat, lng}) => {
                   key="fullday"
                 >
                   <Calendar
-                    selectType="multi"
+                    bookedDate={bookedDateList}
+                    dayType='Бүтэн Өдөр'
                     selectedDate={selectedDate3}
                     getSelectedDate={getSelectedDate3}
                     className={'timePickCalendar'}
+                    dayOfWeek={fullDayOfWeek}
                   />
                 </TabPane>
               </Tabs>
             </div>
             <Row>
-              <p>
+              <div>
                 <b>Таны сонгосон захиалга </b>
-              </p>
+              </div>
             </Row>
             <Row>
               <Col span={3}>Өдөр</Col>
@@ -1577,19 +1790,20 @@ const tofit = ({data, lat, lng}) => {
             <Divider />
             <Row>
               <Col span={19}>
-                <p>
+                <div>
                   <b>Нийт захиалгын төлбөр</b>
-                </p>
+                </div>
               </Col>
               <Col span={3}>
                 {totalValue}
                 ₮
               </Col>
             </Row>
-            <Row>
+            <Row style={{marginTop: '10px'}}>
               <Button
                 style={{
-                  width: '1000%',
+                  width: '1000%', height: '50px',
+                  borderRadius: '20px',
                 }}
                 type='primary'
                 className={'buttonGo'}
@@ -1610,7 +1824,124 @@ const tofit = ({data, lat, lng}) => {
       >
         <Alert message={title} description={message} type={status} showIcon />
       </Modal>
+      <Modal visible={conFirmAddBookingVisible} footer={null} onCancel={()=>setConfirmAddBookingVisible(false)}>
+        <div>
+          <Row>
+            <Col span={10} offset={10}>
+              <CheckCircleOutlined style={{height: '30px'}} className="confirmIcon"/>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={6} offset={8}><div style={{color: 'green', fontSize: '20px'}}>Амжилттай</div></Col>
+          </Row>
+          <Row style={{marginTop: '20px'}}>
+            <Col offset={5}>
+              <Button type='primary' onClick={onClickPushOrder}>Төлбөр төлөх хэсэг рүү шилжих</Button>
+            </Col>
+          </Row>
+          <Row style={{marginTop: '10px'}}>
+            <Col offset={9}>
+              <Button type='primary' onClick={()=>setConfirmAddBookingVisible(false)}>Буцах</Button>
+            </Col>
+          </Row>
+        </div>
+      </Modal>
+      <Modal visible={chooseTimeView} onCancel={()=>setChooseTimeView(false)} footer={null}>
+        <Row>
+          <Col offset={1} span={8}>
+            <p style={{color: 'blue', fontSize: '20px'}}>
+              <b>Сул цаг харах</b>
+            </p>
+          </Col>
+        </Row>
+        <div
+          style={{
+            alignItems: 'center',
+          }}
+        >
+          <div style={{marginTop: '30px'}}>
+            <Tabs defaultActiveKey="day" onChange={handleClickDayTab} style={{paddingLeft: '20px'}}>
+              <TabPane
+                key="day"
+                tab={
+                  <div style={{height: '32px'}}>
+                    <p
+                      style={{
+                        height: '24px',
+                        width: '100px',
+                        textAlign: 'center',
+                        fontSize: '14px',
+                        fontWeight: '700',
+                        marginLeft: '10px',
+                      }}
+                    >
+                        Өдөр
+                    </p>
+                  </div>
+                }
+              >
+                <CalendarView
+                  bookedDate={bookedDateList}
+                  dayOfWeek={dayOfWeek}
+                  dayType='Өдөр'
+                  // className={'timePickCalendar'}
+                />
+              </TabPane>
+              <TabPane
+                key="night"
+                tab={
+                  <div style={{height: '32px'}}>
+                    <p
+                      style={{
+                        height: '24px',
+                        width: '100px',
+                        textAlign: 'center',
+                        fontSize: '14px',
+                        fontWeight: '700',
+                        marginLeft: '10px',
+                      }}
+                    >
+                        Шөнө
+                    </p>
+                  </div>
+                }
+              >
+                <CalendarView
+                  dayOfWeek={nightOfWeek}
+                  dayType='Шөнө'
+                  bookedDate={bookedDateList}
+                />
+              </TabPane>
+              <TabPane
+                tab={
+                  <div style={{height: '32px'}}>
+                    <p
+                      style={{
 
+                        height: '24px',
+                        width: '100px',
+                        textAlign: 'center',
+                        fontSize: '14px',
+                        fontWeight: '700',
+                        marginLeft: '10px',
+                      }}
+                    >
+                        Бүтэн өдөр
+                    </p>
+                  </div>
+                }
+                key="fullday"
+              >
+                <CalendarView
+                  bookedDate={bookedDateList}
+                  dayType='Бүтэн Өдөр'
+                  dayOfWeek={fullDayOfWeek}
+                />
+              </TabPane>
+            </Tabs>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

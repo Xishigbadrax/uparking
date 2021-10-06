@@ -88,7 +88,6 @@ const History = () => {
 
   return (
     <WalletLayout>
-
       <div>
         <Table columns={columns} dataSource={data} />
       </div>

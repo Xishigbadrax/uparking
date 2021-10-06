@@ -88,22 +88,7 @@ body {
         padding-top: 3px;
       }
     }
-    .loginBtn {
-      // margin-top: 24px;
-      // width: 100%;
-      // // background-color: #DEE2E9;
-      // background:linear-gradient(90deg, #0013D4 0%, #00F9B8 100%);
-      // border-radius: 8px;
-      // height: 48px;
-      // span{
-      //     // color:#7D8FC0;
-      //     color:white;
-      //     font-weight: bold;
-      //     font-size: 18px;
-      //     line-height: 24px;
-      //     letter-spacing: 0.15px;
-      // }
-    }
+
   }
 }
 
@@ -377,8 +362,10 @@ body {
                     text-align: center;
                     .eventText {
                       font-weight: normal;
+                      color: red;
                       border-radius: 10px;
-                      border: 1px solid black;
+                      border: 1px solid red;
+                      background: rgba(255, 2, 102, 0.08);;
                       font-size: 10px;
                       line-height: 16px;
                       height: 20px;
@@ -450,7 +437,8 @@ body {
   }
 }
 .profileDropdownPopup {
-  margin-top: 21px;
+  margin-top: 25px;
+  width: 200px !important;
 }
 
 .events {
@@ -614,6 +602,7 @@ body {
     }
     tbody {
       tr {
+
         td {
           // align-items: center;
           // justify-content: center;
@@ -646,6 +635,7 @@ body {
             background: rgba(24, 144, 255, 0.8) !important;
           }
         }
+      
       }
     }
   }
@@ -771,6 +761,7 @@ body {
   color: #fff;
   background:linear-gradient(90deg, #0013D4 0%, #00F9B8 100%);
   border:none !important;
+  border-radius: 8px !important;
   &:active , &:focus, &:hover{
     color: #fff;
     background:linear-gradient(90deg, #0012d4be 0%, #00f9b7d0 100%);

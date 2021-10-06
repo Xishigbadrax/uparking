@@ -74,6 +74,9 @@ const Login = () => {
     if (Object.keys(auth).length !== 0 && userdata.firstName !== null) {
       router.push('/park');
     }
+    // } else {
+    //   router.push('/park/profile/verify');
+    // }
   }, [auth]);
 
   const handleConfirm = async () => {

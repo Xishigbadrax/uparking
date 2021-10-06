@@ -96,7 +96,7 @@ const farthest = ({data}) => {
     setSelectedDayTab(key);
   };
   return (
-    <div style={{height: '828px', width: '100%', overflow: true}}>
+    <div style={{height: '828px', width: '100%', overflow: false}}>
       {data.map((item) => (
         <div key={item.id}>
           <Card
@@ -428,18 +428,18 @@ const farthest = ({data}) => {
                           style={{marginLeft: '2px'}}
                         />
                       </div>
-                      <p
+                      <div
                         style={{
                           width: '40px',
                           height: '16px',
                           marginTop: '12px',
                           fontSize: '12px',
                         }}
-                      > 112м</p>
-                      <p style={{width: '75px', fontSize: '12px', textAlign: 'center', marginTop: '12px', fontStyle: 'regular'}}>
+                      > 112м</div>
+                      <div style={{width: '75px', fontSize: '12px', textAlign: 'center', marginTop: '12px', fontStyle: 'regular'}}>
                     Байршил ID
-                      </p>
-                      <p
+                      </div>
+                      <div
                         style={{
                           width: '43px',
                           fontSize: '12px',
@@ -447,7 +447,7 @@ const farthest = ({data}) => {
                         }}
                       >
                         {item.residence.locationId}
-                      </p>
+                      </div>
                     </div>
                     <div style={{display: 'flex'}}>
                       <div

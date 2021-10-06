@@ -125,7 +125,7 @@ const Profile = () => {
   // eslint-disable-next-line no-unused-vars
   const [spaceData, setSpaceData] = useState(null);
   const [vehicleId, setVehicleId] = useState();
-  const [editData1, setEditData1]=useState();
+  // const [editData1, setEditData1]=useState();
   // eslint-disable-next-line no-unused-vars
   const [updatedData, setUpdatedData] = useState();
   const [loading, setLoading] = useState(false);
@@ -316,7 +316,6 @@ const Profile = () => {
         });
         if (res.status === 'success') {
           setParkingSpaceId(res.message);
-
           setCurrent(current + 1);
         };
       }
@@ -437,31 +436,31 @@ const Profile = () => {
         });
       }
       console.log(monthSale, weekSale, monthId, weekId, 'ggggggggggggggggggg');
-      // if (weekSale && monthSale &&weekId && monthId) {
-      //   const ress = await callPost('/parkingspace/sale', {
-      //     parkingSpaceId: parkingSpaceId,
-      //     parkingSpaceSale: [
-      //       {
-      //         salePercent: weekSale,
-      //         saleSplitId: weekId,
-      //         saleSplitDescription: weekDescription,
-      //       },
-      //       {
-      //         salePercent: monthSale,
-      //         saleSplitId: monthId,
-      //         saleSplitDescription: monthDescription,
-      //       },
-      //     ],
-      //   });
+      if (weekSale && monthSale &&weekId && monthId) {
+        const ress = await callPost('/parkingspace/sale', {
+          parkingSpaceId: parkingSpaceId,
+          parkingSpaceSale: [
+            {
+              salePercent: weekSale,
+              saleSplitId: weekId,
+              saleSplitDescription: weekDescription,
+            },
+            {
+              salePercent: monthSale,
+              saleSplitId: monthId,
+              saleSplitDescription: monthDescription,
+            },
+          ],
+        });
 
-      //   // console.log(ress);
-      //   if (!ress || ress === undefined) {
-      //     showMessage(messageType.FAILED.type, ress.error);
-      //     return true;
-      //   } else {
-      //     setCurrent(current + 1);
-      //   }
-      // }
+        // console.log(ress);
+        if (!ress || ress === undefined) {
+          showMessage(messageType.FAILED.type, ress.error);
+          return true;
+        } else {
+          setCurrent(current + 1);
+        }
+      }
     } else if (current === 6) {
       console.log(dayOfWeek);
       const newGeneralScheduleDto = {
