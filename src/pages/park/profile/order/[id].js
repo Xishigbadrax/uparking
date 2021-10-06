@@ -198,13 +198,13 @@ const OrderId = () => {
     }
   };
 
-  const fetchData = async () => {
-    await callGet(`/payment/bankinfo?bankName=${type}`).then((res) => {
-    });
-  };
-  useEffect(() => {
-    fetchData();
-  }, [type]);
+  // const fetchData = async () => {
+  //   await callGet(`/payment/bankinfo?bankName=${type}`).then((res) => {
+  //   });
+  // };
+  // useEffect(() => {
+  //   fetchData();
+  // }, [type]);
 
   useEffect(()=>{
     const endDate = Date.parse(orderData.endDateTime);
@@ -245,9 +245,8 @@ const OrderId = () => {
   // eslint-disable-next-line no-unused-vars
   const onClickPayPayment =async (e)=>{
     ctx.setIsLoading(true);
-    await callGet(`/payment?bookingId=${orderData.bookingId}`).then((res)=>{
-
-    });
+    const paymentt = await callGet(`/payment?bookingId=${orderData.bookingId}`);
+    console.log(paymentt, 'wawdawaw');
     const invokePaymentDto = {
       amountToPay: orderData.totalPrice,
       bookingId: orderData.bookingId,

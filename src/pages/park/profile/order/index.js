@@ -1,5 +1,5 @@
 import ProfileLayout from '@components/layouts/ProfileLayout';
-import {Tabs, List, Row, Col, DatePicker, Button} from 'antd';
+import {Tabs, List, Row, Col, DatePicker, Button, Rate} from 'antd';
 import {Calendar, Tag, Pagination, Dropdown, Menu} from 'antd';
 import {callPost} from '@api/api';
 import {useEffect, useState, useContext} from 'react';
@@ -85,7 +85,6 @@ const Order = () => {
     console.log(page);
     setCurrentPage(page);
   };
-
   // mashinii list awah
   useEffect(async () => {
     const vehicle = await callGet('/user/vehicle/list');
@@ -119,7 +118,6 @@ const Order = () => {
   const getHistroy = async () => {
     ctx.setIsLoading(true);
     setSelectDate();
-
     const formData = {
       asWho: 1,
       dateList: null,
@@ -247,6 +245,7 @@ const Order = () => {
     }
   };
   const getUnelgee = (id)=>{
+    // const  a = await callGet('')
     return <div>{id}</div>;
   };
   const monthCellRender = (value) => {
@@ -371,8 +370,11 @@ const Order = () => {
                             {item.bookingStatusDescription}{''}
                             {item.expireDateDriver}
                           </div> }
-                          {item.bookingStatus === 'CONFIRMED'&& historyValue === true && <div className="calendarListStatus">
-                            {getUnelgee(item.bookingId)}
+                          {item.bookingStatus === 'CONFIRMED'&& historyValue === true && <div className="calendarListStatus1" style={{display: 'flex'}}>
+                            <div style={{color: '#fff'}}> Миний үнэлгээ : </div> <Rate className='unelgee' value={2}/>{getUnelgee(item.bookingId)}
+                          </div>}
+                          {item.bookingStatus === 'CANCELLED'&& historyValue === true && <div className="calendarListStatus">
+                           Цуцлагдсан захиалга
                           </div>}
                           {item.bookingStatus ==='CONFIRMED' && ! historyValue && <div className="calendarListStatus">
                             {item.bookingStatusDescription}{''}
