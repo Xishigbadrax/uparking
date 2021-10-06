@@ -36,7 +36,6 @@ const booking = (props)=>{
   const [bookingId, setBookingId]= useState();
   const [cancelData, setCancelData]= useState();
   const [checkValue, setChechValue] = useState(false);
-  const [checkStateOfRequest, setCheckStateOfRequest]= useState([]);
   const [isConfirmVisible, setIsConfirmVisible]=useState(false);
   const [seemoreUpDownArrow, setSeemoreUpDownArrow] = useState(false);
   const [seeCanceledBooking, setSeeCanceledBooking] =useState(false);
@@ -124,6 +123,7 @@ const booking = (props)=>{
         returnAmount: cancelData ? cancelData.returnAmount :null,
       };
       const res2 = await callPost('/booking/cancel', data);
+      console.log(res2);
       setIsModalVisibleCancelOrderConfirm(false);
       ctx.setIsLoading(false);
     } else {

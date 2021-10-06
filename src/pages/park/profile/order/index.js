@@ -78,7 +78,7 @@ const Order = () => {
   // sar songoh function
   const onChangeOrderDate = (e)=>{
     console.log(moment(e).format('YYYY-MM-DD'));
-    setSelectDate(moment(e).format('YYYY-MM-DD'));
+    setSelectDate(moment(e).format('YYYY-MM') + '-01');
   };
   // pagination solih
   const onChangePage = (page)=>{
@@ -118,6 +118,7 @@ const Order = () => {
   // history paned haragdah list duudah
   const getHistroy = async () => {
     ctx.setIsLoading(true);
+    setSelectDate();
 
     const formData = {
       asWho: 1,
@@ -156,7 +157,6 @@ const Order = () => {
 
   };
   const handleChangeView = (value) => {
-    console.log(value, 'glg wee');
     if (value.key==='calendar') {
       setDataViewType('calendar');
       setHistoryValue(false);
@@ -179,10 +179,9 @@ const Order = () => {
     } else if (calendarStatus == 3 ) {
       const formData = {
         asWho: 1,
-        dateList: selectDate ? [selectDate]: null,
+        dateList: selectDate ? [String(selectDate)]: null,
         vehicleId: e.key,
       };
-      console.log(formData);
       const res = await callPost('/booking/history', formData);
       if (!res || res === undefined) {
         showMessage(messageType.FAILED.type, defaultMsg.dataError);
@@ -192,9 +191,6 @@ const Order = () => {
       }
     }
     ctx.setIsLoading(false);
-  };
-  const CheckUnelgee=(item)=>{
-    console.log(item, 'ggggggggggggggggeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
   };
   const menu =(
     <Menu className="calendarViewer" onClick={(value)=>handleChangeView(value)} style={{width: '100%'}}>
@@ -250,8 +246,8 @@ const Order = () => {
       return 1394;
     }
   };
-  const getUnelgee = ()=>{
-    return <div>SNi</div>;
+  const getUnelgee = (id)=>{
+    return <div>{id}</div>;
   };
   const monthCellRender = (value) => {
     const num = getMonthData(value);
@@ -371,16 +367,15 @@ const Order = () => {
                       dataSource={calendarData}
                       renderItem={(item) => (
                         <List.Item >
-                          {console.log(item.bookingStatus, 'awdawdw')}
                           {item.bookingStatus ==='PENDING_PAYMENT' && <div className="calendarListStatus">
                             {item.bookingStatusDescription}{''}
                             {item.expireDateDriver}
                           </div> }
-                          {item.bookingStatus === 'CONFIRMED'&& historyValue === true && CheckUnelgee(item)&& <div className="calendarListStatus">
-                            {getUnelgee()}
+                          {item.bookingStatus === 'CONFIRMED'&& historyValue === true && <div className="calendarListStatus">
+                            {getUnelgee(item.bookingId)}
                           </div>}
                           {item.bookingStatus ==='CONFIRMED' && ! historyValue && <div className="calendarListStatus">
-                            {item.bookingStatusDescription}{'   '}
+                            {item.bookingStatusDescription}{''}
                           </div> }
                           <Row style={{width: '100%'}}>
                             <Col span={7}>

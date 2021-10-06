@@ -49,7 +49,6 @@ const CustomCalendar = (props) => {
     if (props.selectType || props.selectType === 'single' || props.selectType === 'multi') {
       setSelectType(props.selectType);
     }
-    console.log(props.bookedDate, 'awdawdawd');
     // setBookedDate(props.bookedDate);
     setDayOfWeek(props.dayOfWeek);
     setType(props.dayType);

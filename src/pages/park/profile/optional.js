@@ -51,9 +51,7 @@ const steps = [
 const Nemelt = () => {
   const [vehicles, setVehicles] = useState([]);
   const [uildwer, setUildwer] = useState([]);
-  const [dugaar, setDugaar] = useState();
   const [colors, setColor] = useState([]);
-  const [selectedUildwer, setSelectedUildwer] = useState({});
   const [isVehileVisible, setIsVehileVisible] = useState(false);
   const [formData, setFormdata] = useState({});
   const [zagwar, setZagwar] = useState([]);
@@ -71,9 +69,7 @@ const Nemelt = () => {
   const [residenceBlockId, setResidenceBlockId] = useState();
   const [parkId, setParkId] = useState(null);
   const [parkingSpaceId, setParkingSpaceId] = useState(null);
-  const [imageData, setImageData] = useState(null);
   const [weekSale, setweekSale] = useState(null);
-  const [spaceData, setSpaceData] = useState(null);
   const [weekId, setweekId] = useState(null);
   const [weekDescription, setweekDescription] = useState();
   const [monthId, setmonthId] = useState(null);
@@ -92,13 +88,11 @@ const Nemelt = () => {
   };
   const onChangeDugaar = (e) => {
     const dugar = e.target.value;
-    setDugaar(dugar);
     setFormdata({...formData, vehicleNumber: dugar});
   };
   const onChangeUildver = async (e) => {
     console.log('i am here-->', e);
     const uildver = uildwer.find((item) => item.value === e);
-    setSelectedUildwer(uildver);
     const model = await callGet(`/user/vehicle/model?maker=${uildver.label}`);
     setZagwar(model);
     setFormdata({...formData, maker: uildver.value});
@@ -165,6 +159,7 @@ const Nemelt = () => {
       );
       setParkId(second.parkingId);
       console.log(second);
+      setParkingSpaceId(mainData.parkingSpaceId);
       const res = await callPost('/parkingspace', {
         entranceLock: componentData.entranceLock,
         floorNumber: componentData.floorNumber,
@@ -322,7 +317,6 @@ const Nemelt = () => {
     const data = await callGet('/user/vehicle/list');
     setVehicles(data);
     const uildwer = await callGet('/user/vehicle/maker');
-    setSelectedUildwer(uildwer);
     setUildwer(uildwer);
     const color = await callGet('/user/vehicle/color');
 
@@ -369,7 +363,7 @@ const Nemelt = () => {
           </Row>
           <Row>
             <Col offset={1}>
-              {/* {vehicles.length > 0 ? vehicles.map((item) => (
+              { vehicles && vehicles.length > 0 ? vehicles.map((item) => (
                 <div
                   key={item.value}
                   className="mt-4 width-auto  rounded flex shadow-sm"
@@ -383,7 +377,7 @@ const Nemelt = () => {
                     ></img>
                   </div>
                   <div className="ml-4">
-                    <div class="text-sm">{item.label}</div>
+                    <div className="text-sm">{item.label}</div>
                     <div className="text-base" style={{color: 'blue '}}>
                       {item.label}
                     </div>
@@ -394,7 +388,7 @@ const Nemelt = () => {
                     </Link>
                   </div>
                 </div>
-              )):<div>nullll</div>} */}
+              )):<div>nullll</div>}
               <div className="mt-4">
 
                 <button onClick={() => {
@@ -642,10 +636,10 @@ const Nemelt = () => {
               />
             )) ||
               (steps[current].title === 'Үндсэн зураг' && (
-                <MainImage setImageData={setImageData} form={form} />
+                <MainImage form={form} />
               )) ||
               (steps[current].title === 'Зогсоолын зураг' && (
-                <SpaceImage setSpaceData={setSpaceData} form={form} />
+                <SpaceImage form={form} />
               )) ||
               (steps[current].title === 'Зогсоолын үзүүлэлт' && (
                 <SpaceIndicator form={form} onFinish={onFinishSPace} />

@@ -12,7 +12,6 @@ import Helper from '@utils/helper';
 import {Button, Carousel, Checkbox, Col, Divider, Form, Image, Input, Layout, Modal, Rate, Row, Tabs, Alert, Card} from 'antd';
 import moment from 'moment';
 import WalletInput from '../../../../components/WalletInput';
-import WalletBankInfo from '@components/WalletBankInfo';
 import WalletCard from '../../../../components/WalletCard';
 
 import Link from 'next/link';
@@ -34,36 +33,9 @@ const style = {
   borderRadius: '8px',
   padding: '5px 10px',
 };
-const tabItems = [
-  {
-    id: 1,
-    name: 'Хаан банк',
-    type: 'KHANBANK',
-    src: '../../../images/icon/khanbank.png',
-  },
-  {
-    id: 2,
-    name: 'Хас банк',
-    type: 'KHASBANK',
-    src: '../../../images/icon/xac.png',
-  },
-  {
-    id: 3,
-    name: 'Голомт банк',
-    type: 'GOLOMTBANK',
-    src: '../../../images/icon/golomt.png',
-  },
-  {
-    id: 4,
-    name: 'Худалдаа хөгжлийн банк',
-    type: 'TDB',
-    src: '../../../images/icon/tdb.png',
-  },
-];
+s;
 const OrderId = () => {
-  const [type, settype] = useState('KHANBANK');
   const [type2, settype2] = useState('MONGOLCHAT');
-  const [data, setdata] = useState(null);
   const [modalData, setModalData] = useState(null);
   const [tureeslegch, setTureeslegch] = useState(false);
   const [amount, setamount] = useState(0);
@@ -228,16 +200,12 @@ const OrderId = () => {
 
   const fetchData = async () => {
     await callGet(`/payment/bankinfo?bankName=${type}`).then((res) => {
-      setdata(res);
     });
   };
   useEffect(() => {
     fetchData();
   }, [type]);
 
-  const handleClickBankLogo = (activekey) => {
-    settype(activekey);
-  };
   useEffect(()=>{
     const endDate = Date.parse(orderData.endDateTime);
     const nowDate = Date.parse(moment().format('YYYY-MM-DD HH:mm:ss'));
@@ -263,8 +231,10 @@ const OrderId = () => {
         returnAmount: cancelData ? cancelData.returnAmount :null,
       };
       const res2 = await callPost('/booking/cancel', data);
-      setIsModalVisibleCancelOrderConfirm(false);
-      setIsConfirmVisible(true);
+      if (res2.status === 'success') {
+        setIsModalVisibleCancelOrderConfirm(false);
+        setIsConfirmVisible(true);
+      }
     } else {
     }
   };
@@ -275,8 +245,9 @@ const OrderId = () => {
   // eslint-disable-next-line no-unused-vars
   const onClickPayPayment =async (e)=>{
     ctx.setIsLoading(true);
-    const paymentt = await callGet(`/payment?bookingId=${orderData.bookingId}`);
-    console.log(paymentt, 'wawdawaw');
+    await callGet(`/payment?bookingId=${orderData.bookingId}`).then((res)=>{
+
+    });
     const invokePaymentDto = {
       amountToPay: orderData.totalPrice,
       bookingId: orderData.bookingId,
