@@ -2,7 +2,7 @@ import React from 'react';
 import {useState} from 'react';
 import WalletLayout from '@components/layouts/WalletLayout';
 import WalletCard from '../../../../components/WalletCard';
-import WalletChart from '@components/WalletChart';
+// import WalletChart from '@components/WalletChart';
 import WalletBankInfo2 from '@components/WalletBankInfo2';
 
 import MaskedInput from 'antd-mask-input';
@@ -284,7 +284,7 @@ const Transfer = () =>{
           </div>
 
           <div>
-            <WalletChart />
+            {/* <WalletChart /> */}
           </div>
         </div>
 

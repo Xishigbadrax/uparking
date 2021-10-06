@@ -3,7 +3,7 @@ import {Tabs} from 'antd';
 import _ from 'lodash';
 // import CustomCalendar from '@components/CustomCalendar/index';
 import {Row, Col, Card, Calendar, Tag, Menu, Dropdown, DatePicker, Button} from 'antd';
-import {Radar} from 'react-chartjs-2';
+// import {Radar} from 'react-chartjs-2';
 import Bar from '@components/BarChart';
 import {callGet, callPost} from '@api/api';
 import {useContext, useState, useEffect} from 'react';
@@ -17,30 +17,30 @@ const {TabPane} = Tabs;
 moment.updateLocale('mn', {
   weekdaysMin: ['Ням', 'Даваа', 'Мягмар', 'Лхагва', 'Пүрэв', 'Баасан', 'Бямба'],
 });
-const data1 = {
-  labels: ['Орц гарц', 'Нэвтрэх хаалга', 'Байршил', 'Зогсоол'],
-  datasets: [
-    {
-      label: '',
-      data: [4, 3, 5, 5],
-      backgroundColor: '#ffff',
-      borderColor: '#00F9B8',
-      borderWidth: 1,
-    },
-  ],
-  options: {
-    plugins: {
-      legend: {
-        display: false,
-      },
-    },
-  },
-};
-const options = {
-  scale: {
-    ticks: {beginAtZero: true},
-  },
-};
+// const data1 = {
+//   labels: ['Орц гарц', 'Нэвтрэх хаалга', 'Байршил', 'Зогсоол'],
+//   datasets: [
+//     {
+//       label: '',
+//       data: [4, 3, 5, 5],
+//       backgroundColor: '#ffff',
+//       borderColor: '#00F9B8',
+//       borderWidth: 1,
+//     },
+//   ],
+//   options: {
+//     plugins: {
+//       legend: {
+//         display: false,
+//       },
+//     },
+//   },
+// };
+// const options = {
+//   scale: {
+//     ticks: {beginAtZero: true},
+//   },
+// };
 const Dashboard = () => {
   const ctx = useContext(Context);
   // const [userData, setuserData] = useState(null);
@@ -489,7 +489,7 @@ const Dashboard = () => {
               <Col span={10}>
                 <Row style={{color: '#35446D', fontWeight: 'bold', fontSize: '14px', lineHeight: '24px'}}>Таны зогсоолын үнэлгээ</Row>
                 <Card style={{borderRadius: '20px', marginTop: '10px'}} className={'RadarChart'}>
-                  <Radar data={data1} options={options} />
+                  {/* <Radar data={data1} options={options} /> */}
                 </Card>
               </Col>
               <Col span={10} offset={2} className='BarChart'>

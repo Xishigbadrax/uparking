@@ -1,7 +1,7 @@
 import React from 'react';
 import {useState, useEffect, useContext} from 'react';
 import WalletLayout from '@components/layouts/WalletLayout';
-import WalletChart from '@components/WalletChart';
+// import WalletChart from '@components/WalletChart';
 import WalletCard from '../../../../components/WalletCard';
 // import WalletBankInfo2 from '@components/WalletBankInfo2';
 import WalletBankInfo from '@components/WalletBankInfo';
@@ -208,7 +208,7 @@ const Charge = () => {
         </div>
 
         <div>
-          <WalletChart />
+          {/* <WalletChart /> */}
         </div>
       </div>
       <div className="flex justify-between mt-[25px]">

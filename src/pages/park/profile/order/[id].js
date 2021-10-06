@@ -33,7 +33,7 @@ const style = {
   borderRadius: '8px',
   padding: '5px 10px',
 };
-s;
+
 const OrderId = () => {
   const [type2, settype2] = useState('MONGOLCHAT');
   const [modalData, setModalData] = useState(null);

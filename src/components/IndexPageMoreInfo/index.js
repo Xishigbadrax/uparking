@@ -1,8 +1,9 @@
+/* eslint-disable no-unused-vars */
 import {Row, Col, Grid, Card} from 'antd';
 import Context from '@context/Context';
-import PieChart from '@components/Chart/Pie';
-import BarChart from '@components/Chart/Bar';
-import ColumnChart from '@components/Chart/Column';
+// import PieChart from '@components/Chart/Pie';
+// import BarChart from '@components/Chart/Bar';
+// import ColumnChart from '@components/Chart/Column';
 import {useState, useContext, useEffect} from 'react';
 import {apiList, sList} from '@api/api';
 const data1 = [
@@ -105,122 +106,122 @@ const IndexPageMoreInfo = (date) => {
       <Row gutter={16}>
         <Col span={screens.xl ? 12 : 24} style={{marginBottom: '20px'}}>
           <Card title={<span style={{color: 'black', fontSize: '20px'}}>Харилцагч (Нийт: {totalUser})</span>} >
-            <PieChart
+            {/* <PieChart
               data={chartUser}
               angleField="cnt"
               colorField="name"
               colors={['#15d8ff', '#15b4ca', '#1aa2b1', '#1e9099', '#217e83', '#215c5a']}
-            />
+            /> */}
           </Card>
         </Col>
         <Col span={screens.xl ? 12 : 24} style={{marginBottom: '20px'}}>
           <Card title={<span style={{color: 'black', fontSize: '20px'}}>Насны ангиллаар</span>} >
-            <PieChart
+            {/* <PieChart
               data={chartAge}
               angleField="cnt"
               colorField="name"
               colors={['#c80909', '#d63d00', '#e25d00', '#ec7b00', '#f49700', '#fab200', '#fdce00', '#ffe925', '#40c322', '#00b285', '#2030d3']}
-            />
+            /> */}
           </Card>
         </Col>
       </Row>
       <Row gutter={16}>
         <Col span={screens.xl ? 12 : 24} style={{marginBottom: '20px'}}>
           <Card title={<span style={{color: 'black', fontSize: '20px'}}>Нийт олгосон идэвхтэй зээл (Нийт: {activeLoanTotal})</span>} >
-            <PieChart
+            {/* <PieChart
               data={chartActiveLoan}
               angleField="cnt"
               colorField="name"
               colors={['#ec7b00', '#fab200', '#fdce00', '#ffe925']}
-            />
+            /> */}
           </Card>
         </Col>
         <Col span={screens.xl ? 12 : 24} style={{marginBottom: '20px'}}>
           <Card title={<span style={{color: 'black', fontSize: '20px'}}>Хугацаа хэтэрсэн зээл</span>} >
-            <PieChart
+            {/* <PieChart
               data={data1}
               angleField="cnt"
               colorField="name"
               colors={['#2f6d00', '#488105', '#62960c', '#7dab14', '#9ac01b', '#b8d523', '#d8ea2b', '#f9ff34']}
-            />
+            /> */}
           </Card>
         </Col>
       </Row>
       <Row gutter={16}>
         <Col span={screens.xl ? 12 : 24} style={{marginBottom: '20px'}}>
           <Card title={<span style={{color: 'black', fontSize: '20px'}}>Зээлийн хүсэлт</span>} >
-            <ColumnChart
+            {/* <ColumnChart
               data={data2}
               xField= 'city'
               yField= 'value'
               seriesField= 'type'
-            />
+            /> */}
           </Card>
         </Col>
         <Col span={screens.xl ? 12 : 24} style={{marginBottom: '20px'}}>
           <Card title={<span style={{color: 'black', fontSize: '20px'}}>Зээл олголт</span>} >
-            <ColumnChart
+            {/* <ColumnChart
               data={chartLoanIssued}
               xField= 'date'
               yField= 'value'
               seriesField= 'type'
               colors={['#d86119', '#f9b520']}
-            />
+            /> */}
           </Card>
         </Col>
       </Row>
       <Row gutter={16} >
         <Col span={24} style={{marginBottom: '20px'}}>
           <Card title={<span style={{color: 'black', fontSize: '20px'}}>Сунгасан зээлүүд</span>} >
-            <PieChart
+            {/* <PieChart
               data={data1}
               angleField="cnt"
               colorField="name"
               colors={['#62960c', '#7dab14', '#9ac01b', '#b8d523', '#d8ea2b', '#f9ff34']}
-            />
+            /> */}
           </Card>
         </Col>
       </Row>
       <Row gutter={16} >
         <Col span={screens.xl ? 12 : 24} style={{marginBottom: '20px'}}>
           <Card title={<span style={{color: 'black', fontSize: '18px'}}>Байршлаар (Аймаг/Хот)</span>}>
-            <BarChart
+            {/* <BarChart
               data={chartAimag}
               xField="cnt"
               yField="name"
               onReady={onReady}
-            />
+            /> */}
           </Card>
         </Col>
         <Col span={screens.xl ? 12 : 24} style={{marginBottom: '20px'}}>
           <Card title={<span style={{color: 'black', fontSize: '18px'}}>Байршлаар (Сум/Дүүрэг)</span>}>
-            <BarChart
+            {/* <BarChart
               data={chartSoum}
               xField="cnt"
               yField="name"
-            />
+            /> */}
           </Card>
         </Col>
       </Row>
       <Row gutter={16}>
         <Col span={screens.xl ? 12 : 24} style={{marginBottom: '20px'}}>
           <Card title={<span style={{color: 'black', fontSize: '18px'}}>Хүйсээр</span>}>
-            <PieChart
+            {/* <PieChart
               data={chartGender}
               angleField="cnt"
               colorField="name"
               colors={['#0c81bc', '#00b5e1']}
-            />
+            /> */}
           </Card>
         </Col>
         <Col span={screens.xl ? 12 : 24} style={{marginBottom: '20px'}}>
           <Card title={<span style={{color: 'black', fontSize: '18px'}}>Банкааар</span>}>
-            <ColumnChart
+            {/* <ColumnChart
               opacity='1'
               data={chartBank}
               xField= 'name'
               yField= 'cnt'
-            />
+            /> */}
           </Card>
         </Col>
       </Row>
