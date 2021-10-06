@@ -487,6 +487,19 @@ body {
   background: rgba(234, 102, 95, 0.08);
   border-radius: 8px 8px 0px 0px;
   padding: 4px 8px;
+  width: 200px;
+  left: 130px;
+  text-align: center;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+.calendarListStatus1{
+  position: absolute;
+  top: -40px;
+  background: linear-gradient(90deg, #0013D4 0%, #00F9B8 100%);
+  border-radius: 8px 8px 0px 0px;
+  padding: 4px 8px;
+  width: 300px;
   left: 130px;
   text-align: center;
   letter-spacing: 0.4px;

@@ -2521,7 +2521,12 @@ input[type=number]::-webkit-outer-spin-button {
 
 
 
-
+.unelgee svg{
+  height: 16px !important;
+  width: 16.409276962280273px !important;
+  border-radius: 0px;
+  margin-top: -10px !important;
+}
 .OrderRate .ant-rate svg {
   height: 10.903876304626465px !important;
   width: 11.409276962280273px !important;
