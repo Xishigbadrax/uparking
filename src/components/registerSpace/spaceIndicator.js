@@ -15,6 +15,7 @@ const spaceIndicator = (props) => {
 
   useEffect(async () => {
     console.log(props);
+
     const spaceSize = await callGet('/reference/list/test?type=SPACE_TYPE');
     setSpaceSizeData(spaceSize);
     const parking = await callGet('/reference/list/test?type=SPACE_SIGN');
@@ -27,7 +28,7 @@ const spaceIndicator = (props) => {
     setSpaceTypeData(spaceType);
     const route = await callGet('/reference/list/test?type=RETURN_ROUTE');
     setRouteData(route);
-    const floor = await callGet('/reference/list/test?type=FLOOR_NUMBER');
+    const floor = await callGet('/reference/list/test?type=FLOOR_NUMBER?re');
     setFloorData(floor);
   }, []);
   const onChangeEntranceLock = (e) => {
@@ -199,7 +200,7 @@ const spaceIndicator = (props) => {
                     placeholder="Зогсоолын хэмжээ*"
                     onChange={onChangeSpaceSize}
                   >
-                    {spaceSizeData.map((item) => (
+                    {spaceTypeData.map((item) => (
                       <Select.Option key={item.value} value={item.value}>
                         <div style={{display: 'flex'}}>
                           <div>
@@ -230,7 +231,7 @@ const spaceIndicator = (props) => {
                     placeholder="Зогсоолын төрөл*"
                     onChange={onChangeType}
                   >
-                    {spaceTypeData.map((item) => (
+                    {spaceSizeData.map((item) => (
                       <Select.Option key={item.value} value={item.value}>
                         <div style={{display: 'flex'}}>
                           <div>

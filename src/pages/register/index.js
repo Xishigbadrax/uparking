@@ -156,7 +156,7 @@ const Login = () => {
       if (result.status !== 'failed') {
         showMessage(messageType.SUCCESS.type, 'Бүртгэл амжилттай.Өөрийн бүртгэлээр нэвтэрнэ үү!');
         await delay(2000);
-        router.push('/login');
+        router.push('/park/profile/verify');
       } else {
         showMessage(messageType.FAILED.type, result.error);
       }

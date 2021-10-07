@@ -1,0 +1,82 @@
+image: node:12.22
+
+stages:
+  - install
+  - quality
+  - build
+  - deploy
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - node_modules
+installing:
+  stage: install
+  tags:
+    - docker
+  script:
+    - echo "Installing the project"
+    - npm install
+    - echo "Installed"
+
+testing-code-quality:
+  stage: quality
+  needs: [installing]
+  image: node:12.22
+  tags:
+    - docker
+  script:
+    - echo "esLint testing"
+    - npm run lint
+    - echo "esLint testing done"
+sonarqube-check:
+  stage: quality
+  needs: []
+  image: 
+    name: sonarsource/sonar-scanner-cli:latest
+    entrypoint: [""]
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script: 
+    - sonar-scanner
+  allow_failure: true
+# build:
+#   stage: build
+#   tags:
+#     - docker
+#   script:
+#     - CI=false npm run build
+#   artifacts:
+#     paths:
+#       - build
+#     expire_in: 60 mins
+# deploy:
+#   stage: deploy
+#   dependencies:
+#     - build
+#   before_script:
+#     - apt-get update
+#     - apt-get install -y zip unzip
+#     - eval $(ssh-agent -s) # Run the SSH client 
+#     # Adding environment's variable SSH_PRIVATE_KEY to the SSH client's agent that manages the private keys
+#     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+#     # Create the SSH directory and give it the right permissions
+#     - mkdir -p ~/.ssh
+#     - chmod 700 ~/.ssh
+#   script:
+#     - mkdir api
+#     - mv dist/IctCoreAPI api
+#     - zip -r api.zip api
+#     - ssh -o StrictHostKeyChecking=no ics-user@103.50.205.213 "cd /home/ics-user/web; mkdir $(date +%m_%d_%H); mv public $(date +%m_%d_%H)"
+#     - scp -o StrictHostKeyChecking=no api.zip ics-user@103.50.205.213:/home/ics-user/web
+#     - ssh -o StrictHostKeyChecking=no ics-user@103.50.205.213 "cd /home/ics-user/web; unzip api.zip; mv api/IctCoreAPI ../public"
+#   artifacts:
+#     paths:
+#       - api.zip
+#   only:
+#     - master

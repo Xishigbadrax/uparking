@@ -779,18 +779,15 @@ const Home =()=> {
           </div>
           <div className="flex flex-wrap w-full lg:justify-start  md:justify-between sm:justify-center justify-center ">
             {news.map((item, index) => (
-
               <News
                 key={index}
-                head={ <p className="text-white">{item.head}</p> }
+                head={item.head }
                 image={item.image}
                 date={item.date}
                 title={item.title}
                 titlebold={item.titlebold}
                 desc={item.desc}
               />
-
-
             ))}
           </div>
         </div>

@@ -14,14 +14,19 @@ const IMG_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
 const Navbar = () => {
   const {userdata} = useContext(Context);
   const router = useRouter();
-  const [userRealData, setUserRealData] = useState('');
+  const [userRealData, setUserRealData] = useState({});
 
 
   useEffect(async () => {
-    if (typeof userdata.firstName != 'undefined') {
+    if (typeof userdata.firstName !== 'undefined') {
       setUserRealData(userdata);
+    // setUserRealData(userdata);
     }
+    getProfile();
   }, [userdata]);
+  useEffect(()=>{
+    getProfile();
+  }, []);
 
   const getIcon = (icon) => {
     const AntIcon = AntdIcons[icon];
@@ -29,12 +34,16 @@ const Navbar = () => {
   };
 
   const getProfile = () => {
-    if (userRealData === '') return null;
-    return <div style={{height: '21px'}}>
-      <Avatar src={IMG_URL + userRealData.imageProfile} style={{marginRight: '10px'}}
-      />
-      {userRealData.lastName.charAt(0) + '. ' + userRealData.firstName}
-    </div>;
+    if (userdata === '') {
+      return null;
+    } else {
+      return <div style={{height: '21px'}}>
+        <Avatar src={IMG_URL + userRealData.imageProfile} style={{marginRight: '10px'}}
+        />
+        {userdata && userdata.lastName+ '. ' + userdata.firstName}
+      </div>
+      ;
+    }
   };
 
   const navigation = [
@@ -114,7 +123,7 @@ const Navbar = () => {
                 <div className="flex items-center sm:hidden">
                   {/* Mobile menu button*/}
                   <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                    <span className="sr-only">Open main menu</span>
+                    <span className="sr-only">Цэс</span>
                     {open ? (
                       <XIcon className="block h-6 w-6" aria-hidden="true" />
                     ) : (

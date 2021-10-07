@@ -86,7 +86,7 @@ const Settings = () => {
     formData.label = label;
     formData.state = state;
     const res = await callPost('/user/config', formData);
-
+    console.log(res);
     ctx.setIsLoading(false);
   };
   const submit2 = async () => {

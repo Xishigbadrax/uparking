@@ -6,7 +6,7 @@ import {ContextProvider} from '@context/Context';
 import auth from '@utils/auth';
 import Login from './login';
 import {useState, useEffect} from 'react';
-import Navbar from '@components/Navbar';
+import Navbar from '@components/Navbar/Navbar';
 
 const App = ({Component, pageProps, router}) => {
   const [isMounted, setIsMounted] = useState(false);

@@ -67,12 +67,12 @@ const AboutUs = () => {
           >
             <div style={{width: '505px'}} className="block  flex-grow  w-full">
               <div className="py-2 text-justify mt-16  " style={{color: '#35446D'}}>
-                <p style={{fontSize: '18px', marginBottom: '20px'}}>  Uparking. Your parking  <span style={{fontStyle: 'italic'}}>from</span> <b>Uparking Int LLC</b></p>
+                <div style={{fontSize: '18px', marginBottom: '20px'}}>  Uparking. Your parking  <span style={{fontStyle: 'italic'}}>from</span> <b>Uparking Int LLC</b></div>
 
                 “Юу Паркинг Инт” ХХК нь Монгол улсад анхдагч болох Авто
                 зогсоолын түрээсийн цахим peer to peer Uparking платформыг
                 хөгжүүлж байгаа юм.
-                <p className="mt-4">
+                <div className="mt-4">
                   {' '}
                   Uparking платформ нь Авто зогсоолын түрээсийн үйл ажиллагаанд
                   технологийн шийдлийг ашиглан Тээврийн хэрэгсэл эзэмшигчдэд
@@ -80,14 +80,14 @@ const AboutUs = () => {
                   хэрэгслээ байршуулах, Зогсоол эзэмшигчдэд өөрийн зогсоолыг
                   илүү үр ашигтайгаар бусдад хуваалцан нэмэлт орлого олох
                   боломжийг олгоно.
-                </p>{' '}
-                <p className="mt-4">
+                </div>{' '}
+                <div className="mt-4">
                   Бид автозогсоолын асуудлыг хүрэлцээнээсээ бус зөв
                   менежментгүйгээсээ болж үүсдэг. Тиймээс Uparking платформ нь
                   авто зогсоолын хүрэлцээг нэмэгдүүлэх боломж, цаашид авто
                   зогсоол төлөвлөлтийг нэмэгдүүлэх ач холбогдолтой төсөл гэж
                   харж, хөгжүүлж байна.
-                </p>
+                </div>
               </div>
             </div>
           </div>
@@ -115,8 +115,8 @@ const AboutUs = () => {
               >
                 <div className="my-auto flex flex-row justify-between w-full">
                   <div>
-                    <p className="text-white">{item.name1} <b>{item.name2}</b></p>
-                    <p className="text-white">{item.position}</p>
+                    <div className="text-white">{item.name1} <b>{item.name2}</b></div>
+                    <div className="text-white">{item.position}</div>
                   </div>
                   <div>
                     <img src="/u_linkedin.png" height="40px" width="40px" />
@@ -146,13 +146,13 @@ const AboutUs = () => {
               className="block justify-center flex-grow  text-[#647189]"
             >
               <div className={'py-2 '}>
-                <p style={{color: '#647189'}}>
+                <div style={{color: '#647189'}}>
                   Удирдлага төвт бус
-                </p>
+                </div>
                 <span className="text-xl  ">
                   ЧӨЛӨӨТ ХАМТЫН АЖИЛЛАГААГ ЭРХЭМЛЭГЧ
                 </span>
-                <p className="mt-1">Зөвхөн өөрөөрөө байх</p>
+                <div className="mt-1">Зөвхөн өөрөөрөө байх</div>
                 <span className="text-xl font-bold 7 ">
                   ТАНЫГ Л БИД ХАЙЖ БАЙНА.
                 </span>

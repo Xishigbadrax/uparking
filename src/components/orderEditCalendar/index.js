@@ -19,7 +19,6 @@ export const AcademicYearEnd = moment(today)
   .date(18);
 
 const CustomCalendar = (props) => {
-  console.log(props, 'sdaaa');
   const [fromDate, setFromDate] = useState([]);
   const [selectedDate, setselectedDate] = useState([]);
   // eslint-disable-next-line no-unused-vars
@@ -27,6 +26,7 @@ const CustomCalendar = (props) => {
   // eslint-disable-next-line no-unused-vars
   const [value, setValue] = useState(null);
   const [current, setCurrent]= useState(parseInt(moment().format('M')));
+  const [currMonth, setCurrMonth] = useState();
 
   const test = (date, date2, day2)=>{
     const startDate = Date.parse(date);
@@ -66,20 +66,22 @@ const CustomCalendar = (props) => {
   //   return differenceInCalendarDays(a, b) === 0;
   // };
   const dateFullCellRender = (value) => {
+    const month = moment(value).format('YYYY-MM');
     const day = moment(value).format('D');
     const day2 = moment(value).format('YYYY-MM-DD HH:mm:ss').toString();
     let onclickclass = '';
-
-    if (fromDate) {
-      fromDate.map((item)=>{
-        const x = test(item.startDate, item.endDate, day2);
-        // console.log(x, 'ijilhe bnaa ged bna SDA');
-        if (x === 1) {
-          onclickclass = 'onclickeddate';
-        }
-      });
+    if (currMonth === month) {
+      if (fromDate) {
+        fromDate.map((item)=>{
+          const x = test(item.startDate, item.endDate, day2);
+          // console.log(x, 'ijilhe bnaa ged bna SDA');
+          if (x === 1) {
+            onclickclass = 'onclickeddate';
+          }
+        });
+      }
+      return <div className={`customFullCellRender ant-picker-cell-inner ${onclickclass}`}><div className="ant-picker-calendar-date-value">{day}</div></div>;
     }
-    return <div className={`customFullCellRender ant-picker-cell-inner ${onclickclass}`}><div className="ant-picker-calendar-date-value">{day}</div></div>;
   };
   const onSelect = (value) => {
     const day = moment(value).format('D');
@@ -101,6 +103,7 @@ const CustomCalendar = (props) => {
         locale={calendarLocale}
         headerRender={({value, type, onChange, onTypeChange}) => {
           const localeData = value.localeData();
+          setCurrMonth(moment(value).format('YYYY-MM'));
           const year = value.year();
           const month = [];
           console.log(localeData, 'awdawd');
@@ -144,7 +147,7 @@ const CustomCalendar = (props) => {
                       onChange(newValue);
                     } else {
                       const newValue = value.clone();
-                      newValue.month(parseInt(current +1));
+                      newValue.month(parseInt(current ));
                       onChange(newValue);
                     }
                   }}

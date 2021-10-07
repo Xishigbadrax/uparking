@@ -22,8 +22,8 @@ const Item = ({title, data, height=false}) => {
               marginTop: '12px',
             }}
           >
-            <p style={{color: 'gray', fontSize: '13px'}}>{e.name}</p>
-            <p style={{fontSize: '13px', color: 'black'}}>{e.val}</p>
+            <div style={{color: 'gray', fontSize: '13px'}}>{e.name}</div>
+            <div style={{fontSize: '13px', color: 'black'}}>{e.val}</div>
           </Row>
         );
       })}

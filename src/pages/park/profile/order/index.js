@@ -1,5 +1,5 @@
 import ProfileLayout from '@components/layouts/ProfileLayout';
-import {Tabs, List, Row, Col, DatePicker, Button} from 'antd';
+import {Tabs, List, Row, Col, DatePicker, Button, Rate} from 'antd';
 import {Calendar, Tag, Pagination, Dropdown, Menu} from 'antd';
 import {callPost} from '@api/api';
 import {useEffect, useState, useContext} from 'react';
@@ -11,11 +11,10 @@ import moment from 'moment';
 import {calendarLocale} from '@constants/constants.js';
 import DayNightColumn from '@components/DayNightColumns';
 import Lessor from '@components/OrderPanes/lessor';
-import {DownOutlined, ArrowRightOutlined, EyeTwoTone, DeleteTwoTone, OrderedListOutlined, RightOutlined, LeftOutlined} from '@ant-design/icons';
+import {DownOutlined, ArrowRightOutlined, EyeTwoTone, CalendarOutlined, DeleteTwoTone, OrderedListOutlined, RightOutlined, LeftOutlined} from '@ant-design/icons';
 import Helper from '@utils/helper';
 import Link from 'next/link';
 const {TabPane} = Tabs;
-// const {Option} = Select;
 moment.updateLocale('mn', {
   weekdaysMin: ['НЯМ', 'ДАВ', 'МЯГ', 'ЛХА', 'ПҮР', 'БАА', 'БЯМ'],
 });
@@ -24,6 +23,7 @@ moment.updateLocale('mn', {
 });
 const Order = () => {
   const ctx = useContext(Context);
+  const [innerKey, setInnerKey]=useState();
   const [asWho, setAsWho] = useState(1);
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [calendarStatus, setCalendarStatus] = useState();
@@ -32,10 +32,23 @@ const Order = () => {
   const [currentPage, setCurrentPage]= useState(1);
   const [current, setCurrent]= useState(parseInt(moment().format('M')));
   const [vehicles, setVehicles] = useState([]);
+  const [currMonth, setCurrMonth] = useState();
   const [historyValue, setHistoryValue] =useState(false);
   // const [selectVehicle, setSelecteVehicle]= useState();
   const [selectDate, setSelectDate] = useState();
 
+
+  // hadgalsan zahialga bolon tvvhiin zahialgin medeelliig ustgah
+
+  const onDeleteBooking = async (id)=>{
+    if (innerKey == 1 ) {
+      const formData = {
+        bookingId: id,
+      };
+      const res = await callPost('/booking/cancelanybooking', formData);
+      console.log(res);
+    }
+  };
   // Tab solih function
   const onClickTab = async (key) => {
     setAsWho(key);
@@ -44,6 +57,7 @@ const Order = () => {
   };
   // dotorh tab solih function
   const onClickInnerTab = (key) => {
+    setInnerKey(key);
     setCurrent(parseInt(moment().format('MM')));
     if (key ==1) {
       setCalendarStatus(key);
@@ -64,14 +78,13 @@ const Order = () => {
   // sar songoh function
   const onChangeOrderDate = (e)=>{
     console.log(moment(e).format('YYYY-MM-DD'));
-    setSelectDate(moment(e).format('YYYY-MM-DD'));
+    setSelectDate(moment(e).format('YYYY-MM') + '-01');
   };
   // pagination solih
   const onChangePage = (page)=>{
     console.log(page);
     setCurrentPage(page);
   };
-
   // mashinii list awah
   useEffect(async () => {
     const vehicle = await callGet('/user/vehicle/list');
@@ -97,7 +110,6 @@ const Order = () => {
       } else {
         setCalendarData(res);
         setIsConfirmed(false);
-        console.log(res, 'ene nuguu data');
       }
     }
     ctx.setIsLoading(false);
@@ -105,7 +117,7 @@ const Order = () => {
   // history paned haragdah list duudah
   const getHistroy = async () => {
     ctx.setIsLoading(true);
-
+    setSelectDate();
     const formData = {
       asWho: 1,
       dateList: null,
@@ -121,6 +133,7 @@ const Order = () => {
     }
     ctx.setIsLoading(false);
   };
+
   // calendar der haragdah data awah
   const getListData = (value) => {
     const listData = [];
@@ -142,7 +155,6 @@ const Order = () => {
 
   };
   const handleChangeView = (value) => {
-    console.log(value, 'glg wee');
     if (value.key==='calendar') {
       setDataViewType('calendar');
       setHistoryValue(false);
@@ -165,10 +177,9 @@ const Order = () => {
     } else if (calendarStatus == 3 ) {
       const formData = {
         asWho: 1,
-        dateList: selectDate ? [selectDate]: null,
+        dateList: selectDate ? [String(selectDate)]: null,
         vehicleId: e.key,
       };
-      console.log(formData);
       const res = await callPost('/booking/history', formData);
       if (!res || res === undefined) {
         showMessage(messageType.FAILED.type, defaultMsg.dataError);
@@ -181,12 +192,22 @@ const Order = () => {
   };
   const menu =(
     <Menu className="calendarViewer" onClick={(value)=>handleChangeView(value)} style={{width: '100%'}}>
-      <Menu.Item key='calendar' value={'calendar'}>Календарь</Menu.Item>
-      <Menu.Item key='list' value={'list'}>Жагсаалт</Menu.Item>
+      <Menu.Item key='calendar' value={'calendar'} style={{display: 'inline-flex'}}>
+        <div style={{display: 'flex'}}>
+          <CalendarOutlined />
+          <p style={{marginLeft: '5px'}}>Календарь</p>
+        </div>
+      </Menu.Item>
+      <Menu.Item key='list' value={'list'}>
+        <div style={{display: 'flex'}}>
+          <OrderedListOutlined />
+          <p style={{marginLeft: '5px'}}>Жагсаалт</p>
+        </div>
+      </Menu.Item>
     </Menu>
   );
   const vehicleMenu = (
-    <Menu onClick={(value)=>handleVehicle(value)} style={{width: '100%'}}>
+    <Menu onClick={(value)=>handleVehicle(value)} style={{width: '100%'}} placeholder='Бүх автомашин'>
       {vehicles.map((item)=>(
         <Menu.Item key={item.value}>
           {item.label}
@@ -195,30 +216,37 @@ const Order = () => {
     </Menu>
   );
   const dateCellRender = (value) => {
-    const listData = getListData(value);
-    return (
-      <ul className="events" style={{marginTop: '10px'}}>
-        {listData && listData.map((item) => (
-          <li key={item.bookingId}>
-            {/* <Badge status={item.type} text={item.content} /> */}
-            {calendarStatus === '1' && <div> <Tag color='#C6231A' className="eventText">{item.bookingNumber}</Tag>
-              <Tag color='gray' style={{borderRadius: '20px', border: ' 1px solid black',
-                fontSize: '10px',
-                lineHeight: '16px',
-                height: '20px',
-                width: '100px'}}></Tag></div>}
-            {calendarStatus === '2' && <Tag color='green' className="eventText">{item.bookingNumber}</Tag>}
-            {calendarStatus === '3' && <Tag color='yellow' className="eventText">{item.bookingNumber}</Tag>}
-          </li>
-        ))}
-        {listData === [] && <Tag color='#C6231A' className="eventText" style={{background: 'pink', height: '20px'}}></Tag>}
-      </ul>
-    );
+    const month = moment(value).format('YYYY-MM');
+    if (currMonth === month) {
+      const listData = getListData(value);
+      return (
+        <ul className="events" style={{marginTop: '10px'}}>
+          {listData && listData.map((item) => (
+            <li key={item.bookingId}>
+              {calendarStatus === '1' && <div> <Tag className="eventText" style={{overflowX: 't'}}> Хүлээгдэж буй</Tag>
+                <Tag className="eventText" style={{borderRadius: '20px', border: ' 1px solid black',
+                  fontSize: '10px',
+                  lineHeight: '16px',
+                  color: 'red',
+                  height: '20px',
+                  width: '100px'}}></Tag></div>}
+              {calendarStatus === '2' && <Tag color='green' className="eventText">{item.bookingNumber}</Tag>}
+              {calendarStatus === '3' && <Tag color='yellow' className="eventText">{item.bookingNumber}</Tag>}
+            </li>
+          ))}
+          {listData === [] && <Tag color='#C6231A' className="eventText" style={{background: 'pink', height: '20px'}}></Tag>}
+        </ul>
+      );
+    };
   };
   const getMonthData = (value) => {
     if (value.month() === 8) {
       return 1394;
     }
+  };
+  const getUnelgee = (id)=>{
+    // const  a = await callGet('')
+    return <div>{id}</div>;
   };
   const monthCellRender = (value) => {
     const num = getMonthData(value);
@@ -261,20 +289,20 @@ const Order = () => {
                   </Col>
                   <Col>
                     <Dropdown overlay={vehicleMenu} className='dropdown'>
-                      <Button style={{color: '#35446D'}}>Бүх автомашин<OrderedListOutlined /></Button>
+                      <Button style={{color: '#35446D'}} ><OrderedListOutlined /></Button>
                     </Dropdown>
                   </Col>
                 </Row>
                 {dataViewType ==='calendar'?
                   <div className='orderCalendar'>
                     <DayNightColumn />
-                    <Calendar className="customCalendar"
+                    <Calendar
                       locale={calendarLocale}
                       headerRender={({value, type, onChange, onTypeChange}) => {
                         const localeData = value.localeData();
                         const year = value.year();
+                        setCurrMonth(moment(value).format('YYYY-MM'));
                         const month = [];
-                        // console.log(localeData, 'awdawd');
                         for (let i = 0; i < 12; i++) {
                           month.push(localeData._months[i]);
                         }
@@ -285,7 +313,6 @@ const Order = () => {
                                 <LeftOutlined
                                   onClick={()=>{
                                     setCurrent(current-1);
-                                    console.log(current, 'ene harachde ');
                                     if (current === 1 ) {
                                       setCurrent(12);
                                       const newValue = value.clone();
@@ -314,7 +341,7 @@ const Order = () => {
                                     onChange(newValue);
                                   } else {
                                     const newValue = value.clone();
-                                    newValue.month(parseInt(current +1 ));
+                                    newValue.month(parseInt(current ));
                                     onChange(newValue);
                                   }
                                 }}
@@ -339,16 +366,18 @@ const Order = () => {
                       dataSource={calendarData}
                       renderItem={(item) => (
                         <List.Item >
-                          {console.log(item.bookingStatus, 'awdawdw')}
                           {item.bookingStatus ==='PENDING_PAYMENT' && <div className="calendarListStatus">
-                            {item.bookingStatusDescription}{'   '}
+                            {item.bookingStatusDescription}{''}
                             {item.expireDateDriver}
                           </div> }
-                          {item.bookingStatus === 'CONFIRMED'&& historyValue===true && <div className="calendarListStatus">
-                            {'Үнэлгээ'}
+                          {item.bookingStatus === 'CONFIRMED'&& historyValue === true && <div className="calendarListStatus1" style={{display: 'flex'}}>
+                            <div style={{color: '#fff'}}> Миний үнэлгээ : </div> <Rate className='unelgee' value={2}/>{getUnelgee(item.bookingId)}
+                          </div>}
+                          {item.bookingStatus === 'CANCELLED'&& historyValue === true && <div className="calendarListStatus">
+                           Цуцлагдсан захиалга
                           </div>}
                           {item.bookingStatus ==='CONFIRMED' && ! historyValue && <div className="calendarListStatus">
-                            {item.bookingStatusDescription}{'   '}
+                            {item.bookingStatusDescription}{''}
                           </div> }
                           <Row style={{width: '100%'}}>
                             <Col span={7}>
@@ -357,7 +386,7 @@ const Order = () => {
                             </Col>
                             <Col span={4} className="listdaynight">
                               <Row>
-                                {item.totalAtDay > 0 && item.totalAtNight === 0 && item.totalAllDay ===0 ?
+                                {item.totalAtDay > 0 && item.totalAtNight === 0 && item.totalAllDay === 0 ?
                                   <div className='orderDayType' style={{display: ' flex', height: '30px', background: '', width: '120px', alignItems: 'center'}}>
                                     <div style={{marginTop: '5px', marginLeft: '20%'}}>
                                       <img src='/icons/brightness_5_24px.png' height='12px' width='18px'/>
@@ -388,7 +417,7 @@ const Order = () => {
                                 </div>
                                 <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '30px'}} ><ArrowRightOutlined /></div>
                                 <div >
-                                  <div> <strong>{Helper.date(item.startDateTime)}</strong></div>
+                                  <div> <strong>{Helper.date(item.endDateTime)}</strong></div>
                                   <div> {Helper.time(item.endDateTime)}</div>
                                 </div>
 
@@ -400,13 +429,13 @@ const Order = () => {
                                 {item.totalPrice ? Helper.formatValueReverse(item.totalPrice) : 0}₮</strong></div>
                             </Col>
                             <Col span={3} className="listactions">
-                              <Link href={{pathname: `/park/profile/order/${item.bookingId}`, query: {page: '1', asWho: 1}}} passHref>
+                              <Link href={{pathname: `/park/profile/order/${item.bookingId}`, query: {page: '1', asWho: 1, history: historyValue}}} passHref>
                                 <EyeTwoTone twoToneColor="#0013D4" style={{fontSize: 20}} />
                               </Link>
 
                             </Col>
                             <Col>
-                              {calendarStatus != 2 && <button> <DeleteTwoTone style={{marginLeft: '10px', marginTop: '18px'}} twoToneColor="#C6231A" /></button>}
+                              {calendarStatus != 2 && <button> <DeleteTwoTone style={{marginLeft: '10px', marginTop: '18px'}} onClick={()=>onDeleteBooking(item.bookingId)} twoToneColor="#C6231A" /></button>}
                             </Col>
                           </Row>
                         </List.Item>

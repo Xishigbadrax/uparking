@@ -1,13 +1,17 @@
 import {Row, Col, Button, Calendar, Tag, Modal, Divider, Form, Checkbox} from 'antd';
 import Link from 'next/link';
-import {LeftOutlined, RightOutlined, DownOutlined, UpOutlined, InfoCircleOutlined} from '@ant-design/icons';
-import {useState, useEffect} from 'react';
+import {LeftOutlined, RightOutlined, DownOutlined, UpOutlined, InfoCircleOutlined, CheckOutlined, CloseOutlined} from '@ant-design/icons';
+import {useState, useEffect, useContext} from 'react';
 import {callGet, callPost} from '@api/api';
 // import Image from 'next/image';
 import {calendarLocale} from '@constants/constants';
+import {showMessage} from '@utils/message';
+import {messageType, defaultMsg} from '@constants/constants';
 import DayNightColumns from '@components/DayNightColumns';
 import renderHTML from 'react-render-html';
 import Helper from '@utils/helper';
+import {useRouter} from 'next/router';
+import Context from '@context/Context';
 import moment from 'moment';
 import CustomCalendar from '@components/orderEditCalendar/index';
 moment.updateLocale('mn', {
@@ -21,58 +25,84 @@ const booking = (props)=>{
   console.log(props, 'props');
   const [current, setCurrent]= useState(parseInt(moment().format('M')));
   // eslint-disable-next-line no-unused-vars
-  const [calendarData, setCalendarData]= useState([]);
+  const ctx = useContext(Context);
+  const router = useRouter();
   // eslint-disable-next-line no-unused-vars
   const [isVisibleTsutslahPage1, setIsVisibleTsutslah1]=useState(false);
   const [isModalVisibleCancelOrderConfirm, setIsModalVisibleCancelOrderConfirm] = useState(false);
   const [fromSelectedDate, setFromSelectedDate]= useState();
   const [orderData, setOrderData]= useState({});
+  const [modalData, setModalData] = useState([]);
   const [bookingId, setBookingId]= useState();
   const [cancelData, setCancelData]= useState();
   const [checkValue, setChechValue] = useState(false);
   const [isConfirmVisible, setIsConfirmVisible]=useState(false);
   const [seemoreUpDownArrow, setSeemoreUpDownArrow] = useState(false);
   const [seeCanceledBooking, setSeeCanceledBooking] =useState(false);
+  const [requestedData, setRequestedData] = useState([]);
   // eslint-disable-next-line no-unused-vars
   const [selectedDate, setSelectedDate] = useState([]);
-
+  const urlString = window.location.href;
+  const params = new URL(urlString);
+  const history = params.searchParams.get('history');
   useEffect( async ()=>{
-    const res = await callGet(`/booking/id/test?id=${props.orderId}&asWho=2`);
-    setBookingId(props.orderId);
-    console.log(res, 'gggggg');
-    setOrderData(res);
+    if (history) {
+      const res = await callGet(`/booking/id/history?id=${props.orderId}&asWho=2`);
+      setBookingId(props.orderId);
+      console.log(res, 'gg');
+      setOrderData(res);
+    } else {
+      setBookingId(props.orderId);
+      const res = await callGet(`/booking/id/test?id=${props.orderId}&asWho=2`);
+      setOrderData(res);
+      console.log(res);
+      if (res) {
+        setRequestedData(res.requestedBookingDetail);
+      }
+      // } else {
+      // showMessage(messageType.WARNING.type, defaultMsg.dataError);
+    }
+    // }
   }, []);
   const handleOkCancelOrder = async ()=>{
   };
-  const handleOkCancelOrderConfirm = ()=>{
+  const setRequestedState = (date, value) =>{
+    console.log(date, value);
+  };
+  const handleOkCancelOrderConfirm = ()=> {
 
   };
   const handleCancelCancelOrder = ()=>{
     setIsVisibleTsutslah1(false);
   };
-  const onClickSeeCanceledBooking=()=>{
+  const onClickSeeCanceledBooking=async (id)=>{
+    const res = await callGet(`/booking/detail?id=${bookingId}&walletId=${id}&asWho=2`);
+    console.log(res);
+    setModalData(res);
     setSeeCanceledBooking(true);
   };
   const handleClickCancelOrderContinue = async ()=>{
     if (!fromSelectedDate.length) {
       showMessage(messageType.WARNING.type, defaultMsg.chooseDate);
     } else {
-      // setisLoading(true);
       const formData = {
         bookingId: bookingId,
-        date: fromSelectedDate,
+        date: moment(fromSelectedDate).format('YYYY-MM-DD'),
       };
       const res = await callPost('/booking/cancelrequest', formData);
-      console.log(res);
       setCancelData(res);
       setIsVisibleTsutslah1(false);
       setIsModalVisibleCancelOrderConfirm(true);
-      // const res = await callPost('/booking/cancelrequest', formData);
-    // const cancelBookingDto = {
-    //   bookingId: bookingId,
-    //   date: fromSelectedDate,
-    // };
-    // const res = await callPost(`/booking/cancelrequest`,)
+    };
+  };
+  const onClickCancelRequested =async ()=>{
+    const formData = {
+      bookingId: bookingId,
+    };
+    const res = await callPost('/booking/cancelanybooking', formData);
+    if (res && res.status === 'success') {
+      router.push('/park/profile/order');
+      console.log(res, 'gg yu');
     };
   };
   const handleCancelCancelOrderConfirm = ()=>{
@@ -82,9 +112,24 @@ const booking = (props)=>{
 
   };
   const onFinishPolicy = async (value)=>{
-    // setIsLoading(true);
+    ctx.setIsLoading(true);
     const res = await callPost(`/booking/cancelpolicy?isAccept=${value.agreement}`);
-    setIsModalVisibleCancelOrderConfirm(false);
+    console.log(res);
+    if (res && res.status) {
+      const data =
+      {
+        bookingId: orderData.bookingId,
+        date: moment(fromSelectedDate).format('YYYY-MM-DD'),
+        returnAmount: cancelData ? cancelData.returnAmount :null,
+      };
+      const res2 = await callPost('/booking/cancel', data);
+      console.log(res2);
+      setIsModalVisibleCancelOrderConfirm(false);
+      ctx.setIsLoading(false);
+    } else {
+
+    }
+
     setIsConfirmVisible(true);
   };
   const getSelectedDate = (data) =>{
@@ -98,7 +143,7 @@ const booking = (props)=>{
       const currentMoment = moment(orderData.startDateTime, 'YYYY/MM/DD');
       const endMoment = moment(orderData.endDateTime, 'YYYY/MM/DD').add(1, 'day');
       while (currentMoment.isBefore(endMoment, 'day')) {
-        if (value.format('YYYY-MM-DD') === currentMoment.format('YYYY-MM-DD')) {
+        if (moment(value).format('YYYY-MM-DD') === moment(currentMoment).format('YYYY-MM-DD')) {
           listData.push(orderData);
         }
         currentMoment.add(1, 'days');
@@ -119,18 +164,16 @@ const booking = (props)=>{
                 background: 'rgba(0, 249, 184, 0.08)',
                 lineHeight: '16px',
                 height: '15px',
-                width: '100px',
-                paddingLeft: '20px'}}>{item.vehicleNumber}</Tag>
+                width: '90%',
+                paddingLeft: '20%'}}>{item.vehicleNumber}</Tag>
               <Tag style={{borderRadius: '20px', border: ' 0.4px solid #DEE2E9',
                 fontSize: '10px',
                 background: '#fff',
                 lineHeight: '16px',
                 height: '15px',
-                width: '100px'}}>
+                width: '90%'}}>
               </Tag>
             </div>
-            {/* {calendarStatus === '2' && <Tag color='green' className="eventText">{item.bookingNumber}</Tag>}
-            {calendarStatus === '3' && <Tag color='yellow' className="eventText">{item.bookingNumber}</Tag>} */}
           </li>
         ))}
         {listData.length === 0 &&
@@ -140,14 +183,14 @@ const booking = (props)=>{
             background: '#fff',
             lineHeight: '16px',
             height: '15px',
-            width: '100px',
+            width: '90%',
           }}></Tag>
           <Tag style={{borderRadius: '20px', border: ' 0.4px solid #DEE2E9',
             fontSize: '10px',
             lineHeight: '16px',
             background: '#fff',
             height: '15px',
-            width: '100px',
+            width: '90%',
           }}></Tag>
         </div>}
       </ul>
@@ -166,18 +209,13 @@ const booking = (props)=>{
           <span style={{fontSize: '20px', lineHeight: '24px', color: '#0013D4', marginTop: '20px'}}>Захиалгын Түүх  </span>
         </Col>
       </Row>
-      {/* <Row> */}
-      {/* <Col span={18} offset={2}> */}
-
       <Row className='orderCalendarAsWho2'>
         <Col span={2}offset={2}>
           <DayNightColumns/>
         </Col>
-        <Col span={12} >
+        <Col span={12}>
           <Calendar
             style={{height: '500px'}}
-            // className="customCalendar"
-            // disabledDate={disabledDate}
             headerRender={({value, type, onChange, onTypeChange}) => {
               const localeData = value.localeData();
               const year = value.year();
@@ -221,7 +259,7 @@ const booking = (props)=>{
                           onChange(newValue);
                         } else {
                           const newValue = value.clone();
-                          newValue.month(parseInt(current+1));
+                          newValue.month(parseInt(current));
                           onChange(newValue);
                         }
                       }}
@@ -251,7 +289,7 @@ const booking = (props)=>{
           <Row style={{marginTop: '40px'}} >
             <Col span={10} offset={1}>
               <p style={{color: '#0013D4', fontSize: '20px', fontWeight: '700'}}>{orderData && orderData.vehicleNumber}</p>
-              <p style={{fontWeight: '400', fontSize: '10px'}}>Toyota, Хар, Crown 200</p>
+              <p style={{fontWeight: '400', fontSize: '10px'}}>{orderData && orderData.vehicleMaker, orderData && orderData.vehicleColor, orderData && orderData.vehicleModel}</p>
             </Col>
           </Row>
           {orderData && orderData.totalAtDay > 0 && orderData.totalAtNight === 0 && orderData.totalAllDay === 0 &&
@@ -323,13 +361,13 @@ const booking = (props)=>{
           {orderData && orderData.totalAllDay > 0 && orderData.totalAtDay === 0 && orderData.totalAtNight === 0 &&
           <div>
             <Row style={{marginTop: '20px'}}>
-              <Col offset={2}><p style={{color: '#A2A4AA'}}>Бүтэн өдөр (09:00- 09:00)</p></Col>
+              <Col offset={2}><p style={{color: '#A2A4AA'}}>Бүтэн өдөр (09:00- 08:30)</p></Col>
             </Row>
             <Row>
               <Col offset={1} span={10}>
                 <div style={{borderRadius: '8px', border: '1px solid #DEE2E9'}}>
                   <p style={{paddingLeft: '10px', paddingTop: '10px', color: '#0013D4', fontWeight: '400', fontSize: '12px'}}>Эхлэх хугацаа</p>
-                  <p style={{paddingLeft: '10px', paddingBottom: '10px', color: '#141A29', fontWeight: '400', fontSize: '16px'}}>{orderData && orderData.startDateTime}</p>
+                  <p style={{paddingLeft: '10px', paddingBottom: '10px', color: '#141A29', fontWeight: '400', fontSize: '16px'}}>{ orderData.startDateTime}</p>
                 </div>
               </Col>
               <Col offset={1} span={10}>
@@ -353,7 +391,8 @@ const booking = (props)=>{
               </Row>
             </Row>
           </div>}
-          {orderData && (orderData.totalAllDay > 0 && orderData.totalAtDay > 0 && orderData.totalAtNight === 0) ||
+          {
+            orderData && (orderData.totalAllDay > 0 && orderData.totalAtDay > 0 && orderData.totalAtNight === 0) ||
            (orderData && orderData.totalAllDay > 0 && orderData.totalAtDay === 0 && orderData.totalAtNight > 0) ||
            (orderData && orderData.totalAllDay === 0 && orderData.totalAtDay > 0 && orderData.totalAtNight > 0) ||
            (orderData && orderData.totalAllDay > 0 && orderData.totalAtDay > 0 && orderData.totalAtNight > 0) &&
@@ -395,61 +434,110 @@ const booking = (props)=>{
                   <img src='/icons/brightness_4_24px.png'/>
                 </div></Col>
             </Row>
-          </div>}
+          </div>
+          }
+          {orderData && orderData.bookingStatus !== 'SPACE_OWNER_DECISION' &&
+            <div>
+              <Row style={{padding: '20px 10px'}}>
+                <Col offset={2} span={20} style={{background: 'rgba(222, 226, 233, 0.2)', borderRadius: '24px', padding: '13px 23px', display: 'inline-flex', textAlign: 'center', justifyContent: 'center'}}>
+                  <div style={{color: '#0013D4', fontWeight: 'bold', fontSize: '14px'}}>Захиалгын дэлгэрэнгүй харах</div>
+                  <div style={{marginLeft: '40px'}}>
+                    {!seemoreUpDownArrow ?
+                      <DownOutlined onClick={() => setSeemoreUpDownArrow(true)} /> :
+                      <UpOutlined onClick={() => setSeemoreUpDownArrow(false)} />
+                    }
+                  </div>
+                </Col>
+              </Row>
 
-          <Row style={{marginTop: '10px'}}>
-            <Col offset={2} span={20} style={{display: 'flex', height: '50px', background: ' rgba(222, 226, 233, 0.2)', paddingTop: '15px', borderRadius: '20px', paddingLeft: '50px'}}>
-              <div style={{color: '#0013D4', fontWeight: 'bold', fontSize: '14px'}}>Захиалгын дэлгэрэнгүй харах</div>
-              <div style={{marginLeft: '40px'}}>
-                {!seemoreUpDownArrow ?
-                  <DownOutlined onClick={() => setSeemoreUpDownArrow(true)} /> :
-                  <UpOutlined onClick={() => setSeemoreUpDownArrow(false)} />
-                }
-              </div>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={20} offset={1}>
-              {seemoreUpDownArrow ?
-                <div>
-                  {orderData.bookingDetail && orderData.bookingDetail ?
-                    orderData.bookingDetail.map((book, key) => (
-                      <div key={key}>
-                        <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                          <div>
-                            <div style={{color: '#0013D4', fontSize: '12px'}}>
+              <Row>
+                <Col offset={2} span={20}>
+                  {seemoreUpDownArrow ?
+                    <div>
+                      {orderData.bookingDetail && orderData.bookingDetail ?
+                        orderData.bookingDetail.map((book, key) => (
+                          <div key={key}>
+                            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                              <div>
+                                <div style={{color: '#0013D4', fontSize: '12px'}}>
                                                                     Эхлэх
-                            </div>
-                            <div>
-                              {Helper.removeSec(book.startDate)}
-                            </div>
-                          </div>
-                          <div style={{alignItems: 'center', justifyContent: 'center', display: 'flex'}}>
-                            <img
-                              preview={false}
-                              width={24}
-                              height={24}
-                              src={'/images/icon/arrow_right_alt_24px.png'}
-                            />
-                          </div>
-                          <div>
-                            <div style={{color: '#0013D4', textAlign: 'right', fontSize: '12px'}}>
+                                </div>
+                                <div>
+                                  {Helper.removeSec(book.startDate)}
+                                </div>
+                              </div>
+                              <div style={{alignItems: 'center', justifyContent: 'center', display: 'flex'}}>
+                                <img
+                                  width={24}
+                                  src={'/images/icon/arrow_right_alt_24px.png'}
+                                />
+                              </div>
+                              <div>
+                                <div style={{color: '#0013D4', textAlign: 'right', fontSize: '12px'}}>
                                                                     Дуусах
+                                </div>
+                                <div>
+                                  {Helper.removeSec(book.endDate)}
+                                </div>
+                              </div>
+                            </div>
+                            <Divider/>
+                          </div>
+                        )) :
+                        null}
+                    </div> :
+                    null
+                  }
+                </Col>
+              </Row>
+            </div>}
+          {orderData && orderData.bookingStatus === 'SPACE_OWNER_DECISION' &&
+          <div>
+            <Row style={{marginTop: '10px'}}>
+              <Col offset={3} span={18} style={{display: 'flex', height: '50px', background: ' rgba(222, 226, 233, 0.2)', paddingTop: '15px', borderRadius: '20px', paddingLeft: '50px'}}>
+                <div style={{color: '#0013D4', fontWeight: 'bold', fontSize: '14px'}}>Хүсэлттэй өдрүүдийг харах</div>
+                <div style={{marginLeft: '40px'}}>
+                  {!seemoreUpDownArrow ?
+                    <DownOutlined onClick={() => setSeemoreUpDownArrow(true)} /> :
+                    <UpOutlined onClick={() => setSeemoreUpDownArrow(false)} />
+                  }
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={18} offset={3}>
+                {seemoreUpDownArrow ?
+                  <div>
+                    {requestedData ?
+                      requestedData.map((book) => (
+                        <div key={book.date} style={{border: '1px solid gray', borderRadius: '8px', marginTop: '8px'}}>
+                          <div style={{display: 'flex', justifyContent: 'space-between', padding: '10px'}}>
+                            <div style={{width: '50%'}}>
+                              <div style={{color: '#0013D4', fontSize: '12px'}}>
+                                {Helper.formatDatetimeValue(book.date)}
+                              </div>
+                              <div>
+                                {book && book.timeSplitDescription === 'DAY' && <div style={{fontSize: '11px', color: '#141A29', fontWeight: '500', font: 'roboto', lineHeight: '16px', fontStyle: 'normal'}}>Өдөр /09:00-18:30/ </div>}
+                              </div>
                             </div>
                             <div>
-                              {Helper.removeSec(book.endDate)}
+                              <CloseOutlined className={ book &&! book.ownerDecision ? 'requestDelete':'requestDeleteNone'} onClick={()=>setRequestedState(book.date, false) }/>
                             </div>
+                            <div style={{paddingRight: '20px'}}>
+                              <CheckOutlined className={book && book.ownerDecision ?'requestConfirm':'requestConfirmNone'} onClick={()=>setRequestedState(book.date, true)}/>
+                            </div>
+
                           </div>
+                          {/* <Divider/> */}
                         </div>
-                        <Divider/>
-                      </div>
-                    )) :
-                    null}
-                </div> :
-                null
-              }
-            </Col>
-          </Row>
+                      )) :
+                      null}
+                  </div> :
+                  null
+                }
+              </Col>
+            </Row>
+          </div>}
           <Row style={{marginTop: '20px'}}>
             <Col offset={1}>
               <p style={{color: '#141A29', fontWeight: '700', fontSize: '14px', lineHeight: '24px'}}>Нийт захиалгын төлбөр</p>
@@ -460,19 +548,56 @@ const booking = (props)=>{
               <p style={{color: '#141A29', fontWeight: '700', fontSize: '16px', lineHeight: '24px'}}>{orderData && orderData.totalPrice}₮</p>
             </Col>
           </Row>
-          {
-            orderData && orderData.bookingStatus === 'CANCELLED' &&
-            <Row style={{marginTop: '20px'}}>
-              <Col offset={2}>
-                <p style={{color: '#C6231A', fontSize: '14px', fontWeight: '700', paddingTop: '5px'}}>
-                Захиалга цуцлагдсан байна.
-                </p>
-              </Col>
-              <Col offset={2}>
-                <Button style={{width: '100%', height: '32px', borderRadius: '10px', background: 'rgba(3, 54, 255, 0.08)', width: '98px'}}
-                  onClick={onClickSeeCanceledBooking}>харах</Button>
+          {orderData && orderData.bookingStatus === 'SPACE_OWNER_DECISION' &&
+          <div>
+            <Row style={{width: '100%'}}>
+              <Col offset={2} span={20} style={{display: 'flex', height: '50px', marginTop: '20px', background: ' rgba(255, 2, 102, 0.08)', paddingTop: '15px', borderRadius: '8px', justifyContent: 'center'}}>
+                <div style={{color: '#C6231A', fontWeight: 'bold', fontSize: '16px', alignItems: 'center', cursor: 'pointer'}} onClick={onClickCancelRequested}>Хүсэлт цуцлах</div>
               </Col>
             </Row>
+            <Row >
+              <Col span={20} offset={2} style={{marginTop: '20px'}}>
+                <Button disabled type='primary' style={{fontSize: '16px', height: '50px', fontWeight: 'bold', alignItems: 'center', width: '100%'}}>Хүсэлт баталгаажуулах</Button>
+              </Col>
+            </Row>
+          </div>}
+          {orderData && orderData.vehicleNumber ? (
+            <Row style={{marginTop: '20px'}}>
+              <Col style={{borderRadius: '8px', border: 'solid 1px #0013D4', display: 'flex', alignItems: 'center'}} offset={1}>
+                <div style={{padding: '20px'}}>
+                  <img
+                    width={24}
+                    src={'/images/icon/directions_car.png'}></img>
+                </div>
+                <div style={{paddingRight: '20px'}}>
+                  <div style={{color: '#000000'}}>{orderData && orderData.vehicleMaker, orderData.vehicleModel},</div>
+                  <div style={
+                    {
+                      color: '#0013D4',
+                      fontFamily: 'Roboto-Bold',
+                      textTransform: 'uppercase',
+                    }
+                  }><b>{ orderData && orderData.vehicleNumber}</b></div>
+                </div>
+              </Col>
+            </Row>
+          ) : null}
+          {
+            orderData && orderData.bookingStatus === 'CANCELLED' &&
+            orderData.wallets.length > 0 &&
+            orderData.wallets.map((item)=>(
+              <Row style={{marginTop: '20px'}} key={item.walletId}>
+                <Col offset={2}>
+                  <p style={{color: '#C6231A', fontSize: '14px', fontWeight: '700', paddingTop: '5px'}}>
+                Захиалга цуцлалт {item.walletId}
+                  </p>
+                </Col>
+                <Col offset={2}>
+                  <Button style={{width: '100%', height: '32px', borderRadius: '10px', background: 'rgba(3, 54, 255, 0.08)', width: '98px'}}
+                    onClick={()=>onClickSeeCanceledBooking(item.walletId)}>харах</Button>
+                </Col>
+              </Row>
+            ))
           }
           { orderData && orderData.bookingStatus ==='CONFIRMED'&&
             <Row style={{marginTop: '20px'}}>
@@ -511,7 +636,6 @@ const booking = (props)=>{
           <Col span={8}>
             <div style={{display: 'flex'}}>
               <img
-                preview={false}
                 width={24}
                 height={24}
                 src={'/images/icon/brightness_5_24px.png'}/><p style={{marginLeft: '10px'}}> Өдөр
@@ -532,16 +656,16 @@ const booking = (props)=>{
       <Modal title={<div style={{color: '#C6231A', fontWeight: 'bold', fontSize: '20px'}}>Захиалга цуцлах</div>} visible={isModalVisibleCancelOrderConfirm} onOk={handleOkCancelOrderConfirm} onCancel={handleCancelCancelOrderConfirm} footer={null}>
         <Row>
           <Col span={12} style={{color: '#141A29', height: '24px', fontSize: '16px'}}>Нийт цуцлах захиалгын төлбөр</Col>
-          <Col span={12} style={{color: '#0013D4', height: '24px', fontSize: '16px', fontWeight: 'bold', textAlign: 'right'}}>{Helper.formatValueReverse(10000)}₮</Col>
+          <Col span={12} style={{color: '#0013D4', height: '24px', fontSize: '16px', fontWeight: 'bold', textAlign: 'right'}}>{cancelData && cancelData.totalPrice}₮</Col>
         </Row>
-        <Row style={{marginTop: '10px'}}>
+        {/* <Row style={{marginTop: '10px'}}>
           <Col span={12} style={{color: '#141A29', height: '24px', fontSize: '16px'}}>Захиалга цуцалсны шимтгэл</Col>
-          <Col span={12} style={{color: '#C6231A', height: '24px', fontSize: '16px', fontWeight: 'bold', textAlign: 'right'}}>{10000}₮</Col>
-        </Row>
+          <Col span={12} style={{color: '#C6231A', height: '24px', fontSize: '16px', fontWeight: 'bold', textAlign: 'right'}}>₮</Col>
+        </Row> */}
         <Divider />
         <Row>
           <Col span={12} style={{color: '#141A29', height: '24px', fontSize: '16px'}}>Буцаалт</Col>
-          <Col span={12} style={{color: '#0013D4', height: '24px', fontSize: '16px', fontWeight: 'bold', textAlign: 'right'}}>{90909}₮</Col>
+          <Col span={12} style={{color: '#0013D4', height: '24px', fontSize: '16px', fontWeight: 'bold', textAlign: 'right'}}>{cancelData && cancelData.returnAmount}₮</Col>
         </Row>
         <Row>
           <Col style={{color: '#35446D', fontWeight: '700', fontSize: '14px', marginTop: '20px'}}>Цуцлалтын бодлого</Col>
@@ -570,7 +694,6 @@ const booking = (props)=>{
                       value ? Promise.resolve() : Promise.reject(new Error('Зөвшөөрнө үү')),
                   },
                 ]}
-                // {...tailFormItemLayout}
               >
                 <Checkbox style={{color: '#141A29', fontWeight: '400', fontSize: '16px'}} value={true} onClick={(e)=>{
                   if (checkValue === false) {
@@ -641,9 +764,57 @@ const booking = (props)=>{
       </Modal>
       <Modal visible={seeCanceledBooking} footer={null}
         headStyle={{backgroundColor: 'red'}}
-        className='cancelBooking'
-        title={<div >Захиалга цуцлалтын мэдээлэл</div>}>
+        className='tureesModal'
+        onCancel={()=>setSeeCanceledBooking(false)}
+        title={<div><b>Захиалга цуцлалтын мэдээлэл</b></div>}>
+        <div>
+          <Row className=" flex justify-between">
+            <Col><p><b>Нийт цуцлах захиалгын төлбөр:</b></p></Col>
+            <Col><p><b>{modalData && modalData.total }</b></p></Col>
+          </Row>
+          <Divider />
+          <p className=" text-[14px] font-bold">Таны цуцлах захиалга:</p>
+          <p className=" text-[12px] text-[#35446D]">{modalData && modalData.startDate} хойшхи захиалга цуцлагдсан. </p>
+          <Row style={{marginTop: '10px'}}>
+            {modalData != null ? <Col style={{display: 'flex', justifyItems: 'space-between'}} span={6}>
+              <img src="../../../icons/brightness_5_24px.png" height={18} width={18} />
+              <p style={{color: '#35446D', fontSize: '14px', marginLeft: '10px'}} >Өдөр  {modalData.day}</p>
+            </Col> : null}
 
+            {modalData != null ? <Col style={{display: 'flex', marginLeft: '40px'}} span={6}>
+              <img src="../../../icons/brightness_3_24px.png" height={18} width={18}/>
+              <p style={{color: '#35446D', fontSize: '14px', marginLeft: '10px'}}>Шөнө  {modalData.night}</p>
+            </Col> : null}
+            {modalData != null ? <Col style={{display: 'flex', marginLeft: '40px'}} span={6}>
+              <img src="../../../icons/brightness_4_24px.png"height={18} width={18} />
+              <p style={{color: '#35446D', fontSize: '14px', marginLeft: '10px'}}>Бүтэн өдөр  {modalData.fullDay}</p>
+            </Col> : null}
+          </Row>
+          <Divider />
+          <p className=" text-[14px] text-[#141A29] font-bold">Захиалга цуцлалтын шимтгэл</p>
+
+          <div className="flex justify-between">
+            <div>Нийт буцаалтын төлбөр </div>
+            <div className=" text-[14px] font-bold text-[#141A29]">{modalData && modalData.cancelTotal}₮</div>
+          </div>
+          <Divider />
+          <p className="text-[#141A29] font-bold">Буцаалтын төлбөр</p>
+          <p className=" text-[12px] text-[#35446D]">Буцаалтын төлбөр нь цуцлалтын бодлогын дагуу олгогдоно. </p>
+          <div className="flex justify-between">
+            <div className="flex  justify-between">
+              <div className=" mt-1 mr-[10px]"><img src="../../../icons/confirm.png" /></div>
+              <div>Захиалга цуцлалт </div>
+            </div>
+            <div className=" text-[#647189]">{modalData && modalData.walletCreatedDate}</div>
+          </div>
+          <div className="flex justify-between">
+            <div className="flex  justify-between">
+              <div className=" mt-1 mr-[10px]"><img src="../../../icons/time.png" /></div>
+              <div>Буцаалт </div>
+            </div>
+            {modalData != null && modalData.walletIsActive ? <div className=" text-[#647189]" >{modalData.walletUpdatedDate}</div> : <div className=" text-[#647189]">Хүлээгдэж байна</div>}
+          </div>
+        </div>
       </Modal>
     </div>
   );

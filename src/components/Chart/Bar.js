@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-import {Bar} from '@ant-design/charts';
+// import {Bar} from '@ant-design/charts';
 import css from './_.module.css';
 const DemoBar = ({
   title,
@@ -10,20 +10,20 @@ const DemoBar = ({
   additionalConfig,
   onReady,
 }) => {
-  const config = {
-    data: data,
-    xField: xField,
-    yField: yField,
-    seriesField: xField,
-    barWidthRatio: 0.9,
-    legend: {position: 'top-left'},
-    onReady: onReady,
-    ...additionalConfig,
-  };
+  // const config = {
+  //   data: data,
+  //   xField: xField,
+  //   yField: yField,
+  //   seriesField: xField,
+  //   barWidthRatio: 0.9,
+  //   legend: {position: 'top-left'},
+  //   onReady: onReady,
+  //   ...additionalConfig,
+  // };
   return (
     <div className={css.chartDiv}>
       <h1 className={css.chartTitle}>{title}</h1>
-      <Bar {...config} />
+      {/* <Bar {...config} /> */}
     </div>
   );
 };

@@ -25,22 +25,19 @@ const WalletBankInfo = (props) => {
 
   return (
 
-    <div>
+    <div className='walletIput'>
 
       <p style={{height: 16, fontSize: 12, color: '#A2A4AA'}}>
 
         {props.children}
       </p>
       <div style={{display: 'flex', justifyContent: 'space-between'}}>
-        <div style={{}}>
+        <div style={{marginTop: '10px'}}>
           {propData && propData !== '' ? (
             <Input type="number" bordered={false} value={propData} />
           ) : (
             <Input type="number" bordered={false} onChange={onChange} />
           )}
-        </div>
-        <div>
-
         </div>
       </div>
       <Divider />

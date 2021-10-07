@@ -4,7 +4,7 @@ import {Row, Col, Tabs, Modal, Button, Dropdown, Menu, DatePicker, Calendar, Tag
 import {useEffect, useState, useContext} from 'react';
 import {calendarLocale} from '@constants/constants';
 import Helper from '@utils/helper';
-import {DownOutlined, OrderedListOutlined, LeftOutlined, RightOutlined, ArrowRightOutlined, EyeTwoTone, DeleteTwoTone} from '@ant-design/icons';
+import {DownOutlined, CheckOutlined, OrderedListOutlined, CalendarOutlined, LeftOutlined, RightOutlined, ArrowRightOutlined, EyeTwoTone, DeleteTwoTone} from '@ant-design/icons';
 import moment from 'moment';
 import DayNightColumn from '@components/DayNightColumns';
 import Context from '@context/Context';
@@ -20,16 +20,18 @@ moment.updateLocale('mn', {
 
 const Lessor = () =>{
   const [current, setCurrent]=useState(parseInt(moment().format('M')));
-  const [orderData, setOrderData] = useState([]);
+  // const [orderData, setOrderData] = useState([]);
   const ctx = useContext(Context);
   const [calendarStatus, setCalendarStatus]=useState();
   const [vehicles, setVehicles]= useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [calendarData, setCalendarData]= useState([]);
   const [dateVisible, setDateVisible] =useState(false);
-  const [historyData, setHistoryData] =useState([]);
   const [currentPage, setCurrentPage] = useState();
   const [dataViewType, setDataViewType] = useState('calendar');
+  const [currMonth, setCurrMonth] = useState(moment().format('YYYY-MM'));
+
   useEffect(async ()=>{
     const vehicle = await callGet('/user/vehicle/list');
     setVehicles(vehicle);
@@ -77,9 +79,10 @@ const Lessor = () =>{
     } else if (key == 3) {
       setCalendarStatus(key);
       setIsConfirmed(false);
-
       getHistory();
     }
+  };
+  const onClickCheckBookingRequest = ()=>{
   };
   const handleChangeView = (value) => {
     if (value.key==='calendar') {
@@ -92,27 +95,31 @@ const Lessor = () =>{
 
   };
   const handleVehicle=()=>{
+
   };
   const dateCellRender = (value) => {
     const listData = getListData(value);
-    return (
-      <ul className="events" style={{marginTop: '10px'}}>
-        {listData && listData.map((item) => (
-          <li key={item.bookingId}>
-            {/* <Badge status={item.type} text={item.content} /> */}
-            {calendarStatus === '1' && <div> <Tag color='#C6231A' className="eventText">{item.bookingNumber}</Tag>
-              <Tag color='gray' style={{borderRadius: '20px', border: ' 1px solid black',
-                fontSize: '10px',
-                lineHeight: '16px',
-                height: '20px',
-                width: '100px'}}></Tag></div>}
-            {calendarStatus === '2' && <Tag color='green' className="eventText">{item.vehicleNumber}</Tag>}
-            {calendarStatus === '3' && <Tag color='green' className="eventText">{item.vehicleNumber}</Tag>}
-          </li>
-        ))}
-        {listData === [] && <Tag color='#C6231A' className="eventText" style={{background: 'pink', height: '20px'}}></Tag>}
-      </ul>
-    );
+    const month = moment(value).format('YYYY-MM');
+    if (currMonth=== month) {
+      return (
+        <ul className="events" style={{marginTop: '10px'}}>
+          {listData && listData.map((item) => (
+            <li key={item.bookingId}>
+              {/* <Badge status={item.type} text={item.content} /> */}
+              {calendarStatus === '1' && <div> <Tag className="eventText">{item.bookingNumber}</Tag>
+                <Tag style={{borderRadius: '20px', border: ' 1px solid black',
+                  fontSize: '10px',
+                  lineHeight: '16px',
+                  height: '20px',
+                  width: '100px'}}></Tag></div>}
+              {calendarStatus === '2' && <Tag color='green' className="eventText">{item.vehicleNumber}</Tag>}
+              {calendarStatus === '3' && <Tag color='green' className="eventText">{item.vehicleNumber}</Tag>}
+            </li>
+          ))}
+          {listData === [] && <Tag color='#C6231A' className="eventText" style={{background: 'pink', height: '20px'}}></Tag>}
+        </ul>
+      );
+    }
   };
   const onChangePage = (page)=>{
     console.log(page);
@@ -151,8 +158,18 @@ const Lessor = () =>{
   };
   const menu =(
     <Menu className="calendarViewer" onClick={(value)=>handleChangeView(value)} style={{width: '100%'}}>
-      <Menu.Item key='calendar' value={'calendar'}>Календарь</Menu.Item>
-      <Menu.Item key='list' value={'list'}>Жагсаалт</Menu.Item>
+      <Menu.Item key='calendar' value={'calendar'} style={{display: 'inline-flex'}}>
+        <div style={{display: 'flex'}}>
+          <CalendarOutlined />
+          <p style={{marginLeft: '5px'}}>Календарь</p>
+        </div>
+      </Menu.Item>
+      <Menu.Item key='list' value={'list'}>
+        <div style={{display: 'flex'}}>
+          <OrderedListOutlined />
+          <p style={{marginLeft: '5px'}}>Жагсаалт</p>
+        </div>
+      </Menu.Item>
     </Menu>
   );
 
@@ -200,6 +217,7 @@ const Lessor = () =>{
                 headerRender={({value, type, onChange, onTypeChange}) => {
                   const localeData = value.localeData();
                   const year = value.year();
+                  setCurrMonth(moment(value).format('YYYY-MM'));
                   const month = [];
                   console.log(localeData, 'awdawd');
                   for (let i = 0; i < 12; i++) {
@@ -353,7 +371,6 @@ const Lessor = () =>{
                             <div> <strong>{Helper.date(item.startDateTime)}</strong></div>
                             <div> {Helper.time(item.endDateTime)}</div>
                           </div>
-
                         </div>
                       </Col>
                       <Col span={4} className="listpay">
@@ -363,12 +380,12 @@ const Lessor = () =>{
                       </Col>
                       <Col span={3} className="listactions">
                         <Link href={{pathname: `/park/profile/order/${item.bookingId}`, query: {page: '1', asWho: 2}}} passHref>
-                          <EyeTwoTone twoToneColor="#0013D4" style={{fontSize: 20}} />
+                          <CheckOutlined twoToneColor="#0013D4" style={{fontSize: 20}} onClick={onClickCheckBookingRequest} />
                         </Link>
 
                       </Col>
                       <Col>
-                        {calendarStatus != 2 && <button> <DeleteTwoTone style={{marginLeft: '10px', marginTop: '18px'}} twoToneColor="#C6231A" /></button>}
+                        {calendarStatus === 3 && <button> <DeleteTwoTone style={{marginLeft: '10px', marginTop: '18px'}} twoToneColor="#C6231A" /></button>}
                       </Col>
                     </Row>
                   </List.Item>)}
@@ -805,7 +822,7 @@ const Lessor = () =>{
                           {item.totalPrice ? Helper.formatValueReverse(item.totalPrice) : 0}₮</strong></div>
                       </Col>
                       <Col span={3} className="listactions">
-                        <Link href={{pathname: `/park/profile/order/${item.bookingId}`, query: {page: '1', asWho: 2}}} passHref>
+                        <Link href={{pathname: `/park/profile/order/${item.bookingId}`, query: {page: '1', asWho: 2, history: true}}} passHref>
                           <EyeTwoTone twoToneColor="#0013D4" style={{fontSize: 20}} />
                         </Link>
 

@@ -3,7 +3,7 @@ import {Calendar, Row, Col} from 'antd';
 import {calendarLocale} from '@constants/constants.js';
 import moment from 'moment';
 import {useState, useEffect} from 'react';
-import {differenceInCalendarDays} from 'date-fns';
+// import {differenceInCalendarDays} from 'date-fns';
 // import Helper from '@utils/helper';
 import {RightOutlined, LeftOutlined} from '@ant-design/icons';
 
@@ -27,14 +27,14 @@ export const AcademicYearEnd = moment(today)
   .date(18);
 
 const CustomCalendar = (props) => {
-  const [selectedDate, setselectedDate] = useState([]);
+//   const [selectedDate, setselectedDate] = useState([]);
   // eslint-disable-next-line no-unused-vars
   const [bookedDate, setBookedDate] = useState([]);
   const [bookedDateOfDay, setBookedDateOfDay]=useState([]);
   const [bookedDateOfNight, setBookedDateOfNight]=useState([]);
   const [bookedDateOfFullDay, setBookedDateOfFullDay]=useState([]);
 
-  const [selectType, setSelectType] = useState('multi');
+  //   const [selectType, setSelectType] = useState('multi');
   const [dayOfWeek, setDayOfWeek] = useState([]);
   // const [dayStatus, setDayStatus] = useState(false);
   const [currMonth, setCurrMonth] = useState();
@@ -45,10 +45,7 @@ const CustomCalendar = (props) => {
   const [current, setCurrent]=useState(parseInt(moment().format('M')));
 
   useEffect(() => {
-    setType('');
-    if (props.selectType || props.selectType === 'single' || props.selectType === 'multi') {
-      setSelectType(props.selectType);
-    }
+    console.log(props.bookedDate, 'awdawdawd');
     // setBookedDate(props.bookedDate);
     setDayOfWeek(props.dayOfWeek);
     setType(props.dayType);
@@ -78,37 +75,38 @@ const CustomCalendar = (props) => {
       setBookedDateOfFullDay(array);
     }
   }, [props]);
-  useEffect(() => {
-    props.getSelectedDate(selectedDate);
-  }, [selectedDate]);
+  //   useEffect(() => {
+  //     props.getSelectedDate(selectedDate);
+  //   }, [selectedDate]);
 
 
   const onPanelChange = (value, mode) => {
-    setselectedDate([]);
+    // setselectedDate([]);
   };
-  const isSameDay = (a, b) => {
-    return differenceInCalendarDays(a, b) === 0;
-  };
+  //   const isSameDay = (a, b) => {
+  //     return differenceInCalendarDays(a, b) === 0;
+  //   };
   const dateFullCellRender = (value) => {
     const ofDay = value.day();
     const month = moment(value).format('YYYY-MM');
     const day = moment(value).format('D');
     const current = moment(value);
-    let onclickclass = '';
+    const onclickclass = '';
     let style;
 
     if (month === currMonth) {
-      if (
-        selectedDate.find((dDate) => isSameDay(dDate.toDate(), value.toDate()))
-      ) {
-        onclickclass = 'onclickeddate';
-      }
+    //   if (
+    //     selectedDate.find((dDate) => isSameDay(dDate.toDate(), value.toDate()))
+    //   ) {
+    //     onclickclass = 'onclickeddate';
+    //   }
       const a = dayOfWeek.find((item)=>
         item.day == ofDay && item.spaceStatusDescription === 'UN',
       );
       console.log(type, 'xaxa');
       if (type === 'Өдөр') {
         const day2 = bookedDateOfDay.find((item)=>item.startDate === moment(current).format('YYYY-MM-DD'));
+        // const b = bookedDate.find((item)=>item.startDate === moment(current).format('YYYY-MM-DD'));
         if (moment(current).format('YYYY-MM-DD') >= moment().format('YYYY-MM-DD') && a || day2 ) {
           style = {
             background: 'black',
@@ -121,6 +119,7 @@ const CustomCalendar = (props) => {
             color: 'white',
             marginLeft: '5px'};
         }
+
         return <div className={`customFullCellRender ant-picker-cell-inner ${onclickclass}`} style={style}>
           <div className="ant-picker-calendar-date-value">{day}</div>
         </div>;
@@ -139,6 +138,7 @@ const CustomCalendar = (props) => {
             color: 'white',
             marginLeft: '5px'};
         }
+
         return <div className={`customFullCellRender ant-picker-cell-inner ${onclickclass}`} style={style}>
           <div className="ant-picker-calendar-date-value">{day}</div>
         </div>;
@@ -157,6 +157,7 @@ const CustomCalendar = (props) => {
             color: 'white',
             marginLeft: '5px'};
         }
+
         return <div className={`customFullCellRender ant-picker-cell-inner ${onclickclass}`} style={style}>
           <div className="ant-picker-calendar-date-value">{day}</div>
         </div>;
@@ -173,18 +174,20 @@ const CustomCalendar = (props) => {
     return ( current < moment().endOf('day')) || a || b;
   };
   const onSelect = (value) => {
-    let array = [];
-    if (selectType === 'multi') {
-      array=[];
-      if (selectedDate.find((dDate) => isSameDay(dDate.toDate(), value.toDate()))) {
-        array = selectedDate.filter((i) => !isSameDay(i.toDate(), value.toDate()));
-        setselectedDate(array);
-      } else {
-        setselectedDate([...selectedDate, value]);
-      }
-    } else {
-      setselectedDate([value]);
-    }
+    // console.log(value, 'adwd');
+    // let array = [];
+    // console.log(selectedDate, 'eniig l check');
+    // if (selectType === 'multi') {
+    //   array=[];
+    //   if (selectedDate.find((dDate) => isSameDay(dDate.toDate(), value.toDate()))) {
+    //     array = selectedDate.filter((i) => !isSameDay(i.toDate(), value.toDate()));
+    //     setselectedDate(array);
+    //   } else {
+    //     setselectedDate([...selectedDate, value]);
+    //   }
+    // } else {
+    //   setselectedDate([value]);
+    // }
   };
   return (
     <div className="site-calendar-customize-header-wrapper">
@@ -213,6 +216,7 @@ const CustomCalendar = (props) => {
                         const newValue = value.clone();
                         newValue.month(parseInt(current-1-1));
                         onChange(newValue);
+                        value='';
                       } else {
                         const newValue = value.clone();
                         newValue.month(parseInt(current-1-1 ));
@@ -248,7 +252,8 @@ const CustomCalendar = (props) => {
                 </Col>
               </Row>
             </div>
-          );
+          )
+          ;
         }}
         onPanelChange={onPanelChange}
         dateFullCellRender={dateFullCellRender}

@@ -122,7 +122,7 @@ const mainInfo = (props) => {
     setResidenceData({
       ...residenceData,
       residenceBlockNumber: resiblock.value,
-      residenceBlockId: parseInt(resiblock.label),
+      residenceBlockId: parseInt(resiblock.value),
     });
   };
   const onChangeDoorNumber = (e) => {

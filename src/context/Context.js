@@ -24,13 +24,11 @@ export const ContextProvider = ({children}) => {
   const router = useRouter();
 
   const checkPermission = (permission) => {
-    // return state.permissions[permission] ? true : false;
-    return false;
+    return state.permissions[permission] ? true : false;
   };
 
   const getProfileData = async (user) => {
     const userdata = await callGet(`/user/${user.user_id}/test`);
-
     if (!userdata || userdata === undefined) {
       showMessage(messageType.FAILED.type, defaultMsg.dataError);
       return;
@@ -53,20 +51,18 @@ export const ContextProvider = ({children}) => {
     const accessToken = Auth.getToken();
     // let role = "admin";
     const permissionList = {};
-    if (router.pathname.startsWith('/park')) {
-      if (accessToken == null || accessToken == 'undefined') {
-        router.push('/login');
-        return;
-      } else {
-        const user = jwtDecode(accessToken);
-        getProfileData(user);
+    if (accessToken === null || accessToken === 'undefined') {
+      router.push('/login');
+      return;
+    } else {
+      const user = jwtDecode(accessToken);
+      getProfileData(user);
 
-        // getProfileData(user);
-        if (user.authorities !== undefined) {
-          user.authorities.map((auths) => {
-            permissionList[auths] = auths;
-          });
-        }
+      // getProfileData(user);
+      if (user.authorities !== undefined) {
+        user.authorities.map((auths) => {
+          permissionList[auths] = auths;
+        });
       }
     }
     dispatch({
@@ -85,7 +81,6 @@ export const ContextProvider = ({children}) => {
     //   return a.order - b.order;
     // });
     const tmpMenus = data;
-
     const menus = {};
     tmpMenus.map((mnu) => {
       const parentId = mnu.parentId;
@@ -130,6 +125,7 @@ export const ContextProvider = ({children}) => {
         setMenuAndPermissions,
         checkPermission,
         userdata,
+        getProfileData,
       }}
     >
       {children}

@@ -4,7 +4,7 @@ import WalletLayout from '@components/layouts/WalletLayout';
 import WalletCard from '../../../components/WalletCard';
 import {calendarLocale} from '@constants/constants.js';
 import Helper from '@utils/helper';
-import WalletChart from '@components/WalletChart';
+// import WalletChart from '@components/WalletChart';
 import moment from 'moment';
 import {callGet} from '@api/api';
 import {Calendar, Tag, Image} from 'antd';
@@ -88,7 +88,7 @@ const Wallet = () => {
         </div>
 
         <div>
-          <WalletChart />
+          {/* <WalletChart /> */}
         </div>
       </div>
       <div className=" mt-[24px]">
