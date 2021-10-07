@@ -57,15 +57,15 @@ const Transfer = () =>{
   const {TabPane} = Tabs;
   // const [modal] = Modal.useModal();
   let password = '';
-  const formData = {
-    amount: amount,
+  const [formData, setFormData] =useState({
+    amount: null,
     currency: 'mnt',
-    description: description,
-    toAccount: accountNumber,
-    toAccountName: accountName,
-    toBank: type,
+    description: null,
+    toAccount: null,
+    toAccountName: null,
+    toBank: 'KHANBANK',
     toCurrency: 'mnt',
-  };
+  });
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -84,17 +84,22 @@ const Transfer = () =>{
   };
   const onChangeAccountNumber = (value) => {
     setAccountNumber(value);
-    console.log(accountNumber, ' account number' );
+    // console.log(accountNumber, ' account number' );
+    setFormData({...formData, toAccount: value});
   };
   const onChangeAccountName = (value) => {
     setAccountName(value);
+    setFormData({...formData, toAccountName: value});
   };
   const onChangeAmount = (value) => {
     setAmount(value);
+    setFormData({...formData, amount: value});
+    console.log(value, 'amountiin valuea');
   };
 
   const onChangeDescription = (value) => {
-    setDescription(value);
+    // setDescription(value);
+    setFormData({...formData, description: value});
   };
 
   const BankImage = () => {
@@ -141,24 +146,69 @@ const Transfer = () =>{
   const submit = async () => {
     // setisLoading(true);
 
-    await callGet(`/user/check/transactionpass?rawPass=${password}`, null).then(
-      async (res) => {
-        if (res.status == 'success') {
-          await callPost('/khanbank/intertransfer', formData).then((res2) => {
-            alert('amjilttai');
-            // setisLoading(false);
-          });
+    const res = await callGet(`/user/check/transactionpass?rawPass=${password}`);
+    console.log(res, 'adawdw');
+    if (res.status === 'success') {
+      if (type == 'KHANBANK') {
+        const res2 = await callPost('/khanbank/intertransfer', formData);
+        console.log(formData, 'formDataaa');
+        console.log(res2, 'res2 iin hariu');
+
+        if (res2.status == 'success') {
+          setmessageShow(true);
+          setmessage(`Таны хэтэвчнээс ${amount} хасагдаж, Хаан банкны ${accountNumber} тоот дансанд амжилттай шилжүүлэг хийгдлээ.`);
+          settitle('Амжилттай');
+          setstatus('success');
         } else {
           setmessageShow(true);
-
-          setmessage(res.error);
-          settitle('Амжилтгүй');
+          setmessage('Шилжүүлэг амжилтгүй');
+          settitle('Алдаа');
           setstatus('error');
         }
-        // setisLoading(false);
-      },
-    );
+      } else if (type == 'GOLOMTBANK') {
+        const res2 = await callPost('/golomt/domesttransfer', formData);
+        console.log(formData, 'formDataaa');
+        console.log(res2, 'res2 iin hariu');
+
+        if (res2.status == 'success') {
+          setmessageShow(true);
+          setmessage(`Таны хэтэвчнээс ${amount} хасагдаж, Хаан банкны ${accountNumber} тоот дансанд амжилттай шилжүүлэг хийгдлээ.`);
+          settitle('Амжилттай');
+          setstatus('success');
+        } else {
+          setmessageShow(true);
+          setmessage('Шилжүүлэг амжилтгүй');
+          settitle('Алдаа');
+          setstatus('error');
+        }
+      } else if (type == 'TDB') {
+        const res2 = await callPost('/tdb/transfer', formData);
+        console.log(formData, 'formDataaa');
+        console.log(res2, 'res2 iin hariu');
+
+        if (res2.status == 'success') {
+          setmessageShow(true);
+          setmessage(`Таны хэтэвчнээс ${amount} хасагдаж, Хаан банкны ${accountNumber} тоот дансанд амжилттай шилжүүлэг хийгдлээ.`);
+          settitle('Амжилттай');
+          setstatus('success');
+        } else {
+          setmessageShow(true);
+          setmessage('Шилжүүлэг амжилтгүй');
+          settitle('Алдаа');
+          setstatus('error');
+        }
+      }
+      // setisLoading(false)
+    } else {
+      setmessageShow(true);
+      setmessage(res.error);
+      settitle('Амжилтгүй');
+      setstatus('error');
+    }
+    // setisLoading(false);
   };
+
+
   const Validate =()=> {
     Modal.info({
       title: <p style={{fontWeight: 'bold'}}>Баталгаажуулах</p>,
@@ -172,7 +222,7 @@ const Transfer = () =>{
             onChange={(e) => onchangeee(e)}
             placeholder="Гүйлгээний нууц үг"
           /> */}
-          <MaskedInput mask="1111" onChange={(e) => onchangeee(e)} name="Гүйлгээний нууц үг" />
+          <MaskedInput mask="1111" type="password" onChange={(e) => onchangeee(e)} name="Гүйлгээний нууц үг" />
         </div>
       ),
       onOk() {
@@ -238,7 +288,7 @@ const Transfer = () =>{
             <div>
               {/* <WalletBankInfo2 onChangeInput={onChangeAmount} place="0₮" /> */}
               {/* <Input className=" text-[48px] text-center" bordered={false} onClick={onChangeAmount} placeholder="0₮" /> */}
-              <Input type="number" className="text-[48px] text-center" onChange={onChangeAmount} bordered={false} placeholder="0₮" />
+              <Input type="number" className="text-[48px] text-center" onChange={(e) => onChangeAmount(e.target.value)} bordered={false} placeholder="0₮" />
             </div>
 
             {!isTransactionDesc ? (
@@ -303,6 +353,8 @@ const Transfer = () =>{
                     <span
                       onClick={() => {
                         settype(tabitem.type);
+                        setFormData({...formData, toBank: tabitem.type});
+                        console.log(tabitem.type, 'typeeee');
                       }}
                     >
                       <Image

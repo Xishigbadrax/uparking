@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-vars */
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 // import {Line} from '@ant-design/charts';
 import {Line} from 'react-chartjs-2';
 import {Button, Tabs} from 'antd';
 import {Legend} from 'chart.js';
+import {callGet, callPost} from '@api/api';
 
 const WalletChart = (props) => {
   const {TabPane} = Tabs;

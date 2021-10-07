@@ -51,8 +51,9 @@ const timeSplit = [
   {id: 2, name: 'Боломжгүй'},
 ];
 // eslint-disable-next-line react/prop-types
-const Edit = ({data}) => {
-  console.log(data, 'dataaaaaaaaa');
+const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
+  // console.log(props, 'pppppppppppppppp');
+  // console.log(data, 'dataaaaaaaaa');
   const GOOGLE_API = process.env.NEXT_GOOGLE_API;
   // const router = useRouter();
   // const [current, setCurrent] = useState(0);
@@ -70,6 +71,7 @@ const Edit = ({data}) => {
   const [saleForm]= Form.useForm();
   const [lat, setLatitude]=useState();
   const [lng, setLongitude]=useState();
+  const [test, setTest]=useState(true);
   // eslint-disable-next-line no-unused-vars
   const [loading, setLoading]=useState(false);
   const [mainLoading, setMainLoading]= useState(false);
@@ -98,9 +100,68 @@ const Edit = ({data}) => {
   const [loadingDirect, setLoadingDirect] = useState(false);
   const [aimag, setAimag]= useState([]);
   const [selectedAimag, setSelectedAimag] = useState();
+  const [selectedAimagName, setSelectedAimagName] = useState();
   const [sum, setSum]= useState([]);
   const [selectedSum, setSelectedSum] = useState();
+  const [selectedSumName, setSelectedSumName] = useState();
+  const [selectedBairName, setSelectedBairName] = useState();
+  const [selectedGateNumber, setSelectedGateNumber] = useState();
   const [section, setSection]= useState([]);
+  const [sectionName, setSectionName]= useState([]);
+  const [bairniiDugaar, setBairniiDugaar]= useState([]);
+  const [selectedBuilding, setSelectedBuilding]= useState();
+  const [selectedBuildingNumber, setSelectedBuildingNumber]= useState();
+  const [splitData, setSplitData]= useState();
+
+
+  const [weekSale, setweekSale] = useState(null);
+  const [weekId, setweekId] = useState(null);
+  const [weekDescription, setweekDescription] = useState();
+  const [monthId, setmonthId] = useState(null);
+  const [monthSale, setmonthSale] = useState(null);
+  const [monthDescription, setMonthDescription] = useState();
+  const [weekSaleSplitCode, setWeekSaleSplitCode] = useState(null);
+  const [monthSaleSplitCode, setMonthSaleSplitCode] = useState(null);
+
+  // eslint-disable-next-line no-unused-vars
+  const [selectedSection, setSelectedSection] = useState();
+  const [residenceList, setResidence] = useState([]);
+  const [selectedResidence, setSelectedResidence] = useState();
+  const [residenceBLockList, setResidenceBlockList]= useState([]);
+  // Зогсоолын үзүүлэлтийн мэдээлэл  хадгалах State
+  const [spaceSizeData, setSpaceSizeData] = useState([]);
+  const [entranceData, setEncranceData] = useState([]);
+  const [parkingData, setParkingData] = useState([]);
+  const [spaceTypeData, setSpaceTypeData] = useState([]);
+  const [routeData, setRouteData] = useState([]);
+  const [floorData, setFloorData] = useState([]);
+  const [priceArray, setPriceArray]= useState([]);
+  const [discountValue, setDiscountValue]=useState(false);
+  const [rentDay, setRentDay] = useState(false);
+
+  // eslint-disable-next-line no-unused-vars
+  const [weekData, setWeekData] = useState();
+  // eslint-disable-next-line no-unused-vars
+  const [checked, setChecked] = useState();
+
+  const [mondayMorning, setmondayMorning] = useState('Боломжтой');
+  const [tuesdayMorning, settuesdayMorning] = useState('Боломжтой');
+  const [wednesdayMorning, setwednesdayMorning] = useState('Боломжтой');
+  const [thursdayMorning, setthursdayMorning] = useState('Боломжтой');
+  const [fridayMorning, setfridayMorning] = useState('Боломжтой');
+  const [saturdayMorning, setsaturdayMorning] = useState('Боломжтой');
+  const [sundayMorning, setsundayMorning] = useState('Боломжтой');
+  // const [statusValue, setStatusValue]=useState('CANCELLED');
+  // eslint-disable-next-line no-unused-vars
+  const [mondayNight, setmondayNight] = useState('Боломжтой');
+  const [tuesdayNight, settuesdayNight] = useState('Боломжтой');
+  const [wednesdayNight, setwednesdayNight] = useState('Боломжтой');
+  const [thursdayNight, setthursdayNight] = useState('Боломжтой');
+  const [fridayNight, setfridayNight] = useState('Боломжтой');
+  const [saturdayNight, setsaturdayNight] = useState('Боломжтой');
+  const [sundayNight, setsundayNight] = useState('Боломжтой');
+  const [daySplitId, setDaySplitId] = useState(null);
+  const [nightSplitId, setNightSplitId] = useState(null);
   const [mainData, setMainData] = useState({
     provinceId: data.provinceId,
     districtId: data.districtId,
@@ -122,45 +183,68 @@ const Edit = ({data}) => {
     typeId: data.typeId,
     typeOther: data.typeOther,
   });
-  // eslint-disable-next-line no-unused-vars
-  const [selectedSection, setSelectedSection] = useState();
-  const [residenceList, setResidence] = useState([]);
-  const [selectedResidence, setSelectedResidence] = useState();
-  const [residenceBLockList, setResidenceBlockList]= useState([]);
-  // Зогсоолын үзүүлэлтийн мэдээлэл  хадгалах State
-  const [spaceSizeData, setSpaceSizeData] = useState([]);
-  const [entranceData, setEncranceData] = useState([]);
-  const [parkingData, setParkingData] = useState([]);
-  const [spaceTypeData, setSpaceTypeData] = useState([]);
-  const [routeData, setRouteData] = useState([]);
-  const [floorData, setFloorData] = useState([]);
-  const [priceArray, setPriceArray]= useState([]);
-  const [discountValue, setDiscountValue]=useState(false);
+  const [mainData7, setMainData7] = useState({
 
-  // eslint-disable-next-line no-unused-vars
-  const [weekData, setWeekData] = useState();
-  // eslint-disable-next-line no-unused-vars
-  const [checked, setChecked] = useState();
+    capacityId: 0,
+    entranceLock: 0,
+    floorNumber: 0,
+    isNumbering: 0,
+    parkingId: data.parkingId,
+    parkingSpaceId: data.id,
+    residenceBlockId: 0,
+    returnRoutes: 0,
+    typeId: 0,
+    typeOther: '',
+  });
 
-  const [mondayMorning, setmondayMorning] = useState('Боломжтой');
-  const [tuesdayMorning, settuesdayMorning] = useState('Боломжтой');
-  const [wednesdayMorning, setwednesdayMorning] = useState('Боломжтой');
-  const [thursdayMorning, setthursdayMorning] = useState('Боломжтой');
-  const [fridayMorning, setfridayMorning] = useState('Боломжтой');
-  const [saturdayMorning, setsaturdayMorning] = useState('Боломжтой');
-  const [sundayMorning, setsundayMorning] = useState('Боломжтой');
-  // const [statusValue, setStatusValue]=useState('CANCELLED');
-  // eslint-disable-next-line no-unused-vars
-  const [mondayNight, setondayNight] = useState('Боломжтой');
-  const [tuesdayNight, settuesdayNight] = useState('Боломжтой');
-  const [wednesdayNight, setwednesdayNight] = useState('Боломжтой');
-  const [thursdayNight, setthursdayNight] = useState('Боломжтой');
-  const [fridayNight, setfridayNight] = useState('Боломжтой');
-  const [saturdayNight, setsaturdayNight] = useState('Боломжтой');
-  const [sundayNight, setsundayNight] = useState('Боломжтой');
+  const [mainData2, setMainData2] = useState({
+    imageParkingOverall: data.imageParkingOverall,
+    imageResidenceGate: data.imageResidenceGate,
+    parkingSpaceId: data.id,
+
+  });
+  const [mainData3, setMainData3] = useState({
+    imageFromGate: data.imageFromGate,
+    imageSpaceNumber: data.imageSpaceNumber,
+    parkingSpaceId: data.id,
+
+  });
+
+
+  const [mainData4, setMainData4] = useState({
+    hourlyPrice: data.hourlyPrice,
+    parkingSpaceId: data.id,
+    parkingSpacePriceInstance: null,
+  });
+  const [mainData5, setMainData5] = useState({
+    parkingSpaceId: data.id,
+    parkingSpaceSale: null,
+
+  });
+  // setMainData6(dayOfWeek.)
+
+
+  // console.log(mainData5, 'dataa 5');
+  // console.log(data, 'mainii data');
+  // console.log(mainData2, 'maindata 2 ');
+  // console.log(mainData3, 'maindataaa 3');
+  // console.log(mainData4, 'main data 4');
+  // console.log(mainData5, 'mainDataa 5');
+
+
+  main(mainData);
+
+
+  // console.log(mainData, 'Main datanii medeelel');
   useEffect(async ()=>{
     const aimags=await callGet('/address/aimag');
     setAimag(aimags);
+
+    const splitdata = await callGet('/parkingspace/timesplit');
+    setSplitData(splitdata);
+    setDaySplitId(splitdata.daySplit.id);
+    setNightSplitId(splitdata.nightSplit.id);
+    // console.log(splitdata, 'split data');
 
     const spaceSize = await callGet('/reference/list/test?type=SPACE_TYPE');
     setSpaceSizeData(spaceSize);
@@ -177,7 +261,7 @@ const Edit = ({data}) => {
     const floor = await callGet('/reference/list/test?type=FLOOR_NUMBER');
     setFloorData(floor);
     setEditData(data);
-    console.log(data);
+    console.log(data, 'irj bgaa data');
     console.log(editData);
     setLatitude(editData.lat);
     setLongitude(editData.lng);
@@ -211,41 +295,76 @@ const Edit = ({data}) => {
     const value = aimag.find((item)=>item.label===e);
     const sum = await callGet(`/address/sum/${value.value}`);
     setSum(sum);
+    console.log(sum, 'sumiin utga');
     setSelectedAimag(value.value);
+    console.log(value, 'vlueee');
+    setSelectedAimagName(value.label);
+    console.log(selectedAimag, 'songogdson aimg');
     setMainData({...mainData, provinceId: value.value});
   };
   const onChangeSum = async (e)=>{
     const section = await callGet(`/address/khoroo/${e}`);
     setSection(section);
     setMainData({...mainData, districtId: e});
-    setSelectedSum(e);
+    const selectSum = sum.find((item)=>item.value==e);
+    setSelectedSum(selectSum.value);
+    setSelectedSumName(selectSum.label);
+    console.log(selectSum.label, 'maybe sumiin medeelel');
+    // console.log(section, 'khoroonii medeele');
   };
   const onChangeSection = async (e)=>{
     setSelectedSection(e);
-    console.log(e);
+    console.log(e, 'songoson khorooo');
+    const selectkhoroo = section.find((item)=>item.value==e);
+    console.log(selectkhoroo.label, 'khoroo shuu');
+    setSectionName(selectkhoroo.label);
     setMainData({...mainData, sectionId: e});
     const residence = await callGet(`/address/residence?districtId=${selectedSum}&provinceId=${selectedAimag}&sectionId=${e}`);
     setResidence(residence);
   };
   const onChangeResidence = async (e)=>{
-    console.log(e);
-    setMainData({...mainData, residenceId: e});
+    setSelectedBuilding(e);
+    console.log(e, 'songoson bair');
+
     setSelectedResidence(e);
     const residenceBlock = await callGet(`/address/residenceblock?residenceId=${e}`);
-    console.log(residenceBlock);
     setResidenceBlockList(residenceBlock);
+    console.log(residenceBlock, 'aaa');
+    const selectbair = residenceList.find((item)=>item.value==e);
+
+    console.log(selectbair.label, 'bair shuu');
+    setMainData({...mainData, residenceName: selectbair.label, residenceId: e});
+
+    setSelectedBairName(selectbair.label);
+  };
+
+  const onChangeResidenceBlock = async (e)=>{
+    console.log(e, 'ooooo sda');
+    setSelectedBuildingNumber(e);
+
+    // setSelectedResidence(e);
+    // const residenceBlock = await callGet(`/address/residenceblock?residenceId=${e}`);
+    // setResidenceBlockList(residenceBlock);
+    // console.log(residenceBlock, 'aaa');
+    const selectbairdugaar = residenceBLockList.find((item)=>item.value==e);
+    setBairniiDugaar(selectbairdugaar.label);
+    console.log(selectbairdugaar.label, 'bairnii dugaaraa');
+    setMainData({...mainData, residenceBlockNumber: selectbairdugaar.label});
+    setMainData7({...mainData7, residenceBlockId: e});
+    // setSelectedBairName(selectbair.label);
   };
   const onchangeInputResidenceName=(e)=>{
     setMainData({...mainData, residenceName: e.target.value});
-    console.log(e.target.value);
+    console.log(e.target.value, 'bairnii dugaara');
   };
   const onChangeInputResidenceNumber =(e)=>{
     setMainData({...mainData, residenceBlockNumber: e.target.value});
-    console.log(e.target.value);
+    console.log(e.target.value), 'bairnii dugaaraaa';
   };
   const onChangeParkingGateNumber =(e)=>{
     setMainData({...mainData, parkingGateNumber: e.target.value});
-    console.log(e.target.value);
+    console.log(e.target.value, 'gatenii number');
+    setSelectedGateNumber(e.target.value);
   };
   const onChangeMainImageState = (e) => {
     setMainImageSpin(true);
@@ -276,7 +395,8 @@ const Edit = ({data}) => {
   const onMapClick = (e)=>{
     setLongitude(e.lng);
     setLatitude(e.lat);
-    console.log(e);
+    console.log(e, 'urtraga orgorogo');
+    setMainData({...mainData, latitude: e.lat, longitude: e.lng});
   };
   const changeMaindata = (e) => {
     setMainLoading(true);
@@ -284,29 +404,60 @@ const Edit = ({data}) => {
     setMainLoading(false);
   };
   const changeSpaceData = (e) => {
-    setSpaceLoading(true);
+    // setSpaceLoading(true);
     setSpaceValue(true);
-    setSpaceLoading(false);
+    // setSpaceLoading(false);
   };
 
   const OnSaveAddressData = async (e) => {
-    console.log(addressForm.getFieldsValue());
-    console.log(mainData);
-    const res = await callPost('/parkingspace/update/1', mainData);
-    console.log(res);
-    const gg = await callGet(`parkingspace/update/1?parkingSpaceId=${data.id}`);
-    console.log(gg);
-
+    // console.log(addressForm.getFieldsValue());
+    // console.log(mainData, 'main dataa');
+    // const res = await callPost('/parkingspace/update/1', mainData);
+    // console.log(res, 'update res');
+    // const gg = await callGet(`parkingspace/update/1?parkingSpaceId=${data.id}`);
+    // console.log(gg, 'gg iin utga');
+    console.log(mainData, 'main dataaa');
+    setTest(true);
     setValue(false);
   };
   const spaceDataSave = (e) => {
+    main7(mainData7);
+    console.log(mainData7, 'main7 dataaa');
     setSpaceValue(false);
   };
-  const onChangeFloorNumber = (e)=>{
+  const onChangefloorNumberId = (e)=>{
     console.log(e);
+    setMainData7({...mainData7, floorNumber: +e});
   };
+  const onChangeEntranceLock = (e)=>{
+    console.log(e);
+    setMainData7({...mainData7, entranceLock: +e});
+  };
+  const onChangeisNumbering = (e)=>{
+    console.log(e);
+    setMainData7({...mainData7, isNumbering: +e});
+  };
+  const onChangeCapacityId = (e)=>{
+    console.log(e);
+    setMainData7({...mainData7, capacityId: +e});
+  };
+  const onChangeTypeId = (e)=>{
+    console.log(e);
+    setMainData7({...mainData7, typeId: +e});
+  };
+  const onChangeReturnRoutes = (e)=>{
+    console.log(e);
+    setMainData7({...mainData7, returnRoutes: +e});
+  };
+  const onChangeTypeOther = (e)=>{
+    console.log(e.target.value);
+    setMainData7({...mainData7, typeOther: e.target.value});
+  };
+
   {/* Үндсэн зургийн мэдээлэлтэй холбоотой STATE*/}
   const onsaveMainImage = () => {
+    main2(mainData2);
+    console.log(mainData2, 'main dataa 2');
     setMainImageValue(false);
   };
   {/* Хотхоны ой орчмын зураг оруулах хэсэг*/}
@@ -336,6 +487,9 @@ const Edit = ({data}) => {
       getBase64(
         info.file.originFileObj,
         (image2) => (
+          setMainData2({...mainData2, imageResidenceGate: image2.slice(22)}),
+
+          console.log(image2, 'zurag 2'),
           setLoadingExit(false), setSelectedResidenceExitImage(image2)
         ),
       );
@@ -352,6 +506,7 @@ const Edit = ({data}) => {
         info.file.originFileObj,
         (image3) => (
           console.log(image3),
+
           setLoadingExitImage(false),
           setSelectedExitImage(image3)
         ),
@@ -368,14 +523,15 @@ const Edit = ({data}) => {
       getBase64(
         info.file.originFileObj,
         (image3) => (
-          console.log(image3),
+          console.log(image3, 'zurag 3'),
           setOverallLoading(false),
+          setMainData2({...mainData2, imageParkingOverall: image3.slice(22)}),
           setImageParkingOverall(image3)
         ),
       );
     }
   };
-  const onChangeSpaceNumber = ()=>{
+  const onChangeSpaceNumber = (info)=>{
     if (info.file.status === 'uploading') {
       setLoadingSpaceNumber(true);
       return;
@@ -385,6 +541,7 @@ const Edit = ({data}) => {
         info.file.originFileObj,
         (image3) => (
           console.log(image3),
+          setMainData3({...mainData3, imageSpaceNumber: image3.slice(22)}),
           setLoadingSpaceNumber(false),
           setImageSpaceNumber(image3)
         ),
@@ -400,7 +557,8 @@ const Edit = ({data}) => {
       getBase64(
         info.file.originFileObj,
         (image3) => (
-          console.log(image3),
+          console.log(image3, 'haalganii zurag'),
+          setMainData3({...mainData3, imageFromGate: image3.slice(22)}),
           setLoadingFromGate(false),
           setImageFromGate(image3)
         ),
@@ -424,17 +582,151 @@ const Edit = ({data}) => {
     }
   };
   const onSaveSpaceImage = ()=>{
+    main3(mainData3);
+    console.log(mainData3, 'mainDataa 3');
     setSpaceImage(false);
   };
+  const onChangeRent = ()=>{
+    setRentDay(true);
+  };
+  const onChangeRentDay = ()=>{
+    const dayOfWeek= [
+      {
+        day: 1,
+        spaceStatusCode: mondayMorning == 'Боломжтой' ? 'AV' : 'UN',
+        timeSplitId: daySplitId != null ? daySplitId : null,
+      },
+      {
+        day: 1,
+        spaceStatusCode: mondayNight == 'Боломжтой' ? 'AV' : 'UN',
+        timeSplitId: nightSplitId,
+      },
+      {
+        day: 2,
+        spaceStatusCode: tuesdayMorning == 'Боломжтой' ? 'AV' : 'UN',
+        timeSplitId: daySplitId ? daySplitId : null,
+      },
+      {
+        day: 2,
+        spaceStatusCode: tuesdayNight == 'Боломжтой' ? 'AV' : 'UN',
+        timeSplitId: nightSplitId,
+      },
+      {
+        day: 3,
+        spaceStatusCode: wednesdayMorning === 'Боломжтой' ? 'AV' : 'UN',
+        timeSplitId: daySplitId,
+      },
+      {
+        day: 3,
+        spaceStatusCode: wednesdayNight === 'Боломжтой' ? 'AV' : 'UN',
+        timeSplitId: nightSplitId,
+      },
+      {
+        day: 4,
+        spaceStatusCode: thursdayMorning == 'Боломжтой' ? 'AV' : 'UN',
+        timeSplitId: daySplitId,
+      },
+      {
+        day: 4,
+        spaceStatusCode: thursdayNight == 'Боломжтой' ? 'AV' : 'UN',
+        timeSplitId: nightSplitId,
+      },
+      {
+        day: 5,
+        spaceStatusCode: fridayMorning == 'Боломжтой' ? 'AV' : 'UN',
+        timeSplitId: daySplitId,
+      },
+      {
+        day: 5,
+        spaceStatusCode: fridayNight == 'Боломжтой' ? 'AV' : 'UN',
+        timeSplitId: nightSplitId,
+      },
+      {
+        day: 6,
+        spaceStatusCode: saturdayMorning == 'Боломжтой' ? 'AV' : 'UN',
+        timeSplitId: daySplitId,
+      },
+      {
+        day: 6,
+        spaceStatusCode: saturdayNight == 'Боломжтой' ? 'AV' : 'UN',
+        timeSplitId: nightSplitId,
+      },
+      {
+        day: 7,
+        spaceStatusCode: sundayMorning == 'Боломжтой' ? 'AV' : 'UN',
+        timeSplitId: daySplitId,
+      },
+      {
+        day: 7,
+        spaceStatusCode: sundayNight == 'Боломжтой' ? 'AV' : 'UN',
+        timeSplitId: nightSplitId,
+      },
+    ];
+
+    const holiday = [
+
+    ];
+
+
+    const maindata6 = {
+      dayOfWeek,
+      holiday,
+      parkingSpaceId: data.id,
+    };
+    console.log(maindata6, 'mainDataa 6');
+    main6(maindata6);
+    setRentDay(false );
+  };
+
   const changePriceValue = ()=>{
     setLoadingSale(true);
     setPriceValue(true);
     setLoadingSale(false);
   };
   const onSavePriceData =()=>{
-    setLoading(true);
+    const data2 = priceForm.getFieldsValue();
+    console.log(data2, 'ssssssssssssssssssssssss');
+
+    const array = [
+      {
+        dateSplitId: splitData && splitData.daySplit.winterId,
+        timeSplitId: splitData && [splitData.daySplit.id],
+        priceForRenter: Number(data2.daySplitWinterPrice),
+      },
+      {
+        dateSplitId: splitData.daySplit.summerId,
+        timeSplitId: [splitData.daySplit.id],
+        priceForRenter: Number(data2.daySplitSummerPrice),
+
+      },
+      {
+        dateSplitId: splitData.nightSplit.winterId,
+        timeSplitId: [splitData.nightSplit.id],
+        priceForRenter: Number(data2.nightSplitWinterPrice),
+      },
+      {
+        dateSplitId: splitData.nightSplit.summerId,
+        timeSplitId: [splitData.nightSplit.id],
+        priceForRenter: Number(data2.nightSplitSummerPrice),
+      },
+      {
+        dateSplitId: splitData.fullDaySplit.winterId,
+        priceForRenter: Number(data2.fullDaySplitWinterPrice),
+        timeSplitId: splitData.fullDaySplit.id,
+      },
+      {
+        dateSplitId: splitData.fullDaySplit.summerId,
+        priceForRenter: Number(data2.fullDaySplitSummerPrice),
+        timeSplitId: splitData.fullDaySplit.id,
+      },
+    ];
+    setMainData4({...mainData4, hourlyPrice: data2.hourlyPrice, parkingSpacePriceInstance: array});
+    main4(mainData4);
+    console.log(mainData4, ' data 4444444');
+    // setFormData(priceForm.getFieldsValue());
+    // setLoading(true);
     setPriceValue(false);
-    setLoading(false);
+    // setLoading(false);
   };
   const changeDiscountValue = async ()=>{
     setDiscountValue(true);
@@ -443,10 +735,49 @@ const Edit = ({data}) => {
     console.log(discountValue);
     setLoading(false);
   };
-  const onSaveDiscountData = (e)=>{
+  const onSaveDiscountData = async (e)=>{
     setLoadingDiscount(true);
+
     saleForm.validateFields();
-    console.log(saleForm.getFieldValue());
+    const saleData = saleForm.getFieldValue();
+    console.log(saleData, 'hongololtiin dun');
+    const res = await callGet('/division/salesplit');
+    console.log(res, 'ressss');
+    if (res && res.saleSplit) {
+      res.saleSplit.map((c) => {
+        if (c.code == 'WEEKLY_SALE') {
+          setweekId(c.id);
+          setweekSale(+saleData.WeekSale);
+          setweekDescription(c.description);
+          setWeekSaleSplitCode(c.code);
+        }
+        if (c.code == 'MONTHLY_SALE') {
+          setmonthId(c.id);
+          setmonthSale(+saleData.monthSale);
+          setMonthDescription(c.description);
+          setMonthSaleSplitCode(c.code);
+        }
+      });
+    }
+    const array = [
+      {
+        salePercent: weekSale,
+        saleSplitId: weekId,
+        saleSplitCode: weekSaleSplitCode,
+        saleSplitDescription: weekDescription,
+      },
+      {
+        salePercent: monthSale,
+        saleSplitId: monthId,
+        saleSplitCode: monthSaleSplitCode,
+        saleSplitDescription: monthDescription,
+      },
+    ];
+    setMainData5({...mainData5, parkingSpaceSale: array});
+    main5(mainData5);
+    console.log(weekSale, weekId, weekDescription, '<<<<<<<<<');
+    console.log(mainData5, 'mainDataaa 5');
+    setDiscountValue(false);
     setLoadingDiscount(false);
   };
   const onChangeMonthSale = (e) =>{
@@ -501,6 +832,7 @@ const Edit = ({data}) => {
             Зогсоол бүртгүүлэх хүсэлтийг админаас татгалзан хариу өгсөн байна.
             </div>
           </div>}
+
         </Col>
       </Row>
       <div >
@@ -518,7 +850,7 @@ const Edit = ({data}) => {
             </p>
           </Col>
           <Col style={{marginTop: '50px '}} span={2} offset={14}>
-            {data.requestStatusCode !=='PENDING'?
+            {data.requestStatusCode =='CANCELLED'?
               <div>
                 <Button
                   className='editSpaceDataButton'
@@ -592,7 +924,7 @@ const Edit = ({data}) => {
                         </Form.Item>
                       </div>
                     ):(<Form.Item label="Байрны дугаар*"name="residenceBlockNumber">
-                      <Select onChange={onChangeResidence}>
+                      <Select onChange={onChangeResidenceBlock}>
                         {residenceBLockList.map((item)=>(
                           <Select.Option key={item.label} value={item.value}>
                             {item.label}
@@ -607,7 +939,7 @@ const Edit = ({data}) => {
                     <Input disabled />
                   </Form.Item>
                   <Form.Item>
-                    <Button onClick={OnSaveAddressData}>Хадгалах</Button>
+                    <Button type="primary" className=" float-right" onClick={OnSaveAddressData}>Хадгалах</Button>
                   </Form.Item>
                 </Form>
               </Col>
@@ -625,8 +957,12 @@ const Edit = ({data}) => {
                     text="энд"
                   />
                 </GoogleMapReact>
+
+
               </Col>
+
             </Row>
+
           ) : (
             <Row style={{padding: '30px'}}>
               <Col style={{lineHeight: '40px', color: '#647189'}} span={5} offset={1} >
@@ -639,13 +975,38 @@ const Edit = ({data}) => {
                 <p>Зогсоолын дугаар *</p>
               </Col>
               <Col style={{lineHeight: '40px', color: '#647189'}} span={5}>
-                <p>{editData.provinceLabel !==null ? <p>{editData.provinceLabel}</p> :<p>null</p>}</p>
-                <p>{editData.districtLabel ? <p>{data.districtLabel}</p> :<>null</> }</p>
-                <p>{editData.sectionLabel ?editData.sectionLabel :<p>null</p>}</p>
-                <p>{editData.residenceName ? editData.residenceName :<p>null</p>}</p>
-                <p>{editData.residenceBlockNumber}</p>
-                <p>{editData.parkingGateNumber}</p>
-                <p>{editData.uparkingNumber}</p>
+                {test ? (
+                  <>
+                    <p>{selectedAimagName}</p>
+                    <p>{selectedSumName}</p>
+                    <p>{sectionName}</p>
+                    <p>{selectedBairName}</p>
+                    <p>{bairniiDugaar}</p>
+                    <p>{selectedGateNumber}</p>
+                    <p>{editData.uparkingNumber}</p>
+                  </>
+                ) :(
+                  <>
+                    <p>{editData.provinceLabel}</p>
+                    <p>{data.districtLabel}</p>
+                    <p>{editData.sectionLabel}</p>
+                    <p>{editData.residenceName}</p>
+                    <p>{editData.residenceBLockList}</p>
+                    <p>{editData.parkingGateNumber}</p>
+                    <p>{editData.uparkingNumber}</p>
+                  </>
+                )
+                }
+
+                {/* // <p>{editData.provinceLabel !==null ? <p>{editData.provinceLabel}</p> :<p>{selectedAimagName}</p>}</p>
+                // <p>{editData.districtLabel ? <p>{data.districtLabel}</p> :<p>{selectedSumName}</p> }</p>
+                // <p>{editData.sectionLabel ?editData.sectionLabel :<p>{sectionName}</p>}</p>
+                // <p>{editData.residenceName ? editData.residenceName :<p>{selectedBairName}</p>}</p>
+                // <p>{editData.residenceBlockNumber ? editData.residenceBLockList : <p>{bairniiDugaar}</p>}</p>
+                // <p>{editData.parkingGateNumber ? editData.parkingGateNumber : <p>{selectedGateNumber}</p>}</p>
+                // <p>{editData.uparkingNumber}</p> */}
+
+
               </Col>
               <Col span={12}>
                 <GoogleMapReact
@@ -682,7 +1043,7 @@ const Edit = ({data}) => {
               </p>
             </Col>
             <Col style={{marginTop: '50px '}} span={2} offset={14} >
-              {data.requestStatusCode !=='PENDING'?
+              {data.requestStatusCode =='CANCELLED'?
                 <Button
                   onClick={changeSpaceData}
                   title="Засах"
@@ -706,7 +1067,7 @@ const Edit = ({data}) => {
                   wrapperCol={{span: 10}}
                 >
                   <Form.Item label="Давхрын байршил*" name="floorNumberId">
-                    <Select onChang={onChangeFloorNumber} >
+                    <Select onChange={onChangefloorNumberId} >
                       {floorData.map((item)=>(
                         <Select.Option key={item.value}>
                           <div style={{display: 'flex'}}>
@@ -727,6 +1088,7 @@ const Edit = ({data}) => {
                   </Form.Item>
                   <Form.Item label="Орох хаалга" name="entranceLock">
                     <Select
+                      onChange={onChangeEntranceLock}
                       placeholder="Зогсоолын орох хаалга /Хэрхэн нэвтрэх/"
                     // onChange={onChangeEntranceLock}
                     >
@@ -750,7 +1112,9 @@ const Edit = ({data}) => {
                     </Select>
                   </Form.Item>
                   <Form.Item label="Дугаарын тэмдэглэгээ*" name="isNumbering">
-                    <Select>
+                    <Select
+                      onChange={onChangeisNumbering}
+                    >
                       {parkingData.map((item) => (
                         <Select.Option
                           key={item.value}
@@ -771,7 +1135,9 @@ const Edit = ({data}) => {
                     </Select>
                   </Form.Item>
                   <Form.Item label="Хэмжээ*" name="capacityId">
-                    <Select>
+                    <Select
+                      onChange={onChangeCapacityId}
+                    >
                       {spaceTypeData.map((item) => (
                         <Select.Option
                           key={item.value}
@@ -792,7 +1158,9 @@ const Edit = ({data}) => {
                     </Select>
                   </Form.Item>
                   <Form.Item label="Төрөл*" name="typeId">
-                    <Select>
+                    <Select
+                      onChange={onChangeTypeId}
+                    >
                       {spaceSizeData.map((item) => (
                         <Select.Option
                           key={item.value}
@@ -813,7 +1181,9 @@ const Edit = ({data}) => {
                     </Select>
                   </Form.Item>
                   <Form.Item label="Эргэх урсгал" name="returnRoutes">
-                    <Select>
+                    <Select
+                      onChange={onChangeReturnRoutes}
+                    >
                       {routeData.map((item) => (
                         <Select.Option
                           key={item.value}
@@ -834,13 +1204,13 @@ const Edit = ({data}) => {
                     </Select>
                   </Form.Item>
                   <Form.Item label="Нэмэлт тайлбар" name="typeOther">
-                    <Input />
+                    <Input onChange={onChangeTypeOther} />
                   </Form.Item>
-                  <Col offset={20} span={4}>
-                    <Form.Item>
-                      <Button onClick={spaceDataSave}>Save</Button>
-                    </Form.Item>
-                  </Col>
+                  {/* <Col offset={20} span={4}> */}
+                  <Form.Item>
+                    <Button className=" float-right" type="primary" onClick={spaceDataSave}>Хадгалах</Button>
+                  </Form.Item>
+                  {/* </Col> */}
                 </Form>
               </Col>
             </div>
@@ -888,7 +1258,7 @@ const Edit = ({data}) => {
               </p>
             </Col>
             <Col style={{marginTop: '50px '}} span={2} offset={14}>
-              {data.requestStatusCode !=='PENDING'?
+              {data.requestStatusCode =='CANCELLED'?
                 <Button
                   onClick={onChangeMainImageState}
                   title="Засах"
@@ -1122,6 +1492,7 @@ const Edit = ({data}) => {
                         </div>
                       )}
                     </Upload>
+
                     <p style={{fontSize: '14px', height: '30px'}}>Зогсоолын ерөнхий зураглал</p>
                     <Upload
                       name="avatar"
@@ -1188,8 +1559,10 @@ const Edit = ({data}) => {
                     </Upload>
 
                   </Col>
+
                 </Row>
-                <Button type='primary' onClick={onsaveMainImage}>Хадгалах</Button>
+                <Button className="" type='primary' onClick={onsaveMainImage}>Хадгалах</Button>
+
               </Col>
             )}
           </Row>
@@ -1212,7 +1585,7 @@ const Edit = ({data}) => {
               </p>
             </Col>
             <Col style={{marginTop: '50px '}} span={2} offset={14}>
-              {data.requestStatusCode !=='PENDING'?
+              {data.requestStatusCode =='CANCELLED'?
                 <Button
                   style={{borderRadius: '10px'}}
                   onClick={onChangeSpaceImageState}
@@ -1466,7 +1839,7 @@ const Edit = ({data}) => {
             </p>
           </Col>
           <Col span={2} offset={14}>
-            {data.requestStatusCode !=='PENDING'?
+            {data.requestStatusCode =='CANCELLED'?
               <Button
                 style={{borderRadius: '10px'}}
                 onClick={changePriceValue}
@@ -1491,17 +1864,17 @@ const Edit = ({data}) => {
                         <Col offset={4} span={21}>
                           <Row><p><b>Өвлийн цагийн түрээсийн үнэ | {item.startString} - {item.endString}</b></p></Row>
                           <Row>
-                            <Col span={18}><p>Өдрийн цагаар түрээслэх үнэ <text style={{color: 'blue'}}>| 09:00 - 18:30</text></p></Col>
+                            <Col span={18}><p>Өдрийн цагаар түрээслэх үнэ <span style={{color: 'blue'}}>| 09:00 - 18:30</span></p></Col>
                             <Col offset={2}><p>{item.priceForRenter2}</p></Col></Row>
                           <Row>
-                            <Col span={18}><p>Шөнийн цагаар түрээслэх үнэ <text style={{color: 'blue'}}>| 18:00 - 08:30</text></p></Col>
+                            <Col span={18}><p>Шөнийн цагаар түрээслэх үнэ <span style={{color: 'blue'}}>| 18:00 - 08:30</span></p></Col>
                             <Col offset={2}>{item.priceForRenter3}</Col></Row>
                           <Row>
-                            <Col span={18}><p>Бүтэн өдрийн түрээслэх үнэ <text style={{color: 'blue'}}>| 9:00 - 08:30</text></p></Col>
+                            <Col span={18}><p>Бүтэн өдрийн түрээслэх үнэ <span style={{color: 'blue'}}>| 9:00 - 08:30</span></p></Col>
                             <Col offset={2}>{item.priceForRenter1}</Col>
                           </Row>
                           <Row>
-                            <Col span={18}><p>Цагийн түрээслэх үнэ <text style={{color: 'blue'}}>| 1 цаг</text></p></Col>
+                            <Col span={18}><p>Цагийн түрээслэх үнэ <span style={{color: 'blue'}}>| 1 цаг</span></p></Col>
                             <Col offset={2}>{item.hourlyPrice}1000</Col>
                           </Row>
                         </Col>)}
@@ -1515,17 +1888,17 @@ const Edit = ({data}) => {
                         <Col offset={3} span={21}>
                           <Row><p><b>Зуны цагийн түрээсийн үнэ | {item.startString} - {item.endString}</b></p></Row>
                           <Row>
-                            <Col span={18}><p>Өдрийн цагаар түрээслэх үнэ <text style={{color: 'blue'}}>| 09:00 - 18:30</text></p></Col>
+                            <Col span={18}><p>Өдрийн цагаар түрээслэх үнэ <span style={{color: 'blue'}}>| 09:00 - 18:30</span></p></Col>
                             <Col offset={2}><p>{item.priceForRenter2}</p></Col></Row>
                           <Row>
-                            <Col span={18}><p>Шөнийн цагаар түрээслэх үнэ <text style={{color: 'blue'}}>| 18:00 - 08:30</text></p></Col>
+                            <Col span={18}><p>Шөнийн цагаар түрээслэх үнэ <span style={{color: 'blue'}}>| 18:00 - 08:30</span></p></Col>
                             <Col offset={2}>{item.priceForRenter3}</Col></Row>
                           <Row>
-                            <Col span={18}><p>Бүтэн өдрийн түрээслэх үнэ <text style={{color: 'blue'}}>| 9:00 - 08:30</text></p></Col>
+                            <Col span={18}><p>Бүтэн өдрийн түрээслэх үнэ <span style={{color: 'blue'}}>| 9:00 - 08:30</span></p></Col>
                             <Col offset={2}>{item.priceForRenter1}</Col>
                           </Row>
                           <Row>
-                            <Col span={18}><p>Цагийн түрээслэх үнэ <text style={{color: 'blue'}}>| 1 цаг</text></p></Col>
+                            <Col span={18}><p>Цагийн түрээслэх үнэ <span style={{color: 'blue'}}>| 1 цаг</span></p></Col>
                             <Col offset={2}>{item.hourlyPrice}1000</Col>
                           </Row>
                         </Col>)}
@@ -1538,7 +1911,7 @@ const Edit = ({data}) => {
                 <PriceInfo form={priceForm} priceArray={priceArray}/>
               </Col>
             </Row>
-            <Row><Button onClick={onSavePriceData}>Хадгалах</Button></Row></div>)}
+            <Row><Button type="primary" onClick={onSavePriceData}>Хадгалах</Button></Row></div>)}
           </Spin>
         </div>
         <div style={{marginTop: '10px'}}>
@@ -1556,7 +1929,7 @@ const Edit = ({data}) => {
                 </p>
               </Col>
               <Col span={2} offset={14}>
-                {data.requestStatusCode !=='PENDING'?
+                {data.requestStatusCode =='CANCELLED'?
                   <Button
                     style={{borderRadius: '10px'}}
                     onClick={changeDiscountValue}
@@ -1611,10 +1984,10 @@ const Edit = ({data}) => {
               </p>
             </Col>
             <Col style={{marginTop: '50px'}} span={2} offset={14}>
-              {data.requestStatusCode !=='PENDING'?
+              {data.requestStatusCode =='CANCELLED'?
                 <Button
                   style={{borderRadius: '10px'}}
-                  onClick={changeDiscountValue}
+                  onClick={onChangeRent}
                   title="Засах"
                   className='editSpaceDataButton'
                   icon={<EditOutlined style={{fontSize: '12px'}} />}
@@ -1640,9 +2013,11 @@ const Edit = ({data}) => {
               Ням
               </Row>
               <Row >
-                <Select
+                {rentDay ? <Select
+
                   onChange={(e) => {
-                  // props.setRentData(weekData);
+                    // props.setRentData(weekData);
+                    console.log(e, 'eeeeeeeeeeeeeeee');
                     setsundayMorning(e), setChecked(2);
                   }}
                   value={sundayMorning}
@@ -1650,15 +2025,33 @@ const Edit = ({data}) => {
                     sundayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data.requestStatusCode !=='PENDING' &&timeSplit.map((item) => (
+
+                  {data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
                   ))}
-                </Select>
+                </Select> : <Select
+                  disabled
+                  onChange={(e) => {
+                    // props.setRentData(weekData);
+                    setsundayMorning(e), setChecked(2);
+                  }}
+                  value={sundayMorning}
+                  className={
+                    sundayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
+                  }
+                >
+                  {data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                    <Select.Option key={item.id} value={item.name}>
+                      {item.name}
+                    </Select.Option>
+                  ))}
+                </Select> }
+
               </Row>
               <Row>
-                <Select
+                {rentDay ? <Select
                   onChange={(e) => {
                   // props.setRentData(weekData);
                     setsundayNight(e), setChecked(2);
@@ -1668,18 +2061,35 @@ const Edit = ({data}) => {
                     sundayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data.requestStatusCode !=='PENDING' &&timeSplit.map((item) => (
+                  {data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
                   ))}
-                </Select>
+                </Select> : <Select
+                  disabled
+                  onChange={(e) => {
+                  // props.setRentData(weekData);
+                    setsundayNight(e), setChecked(2);
+                  }}
+                  value={sundayNight}
+                  className={
+                    sundayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
+                  }
+                >
+                  {data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                    <Select.Option key={item.id} value={item.name}>
+                      {item.name}
+                    </Select.Option>
+                  ))}
+                </Select> }
+
               </Row>
             </Col>
             <Col span={3} className={'pickWeekDayState'}>
               <Row>Даваа</Row>
               <Row>
-                <Select
+                {rentDay ? <Select
                   onChange={(e) => {
                   // props.setRentData(weekData);
                     setmondayMorning(e), setChecked(2);
@@ -1689,15 +2099,32 @@ const Edit = ({data}) => {
                     mondayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  { data.requestStatusCode !=='PENDING' &&timeSplit.map((item) => (
+                  { data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
                   ))}
-                </Select>
+                </Select> : <Select
+                  disabled
+                  onChange={(e) => {
+                  // props.setRentData(weekData);
+                    setmondayMorning(e), setChecked(2);
+                  }}
+                  value={mondayMorning}
+                  className={
+                    mondayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
+                  }
+                >
+                  { data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                    <Select.Option key={item.id} value={item.name}>
+                      {item.name}
+                    </Select.Option>
+                  ))}
+                </Select>}
+
               </Row>
               <Row>
-                <Select
+                {rentDay ? <Select
                   onChange={(e) => {
                   // props.setRentData(weekData);
                     setmondayNight(e), setChecked(2);
@@ -1707,18 +2134,34 @@ const Edit = ({data}) => {
                     mondayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  { data.requestStatusCode !=='PENDING' &&timeSplit.map((item) => (
+                  { data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
                   ))}
-                </Select>
+                </Select> : <Select
+                  disabled
+                  onChange={(e) => {
+                  // props.setRentData(weekData);
+                    setmondayNight(e), setChecked(2);
+                  }}
+                  value={mondayNight}
+                  className={
+                    mondayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
+                  }
+                >
+                  { data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                    <Select.Option key={item.id} value={item.name}>
+                      {item.name}
+                    </Select.Option>
+                  ))}
+                </Select>}
               </Row>
             </Col>
             <Col span={3} className={'pickWeekDayState'}>
               <Row >Мягмар</Row>
               <Row>
-                <Select
+                {rentDay ? <Select
                   onChange={(e) => {
                   // props.setRentData(weekData);
                     settuesdayMorning(e), setChecked(2);
@@ -1728,15 +2171,31 @@ const Edit = ({data}) => {
                     tuesdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  { data.requestStatusCode !=='PENDING' &&timeSplit.map((item) => (
+                  { data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
                   ))}
-                </Select>
+                </Select> : <Select
+                  disabled
+                  onChange={(e) => {
+                  // props.setRentData(weekData);
+                    settuesdayMorning(e), setChecked(2);
+                  }}
+                  value={tuesdayMorning}
+                  className={
+                    tuesdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
+                  }
+                >
+                  { data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                    <Select.Option key={item.id} value={item.name}>
+                      {item.name}
+                    </Select.Option>
+                  ))}
+                </Select>}
               </Row>
               <Row>
-                <Select
+                {rentDay ? <Select
                   onChange={(e) => {
                   // props.setRentData(weekData);
                     settuesdayNight(e), setChecked(2);
@@ -1746,18 +2205,34 @@ const Edit = ({data}) => {
                     tuesdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  { data.requestStatusCode !=='PENDING' && timeSplit.map((item) => (
+                  { data.requestStatusCode =='CANCELLED' && timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
                   ))}
-                </Select>
+                </Select> : <Select
+                  disabled
+                  onChange={(e) => {
+                  // props.setRentData(weekData);
+                    settuesdayNight(e), setChecked(2);
+                  }}
+                  value={tuesdayNight}
+                  className={
+                    tuesdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
+                  }
+                >
+                  { data.requestStatusCode =='CANCELLED' && timeSplit.map((item) => (
+                    <Select.Option key={item.id} value={item.name}>
+                      {item.name}
+                    </Select.Option>
+                  ))}
+                </Select>}
               </Row>
             </Col>
             <Col span={3} className={'pickWeekDayState'}>
               <Row>Лхагва</Row>
               <Row>
-                <Select
+                {rentDay ? <Select
                   onChange={(e) => {
                   // props.setRentData(weekData);
                     setwednesdayMorning(e), setChecked(2);
@@ -1767,15 +2242,31 @@ const Edit = ({data}) => {
                     wednesdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data.requestStatusCode !=='PENDING' && timeSplit.map((item) => (
+                  {data.requestStatusCode =='CANCELLED' && timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
                   ))}
-                </Select>
+                </Select> : <Select
+                  disabled
+                  onChange={(e) => {
+                  // props.setRentData(weekData);
+                    setwednesdayMorning(e), setChecked(2);
+                  }}
+                  value={wednesdayMorning}
+                  className = {
+                    wednesdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
+                  }
+                >
+                  {data.requestStatusCode =='CANCELLED' && timeSplit.map((item) => (
+                    <Select.Option key={item.id} value={item.name}>
+                      {item.name}
+                    </Select.Option>
+                  ))}
+                </Select>}
               </Row>
               <Row >
-                <Select
+                {rentDay ? <Select
                   onChange={(e) => {
                   // props.setRentData(weekData);
                     setwednesdayNight(e), setChecked(2);
@@ -1785,18 +2276,34 @@ const Edit = ({data}) => {
                     wednesdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data.requestStatusCode !=='PENDING' &&timeSplit.map((item) => (
+                  {data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
                   ))}
-                </Select>
+                </Select> : <Select
+                  disabled
+                  onChange={(e) => {
+                  // props.setRentData(weekData);
+                    setwednesdayNight(e), setChecked(2);
+                  }}
+                  value={wednesdayNight}
+                  className={
+                    wednesdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
+                  }
+                >
+                  {data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                    <Select.Option key={item.id} value={item.name}>
+                      {item.name}
+                    </Select.Option>
+                  ))}
+                </Select>}
               </Row>
             </Col>
             <Col span={3} className={'pickWeekDayState'}>
               <Row >Пүрэв</Row>
               <Row>
-                <Select
+                {rentDay ? <Select
                   onChange={(e) => {
                   // props.setRentData(weekData);
                     setthursdayMorning(e), setChecked(2);
@@ -1806,15 +2313,31 @@ const Edit = ({data}) => {
                     thursdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data.requestStatusCode !=='PENDING' &&timeSplit.map((item) => (
+                  {data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
                   ))}
-                </Select>
+                </Select> : <Select
+                  disabled
+                  onChange={(e) => {
+                  // props.setRentData(weekData);
+                    setthursdayMorning(e), setChecked(2);
+                  }}
+                  value={thursdayMorning}
+                  className={
+                    thursdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
+                  }
+                >
+                  {data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                    <Select.Option key={item.id} value={item.name}>
+                      {item.name}
+                    </Select.Option>
+                  ))}
+                </Select>}
               </Row>
               <Row>
-                <Select
+                {rentDay ? <Select
                   onChange={(e) => {
                   // props.setRentData(weekData);
                     setthursdayNight(e), setChecked(2);
@@ -1824,18 +2347,34 @@ const Edit = ({data}) => {
                     thursdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data.requestStatusCode !=='PENDING' &&timeSplit.map((item) => (
+                  {data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
                   ))}
-                </Select>
+                </Select> : <Select
+                  disabled
+                  onChange={(e) => {
+                  // props.setRentData(weekData);
+                    setthursdayNight(e), setChecked(2);
+                  }}
+                  value={thursdayNight}
+                  className={
+                    thursdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
+                  }
+                >
+                  {data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                    <Select.Option key={item.id} value={item.name}>
+                      {item.name}
+                    </Select.Option>
+                  ))}
+                </Select>}
               </Row>
             </Col>
             <Col span={3} className={'pickWeekDayState'}>
               <Row >Баасан</Row>
               <Row >
-                <Select
+                {rentDay ? <Select
                   onChange={(e) => {
                   // props.setRentData(weekData);
                     setfridayMorning(e), setChecked(2);
@@ -1845,15 +2384,31 @@ const Edit = ({data}) => {
                     fridayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data.requestStatusCode !=='PENDING' &&timeSplit.map((item) => (
+                  {data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
                   ))}
-                </Select>
+                </Select> : <Select
+                  disabled
+                  onChange={(e) => {
+                  // props.setRentData(weekData);
+                    setfridayMorning(e), setChecked(2);
+                  }}
+                  value={fridayMorning}
+                  className={
+                    fridayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
+                  }
+                >
+                  {data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                    <Select.Option key={item.id} value={item.name}>
+                      {item.name}
+                    </Select.Option>
+                  ))}
+                </Select>}
               </Row>
               <Row >
-                <Select
+                {rentDay ? <Select
                   onChange={(e) => {
                   // props.setRentData(weekData);
                     setfridayNight(e), setChecked(2);
@@ -1863,18 +2418,34 @@ const Edit = ({data}) => {
                     fridayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data.requestStatusCode !=='PENDING' &&timeSplit.map((item) => (
+                  {data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
                   ))}
-                </Select>
+                </Select> : <Select
+                  disabled
+                  onChange={(e) => {
+                  // props.setRentData(weekData);
+                    setfridayNight(e), setChecked(2);
+                  }}
+                  value={fridayNight}
+                  className={
+                    fridayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
+                  }
+                >
+                  {data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                    <Select.Option key={item.id} value={item.name}>
+                      {item.name}
+                    </Select.Option>
+                  ))}
+                </Select>}
               </Row>
             </Col>
             <Col span={3} className={'pickWeekDayState'}>
               <Row >Бямба</Row>
               <Row >
-                <Select
+                {rentDay ? <Select
                   onChange={(e) => {
                   // props.setRentData(weekData);
                     setsaturdayMorning(e), setChecked(2);
@@ -1884,15 +2455,31 @@ const Edit = ({data}) => {
                     saturdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data.requestStatusCode !=='PENDING' &&timeSplit.map((item) => (
+                  {data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
                   ))}
-                </Select>
+                </Select> : <Select
+                  disabled
+                  onChange={(e) => {
+                  // props.setRentData(weekData);
+                    setsaturdayMorning(e), setChecked(2);
+                  }}
+                  value={saturdayMorning}
+                  className={
+                    saturdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
+                  }
+                >
+                  {data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                    <Select.Option key={item.id} value={item.name}>
+                      {item.name}
+                    </Select.Option>
+                  ))}
+                </Select>}
               </Row>
               <Row>
-                <Select
+                {rentDay ? <Select
                   onChange={(e) => {
                   // props.setRentData(weekData);
                     setsaturdayNight(e), setChecked(1);
@@ -1902,14 +2489,31 @@ const Edit = ({data}) => {
                     saturdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data.requestStatusCode !=='PENDING' && timeSplit.map((item) => (
+                  {data.requestStatusCode =='CANCELLED' && timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
                   ))}
-                </Select>
+                </Select> : <Select
+                  disabled
+                  onChange={(e) => {
+                  // props.setRentData(weekData);
+                    setsaturdayNight(e), setChecked(1);
+                  }}
+                  value={saturdayNight}
+                  className={
+                    saturdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
+                  }
+                >
+                  {data.requestStatusCode =='CANCELLED' && timeSplit.map((item) => (
+                    <Select.Option key={item.id} value={item.name}>
+                      {item.name}
+                    </Select.Option>
+                  ))}
+                </Select>}
               </Row>
             </Col>
+            <Button onClick={onChangeRentDay} type="primary" >Хадгалах</Button>
           </Row>
         </div>
       </div>

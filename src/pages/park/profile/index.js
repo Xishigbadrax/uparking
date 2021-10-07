@@ -80,6 +80,15 @@ const Profile = () => {
     reader.readAsDataURL(img);
   };
   const [formData, setFormdata] = useState({});
+  const [update1, setUpdate1] = useState();
+  const [update2, setUpdate2] = useState();
+  const [update3, setUpdate3] = useState();
+  const [update4, setUpdate4] = useState();
+  const [update5, setUpdate5] = useState();
+  const [update6, setUpdate6] = useState();
+  const [update7, setUpdate7] = useState();
+
+
   // eslint-disable-next-line no-unused-vars
   const [dugaar, setDugaar] = useState();
   // eslint-disable-next-line no-unused-vars
@@ -206,6 +215,50 @@ const Profile = () => {
     const model = await callGet(`/user/vehicle/model?maker=${uildver.label}`);
     setZagwar(model);
     setFormdata({...formData, maker: uildver.value});
+  };
+  const onSaveModal = async (e) => {
+    console.log(update1, update2, update3, update4, update5, update6, 'update-uuuud sshuu');
+    const res1 = await callPost('/parkingspace/update/1', update1);
+    console.log(res1, 'res1-iin hariu');
+    if (res1.status === 'success') {
+      const res7 = await callPost('/parkingspace', update7);
+      console.log(res7, 'res7-iin hariu');
+      if (res7.status == 'success') {
+        const res2 = await callPost('/parkingspace/parkingimage', update2);
+        console.log(res2, 'res2-iin hariu');
+        if (res2.status == 'success') {
+          const res3 = await callPost('/parkingspace/detail', update3);
+          console.log(res3, 'res3-iin hariu');
+          if (res3.status == 'success') {
+            const res4 = await callPost('/parkingspace/price', update4);
+            console.log(res4, 'res4-iin hariu');
+            if (res4.status == 'success') {
+              const res5 = await callPost('/parkingspace/sale', update5);
+              console.log(res5, 'res5-iin hariu');
+              if (res5.status == 'success') {
+                const res6 = await callPost('/schedule/general', update6);
+                console.log(res6, 'res6-iin hariu');
+              } else {
+                console.log('res6 amjiltgui');
+              }
+            } else {
+              console.log('res4 amjiltgui');
+            }
+          } else {
+            console.log('res3 amjiltgui');
+          }
+        } else {
+          console.log('res2 amjiltgui');
+        }
+      } else {
+        console.log('res7 amjiltgui');
+      }
+    } else {
+      console.log('res1 amjiltgui');
+    }
+
+
+    setVisibleParkingSpaceEdit(false);
   };
   const onChangeZagwar = (e) => {
     console.log(e);
@@ -1030,9 +1083,20 @@ const Profile = () => {
       <Modal
         visible={visibleParkingSpaceEdit}
         width={1200}
-        onOk= {()=>setVisibleParkingSpaceEdit(false)}
-        onCancel={()=>setVisibleParkingSpaceEdit(false)}>
-        <Edit data={spaceEditData}/>
+
+        onCancel={()=>setVisibleParkingSpaceEdit(false)}
+        footer={[
+          <Button key="back" className=" bg-red-500 text-[white]" onClick={()=>setVisibleParkingSpaceEdit(false)}>
+            Устгах
+          </Button>,
+          <Button key="submit" type="primary" onClick={onSaveModal}>
+            Хадгалах
+          </Button>,
+
+        ]}
+      >
+
+        <Edit main={setUpdate1} main2={setUpdate2} main3={setUpdate3} main4={setUpdate4} main5={setUpdate5} main6={setUpdate6} main7={setUpdate7} data={spaceEditData} />
       </Modal>}
 
       </Spin>

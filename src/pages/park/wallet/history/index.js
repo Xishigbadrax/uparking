@@ -16,70 +16,94 @@ const History = () => {
   const {userdata} = useContext(Context);
   const id = userdata.id;
   const [data, setdata] = useState([]);
-  const [imgSrc, setImgSrc] = useState('');
-  const [symbol, setSymbol] = useState('');
-  const [color, setColor] = useState(false);
+  const [imgIn, setImgIn] = useState('../../images/icon/in.png');
+  const [imgOut, setImgOut] = useState('../../images/icon/out.png');
+
   const ctx = useContext(Context);
 
 
+  const getImgColumn = (data) => {
+    if (data.income) {
+      return <img alt="icon" src={imgIn}/>;
+    } else if (data.outcome) {
+      return <img alt="icon" src={imgOut}/>;
+    } else {
+      return <span>-</span>;
+    }
+  };
+  const getIncomeOutcomeColumn = (data) => {
+    if (data.income) {
+      return <div style={{color: '#76E8AA'}}>+ {data.income}</div>;
+    } else if (data.outcome) {
+      return <div style={{color: '#C6231A'}}>- {data.outcome}</div>;
+    } else {
+      return <span>-</span>;
+    }
+  };
   const columns = [
     {
       title: '',
-      dataIndex: {imgSrc},
+      dataIndex: {imgOut},
+      key: 'img',
+
+
       // eslint-disable-next-line react/display-name
-      render: () => <img alt="icon" src={imgSrc}/>,
+      render: (text, data) => (
+        <div>
+          {getImgColumn(data)}
+        </div>
+      ),
     },
     {
       title: <p style={Header}>Өдөр</p>,
       dataIndex: 'createdDate',
+      key: 'createdDate',
     },
     {
       title: <p style={Header}>Утга</p>,
       dataIndex: 'description',
+      key: 'description',
     },
     {
       title: <p style={Header}>Мөнгөн дүн</p>,
-      dataIndex: 'outcome',
+      // dataIndex: ['outcome'],
+      key: 'outcome',
       // eslint-disable-next-line react/display-name
-      render: (dataIndex) => color ? <text className="text-[#76E8AA]">{symbol + dataIndex}</text> : <text className="text-[#C6231A]">{symbol + dataIndex}</text>,
+      render: (data) => (
+        <div>
+          {getIncomeOutcomeColumn(data)}
+        </div>
+      ),
+
+
     },
     {
       title: <p style={Header}>Харилцах данс</p>,
       dataIndex: 'walletId',
+      key: 'walletId',
     },
   ];
-
+  // console.log(data, 'dataaaa');
   const fetchData = async () => {
     await callGet(`/wallet/user/history?userId=${id}`, null).then((res) => {
       ctx.setIsLoading(true);
+      // console.log(res, 'resssss');
       const arr = [];
 
       if (res && typeof res.history != 'undefined') {
-        res.history.forEach((element) => {
+        res.history.map((element, index) => {
           if (element['list'].length > 0) {
-            element['list'].forEach((el) => {
+            element['list'].map((el, index) => {
               arr.push(el);
-              if (el.outcome) {
-                setImgSrc('../../images/icon/out.png');
-                setSymbol('- ');
-                setColor(false);
-              } else {
-                setImgSrc('../../images/icon/in.png');
-                setSymbol('+  ');
-                setColor(true);
-              }
             });
           }
         });
+        console.log(arr, '----------arr----------');
       }
 
-      // res.history.map((item, index) => {
-      //   if (item.list.length > 0) {
-      //     arr.push(item.list);
-      //   }
-      // });
-      ctx.setIsLoading(false);
+
       setdata(arr);
+      ctx.setIsLoading(false);
     });
   };
   useEffect(() => {
@@ -89,7 +113,7 @@ const History = () => {
   return (
     <WalletLayout>
       <div>
-        <Table columns={columns} dataSource={data} />
+        <Table columns={columns} dataSource={data} rowKey="createdDate"/>
       </div>
     </WalletLayout>
   );
