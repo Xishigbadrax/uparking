@@ -92,7 +92,7 @@ const Sidebar = () => {
     );
   };
   return (
-    <Sider theme="light" className={'sideBar'}>
+    <Sider theme="light" className={'sideBar'} style={{marginTop:'100px'}}>
       {getProfile()}
 
       {/* <div className="logo">

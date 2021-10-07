@@ -45,7 +45,6 @@ const CustomCalendar = (props) => {
   const [current, setCurrent]=useState(parseInt(moment().format('M')));
 
   useEffect(() => {
-    console.log(props.bookedDate, 'awdawdawd');
     // setBookedDate(props.bookedDate);
     setDayOfWeek(props.dayOfWeek);
     setType(props.dayType);

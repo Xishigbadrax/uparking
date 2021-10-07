@@ -106,7 +106,6 @@ const CustomCalendar = (props) => {
           setCurrMonth(moment(value).format('YYYY-MM'));
           const year = value.year();
           const month = [];
-          console.log(localeData, 'awdawd');
           for (let i = 0; i < 12; i++) {
             month.push(localeData._months[i]);
           }
