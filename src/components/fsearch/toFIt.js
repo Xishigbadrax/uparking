@@ -25,7 +25,7 @@ const {TabPane} = Tabs;
 
 const callback = (key) =>{
   console.log(key, 'keyiin hevledee');
-};
+}; 
 const tofit = ({data, lat, lng}) => {
   console.log({data, lat, lng}, 'ehniii dataagaa haruul');
 
@@ -62,9 +62,7 @@ const tofit = ({data, lat, lng}) => {
   const [priceForRenter3, setpriceForRenter3] = useState(0);
   const [selectVehicle, setSelectedVehicle] =useState();
   const [dateValues, setDateValues]=useState();
-  const [message, setmessage] = useState('');
-  const [status, setstatus] = useState('');
-  const [title, settitle] = useState('');
+
   const [messageShow, setmessageShow] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const [selectedDate2, setSelectedDate2] = useState([]);

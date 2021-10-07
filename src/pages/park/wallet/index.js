@@ -105,7 +105,7 @@ const Wallet = () => {
           <div><text className="text-[blue] font-bold">
             {userData != null ?
               userData.totalIncome ?
-                Helper.formatValueReverse(userData.totalIncome + '') :
+                Helper.formatValueReverse(userData.pendingAmount + '') :
                 0 :
               null}
               ₮

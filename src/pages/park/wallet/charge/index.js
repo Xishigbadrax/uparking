@@ -155,24 +155,25 @@ const Charge = () => {
 
   const fetchData3 = async () => {
     setformData3();
-    await callPost('/wallet/promocode', {
-      promoCode: promoCode,
-    }).then((res) => {
-      // if (res.status == "failed") {
-      //   console.log(res["status"], "resresr");
-      //   settitle(res.status);
-      //   setmessage(res.error);
-      //   setstatus(res.status);
-      //   setmessageShow(true);
-      // } else {
-      // console.log(res);
-      // settitle("Амжилттай");
-      // setmessage("Таны Uwallet хэтэвч амжилттай цэнэглэлт хийгдлээ.");
-      // // console.log(res.error, "errorr");
-      // setstatus("success");
-      // setmessageShow(true);
-      // }
+    console.log(promoCode, 'promocodeee');
+    const res = await callPost('/wallet/promocode', {
+      promoCode: ' ' + promoCode,
     });
+    console.log(res, 'promoo res');
+    // if (res.status == "failed") {
+    //   console.log(res["status"], "resresr");
+    //   settitle(res.status);
+    //   setmessage(res.error);
+    //   setstatus(res.status);
+    //   setmessageShow(true);
+    // } else {
+    // console.log(res);
+    // settitle("Амжилттай");
+    // setmessage("Таны Uwallet хэтэвч амжилттай цэнэглэлт хийгдлээ.");
+    // // console.log(res.error, "errorr");
+    // setstatus("success");
+    // setmessageShow(true);
+    // }
   };
 
   useEffect(() => {

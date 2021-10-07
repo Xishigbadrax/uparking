@@ -1,13 +1,16 @@
 /* eslint-disable no-unused-vars */
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 // import {Line} from '@ant-design/charts';
 import {Line} from 'react-chartjs-2';
 import {Button, Tabs} from 'antd';
 import {Legend} from 'chart.js';
+import {callGet, callPost} from '@api/api';
 
 const WalletChart = () => {
   const {TabPane} = Tabs;
   const [active, setActive] = useState('month');
+  const [expenseChart, setExpenseChart] = useState();
+  const [incomeChart, setIncomeChart] = useState();
   let income;
   let outcome;
 
@@ -44,11 +47,15 @@ const WalletChart = () => {
   if (active == 'month') {
     income = {
 
-      labels: ['1 сар', '2 сар', '3 сар', '4 сар', '5 сар', '6 сар', '7 сар', '8 сар', '9 сар', '10 сар', '11 сар', '12 сар'],
+      labels: incomeChart && incomeChart.map((item) => (
+        item.date
+      )),
       datasets: [
         {
-          label: 'null',
-          data: [12, 19, 3, 5, 2, 3, 5, 4, 3, 7, 4, 6],
+          label: null,
+          data: incomeChart && incomeChart.map((item) => (
+            item.amount
+          )),
           fill: false,
           backgroundColor: '#00F9B8',
           borderColor: '#35446D',
@@ -61,7 +68,7 @@ const WalletChart = () => {
       labels: ['Даваа', 'Мягмар', 'Лхагва', 'Пүрэв', 'Баасан', 'Бямба', 'Ням'],
       datasets: [
         {
-          label: 'null',
+          label: null,
           data: [12, 19, 3, 5, 2, 3, 6],
           fill: false,
           backgroundColor: '#00F9B8',
@@ -75,7 +82,7 @@ const WalletChart = () => {
       labels: ['1-р Д/Х', '2-р Д/Х', '3-р Д/Х', '4-р Д/Х', '5-р Д/Х'],
       datasets: [
         {
-          label: 'null',
+          label: null,
           data: [12, 19, 3, 5, 2],
           fill: false,
           backgroundColor: '#00F9B8',
@@ -84,6 +91,17 @@ const WalletChart = () => {
       ],
     };
   }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await callGet('/wallet/user').then((res) => {
+        setExpenseChart(res.expenseChart);
+        setIncomeChart(res.incomeChart);
+        console.log(res, 'ressss');
+      });
+    };
+    fetchData();
+  }, []);
 
   // const incomeMonth = {
 
@@ -119,11 +137,15 @@ const WalletChart = () => {
   if (active == 'month') {
     outcome = {
 
-      labels: ['1 сар', '2 сар', '3 сар', '4 сар', '5 сар', '6 сар', '7 сар', '8 сар', '9 сар', '10 сар', '11 сар', '12 сар'],
+      labels: expenseChart && expenseChart.map((item) => (
+        item.date
+      )),
       datasets: [
         {
-          label: 'null',
-          data: [5, 19, 3, 5, 2, 3, 5, 4, 3, 7, 4, 6],
+          label: null,
+          data: expenseChart && expenseChart.map((item) => (
+            item.amount
+          )),
           fill: false,
           backgroundColor: '#00F9B8',
           borderColor: '#35446D',
@@ -136,7 +158,7 @@ const WalletChart = () => {
       labels: ['Даваа', 'Мягмар', 'Лхагва', 'Пүрэв', 'Баасан', 'Бямба', 'Ням'],
       datasets: [
         {
-          label: 'null',
+          label: null,
           data: [12, 19, 3, 5, 2, 3, 6],
           fill: false,
           backgroundColor: '#00F9B8',
@@ -150,7 +172,7 @@ const WalletChart = () => {
       labels: ['1-р Д/Х', '2-р Д/Х', '3-р Д/Х', '4-р Д/Х', '5-р Д/Х'],
       datasets: [
         {
-          label: 'null',
+          label: null,
           data: [12, 19, 3, 5, 2],
           fill: false,
           backgroundColor: '#00F9B8',
@@ -168,19 +190,14 @@ const WalletChart = () => {
     },
 
     scales: {
-
-      yAxes: [
-        {
-          ticks: {
-            beginAtZero: true,
-          },
-        },
-      ],
+      y: {
+        display: false,
+      },
     },
     height: 10,
-
-
   };
+
+
   return (
     <div
       className=" w-[529px] h-[199px]"
@@ -195,9 +212,9 @@ const WalletChart = () => {
       <Tabs defaultActiveKey="1">
         <TabPane tab="Орлого" key="1">
           <div style={{textAlign: 'right', lineHeight: '10px', fontSize: '11px'}}>
-            <button onClick={() => setActive('day')} className=" mr-[20px] text-[#35446D]">Өдөр</button>
-            <button onClick={() => setActive('week')} className=" mr-[20px] text-[#35446D]">Долоо хоног</button>
-            <button onClick={() => setActive('month')} className=" text-[#35446D]">Сар</button>
+            {active == 'day' ? <button onClick={() => setActive('day')} className="mr-[20px] text-[#0013D4]"><p >Өдөр</p> </button> : <button onClick={() => setActive('day')} className="mr-[20px] text-[#35446D]"><p >Өдөр</p> </button>}
+            {active == 'week' ? <button onClick={() => setActive('week')} className="mr-[20px] text-[#0013D4]"><p >Долоо хоног</p> </button> : <button onClick={() => setActive('week')} className="mr-[20px] text-[#35446D]"><p >Долоо хоног</p> </button>}
+            {active == 'month' ? <button onClick={() => setActive('month')} className="mr-[20px] text-[#0013D4]"><p >Сар</p> </button> : <button onClick={() => setActive('month')} className="mr-[20px] text-[#35446D]"><p>Сар</p> </button>}
           </div>
           <div>
             {/* <Line {...config} /> */}
@@ -206,9 +223,10 @@ const WalletChart = () => {
         </TabPane>
         <TabPane tab="Зарлага" key="2">
           <div style={{textAlign: 'right', lineHeight: '10px', fontSize: '11px'}}>
-            <button onClick={() => setActive('day')} className="mr-[20px] text-[#35446D]"><p >Өдөр</p> </button>
-            <button onClick={() => setActive('week')} className="mr-[20px] text-[#35446D]"> <p>Долоо хоног</p></button>
-            <button onClick={() => setActive('month')} className=" text-[#35446D]"> <p>Сар</p></button>
+            {active == 'day' ? <button onClick={() => setActive('day')} className="mr-[20px] text-[#0013D4]"><p >Өдөр</p> </button> : <button onClick={() => setActive('day')} className="mr-[20px] text-[#35446D]"><p >Өдөр</p> </button>}
+            {active == 'week' ? <button onClick={() => setActive('week')} className="mr-[20px] text-[#0013D4]"><p >Долоо хоног</p> </button> : <button onClick={() => setActive('week')} className="mr-[20px] text-[#35446D]"><p >Долоо хоног</p> </button>}
+            {active == 'month' ? <button onClick={() => setActive('month')} className="mr-[20px] text-[#0013D4]"><p >Сар</p> </button> : <button onClick={() => setActive('month')} className="mr-[20px] text-[#35446D]"><p>Сар</p> </button>}
+
           </div>
           <div>
             {/* <Line {...config} />; */}
