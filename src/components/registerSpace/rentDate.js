@@ -728,7 +728,6 @@ const rentDate = (props) => {
                     const localeData = value.localeData();
                     const year = value.year();
                     const month = [];
-                    console.log(localeData, 'awdawd');
                     for (let i = 0; i < 12; i++) {
                       month.push(localeData._months[i]);
                     }

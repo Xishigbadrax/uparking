@@ -1,6 +1,6 @@
 import {useContext} from 'react';
 import LoadingBar from 'react-top-loading-bar';
-import {Layout, Spin} from 'antd';
+import {Layout, Spin,Card} from 'antd';
 // import Header from './Header';
 import WalletSidebar from './WalletSidebar';
 import Context from '@context/Context';
@@ -21,11 +21,14 @@ const ProfileLayout = ({children, title, className}) => {
       spinning={isLoading}
     >
       <Layout
-        style={{maxWidth: '1200px', margin: 'auto'}}
+        style={{maxWidth: '1400px', margin: 'auto'}}
         className={'profileLayout'}
       >
         <LoadingBar color="#109720" progress={isLoading ? 70 : 100} />
-        <WalletSidebar />
+       
+        <Card style={{borderRadius: '50px', height: '800px'}}>
+          <WalletSidebar />
+        </Card>
         <Layout style={{background: 'none'}}>
           {/* <Header /> */}
           <Content className={'profileContent'}>
@@ -37,5 +40,4 @@ const ProfileLayout = ({children, title, className}) => {
     </Spin>
   );
 };
-
 export default ProfileLayout;

@@ -219,7 +219,6 @@ const Lessor = () =>{
                   const year = value.year();
                   setCurrMonth(moment(value).format('YYYY-MM'));
                   const month = [];
-                  console.log(localeData, 'awdawd');
                   for (let i = 0; i < 12; i++) {
                     month.push(localeData._months[i]);
                   }
@@ -427,7 +426,6 @@ const Lessor = () =>{
                   const localeData = value.localeData();
                   const year = value.year();
                   const month = [];
-                  console.log(localeData, 'awdawd');
                   for (let i = 0; i < 12; i++) {
                     month.push(localeData._months[i]);
                   }
@@ -648,7 +646,6 @@ const Lessor = () =>{
                   const localeData = value.localeData();
                   const year = value.year();
                   const month = [];
-                  console.log(localeData, 'awdawd');
                   for (let i = 0; i < 12; i++) {
                     month.push(localeData._months[i]);
                   }

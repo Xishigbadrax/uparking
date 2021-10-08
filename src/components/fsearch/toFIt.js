@@ -227,7 +227,6 @@ const tofit = ({data, lat, lng}) => {
           userPhoneNumber: String(userPhoneNumber),
           vehicleId: selectVehicle,
         };
-        console.log(formData, 'awdawd');
         const res = await callPost('/booking', formData);
         setBookingId(res.bookingId);
         if (res.status === 'success') {
