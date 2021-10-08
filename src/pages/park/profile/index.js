@@ -155,7 +155,8 @@ const Profile = () => {
       // setUserId(userdata.id);
       const parkSpaceList = await callGet(`/parkingspace/list/user?id=${userdata.id}`);
       setSpace(parkSpaceList);
-      console.log(parkSpaceList);
+     
+      // console.log(parkSpaceList, "parkings");
     }
   }, [userdata]);
   const onFinish123 = (values) => {};
@@ -377,12 +378,12 @@ const Profile = () => {
       if (componentData) {
         getBase64(componentData.imageParkingGate.file.originFileObj, (image2) =>
 
-          setImageParkingGate(image2.slice(23)),
+          setImageParkingGate(image2.slice(22)),
         );
         getBase64(
           componentData.imageParkingOverall.file.originFileObj,
           (image2) => {
-            setImageParkingOverall(image2.slice(23));
+            setImageParkingOverall(image2.slice(22));
           },
         );
       }
@@ -403,10 +404,10 @@ const Profile = () => {
       {/* ЗОгсоолын зураг өгөгдлийн санруу шидэх*/}
       if (componentData) {
         getBase64(componentData.imageFromGate.file.originFileObj, (image1) => {
-          setImageFromGate(image1.slice(23));
+          setImageFromGate(image1.slice(22));
         });
         getBase64(componentData.imageSpaceNumber.file.originFileObj, (image4) => {
-          setImageSpaceNUmbe(image4.slice(23));
+          setImageSpaceNUmbe(image4.slice(22));
         });
       }
       if (imageFromGate && imageSpaceNumber) {
