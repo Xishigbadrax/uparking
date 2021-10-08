@@ -505,6 +505,19 @@ body {
   letter-spacing: 0.4px;
   text-transform: uppercase;
 }
+.calendarListStatus2{
+  position: absolute;
+  top: -30px;
+  background:  rgba(234, 102, 95, 0.08);
+  color: #C6231A;
+  border-radius: 8px 8px 0px 0px;
+  padding: 4px 8px;
+  width: 300px;
+  left: 130px;
+  text-align: center;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
 .calendarList {
   margin-top: 60px !important;
   .ant-list-items {

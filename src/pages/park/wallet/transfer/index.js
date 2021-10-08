@@ -15,24 +15,28 @@ const tabItems = [
     id: 1,
     name: 'Хаан банк',
     type: 'KHANBANK',
+    name:'khan',
     src: '../../images/icon/khanbank.png',
   },
   {
     id: 2,
     name: 'Хас банк',
     type: 'KHASBANK',
+    name:'khas',
     src: '../../images/icon/xac.png',
   },
   {
     id: 3,
     name: 'Голомт банк',
     type: 'GOLOMTBANK',
+    name:'glmt',
     src: '../../images/icon/golomt.png',
   },
   {
     id: 4,
     name: 'Худалдаа хөгжлийн банк',
     type: 'TDB',
+    name:'tdbm',
     src: '../../images/icon/tdb.png',
   },
 ];
@@ -63,7 +67,7 @@ const Transfer = () =>{
     description: null,
     toAccount: null,
     toAccountName: null,
-    toBank: 'KHANBANK',
+    toBank: 'khan',
     toCurrency: 'mnt',
   });
 
@@ -145,59 +149,58 @@ const Transfer = () =>{
   };
   const submit = async () => {
     // setisLoading(true);
-
     const res = await callGet(`/user/check/transactionpass?rawPass=${password}`);
     console.log(res, 'adawdw');
     if (res.status === 'success') {
-      if (type == 'KHANBANK') {
+      // if (type == 'KHANBANK') {
         const res2 = await callPost('/khanbank/intertransfer', formData);
         console.log(formData, 'formDataaa');
         console.log(res2, 'res2 iin hariu');
 
-        if (res2.status == 'success') {
+        if (res2.journalNo) {
           setmessageShow(true);
           setmessage(`Таны хэтэвчнээс ${amount} хасагдаж, Хаан банкны ${accountNumber} тоот дансанд амжилттай шилжүүлэг хийгдлээ.`);
           settitle('Амжилттай');
           setstatus('success');
         } else {
           setmessageShow(true);
-          setmessage('Шилжүүлэг амжилтгүй');
+          console.log(res2);
+          setmessage('Шилжүүлэг амжилтгүй.Та шилжүүлэх дансны дугаараа шалгана уу?');
           settitle('Алдаа');
           setstatus('error');
         }
-      } else if (type == 'GOLOMTBANK') {
-        const res2 = await callPost('/golomt/domesttransfer', formData);
-        console.log(formData, 'formDataaa');
-        console.log(res2, 'res2 iin hariu');
+      // } else if (type == 'GOLOMTBANK') {
+      //   const res2 = await callPost('/golomt/domesttransfer', formData);
+      //   console.log(formData, 'formDataaa');
+      //   console.log(res2, 'res2 iin hariu');
 
-        if (res2.status == 'success') {
-          setmessageShow(true);
-          setmessage(`Таны хэтэвчнээс ${amount} хасагдаж, Хаан банкны ${accountNumber} тоот дансанд амжилттай шилжүүлэг хийгдлээ.`);
-          settitle('Амжилттай');
-          setstatus('success');
-        } else {
-          setmessageShow(true);
-          setmessage('Шилжүүлэг амжилтгүй');
-          settitle('Алдаа');
-          setstatus('error');
-        }
-      } else if (type == 'TDB') {
-        const res2 = await callPost('/tdb/transfer', formData);
-        console.log(formData, 'formDataaa');
-        console.log(res2, 'res2 iin hariu');
-
-        if (res2.status == 'success') {
-          setmessageShow(true);
-          setmessage(`Таны хэтэвчнээс ${amount} хасагдаж, Хаан банкны ${accountNumber} тоот дансанд амжилттай шилжүүлэг хийгдлээ.`);
-          settitle('Амжилттай');
-          setstatus('success');
-        } else {
-          setmessageShow(true);
-          setmessage('Шилжүүлэг амжилтгүй');
-          settitle('Алдаа');
-          setstatus('error');
-        }
-      }
+      //   if (res2.status == 'success') {
+      //     setmessageShow(true);
+      //     setmessage(`Таны хэтэвчнээс ${amount} хасагдаж, Хаан банкны ${accountNumber} тоот дансанд амжилттай шилжүүлэг хийгдлээ.`);
+      //     settitle('Амжилттай');
+      //     setstatus('success');
+      //   } else {
+      //     setmessageShow(true);
+      //     setmessage('Шилжүүлэг амжилтгүй');
+      //     settitle('Алдаа');
+      //     setstatus('error');
+      //   }
+      // } else if (type == 'TDB') {
+      //   const res2 = await callPost('/khanbank/intertransfer', formData);
+      //   console.log(formData, 'formDataaa');
+      //   console.log(res2, 'res2 iin hariu');
+      //   if (res2.journalNo) {
+      //     setmessageShow(true);
+      //     setmessage(`Таны хэтэвчнээс ${amount} хасагдаж, Хаан банкны ${accountNumber} тоот дансанд амжилттай шилжүүлэг хийгдлээ.`);
+      //     settitle('Амжилттай');
+      //     setstatus('success');
+      //   } else {
+      //     setmessageShow(true);
+      //     setmessage('Шилжүүлэг амжилтгүй');
+      //     settitle('Алдаа');
+      //     setstatus('error');
+      //   }
+      // }
       // setisLoading(false)
     } else {
       setmessageShow(true);
@@ -213,7 +216,6 @@ const Transfer = () =>{
     Modal.info({
       title: <p style={{fontWeight: 'bold'}}>Баталгаажуулах</p>,
       okText: 'Баталгаажуулах',
-
       content: (
         <div>
           <p>Та өөрийн гүйлгээний нууц үгээ оруулна уу</p>
@@ -222,7 +224,7 @@ const Transfer = () =>{
             onChange={(e) => onchangeee(e)}
             placeholder="Гүйлгээний нууц үг"
           /> */}
-          <MaskedInput mask="1111" type="password" onChange={(e) => onchangeee(e)} name="Гүйлгээний нууц үг" />
+          <MaskedInput mask='1111' type="password" onChange={(e) => onchangeee(e)} name="Гүйлгээний нууц үг" />
         </div>
       ),
       onOk() {
@@ -251,7 +253,7 @@ const Transfer = () =>{
         footer={[
           <>
             <Button onClick={Validate} block type="primary">
-            Шилжүүлэх
+              Шилжүүлэх
             </Button>
           </>,
         ]}
@@ -321,7 +323,7 @@ const Transfer = () =>{
                     />
                   </div>
                 </div>
-                <Divider />
+                {/* <Divider /> */}
               </div>
             )}
           </div>
@@ -339,8 +341,6 @@ const Transfer = () =>{
         </div>
 
         <div className="flex justify-between mt-[25px]" >
-
-
           <div style={{height: '480px', width: '327px'}}>
             <p style={{height: 24, width: 304, fontSize: 14, color: '#A2A4AA'}}>
             Банкны данс руу
@@ -353,8 +353,7 @@ const Transfer = () =>{
                     <span
                       onClick={() => {
                         settype(tabitem.type);
-                        setFormData({...formData, toBank: tabitem.type});
-                        console.log(tabitem.type, 'typeeee');
+                        setFormData({...formData, toBank: tabitem.name});
                       }}
                     >
                       <Image

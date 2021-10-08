@@ -120,7 +120,9 @@ const tofit = ({data, lat, lng}) => {
     // eslint-disable-next-line no-unused-vars
     const review = await callGet(`/parkingspace/review?parkingSpaceId=${id}`);
     console.log(review, 'ggg');
+    if(review ){
     setReview(review.content);
+    }
     const priceData = await callGet(`/parkingspace/price?parkingSpaceId=${id}`);
     // eslint-disable-next-line no-unused-vars
     const a = data.find((item) => item.park.parkingSpaceId === id);
@@ -1410,7 +1412,7 @@ const tofit = ({data, lat, lng}) => {
                               </p>
                             </Col>
                             <Col span={2} offset={1}>
-                              <p>{Number(weekSale)}</p>
+                              <div>{Number(weekSale)}</div>
                             </Col>
                           </Row>
                           <Row>

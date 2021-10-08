@@ -1,7 +1,7 @@
 import {CheckOutlined, DownOutlined, LeftOutlined, UpOutlined} from '@ant-design/icons';
 import {callGet, callPost} from '@api/api';
 import DefaultLayout from '@components/layouts/DefaultLayout';
-;
+import QRCode from "react-qr-code";
 import {showMessage} from '@utils/message';
 import {useEffect, useState, useContext} from 'react';
 import CustomCalendar from '@components/orderEditCalendar';
@@ -39,7 +39,7 @@ const OrderId = () => {
   const [modalData, setModalData] = useState(null);
   const [tureeslegch, setTureeslegch] = useState(false);
   const [amount, setamount] = useState(0);
-  const [formData] = useState({
+  const [formData,setFormData] = useState({
     amount: null,
     phoneNumber: null,
   });
@@ -50,7 +50,9 @@ const OrderId = () => {
   const [messageShow, setmessageShow] = useState(false);
 
   const router = useRouter();
+  const {userdata } = useContext(Context)
   const ctx = useContext(Context);
+  const [phoneNumber,setphoneNumber]=useState();
   const [orderData, setOrderData] = useState({});
   const [images, setImages] = useState([]);
   const [parkingUpDownArrow, setParkingUpDownArrow] = useState(false);
@@ -73,6 +75,7 @@ const OrderId = () => {
   const [selectedDate, setSelectedDate] = useState([]);
   const [isUnelgee, setIsUnelgee]= useState(false);
   const [fromSelectedDate, setFromSelectedDate] = useState();
+  const [MongolChatResultData,setMongolChatResultData]= useState()
   // eslint-disable-next-line no-unused-vars
   const [time, settime] = useState(null);
   const urlString = window.location.href;
@@ -82,12 +85,11 @@ const OrderId = () => {
   const orderId = router.query.id;
 
   useEffect(() => {
+    console.log(userdata,'aaaaaaaaaaay');
     getData();
     // const startDate = Date.parse(orderData.startDateTime);
   }, []);
-  useEffect(() => {
-    fetchData4();
-  }, []);
+
   const onChangeInput = (value) => {
     setamount(value);
   };
@@ -102,53 +104,44 @@ const OrderId = () => {
     setModalData(resCancel);
   };
 
-  const fetchData4 = async () => {
-    ctx.setIsLoading(true);
-    await callGet('/wallet/user', null).then((res) => {
-      setuserData(res);
-      if (res && res.pendingList && res.pendingList.length > 0) {
-        // setCalendarData(res.pendingList);
-        // console.log(res.pendingList, 'medhgueeeeeeeee');
-      }
-      ctx.setIsLoading(false);
-    });
-  };
-  const fetchData2 = async () => {
-    if (amount != 0) {
+
+  const onClickPaymentPending = async() => {
+    if (orderData && orderData.totalPrice > 0) {
       const formData2 = {
-        amount: +amount,
+        amount: orderData && orderData.totalPrice,
         bookingId: null,
         topUp: true,
       };
-      formData.amount = amount;
-      formData.phoneNumber =
-        type2 == 'LENDMN' ? phoneNumber : userData.phoneNumber;
-      {
-        type2 == 'MONGOLCHAT' ?
-          await callPost('/mongolchat/wallet', formData).then((res) => {
-            if (res.code == 1000) {
-              settitle('Амжилтай');
+      const  formData3 ={
+        amount:orderData&& orderData.totalPrice,
+        phoneNumber: type2==='LENDMN'? phoneNumber : userdata.phoneNumber,
+      }
+      if(type2 == 'MONGOLCHAT') {
+          await callPost('/mongolchat/wallet', formData3).then((res) => {
+            console.log(res,'MGL CHAT');
+            if (res && res.code == 1000) {
+              setMongolChatResultData(res);
               setmessage('Амжилттай. Нэхэмжлэх үүсгэлээ.');
               setstatus('success');
               setmessageShow(true);
-              try {
-                const win = window.open(res.dynamic_link, '_blank');
-                win.focus();
-              } catch (e) {
-                settitle('Анхааруулга');
-                setmessage('Нэхэмжлэх үүсгэхэд алдаа гарлаа');
-                setstatus('warning');
-                setmessageShow(true);
-              }
+              // try {
+              //   const win = window.open(res.dynamic_link, '_blank');
+              //   win.focus();
+              // } catch (e) {
+              //   settitle('Анхааруулга');
+              //   setmessage('Нэхэмжлэх үүсгэхэд алдаа гарлаа');
+              //   setstatus('warning');
+              //   setmessageShow(true);
+              // }
             } else {
               settitle('Анхааруулга');
               setmessage('Нэхэмжлэх үүсгэхэд алдаа гарлаа');
               setstatus('warning');
               setmessageShow(true);
             }
-          }) :
-          type2 == 'LENDMN' ?
-            await callPost('/lend/qr/wallettopup', formData).then((res) => {
+          }) }else if(type2 == 'LENDMN') {
+            await callPost('/lend/qr/wallettopup', formData3).then((res) => {
+            console.log(res,'LEND CHAT');
               if (res.qr_string) {
                 settitle('Амжилтай');
                 setmessage('Амжилттай. Нэхэмжлэх үүсгэлээ.');
@@ -160,8 +153,7 @@ const OrderId = () => {
                 setstatus('warning');
                 setmessageShow(true);
               }
-            }) :
-            type2 == 'SOCIALPAY' ?
+            }) }else if(type2 == 'SOCIALPAY' ){
               await callPost('/invoice', formData2).then((res) => {
                 if (res && res.invoice) {
                   settitle('Амжилтай');
@@ -187,10 +179,9 @@ const OrderId = () => {
                   setstatus('warning');
                   setmessageShow(true);
                 }
-              }) :
-              null;
+              }) }  
       }
-    } else {
+    else {
       settitle('Анхааруулга');
       setmessage('Үнийн дүн хоосон байна');
       setstatus('warning');
@@ -408,7 +399,10 @@ const OrderId = () => {
             <Link href={{pathname: '/park/profile/order/'}} passHref>
               <Button type="primary" shape="circle" icon={<LeftOutlined />} size={'large'} />
             </Link>
+            {orderData && orderData.bookingStatus === 'PENDING_PAYMENT' ?
+            <span style={{fontSize: '20px', lineHeight: '24px', color: '#0013D4', marginLeft: '20px'}}>Хадгалсан захиалга</span>:
             <span style={{fontSize: '20px', lineHeight: '24px', color: '#0013D4', marginLeft: '20px'}}>Миний захиалга</span>
+            }
           </Header>
           <Row className={'carousell'}>
             <Col span={12} offset={1}>
@@ -658,7 +652,6 @@ const OrderId = () => {
                           </div>
                           <div style={{marginLeft: '30px'}}>
                             <Image
-
                               preview={false}
                               width={24}
                               src={'/icons/brightness_4_24px.png'}></Image></div>
@@ -808,8 +801,8 @@ const OrderId = () => {
                                         key="1"
                                       >
                                         <div>
-                                          <WalletInput onChangeInput={onChangeInput}>
-                                          Цэнэглэх дүн
+                                          <WalletInput onChangeInput={onChangeInput} value={orderData.totalPrice}>
+                                               Нэхэмжлэх дүн
                                           </WalletInput>
                                         </div>
                                       </TabPane>
@@ -831,10 +824,10 @@ const OrderId = () => {
                                         key="2"
                                       >
                                         <WalletInput onChangeInput={onChangeInputPhone} style={{fontSize: '18px'}}>
-                    Утасны дугаар
+                                            Нэхэмжлэх илгээх утасны дугаар
                                         </WalletInput>
-                                        <WalletInput onChangeInput={onChangeInput}>
-                    Цэнэглэх дүн
+                                        <WalletInput onChangeInput={onChangeInput} value={orderData.totalPrice}>
+                                            Нэхэмжлэх дүн
                                         </WalletInput>
                                       </TabPane>
                                       <TabPane
@@ -854,13 +847,13 @@ const OrderId = () => {
                                         }
                                         key="3"
                                       >
-                                        <WalletInput onChangeInput={onChangeInput}>
-                                            Цэнэглэх дүн
+                                        <WalletInput onChangeInput={onChangeInput} value={orderData && orderData.totalPrice} disabled={true}>
+                                            Нэхэмжлэх дүн
                                         </WalletInput>
                                       </TabPane>
                                     </Tabs>
-                                    <Button style={{height: '50px', marginTop: '10px'}} className="rounded-[8px]" onClick={() => fetchData2()} type="primary" block>
-                                                 Нэхэмжлэл илгээх
+                                    <Button style={{height: '50px', marginTop: '10px'}} className="rounded-[8px]" onClick={onClickPaymentPending} type="primary" block>
+                                          Нэхэмжлэл илгээх
                                     </Button>
                                   </div>
                                 </TabPane>
@@ -1149,7 +1142,22 @@ const OrderId = () => {
           onCancel={handleCancel}
           footer={[]}
         >
-          <Alert message={title} description={message} type={status} showIcon />
+          <Alert message={title} description={message} type={status} showIcon style={{padding:'20px'}}/>
+          
+          {type2 ==='MONGOLCHAT' && <div>
+          <Row style={{marginTop:'20px'}}>
+            <Col offset={5}>
+              <QRCode value={MongolChatResultData && MongolChatResultData.qr}/>
+            </Col>
+          </Row>
+          <Row> <Col offset={7}>QR-кодоо уншуулна уу?</Col></Row>
+          </div>
+        }
+        <Row style={{marginTop:'20px'}}>
+          <Col offset={8}>
+            <Button style={{width:'100px'}} type='primary' onClick={()=>  setmessageShow(false)}>OK</Button>
+         </Col>
+        </Row>
         </Modal>
         <Modal
           visible={tureeslegch}

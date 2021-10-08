@@ -9,6 +9,8 @@ import moment from 'moment';
 import DayNightColumn from '@components/DayNightColumns';
 import Context from '@context/Context';
 import RentDate from '@components/registerSpace/rentDate';
+import { showMessage } from '@utils/message';
+import { messageType,DefaultMsg } from '@constants/constants';
 import Link from 'next/link';
 const {TabPane} = Tabs;
 moment.updateLocale('mn', {
@@ -37,16 +39,27 @@ const Lessor = () =>{
     setVehicles(vehicle);
   }, []);
   const getSavedData =async ()=>{
+    ctx.setIsLoading(true);
     const result = await callGet('/booking?asWho=2&isConfirmed=false');
     console.log(result, 'saveeeeeeeeeed Dataaaaaaaaaaaaaaa');
-    setCalendarData(result);
+    if (!result || result === undefined) {
+      showMessage(messageType.FAILED.type, defaultMsg.dataError);
+    } else {
+      setCalendarData(result);
+    }
+    ctx.setIsLoading(false);
   };
   const getConfirmedData = async ()=>{
+    ctx.setIsLoading(true)
     const res = await callGet('booking?asWho=2&isConfirmed=true');
-    console.log(res, 'confirm yesss');
-    setCalendarData(res);
+    if (!res || res === undefined) {
+      showMessage(messageType.FAILED.type, defaultMsg.dataError);
+    } else {
+      setCalendarData(res);
+    }
+    ctx.setIsLoading(false);
   };
-
+  
   const getHistory = async ()=>{
     ctx.setIsLoading(true);
     const formData = {
@@ -91,6 +104,12 @@ const Lessor = () =>{
       setDataViewType('list');
     }
   };
+  const paginationProps = {
+    showSizeChanger: true,
+    showQuickJumper: true,
+    pageSize: 8,
+    total: 10,
+};
   const onChangeDropDown= ()=>{
 
   };
@@ -281,6 +300,7 @@ const Lessor = () =>{
                 className="calendarList"
                 style={{marginTop: 30}}
                 itemLayout="horizontal"
+                pagination={paginationProps}
                 dataSource={calendarData}
                 renderItem={(item) => (
                   <List.Item >
@@ -501,6 +521,7 @@ const Lessor = () =>{
                 className="calendarList"
                 style={{marginTop: 30}}
                 itemLayout="horizontal"
+                pagination={paginationProps}
                 dataSource={calendarData}
                 renderItem={(item) => (
                   <List.Item >
@@ -721,6 +742,7 @@ const Lessor = () =>{
                 className="calendarList"
                 style={{marginTop: 30}}
                 itemLayout="horizontal"
+                pagination={paginationProps}
                 dataSource={calendarData}
                 renderItem={(item) => (
                   <List.Item >
@@ -831,9 +853,6 @@ const Lessor = () =>{
 
                   </List.Item>)}
               />
-              <Row style={{height: '50px'}}>
-                <Pagination current={currentPage} onChange={onChangePage} total={50} className='OrdePagination'/>
-              </Row>
             </div>}
         </TabPane>
       </Tabs>

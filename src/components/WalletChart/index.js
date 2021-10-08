@@ -7,16 +7,49 @@ import {Legend} from 'chart.js';
 import {callGet, callPost} from '@api/api';
 
 const WalletChart = (props) => {
+  console.log(props);
   const {TabPane} = Tabs;
-  
+  const [comeData,setComeData]=useState([]);
+  const [expenseData,setExpenseData]=useState([]);
+  const [comeValue,setComeValue]=useState([]);
+  const [expenseValue,setExpenseValue]=useState([]);
+{   const comeD=[];
+    const expeD = [];
+    const comeVal=[];
+    const expeVal = [];
+      props.incomeData.map((item)=>{
+        comeD.push(item.amount);
+        comeVal.push(item.date);
+      });
+      props.expenceData.map((item)=>{
+        expeD.push(item.amount);
+        expeVal.push(item.date);
+      });
+      setComeData(comeD);
+      setComeValue(comeVal);
+      setExpenseData(expeD);
+      setExpenseValue(expeVal);
+      console.log(comeD,comeVal,expeD,expeVal,'yaaaaaaaaaaaaaaaaaaaaaaaaaaaaaayyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
+    }
   let outcome;
-  
+  let income;
+    income = {
+      labels: comeValue,
+      datasets: [
+        {
+          data: comeData,
+          fill: false,
+          backgroundColor: '#00F9B8',
+          borderColor: '#35446D',
+        },
+      ],
+    };
     outcome = {
-      labels: ['1 сар', '2 сар', '3 сар', '4 сар', '5 сар', '6 сар', '7 сар', '8 сар', '9 сар', '10 сар', '11 сар', '12 сар'],
+      labels: expenseValue,
       datasets: [
         {
           label: 'null',
-          data: [7, 19, 3, 5, 2, 3, 5, 4, 3, 7, 4, 6],
+          data: expenseData,
           fill: false,
           backgroundColor: '#00F9B8',
           borderColor: '#35446D',
@@ -53,7 +86,7 @@ const WalletChart = (props) => {
           </div> */}
           <div>
             {/* <Line {...config} style={{marginTop:'-150px'}} /> */}
-            <Line data={props.income} options={options} />
+            <Line data={income} options={options} />
           </div>
         </TabPane>
         <TabPane tab="Зарлага" key="2">

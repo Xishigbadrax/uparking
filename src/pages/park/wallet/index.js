@@ -6,56 +6,81 @@ import {calendarLocale} from '@constants/constants.js';
 import Helper from '@utils/helper';
 import WalletChart from '@components/WalletChart';
 import moment from 'moment';
-import {callGet} from '@api/api';
-import {Calendar, Tag, Image,Row,Col, Card} from 'antd';
+import {callGet,callPost} from '@api/api';
+import {Calendar, Tag, Image,Row,Col, Card, Button, Modal} from 'antd';
 import Context from '@context/Context';
-import {LeftOutlined, RightOutlined} from '@ant-design/icons';
-
+import {LeftOutlined, RightOutlined,CalendarOutlined} from '@ant-design/icons';
+import { showMessage } from '@utils/message';
+import { messageType,defaultMsg } from '@constants/constants.js';
+moment.updateLocale('mn', {
+  weekdaysMin: ['НЯМ', 'ДАВ', 'МЯГ', 'ЛХА', 'ПҮР', 'БАА', 'БЯМ'],
+});
 const Wallet = () => {
   const [calendarData, setCalendarData] = useState([]);
-  const [userData, setuserData] = useState(null);
+  const [current, setCurrent]= useState(parseInt(moment().format('M')));
+  const [wallertData, setWallertData] = useState(null);
+  const [pendingData,setPendingData] = useState([]);
+  const [visibleOfPendingModal,setVisibleOfPendingModal] = useState(false);
+  const [visiblePayPending,setVisiblePayPending] = useState(false);
+  const [selectedPending,setSelectPending]=useState();
+  const [incomeData,setIncomeData]= useState();
+  const [currMonth, setCurrMonth] = useState();
+  const [expenceData,setExpenceData]=useState();
   const ctx = useContext(Context);
-  const [data11,setData11] = useState(5);
-  const [data12,setData12] = useState(5);
-  const [data13,setData13] = useState(5);
-  const [data14,setData14] = useState(5);
-  const [data15,setData15] = useState(5);
-  const [data16,setData16] = useState(5);
-  const [data17,setData17] = useState(5);
-  const [data18,setData18] = useState(5);
-  const [data19,setData19] = useState(5);
-  const [data110,setData110] = useState(5);
-  const [data111,setData111] = useState(5);
-  const [data112,setData112] = useState(5);
-  useEffect(() => {
+ 
+  useEffect(async() => {
     fetchData();
   }, []);
-  let income;
-    income = {
-      labels: ['1 сар', '2 сар', '3 сар', '4 сар', '5 сар', '6 сар', '7 сар', '8 сар', '9 сар', '10 сар', '11 сар', '12 сар'],
-      datasets: [
-        {
-          label: 'null',
-          data: [data11, data12, data13, data14, data15, data16, data17, data18, data19, data110, data111, data112],
-          fill: false,
-          backgroundColor: '#00F9B8',
-          borderColor: '#35446D',
-        },
-      ],
-    };
-
+  
   const fetchData = async () => {
     ctx.setIsLoading(true);
     await callGet('/wallet/user', null).then((res) => {
-      setuserData(res);
-      console.log(res,'ggggg');
-      if (res && res.pendingList && res.pendingList.length > 0) {
+      setWallertData(res);
+      if (res){
+        if(res.pendingList && res.pendingList.length > 0) {
         setCalendarData(res.pendingList);
+        }
+        if(res.incomeChart && res.expenseChart){
+        setIncomeData(res.incomeChart);
+        setExpenceData(res.expenseChart);
+        }
       }
       ctx.setIsLoading(false);
     });
   };
+  const setClickPayPending = (id)=>{
+      console.log(id);
+      ctx.setIsLoading(true);
+      const item = pendingData.find((it)=>it.bookingId == id);
+      console.log(item);
+      setSelectPending(item);
+      setVisiblePayPending(true);
+  }
+   const onClickPayPayment = async ()=>{
+      ctx.setIsLoading(true);
+      const formData = {
+        parkingSpaceId:selectedPending.parkingSpaceId,
+        pendingAmount:selectedPending.pendingAmount,
+        walletId:selectedPending.walletId
+      }
+       const res= await callPost('wallet/pending',formData);
+       console.log(res);
+       if(res && res.status === 'success'){
+         setVisiblePayPending(false);
+         setVisibleOfPendingModal(false);
+      ctx.setIsLoading(false);
 
+       }
+   }
+  const onClickVisiblePendingModal = async () => {
+    const pendingData =  await callGet(`wallet/pending`);
+    if(pendingData){
+     setPendingData(pendingData);
+     setVisibleOfPendingModal(true);}
+     else{
+     showMessage(messageType.FAILED.type,'Мэдээлэл дуудахад алдаа гарлаа');
+    }
+  }
   const getListData = (value) => {
     const listData = [];
     // const monthData = 0;
@@ -65,18 +90,11 @@ const Wallet = () => {
         if (value.format('YYYY-MM-DD') === currentMoment.format('YYYY-MM-DD')) {
           listData.push(element);
         }
-        if(value.format('YYYY')=== currentMoment.format('YYYY')){
-          const month = moment(value).format('MM');
-          if(month === '10'){
-            setData11(data11+element.amount);
-          }
-        }
       });
     }
     
     return listData || [];
   };
-
   const dateCellRender = (value) => {
     const listData = getListData(value);
     return (
@@ -92,7 +110,6 @@ const Wallet = () => {
       </ul>
     );
   };
-
   const getMonthData = (value) => {
     if (value.month() === 8) {
       return 1394;
@@ -107,21 +124,37 @@ const Wallet = () => {
       </div>
     ) : null;
   };
-
   const styles = {
     display: 'flex',
     justifyContent: 'space-between',
   };
-
   return (
+    <div>
     <WalletLayout>
       <Row style={{width:'100%'}}> 
         <Col span={10}>
+          <Row>
           <WalletCard />
+          </Row>
+          <Row style={{border:'1px solid black',height:'70px',marginTop:'20px',borderRadius:'8px',width:'80%',alignItems:'center'}}>
+            <Col span={12}>
+              <Row style={{color:'red',marginLeft:'10px'}}>
+              Нэхэмжлэлийн дүн
+              </Row>
+              <Row>
+                <Col offset={6}>
+                {wallertData && wallertData.pendingAmount}₮
+                </Col>
+              </Row>
+            </Col>
+            <Col span={8} offset={2}>
+              <Row onClick={onClickVisiblePendingModal} style={{border:'1px solid gray',width:'100%',height:'30px',alignItems:'center',display:'flex',paddingLeft:'20%',borderRadius:'8px'}}>Төлөх</Row>
+            </Col>
+          </Row>
         </Col>
-        <Col span={14} >
+          <Col span={14} >
           <Card style={{width:'100%',height:'400px'}}>
-            <WalletChart  style={{paddingBottom:'10px'}} income={income}/>
+            <WalletChart  style={{paddingBottom:'10px'}} incomeData={incomeData} expenceData={expenceData}/>
           </Card>
          </Col>
       
@@ -132,21 +165,7 @@ const Wallet = () => {
           <span> Хүлээгдэж буй орлого </span>
           <Col> <img className=" " src="../../question.png" /> </Col>
         </Row>
-        <div className="flex w-[580px] h-[21px] justify-between mt-[18px] ">
-          <div className=" flex justify-between w-[190px] cursor-pointer ">
-            <div className=" text-[#0013D4]"><LeftOutlined /></div>
-            <div className=" mt-[3px] text-[#647189] font-bold"> Аравдугаар сар, 2020 </div>
-            <div className=" text-[#0013D4]"><RightOutlined /></div>
-          </div>
-          <div><text className="text-[blue] font-bold">
-            {userData != null ?
-              userData.totalIncome ?
-                Helper.formatValueReverse(userData.pendingAmount + '') :
-                0 :
-              null}
-              ₮
-          </text></div>
-        </div>
+        
         <div className="flex justify-between mt-[25px]">
 
           <div className=" h-[480px] w-[613px]" style={{overflow:'hidden'}}>
@@ -154,7 +173,63 @@ const Wallet = () => {
               className="walletCal"
               locale={calendarLocale}
               dateCellRender={dateCellRender}
-              // headerRender={}
+              headerRender={({value, type, onChange, onTypeChange}) => {
+                const localeData = value.localeData();
+                const year = value.year();
+                setCurrMonth(moment(value).format('YYYY-MM'));
+                const month = [];
+                for (let i = 0; i < 12; i++) {
+                  month.push(localeData._months[i]);
+                }
+                return (
+                  <div style={{padding: '16px'}}>
+                    <Row >
+                      <Col span={1}>
+                        <LeftOutlined
+                          onClick={()=>{
+                            setCurrent(current-1);
+                            if (current === 1 ) {
+                              setCurrent(12);
+                              const newValue = value.clone();
+                              newValue.month(parseInt(current-1-1));
+                              onChange(newValue);
+                            } else {
+                              const newValue = value.clone();
+                              newValue.month(parseInt(current-1-1 ));
+                              onChange(newValue);
+                            }
+                          }}
+                          style={{cursor: 'pointer', color: '#0013D4'}}
+                        />
+                      </Col>
+                      <Col span={5} style={{marginTop: '5px'}}>
+                        {month[current-1] },{year}
+                      </Col>
+                      <Col
+                        span={1}
+                        onClick={()=>{
+                          setCurrent(current+1);
+                          if (current === 12) {
+                            setCurrent(1);
+                            const newValue = value.clone();
+                            newValue.month(parseInt(current));
+                            onChange(newValue);
+                          } else {
+                            const newValue = value.clone();
+                            newValue.month(parseInt(current ));
+                            onChange(newValue);
+                          }
+                        }}
+
+                        style={{cursor: 'pointer', color: '#0013D4'}}
+                      >
+                        <RightOutlined />
+                      </Col>
+                    </Row>
+                  </div>
+                )
+                ;
+              }}
               monthCellRender={monthCellRender}
             ></Calendar>
           </div>
@@ -162,6 +237,80 @@ const Wallet = () => {
         </div>
       </div>
     </WalletLayout>
+    <Modal visible={visiblePayPending} footer={null}>
+      <div>
+      <div className=" ml-[24px]"> <WalletCard /></div>
+        <Row style={{marginTop: '35px'}}>
+           <Col span={24}>
+            <Button className="w-[372px] rounded-[8px]" type="primary" size={'large'} onClick={onClickPayPayment}>
+              Төлөх
+            </Button>
+       </Col>
+      </Row>
+      </div>
+      </Modal>
+    <Modal visible={visibleOfPendingModal} footer={null} onCancel={()=>setVisibleOfPendingModal(false)}>
+        {pendingData && pendingData.length
+        ?pendingData.map((item)=>(
+          <div style={{padding:'30px'}} >
+            <Card style={{borderRadius:'10px'}} onClick={()=>setClickPayPending(item.bookingId)} >
+                <Row>
+                  <Col offset={6} span={10}>{item.bookingStatus === 'CANCELLED' && <div style={{fontSize:'16px'}}>ЦУЦЛАГДСАН</div>}</Col>
+                  <Col offset={4} span={4} style={{float:'left'}}>
+                    <Row style={{width:'100%'}}>Нийт үнэ</Row></Col>
+                </Row>
+                <Row>
+                  <Col offset={2} span={10}></Col>
+                  <Col offset={8} span={4} style={{float:'left'}}>
+                    <Row style={{width:'100%',fontSize:'20px',fontWeight:'600'}}>{item.pendingAmount}₮</Row></Col>
+                </Row>
+                <Row>
+                  {item.totalAtDay >0 &&
+                  <Col span={6}>
+                    <div style={{display:'flex'}}>
+                        <div><img src='/icons/brightness_5_24px.png'/></div>
+                        <div style={{marginLeft:'20px',fontSize:'14px',color:'gray'}}>Өдөр</div>
+                    </div>
+                  </Col>}
+                  {item.totalAtNight>0 &&
+                  <Col span={6} offset={2}>
+                    <div style={{display:'flex'}}>
+                        <div><img src='/icons/brightness_3_24px.png'/></div>
+                        <div style={{marginLeft:'20px'}}>Шөнө</div>
+                    </div>
+                  </Col>}
+                  {item.totalAllDay > 0 &&
+                  <Col span={6} offset={2}>
+                    <div style={{display:'flex'}}>
+                      <div><img src='/icons/brightness_4_24px.png'/></div>
+                      <div style={{marginLeft:'20px'}}>Бүтэн өдөр</div>
+                    </div>
+                  </Col>}
+                </Row>
+                <Row>
+                  <Col  span={2}>
+                  <CalendarOutlined />
+                  </Col>
+                  <Col span={8} offset={1}>
+                    <Row><div style={{fontWeight:'700'}}>{Helper.formatOrderDatetime(item.startDateTime)}</div></Row>
+                  </Col>
+                  <Col offset={1}>
+                  <div style={{alignItems: 'center', justifyContent: 'center', display: 'flex',paddingTop:'5px'}}>
+                                <img
+                                  width={24}
+                                  src={'/images/icon/arrow_right_alt_24px.png'}
+                                />
+                              </div></Col>
+                  <Col span={8} offset={2}>
+                    <Row><div style={{fontWeight:'700'}}>{Helper.formatOrderDatetime(item.endDateTime)}</div></Row>
+                  </Col>
+                </Row>
+            </Card>
+            </div>
+        )):<div style={{height:'100px'}}>Нэхэмжлэл байхгүй байна...</div>
+        }
+    </Modal>
+    </div>
   );
 };
 
