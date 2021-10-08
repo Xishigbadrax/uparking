@@ -19,6 +19,7 @@ export const AcademicYearEnd = moment(today)
   .date(18);
 
 const CustomCalendar = (props) => {
+  console.log(props,'yay');
   const [fromDate, setFromDate] = useState([]);
   const [selectedDate, setselectedDate] = useState([]);
   // eslint-disable-next-line no-unused-vars
@@ -86,11 +87,11 @@ const CustomCalendar = (props) => {
   const onSelect = (value) => {
     const day = moment(value).format('D');
     const day2 = moment(value).format('YYYY-MM-DD HH:mm:ss').toString();
-    if (fromDate.find((item) =>(test(item.startDate, item.endDate, day2) === 1 ) && item.time === 'DAY')) {
+    if (fromDate.find((item) =>(test(item.startDate, item.endDate, day2) === 1 ) && item.timeSplitDescription === 'DAY')) {
     //   onclickclass = 'onDoubleClickDate';
       props.getSelectedDate(moment(day2).format('YYYY-MM-DD')+' '+'09:00:00');
       console.log('nicee');
-    } else if (fromDate.find((item) =>(test(item.startDate, item.endDate, day2) === 1 ) && item.time === 'NIGHT')) {
+    } else if (fromDate.find((item) =>(test(item.startDate, item.endDate, day2) === 1 ) && item.timeSplitDescription === 'NIGHT')) {
       //   onclickclass = 'onDoubleClickDate';
       props.getSelectedDate(moment(day2).format('YYYY-MM-DD')+' '+'18:30:00');
       console.log('nicee');

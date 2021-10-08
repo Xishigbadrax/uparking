@@ -5,7 +5,7 @@ import WalletLayout from '@components/layouts/WalletLayout';
 import WalletCard from '../../../../components/WalletCard';
 // import WalletBankInfo2 from '@components/WalletBankInfo2';
 import WalletBankInfo from '@components/WalletBankInfo';
-import {Tabs, Image, Button, Modal, Alert} from 'antd';
+import {Tabs, Image, Button, Modal, Alert, Divider} from 'antd';
 import {callGet, callPost} from '@api/api';
 import Context from '@context/Context';
 import WalletInput from '../../../../components/WalletInput';
@@ -285,7 +285,7 @@ const Charge = () => {
                     <div>
                       <WalletInput onChangeInput={onChangeInput}>
                       Цэнэглэх дүн
-                      </WalletInput>
+                      </WalletInput> 
                     </div>
                   </TabPane>
                   <TabPane
@@ -334,7 +334,7 @@ const Charge = () => {
                     </WalletInput>
                   </TabPane>
                 </Tabs>
-                <Button onClick={() => fetchData2()} type="primary" block>
+                <Button onClick={() => fetchData2()} type="primary" block style={{marginTop:'10px'}}>
                 Нэхэмжлэл илгээх
                 </Button>
               </div>
@@ -343,7 +343,7 @@ const Charge = () => {
               <WalletInput onChangeInput={onChangePromo}>
               Промо код
               </WalletInput>
-              <Button onClick={() => fetchData3()} type="primary" block>
+              <Button onClick={() => fetchData3()} type="primary" block style={{marginTop:'10px'}}>
               Идэвхжүүлэх
               </Button>
             </TabPane>

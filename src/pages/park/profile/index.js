@@ -126,11 +126,11 @@ const Profile = () => {
   const [parkingSpaceId, setParkingSpaceId] = useState(null);
   // const [parkingListData, setParkingListData]= useState([]);
   const {userdata} = useContext(Context);
-  const [realData, setRealData] = useState('');
   const [mainData, setMainData] = useState(null);
   // eslint-disable-next-line no-unused-vars
   const [imageData, setImageData] = useState(null);
   const [parkId, setParkId] = useState(null);
+  const [realData,setRealData] = useState();
   // eslint-disable-next-line no-unused-vars
   const [spaceData, setSpaceData] = useState(null);
   const [vehicleId, setVehicleId] = useState();
@@ -324,7 +324,10 @@ const Profile = () => {
   const handleCancel = () => {
     setIsVehileVisible(false);
   };
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
+    console.log(values);
+    const res = await callPost(`/user/update`,values);
+    console.log(res);
     console.log('Undesen dataaa yma');
   };
   const onFinishSale = (values) => {
@@ -558,7 +561,7 @@ const Profile = () => {
                   />
                 </Col>
               </Row>
-              {realData != '' ? (
+              { realData != null ? (
                 <Form
                   className="profileForm"
                   name="basic"

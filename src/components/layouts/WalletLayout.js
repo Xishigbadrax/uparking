@@ -24,8 +24,7 @@ const ProfileLayout = ({children, title, className}) => {
         style={{maxWidth: '1400px', margin: 'auto'}}
         className={'profileLayout'}
       >
-        <LoadingBar color="#109720" progress={isLoading ? 70 : 100} />
-       
+        <LoadingBar color="#109720" progress={isLoading ? 70 : 100} /> 
         <Card style={{borderRadius: '50px', height: '800px'}}>
           <WalletSidebar />
         </Card>

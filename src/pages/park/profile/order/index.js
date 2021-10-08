@@ -85,6 +85,12 @@ const Order = () => {
     console.log(page);
     setCurrentPage(page);
   };
+  const paginationProps = {
+    showSizeChanger: true,
+    showQuickJumper: true,
+    pageSize: 5,
+    total: 10,
+};
   // mashinii list awah
   useEffect(async () => {
     const vehicle = await callGet('/user/vehicle/list');
@@ -97,8 +103,15 @@ const Order = () => {
   }, [isConfirmed]);
   // hadgalagdsan data awah
   const getSavedData=(async ()=>{
+    ctx.setIsLoading(true);
     const result = await callGet(`/booking?asWho=${asWho}&isConfirmed=false`);
-    setCalendarData(result);
+    if (!result || result === undefined) {
+      showMessage(messageType.FAILED.type, defaultMsg.dataError);
+    } else {
+      setCalendarData(result);
+    }
+    ctx.setIsLoading(false);
+    
   });
   // batalgaajsan turliin data awah
   const getConfirmData = async () => {
@@ -362,12 +375,13 @@ const Order = () => {
                     <List
                       className="calendarList"
                       style={{marginTop: 30}}
+                      pagination={paginationProps}
                       itemLayout="horizontal"
                       dataSource={calendarData}
                       renderItem={(item) => (
                         <List.Item >
-                          {item.bookingStatus ==='PENDING_PAYMENT' && <div className="calendarListStatus">
-                            {item.bookingStatusDescription}{''}
+                          {item.bookingStatus ==='PENDING_PAYMENT' && <div className="calendarListStatus2">
+                            {item.bookingStatusDescription}{'   ' }
                             {item.expireDateDriver}
                           </div> }
                           {item.bookingStatus === 'CONFIRMED'&& historyValue === true && <div className="calendarListStatus1" style={{display: 'flex'}}>
@@ -442,9 +456,7 @@ const Order = () => {
 
                       )}
                     />
-                    <Row style={{height: '50px'}}>
-                      <Pagination current={currentPage} onChange={onChangePage} total={50} className='OrdePagination'/>
-                    </Row>
+                 
                   </div>}
               </TabPane>
             ))}

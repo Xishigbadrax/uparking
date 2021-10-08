@@ -144,7 +144,7 @@ const booking = (props)=>{
       const endMoment = moment(orderData.endDateTime, 'YYYY/MM/DD').add(1, 'day');
       while (currentMoment.isBefore(endMoment, 'day')) {
         if (moment(value).format('YYYY-MM-DD') === moment(currentMoment).format('YYYY-MM-DD')) {
-          listData.push(orderData);
+          listData.push(orderData.bookingDetail);
         }
         currentMoment.add(1, 'days');
       }
@@ -153,10 +153,11 @@ const booking = (props)=>{
   };
   const dateCellRender = (value) => {
     const listData = getListData(value);
+    console.log(listData,'ýoooooooooooooooooooooooow');
     return (
       <ul className="events" style={{marginTop: '10px'}}>
         {listData && listData.map((item) => (
-          <li key={item.bookingId}>
+          <li key={item.spaceStatusId}>
             {/* <Badge status={item.type} text={item.content} /> */}
             <div>
               <Tag className="eventText" style={{borderRadius: '20px', border: ' 0.4px solid green',
@@ -165,7 +166,7 @@ const booking = (props)=>{
                 lineHeight: '16px',
                 height: '15px',
                 width: '90%',
-                paddingLeft: '20%'}}>{item.vehicleNumber}</Tag>
+                paddingLeft: '20%'}}>{item.spaceStatusId}</Tag>
               <Tag style={{borderRadius: '20px', border: ' 0.4px solid #DEE2E9',
                 fontSize: '10px',
                 background: '#fff',
@@ -391,11 +392,10 @@ const booking = (props)=>{
               </Row>
             </Row>
           </div>}
-          {
-            orderData && (orderData.totalAllDay > 0 && orderData.totalAtDay > 0 && orderData.totalAtNight === 0) ||
-           (orderData && orderData.totalAllDay > 0 && orderData.totalAtDay === 0 && orderData.totalAtNight > 0) ||
-           (orderData && orderData.totalAllDay === 0 && orderData.totalAtDay > 0 && orderData.totalAtNight > 0) ||
-           (orderData && orderData.totalAllDay > 0 && orderData.totalAtDay > 0 && orderData.totalAtNight > 0) &&
+          {(orderData && (orderData.totalAllDay > 0 && orderData.totalAtDay > 0 && orderData.totalAtNight === 0) ||
+           ( orderData.totalAllDay > 0 && orderData.totalAtDay === 0 && orderData.totalAtNight > 0) ||
+           (orderData.totalAllDay === 0 && orderData.totalAtDay > 0 && orderData.totalAtNight > 0) ||
+           ( orderData.totalAllDay > 0 && orderData.totalAtDay > 0 && orderData.totalAtNight > 0)) ?
           <div>
             <Row style={{marginTop: '20px'}}>
               <Col offset={2}><p style={{color: '#A2A4AA'}}>Сул цагийн захиалга </p></Col>
@@ -420,22 +420,28 @@ const booking = (props)=>{
               </Col>
             </Row>
             <Row>
-              <Col>
+              <Col span={6} offset={2}>
                 <div style={{display: 'flex'}}>
                   <img src='/icons/brightness_5_24px.png'/>
+                  <div  style={{marginLeft:'10px'}}>{orderData && orderData.totalAtDay} Өдөр</div>
+                </div>
+              </Col>
+              <Col span={6}>
+                <div style={{display: 'flex'}}>
+                  <img src='/icons/brightness_3_24px.png'/>
+                  <div style={{marginLeft:'10px'}}>{orderData && orderData.totalAtNight}  Шөнө</div>
                 </div>
               </Col>
               <Col>
                 <div style={{display: 'flex'}}>
-                  <img src='/icons/brightness_3_24px.png'/>
-                </div></Col>
-              <Col>
-                <div style={{display: 'flex'}}>
                   <img src='/icons/brightness_4_24px.png'/>
-                </div></Col>
+                  <div  style={{marginLeft:'10px'}}>{orderData && orderData.totalAllDay}  Бүтэн өдөр</div>
+                </div>
+                
+                </Col>
             </Row>
-          </div>
-          }
+          </div>:null}
+          {/* } */}
           {orderData && orderData.bookingStatus !== 'SPACE_OWNER_DECISION' &&
             <div>
               <Row style={{padding: '20px 10px'}}>
