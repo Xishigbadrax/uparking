@@ -14,7 +14,7 @@ import {
   Select,
   Divider,
 } from 'antd';
-import {useContext, useState} from 'react';
+import { useState,useContext} from 'react';
 import {useEffect} from 'react';
 import {Steps} from 'antd';
 import {callGet, callPost} from '@api/api';
@@ -87,7 +87,7 @@ const Profile = () => {
   const [update5, setUpdate5] = useState();
   const [update6, setUpdate6] = useState();
   const [update7, setUpdate7] = useState();
-
+  const ctx =  useContext(Context);
 
   // eslint-disable-next-line no-unused-vars
   const [dugaar, setDugaar] = useState();
@@ -160,14 +160,10 @@ const Profile = () => {
   }, [userdata]);
   const onFinish123 = (values) => {};
   const onFinishMainImage = (values) =>{
-    console.log(values, 'mainImageee');
   };
   const onFinishSpaceImage = (values)=>{
-    console.log(values, 'spaceeeeeeeeeeeeeeeeeeeeeeeeeeeeeeephotoooooooooooooooooooooos');
   };
   const onFinishSPace = (values) => {
-    console.log(values);
-    console.log(form.getFieldsValue(), 'aaaaaaaaaaaaaaash');
   };
   const onchangeNewVehicle = () => {
     vehicleForm.setFieldsValue({
@@ -184,11 +180,11 @@ const Profile = () => {
     console.log('id ymaa----------->', a);
     const spaceEdit = await callGet(`/parkingspace?parkingSpaceId=${a}`);
     const res = await callGet(`parkingspace/update/1?parkingSpaceId=${a}`);
-    console.log(res, 'ediiiiiiiiiiiiiiiiiiiiiiiiiiiitttttttttttttttttttttt daaaaaaattttttttttttaaaaaaaaaaaa');
     setSpaceEditData(spaceEdit);
     setLoading(false);
   };
   const onChangeisVehicleEditVisible = async (a) => {
+    ctx.setIsLoading(true);
     const vehicleData = await callGet(`/user/vehicle?vehicleId=${a}`);
     vehicleEditForm.setFieldsValue({
       vehicleNumber: vehicleData.vehicleNumber,
@@ -197,25 +193,26 @@ const Profile = () => {
       color: vehicleData.color,
     });
     setIsVehicleEditVisible(true);
+    ctx.setIsLoading(false);
+
   };
   useEffect(async () => {
+    ctx.setIsLoading(true);
+
+    //get mashinii medeell awah
     const data = await callGet('/user/vehicle/list');
     setVehicles(data);
+    //uidlwer medeelel
     const uildwer = await callGet('/user/vehicle/maker');
     setSelectedUildwer(uildwer);
     setUildwer(uildwer);
+    //ungu
     const color = await callGet('/user/vehicle/color');
     setColor(color);
+    ctx.setIsLoading(false);
+
     // setFormdata({...formData, rfid: '12'});
   }, []);
-  const onChangeUildver = async (e) => {
-    console.log('i am here-->', e);
-    const uildver = uildwer.find((item) => item.value === e);
-    setSelectedUildwer(uildver);
-    const model = await callGet(`/user/vehicle/model?maker=${uildver.label}`);
-    setZagwar(model);
-    setFormdata({...formData, maker: uildver.value});
-  };
   const onSaveModal = async (e) => {
     console.log(update1, update2, update3, update4, update5, update6, 'update-uuuud sshuu');
     const res1 = await callPost('/parkingspace/update/1', update1);
@@ -260,19 +257,36 @@ const Profile = () => {
 
     setVisibleParkingSpaceEdit(false);
   };
+  //uildweriin medeelel onChange hiih
+  const onChangeUildver = async (e) => {
+    ctx.setIsLoading(true);
+    const uildver = uildwer.find((item) => item.value === e);
+    setSelectedUildwer(uildver);
+    const model = await callGet(`/user/vehicle/model?maker=${uildver.label}`);
+    if(!model && model===undefined ){
+      ctx.setIsLoading(false);
+      showMessage(messageType.FAILED.type, defaultMsg.dataError);
+    }else{
+    setZagwar(model);
+    setFormdata({...formData, maker: uildver.value});
+    ctx.setIsLoading(false);
+    }
+  };
+ 
+  //zagwar medeelel uurchluh
   const onChangeZagwar = (e) => {
-    console.log(e);
     const selectZagwar = zagwar.find((item) => item.value === e);
     setSelectedZagwar(selectZagwar);
     setFormdata({...formData, model: selectZagwar.value});
   };
+  //onCHange dugaar
   const onChangeDugaar = (e) => {
     const dugar = e.target.value;
     setDugaar(dugar);
     setFormdata({...formData, vehicleNumber: dugar});
   };
+  //onChange COlor 
   const onChangeColor = (e) => {
-    console.log(e);
     const selectColor = color.find((item) => item.label === e);
     setSelectedColor(selectColor);
     setFormdata({...formData, color: selectColor});
@@ -280,6 +294,7 @@ const Profile = () => {
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
+  //profile medeelel uurchluh
   const clickProfileEdit = () => {
     if (isProfileNotEdit) {
       setIsProfileNotEdit(false);
@@ -287,7 +302,9 @@ const Profile = () => {
       setIsProfileNotEdit(true);
     }
   };
-  const handleOk = async () => {
+  //shine mashin bvrtguuleh
+  const onSaveNewVehicle = async () => {
+    ctx.setIsLoading(true);
     vehicleForm.validateFields();
     console.log(vehicleForm.getFieldsValue());
     const a = vehicleForm.getFieldsValue();
@@ -298,14 +315,23 @@ const Profile = () => {
         color: a.color,
         model: a.model,
       });
+      if(!res || res === undefined){
       console.log(res);
+      ctx.setIsLoading(false);
+      showMessage(messageType.FAILED.type, defaultMsg.dataError);
+      }
+      else{
+        setIsLoading(false);
       setIsVehileVisible(false);
+
+      }
     } else {
-      // showMessage(messageType.FAILED.type, defaultMsg.dataError +'Талбараа гүйцэт бөглөнө үү?');
+      showMessage(messageType.FAILED.type, defaultMsg.dataError +'Талбараа гүйцэт бөглөнө үү?');
     }
     // setIsVehileVisible(false);
   };
-  const handleEditOk = async () => {
+  const onSaveEditVehicleData = async () => {
+    ctx.setIsLoading(true);
     const a = vehicleEditForm.getFieldsValue();
     const colorId = color.find((item)=>item.label === a.color);
     console.log(colorId);
@@ -316,48 +342,53 @@ const Profile = () => {
       model: a.model,
       vehicleId: vehicleId,
     };
-    console.log(editFormData);
     const res = await callPost('/user/vehicle/update', editFormData );
-    setUpdatedData(res.data);
+    if(!res || res ===  undefined ){
+      ctx.setIsLoading(false);
+      showMessage(messageType.FAILED.type, defaultMsg.dataError +'Талбараа гүйцэт бөглөнө үү?');
+    }else{
+      setUpdatedData(res.data);
+      ctx.setIsLoading(false);
+    }
   };
   const handleCancel = () => {
     setIsVehileVisible(false);
   };
   const onFinish = async (values) => {
-    console.log(values);
-    const res = await callPost(`/user/update`,values);
-    console.log(res);
-    console.log('Undesen dataaa yma');
+    // console.log(values);
+    // const res = await callPost(`/user/update`,values);
   };
   const onFinishSale = (values) => {
-    console.log('sale Data--->', values);
   };
-
-  const onClickContinue = async () => {
+//parking space bvrtguuleh
+  const onSaveParkingSpaceDatas = async () => {
     console.log(await form.validateFields());
     await form.isFieldsValidating();
     const componentData = form.getFieldsValue();
     // Үндсэн мэдээллийн өгөгдлийг өгөгдлийн санруу
     if (current === 0 ) {
+      ctx.setIsLoading(true);
       if (mainData) {
         const res = await callPost('/parkingfirst', mainData);
         setResidenceBlockId(mainData.residenceBlockId);
-        console.log(residenceBlockId);
         if (res.status === 'success') {
           setCurrent(current + 1);
+          ctx.setIsLoading(false);
         } else {
+          ctx.setIsLoading(false);
           showMessage(messageType.defaultMsg.validateLocation);
         }
       }
       // }
+      
     } else if (current === 1) {
+      ctx.setIsLoading(true);
+      //Zogsoolin medeelel nemeh
       if (componentData) {
         const second = await callGet(
           `/parkingsecond?parkingFloorId=${componentData.floorNumber}&residenceBlockId=${mainData.residenceBlockId}`,
         );
         setParkId(second.parkingId);
-
-        console.log(second);
         const res = await callPost('/parkingspace', {
           entranceLock: componentData.entranceLock,
           floorNumber: componentData.floorNumber,
@@ -372,10 +403,16 @@ const Profile = () => {
         });
         if (res.status === 'success') {
           setParkingSpaceId(res.message);
+          ctx.setIsLoading(false);
           setCurrent(current + 1);
-        };
+        }
+      }
+      else{
+        ctx.setIsLoading(false);
+        showMessage(messageType.FAILED.type,'Мэдээллээ бүрэн оруулна уу?');
       }
     } else if (current === 2) {
+      
       // Үндсэн зургийн мэдээллийг өгөгдлийн санруу бичих
       if (componentData) {
         getBase64(componentData.imageParkingGate.file.originFileObj, (image2) =>
@@ -389,6 +426,7 @@ const Profile = () => {
           },
         );
       }
+      ctx.setIsLoading(true);
       if (imageParkingOverall && imageParkingGate) {
         const res = await callPost('/parkingspace/parkingimage', {
           imageParkingOverall: String( imageParkingOverall),
@@ -398,8 +436,10 @@ const Profile = () => {
         console.log(res);
         if (res.status === 'success') {
           setCurrent(current + 1);
+          ctx.setIsLoading(false);
         }
       } else {
+        ctx.setIsLoading(false);
         showMessage(messageType.FAILED.type, 'Зургуудаа оруулна уу?');
       }
     } else if (current === 3) {
@@ -412,6 +452,7 @@ const Profile = () => {
           setImageSpaceNUmbe(image4.slice(23));
         });
       }
+      ctx.setIsLoading(true);
       if (imageFromGate && imageSpaceNumber) {
         const res = await callPost('/parkingspace/detail', {
           imageFromGate: imageFromGate,
@@ -421,15 +462,15 @@ const Profile = () => {
 
         if (res.status === 'success') {
           setCurrent(current + 1);
+          ctx.setIsLoading(false);
         }
       } else {
+        ctx.setIsLoading(false);
         showMessage(messageType.FAILED.type, 'Зургуудаа оруулна уу?');
       }
     } else if (current === 4) {
+      ctx.setIsLoading(true);
       const data = await callGet('/parkingspace/timesplit');
-      console.log(data, 'awsan dataaa');
-      console.log(componentData, 'ywah dataaa');
-      console.log(data.daySplit, 'daySpliiiiiiiiiiiit');
       const array = [
         {
           dateSplitId: data.daySplit.winterId,
@@ -468,11 +509,15 @@ const Profile = () => {
         parkingSpaceId: parkingSpaceId,
         parkingSpacePriceInstance: array,
       };
-      console.log(formData, 'awhdgawdgawiudg');
       const res = await callPost('/parkingspace/price', formData);
-      console.log(res);
-      setCurrent(current + 1);
+      if(!res || res === undefined){
+      showMessage(messageType.FAILED.type, defaultMsg.dataError);
+      }else{
+        setCurrent(current + 1);
+        ctx.setIsLoading(false)
+      }
     } else if (current === 5) {
+      ctx.setIsLoading(true);
       const saleData = form.getFieldsValue();
       console.log(saleData);
       const res = await callGet('/division/salesplit');
@@ -512,12 +557,15 @@ const Profile = () => {
         // console.log(ress);
         if (!ress || ress === undefined) {
           showMessage(messageType.FAILED.type, ress.error);
+          ctx.setIsLoading(false);
           return true;
         } else {
           setCurrent(current + 1);
+          ctx.setIsLoading(false);
         }
       }
     } else if (current === 6) {
+      ctx.setIsLoading(true);
       console.log(dayOfWeek);
       const newGeneralScheduleDto = {
         parkingSpaceId: parkingSpaceId,
@@ -526,7 +574,13 @@ const Profile = () => {
       };
       const res = await callPost('/schedule/general', newGeneralScheduleDto );
       console.log(res.status);
-      setIsParkVisible(false);
+      if (!ress || ress === undefined) {
+        showMessage(messageType.FAILED.type, ress.error);
+        ctx.setIsLoading(false);
+        return true;
+      } else {
+        ctx.setIsLoading(false);
+        setIsParkVisible(false);}
     }
   };
   const goBack = () => {
@@ -753,7 +807,7 @@ const Profile = () => {
               key="submit"
               type="primary"
               htmlType="submit"
-              onClick={(values) => handleOk(values)}
+              onClick={(values) => onSaveNewVehicle(values)}
             >
             Хадгалах
             </Button>,
@@ -875,7 +929,7 @@ const Profile = () => {
           title="Тээврийн хэрэгсэл шинэчлэх"
           centered
           style={{minHeight: '800px', height: 'auto'}}
-          visible={isVehicleEditVisible}handleOk
+          visible={isVehicleEditVisible}
           okButtonProps={{
             form: 'vehile-edit-form',
             key: 'submit',
@@ -892,7 +946,7 @@ const Profile = () => {
               key="submit"
               type="primary"
               htmlType="submit"
-              onClick={(values) => handleEditOk(values)}
+              onClick={(values) => onSaveEditVehicleData(values)}
             >
             Хадгалах
             </Button>,
@@ -1023,14 +1077,14 @@ const Profile = () => {
             <>
               {current < steps.length - 1 && (
                 <Button
-                  onClick={onClickContinue}
+                  onClick={onSaveParkingSpaceDatas}
                   type="primary"
                 >
                 Үргэлжлүүлэх
                 </Button>
               )}
               {current === steps.length - 1 && (
-                <Button onClick={onClickContinue} className="buttonGo" type='primary'>
+                <Button onClick={onSaveParkingSpaceDatas} className="buttonGo" type='primary'>
                 Дуусгах
                 </Button>
               )}

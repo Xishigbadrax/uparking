@@ -1877,11 +1877,36 @@
   background: none !important;
   color: black !important;
 }
-
-
-.ResidenceCardList .ant-card-body {
+.ResidenceCardListCurrent{
+  /* box-shadow: 5px 2px 5px gray; */
+  border: 1px solid blue !important;
+}
+.ResidenceCardListCurrent .ant-card-body {
   padding-top: 0px !important;
   align-items: center;
+}
+.parkingSpaceImage{
+  height: 140px !important;
+  width: 209.58px !important;
+
+}
+.ResidenceCardListCurrent .ant-rate svg {
+  height: 10.903876304626465px !important;
+  width: 11.409276962280273px !important;
+  margin-top: 2.3px !important;
+  border-radius: 0px;
+}
+.ResidenceCardListCurrent .ant-rate .ant-rate-star .ant-rate-star-full {
+  margin-left: 2.29px !important;
+}
+.ResidenceCardList .ant-card-body {
+  padding-top: 0px !important;
+
+  align-items: center;
+}
+.ResidenceCardList{
+  /* box-shadow: 5px 2px 5px gray; */
+
 }
 .ResidenceCardList .ant-rate svg {
   height: 10.903876304626465px !important;

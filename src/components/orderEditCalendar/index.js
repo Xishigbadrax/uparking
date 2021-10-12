@@ -85,16 +85,16 @@ const CustomCalendar = (props) => {
     }
   };
   const onSelect = (value) => {
+    
     const day = moment(value).format('D');
     const day2 = moment(value).format('YYYY-MM-DD HH:mm:ss').toString();
-    if (fromDate.find((item) =>(test(item.startDate, item.endDate, day2) === 1 ) && item.timeSplitDescription === 'DAY')) {
+    if (fromDate.find((item) =>(test(item.startDate, item.endDate, day2) === 1 ) && item.time === 'DAY')) {
     //   onclickclass = 'onDoubleClickDate';
       props.getSelectedDate(moment(day2).format('YYYY-MM-DD')+' '+'09:00:00');
-      console.log('nicee');
-    } else if (fromDate.find((item) =>(test(item.startDate, item.endDate, day2) === 1 ) && item.timeSplitDescription === 'NIGHT')) {
+      console.log('niceeeeeeeeee');
+    } else if (fromDate.find((item) =>(test(item.startDate, item.endDate, day2) === 1 ) && item.time === 'NIGHT')) {
       //   onclickclass = 'onDoubleClickDate';
       props.getSelectedDate(moment(day2).format('YYYY-MM-DD')+' '+'18:30:00');
-      console.log('nicee');
     }
     return <div className={`customFullCellRender1 ant-picker-cell-inner ${'onDoubleClickDate'}`}><div className="ant-picker-calendar-date-value">{day}</div></div>;
   };

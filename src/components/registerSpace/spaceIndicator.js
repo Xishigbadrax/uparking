@@ -28,7 +28,7 @@ const spaceIndicator = (props) => {
     setSpaceTypeData(spaceType);
     const route = await callGet('/reference/list/test?type=RETURN_ROUTE');
     setRouteData(route);
-    const floor = await callGet('/reference/list/test?type=FLOOR_NUMBER?re');
+    const floor = await callGet('/reference/list/test?type=FLOOR_NUMBER');
     setFloorData(floor);
   }, []);
   const onChangeEntranceLock = (e) => {

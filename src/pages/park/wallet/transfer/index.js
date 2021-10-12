@@ -210,8 +210,6 @@ const Transfer = () =>{
     }
     // setisLoading(false);
   };
-
-
   const Validate =()=> {
     Modal.info({
       title: <p style={{fontWeight: 'bold'}}>Баталгаажуулах</p>,

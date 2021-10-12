@@ -82,7 +82,6 @@ const Dashboard = () => {
       }
       console.log(rateArray,'ggawdwwwg');
     }
-        // console.log(rateArray,'gggggggggggggggggggggggggggggggggggggggg');
   }
   useEffect(async () => {
     const vehicle = await callGet('/user/vehicle/list');

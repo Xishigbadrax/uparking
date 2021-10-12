@@ -15,6 +15,9 @@ import { messageType,defaultMsg } from '@constants/constants.js';
 moment.updateLocale('mn', {
   weekdaysMin: ['НЯМ', 'ДАВ', 'МЯГ', 'ЛХА', 'ПҮР', 'БАА', 'БЯМ'],
 });
+moment.updateLocale('mn', {
+  months: ['Нэгдүгээр сар', 'Хоёрдугаар сар', 'Гуравдугаар сар', 'Дөрөвдүгээр сар', 'Тавдугаар сар', 'Зургаадугаар сар', 'Долоодугаар сар', 'Наймдугаар сар', 'Есдүгээр сар', 'Аравдугаар сар', 'Арван нэгдүгээр сар', 'Арван хоёрдугаар сар'],
+});
 const Wallet = () => {
   const [calendarData, setCalendarData] = useState([]);
   const [current, setCurrent]= useState(parseInt(moment().format('M')));
@@ -28,7 +31,7 @@ const Wallet = () => {
   const [expenceData,setExpenceData]=useState();
   const ctx = useContext(Context);
  
-  useEffect(async() => {
+  useEffect(() => {
     fetchData();
   }, []);
   
@@ -154,7 +157,9 @@ const Wallet = () => {
         </Col>
           <Col span={14} >
           <Card style={{width:'100%',height:'400px'}}>
-            <WalletChart  style={{paddingBottom:'10px'}} incomeData={incomeData} expenceData={expenceData}/>
+            {/* <WalletChart  style={{paddingBottom:'10px'}} incomeData={incomeData} expenceData={expenceData}/>
+             */}
+             
           </Card>
          </Col>
       

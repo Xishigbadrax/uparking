@@ -8,7 +8,6 @@ import {showMessage} from '@utils/message';
 import MaskedInput from 'antd-mask-input';
 import Countdown from 'react-countdown';
 import renderHTML from 'react-render-html';
-// import Footer from '../../components/Footer';
 import OTPInput from 'otp-input-react';
 const layout = {
   labelCol: {
@@ -16,7 +15,6 @@ const layout = {
   wrapperCol: {
   },
 };
-
 const tailFormItemLayout = {
   wrapperCol: {
     xs: {
@@ -62,8 +60,6 @@ const Login = () => {
   const handleSubmitTransaction = (e) => {
     e.preventDefault();
   };
-
-
   // step1
   const onFinish = async (values) => {
     setLoading(true);
@@ -85,6 +81,7 @@ const Login = () => {
   const phoneNumberOK = async (value) => {
     try {
       const result = await callGet(`verificationCode/${value}`);
+      console.log(result,'sdaaaaaaaaaa');
       if (result.status === 'failed') {
         showMessage(messageType.FAILED.type, result.error);
         return true;
@@ -322,7 +319,7 @@ const Login = () => {
                     },
                   ]}
                 >
-                  <MaskedInput mask="1111" name="verificationCode" />
+                  <MaskedInput mask="1111"  />
 
                 </Form.Item>
                 <div className="getCodeAgain">

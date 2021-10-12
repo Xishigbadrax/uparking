@@ -75,7 +75,7 @@ const OrderId = () => {
   const [selectedDate, setSelectedDate] = useState([]);
   const [isUnelgee, setIsUnelgee]= useState(false);
   const [fromSelectedDate, setFromSelectedDate] = useState();
-  const [MongolChatResultData,setMongolChatResultData]= useState()
+  const [MongolChatResultData,setMongolChatResultData]= useState();
   // eslint-disable-next-line no-unused-vars
   const [time, settime] = useState(null);
   const urlString = window.location.href;
@@ -103,8 +103,6 @@ const OrderId = () => {
     ctx.setIsLoading(false);
     setModalData(resCancel);
   };
-
-
   const onClickPaymentPending = async() => {
     if (orderData && orderData.totalPrice > 0) {
       const formData2 = {
@@ -281,7 +279,9 @@ const OrderId = () => {
       }
       if (res && res.parkingSpaceId) {
         const review = await callGet(`/parkingspace/review?parkingSpaceId=${res.parkingSpaceId}`);
+        if(review){
         setReviewData(review.content);
+        }
       }
       ctx.setIsLoading(false);
     } else if (history) {
@@ -387,6 +387,7 @@ const OrderId = () => {
     }
   };
   const getSelectedDate = (data) =>{
+    console.log(data,'');
     setFromSelectedDate(data);
   };
 
@@ -1103,7 +1104,7 @@ const OrderId = () => {
             </Row>
           </div>
         </Modal>
-        <Modal visible={isUnelgeeVisible} width={600} footer={null} style={{borderRadius: '40px'}}>
+        <Modal visible={isUnelgeeVisible} width={600} footer={null} style={{borderRadius: '40px'}} onCancel={()=>setIsUnelgeeVisible(false)}>
           <Row>{orderData ? <div style={{color: '#0013D4', fontSize: '20px', lineHeight: '24px', fontWeight: '700'}}>{orderData.residenceName},{orderData.floorNumberLabel}</div>:null}</Row>
           <div style={{fontSize: '10px', fontWeight: '400', lineHeight: '20px'}}>Зогсоолын үндсэн 4 үзүүлэлтээр 1-5 од өгч үнэлнэ. |1 - маш муу, 2 - муу, 3 - Дунд зэрэг, 4 - Сайн, 5 - Маш сайн|</div>
           { unelgeeData?.length > 0 ? unelgeeData.map((item)=>(

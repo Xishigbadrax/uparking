@@ -42,7 +42,9 @@ const {TabPane} = Tabs;
 // ];
 const callback = (key) =>{
 };
-const tofit = ({data, lat, lng}) => {
+const tofit = ({data, lat, lng,currentSpaceId,setDefaultCenter,setCurrentSpaceId}) => {
+  console.log(currentSpaceId);
+
   // const [PickTimevisible, setPickTimeVisible] = useState(false);
   const [detailVisible, setDetailsVisible] = useState(false);
   const router =useRouter();
@@ -99,6 +101,7 @@ const tofit = ({data, lat, lng}) => {
   // eslint-disable-next-line no-unused-vars
   const [selectedDate3, setSelectedDate3] = useState([]);
   const {userdata} = useContext(Context);
+  const ctx = useContext(Context)
   const [userRealData, setUserRealData] = useState('');
   const [userPhoneNumber, setUserPhoneNumber]=useState();
   const [parkingSpaceId, setParkingSpaceID] = useState(0);
@@ -107,6 +110,7 @@ const tofit = ({data, lat, lng}) => {
   const [nightOfWeek, setNightOfWeek]=useState([]);
   const [fullDayOfWeek, setFullDayOfWeek] = useState([]);
   const [review, setReview] = useState([]);
+  const [parkingSpaceImage,setParkingSpaceImage] = useState();
   // const [fromSelectedDate3, setFromSelectedDate3] = useState([]);
   useEffect(async () => {
     if (typeof userdata.firstName != 'undefined') {
@@ -114,19 +118,30 @@ const tofit = ({data, lat, lng}) => {
       setUserPhoneNumber(userdata.phoneNumber);
     }
   }, [userdata]);
-  const DetailsDrawerOpen = async (id) => {
+  useEffect(()=>{
+    if(currentSpaceId !==null && currentSpaceId !== undefined){
+      DetailsDrawerOpen(currentSpaceId);
+    }
+    
+  },[currentSpaceId])
+  const DetailsDrawerOpen = async (id,latitude,longitude) => {
+    setDefaultCenter({lat:latitude,
+      lng:longitude})
     setDetailsVisible(true);
+    setCurrentSpaceId(id);
     setId(id);
     // eslint-disable-next-line no-unused-vars
     const review = await callGet(`/parkingspace/review?parkingSpaceId=${id}`);
-    console.log(review, 'ggg');
     if(review ){
     setReview(review.content);
     }
     const priceData = await callGet(`/parkingspace/price?parkingSpaceId=${id}`);
     // eslint-disable-next-line no-unused-vars
     const a = data.find((item) => item.park.parkingSpaceId === id);
+    if(a){
+      setParkingSpaceImage(a.park.parkingSpaceImage);
     setResidenceDrawerItem(a.residence);
+    }
     setSelected(priceData);
     {
       priceData.priceList.map((item) => {
@@ -144,7 +159,6 @@ const tofit = ({data, lat, lng}) => {
     const space = await callGet(
       `/search/parkingspace/test?parkingSpaceId=${id}`,
     );
-    console.log(space, 'gg');
     setSpaceData(space);
     if (space ) {
       const dayArray=[];
@@ -173,6 +187,33 @@ const tofit = ({data, lat, lng}) => {
     const vehicle = await callGet('/user/vehicle/list');
     setVehiclesData(vehicle);
   };
+  const seeFreeTime = async(id)=>{
+    ctx.setIsLoading(true);
+    console.log(id,'ggggg');
+    const space = await callGet(
+      `/search/parkingspace/test?parkingSpaceId=${id}`,
+    );
+    if (space ) {
+      const dayArray=[];
+      const nightArray=[];
+      const fullDayArray=[];
+      console.log(space.dayOfWeek);
+      space.dayOfWeek.find((item)=>{
+        if (item.timeSplitDescription =='Өдөр') {
+          dayArray.push(item);
+        } else if (item.timeSplitDescription == 'Шөнө') {
+          nightArray.push(item);
+        } else if (item.timeSplitDescription == 'Бүтэн өдөр') {
+          fullDayArray.push(item);
+        }
+      });
+      setDayOfWeek(dayArray);
+      setNightOfWeek(nightArray);
+      setFullDayOfWeek(fullDayArray);
+      setChooseTimeView(true);
+      ctx.setIsLoading(false);
+    }
+  }
   const onChangeChooseVehicle = (e) => {
     setSelectedVehicle(e.target.value);
   };
@@ -195,11 +236,9 @@ const tofit = ({data, lat, lng}) => {
             userPhoneNumber: String(userPhoneNumber),
             vehicleId: selectVehicle,
           };
-          console.log(formData, 'ysssssssssss');
           const res = await callPost('/booking', formData);
           setBookingId(res.bookingId);
           if (res.bookingId !== undefined) {
-            console.log(bookingId, 'haana bna');
             router.push({pathname: `/park/profile/order/${res.bookingId}`, query: {page: '1', asWho: 1, history: false}});
           }
         } else {
@@ -214,7 +253,6 @@ const tofit = ({data, lat, lng}) => {
     }
   };
   const timeSubmit = async () => {
-    console.log(userPhoneNumber);
     if (totalValue > 0 ) {
       if (selectVehicle) {
       // setisLoading(true);
@@ -383,7 +421,7 @@ const tofit = ({data, lat, lng}) => {
       {data.map((it) => (
         <Card
           key={it.park.parkingSpaceId}
-          className={'ResidenceCardList'}
+          className={it.park.parkingSpaceId === currentSpaceId ?'ResidenceCardListCurrent': `ResidenceCardList`}
           style={{
             height: '200px',
             marginTop: '20px',
@@ -436,17 +474,17 @@ const tofit = ({data, lat, lng}) => {
           )}
           <div style={{marginTop: '19px'}}>
             <Row>
-              <Col>
-                <Row>
+              <Col span={11}>
+                <Row >
                   <img
-                    src="/pexels-photo-3349460 1.png"
-                    height="140px"
-                    width="209.58px"
+                    src={IMG_URL + it.park.parkingSpaceImage}
+                    className={`parkingSpaceImage`}
+                    height='100px'
+                    width='200px'
                   />
                 </Row>
                 <Row>
                   <div>
-                    {/* <Image src={``} width="20px" height="20px" /> */}
                     {/* Том зургын доод талын зогсоолын үзүүлэлтийн зураг*/}
                     <div
                       style={{
@@ -517,7 +555,7 @@ const tofit = ({data, lat, lng}) => {
                   </div>
                 </Row>
               </Col>
-              <Col style={{width: '210px', marginLeft: '10px'}}>
+              <Col span={12} offset={1}>
                 <div
                   style={{
                     position: 'static',
@@ -631,7 +669,7 @@ const tofit = ({data, lat, lng}) => {
                         marginTop: '10px',
                         borderRadius: '10px',
                       }}
-                      onClick={() => setChooseTimeView(true)}
+                      onClick={()=>seeFreeTime(it.park.parkingSpaceId)}
                     >
                       Сул цаг харах
                     </Button>
@@ -648,7 +686,7 @@ const tofit = ({data, lat, lng}) => {
                       className={'freeTimePick'}
                       onClick={() =>
                         // eslint-disable-next-line new-cap
-                        DetailsDrawerOpen(Number(it.park.parkingSpaceId))
+                        DetailsDrawerOpen(Number(it.park.parkingSpaceId),it.residence.latitude,it.residence.longitude)
                       }
                     >
                       Дэлгэрэнгүй

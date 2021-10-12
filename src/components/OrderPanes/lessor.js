@@ -12,6 +12,8 @@ import RentDate from '@components/registerSpace/rentDate';
 import { showMessage } from '@utils/message';
 import { messageType,DefaultMsg } from '@constants/constants';
 import Link from 'next/link';
+import Select from 'rc-select';
+import { result } from 'lodash';
 const {TabPane} = Tabs;
 moment.updateLocale('mn', {
   weekdaysMin: ['НЯМ', 'ДАВ', 'МЯГ', 'ЛХА', 'ПҮР', 'БАА', 'БЯМ'],
@@ -24,6 +26,8 @@ const Lessor = () =>{
   const [current, setCurrent]=useState(parseInt(moment().format('M')));
   // const [orderData, setOrderData] = useState([]);
   const ctx = useContext(Context);
+  const {userdata} = useContext(Context);
+
   const [calendarStatus, setCalendarStatus]=useState();
   const [vehicles, setVehicles]= useState([]);
   // eslint-disable-next-line no-unused-vars
@@ -31,17 +35,27 @@ const Lessor = () =>{
   const [calendarData, setCalendarData]= useState([]);
   const [dateVisible, setDateVisible] =useState(false);
   const [currentPage, setCurrentPage] = useState();
+  const [userRealData,setUserRealData]=useState();
+  const [spaceList,setSpaceList] = useState([]);
   const [dataViewType, setDataViewType] = useState('calendar');
   const [currMonth, setCurrMonth] = useState(moment().format('YYYY-MM'));
+  const [selectedSPace,setSelectedSpace] = useState(null);
+  const [selectedDate,setSelectDate] = useState(moment().format('YYYY-MM-DD'));
 
+  //Хэрэглэгчийн бүртгүүлсэн зогсоолуудын мэдээллийг дуудах
   useEffect(async ()=>{
-    const vehicle = await callGet('/user/vehicle/list');
-    setVehicles(vehicle);
-  }, []);
+    if (typeof userdata.firstName != 'undefined') {
+      setUserRealData(userdata);
+      // setUserId(userdata.id);
+      const parkSpaceList = await callGet(`/parkingspace/list/user?id=${userdata.id}`);
+      setSpaceList(parkSpaceList)
+      console.log(parkSpaceList);
+    }
+  }, [userdata]);
+  //Түрээслүүлэгч талын хүсэлт tab-ын API дуудаж CalendarData-д утгыг оноох
   const getSavedData =async ()=>{
     ctx.setIsLoading(true);
     const result = await callGet('/booking?asWho=2&isConfirmed=false');
-    console.log(result, 'saveeeeeeeeeed Dataaaaaaaaaaaaaaa');
     if (!result || result === undefined) {
       showMessage(messageType.FAILED.type, defaultMsg.dataError);
     } else {
@@ -49,6 +63,7 @@ const Lessor = () =>{
     }
     ctx.setIsLoading(false);
   };
+  //Баталгаажсан захиалгын API дуудаж CalendarData-д оноох
   const getConfirmedData = async ()=>{
     ctx.setIsLoading(true)
     const res = await callGet('booking?asWho=2&isConfirmed=true');
@@ -59,7 +74,7 @@ const Lessor = () =>{
     }
     ctx.setIsLoading(false);
   };
-  
+  //түүхийн мэдээллийн API дуудаж мэдээллийг CalendarData-д олгох
   const getHistory = async ()=>{
     ctx.setIsLoading(true);
     const formData = {
@@ -77,26 +92,33 @@ const Lessor = () =>{
     }
     ctx.setIsLoading(false);
   };
-  // хүсэлт болон баталгаажсан Түүх гэсэн Tab солих
+  // хүсэлт болон баталгаажсан , Түүх гэсэн Tab солих 
   const onClickInnerTab = (key) => {
+    ctx.setIsLoading(true);
     setCalendarData([]);
     setCurrent(parseInt(moment().format('M')));
     if (key == 1) {
+      setSelectedSpace(null);
       setCalendarStatus(key);
       setIsConfirmed(false);
       getSavedData();
     } else if (key == 2) {
       setCalendarStatus(key);
+      setSelectedSpace(null);
       getConfirmedData();
       setIsConfirmed(true);
     } else if (key == 3) {
       setCalendarStatus(key);
+      setSelectedSpace(null);
       setIsConfirmed(false);
       getHistory();
     }
+    ctx.setIsLoading(false);
+
   };
   const onClickCheckBookingRequest = ()=>{
   };
+  //Calendar eswel List baidlaad harj boloh ba tvvniig solig function
   const handleChangeView = (value) => {
     if (value.key==='calendar') {
       setDataViewType('calendar');
@@ -104,6 +126,7 @@ const Lessor = () =>{
       setDataViewType('list');
     }
   };
+  //pagination
   const paginationProps = {
     showSizeChanger: true,
     showQuickJumper: true,
@@ -111,11 +134,98 @@ const Lessor = () =>{
     total: 10,
 };
   const onChangeDropDown= ()=>{
-
   };
-  const handleVehicle=()=>{
-
+  // const onChangeOrderDate = (e)=> {
+  //   console.log(calendarData,'eniiig');
+  //   const array = [];
+  //   const a = calendarData.find((item)=>moment(item.startDateTime).format('MM') === moment(e).format('MM'));
+  //   // array.push(a);
+  //   console.log(a,'aaaaaaaaaaaaaaaaaaaaaaauuuuuuuuuuuuuuuuuuuuu');
+  //   setCurrent(Number(moment(e).format('MM')));
+  //   // console.log(moment(e).format('MM'));
+  //   // setSelectDate(moment(e).format('YYYY-MM'));
+  //   // CalendarData
+  // };
+  //Түрээслүүлэгч өөрийн бүртгүүлсэн зогсоол бүр дээр ямар хүсэлт болон ямар захиалга баталгаажсан байна вэ мөн ямар түүхүүд байна вэ гэдгийг харж болно.
+  const handleSpace = async (value)=>{
+    setSelectedSpace(value.key);
+    // ctx.setIsLoading(true);
+    if(Number(calendarStatus)===1){
+      if(value.key === null){
+        const result = await callGet(`/booking?asWho=2&isConfirmed=false`);
+          if (!result || result === undefined) {
+            showMessage(messageType.FAILED.type, defaultMsg.dataError);
+          } else {
+            setCalendarData(result);
+          ctx.setIsLoading(false);
+          }
+          }else{
+            const result = await callGet(`/booking?asWho=2&isConfirmed=false&parkingSpaceId=${value.key}`);
+            if (!result || result === undefined) {
+              showMessage(messageType.FAILED.type, defaultMsg.dataError);
+            } else {
+              setCalendarData(result);
+            ctx.setIsLoading(false);
+          }
+      }
+    }else if(Number(calendarStatus)===2){
+      ctx.setIsLoading(true);
+      console.log(value.key,'aa');
+      // setIsConfirmed(true);
+      if(selectedSPace === 'null'){
+          const res = await callGet(`booking?asWho=2&isConfirmed=true`);
+          if (!res || res === undefined) {
+            showMessage(messageType.FAILED.type, result.error);
+          } else {
+            setCalendarData(res);
+            ctx.setIsLoading(false);
+          }
+    }else{
+      const res = await callGet(`booking?asWho=2&isConfirmed=true&parkingSpaceId=${value.key}`);
+      if (!res || res === undefined) {
+        showMessage(messageType.FAILED.type,defaultMsg.dataError);
+      } else {
+        console.log(res);
+        setCalendarData(res);
+        ctx.setIsLoading(false);
+    }
+  }
+  }else if(Number(calendarStatus)===3){
+    ctx.setIsLoading(true);
+    if(selectedSPace === 'null'){
+      const formData = {
+        asWho: 2,
+        dateList: null,
+        vehicleId: null,
+        parkingSpaceId: null,
+      };
+      const res = await callPost('/booking/history', formData);
+      if (!res || res === undefined) {
+        showMessage(messageType.FAILED.type, result.error);
+        return true;
+      } else {
+        setCalendarData(res.history);
+        ctx.setIsLoading(false);
+      }
+    }else {
+      const formData = {
+        asWho: 2,
+        dateList: null,
+        vehicleId: null,
+        parkingSpaceId: Number(value.key),
+      };
+      const res = await callPost('/booking/history', formData);
+      if (!res || res === undefined) {
+        showMessage(messageType.FAILED.type, result.error);
+        return true;
+      } else {
+        setCalendarData(res.history);
+        ctx.setIsLoading(false);
+      }
+    }
+  }
   };
+  //Календарын буцаах утга
   const dateCellRender = (value) => {
     const listData = getListData(value);
     const month = moment(value).format('YYYY-MM');
@@ -140,16 +250,12 @@ const Lessor = () =>{
       );
     }
   };
-  const onChangePage = (page)=>{
-    console.log(page);
-    setCurrentPage(page);
-  };
   const getMonthData = (value) => {
     if (value.month() === 8) {
       return 1394;
     }
   };
-  // calendar der haragdah data awah
+  // calendar-ын нүд болгоэ дээр haragdah data awah
   const getListData = (value) => {
     const listData = [];
     if (calendarData && calendarData.length > 0) {
@@ -175,6 +281,7 @@ const Lessor = () =>{
       </div>
     ) : null;
   };
+  //Каленпар уу Лист үү гэдгийг харуулах Menu
   const menu =(
     <Menu className="calendarViewer" onClick={(value)=>handleChangeView(value)} style={{width: '100%'}}>
       <Menu.Item key='calendar' value={'calendar'} style={{display: 'inline-flex'}}>
@@ -191,10 +298,11 @@ const Lessor = () =>{
       </Menu.Item>
     </Menu>
   );
-
-  const vehicleMenu = (
-    <Menu onClick={(value)=>handleVehicle(value)} style={{width: '100%'}}>
-      {vehicles.map((item)=>(
+    //түрээслүүлэгчийн зогсоолуудын Menu
+  const spaceMenu = (
+    <Menu onClick={(value)=>handleSpace(value)} style={{width: '100%'}}>
+      <Menu.Item key={null}>Бүх зогсоол </Menu.Item>
+      { spaceList && spaceList.map((item)=>(
         <Menu.Item key={item.value}>
           {item.label}
         </Menu.Item>
@@ -211,7 +319,7 @@ const Lessor = () =>{
             </Dropdown>
           </div>}>
           <Row>
-            <Col span={4} offset={14}>
+            {/* <Col span={4} offset={14}>
               <DatePicker
               // className='selectMonthDate'
                 bordered={false}
@@ -219,12 +327,12 @@ const Lessor = () =>{
                 placeholder='Сараа сонгоно уу?'
                 picker='month'
 
-              // onChange={onChangeOrderDate}
+              onChange={onChangeOrderDate}
               />
-            </Col>
-            <Col>
-              <Dropdown overlay={vehicleMenu} className='dropdown' >
-                <Button style={{color: '#35446D'}}>Бүх автомашин<OrderedListOutlined /></Button>
+            </Col> */}
+            <Col offset={18}>
+              <Dropdown overlay={spaceMenu} className='dropdown' >
+                <Button style={{color: '#35446D'}}>{selectedSPace !== 'null' ? selectedSPace : 'Бүх зогсоол'}<OrderedListOutlined /></Button>
               </Dropdown>
             </Col>
           </Row>
@@ -411,6 +519,7 @@ const Lessor = () =>{
               />
             </div>}
         </TabPane>
+        {/*Баталгаажсан захиалгыг харуулах байдал*/}
         <TabPane key='2' tab={
           <div className={`${calendarStatus === 2 }`?'activeKey':'notActiveKey'}>
             <Dropdown overlay={menu} onChange={onChangeDropDown } className='dropdown'>
@@ -419,20 +528,18 @@ const Lessor = () =>{
           </div>
         }>
           <Row>
-            <Col span={4} offset={14}>
+            {/* <Col span={4} offset={14}>
               <DatePicker
-              // className='selectMonthDate'
                 bordered={false}
                 locale={calendarLocale}
                 placeholder='Сараа сонгоно уу?'
                 picker='month'
-
-              // onChange={onChangeOrderDate}
+              onChange={onChangeOrderDate}
               />
-            </Col>
-            <Col>
-              <Dropdown overlay={vehicleMenu} className='dropdown' >
-                <Button style={{color: '#35446D'}}>Бүх автомашин<OrderedListOutlined /></Button>
+            </Col> */}
+            <Col offset={18}>
+              <Dropdown overlay={spaceMenu} className='dropdown' >
+                <Button style={{color: '#35446D'}}>{selectedSPace !== 'null' ? selectedSPace : 'Бүх зогсоол'}<OrderedListOutlined /></Button>
               </Dropdown>
             </Col>
           </Row>
@@ -440,7 +547,6 @@ const Lessor = () =>{
             <div className='orderCalendar'>
               <DayNightColumn />
               <Calendar className="customCalendar"
-                onPanelChange={(e)=>console.log(e, 'sdaaaaaaaaaaaaaaaa')}
                 locale={calendarLocale}
                 headerRender={({value, type, onChange, onTypeChange}) => {
                   const localeData = value.localeData();
@@ -633,6 +739,7 @@ const Lessor = () =>{
               />
             </div>}
         </TabPane>
+        {/*Түүхийг  харуулах байдал*/}
         <TabPane key='3' tab={
           <div className={`${calendarStatus === 2 }`?'activeKey':'notActiveKey'}>
             <Dropdown overlay={menu} onChange={onChangeDropDown } className='dropdown'>
@@ -641,20 +748,19 @@ const Lessor = () =>{
           </div>
         }>
           <Row>
-            <Col span={4} offset={14}>
+            {/* <Col span={4} offset={14}>
               <DatePicker
               // className='selectMonthDate'
                 bordered={false}
                 locale={calendarLocale}
                 placeholder='Сараа сонгоно уу?'
                 picker='month'
-
-              // onChange={onChangeOrderDate}
+              onChange={onChangeOrderDate}
               />
-            </Col>
-            <Col>
-              <Dropdown overlay={vehicleMenu} className='dropdown' >
-                <Button style={{color: '#35446D'}}>Бүх автомашин<OrderedListOutlined /></Button>
+            </Col> */}
+            <Col offset={18}>
+              <Dropdown overlay={spaceMenu} className='dropdown' >
+                <Button style={{color: '#35446D'}}>{selectedSPace !== 'null' ? selectedSPace : 'Бүх зогсоол'}<OrderedListOutlined /></Button>
               </Dropdown>
             </Col>
           </Row>

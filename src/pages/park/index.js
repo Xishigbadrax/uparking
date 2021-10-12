@@ -3,6 +3,7 @@ import {callGet} from '@api/api';
 // import { Router } from 'next/router';
 import {showMessage} from '../../utils/message';
 import {messageType, defaultMsg} from '@constants/constants';
+import ReactCursorPosition from "react-cursor-position";
 import moment from 'moment';
 import {
   Col,
@@ -78,23 +79,7 @@ const {Header, Sider, Content} = Layout;
 //   </GoogleMap>
 // ));
 // eslint-disable-next-line react/prop-types
-const AnyReactComponent = ({text}) => (
-  <div
-    className={'locationBackground'}
-    style={{marginTop: '-35px', marginLeft: '-27px'}}
-  >
-    <p
-      style={{
-        textAlign: 'center',
-        color: '#fff',
-        fontSize: '12px',
-        paddingTop: '5px',
-      }}
-    >
-      <b>{text}</b>
-    </p>
-  </div>
-);
+
 
 const Dashboard = () => {
   const [form] = Form.useForm();
@@ -133,6 +118,7 @@ const Dashboard = () => {
   const [timeSplit, settimeSplit] = useState(null);
   const [selectLat, setSelectLate] = useState();
   const [selectLng, setSelectLng] = useState();
+  const [currentSpaceId,setCurrentSpaceId]= useState(null)
   // const [visibleDrawerMore, setVisibleDrawerMore] = useState(false);
   const [parkingObject, setParkingObject] = useState({});
 
@@ -147,15 +133,6 @@ const Dashboard = () => {
   useEffect(() => {
     setParkingObject(parkingObject);
   }, [parkingObject]);
-
-  // const Markers = (props) => {
-  //   console.log(props, 'aaaaaaas');
-  //   return <Marker className="SuperAwesomePin" style={{background: 'red'}} position={{
-  //     lat: props.lat,
-  //     lng: props.lng,
-  //   }}>aaaaaaaaaaaa</Marker>;
-  // };
-
   // eslint-disable-next-line no-unused-vars
   const callback = (key) => {};
   const loadData = (res) => {
@@ -186,7 +163,6 @@ const Dashboard = () => {
       });
 
       setSearchedDataOfPosition(parks);
-      console.log(searchDataOfPosition, 'gg');
       setMarkers(parks);
     } else {
       setDefaultCenter({
@@ -221,23 +197,11 @@ const Dashboard = () => {
   const onChangeStartDate = (date) => {
     const a= moment(date).format('YYYY/MM/DD');
     setStartDate(a);
-    console.log(a, 'start dtae->');
   };
   const onChangeEndDate = (date) => {
     const end = moment(date).format('YYYY/MM/DD');
     setEndDate(end);
-    // console.log(end, 'endDate end bnaa bandia');
   };
-  // const onTransfer = (id) => {
-  //   console.log(id, 'ehnii id');
-  //   id &&
-  //     router.push({
-  //       pathname: 'park/payment',
-  //       query: {
-  //         id: id,
-  //       },
-  //     });
-  // };
   const onFinish = async (values) => {
     setGetDataLoading(true);
     let url = '';
@@ -288,8 +252,8 @@ const Dashboard = () => {
     setGetDataLoading(false);
   };
   const onClickMap = async (e) => {
+    setCurrentSpaceId(null)
     setSearchType('fsearch');
-    console.log(e, 'ggggggggggggggggg');
     setGetDataLoading(true);
     setSelectLate(e.lat);
     setSelectLng(e.lng);
@@ -298,7 +262,30 @@ const Dashboard = () => {
     loadData(searchOfLocation);
     setGetDataLoading(false);
   };
-
+  const onClickMarkeditem = (id,lat,lng)=>{
+    setCurrentSpaceId(id);
+    setDefaultCenter({
+      lat: lat,
+      lng: lng,
+    });
+  }
+  const AnyReactComponent = ({text,parkingSpaceId,lat,lng}) => (
+    <div
+      className={'locationBackground'}
+      onClick={()=>onClickMarkeditem(parkingSpaceId,lat,lng)}
+      style={{marginTop: '-35px', marginLeft: '-27px'}}>
+      <p
+        style={{
+          textAlign: 'center',
+          color: '#fff',
+          fontSize: '12px',
+          paddingTop: '5px',
+        }}
+      >
+        <b>{text}</b>
+      </p>
+    </div>
+  );
   const ClickLocation = () => (
     <div
       // style={{
@@ -411,7 +398,7 @@ const Dashboard = () => {
           <Row>
             <Col span={24} >
               <GoogleMapReact
-                style={{height: '828px'}}
+                style={{height: '100vh'}}
                 bootstrapURLKeys={{key: GOOGLE_API}}
                 center={{lat: defaultCenter.lat, lng: defaultCenter.lng}}
                 defaultZoom={16}
@@ -419,7 +406,6 @@ const Dashboard = () => {
                 yesIWantToUseGoogleMapApiInternals
                 // onGoogleApiLoaded={({map, markers}) => renderMarkers(map, markers)}
               >
-
                 <div
                   className={'locationBackground'}
                   style={{color: 'white', paddingTop: '5px'}}
@@ -430,16 +416,12 @@ const Dashboard = () => {
                   <ClickLocation lat={selectLat} lng={selectLng} />
                 ) : null}
                 {markers && markers.length && markers.map((item)=>(
-                  // <Marker key={item.park.parkingSpaceId}
-                  //   latitude={item.residence.latitude}
-                  //   longitude={item.residence.longitude}
-                  // >aaaaaaaaaaaa</Marker>
                   <AnyReactComponent
                     key={item.park.parkingSpaceId}
                     lat={item.residence.latitude}
                     lng={item.residence.longitude}
+                    parkingSpaceId={item.park.parkingSpaceId}
                     text="1p"
-                    onClick={()=>nClickMarkeditem(item.park)}
                   />
                 ))}
               </GoogleMapReact>
@@ -450,8 +432,8 @@ const Dashboard = () => {
           <Sider width={550}>
             {searchDataOfPosition && searchDataOfPosition.length > 0 ? (
               <div style={{height: '100vh'}}>
-                {searchType ==='full' && <Search data={searchedData} startDate={startDate} endDate={endDate} tunetype={tuneType}/>}
-                {searchType ==='fsearch' && <ToFit data={searchDataOfPosition} lat={selectLat} lng={selectLng} />}</div>):(
+                {searchType ==='full' && <Search data={searchedData} startDate={startDate} endDate={endDate} tunetype={tuneType} currentSpaceId={currentSpaceId} setDefaultCenter={setDefaultCenter} setCurrentSpaceId={setCurrentSpaceId} /> }
+                {searchType ==='fsearch' && <ToFit data={searchDataOfPosition} lat={selectLat} lng={selectLng} currentSpaceId={currentSpaceId} currentSpaceId={currentSpaceId} setDefaultCenter={setDefaultCenter} setCurrentSpaceId={setCurrentSpaceId} />}</div>):(
               <Empty description={<span>Өгөгдөл байхгүй</span>} />
             )}
             {/* <Tabs defaultActiveKey="1" className="searchTab" onChange={callback}>

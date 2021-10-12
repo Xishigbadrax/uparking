@@ -38,8 +38,6 @@ const Verify = () => {
       range: '${label} must be between ${min} and ${max}',
     },
   };
-
-
   return (
     <div>
       <Row className="">
