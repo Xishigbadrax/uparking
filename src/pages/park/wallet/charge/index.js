@@ -5,10 +5,13 @@ import WalletLayout from '@components/layouts/WalletLayout';
 import WalletCard from '../../../../components/WalletCard';
 // import WalletBankInfo2 from '@components/WalletBankInfo2';
 import WalletBankInfo from '@components/WalletBankInfo';
-import {Tabs, Image, Button, Modal, Alert, Divider} from 'antd';
+import {Tabs, Image, Button, Modal, Alert, Divider,Row,Col} from 'antd';
+import QRCode from "react-qr-code";
+
 import {callGet, callPost} from '@api/api';
 import Context from '@context/Context';
 import WalletInput from '../../../../components/WalletInput';
+
 
 const tabItems = [
   {
@@ -44,11 +47,11 @@ const Charge = () => {
     display: 'flex',
     justifyContent: 'space-between',
   };
-
   const [type2, settype2] = useState('MONGOLCHAT');
   const [phoneNumber, setphoneNumber] = useState(null);
   const [amount, setamount] = useState(0);
   const [promoCode, setPromoCode] = useState(null);
+  const [MongolChatResultData,setMongolChatResultData]= useState();
   const [type, settype] = useState('KHANBANK');
   const [data, setdata] = useState(null);
   const [message, setmessage] = useState('');
@@ -72,23 +75,26 @@ const Charge = () => {
       formData.amount = amount;
       formData.phoneNumber =
         type2 == 'LENDMN' ? phoneNumber : userdata.phoneNumber;
+         console.log(formData,'saaaaahaaaaaaaaaaaaaaaaaaaa');
       {
         type2 == 'MONGOLCHAT' ?
           await callPost('/mongolchat/wallet', formData).then((res) => {
+             console.log(res,'reeeeeeeeeeeeeeeeeeeee');
             if (res.code == 1000) {
               settitle('Амжилтай');
+              setMongolChatResultData(res);
               setmessage('Амжилттай. Нэхэмжлэх үүсгэлээ.');
               setstatus('success');
               setmessageShow(true);
-              try {
-                const win = window.open(res.dynamic_link, '_blank');
-                win.focus();
-              } catch (e) {
-                settitle('Анхааруулга');
-                setmessage('Нэхэмжлэх үүсгэхэд алдаа гарлаа');
-                setstatus('warning');
-                setmessageShow(true);
-              }
+              // try {
+              //   const win = window.open(res.dynamic_link, '_blank');
+              //   win.focus();
+              // } catch (e) {
+              //   settitle('Анхааруулга');
+              //   setmessage('Нэхэмжлэх үүсгэхэд алдаа гарлаа');
+              //   setstatus('warning');
+              //   setmessageShow(true);
+              // }
             } else {
               settitle('Анхааруулга');
               setmessage('Нэхэмжлэх үүсгэхэд алдаа гарлаа');
@@ -355,14 +361,29 @@ const Charge = () => {
       </div>
 
       <Modal
-        visible={messageShow}
-        title="Мэдээлэл"
-        onOk={handleOk}
-        onCancel={handleCancel}
-        footer={[]}
-      >
-        <Alert message={title} description={message} type={status} showIcon />
-      </Modal>
+          visible={messageShow}
+          title="Мэдээлэл"
+          onOk={handleOk}
+          onCancel={handleCancel}
+          footer={[]}
+        >
+          <Alert message={title} description={message} type={status} showIcon style={{padding:'20px'}}/>
+          
+          {type2 ==='MONGOLCHAT' && <div>
+          <Row style={{marginTop:'20px'}}>
+            <Col offset={5}>
+              <QRCode value={MongolChatResultData && MongolChatResultData.qr}/>
+            </Col>
+          </Row>
+          <Row> <Col offset={7}>QR-кодоо уншуулна уу?</Col></Row>
+          </div>
+        }
+        <Row style={{marginTop:'20px'}}>
+          <Col offset={8}>
+            <Button style={{width:'100px'}} type='primary' onClick={()=>  setmessageShow(false)}>OK</Button>
+         </Col>
+        </Row>
+        </Modal>
     </WalletLayout>
   );
 };

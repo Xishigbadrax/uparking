@@ -34,10 +34,7 @@ const Order = () => {
   const [vehicles, setVehicles] = useState([]);
   const [currMonth, setCurrMonth] = useState();
   const [historyValue, setHistoryValue] =useState(false);
-  // const [selectVehicle, setSelecteVehicle]= useState();
   const [selectDate, setSelectDate] = useState();
-
-
   // hadgalsan zahialga bolon tvvhiin zahialgin medeelliig ustgah
 
   const onDeleteBooking = async (id)=>{
@@ -81,15 +78,11 @@ const Order = () => {
     setSelectDate(moment(e).format('YYYY-MM') + '-01');
   };
   // pagination solih
-  const onChangePage = (page)=>{
-    console.log(page);
-    setCurrentPage(page);
-  };
   const paginationProps = {
     showSizeChanger: true,
     showQuickJumper: true,
-    pageSize: 5,
-    total: 10,
+    pageSize: 10,
+    total: 15,
 };
   // mashinii list awah
   useEffect(async () => {
@@ -456,7 +449,6 @@ const Order = () => {
 
                       )}
                     />
-                 
                   </div>}
               </TabPane>
             ))}

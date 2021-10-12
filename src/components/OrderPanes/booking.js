@@ -59,10 +59,7 @@ const booking = (props)=>{
       if (res) {
         setRequestedData(res.requestedBookingDetail);
       }
-      // } else {
-      // showMessage(messageType.WARNING.type, defaultMsg.dataError);
     }
-    // }
   }, []);
   const handleOkCancelOrder = async ()=>{
   };
@@ -70,7 +67,6 @@ const booking = (props)=>{
     console.log(date, value);
   };
   const handleOkCancelOrderConfirm = ()=> {
-
   };
   const handleCancelCancelOrder = ()=>{
     setIsVisibleTsutslah1(false);

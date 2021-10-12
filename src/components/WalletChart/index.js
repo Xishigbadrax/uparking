@@ -13,24 +13,26 @@ const WalletChart = (props) => {
   const [expenseData,setExpenseData]=useState([]);
   const [comeValue,setComeValue]=useState([]);
   const [expenseValue,setExpenseValue]=useState([]);
-{   const comeD=[];
+  useEffect(()=>{
+
+ const comeD=[];
     const expeD = [];
     const comeVal=[];
     const expeVal = [];
-      props.incomeData.map((item)=>{
-        comeD.push(item.amount);
-        comeVal.push(item.date);
-      });
-      props.expenceData.map((item)=>{
-        expeD.push(item.amount);
-        expeVal.push(item.date);
-      });
-      setComeData(comeD);
-      setComeValue(comeVal);
-      setExpenseData(expeD);
-      setExpenseValue(expeVal);
-      console.log(comeD,comeVal,expeD,expeVal,'yaaaaaaaaaaaaaaaaaaaaaaaaaaaaaayyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
-    }
+      // props.incomeData.map((item)=>{
+      //   comeD.push(item.amount);
+      //   comeVal.push(item.date);
+      // });
+      // props.expenceData.map((item)=>{
+      //   expeD.push(item.amount);
+      //   expeVal.push(item.date);
+      // });
+      // setComeData(comeD);
+      // setComeValue(comeVal);
+      // setExpenseData(expeD);
+      // setExpenseValue(expeVal);
+      // console.log(comeD,comeVal,expeD,expeVal,'yaaaaaaaaaaaaaaaaaaaaaaaaaaaaaayyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
+    },[props]);
   let outcome;
   let income;
     income = {

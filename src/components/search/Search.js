@@ -18,7 +18,7 @@ const IMG_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
 // eslint-disable-next-line no-unused-vars
 
 // eslint-disable-next-line react/prop-types
-const Search = ({data, startDate, endDate, tunetype})=>{
+const Search = ({data, startDate, endDate, tunetype,currentSpaceId,setDefaultCenter,setCurrentSpaceId})=>{
   console.log(startDate, endDate, data);
   const {userdata} = useContext(Context);
   const router = useRouter();
@@ -54,6 +54,7 @@ const Search = ({data, startDate, endDate, tunetype})=>{
   // eslint-disable-next-line no-unused-vars
   const [bookingCount, setBookingCount]= useState(0);
   const [messageShow, setmessageShow] = useState(false);
+   const [review,setReview] = useState([]);
 
   // eslint-disable-next-line no-unused-vars
   const [diffDay, setDiffDays] = useState(0);
@@ -129,10 +130,20 @@ const Search = ({data, startDate, endDate, tunetype})=>{
       showMessage(messageType.FAILED.type, 'Машинаа сонгоно уу?');
     }
   };
-  const DetailsDrawerOpen = async (id) => {
+  const DetailsDrawerOpen = async (id,latitude,longitude) => {
+    setDefaultCenter({
+      lat:latitude,
+      lng:longitude
+    })
+    setCurrentSpaceId(id);
+    const review = await callGet(`/parkingspace/review?parkingSpaceId=${id}`);
+    if(review){
+    setReview(review.content);
+    }
     setDetailsVisible(true);
     // eslint-disable-next-line react/prop-types
     const a = data.find((item) => item.park.parkingSpaceId === id);
+    console.log(a,'koreeeeeeeeeeeeeeeeeeeeeeeeeee');
     setResidenceDrawerItem(a.residence);
     setSpaceStatus(a.park.spaceStatus);
     setTotalPrice(a.park.price);
@@ -210,7 +221,8 @@ const Search = ({data, startDate, endDate, tunetype})=>{
         {data.map((it) => (
           <Card
             key={it.park.parkingSpaceId}
-            className={'ResidenceCardList'}
+          className={it.park.parkingSpaceId === currentSpaceId ?'ResidenceCardListCurrent': `ResidenceCardList`}
+
             style={{
               height: '200px',
               marginTop: '20px',
@@ -289,7 +301,7 @@ const Search = ({data, startDate, endDate, tunetype})=>{
                               preview={false}
                               width={18}
                               height={18}
-                              src={IMG_URL + it.park.floorNumber}
+                              src={`data:image/jpeg;base64,${it.park.floorNumber}`}
                             />
                           </div>
                         ) : null}
@@ -299,7 +311,7 @@ const Search = ({data, startDate, endDate, tunetype})=>{
                               preview={false}
                               width={18}
                               height={18}
-                              src={IMG_URL + it.park.entranceLock}
+                              src={`data:image/jpeg;base64,${it.park.entranceLock}`}
                             />
                           </div>
                         ) : null}
@@ -309,7 +321,7 @@ const Search = ({data, startDate, endDate, tunetype})=>{
                               preview={false}
                               width={18}
                               height={18}
-                              src={IMG_URL + it.park.isNumbering}
+                              src={`data:image/jpeg;base64,${it.park.isNumbering}`}
                             />
                           </div>
                         ) : null}
@@ -319,7 +331,8 @@ const Search = ({data, startDate, endDate, tunetype})=>{
                               preview={false}
                               width={18}
                               height={18}
-                              src={IMG_URL + it.park.capacity}
+                              src={`data:image/jpeg;base64,${it.park.capacity}`}
+
                             />
                           </div>
                         ) : null}
@@ -329,7 +342,8 @@ const Search = ({data, startDate, endDate, tunetype})=>{
                               preview={false}
                               width={18}
                               height={18}
-                              src={IMG_URL + it.park.type}
+                              src={`data:image/jpeg;base64,${it.park.type}`}
+
                             />
                           </div>
                         ) : null}
@@ -339,7 +353,8 @@ const Search = ({data, startDate, endDate, tunetype})=>{
                               preview={false}
                               width={18}
                               height={18}
-                              src={IMG_URL + it.park.returnRoutes}
+                              src={`data:image/jpeg;base64,${it.park.returnRoutes}`}
+
                             />
                           </div>
                         ) : null}
@@ -605,7 +620,7 @@ const Search = ({data, startDate, endDate, tunetype})=>{
                         className={'freeTimePick'}
                         onClick={() =>
                         // eslint-disable-next-line new-cap
-                          DetailsDrawerOpen(Number(it.park.parkingSpaceId))
+                          DetailsDrawerOpen(Number(it.park.parkingSpaceId),it.residence.latitude,it.residence.longitude)
                         }
                       >
                       Дэлгэрэнгүй
@@ -1131,7 +1146,33 @@ const Search = ({data, startDate, endDate, tunetype})=>{
                       }
                       key="2"
                     >
-                      Хэрэглэгчийн үнэлгээ
+                      Хэрэглэгчдийн үнэлгээ
+                      {
+                        review.map((item)=>(
+                          <Card key={item.name} style={{background: 'rgba(222, 226, 233, 0.2)', marginTop: '20px', borderRadius: '16px', padding: '0'}}>
+                            <Row style={{padding: '0'}}>
+                              <Col span={2} >
+                                <div style={{borderRadius: '12px', height: '24px', width: '24px'}}>
+                                  <img src={item.profileImage} height={24} width={24} style={{borderRadius: '12px'}} />
+                                </div>
+                              </Col>
+                              <Col span={10}>
+                                <div style={{fontSize: '14px', lineHeight: '24px'}}><b>{item.name}</b></div>
+                                <div style={{color: '#35446D', fontSize: '12px'}}>{item.date}</div>
+                              </Col>
+                              <Col offset={6} className='reviewRate' style={{marginTop: '-10px'}}>
+                                <Rate value={item.rating}/>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col offset={2}>
+                                <p style={{color: '#35446D', fontSize: '14px', textAlign: 'justify', marginBottom: '10px'}}>{item.text}</p>
+                              </Col>
+                            </Row>
+                          </Card>
+                        ))
+                      }
+
                     </TabPane>
                     <TabPane
                       tab={
