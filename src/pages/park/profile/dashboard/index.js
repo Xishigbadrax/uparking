@@ -15,6 +15,7 @@ import { defaultMsg } from '@constants/constants.js';
 import {LeftOutlined, RightOutlined, OrderedListOutlined} from '@ant-design/icons';
 import moment from 'moment';
 import DayNightColumn from '@components/DayNightColumns';
+import { Radar } from '@ant-design/charts';
 const {TabPane} = Tabs;
 moment.updateLocale('mn',{
   weekdaysMin: ['Ням', 'Даваа', 'Мягмар', 'Лхагва', 'Пүрэв', 'Баасан', 'Бямба'],
@@ -51,6 +52,7 @@ const Dashboard = () => {
   // const [userData, setuserData] = useState(null);
   // const [markedDate, setmarkedDate] = useState(null);
   // eslint-disable-next-line no-unused-vars
+  const {userdata} = useContext(Context);
   const [calendarData, setCalendarData] = useState([]);
   const [current, setCurrent] = useState(parseInt(moment().format('MM')));
   const [tabKey, setTabKey]=useState(1);
@@ -106,6 +108,37 @@ const Dashboard = () => {
       fetchData();
     }
   };
+  const data = [
+    { name: 'Орц гарц', star:5  },
+    { name: 'Нэвтрэх хаалга', star: 4 },
+    { name: 'Байршил', star: 3 },
+    { name: 'Зогсоол', star: 2},
+  ];
+  const config = {
+    data: data.map((d) => ({ ...d })),
+    xField: 'name',
+    yField: 'star',
+    meta: {
+      star: {
+        alias: 'Үнэлгээ',
+        min: 0,
+        nice: true,
+      },
+    },
+    xAxis: {
+      line: null,
+      tickLine: null,
+    },
+    yAxis: {
+      label: false,
+      grid: {
+        alternateColor: 'rgba(0, 0, 0, 0.04)',
+      },
+    },
+    // 开启辅助点
+    point: {},
+    area: {},
+  };
   const getDataOwner = async ()=>{
     ctx.setIsLoading(true);
     const formData = {
@@ -141,7 +174,7 @@ const Dashboard = () => {
       return true;
     } else {
       setCalendarData(res.history);
-      console.log(res.history, 'ress');
+      // console.log(res.history, 'ress');
       ctx.setIsLoading(false);
       if (res.history.length) {
         setSumDay(_.sumBy(res.history, 'totalAtDay'));
@@ -519,6 +552,9 @@ const Dashboard = () => {
             </Row>
           </TabPane>
         </Tabs>
+        <Row>
+        <Radar {...config} />
+        </Row>
       </Card>
     </ProfileLayout>
   );

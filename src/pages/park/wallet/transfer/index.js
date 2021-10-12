@@ -6,7 +6,7 @@ import WalletCard from '../../../../components/WalletCard';
 import WalletBankInfo2 from '@components/WalletBankInfo2';
 
 import MaskedInput from 'antd-mask-input';
-import {Tabs, Image, Button, Modal, Divider, Input, Alert} from 'antd';
+import {Tabs, Image, Button, Modal, Divider, Input, Alert, InputNumber} from 'antd';
 import {callGet, callPost} from '@api/api';
 
 
@@ -385,8 +385,13 @@ const Transfer = () =>{
                           type="number"
                           bordered={false}
                           placeholder="Дансны дугаар"
+                          onInput = {(e) =>{
+                            e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,10)
+                          }}
                           onChange={(e) => onChangeAccountNumber(e.target.value)}
                         />
+
+                       
                       </div>
                     </div>
                     <Divider />
@@ -396,6 +401,7 @@ const Transfer = () =>{
                           type="text"
                           bordered={false}
                           placeholder="Эзэмшигчийн нэр"
+                          maxLength={25}
                           onChange={(e) => onChangeAccountName(e.target.value)}
                         />
                       </div>
