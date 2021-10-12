@@ -1,9 +1,10 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useState,useContext} from 'react';
 import {callGet} from '@api/api';
-// import { Router } from 'next/router';
+import router, { Router } from 'next/router';
 import {showMessage} from '../../utils/message';
 import {messageType, defaultMsg} from '@constants/constants';
 import moment from 'moment';
+import Context from '@context/Context';
 import {
   Col,
   Row,
@@ -104,7 +105,8 @@ const Dashboard = () => {
   const [dataSource, setDataSource] = useState([]);
   const [getdataLoading, setGetDataLoading]= useState(false);
   const GOOGLE_API = process.env.NEXT_GOOGLE_API;
-
+  const {userdata} = useContext(Context);
+  const [userRealData, setUserRealData] = useState('');
   // eslint-disable-next-line no-unused-vars
   const [transfer, setTransfer] = useState(null);
 
@@ -136,18 +138,33 @@ const Dashboard = () => {
   // const [visibleDrawerMore, setVisibleDrawerMore] = useState(false);
   const [parkingObject, setParkingObject] = useState({});
 
+  
+  useEffect(() => {
+    setParkingObject(parkingObject);
+  }, [parkingObject]);
+  useEffect(async () => {
+    if (typeof userdata.firstName != 'undefined') {
+      setUserRealData(userdata);
+    }
+  }, [userdata]);
   useEffect(() => {
     const fetchData = async () => {
       await callGet('/config/timesplit').then((res) => {
         settimeSplit(res);
       });
+      userdata.firstName && userdata.lastName ? router.push('/park')    : router.push('/park/createUser')
+      // if(userRealData.firstName  &&   userRealData.lastName){
+      //   router.push('/park');
+      // }
+      // else{
+      //   router.push('/park/profile/verify');
+      //   console.log(typeof userRealData.firstName)
+      // }
     };
+    
+    console.log(userRealData, "dataaa2")
     fetchData();
   }, []);
-  useEffect(() => {
-    setParkingObject(parkingObject);
-  }, [parkingObject]);
-
   // const Markers = (props) => {
   //   console.log(props, 'aaaaaaas');
   //   return <Marker className="SuperAwesomePin" style={{background: 'red'}} position={{
