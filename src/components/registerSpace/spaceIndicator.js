@@ -28,10 +28,7 @@ const spaceIndicator = (props) => {
     setSpaceTypeData(spaceType);
     const route = await callGet('/reference/list/test?type=RETURN_ROUTE');
     setRouteData(route);
-<<<<<<< HEAD
-=======
     // const floor = await callGet('/reference/list/test?type=FLOOR_NUMBER?re');
->>>>>>> d56ed7428bc0fb6a9ac4e42d673b8ae80c88c143
     const floor = await callGet('/reference/list/test?type=FLOOR_NUMBER');
     setFloorData(floor);
   }, []);

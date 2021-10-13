@@ -3,7 +3,7 @@ import {callGet} from '@api/api';
 import router, { Router } from 'next/router';
 import {showMessage} from '../../utils/message';
 import {messageType, defaultMsg} from '@constants/constants';
-import ReactCursorPosition from "react-cursor-position";
+// import ReactCursorPosition from "react-cursor-position";
 import moment from 'moment';
 import Context from '@context/Context';
 import {

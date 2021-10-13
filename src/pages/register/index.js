@@ -95,13 +95,14 @@ const Login = () => {
   const delay = (ms) => new Promise((res) => setTimeout(res, ms));
   // step3
   const onFinishVerfication = async (values) => {
+    
     try {
       setVerifyCode(values.verificationCode);
       const data = {
-        'code': values.verificationCode,
-        'phoneNumber': phoneNumber,
+        code: values.verificationCode,
+        phoneNumber: phoneNumber,
       };
-      const result = await callPost('verifyPhoneNumber', data);
+      const result = await callPost('/verifyPhoneNumber', data);
       if (result.status === 'failed') {
         showMessage(messageType.FAILED.type, result.error);
         return true;
