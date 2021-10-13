@@ -182,6 +182,7 @@ const Profile = () => {
     const spaceEdit = await callGet(`/parkingspace?parkingSpaceId=${a}`);
     const res = await callGet(`parkingspace/update/1?parkingSpaceId=${a}`);
     setSpaceEditData(spaceEdit);
+   
     setLoading(false);
   };
   const onChangeisVehicleEditVisible = async (a) => {

@@ -71,7 +71,7 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
   const [saleForm]= Form.useForm();
   const [lat, setLatitude]=useState();
   const [lng, setLongitude]=useState();
-  const [test, setTest]=useState(true);
+  const [test, setTest]=useState(false);
   // eslint-disable-next-line no-unused-vars
   const [loading, setLoading]=useState(false);
   const [mainLoading, setMainLoading]= useState(false);
@@ -138,6 +138,7 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
   const [priceArray, setPriceArray]= useState([]);
   const [discountValue, setDiscountValue]=useState(false);
   const [rentDay, setRentDay] = useState(false);
+  const [calendarValue, setCalendarValue] = useState(false);
 
   // eslint-disable-next-line no-unused-vars
   const [weekData, setWeekData] = useState();
@@ -163,25 +164,25 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
   const [daySplitId, setDaySplitId] = useState(null);
   const [nightSplitId, setNightSplitId] = useState(null);
   const [mainData, setMainData] = useState({
-    provinceId: data.provinceId,
-    districtId: data.districtId,
-    sectionId: data.sectionId,
-    residenceBlockId: data.residenceBlockId,
-    residenceBlockNumber: data.residenceBlockNumber,
-    parkingSpaceId: data.id,
-    parkingGateNumber: data.parkingGateNumber,
-    parkingSpaceGarageNumber: data.parkingSpaceGarageNumber,
-    residenceId: data.residenceId ?data.residenceId : 0,
-    residenceName: data.residenceName,
-    latitude: data.lat,
-    longitude: data.lng,
-    capacityId: data.capacityId,
-    entranceLock: data.entranceLockId,
-    isNumbering: data.isNumberingId,
-    floorNumber: data.floorNumberId,
-    returnRoutes: data.returnRoutesId,
-    typeId: data.typeId,
-    typeOther: data.typeOther,
+    provinceId: data && data.provinceId,
+    districtId: data && data.districtId,
+    sectionId: data && data.sectionId,
+    residenceBlockId: data && data.residenceBlockId,
+    residenceBlockNumber: data && data.residenceBlockNumber,
+    parkingSpaceId: data && data.id,
+    parkingGateNumber: data && data.parkingGateNumber,
+    parkingSpaceGarageNumber: data && data.parkingSpaceGarageNumber,
+    residenceId: data && data.residenceId ? data.residenceId : 0,
+    residenceName: data && data.residenceName,
+    latitude: data && data.lat,
+    longitude: data && data.lng,
+    capacityId: data && data.capacityId,
+    entranceLock: data && data.entranceLockId,
+    isNumbering: data && data.isNumberingId,
+    floorNumber: data && data.floorNumberId,
+    returnRoutes: data && data.returnRoutesId,
+    typeId: data && data.typeId,
+    typeOther: data && data.typeOther,
   });
   const [mainData7, setMainData7] = useState({
 
@@ -189,8 +190,8 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
     entranceLock: 0,
     floorNumber: 0,
     isNumbering: 0,
-    parkingId: data.parkingId,
-    parkingSpaceId: data.id,
+    parkingId: data && data.parkingId,
+    parkingSpaceId: data && data.id,
     residenceBlockId: 0,
     returnRoutes: 0,
     typeId: 0,
@@ -198,26 +199,26 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
   });
 
   const [mainData2, setMainData2] = useState({
-    imageParkingOverall: data.imageParkingOverall,
-    imageResidenceGate: data.imageResidenceGate,
-    parkingSpaceId: data.id,
+    imageParkingOverall: data && data.imageParkingOverall,
+    imageResidenceGate: data && data.imageResidenceGate,
+    parkingSpaceId: data && data.id,
 
   });
   const [mainData3, setMainData3] = useState({
-    imageFromGate: data.imageFromGate,
-    imageSpaceNumber: data.imageSpaceNumber,
-    parkingSpaceId: data.id,
+    imageFromGate: data && data.imageFromGate,
+    imageSpaceNumber: data && data.imageSpaceNumber,
+    parkingSpaceId: data && data.id,
 
   });
 
 
   const [mainData4, setMainData4] = useState({
-    hourlyPrice: data.hourlyPrice,
-    parkingSpaceId: data.id,
+    hourlyPrice: data &&  data.hourlyPrice,
+    parkingSpaceId: data &&  data.id,
     parkingSpacePriceInstance: null,
   });
   const [mainData5, setMainData5] = useState({
-    parkingSpaceId: data.id,
+    parkingSpaceId: data &&  data.id,
     parkingSpaceSale: null,
 
   });
@@ -233,7 +234,7 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
 
 
   main(mainData);
-
+console.log(editData, "edit dataa")
 
   // console.log(mainData, 'Main datanii medeelel');
   useEffect(async ()=>{
@@ -290,6 +291,37 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
       returnRoutes: data.returnRoutesLabel !==null?data.returnRoutesLabel:null,
       typeOther: data.typeOther,
     });
+     data.dayOfWeek.map((item, index) => {
+      if(index == 0){
+        item.spaceStatusDescription == 'AV' ? settuesdayMorning("Боломжтой") : settuesdayMorning("Боломжгүй");
+      } else if(index == 1){
+        item.spaceStatusDescription == 'AV' ? settuesdayNight("Боломжтой") : settuesdayNight("Боломжгүй");
+      } else if(index == 2){
+        item.spaceStatusDescription == 'AV' ? setwednesdayMorning("Боломжтой") : setwednesdayMorning("Боломжгүй");
+      } else if(index == 3){
+        item.spaceStatusDescription == 'AV' ? setwednesdayNight("Боломжтой") : setwednesdayNight("Боломжгүй");
+      } else if(index == 4){
+        item.spaceStatusDescription == 'AV' ? setthursdayMorning("Боломжтой") : setthursdayMorning("Боломжгүй");
+      } else if(index == 5){
+        item.spaceStatusDescription == 'AV' ? setfridayMorning("Боломжтой") : setfridayMorning("Боломжгүй");
+      } else if(index == 6){
+        item.spaceStatusDescription == 'AV' ? setfridayNight("Боломжтой") : setfridayNight("Боломжгүй");
+      }  else if(index == 7){
+        item.spaceStatusDescription == 'AV' ? setsaturdayMorning("Боломжтой") : setsaturdayMorning("Боломжгүй");
+      } else if(index == 8){
+        item.spaceStatusDescription == 'AV' ? setsaturdayNight("Боломжтой") : setsaturdayNight("Боломжгүй");
+      } else if(index == 9){
+        item.spaceStatusDescription == 'AV' ? setsundayMorning("Боломжтой") : setsundayMorning("Боломжгүй");
+      } else if(index == 10){
+        item.spaceStatusDescription == 'AV' ? setsundayNight("Боломжтой") : setsundayNight("Боломжгүй");
+      } else if(index == 11){
+        item.spaceStatusDescription == 'AV' ? setmondayMorning("Боломжтой") : setmondayMorning("Боломжгүй");
+      } else if(index == 12){
+        item.spaceStatusDescription == 'AV' ? setmondayNight("Боломжтой") : setmondayNight("Боломжгүй");
+      } 
+      
+      // console.log(item.spaceStatusDescription[0], "mapped element")
+    })
   }, []);
   const onChangeAimag = async (e)=>{
     const value = aimag.find((item)=>item.label===e);
@@ -987,13 +1019,13 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                   </>
                 ) :(
                   <>
-                    <p>{editData.provinceLabel}</p>
+                    <p>{data.provinceLabel}</p>
                     <p>{data.districtLabel}</p>
-                    <p>{editData.sectionLabel}</p>
-                    <p>{editData.residenceName}</p>
-                    <p>{editData.residenceBLockList}</p>
-                    <p>{editData.parkingGateNumber}</p>
-                    <p>{editData.uparkingNumber}</p>
+                    <p>{data.sectionLabel}</p>
+                    <p>{data.residenceName}</p>
+                    <p>{data.residenceBlockNumber}</p>
+                    <p>{data.parkingGateNumber}</p>
+                    <p>{data.uparkingNumber}</p>
                   </>
                 )
                 }
@@ -1875,7 +1907,7 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                           </Row>
                           <Row>
                             <Col span={18}><p>Цагийн түрээслэх үнэ <span style={{color: 'blue'}}>| 1 цаг</span></p></Col>
-                            <Col offset={2}>{item.hourlyPrice}1000</Col>
+                            <Col offset={2}>{item.hourlyPrice ? item.hourlyPrice : 1000 }</Col>
                           </Row>
                         </Col>)}
                     </Row>
@@ -1899,7 +1931,7 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                           </Row>
                           <Row>
                             <Col span={18}><p>Цагийн түрээслэх үнэ <span style={{color: 'blue'}}>| 1 цаг</span></p></Col>
-                            <Col offset={2}>{item.hourlyPrice}1000</Col>
+                            <Col offset={2}>{item.hourlyPrice ? item.hourlyPrice : 1000 }</Col>
                           </Row>
                         </Col>)}
                     </Row>
@@ -1945,9 +1977,9 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
             <Divider />
             {!discountValue ? (
               <Col offset={1} span={16}><Row><Col span={10}>7 хоногын захиалга - Хөнгөлөлтийн %</Col>
-                <Col span={2} offset={4}>5%</Col></Row>
+                <Col span={2} offset={4}>{data.saleList[0].salePercent}%</Col></Row>
               <Row><Col span={10}>1 сарын захиалга - Хөнгөлөлтийн %</Col>
-                <Col span={2} offset={4}>10%</Col></Row></Col>
+                <Col span={2} offset={4}>{data.saleList[1].salePercent}%</Col></Row></Col>
             ):<Row>
               <Col span={20}>
                 <Form form={saleForm}>
@@ -2513,7 +2545,8 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                 </Select>}
               </Row>
             </Col>
-            <Button onClick={onChangeRentDay} type="primary" >Хадгалах</Button>
+            
+                {data.requestStatusCode =='CANCELLED'? <Button onClick={onChangeRentDay} type="primary" >Хадгалах</Button> :null}
           </Row>
         </div>
       </div>
