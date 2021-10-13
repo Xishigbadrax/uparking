@@ -156,13 +156,11 @@ const Wallet = () => {
           </Row>
         </Col>
           <Col span={14} >
-          <Card style={{width:'100%',height:'400px'}}>
+          <Card style={{width:'100%',height:'300px'}}>
             {/* <WalletChart  style={{paddingBottom:'10px'}} incomeData={incomeData} expenceData={expenceData}/>
              */}
-             
           </Card>
          </Col>
-      
       </Row>
       {/* <Card> */}
       <div className=" mt-[24px]">
@@ -170,10 +168,8 @@ const Wallet = () => {
           <span> Хүлээгдэж буй орлого </span>
           <Col> <img className=" " src="../../question.png" /> </Col>
         </Row>
-        
-        <div className="flex justify-between mt-[25px]">
-
-          <div className=" h-[480px] w-[613px]" style={{overflow:'hidden'}}>
+        <Row >
+          <Col style={{overflow:'hidden'}} span={16}>
             <Calendar
               className="walletCal"
               locale={calendarLocale}
@@ -237,9 +233,9 @@ const Wallet = () => {
               }}
               monthCellRender={monthCellRender}
             ></Calendar>
-          </div>
-          <div><Image preview={false} width={243} height={480} src="../../ad2.png" /></div>
-        </div>
+          </Col>
+          <Col span={7} offset={1}><Image preview={false} width={343} height={480} src="../../ad2.png" /></Col>
+        </Row>
       </div>
     </WalletLayout>
     <Modal visible={visiblePayPending} footer={null}>

@@ -371,15 +371,15 @@ const OrderId = () => {
       parkingSpaceId: orderData.parkingSpaceId,
       reviewList: [
         {questionId: 689,
-          rating: Number(parkingReview)},
+          rating: parkingReview?Number(parkingReview):0},
         {questionId: 690,
-          rating: Number(entranceLockReview)},
+          rating:entranceLockReview? Number(entranceLockReview):0},
         {questionId: 691,
-          rating: Number(findReview)},
+          rating:findReview? Number(findReview):0},
         {questionId: 692,
-          rating: Number(positionReview)},
+          rating:positionReview ? Number(positionReview):0},
       ],
-      reviewText: commentReview,
+      reviewText: commentReview?commentReview:'hooson',
     };
     const res = await callPost('/parkingspace/review', postParkingSpaceReview);
     if (res && res.status ==='success') {
@@ -440,7 +440,7 @@ const OrderId = () => {
             </Col>
             <Col span={8} offset={1}>
               <Tabs defaultActiveKey="1">
-                <TabPane tab="Танилцуулга" key="1">
+                <TabPane tab={<div style={{width:'140px',paddingLeft:'20px'}}>Танилцуулга</div>} key="1">
                   {orderData.bookingStatus === 'CONFIRMED' || orderData.bookingStatus === 'HISTORY ' ?
                     <div>
                       <Row style={{lineHeight: '24px'}}>
@@ -876,7 +876,7 @@ const OrderId = () => {
                             </Row>
                           ))}
                         </div>);
-                    } else if (orderData && orderData.bookingStatus==='CONFIRMED' && isUnelgee ) {
+                    } else if (orderData && orderData.bookingStatus==='CONFIRMED' && isUnelgee && !orderData.isReview) {
                       return (
                         <Col span={24} style={{marginTop: '20px'}}>
                           <Button type="primary" size={'large'} onClick={()=>{
@@ -896,7 +896,7 @@ const OrderId = () => {
                     }
                   })()}
                 </TabPane>
-                <TabPane tab="Үнэлгээ" key="2">
+                <TabPane tab={<div style={{width:'140px',paddingLeft:'30px'}}>Үнэлгээ</div>} key="2">
                   <div>
                     {reviewData &&
                         reviewData.map((item)=>(
@@ -925,7 +925,7 @@ const OrderId = () => {
                     }
                   </div>
                 </TabPane>
-                <TabPane tab="Тусламж" key="3">
+                <TabPane tab={<div style={{width:'130px' ,paddingLeft:'20px'}}>Тусламж</div>} key="3">
                   <div className="mb-[30px]"><SettingPane /></div>
                 </TabPane>
               </Tabs>

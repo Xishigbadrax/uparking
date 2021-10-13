@@ -57,7 +57,7 @@ const Lessor = () =>{
     ctx.setIsLoading(true);
     const result = await callGet('/booking?asWho=2&isConfirmed=false');
     if (!result || result === undefined) {
-      showMessage(messageType.FAILED.type, defaultMsg.dataError);
+      showMessage(messageType.FAILED.type, DefaultMsg.dataError);
     } else {
       setCalendarData(result);
     }
@@ -68,7 +68,7 @@ const Lessor = () =>{
     ctx.setIsLoading(true)
     const res = await callGet('booking?asWho=2&isConfirmed=true');
     if (!res || res === undefined) {
-      showMessage(messageType.FAILED.type, defaultMsg.dataError);
+      showMessage(messageType.FAILED.type, DefaultMsg.dataError);
     } else {
       setCalendarData(res);
     }
@@ -149,12 +149,13 @@ const Lessor = () =>{
   //Түрээслүүлэгч өөрийн бүртгүүлсэн зогсоол бүр дээр ямар хүсэлт болон ямар захиалга баталгаажсан байна вэ мөн ямар түүхүүд байна вэ гэдгийг харж болно.
   const handleSpace = async (value)=>{
     setSelectedSpace(value.key);
+    console.log(value.key);
     // ctx.setIsLoading(true);
     if(Number(calendarStatus)===1){
       if(value.key === null){
         const result = await callGet(`/booking?asWho=2&isConfirmed=false`);
           if (!result || result === undefined) {
-            showMessage(messageType.FAILED.type, defaultMsg.dataError);
+            showMessage(messageType.FAILED.type, DefaultMsg.dataError);
           } else {
             setCalendarData(result);
           ctx.setIsLoading(false);
@@ -162,17 +163,17 @@ const Lessor = () =>{
           }else{
             const result = await callGet(`/booking?asWho=2&isConfirmed=false&parkingSpaceId=${value.key}`);
             if (!result || result === undefined) {
-              showMessage(messageType.FAILED.type, defaultMsg.dataError);
+              showMessage(messageType.FAILED.type, DefaultMsg.dataError);
             } else {
               setCalendarData(result);
             ctx.setIsLoading(false);
           }
       }
-    }else if(Number(calendarStatus)===2){
+    }else if(Number(calendarStatus)=== 2){
       ctx.setIsLoading(true);
       console.log(value.key,'aa');
       // setIsConfirmed(true);
-      if(selectedSPace === 'null'){
+      if(value.key === 'null'){
           const res = await callGet(`booking?asWho=2&isConfirmed=true`);
           if (!res || res === undefined) {
             showMessage(messageType.FAILED.type, result.error);
@@ -183,7 +184,7 @@ const Lessor = () =>{
     }else{
       const res = await callGet(`booking?asWho=2&isConfirmed=true&parkingSpaceId=${value.key}`);
       if (!res || res === undefined) {
-        showMessage(messageType.FAILED.type,defaultMsg.dataError);
+        showMessage(messageType.FAILED.type,DefaultMsg.dataError);
       } else {
         console.log(res);
         setCalendarData(res);

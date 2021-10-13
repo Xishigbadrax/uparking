@@ -10,6 +10,7 @@ const defaultMsg = {
   newDeviceConfirmErrorTxt:
     'Та шинэ төхөөрөмжөөс хандалт хийж байгаа тул баталгаажуулалт хийнэ үү.',
   dataError: 'Мэдээлэл дуудахад алдаа гарлаа',
+  createError:'Мэдээлэл хадгалахад алдаа гарлаа.'
 };
 
 const dataType = {

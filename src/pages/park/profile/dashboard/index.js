@@ -15,7 +15,6 @@ import { defaultMsg } from '@constants/constants.js';
 import {LeftOutlined, RightOutlined, OrderedListOutlined} from '@ant-design/icons';
 import moment from 'moment';
 import DayNightColumn from '@components/DayNightColumns';
-import { Radar } from '@ant-design/charts';
 const {TabPane} = Tabs;
 moment.updateLocale('mn',{
   weekdaysMin: ['Ням', 'Даваа', 'Мягмар', 'Лхагва', 'Пүрэв', 'Баасан', 'Бямба'],
@@ -52,7 +51,6 @@ const Dashboard = () => {
   // const [userData, setuserData] = useState(null);
   // const [markedDate, setmarkedDate] = useState(null);
   // eslint-disable-next-line no-unused-vars
-  const {userdata} = useContext(Context);
   const [calendarData, setCalendarData] = useState([]);
   const [current, setCurrent] = useState(parseInt(moment().format('MM')));
   const [tabKey, setTabKey]=useState(1);
@@ -64,33 +62,60 @@ const Dashboard = () => {
   const [selectDate, setSelectDate] = useState();
   const [currMonth, setCurrMonth] = useState();
   const [realData, setRealData] = useState();
+  const [spaceList,setSpaceList] = useState();
   const [spaceRateData,setSpaceRateData] = useState()
   const [gateRateData,setGateRateData] = useState();
   const [entranceLockData,setEnterLockData] = useState();
   const [positionRateData,setPositionRateData] = useState()
+  const data1 = {
+    labels: ['Орц гарц', 'Нэвтрэх хаалга', 'Байршил', 'Зогсоол'],
+    datasets: [
+      {
+        label: '',
+        data: [4, 3, 5, 5],
+        backgroundColor: '#ffff',
+        borderColor: '#00F9B8',
+        borderWidth: 1,
+      },
+    ],
+    options: {
+      plugins: {
+        legend: {
+          display: false,
+        },
+      },
+    },
+  };
+  const options = {
+    scale: {
+      ticks: {beginAtZero: true},
+    },
+    suggestedMin:0
+  };
 
-
-  const aa = async () => {
+  const checkUserData = async () => {
     const rateArray = [];
     if (typeof userdata.firstName != 'undefined') {
       setRealData(userdata);
       const parkSpaceList = await callGet(`/parkingspace/list/user?id=${userdata.id}`);
       console.log(parkSpaceList);
-      if(parkSpaceList && parkSpaceList.length){
-        parkSpaceList.map(async(item)=>{
-          const a = await callGet(`/parkingspace/review?parkingSpaceId=${item.value}`);
-          console.log(a,'reviewss');
-        })
-      }
-      console.log(rateArray,'ggawdwwwg');
+      setSpaceList(parkSpaceList);
+      // if(parkSpaceList && parkSpaceList.length){
+      //   parkSpaceList.map(async(item)=>{
+      //     const a = await callGet(`/parkingspace/review?parkingSpaceId=${item.value}`);
+      //     console.log(a,'reviewss');
+      //   })
+      // }
+      // console.log(rateArray,'ggawdwwwg');
     }
   }
+   //Хэрэглэгчийн бүртгүүлсэн зогсоолуудын мэдээллийг дуудах
+  
   useEffect(async () => {
     const vehicle = await callGet('/user/vehicle/list');
     setVehicles(vehicle);
-    const space =  await callGet(``)
     fetchData();
-    aa();
+    checkUserData();
   }, []);
   const callback = (key) => {
     setTabKey(key);
@@ -295,6 +320,16 @@ const Dashboard = () => {
       ))}
     </Menu>
   );
+  const spaceMenu = (
+    <Menu onClick={(value)=>handleSpace(value)} style={{width: '100%'}}>
+      <Menu.Item key={null}>Бүх зогсоол </Menu.Item>
+      { spaceList && spaceList.map((item)=>(
+        <Menu.Item key={item.value}>
+          {item.label}
+        </Menu.Item>
+      ))}
+    </Menu>
+  );
   return (
     <ProfileLayout>
       <Card style={{borderRadius: '50px'}}>
@@ -431,8 +466,8 @@ const Dashboard = () => {
                 />
               </Col>
               <Col>
-                <Dropdown overlay={vehicleMenu} className='dropdown'>
-                  <Button style={{color: '#35446D'}}>Бүх автомашин<OrderedListOutlined /></Button>
+                <Dropdown overlay={spaceMenu} className='dropdown'>
+                  <Button style={{color: '#35446D'}}>Бүх зогсоол<OrderedListOutlined /></Button>
                 </Dropdown>
               </Col>
             </Row>
