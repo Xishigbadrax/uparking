@@ -10,7 +10,7 @@ import DayNightColumn from '@components/DayNightColumns';
 import Context from '@context/Context';
 import RentDate from '@components/registerSpace/rentDate';
 import { showMessage } from '@utils/message';
-import { messageType,DefaultMsg } from '@constants/constants';
+import { messageType,defaultMsg } from '@constants/constants';
 import Link from 'next/link';
 import Select from 'rc-select';
 import { result } from 'lodash';
@@ -41,7 +41,6 @@ const Lessor = () =>{
   const [currMonth, setCurrMonth] = useState(moment().format('YYYY-MM'));
   const [selectedSPace,setSelectedSpace] = useState(null);
   const [selectedDate,setSelectDate] = useState(moment().format('YYYY-MM-DD'));
-
   //Хэрэглэгчийн бүртгүүлсэн зогсоолуудын мэдээллийг дуудах
   useEffect(async ()=>{
     if (typeof userdata.firstName != 'undefined') {
@@ -57,7 +56,7 @@ const Lessor = () =>{
     ctx.setIsLoading(true);
     const result = await callGet('/booking?asWho=2&isConfirmed=false');
     if (!result || result === undefined) {
-      showMessage(messageType.FAILED.type, DefaultMsg.dataError);
+      showMessage(messageType.FAILED.type, defaultMsg.dataError);
     } else {
       setCalendarData(result);
     }
@@ -68,7 +67,7 @@ const Lessor = () =>{
     ctx.setIsLoading(true)
     const res = await callGet('booking?asWho=2&isConfirmed=true');
     if (!res || res === undefined) {
-      showMessage(messageType.FAILED.type, DefaultMsg.dataError);
+      showMessage(messageType.FAILED.type, defaultMsg.dataError);
     } else {
       setCalendarData(res);
     }
@@ -114,7 +113,6 @@ const Lessor = () =>{
       getHistory();
     }
     ctx.setIsLoading(false);
-
   };
   const onClickCheckBookingRequest = ()=>{
   };
@@ -155,7 +153,7 @@ const Lessor = () =>{
       if(value.key === null){
         const result = await callGet(`/booking?asWho=2&isConfirmed=false`);
           if (!result || result === undefined) {
-            showMessage(messageType.FAILED.type, DefaultMsg.dataError);
+            showMessage(messageType.FAILED.type, defaultMsg.dataError);
           } else {
             setCalendarData(result);
           ctx.setIsLoading(false);
@@ -163,7 +161,7 @@ const Lessor = () =>{
           }else{
             const result = await callGet(`/booking?asWho=2&isConfirmed=false&parkingSpaceId=${value.key}`);
             if (!result || result === undefined) {
-              showMessage(messageType.FAILED.type, DefaultMsg.dataError);
+              showMessage(messageType.FAILED.type, defaultMsg.dataError);
             } else {
               setCalendarData(result);
             ctx.setIsLoading(false);
@@ -184,7 +182,7 @@ const Lessor = () =>{
     }else{
       const res = await callGet(`booking?asWho=2&isConfirmed=true&parkingSpaceId=${value.key}`);
       if (!res || res === undefined) {
-        showMessage(messageType.FAILED.type,DefaultMsg.dataError);
+        showMessage(messageType.FAILED.type,defaultMsg.dataError);
       } else {
         console.log(res);
         setCalendarData(res);
