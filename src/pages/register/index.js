@@ -3,7 +3,7 @@ import {useRouter} from 'next/router';
 import {Form, Input, Button, Modal, Checkbox} from 'antd';
 import {ExclamationCircleOutlined, ReloadOutlined} from '@ant-design/icons';
 import {callPost, callGet} from '@api/api';
-import {messageType} from '@constants/constants';
+import {defaultMsg, messageType} from '@constants/constants';
 import {showMessage} from '@utils/message';
 import MaskedInput from 'antd-mask-input';
 import Countdown from 'react-countdown';
@@ -95,18 +95,31 @@ const Login = () => {
   const delay = (ms) => new Promise((res) => setTimeout(res, ms));
   // step3
   const onFinishVerfication = async (values) => {
+<<<<<<< HEAD
     
+=======
+    setVerifyCode(values.verificationCode);
+   
+>>>>>>> 8104f8b7b3f40a169e78a01d30fbda94ea7a2d62
     try {
-      setVerifyCode(values.verificationCode);
       const data = {
+<<<<<<< HEAD
         code: values.verificationCode,
         phoneNumber: phoneNumber,
       };
       const result = await callPost('/verifyPhoneNumber', data);
       if (result.status === 'failed') {
         showMessage(messageType.FAILED.type, result.error);
+=======
+        code: String(values.verificationCode),
+        phoneNumber: String(phoneNumber),
+      };
+      const result = await callPost('verifyPhoneNumber', data);
+      if (result.status === 500 ) {
+        showMessage(messageType.FAILED.type, defaultMsg.createError);
+>>>>>>> 8104f8b7b3f40a169e78a01d30fbda94ea7a2d62
         return true;
-      } else {
+      }else {
         getPolicyData();
       }
     } catch (e) {
@@ -278,9 +291,7 @@ const Login = () => {
                 >
                   <Input.Password placeholder="Нууц үг давтах" />
                 </Form.Item>
-
               </div>
-
               <Form.Item {...tailLayout} shouldUpdate>
                 {() => (
                   <Button
@@ -321,10 +332,8 @@ const Login = () => {
                   ]}
                 >
                   <MaskedInput mask="1111"  />
-
                 </Form.Item>
                 <div className="getCodeAgain">
-
                   <Countdown className="getCodeAgainCountDown" renderer={rendererCounter} ref={clockRef} date={Date.now() + 30000} onComplete={counterOnComplete} >
                   </Countdown>
                   <Button className="getCodeAgainButton" icon={<ReloadOutlined />} disabled={havecode} onClick={getCodeAgain}>Дахин код авах</Button>

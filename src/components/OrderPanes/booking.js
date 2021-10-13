@@ -22,7 +22,6 @@ moment.updateLocale('mn', {
 });
 
 const booking = (props)=>{
-  console.log(props, 'props');
   const [current, setCurrent]= useState(parseInt(moment().format('M')));
   // eslint-disable-next-line no-unused-vars
   const ctx = useContext(Context);
@@ -39,6 +38,7 @@ const booking = (props)=>{
   const [isConfirmVisible, setIsConfirmVisible]=useState(false);
   const [seemoreUpDownArrow, setSeemoreUpDownArrow] = useState(false);
   const [seeCanceledBooking, setSeeCanceledBooking] =useState(false);
+  const [currMonth, setCurrMonth] = useState();
   const [requestedData, setRequestedData] = useState([]);
   // eslint-disable-next-line no-unused-vars
   const [selectedDate, setSelectedDate] = useState([]);
@@ -148,50 +148,55 @@ const booking = (props)=>{
     return listData || [];
   };
   const dateCellRender = (value) => {
-    const listData = getListData(value);
-    console.log(listData,'ýoooooooooooooooooooooooow');
-    return (
-      <ul className="events" style={{marginTop: '10px'}}>
-        {listData && listData.map((item) => (
-          <li key={item.spaceStatusId}>
-            {/* <Badge status={item.type} text={item.content} /> */}
-            <div>
-              <Tag className="eventText" style={{borderRadius: '20px', border: ' 0.4px solid green',
-                fontSize: '10px',
-                background: 'rgba(0, 249, 184, 0.08)',
-                lineHeight: '16px',
-                height: '15px',
-                width: '90%',
-                paddingLeft: '20%'}}>{item.spaceStatusId}</Tag>
-              <Tag style={{borderRadius: '20px', border: ' 0.4px solid #DEE2E9',
-                fontSize: '10px',
-                background: '#fff',
-                lineHeight: '16px',
-                height: '15px',
-                width: '90%'}}>
-              </Tag>
-            </div>
-          </li>
-        ))}
-        {listData.length === 0 &&
-        <div>
-          <Tag style={{borderRadius: '20px', border: ' 0.4px solid #DEE2E9',
-            fontSize: '10px',
-            background: '#fff',
-            lineHeight: '16px',
-            height: '15px',
-            width: '90%',
-          }}></Tag>
-          <Tag style={{borderRadius: '20px', border: ' 0.4px solid #DEE2E9',
-            fontSize: '10px',
-            lineHeight: '16px',
-            background: '#fff',
-            height: '15px',
-            width: '90%',
-          }}></Tag>
-        </div>}
-      </ul>
-    );
+    const month = moment(value).format('YYYY-MM');
+    if (month === currMonth) {
+    // const listData = getListData(value);
+      console.log(value,'gggggggggggggg');
+       console.log();
+    // return (
+    //   <ul className="events" style={{marginTop: '10px'}}>
+    //     {listData && listData.map((item) => (
+    //       <li key={item.spaceStatusId}>
+    //         {/* <Badge status={item.type} text={item.content} /> */}
+    //         <div>
+    //           <Tag className="eventText" style={{borderRadius: '20px', border: ' 0.4px solid green',
+    //             fontSize: '10px',
+    //             background: 'rgba(0, 249, 184, 0.08)',
+    //             lineHeight: '16px',
+    //             color:'blue',
+    //             height: '15px',
+    //             width: '90%',
+    //             paddingLeft: '20%'}}>{item.vehicleNumber}</Tag>
+    //           <Tag style={{borderRadius: '20px', border: ' 0.4px solid #DEE2E9',
+    //             fontSize: '10px',
+    //             background: '#fff',
+    //             lineHeight: '16px',
+    //             height: '15px',
+    //             width: '90%'}}>
+    //           </Tag>
+    //         </div>
+    //       </li>
+    //     ))}
+    //     {listData.length === 0 &&
+    //     <div>
+    //       <Tag style={{borderRadius: '20px', border: ' 0.4px solid #DEE2E9',
+    //         fontSize: '10px',
+    //         background: '#fff',
+    //         lineHeight: '16px',
+    //         height: '15px',
+    //         width: '90%',
+    //       }}></Tag>
+    //       <Tag style={{borderRadius: '20px', border: ' 0.4px solid #DEE2E9',
+    //         fontSize: '10px',
+    //         lineHeight: '16px',
+    //         background: '#fff',
+    //         height: '15px',
+    //         width: '90%',
+    //       }}></Tag>
+    //     </div>}
+    //   </ul>
+    // );
+    }
   };
   return (
     // <DefaultLayout>
@@ -216,6 +221,7 @@ const booking = (props)=>{
             headerRender={({value, type, onChange, onTypeChange}) => {
               const localeData = value.localeData();
               const year = value.year();
+              setCurrMonth(moment(value).format('YYYY-MM'));
               const month = [];
               for (let i = 0; i < 12; i++) {
                 month.push(localeData._months[i]);
@@ -282,7 +288,7 @@ const booking = (props)=>{
           width: '1px',
           marginTop: '20px',
         }}/>
-        <Col span={6}>
+        <Col span={7} offset={0}>
           <Row style={{marginTop: '40px'}} >
             <Col span={10} offset={1}>
               <p style={{color: '#0013D4', fontSize: '20px', fontWeight: '700'}}>{orderData && orderData.vehicleNumber}</p>
@@ -389,9 +395,9 @@ const booking = (props)=>{
             </Row>
           </div>}
           {(orderData && (orderData.totalAllDay > 0 && orderData.totalAtDay > 0 && orderData.totalAtNight === 0) ||
-           ( orderData.totalAllDay > 0 && orderData.totalAtDay === 0 && orderData.totalAtNight > 0) ||
-           (orderData.totalAllDay === 0 && orderData.totalAtDay > 0 && orderData.totalAtNight > 0) ||
-           ( orderData.totalAllDay > 0 && orderData.totalAtDay > 0 && orderData.totalAtNight > 0)) ?
+           (orderData&& orderData.totalAllDay > 0 && orderData.totalAtDay === 0 && orderData.totalAtNight > 0) ||
+           (orderData&& orderData.totalAllDay === 0 && orderData.totalAtDay > 0 && orderData.totalAtNight > 0) ||
+           (orderData&& orderData.totalAllDay > 0 && orderData.totalAtDay > 0 && orderData.totalAtNight > 0)) ?
           <div>
             <Row style={{marginTop: '20px'}}>
               <Col offset={2}><p style={{color: '#A2A4AA'}}>Сул цагийн захиалга </p></Col>
@@ -601,7 +607,7 @@ const booking = (props)=>{
               </Row>
             ))
           }
-          { orderData && orderData.bookingStatus ==='CONFIRMED'&&
+          {orderData && orderData.bookingStatus ==='CONFIRMED'&&
             <Row style={{marginTop: '20px'}}>
               <Col offset={1} span={22} style={{height: '50px'}}>
                 <Button style={{width: '100%', height: '50px', background: 'rgba(255, 2, 102, 0.08)', borderRadius: '8px', color: '#C6231A',
@@ -760,7 +766,7 @@ const booking = (props)=>{
             <Button style={{width: '100%', borderRadius: '8px'}} type='primary' onClick={()=>{
               setIsConfirmVisible(false);
               router.push('/park/profile/order');
-            }}>Цуцлах</Button>
+            }}>Нэхэмжлэл төлөх</Button>
           </Col>
         </Row>
       </Modal>

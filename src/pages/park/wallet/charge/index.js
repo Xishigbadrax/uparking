@@ -57,14 +57,35 @@ const Charge = () => {
   const [message, setmessage] = useState('');
   const [status, setstatus] = useState('');
   const [title, settitle] = useState('');
+  const [socialPayTransactionId,setSocialPayTransactionId]= useState(null);
   const [messageShow, setmessageShow] = useState(false);
+  const [socialPayCheck,setSocialPayCheck] = useState(true);
   const [formData] = useState({
     amount: null,
     phoneNumber: null,
   });
   // eslint-disable-next-line no-unused-vars
   const [formData3, setformData3] = useState('');
-
+  const checkSocialPay = async ()=>{
+    // if(!socialPayCheck){
+    // const res = await callGet(`/checkpayment?transactionId=${socialPayTransactionId}`);
+  //   if( res && res.status === 'success'){
+  //     setSocialPayCheck(false);
+  //     setmessageShow(false);
+  //   }
+  // }
+}   
+  useEffect(()=>{
+    console.log(socialPayTransactionId);
+    const timer = setInterval( async function (){
+      const res = await callGet(`/checkpayment?transactionId=${socialPayTransactionId}`);
+     if( res && res.status === 'success'){
+      setSocialPayCheck(false);
+      setmessageShow(false);
+    }
+    }, 10000);
+    
+  },[socialPayTransactionId])
   const fetchData2 = async () => {
     if (amount != 0) {
       const formData2 = {
@@ -83,6 +104,7 @@ const Charge = () => {
             if (res.code == 1000) {
               settitle('Амжилтай');
               setMongolChatResultData(res);
+              setSocialPayCheck(true);
               setmessage('Амжилттай. Нэхэмжлэх үүсгэлээ.');
               setstatus('success');
               setmessageShow(true);
@@ -122,6 +144,9 @@ const Charge = () => {
                   settitle('Амжилтай');
                   setmessage('Амжилттай. Нэхэмжлэх үүсгэлээ.');
                   setstatus('success');
+                  setSocialPayCheck(false);
+                  setSocialPayTransactionId(res.transactionId);
+                  checkSocialPay();
                   setmessageShow(true);
                   try {
                     const win = window.open(
@@ -213,7 +238,6 @@ const Charge = () => {
         <div>
           <WalletCard />
         </div>
-
         <div>
           {/* <WalletChart /> */}
         </div>

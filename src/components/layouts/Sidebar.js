@@ -4,6 +4,7 @@ import {useRouter} from 'next/router';
 import * as AntdIcons from '@ant-design/icons';
 import Context from '@context/Context';
 import {useContext, useState, useEffect} from 'react';
+import { contextType } from 'google-map-react';
 const IMG_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
 // import {
 //   // UserOutlined,
@@ -11,9 +12,9 @@ const IMG_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
 
 const {Sider} = Layout;
 const {SubMenu} = Menu;
-
 const Sidebar = () => {
   const router = useRouter();
+  const ctx = useContext(Context)
   const {state, menuOpenKeys, setMenuOpenKeys, userdata} = useContext(Context);
   // const [pathName, setPathName] = useState('/');
   const {menus} = state;
@@ -51,6 +52,7 @@ const Sidebar = () => {
   };
 
   const getSubMenuOrItem = (item) => {
+      ctx.setIsLoading(true);
     if (item.children && item.children.some((child) => child.name)) {
       const childrenItems = getNavMenuItems(item.children);
       if (childrenItems && childrenItems.length > 0) {
@@ -64,8 +66,10 @@ const Sidebar = () => {
           </SubMenu>
         );
       }
+      ctx.setIsLoading(false);
       return null;
     } else {
+      ctx.setIsLoading(false);
       return <Menu.Item className={item.link === router.asPath ? 'ant-menu-item-selected' : ''} key={item.link} icon={getIcon(item.icon)}>{getMenuItemPath(item)}</Menu.Item>;
     }
   };

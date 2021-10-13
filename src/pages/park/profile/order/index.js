@@ -377,8 +377,8 @@ const Order = () => {
                             {item.bookingStatusDescription}{'   ' }
                             {item.expireDateDriver}
                           </div> }
-                          {item.bookingStatus === 'CONFIRMED'&& historyValue === true && <div className="calendarListStatus1" style={{display: 'flex'}}>
-                            <div style={{color: '#fff'}}> Миний үнэлгээ : </div> <Rate className='unelgee' value={2}/>{getUnelgee(item.bookingId)}
+                          {item.bookingStatus === 'CONFIRMED'&& historyValue === true && item.isReview && <div className="calendarListStatus1" style={{display: 'flex'}}>
+                            <div style={{color: '#fff'}}> Миний үнэлгээ : </div> <Rate className='unelgee' value={item.isReviewCount} disabled/>{getUnelgee(item.bookingId)}
                           </div>}
                           {item.bookingStatus === 'CANCELLED'&& historyValue === true && <div className="calendarListStatus">
                            Цуцлагдсан захиалга

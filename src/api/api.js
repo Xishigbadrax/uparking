@@ -61,14 +61,15 @@ const execData = async (code, data, child, deletedIds) => {
 };
 
 const callPost = async (command, data) => {
-  const result = await baseAxios.post(command, data);
-
+  const result = await baseAxios.post(command,data);
   if (result.status === 403) {
     // console.log(1111111);
     showMessage(messageType.FAILED.type, result.message);
     return result.message;
   }else if(result.status === 400){
      return  result.data;
+  }else if(result.status === 500){
+    return result;
   }
   if ((result.status !== 200 && result.status !== 201) || !result.data) {
     // console.log(result.error);
@@ -92,7 +93,6 @@ const callPost = async (command, data) => {
       );
     }
   }
-
   return resultData;
 };
 
