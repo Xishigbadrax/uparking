@@ -138,7 +138,11 @@ const Dashboard = () => {
       await callGet('/config/timesplit').then((res) => {
         settimeSplit(res);
       });
-      userdata.firstName && userdata.lastName ? router.push('/park')    : router.push('/park/createUser')
+      if(userdata.firstName && userdata.lastName ){
+         router.push('/park') ;
+      }else{
+        router.push('/park/createUser');
+      }
       // if(userRealData.firstName  &&   userRealData.lastName){
       //   router.push('/park');
       // }
