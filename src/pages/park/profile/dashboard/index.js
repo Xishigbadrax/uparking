@@ -1,6 +1,6 @@
 import ProfileLayout from '@components/layouts/ProfileLayout';
 import {Tabs} from 'antd';
-import _ from 'lodash';
+import _, { countBy } from 'lodash';
 // import CustomCalendar from '@components/CustomCalendar/index';
 import {Row, Col, Card, Calendar, Tag, Menu, Dropdown, DatePicker, Button} from 'antd';
 import {Radar} from 'react-chartjs-2';
@@ -15,6 +15,11 @@ import { defaultMsg } from '@constants/constants.js';
 import {LeftOutlined, RightOutlined, OrderedListOutlined} from '@ant-design/icons';
 import moment from 'moment';
 import DayNightColumn from '@components/DayNightColumns';
+<<<<<<< HEAD
+=======
+// import { Radar } from '@ant-design/charts';
+import { Bar } from '@ant-design/charts';
+>>>>>>> 0b40acc4c3723bfa500601b3382e7b05afc1b178
 const {TabPane} = Tabs;
 moment.updateLocale('mn',{
   weekdaysMin: ['Ням', 'Даваа', 'Мягмар', 'Лхагва', 'Пүрэв', 'Баасан', 'Бямба'],
@@ -39,18 +44,31 @@ const data1 = {
     },
   },
 };
+
 const options = {
+  plugins: {
+    legend: {
+      display: false,
+    },
+  },
   scale: {
     ticks: {beginAtZero: true},
   },
   suggestedMin:0
 };
+
+
+
 const Dashboard = () => {
   const ctx = useContext(Context);
   const {userdata} = useContext(Context);
   // const [userData, setuserData] = useState(null);
   // const [markedDate, setmarkedDate] = useState(null);
   // eslint-disable-next-line no-unused-vars
+<<<<<<< HEAD
+=======
+  // const {userdata} = useContext(Context);
+>>>>>>> 0b40acc4c3723bfa500601b3382e7b05afc1b178
   const [calendarData, setCalendarData] = useState([]);
   const [current, setCurrent] = useState(parseInt(moment().format('MM')));
   const [tabKey, setTabKey]=useState(1);
@@ -66,13 +84,23 @@ const Dashboard = () => {
   const [spaceRateData,setSpaceRateData] = useState()
   const [gateRateData,setGateRateData] = useState();
   const [entranceLockData,setEnterLockData] = useState();
+<<<<<<< HEAD
   const [positionRateData,setPositionRateData] = useState()
   const data1 = {
+=======
+  const [positionRateData,setPositionRateData] = useState();
+  const [radarValue,setRadarValue] = useState();
+  const data2 = {
+>>>>>>> 0b40acc4c3723bfa500601b3382e7b05afc1b178
     labels: ['Орц гарц', 'Нэвтрэх хаалга', 'Байршил', 'Зогсоол'],
     datasets: [
       {
         label: '',
+<<<<<<< HEAD
         data: [4, 3, 5, 5],
+=======
+        data: [radarValue, radarValue, radarValue, radarValue],
+>>>>>>> 0b40acc4c3723bfa500601b3382e7b05afc1b178
         backgroundColor: '#ffff',
         borderColor: '#00F9B8',
         borderWidth: 1,
@@ -86,6 +114,7 @@ const Dashboard = () => {
       },
     },
   };
+<<<<<<< HEAD
   const options = {
     scale: {
       ticks: {beginAtZero: true},
@@ -94,11 +123,44 @@ const Dashboard = () => {
   };
 
   const checkUserData = async () => {
+=======
+
+  var data = [
+    {
+      year: 'Үзсэн',
+      value: 38,
+    },
+    {
+      year: 'Дарсан',
+      value: 52,
+    },
+    {
+      year: 'Хадгалсан',
+      value: 61,
+    },
+    {
+      year: 'Захиалсан',
+      value: 145,
+    },
+    
+  ];
+  var config = {
+    data: data,
+    xField: 'value',
+    yField: 'year',
+    seriesField: 'year',
+    legend: false
+  };
+
+  console.log(radarValue, "dddd");
+  const aa = async () => {
+>>>>>>> 0b40acc4c3723bfa500601b3382e7b05afc1b178
     const rateArray = [];
     if (typeof userdata.firstName != 'undefined') {
       setRealData(userdata);
       const parkSpaceList = await callGet(`/parkingspace/list/user?id=${userdata.id}`);
       console.log(parkSpaceList);
+<<<<<<< HEAD
       setSpaceList(parkSpaceList);
       // if(parkSpaceList && parkSpaceList.length){
       //   parkSpaceList.map(async(item)=>{
@@ -107,7 +169,37 @@ const Dashboard = () => {
       //   })
       // }
       // console.log(rateArray,'ggawdwwwg');
+=======
+      var c = 0;
+      var d =0;
+     
+      if(parkSpaceList && parkSpaceList.length){
+        parkSpaceList.map(async(item)=>{
+          const a = await callGet(`/parkingspace/review?parkingSpaceId=${item.value}`);
+          console.log(a,'reviewss');
+          // const b = a.content.rating + a.content.rating
+          if(a.content != []){
+            d += a.content.length
+          }
+          
+          a.content != '[]' ? a.content.map((item, index) => {
+            console.log(item, "a-iin item")
+            c+= item.ratingDecimal
+            
+          })
+          : null;
+          setRadarValue(c/d);
+          console.log(c, "cccc");
+         
+        })
+      }
+     
+      console.log(rateArray,'ggawdwwwg');
+>>>>>>> 0b40acc4c3723bfa500601b3382e7b05afc1b178
     }
+    const res = await callGet(`/reference/review`);
+    console.log(res,"haridaa ress")
+        // console.log(rateArray,'gggggggggggggggggggggggggggggggggggggggg');
   }
    //Хэрэглэгчийн бүртгүүлсэн зогсоолуудын мэдээллийг дуудах
   
@@ -133,37 +225,37 @@ const Dashboard = () => {
       fetchData();
     }
   };
-  const data = [
-    { name: 'Орц гарц', star:5  },
-    { name: 'Нэвтрэх хаалга', star: 4 },
-    { name: 'Байршил', star: 3 },
-    { name: 'Зогсоол', star: 2},
-  ];
-  const config = {
-    data: data.map((d) => ({ ...d })),
-    xField: 'name',
-    yField: 'star',
-    meta: {
-      star: {
-        alias: 'Үнэлгээ',
-        min: 0,
-        nice: true,
-      },
-    },
-    xAxis: {
-      line: null,
-      tickLine: null,
-    },
-    yAxis: {
-      label: false,
-      grid: {
-        alternateColor: 'rgba(0, 0, 0, 0.04)',
-      },
-    },
-    // 开启辅助点
-    point: {},
-    area: {},
-  };
+  // const data = [
+  //   { name: 'Орц гарц', star:radarValue  },
+  //   { name: 'Нэвтрэх хаалга', star: radarValue },
+  //   { name: 'Байршил', star: radarValue },
+  //   { name: 'Зогсоол', star: radarValue},
+  // ];
+  // const config = {
+  //   data: data.map((d) => ({ ...d })),
+  //   xField: 'name',
+  //   yField: 'star',
+  //   meta: {
+  //     star: {
+  //       alias: 'Үнэлгээ',
+  //       min: 0,
+  //       nice: true,
+  //     },
+  //   },
+  //   xAxis: {
+  //     line: null,
+  //     tickLine: null,
+  //   },
+  //   yAxis: {
+  //     label: false,
+  //     grid: {
+  //       alternateColor: 'rgba(0, 0, 0, 0.04)',
+  //     },
+  //   },
+  //   // 开启辅助点
+  //   point: {},
+  //   area: {},
+  // };
   const getDataOwner = async ()=>{
     ctx.setIsLoading(true);
     const formData = {
@@ -588,7 +680,11 @@ const Dashboard = () => {
           </TabPane>
         </Tabs>
         <Row>
-        <Radar {...config} />
+        {/* <Radar {...config} /> */}
+        <Card style={{borderRadius: '20px', marginTop: '10px'}} className={'RadarChart'}>
+        <Radar data={data2} options={options} />
+        </Card>
+        <Bar {...config} />;
         </Row>
       </Card>
     </ProfileLayout>

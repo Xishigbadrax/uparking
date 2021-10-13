@@ -9,7 +9,7 @@ import Context from '@context/Context';
 const {Step} = Steps;
 
 
-const Verify = () => {
+const Verify = (props) => {
   const {userdata} = useContext(Context);
   const [active, setActive] = useState(null);
   const [userRealData, setUserRealData] = useState('');
@@ -33,6 +33,9 @@ const Verify = () => {
     }
     const res = await callPost(apiList.userUpdate, formData);
     console.log('success->>>', res);
+    if(res.status == 'success'){
+        props.change(false);
+    }
     console.log(values, "valueee")
   
   };
