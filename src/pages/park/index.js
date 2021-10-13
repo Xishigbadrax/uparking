@@ -138,17 +138,10 @@ const Dashboard = () => {
       await callGet('/config/timesplit').then((res) => {
         settimeSplit(res);
       });
-      if(userdata.firstName && userdata.lastName ){
-         router.push('/park') ;
-      }else{
-        router.push('/park/createUser');
-      }
-      // if(userRealData.firstName  &&   userRealData.lastName){
-      //   router.push('/park');
-      // }
-      // else{
-      //   router.push('/park/profile/verify');
-      //   console.log(typeof userRealData.firstName)
+      // if(userdata.firstName && userdata.lastName ){
+      //    router.push('/park') ;
+      // }else{
+      //   router.push('/park/createUser');
       // }
     };
     
