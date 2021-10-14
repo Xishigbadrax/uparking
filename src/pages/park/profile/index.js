@@ -290,7 +290,7 @@ const Profile = () => {
     }
   };
   //shine mashin bvrtguuleh
-  const onSaveNewVehicle = async () => {
+  const onSaveNewVehicle = async (values) => {
     ctx.setIsLoading(true);
     vehicleForm.validateFields();
     const a = vehicleForm.getFieldsValue();
@@ -780,7 +780,7 @@ const Profile = () => {
               key="submit"
               type="primary"
               htmlType="submit"
-              onClick={(values) => onSaveNewVehicle(values)}
+              onClick={() => onSaveNewVehicle(values)}
             >
             Хадгалах
             </Button>,

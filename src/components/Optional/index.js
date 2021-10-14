@@ -120,7 +120,7 @@ const Optional = () => {
     reader.addEventListener('load', () => callback(reader.result));
     reader.readAsDataURL(img);
   };
-  const handleOk = async () => {
+  const handleOk = async (values) => {
     if (vehicleForm.validateFields()) {
       const a = vehicleForm.getFieldsValue();
 
@@ -440,7 +440,7 @@ const Optional = () => {
             key="submit"
             type="primary"
             htmlType="submit"
-            onClick={(values) => handleOk(values)}
+            onClick={() => handleOk(values)}
           >
             Хадгалах
           </Button>,

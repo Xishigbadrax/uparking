@@ -365,7 +365,7 @@ const removeArray = (datas) => {
     if (Array.isArray(datas[i])) {
       removeArray(datas[i]);
     } else if (isObject(datas[i])) {
-      removeObject(datas[i], true);
+      removeObject(datas[i]);
     }
   }
 };

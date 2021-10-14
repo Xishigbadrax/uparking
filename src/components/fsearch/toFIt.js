@@ -220,7 +220,7 @@ const tofit = ({data, lat, lng,currentSpaceId,setDefaultCenter,setCurrentSpaceId
   const onClickPushOrder = ()=>{
     router.push({pathname: '/park/profile/order'});
   };
-  const onClickPayment = async () =>{
+  const onClickPayment = async (parkingSpaceId, bookingId) =>{
     if (totalValue > 0 ) {
       if (selectVehicle) {
         if (userRealData) {
