@@ -471,7 +471,6 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
         info.file.originFileObj,
         (image2) => (
           setMainData2({...mainData2, imageResidenceGate: image2.slice(22)}),
-
           setLoadingExit(false), setSelectedResidenceExitImage(image2)
         ),
       );

@@ -63,7 +63,6 @@ const execData = async (code, data, child, deletedIds) => {
 const callPost = async (command, data) => {
   const result = await baseAxios.post(command,data);
   if (result.status === 403) {
-    // console.log(1111111);
     showMessage(messageType.FAILED.type, result.message);
     return result.message;
   }else if(result.status === 400){
@@ -72,8 +71,6 @@ const callPost = async (command, data) => {
     return result;
   }
   if ((result.status !== 200 && result.status !== 201) || !result.data) {
-    // console.log(result.error);
-    // console.log("dsfsdfdsfdsfdsf");
     showMessage(
       messageType.FAILED.type,
       typeof result.error != 'undefined' ? result.error : defaultMsg.error,

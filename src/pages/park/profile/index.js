@@ -153,6 +153,8 @@ const Profile = () => {
     if (typeof userdata.firstName != 'undefined') {
       setRealData(userdata);
       // setUserId(userdata.id);
+      const park =  await callGet(`/parkingspace/list`);
+      console.log(park,'sssssssssssssssssssssssssssss');
       const parkSpaceList = await callGet(`/parkingspace/list/user?id=${userdata.id}`);
       setSpace(parkSpaceList);
      

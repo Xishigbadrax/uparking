@@ -236,8 +236,7 @@ const rentDate = (props) => {
   ];
   const getListData = (value) =>{
     const array = [];
-    dayOfWeek.map((item) => {
-     
+    dayOfWeek.forEach((item) => {
       if(item.day === value.day()){
         if (item.spaceStatusCode === 'Боломжтой') {
           array.push({
@@ -251,9 +250,8 @@ const rentDate = (props) => {
             content: item.timeSplitDescription,
           });
         }
-        
       }
-    
+      
     });
     return array;
   };

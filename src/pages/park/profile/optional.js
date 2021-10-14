@@ -84,7 +84,6 @@ const Nemelt = () => {
     setIsVehileVisible(false);
   };
   const onFinishFailedVehile = (errorInfo) => {
-    console.log('Failed:', errorInfo);
   };
   const onChangeDugaar = (e) => {
     const dugar = e.target.value;
@@ -275,9 +274,8 @@ const Nemelt = () => {
           }
         });
       }
-
       const ress = await callPost('/parkingspace/sale', {
-        parkingSpaceId: 522,
+        parkingSpaceId: parkingSpaceId,
         parkingSpaceSale: [
           {
             salePercent: weekSale,

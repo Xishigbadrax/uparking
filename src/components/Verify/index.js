@@ -41,7 +41,6 @@ const Verify = (props) => {
   // const onFilled = () => {
   //   const res = callGet(apiList., values.user);
   // };
-
   const layout = {
     labelCol: {span: 8},
     wrapperCol: {span: 16},
@@ -59,7 +58,6 @@ const Verify = (props) => {
       range: '${label} must be between ${min} and ${max}',
     },
   };
-
   useEffect( async () => {
     setUserRealData(userdata)
     setUser(userdata.phoneNumber)
@@ -178,7 +176,7 @@ const Verify = (props) => {
                 >
                   <Col span={10} offset={14} style={{marginTop: '50px'}}>
                     <Button type="primary" htmlType="submit" className="flex">
-                      <text>Үргэлжлүүлэх</text>
+                      <div>Үргэлжлүүлэх</div>
                       <div style={{marginTop: '4px', marginLeft: '5px'}}>
                         <img
                           src="/icons/arrow_forward_24px.png"
