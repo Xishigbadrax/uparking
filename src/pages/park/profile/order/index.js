@@ -43,7 +43,6 @@ const Order = () => {
         bookingId: id,
       };
       const res = await callPost('/booking/cancelanybooking', formData);
-      console.log(res);
     }
   };
   // Tab solih function
@@ -74,7 +73,6 @@ const Order = () => {
   };
   // sar songoh function
   const onChangeOrderDate = (e)=>{
-    console.log(moment(e).format('YYYY-MM-DD'));
     setSelectDate(moment(e).format('YYYY-MM') + '-01');
   };
   // pagination solih
@@ -134,7 +132,6 @@ const Order = () => {
       showMessage(messageType.FAILED.type, result.error);
       return true;
     } else {
-      console.log(res.history, 'history');
       setCalendarData(res.history);
     }
     ctx.setIsLoading(false);
@@ -170,7 +167,6 @@ const Order = () => {
   };
   // mashinii id bolon on saraar shuult hiih
   const handleVehicle = async (e)=>{
-    // console.log(selectDate, 'dateeee');
     ctx.setIsLoading(true);
     if (calendarStatus ==1) {
       const res = await callGet(`/booking?asWho=${asWho}&isConfirmed=false&vehicleId=${e.key}`);
@@ -190,7 +186,6 @@ const Order = () => {
       if (!res || res === undefined) {
         showMessage(messageType.FAILED.type, defaultMsg.dataError);
       } else {
-        console.log(res.history);
         setCalendarData(res.history);
       }
     }

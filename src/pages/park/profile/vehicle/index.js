@@ -21,7 +21,6 @@ const vehile = () => {
 
   useEffect(async () => {
     const uildwer = await callGet('/user/vehicle/maker');
-    console.log(uildwer);
     setSelectedUildwer(uildwer);
     setUildwer(uildwer);
     const color = await callGet('/user/vehicle/color');
@@ -30,9 +29,7 @@ const vehile = () => {
 
 
   const onSaved = () => {
-    console.log(formData);
     const res = callPost('/user/vehicle', formData);
-    console.log('success', res);
   };
 
   useEffect(async () => {
@@ -76,7 +73,6 @@ const vehile = () => {
 
   return (
     <div>
-      {console.log()}
       <div
         className="h-16 md:w-96 lg:w-96 ml-32 w-96 text-xl pl-4 pt-4 grid justify-items-center"
         style={{

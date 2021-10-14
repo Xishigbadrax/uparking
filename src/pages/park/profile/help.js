@@ -33,7 +33,6 @@ const Help = () => {
   //     ctx.setIsLoading(true);
   //     await callGet(`/help/faq`, null).then((res) => {
   //       setdata2(res);
-  //       console.log(res, "resresresr");
   //     });
   //     ctx.setIsLoading(false);
   //   };

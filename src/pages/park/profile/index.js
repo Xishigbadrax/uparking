@@ -156,7 +156,6 @@ const Profile = () => {
       const parkSpaceList = await callGet(`/parkingspace/list/user?id=${userdata.id}`);
       setSpace(parkSpaceList);
      
-      // console.log(parkSpaceList, "parkings");
     }
   }, [userdata]);
   const onFinish123 = (values) => {};
@@ -178,7 +177,6 @@ const Profile = () => {
     setEditId(a);
     setLoading(true);
     // const editDa
-    console.log('id ymaa----------->', a);
     const spaceEdit = await callGet(`/parkingspace?parkingSpaceId=${a}`);
     const res = await callGet(`parkingspace/update/1?parkingSpaceId=${a}`);
     setSpaceEditData(spaceEdit);
@@ -216,44 +214,30 @@ const Profile = () => {
     // setFormdata({...formData, rfid: '12'});
   }, []);
   const onSaveModal = async (e) => {
-    console.log(update1, update2, update3, update4, update5, update6, 'update-uuuud sshuu');
     const res1 = await callPost('/parkingspace/update/1', update1);
-    console.log(res1, 'res1-iin hariu');
     if (res1.status === 'success') {
       const res7 = await callPost('/parkingspace', update7);
-      console.log(res7, 'res7-iin hariu');
       if (res7.status == 'success') {
         const res2 = await callPost('/parkingspace/parkingimage', update2);
-        console.log(res2, 'res2-iin hariu');
         if (res2.status == 'success') {
           const res3 = await callPost('/parkingspace/detail', update3);
-          console.log(res3, 'res3-iin hariu');
           if (res3.status == 'success') {
             const res4 = await callPost('/parkingspace/price', update4);
-            console.log(res4, 'res4-iin hariu');
             if (res4.status == 'success') {
               const res5 = await callPost('/parkingspace/sale', update5);
-              console.log(res5, 'res5-iin hariu');
               if (res5.status == 'success') {
                 const res6 = await callPost('/schedule/general', update6);
-                console.log(res6, 'res6-iin hariu');
               } else {
-                console.log('res6 amjiltgui');
               }
             } else {
-              console.log('res4 amjiltgui');
             }
           } else {
-            console.log('res3 amjiltgui');
           }
         } else {
-          console.log('res2 amjiltgui');
         }
       } else {
-        console.log('res7 amjiltgui');
       }
     } else {
-      console.log('res1 amjiltgui');
     }
 
 
@@ -294,7 +278,6 @@ const Profile = () => {
     setFormdata({...formData, color: selectColor});
   };
   const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
   };
   //profile medeelel uurchluh
   const clickProfileEdit = () => {
@@ -308,7 +291,6 @@ const Profile = () => {
   const onSaveNewVehicle = async () => {
     ctx.setIsLoading(true);
     vehicleForm.validateFields();
-    console.log(vehicleForm.getFieldsValue());
     const a = vehicleForm.getFieldsValue();
     if (a.vehicleNumber && a.maker && a.model && a.color ) {
       const res = await callPost('/user/vehicle', {
@@ -318,7 +300,6 @@ const Profile = () => {
         model: a.model,
       });
       if(!res || res === undefined){
-      console.log(res);
       ctx.setIsLoading(false);
       showMessage(messageType.FAILED.type, defaultMsg.dataError);
       }
@@ -336,7 +317,6 @@ const Profile = () => {
     ctx.setIsLoading(true);
     const a = vehicleEditForm.getFieldsValue();
     const colorId = color.find((item)=>item.label === a.color);
-    console.log(colorId);
     const editFormData={
       vehicleNumber: a.vehicleNumber,
       maker: a.maker,
@@ -357,14 +337,12 @@ const Profile = () => {
     setIsVehileVisible(false);
   };
   const onFinish = async (values) => {
-    // console.log(values);
     // const res = await callPost(`/user/update`,values);
   };
   const onFinishSale = (values) => {
   };
 //parking space bvrtguuleh
   const onSaveParkingSpaceDatas = async () => {
-    console.log(await form.validateFields());
     await form.isFieldsValidating();
     const componentData = form.getFieldsValue();
     // Үндсэн мэдээллийн өгөгдлийг өгөгдлийн санруу
@@ -435,7 +413,6 @@ const Profile = () => {
           imageResidenceGate: String( imageParkingGate),
           parkingSpaceId: parkingSpaceId,
         });
-        console.log(res);
         if (res.status === 'success') {
           setCurrent(current + 1);
           ctx.setIsLoading(false);
@@ -521,9 +498,7 @@ const Profile = () => {
     } else if (current === 5) {
       ctx.setIsLoading(true);
       const saleData = form.getFieldsValue();
-      console.log(saleData);
       const res = await callGet('/division/salesplit');
-      console.log(res);
       if (res && res.saleSplit) {
         res.saleSplit.forEach((c) => {
           if (c.code === 'WEEKLY_SALE') {
@@ -538,7 +513,6 @@ const Profile = () => {
           }
         });
       }
-      console.log(monthSale, weekSale, monthId, weekId, 'ggggggggggggggggggg');
       if (weekSale && monthSale &&weekId && monthId) {
         const ress = await callPost('/parkingspace/sale', {
           parkingSpaceId: parkingSpaceId,
@@ -556,7 +530,6 @@ const Profile = () => {
           ],
         });
 
-        // console.log(ress);
         if (!ress || ress === undefined) {
           showMessage(messageType.FAILED.type, ress.error);
           ctx.setIsLoading(false);
@@ -568,14 +541,12 @@ const Profile = () => {
       }
     } else if (current === 6) {
       ctx.setIsLoading(true);
-      console.log(dayOfWeek);
       const newGeneralScheduleDto = {
         parkingSpaceId: parkingSpaceId,
         dayOfWeek,
         holiday: [],
       };
       const res = await callPost('/schedule/general', newGeneralScheduleDto );
-      console.log(res.status);
       if (!ress || ress === undefined) {
         showMessage(messageType.FAILED.type, ress.error);
         ctx.setIsLoading(false);
@@ -586,11 +557,9 @@ const Profile = () => {
     }
   };
   const goBack = () => {
-    console.log('Bye');
     setCurrent(current - 1);
   };
   const onFinishFailedVehile = (errorInfo) => {
-    console.log('Failed:', errorInfo);
   };
 
 

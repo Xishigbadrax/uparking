@@ -88,7 +88,6 @@ const Transfer = () =>{
   };
   const onChangeAccountNumber = (value) => {
     setAccountNumber(value);
-    // console.log(accountNumber, ' account number' );
     setFormData({...formData, toAccount: value});
   };
   const onChangeAccountName = (value) => {
@@ -98,7 +97,6 @@ const Transfer = () =>{
   const onChangeAmount = (value) => {
     setAmount(value);
     setFormData({...formData, amount: value});
-    console.log(value, 'amountiin valuea');
   };
 
   const onChangeDescription = (value) => {
@@ -150,12 +148,9 @@ const Transfer = () =>{
   const submit = async () => {
     // setisLoading(true);
     const res = await callGet(`/user/check/transactionpass?rawPass=${password}`);
-    console.log(res, 'adawdw');
     if (res.status === 'success') {
       // if (type == 'KHANBANK') {
         const res2 = await callPost('/khanbank/intertransfer', formData);
-        console.log(formData, 'formDataaa');
-        console.log(res2, 'res2 iin hariu');
 
         if (res2.journalNo) {
           setmessageShow(true);
@@ -164,51 +159,16 @@ const Transfer = () =>{
           setstatus('success');
         } else {
           setmessageShow(true);
-          console.log(res2);
           setmessage('Шилжүүлэг амжилтгүй.Та шилжүүлэх дансны дугаараа шалгана уу?');
           settitle('Алдаа');
           setstatus('error');
         }
-      // } else if (type == 'GOLOMTBANK') {
-      //   const res2 = await callPost('/golomt/domesttransfer', formData);
-      //   console.log(formData, 'formDataaa');
-      //   console.log(res2, 'res2 iin hariu');
-
-      //   if (res2.status == 'success') {
-      //     setmessageShow(true);
-      //     setmessage(`Таны хэтэвчнээс ${amount} хасагдаж, Хаан банкны ${accountNumber} тоот дансанд амжилттай шилжүүлэг хийгдлээ.`);
-      //     settitle('Амжилттай');
-      //     setstatus('success');
-      //   } else {
-      //     setmessageShow(true);
-      //     setmessage('Шилжүүлэг амжилтгүй');
-      //     settitle('Алдаа');
-      //     setstatus('error');
-      //   }
-      // } else if (type == 'TDB') {
-      //   const res2 = await callPost('/khanbank/intertransfer', formData);
-      //   console.log(formData, 'formDataaa');
-      //   console.log(res2, 'res2 iin hariu');
-      //   if (res2.journalNo) {
-      //     setmessageShow(true);
-      //     setmessage(`Таны хэтэвчнээс ${amount} хасагдаж, Хаан банкны ${accountNumber} тоот дансанд амжилттай шилжүүлэг хийгдлээ.`);
-      //     settitle('Амжилттай');
-      //     setstatus('success');
-      //   } else {
-      //     setmessageShow(true);
-      //     setmessage('Шилжүүлэг амжилтгүй');
-      //     settitle('Алдаа');
-      //     setstatus('error');
-      //   }
-      // }
-      // setisLoading(false)
     } else {
       setmessageShow(true);
       setmessage(res.error);
       settitle('Амжилтгүй');
       setstatus('error');
     }
-    // setisLoading(false);
   };
   const Validate =()=> {
     Modal.info({
@@ -217,11 +177,6 @@ const Transfer = () =>{
       content: (
         <div>
           <p>Та өөрийн гүйлгээний нууц үгээ оруулна уу</p>
-          {/* <Input
-            type="password"
-            onChange={(e) => onchangeee(e)}
-            placeholder="Гүйлгээний нууц үг"
-          /> */}
           <MaskedInput mask='1111' type="password" onChange={(e) => onchangeee(e)} name="Гүйлгээний нууц үг" />
         </div>
       ),

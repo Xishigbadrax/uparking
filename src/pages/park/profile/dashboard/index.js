@@ -101,15 +101,12 @@ const Dashboard = () => {
     if (typeof userdata.firstName != 'undefined') {
       setRealData(userdata);
       const parkSpaceList = await callGet(`/parkingspace/list/user?id=${userdata.id}`);
-      console.log(parkSpaceList);
       setSpaceList(parkSpaceList);
       // if(parkSpaceList && parkSpaceList.length){
       //   parkSpaceList.map(async(item)=>{
       //     const a = await callGet(`/parkingspace/review?parkingSpaceId=${item.value}`);
-      //     console.log(a,'reviewss');
       //   })
       // }
-      // console.log(rateArray,'ggawdwwwg');
     }
   }
    //Хэрэглэгчийн бүртгүүлсэн зогсоолуудын мэдээллийг дуудах
@@ -202,7 +199,6 @@ const Dashboard = () => {
       return true;
     } else {
       setCalendarData(res.history);
-      // console.log(res.history, 'ress');
       ctx.setIsLoading(false);
       if (res.history.length) {
         setSumDay(_.sumBy(res.history, 'totalAtDay'));
@@ -255,20 +251,17 @@ const Dashboard = () => {
     }
   };
   const onChangeOrderDate = (e)=>{
-    console.log(moment(e).format('YYYY-MM-DD'));
     setSelectDate(moment(e).format('YYYY-MM-DD'));
   };
   // mshinaar haih
   const handleVehicle = async (e)=>{
     ctx.setIsLoading(true);
-    console.log(tabKey, 'ok');
     if (tabKey==1) {
       const formData = {
         asWho: 1,
         dateList: selectDate ? [selectDate]: null,
         vehicleId: e.key,
       };
-      console.log(formData);
       const res = await callPost('/booking/history', formData);
       if (!res || res === undefined) {
         showMessage(messageType.FAILED.type, defaultMsg.dataError);
@@ -292,7 +285,6 @@ const Dashboard = () => {
         dateList: selectDate ? [selectDate]: null,
         vehicleId: e.key,
       };
-      console.log(formData);
       const res = await callPost('/booking/history', formData);
       if (!res || res === undefined) {
         showMessage(messageType.FAILED.type, defaultMsg.dataError);

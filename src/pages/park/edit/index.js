@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import {Row, Col, Button, Divider, Form, Input, Upload, Spin, Select, Carousel} from 'antd';
 import {
   EditOutlined,
@@ -52,8 +51,7 @@ const timeSplit = [
 ];
 // eslint-disable-next-line react/prop-types
 const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
-  // console.log(props, 'pppppppppppppppp');
-  // console.log(data, 'dataaaaaaaaa');
+  
   const GOOGLE_API = process.env.NEXT_GOOGLE_API;
   // const router = useRouter();
   // const [current, setCurrent] = useState(0);
@@ -225,18 +223,10 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
   // setMainData6(dayOfWeek.)
 
 
-  // console.log(mainData5, 'dataa 5');
-  // console.log(data, 'mainii data');
-  // console.log(mainData2, 'maindata 2 ');
-  // console.log(mainData3, 'maindataaa 3');
-  // console.log(mainData4, 'main data 4');
-  // console.log(mainData5, 'mainDataa 5');
-
 
   main(mainData);
-console.log(editData, "edit dataa")
 
-  // console.log(mainData, 'Main datanii medeelel');
+
   useEffect(async ()=>{
     const aimags=await callGet('/address/aimag');
     setAimag(aimags);
@@ -245,7 +235,6 @@ console.log(editData, "edit dataa")
     setSplitData(splitdata);
     setDaySplitId(splitdata.daySplit.id);
     setNightSplitId(splitdata.nightSplit.id);
-    // console.log(splitdata, 'split data');
 
     const spaceSize = await callGet('/reference/list/test?type=SPACE_TYPE');
     setSpaceSizeData(spaceSize);
@@ -262,11 +251,8 @@ console.log(editData, "edit dataa")
     const floor = await callGet('/reference/list/test?type=FLOOR_NUMBER');
     setFloorData(floor);
     setEditData(data);
-    console.log(data, 'irj bgaa data');
-    console.log(editData);
     setLatitude(editData.lat);
     setLongitude(editData.lng);
-    console.log('--------------->mainData--->', mainData);
     // eslint-disable-next-line react/prop-types
     setPriceArray(data.priceList);
     addressForm.setFieldsValue({
@@ -320,18 +306,14 @@ console.log(editData, "edit dataa")
         item.spaceStatusDescription == 'AV' ? setmondayNight("Боломжтой") : setmondayNight("Боломжгүй");
       } 
       
-      // console.log(item.spaceStatusDescription[0], "mapped element")
     })
   }, []);
   const onChangeAimag = async (e)=>{
     const value = aimag.find((item)=>item.label===e);
     const sum = await callGet(`/address/sum/${value.value}`);
     setSum(sum);
-    console.log(sum, 'sumiin utga');
     setSelectedAimag(value.value);
-    console.log(value, 'vlueee');
     setSelectedAimagName(value.label);
-    console.log(selectedAimag, 'songogdson aimg');
     setMainData({...mainData, provinceId: value.value});
   };
   const onChangeSum = async (e)=>{
@@ -341,14 +323,10 @@ console.log(editData, "edit dataa")
     const selectSum = sum.find((item)=>item.value==e);
     setSelectedSum(selectSum.value);
     setSelectedSumName(selectSum.label);
-    console.log(selectSum.label, 'maybe sumiin medeelel');
-    // console.log(section, 'khoroonii medeele');
   };
   const onChangeSection = async (e)=>{
     setSelectedSection(e);
-    console.log(e, 'songoson khorooo');
     const selectkhoroo = section.find((item)=>item.value==e);
-    console.log(selectkhoroo.label, 'khoroo shuu');
     setSectionName(selectkhoroo.label);
     setMainData({...mainData, sectionId: e});
     const residence = await callGet(`/address/residence?districtId=${selectedSum}&provinceId=${selectedAimag}&sectionId=${e}`);
@@ -356,46 +334,37 @@ console.log(editData, "edit dataa")
   };
   const onChangeResidence = async (e)=>{
     setSelectedBuilding(e);
-    console.log(e, 'songoson bair');
 
     setSelectedResidence(e);
     const residenceBlock = await callGet(`/address/residenceblock?residenceId=${e}`);
     setResidenceBlockList(residenceBlock);
-    console.log(residenceBlock, 'aaa');
     const selectbair = residenceList.find((item)=>item.value==e);
 
-    console.log(selectbair.label, 'bair shuu');
     setMainData({...mainData, residenceName: selectbair.label, residenceId: e});
 
     setSelectedBairName(selectbair.label);
   };
 
   const onChangeResidenceBlock = async (e)=>{
-    console.log(e, 'ooooo sda');
     setSelectedBuildingNumber(e);
 
     // setSelectedResidence(e);
     // const residenceBlock = await callGet(`/address/residenceblock?residenceId=${e}`);
     // setResidenceBlockList(residenceBlock);
-    // console.log(residenceBlock, 'aaa');
     const selectbairdugaar = residenceBLockList.find((item)=>item.value==e);
     setBairniiDugaar(selectbairdugaar.label);
-    console.log(selectbairdugaar.label, 'bairnii dugaaraa');
     setMainData({...mainData, residenceBlockNumber: selectbairdugaar.label});
     setMainData7({...mainData7, residenceBlockId: e});
     // setSelectedBairName(selectbair.label);
   };
   const onchangeInputResidenceName=(e)=>{
     setMainData({...mainData, residenceName: e.target.value});
-    console.log(e.target.value, 'bairnii dugaara');
   };
   const onChangeInputResidenceNumber =(e)=>{
     setMainData({...mainData, residenceBlockNumber: e.target.value});
-    console.log(e.target.value), 'bairnii dugaaraaa';
   };
   const onChangeParkingGateNumber =(e)=>{
     setMainData({...mainData, parkingGateNumber: e.target.value});
-    console.log(e.target.value, 'gatenii number');
     setSelectedGateNumber(e.target.value);
   };
   const onChangeMainImageState = (e) => {
@@ -427,7 +396,6 @@ console.log(editData, "edit dataa")
   const onMapClick = (e)=>{
     setLongitude(e.lng);
     setLatitude(e.lat);
-    console.log(e, 'urtraga orgorogo');
     setMainData({...mainData, latitude: e.lat, longitude: e.lng});
   };
   const changeMaindata = (e) => {
@@ -442,54 +410,38 @@ console.log(editData, "edit dataa")
   };
 
   const OnSaveAddressData = async (e) => {
-    // console.log(addressForm.getFieldsValue());
-    // console.log(mainData, 'main dataa');
-    // const res = await callPost('/parkingspace/update/1', mainData);
-    // console.log(res, 'update res');
-    // const gg = await callGet(`parkingspace/update/1?parkingSpaceId=${data.id}`);
-    // console.log(gg, 'gg iin utga');
-    console.log(mainData, 'main dataaa');
     setTest(true);
     setValue(false);
   };
   const spaceDataSave = (e) => {
     main7(mainData7);
-    console.log(mainData7, 'main7 dataaa');
     setSpaceValue(false);
   };
   const onChangefloorNumberId = (e)=>{
-    console.log(e);
     setMainData7({...mainData7, floorNumber: +e});
   };
   const onChangeEntranceLock = (e)=>{
-    console.log(e);
     setMainData7({...mainData7, entranceLock: +e});
   };
   const onChangeisNumbering = (e)=>{
-    console.log(e);
     setMainData7({...mainData7, isNumbering: +e});
   };
   const onChangeCapacityId = (e)=>{
-    console.log(e);
     setMainData7({...mainData7, capacityId: +e});
   };
   const onChangeTypeId = (e)=>{
-    console.log(e);
     setMainData7({...mainData7, typeId: +e});
   };
   const onChangeReturnRoutes = (e)=>{
-    console.log(e);
     setMainData7({...mainData7, returnRoutes: +e});
   };
   const onChangeTypeOther = (e)=>{
-    console.log(e.target.value);
     setMainData7({...mainData7, typeOther: e.target.value});
   };
 
   {/* Үндсэн зургийн мэдээлэлтэй холбоотой STATE*/}
   const onsaveMainImage = () => {
     main2(mainData2);
-    console.log(mainData2, 'main dataa 2');
     setMainImageValue(false);
   };
   {/* Хотхоны ой орчмын зураг оруулах хэсэг*/}
@@ -502,7 +454,6 @@ console.log(editData, "edit dataa")
       getBase64(
         info.file.originFileObj,
         (image3) => (
-          console.log(image3),
           setLoadingPosition(false),
           setSelectedResidenceSideImage(image3)
         ),
@@ -521,7 +472,6 @@ console.log(editData, "edit dataa")
         (image2) => (
           setMainData2({...mainData2, imageResidenceGate: image2.slice(22)}),
 
-          console.log(image2, 'zurag 2'),
           setLoadingExit(false), setSelectedResidenceExitImage(image2)
         ),
       );
@@ -537,7 +487,6 @@ console.log(editData, "edit dataa")
       getBase64(
         info.file.originFileObj,
         (image3) => (
-          console.log(image3),
 
           setLoadingExitImage(false),
           setSelectedExitImage(image3)
@@ -555,7 +504,6 @@ console.log(editData, "edit dataa")
       getBase64(
         info.file.originFileObj,
         (image3) => (
-          console.log(image3, 'zurag 3'),
           setOverallLoading(false),
           setMainData2({...mainData2, imageParkingOverall: image3.slice(22)}),
           setImageParkingOverall(image3)
@@ -572,7 +520,6 @@ console.log(editData, "edit dataa")
       getBase64(
         info.file.originFileObj,
         (image3) => (
-          console.log(image3),
           setMainData3({...mainData3, imageSpaceNumber: image3.slice(22)}),
           setLoadingSpaceNumber(false),
           setImageSpaceNumber(image3)
@@ -589,7 +536,6 @@ console.log(editData, "edit dataa")
       getBase64(
         info.file.originFileObj,
         (image3) => (
-          console.log(image3, 'haalganii zurag'),
           setMainData3({...mainData3, imageFromGate: image3.slice(22)}),
           setLoadingFromGate(false),
           setImageFromGate(image3)
@@ -606,7 +552,6 @@ console.log(editData, "edit dataa")
       getBase64(
         info.file.originFileObj,
         (image3) => (
-          console.log(image3),
           setLoadingDirect(false),
           setSelectedDirectionImage(image3)
         ),
@@ -615,7 +560,6 @@ console.log(editData, "edit dataa")
   };
   const onSaveSpaceImage = ()=>{
     main3(mainData3);
-    console.log(mainData3, 'mainDataa 3');
     setSpaceImage(false);
   };
   const onChangeRent = ()=>{
@@ -705,7 +649,6 @@ console.log(editData, "edit dataa")
       holiday,
       parkingSpaceId: data.id,
     };
-    console.log(maindata6, 'mainDataa 6');
     main6(maindata6);
     setRentDay(false );
   };
@@ -717,7 +660,6 @@ console.log(editData, "edit dataa")
   };
   const onSavePriceData =()=>{
     const data2 = priceForm.getFieldsValue();
-    console.log(data2, 'ssssssssssssssssssssssss');
 
     const array = [
       {
@@ -754,7 +696,6 @@ console.log(editData, "edit dataa")
     ];
     setMainData4({...mainData4, hourlyPrice: data2.hourlyPrice, parkingSpacePriceInstance: array});
     main4(mainData4);
-    console.log(mainData4, ' data 4444444');
     // setFormData(priceForm.getFieldsValue());
     // setLoading(true);
     setPriceValue(false);
@@ -764,7 +705,6 @@ console.log(editData, "edit dataa")
     setDiscountValue(true);
     // eslint-disable-next-line react/prop-types
     const discountValue = await callGet(`/parkingspace/update/6?parkingSpaceId=${data.parkingId}`);
-    console.log(discountValue);
     setLoading(false);
   };
   const onSaveDiscountData = async (e)=>{
@@ -772,9 +712,7 @@ console.log(editData, "edit dataa")
 
     saleForm.validateFields();
     const saleData = saleForm.getFieldValue();
-    console.log(saleData, 'hongololtiin dun');
     const res = await callGet('/division/salesplit');
-    console.log(res, 'ressss');
     if (res && res.saleSplit) {
       res.saleSplit.map((c) => {
         if (c.code == 'WEEKLY_SALE') {
@@ -807,17 +745,13 @@ console.log(editData, "edit dataa")
     ];
     setMainData5({...mainData5, parkingSpaceSale: array});
     main5(mainData5);
-    console.log(weekSale, weekId, weekDescription, '<<<<<<<<<');
-    console.log(mainData5, 'mainDataaa 5');
     setDiscountValue(false);
     setLoadingDiscount(false);
   };
   const onChangeMonthSale = (e) =>{
-    console.log(e.target.value);
   };
 
   const onFinish = (e) => {
-    console.log('xaaxaa');
   };
   return (
     <div>
@@ -2049,7 +1983,6 @@ console.log(editData, "edit dataa")
 
                   onChange={(e) => {
                     // props.setRentData(weekData);
-                    console.log(e, 'eeeeeeeeeeeeeeee');
                     setsundayMorning(e), setChecked(2);
                   }}
                   value={sundayMorning}

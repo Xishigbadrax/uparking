@@ -12,7 +12,7 @@ axios.defaults.baseURL = process.env.NEXT_PUBLIC_BASEURL;
 
 /* #region Datatable, Form main funtions */
 const sListInfo = async (code) => {
-  return callGet(`slist/info/${code}`);
+  // return callGet(`slist/info/${code}`);
 };
 
 const sList = async (data) => {

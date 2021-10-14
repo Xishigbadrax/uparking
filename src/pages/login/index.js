@@ -3,7 +3,7 @@ import {useRouter} from 'next/router';
 import {Form, Input, Button, Modal} from 'antd';
 import {RightOutlined} from '@ant-design/icons';
 import {login} from '@api/auth';
-import {callPost} from '@api/api';
+import {callGet, callPost} from '@api/api';
 // eslint-disable-next-line camelcase
 import auth_cookie from '@utils/auth';
 import {messageType, defaultMsg} from '@constants/constants';
@@ -39,6 +39,7 @@ const Login = () => {
 
   const onFinish = async (values) => {
     const res = await login(values);
+    console.log(userdata,'gg');
     if (res.response || res.data === undefined) {
       // if (res.response.data.error === "unauthorized") {
       //   setModalVisible(true);
@@ -64,19 +65,15 @@ const Login = () => {
     auth_cookie.setToken(res?.data?.access_token, res?.data?.expires_in);
     setMenuAndPermissions();
     setLoading(false);
+    
   };
-
   useEffect(() => {
-    console.log(
-      Object.keys(auth).length,
-      'Object.keys(auth).lengthObject.keys(auth).length',
-    );
-    if (Object.keys(auth).length !== 0 && userdata.firstName !== null) {
-      router.push('/park');
+    console.log(auth);
+    if (Object.keys(auth).length !== 0 && userdata.firstName !== null && userdata.lastName !== null) {
+        router.push('/park');
+    }else if(Object.keys(auth).length !== 0 && userdata.firstName === undefined && userdata.lastName === undefined){
+        router.push('/park/createUser');
     }
-    // } else {
-    //   router.push('/park/profile/verify');
-    // }
   }, [auth]);
 
   const handleConfirm = async () => {
@@ -87,7 +84,6 @@ const Login = () => {
       setModalVisible(false);
       handleSubmit();
     } catch (e) {
-      console.log('Хадгалахад алдаа гарлаа');
     }
   };
   const handleClickForgotPassword = async () => {
@@ -453,7 +449,7 @@ const Login = () => {
                   <Button
                     className="loginbutton activebutton"
                     onClick={() => {
-                      console.log(router.push('/login'));
+                      router.push('/login')
                     }}
                     type="text"
                   >
@@ -462,7 +458,7 @@ const Login = () => {
                   <Button
                     className="registerbutton"
                     onClick={() => {
-                      console.log(router.push('/register'));
+                      router.push('/register')
                     }}
                     type="text"
                   >

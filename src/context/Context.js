@@ -27,7 +27,7 @@ export const ContextProvider = ({children}) => {
   const checkPermission = (permission) => {
     return state.permissions[permission] ? true : false;
   };
-
+  
   const getProfileData = async (user) => {
     const userdata = await callGet(`/user/${user.user_id}/test`);
     if (!userdata || userdata === undefined) {

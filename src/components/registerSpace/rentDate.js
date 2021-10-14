@@ -237,13 +237,13 @@ const rentDate = (props) => {
   const getListData = (value) =>{
     const array = [];
     dayOfWeek.map((item) => {
-      switch (item.day) {
-      case value.day():
+     
+      if(item.day === value.day()){
         if (item.spaceStatusCode === 'Боломжтой') {
           array.push({
             type: item.spaceStatusCode,
             content: item.timeSplitDescription,
-          });
+          }); 
         }
         if (item.spaceStatusCode === 'Боломжгүй') {
           array.push({
@@ -251,11 +251,11 @@ const rentDate = (props) => {
             content: item.timeSplitDescription,
           });
         }
-        break;
-      default:
+        
       }
+    
     });
-    return array || [];
+    return array;
   };
   const dateCellRender = (value) => {
     const listData = getListData(value);

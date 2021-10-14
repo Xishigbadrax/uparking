@@ -63,6 +63,14 @@ const Login = () => {
   // step1
   const onFinish = async (values) => {
     setLoading(true);
+
+   const data =  {
+      password: String(values.password),
+      passwordRepeat: String(values.confirm),
+      phoneNumber: String(values.phoneNumber)
+    }
+    const res =  await callPost(`/register/user`,data);
+    if(res.status ==='success'){
     setPhoneNumber(values.phoneNumber);
     confirm({
       title: 'Санамж',
@@ -75,13 +83,15 @@ const Login = () => {
       },
       onCancel() { },
     });
+  }else{
+    showMessage(messageType.FAILED.type, 'Бүртгүүлэхэд алдаа гарлаа');
+  }
     setLoading(false);
   };
     // step2
   const phoneNumberOK = async (value) => {
     try {
       const result = await callGet(`verificationCode/${value}`);
-      console.log(result,'sdaaaaaaaaaa');
       if (result.status === 'failed') {
         showMessage(messageType.FAILED.type, result.error);
         return true;
@@ -109,7 +119,6 @@ const Login = () => {
         getPolicyData();
       }
     } catch (e) {
-      console.log('verify Хадгалахад алдаа гарлаа');
     }
   };
     // step4
@@ -121,7 +130,6 @@ const Login = () => {
         return true;
       } else {
         setIsPolicy(true);
-        console.log(result.error);
         setVisible(true);
         setPolicyHtml(result.error);
       }
@@ -141,14 +149,12 @@ const Login = () => {
   };
   // step5
   const onFinishTransaction = async (values) => {
-    console.log(values, 'values n ene bnaaa');
     try {
       const data =
             {
               'transactionPassword': values.OTP,
               'userPhoneNumber': phoneNumber,
             };
-      console.log(data);
       const result = await callPost('/register/transactionpass', data);
       if (result.status !== 'failed') {
         showMessage(messageType.SUCCESS.type, 'Бүртгэл амжилттай.Өөрийн бүртгэлээр нэвтэрнэ үү!');
@@ -158,7 +164,6 @@ const Login = () => {
         showMessage(messageType.FAILED.type, result.error);
       }
     } catch (e) {
-      console.log('Хадгалахад алдаа гарлаа');
     }
   };
   // step6
@@ -188,7 +193,6 @@ const Login = () => {
       setModalVisible(false);
       handleSubmit();
     } catch (e) {
-      console.log('Хадгалахад алдаа гарлаа');
     }
   };
 
@@ -224,10 +228,10 @@ const Login = () => {
               </div>
               <div className="loginAndRegister">
                 <Button className="loginbutton " onClick={() => {
-                  console.log(router.push('/login'));
+                  router.push('/login')
                 }} type="text">Нэвтрэх  </Button>
                 <Button className="registerbutton activebutton" onClick={() => {
-                  console.log(router.push('/register'));
+                  router.push('/register')
                 }} type="text">Бүртгүүлэх <div className="activeLine"></div> </Button>
               </div>
               <div className="inputs">

@@ -52,7 +52,6 @@ const {Header, Sider, Content} = Layout;
 //   withHandlers({
 //     onMarkerClustererClick: () => (markerClusterer) => {
 //       const clickedMarkers= markerClusterer.getMarkers();
-//       console.log(clickedMarkers);
 //     },
 //   }),
 //   withScriptjs,
@@ -145,11 +144,9 @@ const Dashboard = () => {
       // }
     };
     
-    console.log(userRealData, "dataaa2")
     fetchData();
   }, []);
   // const Markers = (props) => {
-  //   console.log(props, 'aaaaaaas');
   //   return <Marker className="SuperAwesomePin" style={{background: 'red'}} position={{
   //     lat: props.lat,
   //     lng: props.lng,
@@ -265,7 +262,6 @@ const Dashboard = () => {
         }`;
       }
     } else if (tuneType=== null || startDate === null || endDate===null) {
-      console.log('fsearch bolson');
       setSearchType('fsearch');
       url=`/search/input/test?keywordId=${searchId}`;
     }
@@ -328,7 +324,6 @@ const Dashboard = () => {
   );
 
   const onFinishFailed = (values) => {
-    console.log(values, 'onFinishFailed');
   };
   return (
     <Layout>
