@@ -315,7 +315,7 @@ const Profile = () => {
     }
     // setIsVehileVisible(false);
   };
-  const onSaveEditVehicleData = async () => {
+  const onSaveEditVehicleData = async (value) => {
     ctx.setIsLoading(true);
     const a = vehicleEditForm.getFieldsValue();
     const colorId = color.find((item)=>item.label === a.color);
@@ -919,7 +919,7 @@ const Profile = () => {
               key="submit"
               type="primary"
               htmlType="submit"
-              onClick={(values) => onSaveEditVehicleData(values)}
+              onClick={() => onSaveEditVehicleData(values)}
             >
             Хадгалах
             </Button>,

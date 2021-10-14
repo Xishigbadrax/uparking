@@ -209,7 +209,7 @@ const Dashboard = () => {
   const onSearchAuto = async (searchText) => {
     if (searchText.length > 0) {
       const data = await callGet(`/search/keyword?syllable=${searchText}`);
-      setDataSource(searchText ? searchResult(data, searchText) : []);
+      setDataSource(searchText ? searchResult(data) : []);
     } else {
       setDataSource([]);
     }
