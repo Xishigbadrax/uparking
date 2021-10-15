@@ -39,7 +39,7 @@ const Login = () => {
 
   const onFinish = async (values) => {
     const res = await login(values);
-    console.log(userdata,'gg');
+    console.log(userdata,'ggGG');
     if (res.response || res.data === undefined) {
       // if (res.response.data.error === "unauthorized") {
       //   setModalVisible(true);
@@ -68,11 +68,8 @@ const Login = () => {
     
   };
   useEffect(() => {
-    console.log(auth);
-    if (Object.keys(auth).length !== 0 && userdata.firstName !== null && userdata.lastName !== null) {
+    if (Object.keys(auth).length !== 0) {
         router.push('/park');
-    }else if(Object.keys(auth).length !== 0 && userdata.firstName === undefined && userdata.lastName === undefined){
-        router.push('/park/createUser');
     }
   }, [auth]);
 

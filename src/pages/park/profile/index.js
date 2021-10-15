@@ -345,10 +345,11 @@ const Profile = () => {
   };
 //parking space bvrtguuleh
   const onSaveParkingSpaceDatas = async () => {
-    await form.isFieldsValidating();
+    await form.validateFields();
     const componentData = form.getFieldsValue();
     // Үндсэн мэдээллийн өгөгдлийг өгөгдлийн санруу
     if (current === 0 ) {
+      await form.isFieldsValidating();
       ctx.setIsLoading(true);
       if (mainData) {
         const res = await callPost('/parkingfirst', mainData);
@@ -379,7 +380,7 @@ const Profile = () => {
           residenceBlockId: residenceBlockId,
           returnRoutes: componentData.returnRoutes[0],
           capacityId: componentData.capacityId,
-          parkingId: parkId,
+          parkingId: second.parkingId,
           typeId: componentData.typeId,
           typeOther: ' ',
         });
@@ -549,7 +550,7 @@ const Profile = () => {
         holiday: [],
       };
       const res = await callPost('/schedule/general', newGeneralScheduleDto );
-      if (!ress || ress === undefined) {
+      if (!res || res === undefined) {
         showMessage(messageType.FAILED.type, ress.error);
         ctx.setIsLoading(false);
         return true;

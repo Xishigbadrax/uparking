@@ -106,7 +106,6 @@ const CustomCalendar = (props) => {
       const a = dayOfWeek.find((item)=>
         item.day == ofDay && item.spaceStatusDescription === 'UN',
       );
-      console.log(type, 'xaxa');
       if (type === 'Өдөр') {
         const day2 = bookedDateOfDay.find((item)=>item.startDate === moment(current).format('YYYY-MM-DD'));
         if (moment(current).format('YYYY-MM-DD') >= moment().format('YYYY-MM-DD') && a || day2 ) {

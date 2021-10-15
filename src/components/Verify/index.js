@@ -20,16 +20,16 @@ const Verify = (props) => {
       fbLink: null,
       firstName: values.firstName,
       homeAddress: null,
-      homeAddressDistrictId: 0,
-      homeAddressLatitude: 0,
-      homeAddressLongitude: 0,
-      homeAddressProvinceId: 0,
-      homeAddressSectionId: 0,
+      homeAddressDistrictId: null,
+      homeAddressLatitude: null,
+      homeAddressLongitude: null,
+      homeAddressProvinceId: null,
+      homeAddressSectionId: null,
       lastName: values.lastName,
       registerNumber: values.registerNumber,
       workAddress: null,
-      workAddressLatitude: 0,
-      workAddressLongitude: 0
+      workAddressLatitude: null,
+      workAddressLongitude: null
     }
     const res = await callPost(apiList.userUpdate, formData);
     if(res.status == 'success'){

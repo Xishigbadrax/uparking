@@ -1,6 +1,6 @@
 import {useEffect, useState,useContext} from 'react';
 import {callGet} from '@api/api';
-import router, { Router } from 'next/router';
+import { useRouter } from 'next/router';
 import {showMessage} from '../../utils/message';
 import {messageType, defaultMsg} from '@constants/constants';
 // import ReactCursorPosition from "react-cursor-position";
@@ -96,7 +96,7 @@ const Dashboard = () => {
 
   // eslint-disable-next-line no-unused-vars
   const [messageShow, setmessageShow] = useState(false);
-  // const router = useRouter();
+  const router = useRouter();
   const [defaultCenter, setDefaultCenter] = useState({
     lat: 47.91909306508191,
     lng: 106.91761127921768,
@@ -131,6 +131,9 @@ const Dashboard = () => {
     if (typeof userdata.firstName != 'undefined') {
       setUserRealData(userdata);
     }
+    // } else{
+    //     router.push('/park/createUser');
+    // }
   }, [userdata]);
   useEffect(() => {
     const fetchData = async () => {

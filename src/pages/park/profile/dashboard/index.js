@@ -4,7 +4,7 @@ import _ from 'lodash';
 // import CustomCalendar from '@components/CustomCalendar/index';
 import {Row, Col, Card, Calendar, Tag, Menu, Dropdown, DatePicker, Button} from 'antd';
 import {Radar} from 'react-chartjs-2';
-// import Bar from '@components/BarChart';
+import Bar from '@components/BarChart';
 import {callGet, callPost} from '@api/api';
 import {useContext, useState, useEffect} from 'react';
 import Context from '@context/Context';
@@ -70,6 +70,10 @@ const Dashboard = () => {
   const [gateRateData,setGateRateData] = useState();
   const [entranceLockData,setEnterLockData] = useState();
   const [positionRateData,setPositionRateData] = useState()
+  const [selectedSPace,setSelectedSpace] = useState(null);
+  const [selectedvehicle,setSelectedVehicle] = useState(null);
+
+
   const data1 = {
     labels: ['Орц гарц', 'Нэвтрэх хаалга', 'Байршил', 'Зогсоол'],
     datasets: [
@@ -160,7 +164,6 @@ const Dashboard = () => {
         alternateColor: 'rgba(0, 0, 0, 0.04)',
       },
     },
-    // 开启辅助点
     point: {},
     area: {},
   };
@@ -251,16 +254,17 @@ const Dashboard = () => {
     }
   };
   const onChangeOrderDate = (e)=>{
-    setSelectDate(moment(e).format('YYYY-MM-DD'));
+    setSelectDate(moment(e).format('YYYY-MM')+'-01');
   };
-  // mshinaar haih
-  const handleVehicle = async (e)=>{
+  // mshinaar haih bolon space eer haiklt hiiih
+  const handleVehicleOrSpace = async (e)=>{
     ctx.setIsLoading(true);
     if (tabKey==1) {
+      setSelectedVehicle(e.key)
       const formData = {
         asWho: 1,
-        dateList: selectDate ? [selectDate]: null,
-        vehicleId: e.key,
+        dateList:  null,
+        vehicleId: Number(e.key),
       };
       const res = await callPost('/booking/history', formData);
       if (!res || res === undefined) {
@@ -280,10 +284,11 @@ const Dashboard = () => {
         }
       }
     } else if (tabKey==2) {
+    setSelectedSpace(e.key);
       const formData = {
         asWho: 2,
-        dateList: selectDate ? [selectDate]: null,
-        vehicleId: e.key,
+        dateList:  null,
+        parkingSpaceId: Number(e.key),
       };
       const res = await callPost('/booking/history', formData);
       if (!res || res === undefined) {
@@ -307,7 +312,8 @@ const Dashboard = () => {
     ctx.setIsLoading(false);
   };
   const vehicleMenu = (
-    <Menu onClick={(value)=>handleVehicle(value)} style={{width: '100%'}}>
+    <Menu onClick={(value)=>handleVehicleOrSpace(value)} style={{width: '100%'}}>
+     <Menu.Item key={null}>Бүх тээврийн хэрэгсэл </Menu.Item>
       {vehicles.map((item)=>(
         <Menu.Item key={item.value}>
           {item.label}
@@ -316,7 +322,7 @@ const Dashboard = () => {
     </Menu>
   );
   const spaceMenu = (
-    <Menu onClick={(value)=>handleSpace(value)} style={{width: '100%'}}>
+    <Menu onClick={(value)=>handleVehicleOrSpace(value)} style={{width: '100%'}}>
       <Menu.Item key={null}>Бүх зогсоол </Menu.Item>
       { spaceList && spaceList.map((item)=>(
         <Menu.Item key={item.value}>
@@ -337,18 +343,18 @@ const Dashboard = () => {
           <TabPane tab="Түрээслэгч" key="1" className={'DashboardCalendar1'}>
             <Row>
               <Col span={4} offset={14}>
-                <DatePicker
+                {/* <DatePicker
                   className='selectMonthDate'
                   bordered={false}
                   locale={calendarLocale}
                   placeholder='Сараа сонгоно уу?'
                   picker='month'
                   onChange={onChangeOrderDate}
-                />
+                /> */}
               </Col>
               <Col>
                 <Dropdown overlay={vehicleMenu} className='dropdown'>
-                  <Button style={{color: '#35446D'}}>Бүх автомашин<OrderedListOutlined /></Button>
+                  <Button style={{color: '#35446D'}}>{selectedvehicle!=='null' ?selectedvehicle:'Бүх тээврийн хэрэгсэл' }<OrderedListOutlined /></Button>
                 </Dropdown>
               </Col>
             </Row>
@@ -451,18 +457,18 @@ const Dashboard = () => {
           <TabPane tab="Түрээслүүлэгч" key="2" className='DashboardCalendar1'>
             <Row>
               <Col span={4} offset={14}>
-                <DatePicker
+                {/* <DatePicker
                   className='selectMonthDate'
                   bordered={false}
                   locale={calendarLocale}
                   placeholder='Сараа сонгоно уу?'
                   picker='month'
                   onChange={onChangeOrderDate}
-                />
+                /> */}
               </Col>
               <Col>
                 <Dropdown overlay={spaceMenu} className='dropdown'>
-                  <Button style={{color: '#35446D'}}>Бүх зоүщгсоол<OrderedListOutlined /></Button>
+                  <Button style={{color: '#35446D'}}>{selectedSPace !== 'null' ? selectedSPace : 'Бүх зогсоол'}<OrderedListOutlined /></Button>
                 </Dropdown>
               </Col>
             </Row>
@@ -529,8 +535,7 @@ const Dashboard = () => {
                           <span>
                             {sumTotalValue ?
                               Helper.formatValueReverse(sumTotalValue) :
-                              0}
-            ₮
+                              0}₮
                           </span>
                         </div>
                         <div className="totalSpentText">
@@ -576,7 +581,7 @@ const Dashboard = () => {
               <Col span={10} offset={2} className='BarChart'>
                 <Row style={{color: '#35446D', fontWeight: 'bold', fontSize: '14px', lineHeight: '24px'}}>Таны зогсоолын хандалт</Row>
                 <Card style={{borderRadius: '20px', marginTop: '10px'}}>
-                  {/* <Bar /> */}
+                  <Bar />
                 </Card>
               </Col>
             </Row>

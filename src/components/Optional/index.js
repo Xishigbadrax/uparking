@@ -123,7 +123,6 @@ const Optional = () => {
   const handleOk = async (values) => {
     if (vehicleForm.validateFields()) {
       const a = vehicleForm.getFieldsValue();
-
       const res = await callPost('/user/vehicle', {
         vehicleNumber: a.vehicleNumber,
         maker: a.maker,
