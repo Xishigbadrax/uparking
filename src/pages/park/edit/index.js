@@ -1242,7 +1242,8 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
               <Col style={{marginTop: '30px'}} offset={3}>
                 {/* ЗОгсоолын зураг харагдах хэсэг*/}
                 <Carousel autoplay>
-                  {data.imageParkingGate ?
+                  {console.log(data,'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')}
+                  {data && data.imageParkingGate ?
                     <div>
                       <div>
                         <Image src={`data:image/jpeg;base64,${data.imageParkingGate}`} height="400px" width='800px' style={{zIndex: '-1', position: 'absolute'}}/>
@@ -1568,7 +1569,7 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
             {!spaceImage ? (
               <Col offset={3}>
                 <Carousel autoplay>
-                  {data.imageResidenceGate ? <div>
+                  {data && data.imageResidenceGate ? <div>
                     <Image src={`data:image/jpeg;base64,${data.imageResidenceGate}`} height="400px" width='800px'/>
                   </div>:null}
                   {data.imageSpaceNumber ? <div>

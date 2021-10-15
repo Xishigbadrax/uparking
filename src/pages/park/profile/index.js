@@ -111,10 +111,10 @@ const Profile = () => {
   const [isVehileVisible, setIsVehileVisible] = useState(false);
   const [isParkVisible, setIsParkVisible] = useState(false);
   const [isVehicleEditVisible, setIsVehicleEditVisible] = useState(false);
-  const [imageSpaceNumber, setImageSpaceNUmbe] = useState();
-  const [imageParkingGate, setImageParkingGate] = useState();
-  const [imageParkingOverall, setImageParkingOverall] = useState();
-  const [imageFromGate, setImageFromGate] = useState();
+  const [imageSpaceNumber, setImageSpaceNUmbe] = useState(null);
+  const [imageParkingGate, setImageParkingGate] = useState(null);
+  const [imageParkingOverall, setImageParkingOverall] = useState(null);
+  const [imageFromGate, setImageFromGate] = useState(null);
   const [visibleParkingSpaceEdit, setVisibleParkingSpaceEdit]= useState(false);
 
   // const mainInfoRef = useRef(null);
@@ -148,18 +148,22 @@ const Profile = () => {
   const [monthSale, setmonthSale] = useState(null);
   // const [userId, setUserId]= useState(null);
   const [monthDescription, setMonthDescription] = useState();
+  const [sendPhotos,setSendPhotos]= useState(false);
+  const [sendSpacePhotos,setSendSpacePhotos]= useState(false);
+
   // const [parkingSpaceData, setParkingSpaceData] = useState({});
   useEffect(async () => {
     if (typeof userdata.firstName != 'undefined') {
       setRealData(userdata);
       // setUserId(userdata.id);
       const park =  await callGet(`/parkingspace/list`);
-      console.log(park,'sssssssssssssssssssssssssssss');
       const parkSpaceList = await callGet(`/parkingspace/list/user?id=${userdata.id}`);
       setSpace(parkSpaceList);
      
     }
   }, [userdata]);
+
+  
   const onFinish123 = (values) => {};
   const onFinishMainImage = (values) =>{
   };
@@ -290,9 +294,9 @@ const Profile = () => {
     }
   };
   //shine mashin bvrtguuleh
-  const onSaveNewVehicle = async (values) => {
+  const onSaveNewVehicle = async () => {
     ctx.setIsLoading(true);
-    vehicleForm.validateFields();
+    await vehicleForm.validateFields();
     const a = vehicleForm.getFieldsValue();
     if (a.vehicleNumber && a.maker && a.model && a.color ) {
       const res = await callPost('/user/vehicle', {
@@ -306,7 +310,7 @@ const Profile = () => {
       showMessage(messageType.FAILED.type, defaultMsg.dataError);
       }
       else{
-        setIsLoading(false);
+        ctx.setIsLoading(false);
       setIsVehileVisible(false);
 
       }
@@ -315,15 +319,18 @@ const Profile = () => {
     }
     // setIsVehileVisible(false);
   };
-  const onSaveEditVehicleData = async (value) => {
+  const onSaveEditVehicleData = async () => {
+    await vehicleEditForm.validateFields();
     ctx.setIsLoading(true);
     const a = vehicleEditForm.getFieldsValue();
     const colorId = color.find((item)=>item.label === a.color);
+    const model = zagwar.find((item)=>item.label===a.model);
+    const selectMaker = uildwer.find((item)=>item.label === a.maker);
     const editFormData={
       vehicleNumber: a.vehicleNumber,
-      maker: a.maker,
+      maker: selectMaker.value,
       color: colorId.value,
-      model: a.model,
+      model: model.value,
       vehicleId: vehicleId,
     };
     const res = await callPost('/user/vehicle/update', editFormData );
@@ -333,6 +340,7 @@ const Profile = () => {
     }else{
       setUpdatedData(res.data);
       ctx.setIsLoading(false);
+      setIsVehicleEditVisible(false);
     }
   };
   const handleCancel = () => {
@@ -343,6 +351,48 @@ const Profile = () => {
   };
   const onFinishSale = (values) => {
   };
+  useEffect(async ()=>{
+    ctx.setIsLoading(true);
+    if(sendSpacePhotos){
+      // if (imageFromGate!==null && imageSpaceNumber !==null) {
+        const res = await callPost('/parkingspace/detail', {
+          imageFromGate: imageFromGate,
+          imageSpaceNumber: imageSpaceNumber,
+          parkingSpaceId: parkingSpaceId,
+        });
+
+        if (res.status === 'success') {
+          setCurrent(current + 1);
+          ctx.setIsLoading(false);
+          setSendSpacePhotos(false);
+        }
+      // } else {
+      //   ctx.setIsLoading(false);
+      //   showMessage(messageType.FAILED.type, 'Зургуудаа оруулна уу?');
+      // }
+    }
+  },[sendSpacePhotos]);
+  useEffect(async ()=>{
+    ctx.setIsLoading(true);
+    if(sendPhotos){
+      // if (imageParkingOverall!==null && imageParkingGate!==null) {
+        const res = await callPost('/parkingspace/parkingimage', {
+          imageParkingOverall: String( imageParkingOverall),
+          imageResidenceGate: String( imageParkingGate),
+          parkingSpaceId: parkingSpaceId,
+        });
+        if (res.status === 'success') {
+          setCurrent(current + 1);
+          ctx.setIsLoading(false);
+          setSendPhotos(false);
+        }
+      }
+      // } else {
+      //   ctx.setIsLoading(false);
+      //   showMessage(messageType.FAILED.type, 'Зургуудаа оруулна уу?');
+      // }
+    
+  },[imageParkingGate,imageParkingOverall,sendPhotos])
 //parking space bvrtguuleh
   const onSaveParkingSpaceDatas = async () => {
     await form.validateFields();
@@ -398,33 +448,21 @@ const Profile = () => {
       
       // Үндсэн зургийн мэдээллийг өгөгдлийн санруу бичих
       if (componentData) {
-        getBase64(componentData.imageParkingGate.file.originFileObj, (image2) =>
-
-          setImageParkingGate(image2.slice(22)),
-        );
+        getBase64(componentData.imageParkingGate.file.originFileObj, (image2) =>{
+          setImageParkingGate(image2.slice(22));
+        })
         getBase64(
           componentData.imageParkingOverall.file.originFileObj,
           (image2) => {
             setImageParkingOverall(image2.slice(22));
           },
         );
+      setSendPhotos(true);
+
       }
-      ctx.setIsLoading(true);
-      if (imageParkingOverall && imageParkingGate) {
-        const res = await callPost('/parkingspace/parkingimage', {
-          imageParkingOverall: String( imageParkingOverall),
-          imageResidenceGate: String( imageParkingGate),
-          parkingSpaceId: parkingSpaceId,
-        });
-        if (res.status === 'success') {
-          setCurrent(current + 1);
-          ctx.setIsLoading(false);
-        }
-      } else {
-        ctx.setIsLoading(false);
-        showMessage(messageType.FAILED.type, 'Зургуудаа оруулна уу?');
-      }
+      
     } else if (current === 3) {
+
       {/* ЗОгсоолын зураг өгөгдлийн санруу шидэх*/}
       if (componentData) {
         getBase64(componentData.imageFromGate.file.originFileObj, (image1) => {
@@ -433,23 +471,9 @@ const Profile = () => {
         getBase64(componentData.imageSpaceNumber.file.originFileObj, (image4) => {
           setImageSpaceNUmbe(image4.slice(22));
         });
+      setSendSpacePhotos(true);
       }
-      ctx.setIsLoading(true);
-      if (imageFromGate && imageSpaceNumber) {
-        const res = await callPost('/parkingspace/detail', {
-          imageFromGate: imageFromGate,
-          imageSpaceNumber: imageSpaceNumber,
-          parkingSpaceId: parkingSpaceId,
-        });
-
-        if (res.status === 'success') {
-          setCurrent(current + 1);
-          ctx.setIsLoading(false);
-        }
-      } else {
-        ctx.setIsLoading(false);
-        showMessage(messageType.FAILED.type, 'Зургуудаа оруулна уу?');
-      }
+      
     } else if (current === 4) {
       ctx.setIsLoading(true);
       const data = await callGet('/parkingspace/timesplit');
@@ -781,7 +805,7 @@ const Profile = () => {
               key="submit"
               type="primary"
               htmlType="submit"
-              onClick={() => onSaveNewVehicle(values)}
+              onClick={() => onSaveNewVehicle()}
             >
             Хадгалах
             </Button>,
@@ -813,7 +837,6 @@ const Profile = () => {
                     <Form.Item
                       label="Улсын дугаар"
                       name="vehicleNumber"
-                      // defaultValue={vehicleEditData.vehicleNumber}
                       rules={[
                         {
                           required: true,
@@ -920,7 +943,7 @@ const Profile = () => {
               key="submit"
               type="primary"
               htmlType="submit"
-              onClick={() => onSaveEditVehicleData(values)}
+              onClick={() => onSaveEditVehicleData()}
             >
             Хадгалах
             </Button>,
@@ -1012,7 +1035,7 @@ const Profile = () => {
                     >
                       <Select onChange={onChangeColor}>
                         {color.map((item) => (
-                          <Option key={item.value} value={item.label}>
+                          <Option key={item.value} value={item.value}>
                             {item.label}
                           </Option>
                         ))}
