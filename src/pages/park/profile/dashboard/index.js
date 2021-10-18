@@ -70,12 +70,16 @@ const Dashboard = () => {
   const [gateRateData,setGateRateData] = useState();
   const [entranceLockData,setEnterLockData] = useState();
   const [positionRateData,setPositionRateData] = useState()
+  const [rateArray,setRateArray] = useState()
+  var b = 0;
+  var c = 0;
+  var dataOfChart = 0;
   const data1 = {
     labels: ['Орц гарц', 'Нэвтрэх хаалга', 'Байршил', 'Зогсоол'],
     datasets: [
       {
         label: '',
-        data: [4, 3, 5, 5],
+        data: [dataOfChart, dataOfChart, dataOfChart, dataOfChart],
         backgroundColor: '#ffff',
         borderColor: '#00F9B8',
         borderWidth: 1,
@@ -96,21 +100,39 @@ const Dashboard = () => {
     suggestedMin:0
   };
 
+
   const checkUserData = async () => {
-    const rateArray = [];
+    
     if (typeof userdata.firstName != 'undefined') {
       setRealData(userdata);
       const parkSpaceList = await callGet(`/parkingspace/list/user?id=${userdata.id}`);
       console.log(parkSpaceList);
       setSpaceList(parkSpaceList);
-      // if(parkSpaceList && parkSpaceList.length){
-      //   parkSpaceList.map(async(item)=>{
-      //     const a = await callGet(`/parkingspace/review?parkingSpaceId=${item.value}`);
-      //     console.log(a,'reviewss');
-      //   })
-      // }
-      // console.log(rateArray,'ggawdwwwg');
+      if(parkSpaceList && parkSpaceList.length){
+        parkSpaceList.map(async(item)=>{
+          const a = await callGet(`/parkingspace/review?parkingSpaceId=${item.value}`);
+          a.content.map((item) => {
+            // b += item.ratingDecimal;
+            b +=  item.ratingDecimal;
+           
+            if(a.content){
+              c = c + 1;
+             
+            }
+            dataOfChart = b/c;
+           
+          })
+        })
+        // d = b/c;
+       
+      }
+      // rateArray.map((item, index) => {
+
+      // })
+      console.log(rateArray,'rateArray');
+     
     }
+    
   }
    //Хэрэглэгчийн бүртгүүлсэн зогсоолуудын мэдээллийг дуудах
   
@@ -137,7 +159,7 @@ const Dashboard = () => {
     }
   };
   const data = [
-    { name: 'Орц гарц', star:5  },
+    { name: 'Орц гарц', star:1  },
     { name: 'Нэвтрэх хаалга', star: 4 },
     { name: 'Байршил', star: 3 },
     { name: 'Зогсоол', star: 2},

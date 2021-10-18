@@ -95,29 +95,16 @@ const Login = () => {
   const delay = (ms) => new Promise((res) => setTimeout(res, ms));
   // step3
   const onFinishVerfication = async (values) => {
-<<<<<<< HEAD
-    
-=======
     setVerifyCode(values.verificationCode);
    
->>>>>>> 8104f8b7b3f40a169e78a01d30fbda94ea7a2d62
     try {
       const data = {
-<<<<<<< HEAD
         code: values.verificationCode,
         phoneNumber: phoneNumber,
       };
       const result = await callPost('/verifyPhoneNumber', data);
       if (result.status === 'failed') {
         showMessage(messageType.FAILED.type, result.error);
-=======
-        code: String(values.verificationCode),
-        phoneNumber: String(phoneNumber),
-      };
-      const result = await callPost('verifyPhoneNumber', data);
-      if (result.status === 500 ) {
-        showMessage(messageType.FAILED.type, defaultMsg.createError);
->>>>>>> 8104f8b7b3f40a169e78a01d30fbda94ea7a2d62
         return true;
       }else {
         getPolicyData();

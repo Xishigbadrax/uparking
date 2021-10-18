@@ -1,11 +1,12 @@
 import {callGet} from '@api/api';
-
+import Context from '@context/Context';
 import {Row, Col} from 'antd';
 import Helper from '@utils/helper';
 import {Form, Input, Divider} from 'antd';
-import {useEffect, useState} from 'react';
+import {useEffect, useState, useContext} from 'react';
 
 const priceInfo = (props) => {
+  const ctx = useContext(Context);
   const [dayWinterValue, setdayWinterValue] = useState(null);
   const [daySummerValue, setdaySummerValue] = useState(null);
   const [nightWinterValue, setnightWinterValue] = useState(null);
@@ -14,20 +15,37 @@ const priceInfo = (props) => {
   const [fullDaySummerValue, setfullDaySummerValue] = useState(null);
   const [hourlyPrice, sethourlyPrice] = useState(null);
   const [priceData, setPriceData] = useState();
+  var summerPrice = {};
+  var winterPrice = {};
+  // const [realData, setRealData] = useState();
+  // const [realData2, setRealData2] = useState();
 
   useEffect(async () => {
+    ctx.setIsLoading(true);
     const bigData = await callGet('/parkingspace/timesplit');
-    console.log(bigData);
+    console.log(bigData, "yun bigdata we");
+    console.log(props.priceArray, "pricearray");
+   
+    props.priceArray.map((item, index) => {
+      if( index == 0){
+        summerPrice = item;
+      } else if(index == 1){
+        winterPrice = item;
+      }
+    });
+    console.log(summerPrice, "real dataaaa");
     setPriceData(bigData);
     const total = bigData.timeSet1.price / bigData.timeSet1.value;
-    setdayWinterValue(bigData.daySplit.winterPrice);
-    setdaySummerValue(bigData.daySplit.summerPrice);
-    setnightSummerValue(bigData.nightSplit.summerPrice);
-    setnightWinterValue(bigData.nightSplit.winterPrice);
-    setfullDaySummerValue(bigData.fullDaySplit.summerPrice);
-    setfullDayWinterValue(bigData.fullDaySplit.winterPrice);
+    summerPrice && setdayWinterValue(summerPrice.priceForRenter2);
+    winterPrice && setdaySummerValue(winterPrice.priceForRenter2);
+    winterPrice && setnightSummerValue(winterPrice.priceForRenter3);
+    summerPrice &&  setnightWinterValue(summerPrice.priceForRenter3);
+    winterPrice && setfullDaySummerValue(winterPrice.priceForRenter1);
+    summerPrice && setfullDayWinterValue(summerPrice.priceForRenter1);
     sethourlyPrice(total.toString());
+    ctx.setIsLoading(false);
   }, []);
+
 
   useEffect(() => {
     {
@@ -106,6 +124,7 @@ const priceInfo = (props) => {
               <Input
                 style={{fontSize: '16px'}}
                 type="text"
+               
                 onChange={(e) => setdayWinterValue(Number(e.target.value))}
               />
             </Form.Item>
@@ -135,6 +154,7 @@ const priceInfo = (props) => {
               <Input
                 style={{fontSize: '16px'}}
                 type="text"
+                
                 onChange={(e) => setdaySummerValue(Number(e.target.value))}
               ></Input>
             </Form.Item>
@@ -288,6 +308,7 @@ const priceInfo = (props) => {
               <Input
                 style={{fontSize: '16px'}}
                 type="text"
+                
                 onChange={(value) => sethourlyPrice(Number(value.target.value))}
               ></Input>
             </Form.Item>
