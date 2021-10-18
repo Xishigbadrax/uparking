@@ -336,12 +336,7 @@ console.log(editData, "edit dataa")
       } else if(item.id == 3242){
         item.spaceStatusDescription == 'AV' ? setmondayNight("Боломжтой") : setmondayNight("Боломжгүй");
       } 
-<<<<<<< HEAD
-
-      // console.log(item.spaceStatusDescription[0], "mapped element")
-=======
       
->>>>>>> d77e47c6351dae39b2f3a8787d4d145b075a6232
     })
   }, []);
   const onChangeAimag = async (e)=>{
@@ -350,11 +345,8 @@ console.log(editData, "edit dataa")
     setSum(sum);
     setSelectedAimag(value.value);
     setSelectedAimagName(value.label);
-<<<<<<< HEAD
     setPersonalInfo(true);
     console.log(selectedAimag, 'songogdson aimg');
-=======
->>>>>>> d77e47c6351dae39b2f3a8787d4d145b075a6232
     setMainData({...mainData, provinceId: value.value});
   };
   const onChangeSum = async (e)=>{
@@ -364,12 +356,9 @@ console.log(editData, "edit dataa")
     const selectSum = sum.find((item)=>item.value==e);
     setSelectedSum(selectSum.value);
     setSelectedSumName(selectSum.label);
-<<<<<<< HEAD
     setPersonalInfo(true);
     console.log(selectSum.label, 'maybe sumiin medeelel');
     // console.log(section, 'khoroonii medeele');
-=======
->>>>>>> d77e47c6351dae39b2f3a8787d4d145b075a6232
   };
   const onChangeSection = async (e)=>{
     setSelectedSection(e);
@@ -382,12 +371,8 @@ console.log(editData, "edit dataa")
   };
   const onChangeResidence = async (e)=>{
     setSelectedBuilding(e);
-<<<<<<< HEAD
     console.log(e, 'songoson bair');
     setPersonalInfo(true);
-=======
-
->>>>>>> d77e47c6351dae39b2f3a8787d4d145b075a6232
     setSelectedResidence(e);
     const residenceBlock = await callGet(`/address/residenceblock?residenceId=${e}`);
     setResidenceBlockList(residenceBlock);
@@ -412,7 +397,6 @@ console.log(editData, "edit dataa")
   };
   const onchangeInputResidenceName=(e)=>{
     setMainData({...mainData, residenceName: e.target.value});
-<<<<<<< HEAD
     console.log(e.target.value, 'bairnii dugaara');
     setPersonalInfo(true);
   };
@@ -420,11 +404,6 @@ console.log(editData, "edit dataa")
     setMainData({...mainData, residenceBlockNumber: e.target.value});
     console.log(e.target.value), 'bairnii dugaaraaa';
     setPersonalInfo(true);
-=======
-  };
-  const onChangeInputResidenceNumber =(e)=>{
-    setMainData({...mainData, residenceBlockNumber: e.target.value});
->>>>>>> d77e47c6351dae39b2f3a8787d4d145b075a6232
   };
   const onChangeParkingGateNumber =(e)=>{
     setMainData({...mainData, parkingGateNumber: e.target.value});
@@ -476,7 +455,6 @@ console.log(editData, "edit dataa")
   };
 
   const OnSaveAddressData = async (e) => {
-<<<<<<< HEAD
     if(personalInfo == true){
       const res1 = await callPost('/parkingspace/update/1', mainData);
       console.log(res1, 'res1-iin hariu');
@@ -504,13 +482,6 @@ console.log(editData, "edit dataa")
       const res7 = await callPost('/parkingspace', mainData7);
       console.log(res7, 'res7-iin hariu');
     console.log(mainData7, 'main7 dataaa');
-=======
-    setTest(true);
-    setValue(false);
-  };
-  const spaceDataSave = (e) => {
-    main7(mainData7);
->>>>>>> d77e47c6351dae39b2f3a8787d4d145b075a6232
     setSpaceValue(false);
     } else{
       setSpaceValue(false);
@@ -518,7 +489,6 @@ console.log(editData, "edit dataa")
     
   };
   const onChangefloorNumberId = (e)=>{
-<<<<<<< HEAD
     setSpaceInfo(true);
     floorData.map((el) => {
       if(el.value == e){
@@ -526,13 +496,10 @@ console.log(editData, "edit dataa")
       }
     });
  
-=======
->>>>>>> d77e47c6351dae39b2f3a8787d4d145b075a6232
     setMainData7({...mainData7, floorNumber: +e});
     
   };
   const onChangeEntranceLock = (e)=>{
-<<<<<<< HEAD
     setSpaceInfo(true);
     entranceData.map((el) => {
       if(el.value == e){
@@ -586,37 +553,15 @@ console.log(editData, "edit dataa")
     setSpaceInfo(true);
     setTypeOther(e.target.value);
     console.log(e.target.value);
-=======
-    setMainData7({...mainData7, entranceLock: +e});
-  };
-  const onChangeisNumbering = (e)=>{
-    setMainData7({...mainData7, isNumbering: +e});
-  };
-  const onChangeCapacityId = (e)=>{
-    setMainData7({...mainData7, capacityId: +e});
-  };
-  const onChangeTypeId = (e)=>{
-    setMainData7({...mainData7, typeId: +e});
-  };
-  const onChangeReturnRoutes = (e)=>{
-    setMainData7({...mainData7, returnRoutes: +e});
-  };
-  const onChangeTypeOther = (e)=>{
->>>>>>> d77e47c6351dae39b2f3a8787d4d145b075a6232
     setMainData7({...mainData7, typeOther: e.target.value});
   };
 
   {/* Үндсэн зургийн мэдээлэлтэй холбоотой STATE*/}
-<<<<<<< HEAD
   const onsaveMainImage = async () => {
     const res2 = await callPost('/parkingspace/parkingimage', mainData2);
     console.log(res2, 'res2-iin hariu');
     
     console.log(mainData2, 'main dataa 2');
-=======
-  const onsaveMainImage = () => {
-    main2(mainData2);
->>>>>>> d77e47c6351dae39b2f3a8787d4d145b075a6232
     setMainImageValue(false);
   };
   {/* Хотхоны ой орчмын зураг оруулах хэсэг*/}
@@ -732,17 +677,12 @@ console.log(editData, "edit dataa")
       );
     }
   };
-<<<<<<< HEAD
   const onSaveSpaceImage = async ()=>{
     const res3 = await callPost('/parkingspace/detail', mainData3);
      console.log(res3, 'res3-iin hariu');
 
     
     console.log(mainData3, 'mainDataa 3');
-=======
-  const onSaveSpaceImage = ()=>{
-    main3(mainData3);
->>>>>>> d77e47c6351dae39b2f3a8787d4d145b075a6232
     setSpaceImage(false);
   };
   const onChangeRent = ()=>{
