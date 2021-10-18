@@ -2283,6 +2283,15 @@
   width: 70px !important;
   border: 1px solid black !important;
   border-radius: 5px;
+  margin-left: 10px !important;
+}
+.maybe{
+  background-color: #f2fd90 !important;
+  padding: 1px;
+  color: rgb(228, 88, 88);
+  width: 70px !important;
+  border: 1px solid rgb(226, 186, 186) !important;
+  border-radius: 5px;
   margin-left: 10px;
 }
 .SpaceIcons .ant-collapse {

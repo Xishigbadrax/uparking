@@ -103,18 +103,27 @@ const CustomCalendar = (props) => {
       ) {
         onclickclass = 'onclickeddate';
       }
-      const a = dayOfWeek.find((item)=>
+      const unDay = dayOfWeek.find((item)=>
         item.day == ofDay && item.spaceStatusDescription === 'UN',
       );
+      //хүсэлттэй өдөр үгүйг нь шалгаж байгаа 
+      const reqDay = dayOfWeek.find((item)=>
+        item.day == ofDay && item.spaceStatusDescription === 'RQ');
+        
       if (type === 'Өдөр') {
         const day2 = bookedDateOfDay.find((item)=>item.startDate === moment(current).format('YYYY-MM-DD'));
-        if (moment(current).format('YYYY-MM-DD') >= moment().format('YYYY-MM-DD') && a || day2 ) {
+        if (moment(current).format('YYYY-MM-DD') >= moment().format('YYYY-MM-DD') && unDay || day2 && reqDay===undefined) {
           style = {
             background: 'black',
             color: 'white',
             marginLeft: '5px',
           };
-        } else if (moment(current).format('YYYY-MM-DD') >= moment().format('YYYY-MM-DD')&& a === undefined) {
+        } else if (moment(current).format('YYYY-MM-DD') >= moment().format('YYYY-MM-DD')&& unDay === undefined && reqDay) {
+          style={
+            background: '#ffc107',
+            color: 'white',
+            marginLeft: '5px'};
+        }else if (moment(current).format('YYYY-MM-DD') >= moment().format('YYYY-MM-DD') && unDay === undefined && reqDay===undefined) {
           style={
             background: ' #76E8AA',
             color: 'white',
@@ -126,13 +135,13 @@ const CustomCalendar = (props) => {
       } else if (type==='Шөнө') {
         const day2 = bookedDateOfNight.find((item)=>item.startDate === moment(current).format('YYYY-MM-DD'));
         // const b = bookedDate.find((item)=>item.startDate === moment(current).format('YYYY-MM-DD'));
-        if (moment(current).format('YYYY-MM-DD') >= moment().format('YYYY-MM-DD') && a || day2 ) {
+        if (moment(current).format('YYYY-MM-DD') >= moment().format('YYYY-MM-DD') && unDay || day2 ) {
           style = {
             background: 'black',
             color: 'white',
             marginLeft: '5px',
           };
-        } else if (moment(current).format('YYYY-MM-DD') >= moment().format('YYYY-MM-DD')&& a === undefined) {
+        } else if (moment(current).format('YYYY-MM-DD') >= moment().format('YYYY-MM-DD')&& unDay === undefined) {
           style={
             background: ' #76E8AA',
             color: 'white',
@@ -144,13 +153,13 @@ const CustomCalendar = (props) => {
       } else if (type === 'Бүтэн Өдөр') {
         const day2 = bookedDateOfFullDay.find((item)=>item.startDate === moment(current).format('YYYY-MM-DD'));
         // const b = bookedDate.find((item)=>item.startDate === moment(current).format('YYYY-MM-DD'));
-        if (moment(current).format('YYYY-MM-DD') >= moment().format('YYYY-MM-DD') && a || day2 ) {
+        if (moment(current).format('YYYY-MM-DD') >= moment().format('YYYY-MM-DD') && unDay || day2 ) {
           style = {
             background: 'black',
             color: 'white',
             marginLeft: '5px',
           };
-        } else if (moment(current).format('YYYY-MM-DD') >= moment().format('YYYY-MM-DD')&& a === undefined) {
+        } else if (moment(current).format('YYYY-MM-DD') >= moment().format('YYYY-MM-DD')&& unDay === undefined) {
           style={
             background: ' #76E8AA',
             color: 'white',
@@ -164,12 +173,12 @@ const CustomCalendar = (props) => {
   };
   const disabledDate =(current)=> {
     const ofDay = current.day();
-    const a = dayOfWeek.find((item)=>
+    const unDay = dayOfWeek.find((item)=>
       item.day == ofDay && item.spaceStatusDescription === 'UN',
     );
     const b = bookedDate.find((item)=>item.startDate === moment(current).format('YYYY-MM-DD'));
     // Can not select days before today and today
-    return ( current < moment().endOf('day')) || a || b;
+    return ( current < moment().endOf('day')) || unDay || b;
   };
   const onSelect = (value) => {
     let array = [];

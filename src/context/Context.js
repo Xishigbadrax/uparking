@@ -30,7 +30,7 @@ export const ContextProvider = ({children}) => {
   
   const getProfileData = async (user) => {
     const userdata = await callGet(`/user/${user.user_id}/test`);
-    console.log(userdata,'ggggggggggg');
+    // console.log(userdata,'ggggggggggg');
     if (!userdata || userdata === undefined) {
       showMessage(messageType.FAILED.type, defaultMsg.dataError);
       return;
