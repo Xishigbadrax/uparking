@@ -75,7 +75,6 @@ const ForgotPassword = () => {
   };
 
   const onFinishVerfication = async (values) => {
-    console.log(values);
     try {
       const data = {
         confCode: values.verificationCode,
@@ -90,7 +89,6 @@ const ForgotPassword = () => {
         setIsTransactionCode(true);
       }
     } catch (e) {
-      console.log('verify Хадгалахад алдаа гарлаа');
     }
   };
 
@@ -117,7 +115,6 @@ const ForgotPassword = () => {
   };
 
   const onFinishTransaction = async (values) => {
-    console.log(values, 'valuesvaluesvalues');
     try {
       const data =
             {
@@ -137,7 +134,6 @@ const ForgotPassword = () => {
         return true;
       }
     } catch (e) {
-      console.log('Хадгалахад алдаа гарлаа');
     }
   };
 

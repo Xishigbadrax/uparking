@@ -1,9 +1,9 @@
 import {useState, createContext, useReducer, useEffect} from 'react';
 import reducers from './Reducers';
 import Auth from '@utils/auth';
+import { useRouter } from 'next/router';
 // eslint-disable-next-line camelcase
 // import jwt_decode from 'jwt-decode';
-import {useRouter} from 'next/router';
 import {profileMenu} from '@constants/profilemenu';
 import {walletMenu} from '@constants/walletmenu';
 import { messageType } from '@constants/constants';
@@ -27,15 +27,19 @@ export const ContextProvider = ({children}) => {
   const checkPermission = (permission) => {
     return state.permissions[permission] ? true : false;
   };
-
+  
   const getProfileData = async (user) => {
     const userdata = await callGet(`/user/${user.user_id}/test`);
+    // console.log(userdata,'ggggggggggg');
     if (!userdata || userdata === undefined) {
       showMessage(messageType.FAILED.type, defaultMsg.dataError);
       return;
     }
-    if (userdata.lastName !== undefined) {
+    if (userdata.lastName !== null && userdata.firstName !==null && userdata.registerNumber !==null) {
       setUserdata(userdata);
+    } else {
+      console.log('endeeeeee');
+      router.push('/park/createUser')
     }
   };
 

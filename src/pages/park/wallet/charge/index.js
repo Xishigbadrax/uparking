@@ -59,33 +59,29 @@ const Charge = () => {
   const [title, settitle] = useState('');
   const [socialPayTransactionId,setSocialPayTransactionId]= useState(null);
   const [messageShow, setmessageShow] = useState(false);
-  const [socialPayCheck,setSocialPayCheck] = useState(true);
+  const [socialPayCheck,setSocialPayCheck] = useState(false);
   const [formData] = useState({
     amount: null,
     phoneNumber: null,
   });
   // eslint-disable-next-line no-unused-vars
   const [formData3, setformData3] = useState('');
-  const checkSocialPay = async ()=>{
-    // if(!socialPayCheck){
-    // const res = await callGet(`/checkpayment?transactionId=${socialPayTransactionId}`);
-  //   if( res && res.status === 'success'){
-  //     setSocialPayCheck(false);
-  //     setmessageShow(false);
-  //   }
-  // }
-}   
-  useEffect(()=>{
-    console.log(socialPayTransactionId);
-    const timer = setInterval( async function (){
-      const res = await callGet(`/checkpayment?transactionId=${socialPayTransactionId}`);
-     if( res && res.status === 'success'){
-      setSocialPayCheck(false);
+  const checkSocialPay = async (id)=> {
+    if(type2 === 'SOCIALPAY'){
+      if(socialPayCheck){
+          const timer = setInterval( async function (){
+          const res = await callGet(`/checkpayment?transactionId=${socialPayTransactionId}`);
+          if( res && res.status === 'success'){
+              setSocialPayCheck(false);
+              clearInterval(timer);
+            }
+          }, 10000);
+      }else
+    if(!socialPayCheck){
       setmessageShow(false);
     }
-    }, 10000);
-    
-  },[socialPayTransactionId])
+  }
+}   
   const fetchData2 = async () => {
     if (amount != 0) {
       const formData2 = {
@@ -96,27 +92,13 @@ const Charge = () => {
       formData.amount = amount;
       formData.phoneNumber =
         type2 == 'LENDMN' ? phoneNumber : userdata.phoneNumber;
-         console.log(formData,'saaaaahaaaaaaaaaaaaaaaaaaaa');
       {
         type2 == 'MONGOLCHAT' ?
           await callPost('/mongolchat/wallet', formData).then((res) => {
-             console.log(res,'reeeeeeeeeeeeeeeeeeeee');
             if (res.code == 1000) {
-              settitle('Амжилтай');
               setMongolChatResultData(res);
-              setSocialPayCheck(true);
-              setmessage('Амжилттай. Нэхэмжлэх үүсгэлээ.');
               setstatus('success');
               setmessageShow(true);
-              // try {
-              //   const win = window.open(res.dynamic_link, '_blank');
-              //   win.focus();
-              // } catch (e) {
-              //   settitle('Анхааруулга');
-              //   setmessage('Нэхэмжлэх үүсгэхэд алдаа гарлаа');
-              //   setstatus('warning');
-              //   setmessageShow(true);
-              // }
             } else {
               settitle('Анхааруулга');
               setmessage('Нэхэмжлэх үүсгэхэд алдаа гарлаа');
@@ -144,9 +126,10 @@ const Charge = () => {
                   settitle('Амжилтай');
                   setmessage('Амжилттай. Нэхэмжлэх үүсгэлээ.');
                   setstatus('success');
-                  setSocialPayCheck(false);
+                  setSocialPayCheck(true);
                   setSocialPayTransactionId(res.transactionId);
-                  checkSocialPay();
+                  checkSocialPay(res.transactionId);
+
                   setmessageShow(true);
                   try {
                     const win = window.open(
@@ -155,6 +138,7 @@ const Charge = () => {
                       '_blank',
                     );
                     win.focus();
+
                   } catch (e) {
                     settitle('Анхааруулга');
                     setmessage('Нэхэмжлэх үүсгэхэд алдаа гарлаа');
@@ -186,22 +170,17 @@ const Charge = () => {
 
   const fetchData3 = async () => {
     setformData3();
-    console.log(promoCode, 'promocodeee');
     const res = await callPost('/wallet/promocode', {
       promoCode: ' ' + promoCode,
     });
-    console.log(res, 'promoo res');
     // if (res.status == "failed") {
-    //   console.log(res["status"], "resresr");
     //   settitle(res.status);
     //   setmessage(res.error);
     //   setstatus(res.status);
     //   setmessageShow(true);
     // } else {
-    // console.log(res);
     // settitle("Амжилттай");
     // setmessage("Таны Uwallet хэтэвч амжилттай цэнэглэлт хийгдлээ.");
-    // // console.log(res.error, "errorr");
     // setstatus("success");
     // setmessageShow(true);
     // }
@@ -390,9 +369,10 @@ const Charge = () => {
           onOk={handleOk}
           onCancel={handleCancel}
           footer={[]}
-        >
+        > 
+        {type2 !=='MONGOLCHAT' &&
           <Alert message={title} description={message} type={status} showIcon style={{padding:'20px'}}/>
-          
+                  }
           {type2 ==='MONGOLCHAT' && <div>
           <Row style={{marginTop:'20px'}}>
             <Col offset={5}>

@@ -31,7 +31,7 @@ const rentDate = (props) => {
   const [fridayNight, setfridayNight] = useState('Боломжтой');
   const [saturdayNight, setsaturdayNight] = useState('Боломжтой');
   const [sundayNight, setsundayNight] = useState('Боломжтой');
-
+  const [currMonth,setCurrMonth] = useState();
   const [daySplitId, setDaySplitId] = useState();
   const [current, setCurrent] = useState(parseInt(moment().format('M')));
   // const [date, setDate] = useState(moment.setDate());
@@ -127,85 +127,85 @@ const rentDate = (props) => {
       day: 1,
       // timeSplitDescription: 'Өдөр',
       timeSplitId: Number(daySplitId),
-      spaceStatusCode: mondayMorning==='Боломжтой'?'AV' :'UN',
+      spaceStatusCode: mondayMorning==='Боломжтой'?'AV' :mondayMorning==='Боломжгүй'?'UN':'RQ',
     },
     {
       day: 1,
       // timeSplitDescription: 'Шөнө',
       timeSplitId: Number(nightSplitId),
-      spaceStatusCode: mondayNight==='Боломжтой'?'AV' :'UN',
+      spaceStatusCode: mondayNight==='Боломжтой'?'AV' : mondayNight === 'Боломжгүй'? 'UN':'RQ',
     },
     {
       day: 2,
       // timeSplitDescription: 'Өдөр',
       timeSplitId: Number(daySplitId),
-      spaceStatusCode: tuesdayMorning==='Боломжтой'?'AV' :'UN',
+      spaceStatusCode: tuesdayMorning==='Боломжтой'?'AV':tuesdayMorning==='Боломжгүй'?'UN':'RQ',
     },
     {
       day: 2,
       // timeSplitDescription: 'Шөнө',
       timeSplitId: Number(nightSplitId),
-      spaceStatusCode: tuesdayNight==='Боломжтой'?'AV' :'UN',
+      spaceStatusCode: tuesdayNight==='Боломжтой'?'AV' :tuesdayNight==='Боломжгүй'?'UN':'RQ',
     },
     {
       day: 3,
       // timeSplitDescription: 'Өдөр',
       timeSplitId: Number(daySplitId),
-      spaceStatusCode: wednesdayMorning==='Боломжтой'?'AV' :'UN',
+      spaceStatusCode: wednesdayMorning ==='Боломжтой'?'AV':wednesdayMorning==='Боломжгүй'?'UN':'RQ',
     },
     {
       day: 3,
       // timeSplitDescription: 'Шөнө',
       timeSplitId: Number(nightSplitId),
-      spaceStatusCode: wednesdayNight==='Боломжтой'?'AV' :'UN',
+      spaceStatusCode: wednesdayNight==='Боломжтой'?'AV' :wednesdayNight==='Боломжгүй'?'UN':'RQ',
     },
     {
       day: 4,
       // timeSplitDescription: 'Өдөр',
       timeSplitId: Number(daySplitId),
-      spaceStatusCode: thursdayMorning==='Боломжтой'?'AV' :'UN',
+      spaceStatusCode: thursdayMorning==='Боломжтой'?'AV': thursdayMorning === 'Боломжгүй'?'UN':'RQ',
     },
     {
       day: 4,
       // timeSplitDescription: 'Шөнө',
       timeSplitId: Number(nightSplitId),
-      spaceStatusCode: thursdayNight==='Боломжтой'?'AV' :'UN',
+      spaceStatusCode: thursdayNight==='Боломжтой'?'AV' :thursdayNight==='Боломжгүй'?'UN':'RQ',
     },
     {
       day: 5,
       // timeSplitDescription: 'Өдөр',
       timeSplitId: Number(daySplitId),
-      spaceStatusCode: fridayMorning==='Боломжтой'?'AV' :'UN',
+      spaceStatusCode: fridayMorning==='Боломжтой'?'AV':fridayMorning==='Боломжгүй'?'UN':'RQ',
     },
     {
       day: 5,
       // timeSplitDescription: 'Шөнө',
       timeSplitId: Number(nightSplitId),
-      spaceStatusCode: fridayNight==='Боломжтой'?'AV' :'UN',
+      spaceStatusCode: fridayNight==='Боломжтой'?'AV' :fridayNight==='Боломжгүй'?'UN':'RQ',
     },
     {
       day: 6,
       // timeSplitDescription: 'Өдөр',
       timeSplitId: Number(daySplitId),
-      spaceStatusCode: saturdayMorning==='Боломжтой'?'AV' :'UN',
+      spaceStatusCode: saturdayMorning==='Боломжтой'?'AV' :saturdayMorning==='Боломжгүй'?'UN':'RQ',
     },
     {
       day: 6,
       // timeSplitDescription: 'Шөнө',
       timeSplitId: Number(nightSplitId),
-      spaceStatusCode: saturdayNight==='Боломжтой'?'AV' :'UN',
+      spaceStatusCode: saturdayNight==='Боломжтой'?'AV' :saturdayNight==='Боломжгүй'?'UN':'RQ',
     },
     {
       day: 0,
       // timeSplitDescription: 'Өдөр',
       timeSplitId: Number(daySplitId),
-      spaceStatusCode: sundayMorning==='Боломжтой'?'AV' :'UN',
+      spaceStatusCode: sundayMorning ==='Боломжтой'? 'AV':sundayMorning ==='Боломжгүй'?'UN':'RQ',
     },
     {
       day: 0,
       // timeSplitDescription: 'Шөнө',
       timeSplitId: Number(nightSplitId),
-      spaceStatusCode: sundayNight==='Боломжтой'?'AV' :'UN',
+      spaceStatusCode: sundayNight==='Боломжтой'?'AV' :sundayNight==='Боломжгүй'?'UN':'RQ',
     },
   ];
   // const headerRender = () => {
@@ -233,17 +233,17 @@ const rentDate = (props) => {
   const timeSplit = [
     {id: 1, name: 'Боломжтой'},
     {id: 2, name: 'Боломжгүй'},
+    {id: 3, name: 'Магадгүй'}
   ];
   const getListData = (value) =>{
     const array = [];
-    dayOfWeek.map((item) => {
-      switch (item.day) {
-      case value.day():
+    dayOfWeek.forEach((item) => {
+      if(item.day === value.day()){
         if (item.spaceStatusCode === 'Боломжтой') {
           array.push({
             type: item.spaceStatusCode,
             content: item.timeSplitDescription,
-          });
+          }); 
         }
         if (item.spaceStatusCode === 'Боломжгүй') {
           array.push({
@@ -251,13 +251,20 @@ const rentDate = (props) => {
             content: item.timeSplitDescription,
           });
         }
-        break;
-      default:
+        if(item.spaceStatusCode ==='Магадгүй'){
+          array.push({
+            type: item.spaceStatusCode,
+            content: item.timeSplitDescription,
+          });
+        }
       }
+      
     });
-    return array || [];
+    return array;
   };
   const dateCellRender = (value) => {
+    const month = moment(value).format('YYYY-MM');
+    if(month === currMonth){
     const listData = getListData(value);
     return (
       <ul className="events">
@@ -265,7 +272,7 @@ const rentDate = (props) => {
           <li key={item.content} style={{height: '15px'}}>
             <span
               style={{fontSize: '10px'}}
-              className={item.type === 'Боломжтой' ? 'Success' : 'NotSuccess'}
+              className={item.type === 'Боломжтой' ? 'Success' : item.type==='Боломжгүй' ? 'NotSuccess':'maybe'}
             >
               {item.type}
             </span>
@@ -273,6 +280,7 @@ const rentDate = (props) => {
         ))}
       </ul>
     );
+  }
   };
   const onChangeBla = (e) => {
     props.setRentData(dayWeek);
@@ -367,7 +375,7 @@ const rentDate = (props) => {
                 onChange={onChangeBla}
                 value={sundayMorning}
                 className={
-                  sundayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
+                  sundayMorning === 'Боломжтой' ? 'Surrender' : 'Боломжгүй'?'NotSurrender':'Maybe'
                 }
               >
                 {timeSplit.map((item) => (
@@ -386,7 +394,7 @@ const rentDate = (props) => {
                 }}
                 value={sundayNight}
                 className={
-                  sundayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
+                  sundayNight === 'Боломжтой' ? 'Surrender' : 'Боломжгүй'?'NotSurrender':'Maybe'
                 }
               >
                 {timeSplit.map((item) => (
@@ -413,7 +421,7 @@ const rentDate = (props) => {
                 }}
                 value={mondayMorning}
                 className={
-                  mondayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
+                  mondayMorning === 'Боломжтой' ? 'Surrender' : 'Боломжгүй'?'NotSurrender':'Maybe'
                 }
               >
                 {timeSplit.map((item) => (
@@ -431,7 +439,7 @@ const rentDate = (props) => {
                 }}
                 value={mondayNight}
                 className={
-                  mondayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
+                  mondayNight === 'Боломжтой' ? 'Surrender' : 'Боломжгүй'?'NotSurrender':'Maybe'
                 }
               >
                 {timeSplit.map((item) => (
@@ -458,7 +466,7 @@ const rentDate = (props) => {
                 }}
                 value={tuesdayMorning}
                 className={
-                  tuesdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
+                  tuesdayMorning === 'Боломжтой' ? 'Surrender' : 'Боломжгүй'?'NotSurrender':'Maybe'
                 }
               >
                 {timeSplit.map((item) => (
@@ -476,7 +484,7 @@ const rentDate = (props) => {
                 }}
                 value={tuesdayNight}
                 className={
-                  tuesdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
+                  tuesdayNight ==='Боломжтой' ? 'Surrender' : 'Боломжгүй'?'NotSurrender':'Maybe'
                 }
               >
                 {timeSplit.map((item) => (
@@ -504,9 +512,7 @@ const rentDate = (props) => {
                 }}
                 value={wednesdayMorning}
                 className={
-                  wednesdayMorning === 'Боломжтой' ?
-                    'Surrender' :
-                    'NotSurrender'
+                  wednesdayMorning === 'Боломжтой' ? 'Surrender' : 'Боломжгүй'?'NotSurrender':'Maybe'
                 }
               >
                 {timeSplit.map((item) => (
@@ -524,7 +530,7 @@ const rentDate = (props) => {
                 }}
                 value={wednesdayNight}
                 className={
-                  wednesdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
+                  wednesdayNight === 'Боломжтой' ? 'Surrender' : 'Боломжгүй'?'NotSurrender':'Maybe'
                 }
               >
                 {timeSplit.map((item) => (
@@ -551,7 +557,7 @@ const rentDate = (props) => {
                 }}
                 value={thursdayMorning}
                 className={
-                  thursdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
+                  thursdayMorning === 'Боломжтой' ? 'Surrender' : 'Боломжгүй'?'NotSurrender':'Maybe'
                 }
               >
                 {timeSplit.map((item) => (
@@ -569,7 +575,7 @@ const rentDate = (props) => {
                 }}
                 value={thursdayNight}
                 className={
-                  thursdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
+                  thursdayNight ==='Боломжтой' ? 'Surrender' : 'Боломжгүй'?'NotSurrender':'Maybe'
                 }
               >
                 {timeSplit.map((item) => (
@@ -596,7 +602,7 @@ const rentDate = (props) => {
                 }}
                 value={fridayMorning}
                 className={
-                  fridayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
+                  fridayMorning === 'Боломжтой' ? 'Surrender' : 'Боломжгүй'?'NotSurrender':'Maybe'
                 }
               >
                 {timeSplit.map((item) => (
@@ -613,7 +619,7 @@ const rentDate = (props) => {
                 }}
                 value={fridayNight}
                 className={
-                  fridayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
+                  fridayNight === 'Боломжтой' ? 'Surrender' : 'Боломжгүй'?'NotSurrender':'Maybe'
                 }
               >
                 {timeSplit.map((item) => (
@@ -641,7 +647,7 @@ const rentDate = (props) => {
                 }}
                 value={saturdayMorning}
                 className={
-                  saturdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
+                  saturdayMorning === 'Боломжтой' ? 'Surrender' : 'Боломжгүй'?'NotSurrender':'Maybe'
                 }
               >
                 {timeSplit.map((item) => (
@@ -660,7 +666,7 @@ const rentDate = (props) => {
                 }}
                 value={saturdayNight}
                 className={
-                  saturdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
+                  saturdayNight === 'Боломжтой' ? 'Surrender' : 'Боломжгүй'?'NotSurrender':'Maybe'
                 }
               >
                 {timeSplit.map((item) => (
@@ -727,6 +733,7 @@ const rentDate = (props) => {
                   headerRender={({value, type, onChange, onTypeChange}) => {
                     const localeData = value.localeData();
                     const year = value.year();
+                    setCurrMonth(moment(value).format('YYYY-MM'));
                     const month = [];
                     for (let i = 0; i < 12; i++) {
                       month.push(localeData._months[i]);
@@ -738,6 +745,7 @@ const rentDate = (props) => {
                             <LeftOutlined
                               onClick={()=>{
                                 setCurrent(current-1);
+                               
                                 console.log(current, 'ene harachde ');
                                 if (current === 1 ) {
                                   setCurrent(12);

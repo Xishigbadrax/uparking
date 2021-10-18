@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import {Row, Col, Button, Divider, Form, Input, Upload, Spin, Select, Carousel} from 'antd';
 import {
   EditOutlined,
@@ -246,18 +245,11 @@ const Edit = ({data}) => {
   // setMainData6(dayOfWeek.)
 
 
-  // console.log(mainData5, 'dataa 5');
-  // console.log(data, 'mainii data');
-  // console.log(mainData2, 'maindata 2 ');
-  // console.log(mainData3, 'maindataaa 3');
-  // console.log(mainData4, 'main data 4');
-  // console.log(mainData5, 'mainDataa 5');
-
 
   
 console.log(editData, "edit dataa")
 
-  // console.log(mainData, 'Main datanii medeelel');
+
   useEffect(async ()=>{
     const aimags=await callGet('/address/aimag');
     console.log(data, "data n irjinuu")
@@ -267,7 +259,6 @@ console.log(editData, "edit dataa")
     setSplitData(splitdata);
     setDaySplitId(splitdata.daySplit.id);
     setNightSplitId(splitdata.nightSplit.id);
-    // console.log(splitdata, 'split data');
 
     const spaceSize = await callGet('/reference/list/test?type=SPACE_TYPE');
     setSpaceSizeData(spaceSize);
@@ -284,13 +275,14 @@ console.log(editData, "edit dataa")
     const floor = await callGet('/reference/list/test?type=FLOOR_NUMBER');
     setFloorData(floor);
     setEditData(data);
-    console.log(data, 'irj bgaa data');
-    console.log(editData);
-    setLatitude(editData.lat);
-    setLongitude(editData.lng);
-    console.log('--------------->mainData--->', mainData);
+    if(data!==null && data !==undefined){
+    setLatitude(data.lat);
+    setLongitude(data.lng);
+    }
     // eslint-disable-next-line react/prop-types
-    setPriceArray(data.priceList);
+    if(data!==null && data!==undefined){
+      setPriceArray(data.priceList);
+    }
     addressForm.setFieldsValue({
       // eslint-disable-next-line react/prop-types
       provinceId: data.provinceLabel,
@@ -344,20 +336,25 @@ console.log(editData, "edit dataa")
       } else if(item.id == 3242){
         item.spaceStatusDescription == 'AV' ? setmondayNight("Боломжтой") : setmondayNight("Боломжгүй");
       } 
+<<<<<<< HEAD
 
       // console.log(item.spaceStatusDescription[0], "mapped element")
+=======
+      
+>>>>>>> d77e47c6351dae39b2f3a8787d4d145b075a6232
     })
   }, []);
   const onChangeAimag = async (e)=>{
     const value = aimag.find((item)=>item.label===e);
     const sum = await callGet(`/address/sum/${value.value}`);
     setSum(sum);
-    console.log(sum, 'sumiin utga');
     setSelectedAimag(value.value);
-    console.log(value, 'vlueee');
     setSelectedAimagName(value.label);
+<<<<<<< HEAD
     setPersonalInfo(true);
     console.log(selectedAimag, 'songogdson aimg');
+=======
+>>>>>>> d77e47c6351dae39b2f3a8787d4d145b075a6232
     setMainData({...mainData, provinceId: value.value});
   };
   const onChangeSum = async (e)=>{
@@ -367,15 +364,16 @@ console.log(editData, "edit dataa")
     const selectSum = sum.find((item)=>item.value==e);
     setSelectedSum(selectSum.value);
     setSelectedSumName(selectSum.label);
+<<<<<<< HEAD
     setPersonalInfo(true);
     console.log(selectSum.label, 'maybe sumiin medeelel');
     // console.log(section, 'khoroonii medeele');
+=======
+>>>>>>> d77e47c6351dae39b2f3a8787d4d145b075a6232
   };
   const onChangeSection = async (e)=>{
     setSelectedSection(e);
-    console.log(e, 'songoson khorooo');
     const selectkhoroo = section.find((item)=>item.value==e);
-    console.log(selectkhoroo.label, 'khoroo shuu');
     setSectionName(selectkhoroo.label);
     setPersonalInfo(true);
     setMainData({...mainData, sectionId: e});
@@ -384,37 +382,37 @@ console.log(editData, "edit dataa")
   };
   const onChangeResidence = async (e)=>{
     setSelectedBuilding(e);
+<<<<<<< HEAD
     console.log(e, 'songoson bair');
     setPersonalInfo(true);
+=======
+
+>>>>>>> d77e47c6351dae39b2f3a8787d4d145b075a6232
     setSelectedResidence(e);
     const residenceBlock = await callGet(`/address/residenceblock?residenceId=${e}`);
     setResidenceBlockList(residenceBlock);
-    console.log(residenceBlock, 'aaa');
     const selectbair = residenceList.find((item)=>item.value==e);
 
-    console.log(selectbair.label, 'bair shuu');
     setMainData({...mainData, residenceName: selectbair.label, residenceId: e});
 
     setSelectedBairName(selectbair.label);
   };
 
   const onChangeResidenceBlock = async (e)=>{
-    console.log(e, 'ooooo sda');
     setSelectedBuildingNumber(e);
     setPersonalInfo(true);
     // setSelectedResidence(e);
     // const residenceBlock = await callGet(`/address/residenceblock?residenceId=${e}`);
     // setResidenceBlockList(residenceBlock);
-    // console.log(residenceBlock, 'aaa');
     const selectbairdugaar = residenceBLockList.find((item)=>item.value==e);
     setBairniiDugaar(selectbairdugaar.label);
-    console.log(selectbairdugaar.label, 'bairnii dugaaraa');
     setMainData({...mainData, residenceBlockNumber: selectbairdugaar.label});
     setMainData7({...mainData7, residenceBlockId: e});
     // setSelectedBairName(selectbair.label);
   };
   const onchangeInputResidenceName=(e)=>{
     setMainData({...mainData, residenceName: e.target.value});
+<<<<<<< HEAD
     console.log(e.target.value, 'bairnii dugaara');
     setPersonalInfo(true);
   };
@@ -422,10 +420,14 @@ console.log(editData, "edit dataa")
     setMainData({...mainData, residenceBlockNumber: e.target.value});
     console.log(e.target.value), 'bairnii dugaaraaa';
     setPersonalInfo(true);
+=======
+  };
+  const onChangeInputResidenceNumber =(e)=>{
+    setMainData({...mainData, residenceBlockNumber: e.target.value});
+>>>>>>> d77e47c6351dae39b2f3a8787d4d145b075a6232
   };
   const onChangeParkingGateNumber =(e)=>{
     setMainData({...mainData, parkingGateNumber: e.target.value});
-    console.log(e.target.value, 'gatenii number');
     setSelectedGateNumber(e.target.value);
     setPersonalInfo(true);
   };
@@ -460,7 +462,6 @@ console.log(editData, "edit dataa")
   const onMapClick = (e)=>{
     setLongitude(e.lng);
     setLatitude(e.lat);
-    console.log(e, 'urtraga orgorogo');
     setMainData({...mainData, latitude: e.lat, longitude: e.lng});
   };
   const changeMaindata = (e) => {
@@ -475,6 +476,7 @@ console.log(editData, "edit dataa")
   };
 
   const OnSaveAddressData = async (e) => {
+<<<<<<< HEAD
     if(personalInfo == true){
       const res1 = await callPost('/parkingspace/update/1', mainData);
       console.log(res1, 'res1-iin hariu');
@@ -502,6 +504,13 @@ console.log(editData, "edit dataa")
       const res7 = await callPost('/parkingspace', mainData7);
       console.log(res7, 'res7-iin hariu');
     console.log(mainData7, 'main7 dataaa');
+=======
+    setTest(true);
+    setValue(false);
+  };
+  const spaceDataSave = (e) => {
+    main7(mainData7);
+>>>>>>> d77e47c6351dae39b2f3a8787d4d145b075a6232
     setSpaceValue(false);
     } else{
       setSpaceValue(false);
@@ -509,6 +518,7 @@ console.log(editData, "edit dataa")
     
   };
   const onChangefloorNumberId = (e)=>{
+<<<<<<< HEAD
     setSpaceInfo(true);
     floorData.map((el) => {
       if(el.value == e){
@@ -516,10 +526,13 @@ console.log(editData, "edit dataa")
       }
     });
  
+=======
+>>>>>>> d77e47c6351dae39b2f3a8787d4d145b075a6232
     setMainData7({...mainData7, floorNumber: +e});
     
   };
   const onChangeEntranceLock = (e)=>{
+<<<<<<< HEAD
     setSpaceInfo(true);
     entranceData.map((el) => {
       if(el.value == e){
@@ -573,15 +586,37 @@ console.log(editData, "edit dataa")
     setSpaceInfo(true);
     setTypeOther(e.target.value);
     console.log(e.target.value);
+=======
+    setMainData7({...mainData7, entranceLock: +e});
+  };
+  const onChangeisNumbering = (e)=>{
+    setMainData7({...mainData7, isNumbering: +e});
+  };
+  const onChangeCapacityId = (e)=>{
+    setMainData7({...mainData7, capacityId: +e});
+  };
+  const onChangeTypeId = (e)=>{
+    setMainData7({...mainData7, typeId: +e});
+  };
+  const onChangeReturnRoutes = (e)=>{
+    setMainData7({...mainData7, returnRoutes: +e});
+  };
+  const onChangeTypeOther = (e)=>{
+>>>>>>> d77e47c6351dae39b2f3a8787d4d145b075a6232
     setMainData7({...mainData7, typeOther: e.target.value});
   };
 
   {/* Үндсэн зургийн мэдээлэлтэй холбоотой STATE*/}
+<<<<<<< HEAD
   const onsaveMainImage = async () => {
     const res2 = await callPost('/parkingspace/parkingimage', mainData2);
     console.log(res2, 'res2-iin hariu');
     
     console.log(mainData2, 'main dataa 2');
+=======
+  const onsaveMainImage = () => {
+    main2(mainData2);
+>>>>>>> d77e47c6351dae39b2f3a8787d4d145b075a6232
     setMainImageValue(false);
   };
   {/* Хотхоны ой орчмын зураг оруулах хэсэг*/}
@@ -594,7 +629,6 @@ console.log(editData, "edit dataa")
       getBase64(
         info.file.originFileObj,
         (image3) => (
-          console.log(image3),
           setLoadingPosition(false),
           setSelectedResidenceSideImage(image3)
         ),
@@ -612,8 +646,6 @@ console.log(editData, "edit dataa")
         info.file.originFileObj,
         (image2) => (
           setMainData2({...mainData2, imageResidenceGate: image2.slice(22)}),
-
-          console.log(image2, 'zurag 2'),
           setLoadingExit(false), setSelectedResidenceExitImage(image2)
         ),
       );
@@ -629,7 +661,6 @@ console.log(editData, "edit dataa")
       getBase64(
         info.file.originFileObj,
         (image3) => (
-          console.log(image3),
 
           setLoadingExitImage(false),
           setSelectedExitImage(image3)
@@ -647,7 +678,6 @@ console.log(editData, "edit dataa")
       getBase64(
         info.file.originFileObj,
         (image3) => (
-          console.log(image3, 'zurag 3'),
           setOverallLoading(false),
           setMainData2({...mainData2, imageParkingOverall: image3.slice(22)}),
           setImageParkingOverall(image3)
@@ -664,7 +694,6 @@ console.log(editData, "edit dataa")
       getBase64(
         info.file.originFileObj,
         (image3) => (
-          console.log(image3),
           setMainData3({...mainData3, imageSpaceNumber: image3.slice(22)}),
           setLoadingSpaceNumber(false),
           setImageSpaceNumber(image3)
@@ -681,7 +710,6 @@ console.log(editData, "edit dataa")
       getBase64(
         info.file.originFileObj,
         (image3) => (
-          console.log(image3, 'haalganii zurag'),
           setMainData3({...mainData3, imageFromGate: image3.slice(22)}),
           setLoadingFromGate(false),
           setImageFromGate(image3)
@@ -698,19 +726,23 @@ console.log(editData, "edit dataa")
       getBase64(
         info.file.originFileObj,
         (image3) => (
-          console.log(image3),
           setLoadingDirect(false),
           setSelectedDirectionImage(image3)
         ),
       );
     }
   };
+<<<<<<< HEAD
   const onSaveSpaceImage = async ()=>{
     const res3 = await callPost('/parkingspace/detail', mainData3);
      console.log(res3, 'res3-iin hariu');
 
     
     console.log(mainData3, 'mainDataa 3');
+=======
+  const onSaveSpaceImage = ()=>{
+    main3(mainData3);
+>>>>>>> d77e47c6351dae39b2f3a8787d4d145b075a6232
     setSpaceImage(false);
   };
   const onChangeRent = ()=>{
@@ -816,7 +848,6 @@ console.log(editData, "edit dataa")
   };
   const onSavePriceData = async ()=>{
     const data2 = priceForm.getFieldsValue();
-    console.log(data2, 'ssssssssssssssssssssssss');
 
     const array = [
       {
@@ -868,7 +899,6 @@ console.log(editData, "edit dataa")
     setDiscountValue(true);
     // eslint-disable-next-line react/prop-types
     const discountValue = await callGet(`/parkingspace/update/6?parkingSpaceId=${data.parkingId}`);
-    console.log(discountValue);
     setLoading(false);
   };
   const onSaveDiscountData = async (e)=> {
@@ -939,11 +969,9 @@ console.log(editData, "edit dataa")
    
   };
   const onChangeMonthSale = (e) =>{
-    console.log(e.target.value);
   };
 
   const onFinish = (e) => {
-    console.log('xaaxaa');
   };
   return (
     <div>
@@ -962,7 +990,7 @@ console.log(editData, "edit dataa")
       </Row>
       <Row>
         <Col span={10} offset={1}>
-          {data.requestStatusCode === 'PENDING' && < div style={{
+          {data && data.requestStatusCode === 'PENDING' && < div style={{
             border: '1px solid #F8C40C',
             height: '64px',
             width: '475px',
@@ -976,7 +1004,7 @@ console.log(editData, "edit dataa")
             Зогсоолын мэдээллийг шалгаж байна. Мэдээлэл баталгаажсаны дараа түрээсийн захиалга авах боломжтой.
             </div>
           </div>}
-          {data.requestStatusCode === 'CANCELLED' && < div style={{
+          {data && data.requestStatusCode === 'CANCELLED' && < div style={{
             border: '1px solid #C6231A',
             height: '64px',
             width: '475px',
@@ -1008,7 +1036,7 @@ console.log(editData, "edit dataa")
             </p>
           </Col>
           <Col style={{marginTop: '50px '}} span={2} offset={14}>
-            {data.requestStatusCode =='CANCELLED' || data.requestStatusCode =='CONFIRMED' ?
+            {data && data.requestStatusCode =='CANCELLED'?
               <div>
                 <Button
                   className='editSpaceDataButton'
@@ -1133,7 +1161,7 @@ console.log(editData, "edit dataa")
                 <p>Зогсоолын дугаар *</p>
               </Col>
               <Col style={{lineHeight: '40px', color: '#647189'}} span={5}>
-                {test ? (
+                {test? (
                   <>
                     <p>{selectedAimagName}</p>
                     <p>{selectedSumName}</p>
@@ -1145,13 +1173,13 @@ console.log(editData, "edit dataa")
                   </>
                 ) : data && (
                   <>
-                    <p>{data.provinceLabel}</p>
-                    <p>{data.districtLabel}</p>
-                    <p>{data.sectionLabel}</p>
-                    <p>{data.residenceName}</p>
-                    <p>{data.residenceBlockNumber}</p>
-                    <p>{data.parkingGateNumber}</p>
-                    <p>{data.uparkingNumber}</p>
+                    <p>{data && data.provinceLabel}</p>
+                    <p>{data &&data.districtLabel}</p>
+                    <p>{data &&data.sectionLabel}</p>
+                    <p>{data &&data.residenceName}</p>
+                    <p>{data &&data.residenceBlockNumber}</p>
+                    <p>{data &&data.parkingGateNumber}</p>
+                    <p>{data &&data.uparkingNumber}</p>
                   </>
                 )
                 }
@@ -1385,13 +1413,13 @@ console.log(editData, "edit dataa")
                   <p>Нэмэлт тайлбар</p>
                 </Col>
                 <Col style={{lineHeight: '40px', color: '#647189'}} span={5}>
-                  <p>{floorNumberLabel}</p>
-                  <p>{entranceLockLabel}</p>
-                  <p>{isNumberingLabel}</p>
-                  <p>{capacityLabel}</p>
-                  <p>{typeLabel}</p>
-                  <p>{returnRoutesLabel}</p>
-                  <p>{typeOther}</p>
+                  <p>{data && data.floorNumberLabel? data.floorNumberLabel:<p style={{color: 'gray'}}>null</p>}</p>
+                  <p>{data && data.entranceLockLabel?data.entranceLockLabel:<p>null</p>}</p>
+                  <p>{data && data.isNumberingLabel ? data.isNumberingLabel :<p>null</p>}</p>
+                  <p>{data && data.capacityLabel ?data.capacityLabel : <p>null</p>}</p>
+                  <p>{data && data.typeLabel ? data.typeLabel :<p>null</p>}</p>
+                  <p>{data && data.returnRoutesLabel ? data.returnRoutesLabel:<>null</>}</p>
+                  <p>{data && data.typeOther? data.typeOther :<>null</>}</p>
                 </Col>
                 <Col></Col>
               </Row>
@@ -1435,17 +1463,18 @@ console.log(editData, "edit dataa")
               <Col style={{marginTop: '30px'}} offset={3}>
                 {/* ЗОгсоолын зураг харагдах хэсэг*/}
                 <Carousel autoplay>
-                  {data.imageParkingGate ?
+                  {console.log(data,'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')}
+                  {data && data.imageParkingGate ?
                     <div>
                       <div>
                         <Image src={`data:image/jpeg;base64,${data.imageParkingGate}`} height="400px" width='800px' style={{zIndex: '-1', position: 'absolute'}}/>
                         {/* <h8 style={{position: 'relative', color: 'red'}}>adwadawdaw</h8> */}
                       </div>
                     </div>:null}
-                  {data.imageParkingOverall ?<div>
+                  {data && data.imageParkingOverall ?<div>
                     <Image src={`data:image/jpeg;base64,${data.imageParkingOverall}`} height="400px" width='800px'/>
                   </div>:null}
-                  {data.imageResidenceGate ?<div>
+                  {data && data.imageResidenceGate ?<div>
                     <Image src={`data:image/jpeg;base64,${data.imageResidenceGate}`} height="400px" width='800px'/>
                   </div>:null}
                 </Carousel>
@@ -1743,7 +1772,7 @@ console.log(editData, "edit dataa")
               </p>
             </Col>
             <Col style={{marginTop: '50px '}} span={2} offset={14}>
-              {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ?
+              {data && data.requestStatusCode =='CANCELLED'  || data && data.requestStatusCode =='CONFIRMED' ?
                 <Button
                   style={{borderRadius: '10px'}}
                   onClick={onChangeSpaceImageState}
@@ -1761,13 +1790,13 @@ console.log(editData, "edit dataa")
             {!spaceImage ? (
               <Col offset={3}>
                 <Carousel autoplay>
-                  {data.imageResidenceGate ? <div>
+                  {data && data.imageResidenceGate ? <div>
                     <Image src={`data:image/jpeg;base64,${data.imageResidenceGate}`} height="400px" width='800px'/>
                   </div>:null}
-                  {data.imageSpaceNumber ? <div>
+                  {data && data.imageSpaceNumber ? <div>
                     <Image src={`data:image/jpeg;base64,${data.imageSpaceNumber}`} height="400px" width='800px'/>
                   </div>:null}
-                  {data.imageFromGate ? <div>
+                  {data && data.imageFromGate ? <div>
                     <Image src={`data:image/jpeg;base64,${data.imageFromGate}`} height="400px" width='800px'/>
                   </div>:null}
                 </Carousel>
@@ -1997,7 +2026,7 @@ console.log(editData, "edit dataa")
             </p>
           </Col>
           <Col span={2} offset={14}>
-            {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ?
+            {data && data.requestStatusCode =='CANCELLED'  || data && data.requestStatusCode =='CONFIRMED' ?
               <Button
                 style={{borderRadius: '10px'}}
                 onClick={changePriceValue}
@@ -2087,7 +2116,7 @@ console.log(editData, "edit dataa")
                 </p>
               </Col>
               <Col span={2} offset={14}>
-                {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ?
+                {data && data.requestStatusCode =='CANCELLED'  || data && data.requestStatusCode =='CONFIRMED' ?
                   <Button
                     style={{borderRadius: '10px'}}
                     onClick={changeDiscountValue}
@@ -2103,9 +2132,9 @@ console.log(editData, "edit dataa")
             <Divider />
             {!discountValue ? (
               <Col offset={1} span={16}><Row><Col span={10}>7 хоногын захиалга - Хөнгөлөлтийн %</Col>
-                <Col span={2} offset={4}>{data.saleList[0].salePercent}%</Col></Row>
+                <Col span={2} offset={4}>{data && data.saleList[0].salePercent}%</Col></Row>
               <Row><Col span={10}>1 сарын захиалга - Хөнгөлөлтийн %</Col>
-                <Col span={2} offset={4}>{data.saleList[1].salePercent}%</Col></Row></Col>
+                <Col span={2} offset={4}>{data && data.saleList[1].salePercent}%</Col></Row></Col>
             ):<Row>
               <Col span={20}>
                 <Form form={saleForm}>
@@ -2142,7 +2171,7 @@ console.log(editData, "edit dataa")
               </p>
             </Col>
             <Col style={{marginTop: '50px'}} span={2} offset={14}>
-              {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ?
+              {data && data.requestStatusCode =='CANCELLED'  || data && data.requestStatusCode =='CONFIRMED' ?
                 <Button
                   style={{borderRadius: '10px'}}
                   onClick={onChangeRent}
@@ -2175,7 +2204,6 @@ console.log(editData, "edit dataa")
 
                   onChange={(e) => {
                     // props.setRentData(weekData);
-                    console.log(e, 'eeeeeeeeeeeeeeee');
                     setsundayMorning(e), setChecked(2);
                   }}
                   value={sundayMorning}
@@ -2184,7 +2212,7 @@ console.log(editData, "edit dataa")
                   }
                 >
 
-                  {data.requestStatusCode =='CANCELLED' || data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
+                  { data && data.requestStatusCode =='CANCELLED' || data && data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -2200,7 +2228,7 @@ console.log(editData, "edit dataa")
                     sundayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
+                  { data && data.requestStatusCode =='CANCELLED'  || data && data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -2219,7 +2247,7 @@ console.log(editData, "edit dataa")
                     sundayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                   {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
+                   { data && data.requestStatusCode =='CANCELLED'  || data && data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -2235,7 +2263,7 @@ console.log(editData, "edit dataa")
                     sundayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                    {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
+                    {data && data.requestStatusCode =='CANCELLED'  || data && data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -2257,7 +2285,7 @@ console.log(editData, "edit dataa")
                     mondayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                   {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
+                   {data && data.requestStatusCode =='CANCELLED'  || data && data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -2273,7 +2301,7 @@ console.log(editData, "edit dataa")
                     mondayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                    {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
+                    { data && data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -2292,7 +2320,7 @@ console.log(editData, "edit dataa")
                     mondayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                   {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
+                   { data && data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -2308,7 +2336,7 @@ console.log(editData, "edit dataa")
                     mondayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                   {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
+                   { data && data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -2329,7 +2357,7 @@ console.log(editData, "edit dataa")
                     tuesdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                    {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
+                    {data &&  data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -2345,7 +2373,7 @@ console.log(editData, "edit dataa")
                     tuesdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                   {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
+                   {data &&  data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -2363,7 +2391,7 @@ console.log(editData, "edit dataa")
                     tuesdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                   {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
+                   {data &&  data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -2379,7 +2407,7 @@ console.log(editData, "edit dataa")
                     tuesdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                   {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
+                   {data &&  data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -2400,7 +2428,7 @@ console.log(editData, "edit dataa")
                     wednesdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                    {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
+                    { data &&  data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -2416,7 +2444,7 @@ console.log(editData, "edit dataa")
                     wednesdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                    {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
+                    {data &&  data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -2434,7 +2462,7 @@ console.log(editData, "edit dataa")
                     wednesdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                   {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
+                   { data &&  data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -2450,7 +2478,7 @@ console.log(editData, "edit dataa")
                     wednesdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                   {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
+                   {data &&  data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -2471,7 +2499,7 @@ console.log(editData, "edit dataa")
                     thursdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                   {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
+                   {data &&  data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -2487,7 +2515,7 @@ console.log(editData, "edit dataa")
                     thursdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                   {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
+                   {data &&  data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -2505,7 +2533,7 @@ console.log(editData, "edit dataa")
                     thursdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                    {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
+                    { data && data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -2521,7 +2549,7 @@ console.log(editData, "edit dataa")
                     thursdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                    {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
+                    { data &&  data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -2542,7 +2570,7 @@ console.log(editData, "edit dataa")
                     fridayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                   {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
+                   { data &&  data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -2558,7 +2586,7 @@ console.log(editData, "edit dataa")
                     fridayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                   {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
+                   { data &&  data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -2576,7 +2604,7 @@ console.log(editData, "edit dataa")
                     fridayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                   {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
+                   {data &&  data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -2592,7 +2620,7 @@ console.log(editData, "edit dataa")
                     fridayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                   {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
+                   {data &&  data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -2613,7 +2641,7 @@ console.log(editData, "edit dataa")
                     saturdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                   {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
+                   { data && data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -2628,8 +2656,8 @@ console.log(editData, "edit dataa")
                   className={
                     saturdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
-                >
-                  {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
+                > 
+                  { data && data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -2647,7 +2675,7 @@ console.log(editData, "edit dataa")
                     saturdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
+                  { data && data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
@@ -2663,7 +2691,7 @@ console.log(editData, "edit dataa")
                     saturdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                    {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
+                    { data && data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>

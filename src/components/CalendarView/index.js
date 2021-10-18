@@ -92,13 +92,7 @@ const CustomCalendar = (props) => {
     const current = moment(value);
     const onclickclass = '';
     let style;
-
     if (month === currMonth) {
-    //   if (
-    //     selectedDate.find((dDate) => isSameDay(dDate.toDate(), value.toDate()))
-    //   ) {
-    //     onclickclass = 'onclickeddate';
-    //   }
       const a = dayOfWeek.find((item)=>
         item.day == ofDay && item.spaceStatusDescription === 'UN',
       );
@@ -118,7 +112,6 @@ const CustomCalendar = (props) => {
             color: 'white',
             marginLeft: '5px'};
         }
-
         return <div className={`customFullCellRender ant-picker-cell-inner ${onclickclass}`} style={style}>
           <div className="ant-picker-calendar-date-value">{day}</div>
         </div>;
@@ -137,7 +130,6 @@ const CustomCalendar = (props) => {
             color: 'white',
             marginLeft: '5px'};
         }
-
         return <div className={`customFullCellRender ant-picker-cell-inner ${onclickclass}`} style={style}>
           <div className="ant-picker-calendar-date-value">{day}</div>
         </div>;
@@ -156,7 +148,6 @@ const CustomCalendar = (props) => {
             color: 'white',
             marginLeft: '5px'};
         }
-
         return <div className={`customFullCellRender ant-picker-cell-inner ${onclickclass}`} style={style}>
           <div className="ant-picker-calendar-date-value">{day}</div>
         </div>;

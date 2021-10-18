@@ -29,7 +29,6 @@ const ClickLocation = () => (
 );
 
 const mainInfo = (props) => {
-  console.log(props);
   const [residenceData, setResidenceData] = useState({});
   const [aimag, setAimag] = useState([]);
   const [provinceId, setSelectedAimag] = useState({});
@@ -52,10 +51,8 @@ const mainInfo = (props) => {
   const [latitude, setLatitude] = useState(47.886398);
   const [selectLat, setSelectLat] = useState();
   const [selectLng, setSelectLng] = useState();
-  const [form] = Form.useForm();
   useEffect(async () => {
     const aimag = await callGet('/address/aimag');
-    console.log(aimag);
     setAimag(aimag);
   }, []);
 
@@ -75,11 +72,9 @@ const mainInfo = (props) => {
   };
   const onChangeSum = async (e) => {
     const sum1 = sum.find((item) => item.value === Number(e));
-    console.log(sum1);
     setSelectedSum(sum1);
     setResidenceData({...residenceData, districtId: sum1.value});
     const khoroo = await callGet(`/address/khoroo/${sum1.value}`);
-    console.log(khoroo);
     setKhoroo(khoroo);
   };
   const onChangeKhoroo = async (e) => {
@@ -89,7 +84,6 @@ const mainInfo = (props) => {
     const residence = await callGet(`/address/residence?districtId=${districtId.value}&provinceId=${provinceId.value}&sectionId=${horoo.value}`,
     );
     setResidence(residence);
-    console.log('residence--->', residence);
   };
   const onChangeResidence = async (e) => {
     const residence1 = residence.find((item) => item.value === Number(e));
@@ -99,12 +93,10 @@ const mainInfo = (props) => {
       residenceName: residence1.label,
       residenceId: e,
     });
-    console.log('nicee');
     const residenceBlock = await callGet(
       `/address/residenceblock?residenceId=${e}`,
     );
     setResidenceBlock(residenceBlock);
-    console.log('residenceBlock--->', residenceBlock);
   };
   const onChangeInputResidence = (e) => {
     setResidenceData({...residenceData, residenceName: e.target.value});
@@ -126,7 +118,6 @@ const mainInfo = (props) => {
     });
   };
   const onChangeDoorNumber = (e) => {
-    console.log(e.target.value);
     setDoorNo(e.target.value);
     setResidenceData({
       ...residenceData,
@@ -139,10 +130,8 @@ const mainInfo = (props) => {
       ...residenceData,
       parkingSpaceId: parseInt(e.target.value),
     });
-    console.log(residenceData);
   };
   const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
   };
   const onMapClick = (e) => {
     setSelectLng(e.lng);
@@ -179,11 +168,10 @@ const mainInfo = (props) => {
       <div style={{display: 'flex'}}>
         <div className={'address'}>
           <Form
-            form = {props.form}
+            form={props.form}
             layout="horizontal"
-            // initialValues={residenceData}
             style={{marginTop: '20px'}}
-            onFinish={(values) => props.onFinish(form, values)}
+            onFinish={(values) => props.onFinish(props.form, values)}
             onFinishFailed={onFinishFailed}
             className={'spaceMainInfo'}
           >

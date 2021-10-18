@@ -20,31 +20,27 @@ const Verify = (props) => {
       fbLink: null,
       firstName: values.firstName,
       homeAddress: null,
-      homeAddressDistrictId: 0,
-      homeAddressLatitude: 0,
-      homeAddressLongitude: 0,
-      homeAddressProvinceId: 0,
-      homeAddressSectionId: 0,
+      homeAddressDistrictId: null,
+      homeAddressLatitude: null,
+      homeAddressLongitude: null,
+      homeAddressProvinceId: null,
+      homeAddressSectionId: null,
       lastName: values.lastName,
       registerNumber: values.registerNumber,
       workAddress: null,
-      workAddressLatitude: 0,
-      workAddressLongitude: 0
+      workAddressLatitude: null,
+      workAddressLongitude: null
     }
     const res = await callPost(apiList.userUpdate, formData);
-    console.log('success->>>', res);
     if(res.status == 'success'){
         props.change(false);
     }
-    console.log(values, "valueee")
   
   };
 
   // const onFilled = () => {
   //   const res = callGet(apiList., values.user);
-  //   console.log("success", values.user);
   // };
-
   const layout = {
     labelCol: {span: 8},
     wrapperCol: {span: 16},
@@ -62,11 +58,9 @@ const Verify = (props) => {
       range: '${label} must be between ${min} and ${max}',
     },
   };
-
   useEffect( async () => {
     setUserRealData(userdata)
     setUser(userdata.phoneNumber)
-    console.log(userdata, "dataa")
   }, []);
 
   useEffect(async () => {
@@ -182,7 +176,7 @@ const Verify = (props) => {
                 >
                   <Col span={10} offset={14} style={{marginTop: '50px'}}>
                     <Button type="primary" htmlType="submit" className="flex">
-                      <text>Үргэлжлүүлэх</text>
+                      <div>Үргэлжлүүлэх</div>
                       <div style={{marginTop: '4px', marginLeft: '5px'}}>
                         <img
                           src="/icons/arrow_forward_24px.png"

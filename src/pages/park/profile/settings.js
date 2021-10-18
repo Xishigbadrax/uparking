@@ -55,8 +55,6 @@ const Settings = () => {
       setvalue5(res.isTransactionPassBooking);
       setvalue6(res.isTransactionPassWallet);
       setvalue7(res.isTransactionPassTransfer);
-      console.log(res, 'Resrs');
-
       // setdatas(res)
     };
     fetchData();
@@ -86,7 +84,6 @@ const Settings = () => {
     formData.label = label;
     formData.state = state;
     const res = await callPost('/user/config', formData);
-    console.log(res);
     ctx.setIsLoading(false);
   };
   const submit2 = async () => {

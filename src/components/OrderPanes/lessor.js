@@ -10,7 +10,7 @@ import DayNightColumn from '@components/DayNightColumns';
 import Context from '@context/Context';
 import RentDate from '@components/registerSpace/rentDate';
 import { showMessage } from '@utils/message';
-import { messageType,defaultMsg } from '@constants/constants';
+import { messageType, defaultMsg } from '@constants/constants';
 import Link from 'next/link';
 import Select from 'rc-select';
 import { result } from 'lodash';

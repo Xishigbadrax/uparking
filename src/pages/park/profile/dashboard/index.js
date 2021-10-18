@@ -70,10 +70,17 @@ const Dashboard = () => {
   const [gateRateData,setGateRateData] = useState();
   const [entranceLockData,setEnterLockData] = useState();
   const [positionRateData,setPositionRateData] = useState()
+<<<<<<< HEAD
   const [rateArray,setRateArray] = useState()
   var b = 0;
   var c = 0;
   var dataOfChart = 0;
+=======
+  const [selectedSPace,setSelectedSpace] = useState(null);
+  const [selectedvehicle,setSelectedVehicle] = useState(null);
+
+
+>>>>>>> d77e47c6351dae39b2f3a8787d4d145b075a6232
   const data1 = {
     labels: ['Орц гарц', 'Нэвтрэх хаалга', 'Байршил', 'Зогсоол'],
     datasets: [
@@ -106,8 +113,8 @@ const Dashboard = () => {
     if (typeof userdata.firstName != 'undefined') {
       setRealData(userdata);
       const parkSpaceList = await callGet(`/parkingspace/list/user?id=${userdata.id}`);
-      console.log(parkSpaceList);
       setSpaceList(parkSpaceList);
+<<<<<<< HEAD
       if(parkSpaceList && parkSpaceList.length){
         parkSpaceList.map(async(item)=>{
           const a = await callGet(`/parkingspace/review?parkingSpaceId=${item.value}`);
@@ -131,6 +138,13 @@ const Dashboard = () => {
       // })
       console.log(rateArray,'rateArray');
      
+=======
+      // if(parkSpaceList && parkSpaceList.length){
+      //   parkSpaceList.map(async(item)=>{
+      //     const a = await callGet(`/parkingspace/review?parkingSpaceId=${item.value}`);
+      //   })
+      // }
+>>>>>>> d77e47c6351dae39b2f3a8787d4d145b075a6232
     }
     
   }
@@ -185,7 +199,6 @@ const Dashboard = () => {
         alternateColor: 'rgba(0, 0, 0, 0.04)',
       },
     },
-    // 开启辅助点
     point: {},
     area: {},
   };
@@ -224,7 +237,6 @@ const Dashboard = () => {
       return true;
     } else {
       setCalendarData(res.history);
-      // console.log(res.history, 'ress');
       ctx.setIsLoading(false);
       if (res.history.length) {
         setSumDay(_.sumBy(res.history, 'totalAtDay'));
@@ -277,20 +289,18 @@ const Dashboard = () => {
     }
   };
   const onChangeOrderDate = (e)=>{
-    console.log(moment(e).format('YYYY-MM-DD'));
-    setSelectDate(moment(e).format('YYYY-MM-DD'));
+    setSelectDate(moment(e).format('YYYY-MM')+'-01');
   };
-  // mshinaar haih
-  const handleVehicle = async (e)=>{
+  // mashinaar haih bolon space eer haiklt hiiih
+  const handleVehicleOrSpace = async (e)=>{
     ctx.setIsLoading(true);
-    console.log(tabKey, 'ok');
     if (tabKey==1) {
+      setSelectedVehicle(e.key)
       const formData = {
         asWho: 1,
-        dateList: selectDate ? [selectDate]: null,
-        vehicleId: e.key,
+        dateList:  null,
+        vehicleId: Number(e.key),
       };
-      console.log(formData);
       const res = await callPost('/booking/history', formData);
       if (!res || res === undefined) {
         showMessage(messageType.FAILED.type, defaultMsg.dataError);
@@ -309,12 +319,12 @@ const Dashboard = () => {
         }
       }
     } else if (tabKey==2) {
+    setSelectedSpace(e.key);
       const formData = {
         asWho: 2,
-        dateList: selectDate ? [selectDate]: null,
-        vehicleId: e.key,
+        dateList:  null,
+        parkingSpaceId: Number(e.key),
       };
-      console.log(formData);
       const res = await callPost('/booking/history', formData);
       if (!res || res === undefined) {
         showMessage(messageType.FAILED.type, defaultMsg.dataError);
@@ -337,7 +347,8 @@ const Dashboard = () => {
     ctx.setIsLoading(false);
   };
   const vehicleMenu = (
-    <Menu onClick={(value)=>handleVehicle(value)} style={{width: '100%'}}>
+    <Menu onClick={(value)=>handleVehicleOrSpace(value)} style={{width: '100%'}}>
+     <Menu.Item key={null}>Бүх тээврийн хэрэгсэл </Menu.Item>
       {vehicles.map((item)=>(
         <Menu.Item key={item.value}>
           {item.label}
@@ -346,7 +357,7 @@ const Dashboard = () => {
     </Menu>
   );
   const spaceMenu = (
-    <Menu onClick={(value)=>handleSpace(value)} style={{width: '100%'}}>
+    <Menu onClick={(value)=>handleVehicleOrSpace(value)} style={{width: '100%'}}>
       <Menu.Item key={null}>Бүх зогсоол </Menu.Item>
       { spaceList && spaceList.map((item)=>(
         <Menu.Item key={item.value}>
@@ -367,18 +378,18 @@ const Dashboard = () => {
           <TabPane tab="Түрээслэгч" key="1" className={'DashboardCalendar1'}>
             <Row>
               <Col span={4} offset={14}>
-                <DatePicker
+                {/* <DatePicker
                   className='selectMonthDate'
                   bordered={false}
                   locale={calendarLocale}
                   placeholder='Сараа сонгоно уу?'
                   picker='month'
                   onChange={onChangeOrderDate}
-                />
+                /> */}
               </Col>
               <Col>
                 <Dropdown overlay={vehicleMenu} className='dropdown'>
-                  <Button style={{color: '#35446D'}}>Бүх автомашин<OrderedListOutlined /></Button>
+                  <Button style={{color: '#35446D'}}>{selectedvehicle!=='null' ?selectedvehicle:'Бүх тээврийн хэрэгсэл' }<OrderedListOutlined /></Button>
                 </Dropdown>
               </Col>
             </Row>
@@ -481,18 +492,18 @@ const Dashboard = () => {
           <TabPane tab="Түрээслүүлэгч" key="2" className='DashboardCalendar1'>
             <Row>
               <Col span={4} offset={14}>
-                <DatePicker
+                {/* <DatePicker
                   className='selectMonthDate'
                   bordered={false}
                   locale={calendarLocale}
                   placeholder='Сараа сонгоно уу?'
                   picker='month'
                   onChange={onChangeOrderDate}
-                />
+                /> */}
               </Col>
               <Col>
                 <Dropdown overlay={spaceMenu} className='dropdown'>
-                  <Button style={{color: '#35446D'}}>Бүх зоүщгсоол<OrderedListOutlined /></Button>
+                  <Button style={{color: '#35446D'}}>{selectedSPace !== 'null' ? selectedSPace : 'Бүх зогсоол'}<OrderedListOutlined /></Button>
                 </Dropdown>
               </Col>
             </Row>
@@ -559,8 +570,7 @@ const Dashboard = () => {
                           <span>
                             {sumTotalValue ?
                               Helper.formatValueReverse(sumTotalValue) :
-                              0}
-            ₮
+                              0}₮
                           </span>
                         </div>
                         <div className="totalSpentText">

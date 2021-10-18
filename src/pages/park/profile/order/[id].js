@@ -85,7 +85,6 @@ const OrderId = () => {
   const orderId = router.query.id;
 
   useEffect(() => {
-    console.log(userdata,'aaaaaaaaaaay');
     getData();
     // const startDate = Date.parse(orderData.startDateTime);
   }, []);
@@ -116,7 +115,6 @@ const OrderId = () => {
       }
       if(type2 == 'MONGOLCHAT') {
           await callPost('/mongolchat/wallet', formData3).then((res) => {
-            console.log(res,'MGL CHAT');
             if (res && res.code == 1000) {
               setMongolChatResultData(res);
               setmessage('Амжилттай. Нэхэмжлэх үүсгэлээ.');
@@ -139,7 +137,6 @@ const OrderId = () => {
             }
           }) }else if(type2 == 'LENDMN') {
             await callPost('/lend/qr/wallettopup', formData3).then((res) => {
-            console.log(res,'LEND CHAT');
               if (res.qr_string) {
                 settitle('Амжилтай');
                 setmessage('Амжилттай. Нэхэмжлэх үүсгэлээ.');
@@ -198,7 +195,6 @@ const OrderId = () => {
   useEffect(()=>{
     const endDate = Date.parse(orderData.endDateTime);
     const nowDate = Date.parse(moment().format('YYYY-MM-DD HH:mm:ss'));
-    console.log(endDate, nowDate);
     if ( nowDate >= endDate ) {
       setIsUnelgee(true);
     } else {
@@ -228,21 +224,18 @@ const OrderId = () => {
     }
   };
   const onChangeComment = (e)=>{
-    console.log(e.target.value);
     setCommentReview(e.target.value);
   };
   // eslint-disable-next-line no-unused-vars
   const onClickPayPayment =async (e)=>{
     ctx.setIsLoading(true);
     const paymentt = await callGet(`/payment?bookingId=${orderData.bookingId}`);
-    console.log(paymentt, 'wawdawaw');
     const invokePaymentDto = {
       amountToPay: orderData.totalPrice,
       bookingId: orderData.bookingId,
       bookingNumber: orderData.bookingNumber,
     };
     const res= await callPost('/payment/bywallet', invokePaymentDto);
-    console.log(res);
     if (res && res.status ==='success') {
       ctx.setIsLoading(false);
       router.push('/park/profile/order');
@@ -259,7 +252,6 @@ const OrderId = () => {
         showMessage(messageType.FAILED.type, defaultMsg.dataError);
       } else {
         setOrderData(res);
-        console.log(res, 'gg');
         setImages([]);
         if (!Helper.isNullOrEmpty(res.imageFromGate)) {
           setImages((images) => [...images, {id: 4, path: res.imageFromGate}]);
@@ -310,16 +302,12 @@ const OrderId = () => {
       if ( res && res.parkingSpaceId) {
         const review = await callGet(`/parkingspace/review?parkingSpaceId=${res.parkingSpaceId}`);
         setReviewData(review.content);
-        console.log(res);
       }
       ctx.setIsLoading(false);
     }
   };
 
-  // eslint-disable-next-line no-unused-vars
-  const callback = (key) => {
-    console.log(key);
-  };
+ 
   const handleClickCancelOrder = () => {
     setIsModalVisibleCancelOrder(true);
   };
@@ -387,7 +375,6 @@ const OrderId = () => {
     }
   };
   const getSelectedDate = (data) =>{
-    console.log(data,'');
     setFromSelectedDate(data);
   };
 
@@ -1033,10 +1020,8 @@ const OrderId = () => {
                   <Checkbox style={{color: '#141A29', fontWeight: '400', fontSize: '16px'}} value={true} onClick={(e)=>{
                     if (checkValue === false) {
                       setChechValue(true);
-                      console.log(checkValue);
                     } else {
                       setChechValue(false);
-                      console.log(checkValue);
                     }
                   }}>
                     Цуцлалтын бодлого зөвшөөрөх
@@ -1112,7 +1097,6 @@ const OrderId = () => {
               <Col span={24} className='commentRate' >
                 <Row style={{color: '#35446D', fontWeight: '400', fontSize: '14px'}}>{item.label}</Row>
                 <Row><Rate onChange={( e)=>{
-                  console.log(item.value);
                   if (item.value === 689) {
                     setParkingReview(e);
                   } else if (item.value === 690) {

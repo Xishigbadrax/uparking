@@ -1,6 +1,6 @@
 import {useEffect, useState,useContext} from 'react';
 import {callGet} from '@api/api';
-import router, { Router } from 'next/router';
+import { useRouter } from 'next/router';
 import {showMessage} from '../../utils/message';
 import {messageType, defaultMsg} from '@constants/constants';
 // import ReactCursorPosition from "react-cursor-position";
@@ -52,7 +52,6 @@ const {Header, Sider, Content} = Layout;
 //   withHandlers({
 //     onMarkerClustererClick: () => (markerClusterer) => {
 //       const clickedMarkers= markerClusterer.getMarkers();
-//       console.log(clickedMarkers);
 //     },
 //   }),
 //   withScriptjs,
@@ -97,7 +96,7 @@ const Dashboard = () => {
 
   // eslint-disable-next-line no-unused-vars
   const [messageShow, setmessageShow] = useState(false);
-  // const router = useRouter();
+  const router = useRouter();
   const [defaultCenter, setDefaultCenter] = useState({
     lat: 47.91909306508191,
     lng: 106.91761127921768,
@@ -132,27 +131,25 @@ const Dashboard = () => {
     if (typeof userdata.firstName != 'undefined') {
       setUserRealData(userdata);
     }
+    // } else{
+    //     router.push('/park/createUser');
+    // }
   }, [userdata]);
   useEffect(() => {
     const fetchData = async () => {
       await callGet('/config/timesplit').then((res) => {
         settimeSplit(res);
       });
-      userdata.firstName && userdata.lastName ? router.push('/park')    : router.push('/park/createUser')
-      // if(userRealData.firstName  &&   userRealData.lastName){
-      //   router.push('/park');
-      // }
-      // else{
-      //   router.push('/park/profile/verify');
-      //   console.log(typeof userRealData.firstName)
+      // if(userdata.firstName && userdata.lastName ){
+      //    router.push('/park') ;
+      // }else{
+      //   router.push('/park/createUser');
       // }
     };
     
-    console.log(userRealData, "dataaa2")
     fetchData();
   }, []);
   // const Markers = (props) => {
-  //   console.log(props, 'aaaaaaas');
   //   return <Marker className="SuperAwesomePin" style={{background: 'red'}} position={{
   //     lat: props.lat,
   //     lng: props.lng,
@@ -215,7 +212,7 @@ const Dashboard = () => {
   const onSearchAuto = async (searchText) => {
     if (searchText.length > 0) {
       const data = await callGet(`/search/keyword?syllable=${searchText}`);
-      setDataSource(searchText ? searchResult(data, searchText) : []);
+      setDataSource(searchText ? searchResult(data) : []);
     } else {
       setDataSource([]);
     }
@@ -268,7 +265,6 @@ const Dashboard = () => {
         }`;
       }
     } else if (tuneType=== null || startDate === null || endDate===null) {
-      console.log('fsearch bolson');
       setSearchType('fsearch');
       url=`/search/input/test?keywordId=${searchId}`;
     }
@@ -331,7 +327,6 @@ const Dashboard = () => {
   );
 
   const onFinishFailed = (values) => {
-    console.log(values, 'onFinishFailed');
   };
   return (
     <Layout>

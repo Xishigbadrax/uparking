@@ -84,7 +84,6 @@ const Nemelt = () => {
     setIsVehileVisible(false);
   };
   const onFinishFailedVehile = (errorInfo) => {
-    console.log('Failed:', errorInfo);
   };
   const onChangeDugaar = (e) => {
     const dugar = e.target.value;
@@ -125,11 +124,10 @@ const Nemelt = () => {
     reader.addEventListener('load', () => callback(reader.result));
     reader.readAsDataURL(img);
   };
-  const handleOk = async () => {
+  const handleOk = async (values) => {
     console.log(vehicleForm.validateFields());
     if (vehicleForm.validateFields()) {
       const a = vehicleForm.getFieldsValue();
-
       const res = await callPost('/user/vehicle', {
         vehicleNumber: a.vehicleNumber,
         maker: a.maker,
@@ -275,9 +273,8 @@ const Nemelt = () => {
           }
         });
       }
-
       const ress = await callPost('/parkingspace/sale', {
-        parkingSpaceId: 522,
+        parkingSpaceId: parkingSpaceId,
         parkingSpaceSale: [
           {
             salePercent: weekSale,
@@ -463,7 +460,7 @@ const Nemelt = () => {
             key="submit"
             type="primary"
             htmlType="submit"
-            onClick={(values) => handleOk(values)}
+            onClick={() => handleOk(values)}
           >
             Хадгалах
           </Button>,

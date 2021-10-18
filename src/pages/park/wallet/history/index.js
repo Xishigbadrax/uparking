@@ -83,11 +83,9 @@ const History = () => {
       key: 'walletId',
     },
   ];
-  // console.log(data, 'dataaaa');
   const fetchData = async () => {
     await callGet(`/wallet/user/history?userId=${id}`, null).then((res) => {
       ctx.setIsLoading(true);
-      // console.log(res, 'resssss');
       const arr = [];
 
       if (res && typeof res.history != 'undefined') {
@@ -98,10 +96,7 @@ const History = () => {
             });
           }
         });
-        console.log(arr, '----------arr----------');
       }
-
-
       setdata(arr);
       ctx.setIsLoading(false);
     });

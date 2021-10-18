@@ -52,10 +52,8 @@ const Wallet = () => {
     });
   };
   const setClickPayPending = (id)=>{
-      console.log(id);
       ctx.setIsLoading(true);
       const item = pendingData.find((it)=>it.bookingId == id);
-      console.log(item);
       setSelectPending(item);
       setVisiblePayPending(true);
   }
@@ -67,7 +65,6 @@ const Wallet = () => {
         walletId:selectedPending.walletId
       }
        const res= await callPost('wallet/pending',formData);
-       console.log(res);
        if(res && res.status === 'success'){
          setVisiblePayPending(false);
          setVisibleOfPendingModal(false);
