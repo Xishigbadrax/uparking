@@ -70,17 +70,14 @@ const Dashboard = () => {
   const [gateRateData,setGateRateData] = useState();
   const [entranceLockData,setEnterLockData] = useState();
   const [positionRateData,setPositionRateData] = useState()
-<<<<<<< HEAD
   const [rateArray,setRateArray] = useState()
   var b = 0;
   var c = 0;
   var dataOfChart = 0;
-=======
   const [selectedSPace,setSelectedSpace] = useState(null);
   const [selectedvehicle,setSelectedVehicle] = useState(null);
 
 
->>>>>>> d77e47c6351dae39b2f3a8787d4d145b075a6232
   const data1 = {
     labels: ['Орц гарц', 'Нэвтрэх хаалга', 'Байршил', 'Зогсоол'],
     datasets: [
@@ -114,7 +111,6 @@ const Dashboard = () => {
       setRealData(userdata);
       const parkSpaceList = await callGet(`/parkingspace/list/user?id=${userdata.id}`);
       setSpaceList(parkSpaceList);
-<<<<<<< HEAD
       if(parkSpaceList && parkSpaceList.length){
         parkSpaceList.map(async(item)=>{
           const a = await callGet(`/parkingspace/review?parkingSpaceId=${item.value}`);
@@ -138,13 +134,6 @@ const Dashboard = () => {
       // })
       console.log(rateArray,'rateArray');
      
-=======
-      // if(parkSpaceList && parkSpaceList.length){
-      //   parkSpaceList.map(async(item)=>{
-      //     const a = await callGet(`/parkingspace/review?parkingSpaceId=${item.value}`);
-      //   })
-      // }
->>>>>>> d77e47c6351dae39b2f3a8787d4d145b075a6232
     }
     
   }

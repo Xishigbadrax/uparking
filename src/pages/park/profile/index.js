@@ -221,35 +221,6 @@ const Profile = () => {
     // setFormdata({...formData, rfid: '12'});
   }, []);
   const onSaveModal = async (e) => {
-<<<<<<< HEAD
-=======
-    const res1 = await callPost('/parkingspace/update/1', update1);
-    if (res1.status === 'success') {
-      const res7 = await callPost('/parkingspace', update7);
-      if (res7.status == 'success') {
-        const res2 = await callPost('/parkingspace/parkingimage', update2);
-        if (res2.status == 'success') {
-          const res3 = await callPost('/parkingspace/detail', update3);
-          if (res3.status == 'success') {
-            const res4 = await callPost('/parkingspace/price', update4);
-            if (res4.status == 'success') {
-              const res5 = await callPost('/parkingspace/sale', update5);
-              if (res5.status == 'success') {
-                const res6 = await callPost('/schedule/general', update6);
-              } else {
-              }
-            } else {
-            }
-          } else {
-          }
-        } else {
-        }
-      } else {
-      }
-    } else {
-    }
-
->>>>>>> d77e47c6351dae39b2f3a8787d4d145b075a6232
 
     setVisibleParkingSpaceEdit(false);
   };
