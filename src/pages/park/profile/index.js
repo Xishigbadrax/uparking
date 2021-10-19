@@ -1,4 +1,5 @@
 import {Row, Col, Card, Alert} from 'antd';
+import MaskedInput from 'antd-mask-input';
 import {
   UserOutlined,
   EditOutlined,
@@ -80,13 +81,8 @@ const Profile = () => {
     reader.readAsDataURL(img);
   };
   const [formData, setFormdata] = useState({});
-  const [update1, setUpdate1] = useState();
-  const [update2, setUpdate2] = useState();
-  const [update3, setUpdate3] = useState();
-  const [update4, setUpdate4] = useState();
-  const [update5, setUpdate5] = useState();
-  const [update6, setUpdate6] = useState();
-  const [update7, setUpdate7] = useState();
+ 
+  const [status, setStatus] = useState();
   const ctx =  useContext(Context);
   // eslint-disable-next-line no-unused-vars
   const [dugaar, setDugaar] = useState();
@@ -143,6 +139,10 @@ const Profile = () => {
   const [editId, setEditId]= useState();
   const [weekDescription, setweekDescription] = useState();
   const [monthId, setmonthId] = useState(null);
+  const [deleteData, setDeleteData] = useState({
+    parkingSpaceId: null,
+    rawPassword: ""
+  });
   const [monthSale, setmonthSale] = useState(null);
   // const [userId, setUserId]= useState(null);
   const [monthDescription, setMonthDescription] = useState();
@@ -180,6 +180,8 @@ const Profile = () => {
     const spaceEdit = await callGet(`/parkingspace?parkingSpaceId=${a}`);
     const res = await callGet(`parkingspace/update/1?parkingSpaceId=${a}`);
     setSpaceEditData(spaceEdit);
+    console.log(spaceEdit, "spaceeditiin data");
+    spaceEdit && setDeleteData({...deleteData, parkingSpaceId: spaceEdit.id});
    
     setLoading(false);
   };
@@ -220,32 +222,6 @@ const Profile = () => {
     // setFormdata({...formData, rfid: '12'});
   }, []);
   const onSaveModal = async (e) => {
-    const res1 = await callPost('/parkingspace/update/1', update1);
-    if (res1.status === 'success') {
-      const res7 = await callPost('/parkingspace', update7);
-      if (res7.status == 'success') {
-        const res2 = await callPost('/parkingspace/parkingimage', update2);
-        if (res2.status == 'success') {
-          const res3 = await callPost('/parkingspace/detail', update3);
-          if (res3.status == 'success') {
-            const res4 = await callPost('/parkingspace/price', update4);
-            if (res4.status == 'success') {
-              const res5 = await callPost('/parkingspace/sale', update5);
-              if (res5.status == 'success') {
-                const res6 = await callPost('/schedule/general', update6);
-              } else {
-              }
-            } else {
-            }
-          } else {
-          }
-        } else {
-        }
-      } else {
-      }
-    } else {
-    }
-
 
     setVisibleParkingSpaceEdit(false);
   };
@@ -264,7 +240,39 @@ const Profile = () => {
     ctx.setIsLoading(false);
     }
   };
- 
+  
+  const onPassword = (e) => {
+    setDeleteData({...deleteData, rawPassword: e.target.value})
+  };
+
+  
+  const submitData = async () => {
+    const res = await callPost('/parkingspace/delete', deleteData);
+    console.log(res, "ustgah res");
+    console.log(deleteData, "delete dataa");
+  };
+
+  const onDeleteParkingSpace = () => {
+    setVisibleParkingSpaceEdit(false);
+    Modal.info({
+      title: <p style={{fontWeight: 'bold'}}>Баталгаажуулах</p>,
+      okText: 'Баталгаажуулах',
+      content: (
+        <div>
+          <p>Та өөрийн гүйлгээний нууц үгээ оруулна уу</p>
+          {/* <Input
+            type="password"
+            onChange={(e) => onchangeee(e)}
+            placeholder="Гүйлгээний нууц үг"
+          /> */}
+          <Input  type="password" onChange={(e) => onPassword(e)} name="Гүйлгээний нууц үг" />
+        </div>
+      ),
+      onOk() {
+        submitData();
+      },
+    });
+  };
   //zagwar medeelel uurchluh
   const onChangeZagwar = (e) => {
     const selectZagwar = zagwar.find((item) => item.value === e);
@@ -1154,20 +1162,26 @@ const Profile = () => {
       <Modal
         visible={visibleParkingSpaceEdit}
         width={1200}
-
+        
         onCancel={()=>setVisibleParkingSpaceEdit(false)}
+    
         footer={[
-          <Button key="back" className=" bg-red-500 text-[white]" onClick={()=>setVisibleParkingSpaceEdit(false)}>
+          status != "PENDING" ? (
+            <>
+          <Button key="back" className=" bg-red-500 text-[white]" onClick={onDeleteParkingSpace}>
             Устгах
           </Button>,
           <Button key="submit" type="primary" onClick={onSaveModal}>
             Хадгалах
-          </Button>,
+          </Button>
+          </>) : <Button key="submit" type="primary" onClick={() => setVisibleParkingSpaceEdit(false)}>
+            Хаах
+          </Button>
 
         ]}
       >
 
-        <Edit main={setUpdate1} main2={setUpdate2} main3={setUpdate3} main4={setUpdate4} main5={setUpdate5} main6={setUpdate6} main7={setUpdate7} data={spaceEditData} />
+        <Edit  data={spaceEditData} />
       </Modal>}
 
       </Spin>

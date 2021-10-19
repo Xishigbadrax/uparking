@@ -50,8 +50,9 @@ const timeSplit = [
   {id: 2, name: 'Боломжгүй'},
 ];
 // eslint-disable-next-line react/prop-types
-const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
-  
+const Edit = ({data}) => {
+  // console.log(props, 'pppppppppppppppp');
+  // console.log(data, 'dataaaaaaaaa');
   const GOOGLE_API = process.env.NEXT_GOOGLE_API;
   // const router = useRouter();
   // const [current, setCurrent] = useState(0);
@@ -98,19 +99,34 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
   const [loadingDirect, setLoadingDirect] = useState(false);
   const [aimag, setAimag]= useState([]);
   const [selectedAimag, setSelectedAimag] = useState();
-  const [selectedAimagName, setSelectedAimagName] = useState();
+  const [selectedAimagName, setSelectedAimagName] = useState(data.provinceLabel);
   const [sum, setSum]= useState([]);
   const [selectedSum, setSelectedSum] = useState();
-  const [selectedSumName, setSelectedSumName] = useState();
-  const [selectedBairName, setSelectedBairName] = useState();
-  const [selectedGateNumber, setSelectedGateNumber] = useState();
+  const [selectedSumName, setSelectedSumName] = useState(data.districtId);
+  const [selectedBairName, setSelectedBairName] = useState(data.residenceName);
+  const [selectedGateNumber, setSelectedGateNumber] = useState(data.parkingGateNumber);
   const [section, setSection]= useState([]);
-  const [sectionName, setSectionName]= useState([]);
-  const [bairniiDugaar, setBairniiDugaar]= useState([]);
+  const [sectionName, setSectionName]= useState(data.sectionLabel);
+  const [bairniiDugaar, setBairniiDugaar]= useState(data.residenceBlockNumber);
   const [selectedBuilding, setSelectedBuilding]= useState();
   const [selectedBuildingNumber, setSelectedBuildingNumber]= useState();
   const [splitData, setSplitData]= useState();
 
+  const [floorNumberLabel, setFloorNumberLabel]= useState(data.floorNumberLabel);
+  const [entranceLockLabel, setEntranceLockLabel]= useState(data.entranceLockLabel);
+  const [isNumberingLabel, setIsNumberingLabel]= useState(data.isNumberingLabel);
+  const [capacityLabel, setCapacityLabel]= useState(data.capacityLabel);
+  const [typeLabel, setTypeLabel]= useState(data.typeLabel);
+  const [returnRoutesLabel, setReturnRoutesLabel]= useState(data.returnRoutesLabel);
+  const [typeOther, setTypeOther]= useState(data.typeOther);
+ 
+  const [personalInfo, setPersonalInfo]= useState(false);
+  const [spaceInfo, setSpaceInfo]= useState(false);
+  const [firstImage, setFirstImage]= useState(false);
+  const [secondImage, setSecondImage]= useState(false);
+  const [priceInfo, setPriceInfo]= useState(false);
+  const [saleInfo, setSaleInfo]= useState(false);
+  const [calInfo, setCalInfo]= useState(false);
 
   const [weekSale, setweekSale] = useState(null);
   const [weekId, setweekId] = useState(null);
@@ -210,25 +226,33 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
   });
 
 
-  const [mainData4, setMainData4] = useState({
+  // const [mainData4, setMainData4] = useState({
+  //   hourlyPrice: data &&  data.hourlyPrice,
+  //   parkingSpaceId: data &&  data.id,
+  //   parkingSpacePriceInstance: null,
+  // });
+
+  var mainData4 = {
     hourlyPrice: data &&  data.hourlyPrice,
     parkingSpaceId: data &&  data.id,
     parkingSpacePriceInstance: null,
-  });
-  const [mainData5, setMainData5] = useState({
+  };
+
+  var mainData5 = {
     parkingSpaceId: data &&  data.id,
     parkingSpaceSale: null,
-
-  });
+  };
   // setMainData6(dayOfWeek.)
 
 
 
-  main(mainData);
+  
+console.log(editData, "edit dataa")
 
 
   useEffect(async ()=>{
     const aimags=await callGet('/address/aimag');
+    console.log(data, "data n irjinuu")
     setAimag(aimags);
 
     const splitdata = await callGet('/parkingspace/timesplit');
@@ -282,31 +306,34 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
       typeOther: data.typeOther,
     });
      data.dayOfWeek.map((item, index) => {
-      if(index == 0){
+       
+      if(item.id == 3229){
         item.spaceStatusDescription == 'AV' ? settuesdayMorning("Боломжтой") : settuesdayMorning("Боломжгүй");
-      } else if(index == 1){
+      } else if(item.id == 3230){
         item.spaceStatusDescription == 'AV' ? settuesdayNight("Боломжтой") : settuesdayNight("Боломжгүй");
-      } else if(index == 2){
+      } else if(item.id == 3231){
         item.spaceStatusDescription == 'AV' ? setwednesdayMorning("Боломжтой") : setwednesdayMorning("Боломжгүй");
-      } else if(index == 3){
+      } else if(item.id == 3232){
         item.spaceStatusDescription == 'AV' ? setwednesdayNight("Боломжтой") : setwednesdayNight("Боломжгүй");
-      } else if(index == 4){
+      } else if(item.id == 3233){
         item.spaceStatusDescription == 'AV' ? setthursdayMorning("Боломжтой") : setthursdayMorning("Боломжгүй");
-      } else if(index == 5){
+      } else if(item.id == 3234){
+        item.spaceStatusDescription == 'AV' ? setthursdayNight("Боломжтой") : setthursdayNight("Боломжгүй");
+      } else if(item.id == 3235){
         item.spaceStatusDescription == 'AV' ? setfridayMorning("Боломжтой") : setfridayMorning("Боломжгүй");
-      } else if(index == 6){
+      } else if(item.id == 3236){
         item.spaceStatusDescription == 'AV' ? setfridayNight("Боломжтой") : setfridayNight("Боломжгүй");
-      }  else if(index == 7){
+      }  else if(item.id == 3237){
         item.spaceStatusDescription == 'AV' ? setsaturdayMorning("Боломжтой") : setsaturdayMorning("Боломжгүй");
-      } else if(index == 8){
+      } else if(item.id == 3238){
         item.spaceStatusDescription == 'AV' ? setsaturdayNight("Боломжтой") : setsaturdayNight("Боломжгүй");
-      } else if(index == 9){
+      } else if(item.id == 3993){
         item.spaceStatusDescription == 'AV' ? setsundayMorning("Боломжтой") : setsundayMorning("Боломжгүй");
-      } else if(index == 10){
+      } else if(item.id == 3994){
         item.spaceStatusDescription == 'AV' ? setsundayNight("Боломжтой") : setsundayNight("Боломжгүй");
-      } else if(index == 11){
+      } else if(item.id == 3241){
         item.spaceStatusDescription == 'AV' ? setmondayMorning("Боломжтой") : setmondayMorning("Боломжгүй");
-      } else if(index == 12){
+      } else if(item.id == 3242){
         item.spaceStatusDescription == 'AV' ? setmondayNight("Боломжтой") : setmondayNight("Боломжгүй");
       } 
       
@@ -318,6 +345,8 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
     setSum(sum);
     setSelectedAimag(value.value);
     setSelectedAimagName(value.label);
+    setPersonalInfo(true);
+    console.log(selectedAimag, 'songogdson aimg');
     setMainData({...mainData, provinceId: value.value});
   };
   const onChangeSum = async (e)=>{
@@ -327,18 +356,23 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
     const selectSum = sum.find((item)=>item.value==e);
     setSelectedSum(selectSum.value);
     setSelectedSumName(selectSum.label);
+    setPersonalInfo(true);
+    console.log(selectSum.label, 'maybe sumiin medeelel');
+    // console.log(section, 'khoroonii medeele');
   };
   const onChangeSection = async (e)=>{
     setSelectedSection(e);
     const selectkhoroo = section.find((item)=>item.value==e);
     setSectionName(selectkhoroo.label);
+    setPersonalInfo(true);
     setMainData({...mainData, sectionId: e});
     const residence = await callGet(`/address/residence?districtId=${selectedSum}&provinceId=${selectedAimag}&sectionId=${e}`);
     setResidence(residence);
   };
   const onChangeResidence = async (e)=>{
     setSelectedBuilding(e);
-
+    console.log(e, 'songoson bair');
+    setPersonalInfo(true);
     setSelectedResidence(e);
     const residenceBlock = await callGet(`/address/residenceblock?residenceId=${e}`);
     setResidenceBlockList(residenceBlock);
@@ -351,7 +385,7 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
 
   const onChangeResidenceBlock = async (e)=>{
     setSelectedBuildingNumber(e);
-
+    setPersonalInfo(true);
     // setSelectedResidence(e);
     // const residenceBlock = await callGet(`/address/residenceblock?residenceId=${e}`);
     // setResidenceBlockList(residenceBlock);
@@ -363,15 +397,21 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
   };
   const onchangeInputResidenceName=(e)=>{
     setMainData({...mainData, residenceName: e.target.value});
+    console.log(e.target.value, 'bairnii dugaara');
+    setPersonalInfo(true);
   };
   const onChangeInputResidenceNumber =(e)=>{
     setMainData({...mainData, residenceBlockNumber: e.target.value});
+    console.log(e.target.value), 'bairnii dugaaraaa';
+    setPersonalInfo(true);
   };
   const onChangeParkingGateNumber =(e)=>{
     setMainData({...mainData, parkingGateNumber: e.target.value});
     setSelectedGateNumber(e.target.value);
+    setPersonalInfo(true);
   };
   const onChangeMainImageState = (e) => {
+    setPersonalInfo(true);
     setMainImageSpin(true);
     if (data.imageResidenceSurrounding) {
       setSelectedResidenceSideImage(`data:image/jpeg;base64,${data.imageResidenceSurrounding}`);
@@ -386,6 +426,7 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
     setMainImageSpin(false);
   };
   const onChangeSpaceImageState =(e)=>{
+    setPersonalInfo(true);
     setSpaceImageSpin(true);
     if (data.imageFromGate) {
       setImageFromGate(`data:image/jpeg;base64,${data.imageFromGate}`);
@@ -414,38 +455,113 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
   };
 
   const OnSaveAddressData = async (e) => {
+    if(personalInfo == true){
+      const res1 = await callPost('/parkingspace/update/1', mainData);
+      console.log(res1, 'res1-iin hariu');
+      console.log(mainData, 'main dataaa');
+      setTest(true);
+    setValue(false);
+    } else{
+      setTest(true);
+    setValue(false);
+    console.log(personalInfo, "peeeeeee");
+    }
+    
+    // console.log(addressForm.getFieldsValue());
+    // console.log(mainData, 'main dataa');
+    // const res = await callPost('/parkingspace/update/1', mainData);
+    // console.log(res, 'update res');
+    // const gg = await callGet(`parkingspace/update/1?parkingSpaceId=${data.id}`);
+    // console.log(gg, 'gg iin utga');
+    
     setTest(true);
     setValue(false);
   };
-  const spaceDataSave = (e) => {
-    main7(mainData7);
+  const spaceDataSave = async (e) => {
+    if(spaceInfo == true){
+      const res7 = await callPost('/parkingspace', mainData7);
+      console.log(res7, 'res7-iin hariu');
+    console.log(mainData7, 'main7 dataaa');
     setSpaceValue(false);
+    } else{
+      setSpaceValue(false);
+    }
+    
   };
   const onChangefloorNumberId = (e)=>{
+    setSpaceInfo(true);
+    floorData.map((el) => {
+      if(el.value == e){
+        setFloorNumberLabel(el.label)
+      }
+    });
+ 
     setMainData7({...mainData7, floorNumber: +e});
+    
   };
   const onChangeEntranceLock = (e)=>{
+    setSpaceInfo(true);
+    entranceData.map((el) => {
+      if(el.value == e){
+        setEntranceLockLabel(el.label)
+      }
+    });
+    console.log(e);
     setMainData7({...mainData7, entranceLock: +e});
   };
   const onChangeisNumbering = (e)=>{
+    setSpaceInfo(true);
+    parkingData.map((el) => {
+      if(el.value == e){
+        setIsNumberingLabel(el.label)
+      }
+    });
+    console.log(e);
     setMainData7({...mainData7, isNumbering: +e});
   };
   const onChangeCapacityId = (e)=>{
+    setSpaceInfo(true);
+    spaceTypeData.map((el) => {
+      if(el.value == e){
+        setCapacityLabel(el.label)
+      }
+    });
+    console.log(e);
     setMainData7({...mainData7, capacityId: +e});
   };
   const onChangeTypeId = (e)=>{
+    setSpaceInfo(true);
+    spaceSizeData.map((el) => {
+      if(el.value == e){
+        setTypeLabel(el.label)
+      }
+    });
+    console.log(e);
     setMainData7({...mainData7, typeId: +e});
   };
   const onChangeReturnRoutes = (e)=>{
+    setSpaceInfo(true);
+    routeData.map((el) => {
+      if(el.value == e){
+        setReturnRoutesLabel(el.label)
+      }
+    });
+    console.log(e);
     setMainData7({...mainData7, returnRoutes: +e});
   };
   const onChangeTypeOther = (e)=>{
+    setSpaceInfo(true);
+    setTypeOther(e.target.value);
+    console.log(e.target.value);
     setMainData7({...mainData7, typeOther: e.target.value});
   };
 
   {/* Үндсэн зургийн мэдээлэлтэй холбоотой STATE*/}
-  const onsaveMainImage = () => {
-    main2(mainData2);
+  const onsaveMainImage = async () => {
+    const res2 = await callPost('/parkingspace/parkingimage', mainData2);
+    console.log(res2, 'res2-iin hariu');
+    
+    console.log(mainData2, 'main dataa 2');
     setMainImageValue(false);
   };
   {/* Хотхоны ой орчмын зураг оруулах хэсэг*/}
@@ -561,14 +677,19 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
       );
     }
   };
-  const onSaveSpaceImage = ()=>{
-    main3(mainData3);
+  const onSaveSpaceImage = async ()=>{
+    const res3 = await callPost('/parkingspace/detail', mainData3);
+     console.log(res3, 'res3-iin hariu');
+
+    
+    console.log(mainData3, 'mainDataa 3');
     setSpaceImage(false);
   };
   const onChangeRent = ()=>{
     setRentDay(true);
+    setCalendarValue(true)
   };
-  const onChangeRentDay = ()=>{
+  const onChangeRentDay = async ()=>{
     const dayOfWeek= [
       {
         day: 1,
@@ -647,13 +768,17 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
     ];
 
 
-    const maindata6 = {
+    var maindata6 = {
       dayOfWeek,
       holiday,
       parkingSpaceId: data.id,
     };
-    main6(maindata6);
+    const res6 = await callPost('/schedule/general', maindata6);
+    console.log(res6, 'res6-iin hariu');
+    console.log(maindata6, 'mainDataa 6');
+    
     setRentDay(false );
+    setCalendarValue(false)
   };
 
   const changePriceValue = ()=>{
@@ -661,7 +786,7 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
     setPriceValue(true);
     setLoadingSale(false);
   };
-  const onSavePriceData =()=>{
+  const onSavePriceData = async ()=>{
     const data2 = priceForm.getFieldsValue();
 
     const array = [
@@ -697,10 +822,16 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
         timeSplitId: splitData.fullDaySplit.id,
       },
     ];
-    setMainData4({...mainData4, hourlyPrice: data2.hourlyPrice, parkingSpacePriceInstance: array});
-    main4(mainData4);
+    // setMainData4({...mainData4, hourlyPrice: data2.hourlyPrice, parkingSpacePriceInstance: array});
+    mainData4.hourlyPrice = data2.hourlyPrice;
+    mainData4.parkingSpacePriceInstance = array;
+
+    console.log(mainData4, ' data 4444444');
+    
     // setFormData(priceForm.getFieldsValue());
     // setLoading(true);
+    const res4 = await callPost('/parkingspace/price', mainData4);
+    console.log(res4, 'res4-iin hariu');
     setPriceValue(false);
     // setLoading(false);
   };
@@ -710,29 +841,11 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
     const discountValue = await callGet(`/parkingspace/update/6?parkingSpaceId=${data.parkingId}`);
     setLoading(false);
   };
-  const onSaveDiscountData = async (e)=>{
+  const onSaveDiscountData = async (e)=> {
+    
     setLoadingDiscount(true);
 
-    saleForm.validateFields();
-    const saleData = saleForm.getFieldValue();
-    const res = await callGet('/division/salesplit');
-    if (res && res.saleSplit) {
-      res.saleSplit.map((c) => {
-        if (c.code == 'WEEKLY_SALE') {
-          setweekId(c.id);
-          setweekSale(+saleData.WeekSale);
-          setweekDescription(c.description);
-          setWeekSaleSplitCode(c.code);
-        }
-        if (c.code == 'MONTHLY_SALE') {
-          setmonthId(c.id);
-          setmonthSale(+saleData.monthSale);
-          setMonthDescription(c.description);
-          setMonthSaleSplitCode(c.code);
-        }
-      });
-    }
-    const array = [
+    mainData5.parkingSpaceSale = [
       {
         salePercent: weekSale,
         saleSplitId: weekId,
@@ -746,10 +859,54 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
         saleSplitDescription: monthDescription,
       },
     ];
-    setMainData5({...mainData5, parkingSpaceSale: array});
-    main5(mainData5);
+
+    saleForm.validateFields();
+    const saleData = saleForm.getFieldValue();
+    console.log(saleData, 'hongololtiin dun');
+    const res = await callGet('/division/salesplit');
+    console.log(res, 'ressss');
+    if (res && res.saleSplit) {
+      res.saleSplit.map((c , i) => {
+        
+        if (c.code == 'WEEKLY_SALE') {
+           mainData5.parkingSpaceSale [i].saleSplitId = c.id;
+           mainData5.parkingSpaceSale [i].salePercent = +saleData.WeekSale;
+           mainData5.parkingSpaceSale [i].saleSplitCode = c.code;
+           mainData5.parkingSpaceSale [i].saleSplitDescription = c.description;
+          // setweekId(c.id);
+          // setweekSale(+saleData.WeekSale);
+          // setweekDescription(c.description);
+          // setWeekSaleSplitCode(c.code);
+        }
+        if (c.code == 'MONTHLY_SALE') {
+           mainData5.parkingSpaceSale [i].saleSplitId = c.id;
+           mainData5.parkingSpaceSale [i].salePercent = +saleData.monthSale;
+           mainData5.parkingSpaceSale [i].saleSplitCode = c.code;
+           mainData5.parkingSpaceSale [i].saleSplitDescription = c.description;
+
+          // setmonthId(c.id);
+          // setmonthSale(+saleData.monthSale);
+          // setMonthDescription(c.description);
+          // setMonthSaleSplitCode(c.code);
+        }
+      });
+      // setMainData5({...mainData5, parkingSpaceSale: array});
+    }
+    
+    
+  
+    
+   
+   
+    const res5 = await callPost('/parkingspace/sale', mainData5);
+    console.log(res5, 'res5-iin hariu');
+
+    
+    console.log(mainData5, 'mainDataaa 5');
+
     setDiscountValue(false);
     setLoadingDiscount(false);
+   
   };
   const onChangeMonthSale = (e) =>{
   };
@@ -954,7 +1111,7 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                     <p>{selectedGateNumber}</p>
                     <p>{editData.uparkingNumber}</p>
                   </>
-                ) :(
+                ) : data && (
                   <>
                     <p>{data && data.provinceLabel}</p>
                     <p>{data &&data.districtLabel}</p>
@@ -1012,7 +1169,7 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
               </p>
             </Col>
             <Col style={{marginTop: '50px '}} span={2} offset={14} >
-              {data&&data.requestStatusCode =='CANCELLED'?
+              {data.requestStatusCode =='CANCELLED' || data.requestStatusCode =='CONFIRMED' ? 
                 <Button
                   onClick={changeSpaceData}
                   title="Засах"
@@ -1227,7 +1384,7 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
               </p>
             </Col>
             <Col style={{marginTop: '50px '}} span={2} offset={14}>
-              { data && data.requestStatusCode =='CANCELLED'?
+              {data.requestStatusCode =='CANCELLED'  || data.requestStatusCode =='CONFIRMED' ?
                 <Button
                   onClick={onChangeMainImageState}
                   title="Засах"
@@ -1554,7 +1711,7 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
               </p>
             </Col>
             <Col style={{marginTop: '50px '}} span={2} offset={14}>
-              {data && data.requestStatusCode =='CANCELLED'?
+              {data && data.requestStatusCode =='CANCELLED'  || data && data.requestStatusCode =='CONFIRMED' ?
                 <Button
                   style={{borderRadius: '10px'}}
                   onClick={onChangeSpaceImageState}
@@ -1808,7 +1965,7 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
             </p>
           </Col>
           <Col span={2} offset={14}>
-            {data && data.requestStatusCode =='CANCELLED'?
+            {data && data.requestStatusCode =='CANCELLED'  || data && data.requestStatusCode =='CONFIRMED' ?
               <Button
                 style={{borderRadius: '10px'}}
                 onClick={changePriceValue}
@@ -1877,7 +2034,7 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
               </Row>
             ):(<div><Row>
               <Col span={24}>
-                <PriceInfo form={priceForm} priceArray={priceArray}/>
+                <PriceInfo form={priceForm}  priceArray={priceArray}/>
               </Col>
             </Row>
             <Row><Button type="primary" onClick={onSavePriceData}>Хадгалах</Button></Row></div>)}
@@ -1898,7 +2055,7 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                 </p>
               </Col>
               <Col span={2} offset={14}>
-                {data && data.requestStatusCode =='CANCELLED'?
+                {data && data.requestStatusCode =='CANCELLED'  || data && data.requestStatusCode =='CONFIRMED' ?
                   <Button
                     style={{borderRadius: '10px'}}
                     onClick={changeDiscountValue}
@@ -1953,7 +2110,7 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
               </p>
             </Col>
             <Col style={{marginTop: '50px'}} span={2} offset={14}>
-              {data && data.requestStatusCode =='CANCELLED'?
+              {data && data.requestStatusCode =='CANCELLED'  || data && data.requestStatusCode =='CONFIRMED' ?
                 <Button
                   style={{borderRadius: '10px'}}
                   onClick={onChangeRent}
@@ -1994,11 +2151,11 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                   }
                 >
 
-                  {data && data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                  { data && data.requestStatusCode =='CANCELLED' || data && data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
-                  ))}
+                  )) : null}
                 </Select> : <Select
                   disabled
                   onChange={(e) => {
@@ -2010,11 +2167,11 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                     sundayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data && data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                  { data && data.requestStatusCode =='CANCELLED'  || data && data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
-                  ))}
+                  )) : null}
                 </Select> }
 
               </Row>
@@ -2029,11 +2186,11 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                     sundayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data && data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                   { data && data.requestStatusCode =='CANCELLED'  || data && data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
-                  ))}
+                  )) : null}
                 </Select> : <Select
                   disabled
                   onChange={(e) => {
@@ -2045,11 +2202,11 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                     sundayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data && data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                    {data && data.requestStatusCode =='CANCELLED'  || data && data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
-                  ))}
+                  )) : null}
                 </Select> }
 
               </Row>
@@ -2067,11 +2224,11 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                     mondayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data &&  data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                   {data && data.requestStatusCode =='CANCELLED'  || data && data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
-                  ))}
+                  )) : null}
                 </Select> : <Select
                   disabled
                   onChange={(e) => {
@@ -2083,11 +2240,11 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                     mondayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data && data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                    { data && data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
-                  ))}
+                  )) : null}
                 </Select>}
 
               </Row>
@@ -2102,11 +2259,11 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                     mondayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data && data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                   { data && data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
-                  ))}
+                  )) : null}
                 </Select> : <Select
                   disabled
                   onChange={(e) => {
@@ -2118,11 +2275,11 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                     mondayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data&&  data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                   { data && data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
-                  ))}
+                  )) : null}
                 </Select>}
               </Row>
             </Col>
@@ -2139,11 +2296,11 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                     tuesdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  { data&&data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                    {data &&  data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
-                  ))}
+                  )) : null}
                 </Select> : <Select
                   disabled
                   onChange={(e) => {
@@ -2155,11 +2312,11 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                     tuesdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data &&  data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                   {data &&  data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
-                  ))}
+                  )) : null}
                 </Select>}
               </Row>
               <Row>
@@ -2173,11 +2330,11 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                     tuesdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data && data.requestStatusCode =='CANCELLED' && timeSplit.map((item) => (
+                   {data &&  data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
-                  ))}
+                  )) : null}
                 </Select> : <Select
                   disabled
                   onChange={(e) => {
@@ -2189,11 +2346,11 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                     tuesdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data && data.requestStatusCode =='CANCELLED' && timeSplit.map((item) => (
+                   {data &&  data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
-                  ))}
+                  )) : null}
                 </Select>}
               </Row>
             </Col>
@@ -2210,11 +2367,11 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                     wednesdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data && data.requestStatusCode =='CANCELLED' && timeSplit.map((item) => (
+                    { data &&  data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
-                  ))}
+                  )) : null}
                 </Select> : <Select
                   disabled
                   onChange={(e) => {
@@ -2226,11 +2383,11 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                     wednesdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data && data.requestStatusCode =='CANCELLED' && timeSplit.map((item) => (
+                    {data &&  data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
-                  ))}
+                  )) : null}
                 </Select>}
               </Row>
               <Row >
@@ -2244,11 +2401,11 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                     wednesdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data && data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                   { data &&  data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
-                  ))}
+                  )) : null}
                 </Select> : <Select
                   disabled
                   onChange={(e) => {
@@ -2260,11 +2417,11 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                     wednesdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data && data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                   {data &&  data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
-                  ))}
+                  )) : null}
                 </Select>}
               </Row>
             </Col>
@@ -2281,11 +2438,11 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                     thursdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data && data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                   {data &&  data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
-                  ))}
+                  )) : null}
                 </Select> : <Select
                   disabled
                   onChange={(e) => {
@@ -2297,11 +2454,11 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                     thursdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data && data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                   {data &&  data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
-                  ))}
+                  )) : null}
                 </Select>}
               </Row>
               <Row>
@@ -2315,11 +2472,11 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                     thursdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data && data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                    { data && data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
-                  ))}
+                  )) : null}
                 </Select> : <Select
                   disabled
                   onChange={(e) => {
@@ -2331,11 +2488,11 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                     thursdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data && data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                    { data &&  data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
-                  ))}
+                  )) : null}
                 </Select>}
               </Row>
             </Col>
@@ -2352,11 +2509,11 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                     fridayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data && data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                   { data &&  data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
-                  ))}
+                  )) : null}
                 </Select> : <Select
                   disabled
                   onChange={(e) => {
@@ -2368,11 +2525,11 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                     fridayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data && data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                   { data &&  data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
-                  ))}
+                  )) : null}
                 </Select>}
               </Row>
               <Row >
@@ -2386,11 +2543,11 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                     fridayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data && data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                   {data &&  data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
-                  ))}
+                  )) : null}
                 </Select> : <Select
                   disabled
                   onChange={(e) => {
@@ -2402,11 +2559,11 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                     fridayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data && data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                   {data &&  data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
-                  ))}
+                  )) : null}
                 </Select>}
               </Row>
             </Col>
@@ -2423,11 +2580,11 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                     saturdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data && data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                   { data && data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
-                  ))}
+                  )) : null}
                 </Select> : <Select
                   disabled
                   onChange={(e) => {
@@ -2438,12 +2595,12 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                   className={
                     saturdayMorning === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
-                >
-                  {data && data.requestStatusCode =='CANCELLED' &&timeSplit.map((item) => (
+                > 
+                  { data && data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
-                  ))}
+                  )) : null}
                 </Select>}
               </Row>
               <Row>
@@ -2457,11 +2614,11 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                     saturdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data && data.requestStatusCode =='CANCELLED' && timeSplit.map((item) => (
+                  { data && data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
-                  ))}
+                  )) : null}
                 </Select> : <Select
                   disabled
                   onChange={(e) => {
@@ -2473,16 +2630,16 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
                     saturdayNight === 'Боломжтой' ? 'Surrender' : 'NotSurrender'
                   }
                 >
-                  {data && data.requestStatusCode =='CANCELLED' && timeSplit.map((item) => (
+                    { data && data.requestStatusCode =='CANCELLED'  || data &&  data.requestStatusCode =='CONFIRMED' ? timeSplit.map((item) => (
                     <Select.Option key={item.id} value={item.name}>
                       {item.name}
                     </Select.Option>
-                  ))}
+                  )) : null}
                 </Select>}
               </Row>
             </Col>
             
-                {data &&data.requestStatusCode =='CANCELLED'? <Button onClick={onChangeRentDay} type="primary" >Хадгалах</Button> :null}
+                { calendarValue ? <Button onClick={onChangeRentDay} type="primary" >Хадгалах</Button> :null}
           </Row>
         </div>
       </div>
