@@ -170,7 +170,7 @@ const Navbar = () => {
                   </Link>
                   <button
                     onClick={() => {
-                      console.log(router.push('/register'));
+                      router.push('/register');
                     }}
                     className={'border rounded-lg py-2.5 px-3 ml-5 navbarBtn'}
                   >

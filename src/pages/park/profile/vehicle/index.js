@@ -18,7 +18,7 @@ const vehile = () => {
   const [selectedZagwar, setSelectedZagwar] = useState({});
   // eslint-disable-next-line no-unused-vars
   const [selectedColor, setSelectedColor] = useState({});
-
+//Машины үйлдюэр загварын мэдээлэл авах өнгө бас авах
   useEffect(async () => {
     const uildwer = await callGet('/user/vehicle/maker');
     setSelectedUildwer(uildwer);
@@ -31,14 +31,14 @@ const vehile = () => {
   const onSaved = () => {
     const res = callPost('/user/vehicle', formData);
   };
-
+  //Машины загвар
   useEffect(async () => {
     const zagwar = await callGet(
       `/user/vehicle/model?maker=${selectedUildwer.label}`,
     );
     setZagwar(zagwar);
   }, [selectedUildwer]);
-
+  
   const onChangeUildver = (e) => {
     const uildver = uildwer.find(
       (item) => item.value === Number(e.target.value),

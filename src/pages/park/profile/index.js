@@ -180,7 +180,6 @@ const Profile = () => {
     const spaceEdit = await callGet(`/parkingspace?parkingSpaceId=${a}`);
     const res = await callGet(`parkingspace/update/1?parkingSpaceId=${a}`);
     setSpaceEditData(spaceEdit);
-    console.log(spaceEdit, "spaceeditiin data");
     spaceEdit && setDeleteData({...deleteData, parkingSpaceId: spaceEdit.id});
    
     setLoading(false);
@@ -248,8 +247,7 @@ const Profile = () => {
   
   const submitData = async () => {
     const res = await callPost('/parkingspace/delete', deleteData);
-    console.log(res, "ustgah res");
-    console.log(deleteData, "delete dataa");
+    
   };
 
   const onDeleteParkingSpace = () => {
@@ -1162,9 +1160,7 @@ const Profile = () => {
       <Modal
         visible={visibleParkingSpaceEdit}
         width={1200}
-        
         onCancel={()=>setVisibleParkingSpaceEdit(false)}
-    
         footer={[
           status != "PENDING" ? (
             <>
@@ -1180,7 +1176,6 @@ const Profile = () => {
 
         ]}
       >
-
         <Edit  data={spaceEditData} />
       </Modal>}
 

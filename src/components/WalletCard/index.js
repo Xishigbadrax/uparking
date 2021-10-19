@@ -14,7 +14,6 @@ const WalletCard = () => {
   const fetchData = async () => {
     ctx.setIsLoading(true);
     await callGet('/wallet/user', null).then((res) => {
-      // console.log(res, 'resres22222');
       setOrderData(res);
       ctx.setIsLoading(false);
     });

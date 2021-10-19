@@ -39,7 +39,6 @@ const Login = () => {
 
   const onFinish = async (values) => {
     const res = await login(values);
-    console.log(userdata,'ggGG');
     if (res.response || res.data === undefined) {
       // if (res.response.data.error === "unauthorized") {
       //   setModalVisible(true);

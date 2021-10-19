@@ -86,7 +86,7 @@ const LoanCredit = ({filter}) => {
           />
         </>
       ),
-      onOk: () => console.log(canTakeLoan, canGiveLoan),
+      onOk: () => 'a',
       okText: 'Тийм',
       cancelText: 'Үгүй',
     });
@@ -106,14 +106,13 @@ const LoanCredit = ({filter}) => {
           />
         </>
       ),
-      onOk: () => console.log(canTakeLoan, canGiveLoan),
+      onOk: () => 'a',
       okText: 'Тийм',
       cancelText: 'Үгүй',
     });
   };
 
   const anketHandler = () => {
-    console.log(anket);
   };
 
   return (

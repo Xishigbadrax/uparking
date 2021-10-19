@@ -4,7 +4,6 @@ import _ from 'lodash';
 // import CustomCalendar from '@components/CustomCalendar/index';
 import {Row, Col, Card, Calendar, Tag, Menu, Dropdown, DatePicker, Button} from 'antd';
 import {Radar} from 'react-chartjs-2';
-import Bar from '@components/BarChart';
 import {callGet, callPost} from '@api/api';
 import {useContext, useState, useEffect} from 'react';
 import Context from '@context/Context';
@@ -22,32 +21,6 @@ moment.updateLocale('mn',{
 moment.updateLocale('mn', {
   months: ['Нэгдүгээр сар', 'Хоёрдугаар сар', 'Гуравдугаар сар', 'Дөрөвдүгээр сар', 'Тавдугаар сар', 'Зургаадугаар сар', 'Долоодугаар сар', 'Наймдугаар сар', 'Есдүгээр сар', 'Аравдугаар сар', 'Арван нэгдүгээр сар', 'Арван хоёрдугаар сар'],
 });
-
-const data1 = {
-  labels: ['Орц гарц', 'Нэвтрэх хаалга', 'Байршил', 'Зогсоол'],
-  datasets: [
-    {
-      label: '',
-      data: [4, 3, 5, 5],
-      backgroundColor: '#ffff',
-      borderColor: '#00F9B8',
-      borderWidth: 1,
-    },
-  ],
-  options: {
-    plugins: {
-      legend: {
-        display: false,
-      },
-    },
-  },
-};
-const options = {
-  scale: {
-    ticks: {beginAtZero: true},
-  },
-  suggestedMin:0
-};
 const Dashboard = () => {
   const ctx = useContext(Context);
   const {userdata} = useContext(Context);
@@ -76,8 +49,35 @@ const Dashboard = () => {
   var dataOfChart = 0;
   const [selectedSPace,setSelectedSpace] = useState(null);
   const [selectedvehicle,setSelectedVehicle] = useState(null);
+  const data = [
+    {
+      type: 'Үзсэн',
+      sales: 114,
+    },
+    {
+      type: 'Дарсан',
+      sales: 37,
+    },
+    {
+      type: 'Хадгалсан',
+      sales: 24,
+    },
+    {
+      type: 'Захиалсан',
+      sales: 14,
+    },
 
-
+  ];
+  const config = {
+    data: data,
+    xField: 'sales',
+    yField: 'type',
+    barWidthRatio: 0.8,
+    meta: {
+      type: {alias: 'xaxa'},
+      sales: {alias: ''},
+    },
+  };
   const data1 = {
     labels: ['Орц гарц', 'Нэвтрэх хаалга', 'Байршил', 'Зогсоол'],
     datasets: [
@@ -106,7 +106,6 @@ const Dashboard = () => {
 
 
   const checkUserData = async () => {
-    
     if (typeof userdata.firstName != 'undefined') {
       setRealData(userdata);
       const parkSpaceList = await callGet(`/parkingspace/list/user?id=${userdata.id}`);
@@ -120,19 +119,11 @@ const Dashboard = () => {
            
             if(a.content){
               c = c + 1;
-             
             }
             dataOfChart = b/c;
-           
           })
         })
-        // d = b/c;
-       
       }
-      // rateArray.map((item, index) => {
-
-      // })
-      console.log(rateArray,'rateArray');
      
     }
     
@@ -160,36 +151,6 @@ const Dashboard = () => {
       setSumTotalValue(0);
       fetchData();
     }
-  };
-  const data = [
-    { name: 'Орц гарц', star:1  },
-    { name: 'Нэвтрэх хаалга', star: 4 },
-    { name: 'Байршил', star: 3 },
-    { name: 'Зогсоол', star: 2},
-  ];
-  const config = {
-    data: data.map((d) => ({ ...d })),
-    xField: 'name',
-    yField: 'star',
-    meta: {
-      star: {
-        alias: 'Үнэлгээ',
-        min: 0,
-        nice: true,
-      },
-    },
-    xAxis: {
-      line: null,
-      tickLine: null,
-    },
-    yAxis: {
-      label: false,
-      grid: {
-        alternateColor: 'rgba(0, 0, 0, 0.04)',
-      },
-    },
-    point: {},
-    area: {},
   };
   const getDataOwner = async ()=>{
     ctx.setIsLoading(true);
@@ -367,14 +328,6 @@ const Dashboard = () => {
           <TabPane tab="Түрээслэгч" key="1" className={'DashboardCalendar1'}>
             <Row>
               <Col span={4} offset={14}>
-                {/* <DatePicker
-                  className='selectMonthDate'
-                  bordered={false}
-                  locale={calendarLocale}
-                  placeholder='Сараа сонгоно уу?'
-                  picker='month'
-                  onChange={onChangeOrderDate}
-                /> */}
               </Col>
               <Col>
                 <Dropdown overlay={vehicleMenu} className='dropdown'>
@@ -594,7 +547,6 @@ const Dashboard = () => {
                 );
               }}
             />
-            {/* <CustomCalendar data={data}></CustomCalendar> */}
             <Row>
               <Col span={10}>
                 <Row style={{color: '#35446D', fontWeight: 'bold', fontSize: '14px', lineHeight: '24px'}}>Таны зогсоолын үнэлгээ</Row>
@@ -605,14 +557,14 @@ const Dashboard = () => {
               <Col span={10} offset={2} className='BarChart'>
                 <Row style={{color: '#35446D', fontWeight: 'bold', fontSize: '14px', lineHeight: '24px'}}>Таны зогсоолын хандалт</Row>
                 <Card style={{borderRadius: '20px', marginTop: '10px'}}>
-                  <Bar />
+                  /awdawd/
                 </Card>
               </Col>
             </Row>
           </TabPane>
         </Tabs>
         <Row>
-        <Radar {...config} />
+        {/* <Radar {...config} /> */}
         </Row>
       </Card>
     </ProfileLayout>

@@ -12,7 +12,6 @@ const ListItem = ({item}) => {
       showMessage(messageType.FAILED.type, defaultMsg.dataError);
       return;
     }
-    console.log(res, 'rese');
 
     // setVisible(true);
   };

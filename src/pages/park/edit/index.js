@@ -51,8 +51,7 @@ const timeSplit = [
 ];
 // eslint-disable-next-line react/prop-types
 const Edit = ({data}) => {
-  // console.log(props, 'pppppppppppppppp');
-  // console.log(data, 'dataaaaaaaaa');
+ 
   const GOOGLE_API = process.env.NEXT_GOOGLE_API;
   // const router = useRouter();
   // const [current, setCurrent] = useState(0);
@@ -247,12 +246,10 @@ const Edit = ({data}) => {
 
 
   
-console.log(editData, "edit dataa")
 
 
   useEffect(async ()=>{
     const aimags=await callGet('/address/aimag');
-    console.log(data, "data n irjinuu")
     setAimag(aimags);
 
     const splitdata = await callGet('/parkingspace/timesplit');
@@ -346,7 +343,6 @@ console.log(editData, "edit dataa")
     setSelectedAimag(value.value);
     setSelectedAimagName(value.label);
     setPersonalInfo(true);
-    console.log(selectedAimag, 'songogdson aimg');
     setMainData({...mainData, provinceId: value.value});
   };
   const onChangeSum = async (e)=>{
@@ -357,8 +353,6 @@ console.log(editData, "edit dataa")
     setSelectedSum(selectSum.value);
     setSelectedSumName(selectSum.label);
     setPersonalInfo(true);
-    console.log(selectSum.label, 'maybe sumiin medeelel');
-    // console.log(section, 'khoroonii medeele');
   };
   const onChangeSection = async (e)=>{
     setSelectedSection(e);
@@ -371,7 +365,6 @@ console.log(editData, "edit dataa")
   };
   const onChangeResidence = async (e)=>{
     setSelectedBuilding(e);
-    console.log(e, 'songoson bair');
     setPersonalInfo(true);
     setSelectedResidence(e);
     const residenceBlock = await callGet(`/address/residenceblock?residenceId=${e}`);
@@ -397,12 +390,10 @@ console.log(editData, "edit dataa")
   };
   const onchangeInputResidenceName=(e)=>{
     setMainData({...mainData, residenceName: e.target.value});
-    console.log(e.target.value, 'bairnii dugaara');
     setPersonalInfo(true);
   };
   const onChangeInputResidenceNumber =(e)=>{
     setMainData({...mainData, residenceBlockNumber: e.target.value});
-    console.log(e.target.value), 'bairnii dugaaraaa';
     setPersonalInfo(true);
   };
   const onChangeParkingGateNumber =(e)=>{
@@ -457,22 +448,14 @@ console.log(editData, "edit dataa")
   const OnSaveAddressData = async (e) => {
     if(personalInfo == true){
       const res1 = await callPost('/parkingspace/update/1', mainData);
-      console.log(res1, 'res1-iin hariu');
-      console.log(mainData, 'main dataaa');
       setTest(true);
     setValue(false);
     } else{
       setTest(true);
     setValue(false);
-    console.log(personalInfo, "peeeeeee");
     }
     
-    // console.log(addressForm.getFieldsValue());
-    // console.log(mainData, 'main dataa');
-    // const res = await callPost('/parkingspace/update/1', mainData);
-    // console.log(res, 'update res');
-    // const gg = await callGet(`parkingspace/update/1?parkingSpaceId=${data.id}`);
-    // console.log(gg, 'gg iin utga');
+  
     
     setTest(true);
     setValue(false);
@@ -480,8 +463,6 @@ console.log(editData, "edit dataa")
   const spaceDataSave = async (e) => {
     if(spaceInfo == true){
       const res7 = await callPost('/parkingspace', mainData7);
-      console.log(res7, 'res7-iin hariu');
-    console.log(mainData7, 'main7 dataaa');
     setSpaceValue(false);
     } else{
       setSpaceValue(false);
@@ -506,7 +487,6 @@ console.log(editData, "edit dataa")
         setEntranceLockLabel(el.label)
       }
     });
-    console.log(e);
     setMainData7({...mainData7, entranceLock: +e});
   };
   const onChangeisNumbering = (e)=>{
@@ -516,7 +496,6 @@ console.log(editData, "edit dataa")
         setIsNumberingLabel(el.label)
       }
     });
-    console.log(e);
     setMainData7({...mainData7, isNumbering: +e});
   };
   const onChangeCapacityId = (e)=>{
@@ -526,7 +505,6 @@ console.log(editData, "edit dataa")
         setCapacityLabel(el.label)
       }
     });
-    console.log(e);
     setMainData7({...mainData7, capacityId: +e});
   };
   const onChangeTypeId = (e)=>{
@@ -536,7 +514,6 @@ console.log(editData, "edit dataa")
         setTypeLabel(el.label)
       }
     });
-    console.log(e);
     setMainData7({...mainData7, typeId: +e});
   };
   const onChangeReturnRoutes = (e)=>{
@@ -546,22 +523,17 @@ console.log(editData, "edit dataa")
         setReturnRoutesLabel(el.label)
       }
     });
-    console.log(e);
     setMainData7({...mainData7, returnRoutes: +e});
   };
   const onChangeTypeOther = (e)=>{
     setSpaceInfo(true);
     setTypeOther(e.target.value);
-    console.log(e.target.value);
     setMainData7({...mainData7, typeOther: e.target.value});
   };
 
   {/* Үндсэн зургийн мэдээлэлтэй холбоотой STATE*/}
   const onsaveMainImage = async () => {
     const res2 = await callPost('/parkingspace/parkingimage', mainData2);
-    console.log(res2, 'res2-iin hariu');
-    
-    console.log(mainData2, 'main dataa 2');
     setMainImageValue(false);
   };
   {/* Хотхоны ой орчмын зураг оруулах хэсэг*/}
@@ -679,10 +651,8 @@ console.log(editData, "edit dataa")
   };
   const onSaveSpaceImage = async ()=>{
     const res3 = await callPost('/parkingspace/detail', mainData3);
-     console.log(res3, 'res3-iin hariu');
 
     
-    console.log(mainData3, 'mainDataa 3');
     setSpaceImage(false);
   };
   const onChangeRent = ()=>{
@@ -774,8 +744,7 @@ console.log(editData, "edit dataa")
       parkingSpaceId: data.id,
     };
     const res6 = await callPost('/schedule/general', maindata6);
-    console.log(res6, 'res6-iin hariu');
-    console.log(maindata6, 'mainDataa 6');
+ 
     
     setRentDay(false );
     setCalendarValue(false)
@@ -826,12 +795,10 @@ console.log(editData, "edit dataa")
     mainData4.hourlyPrice = data2.hourlyPrice;
     mainData4.parkingSpacePriceInstance = array;
 
-    console.log(mainData4, ' data 4444444');
     
     // setFormData(priceForm.getFieldsValue());
     // setLoading(true);
     const res4 = await callPost('/parkingspace/price', mainData4);
-    console.log(res4, 'res4-iin hariu');
     setPriceValue(false);
     // setLoading(false);
   };
@@ -862,9 +829,7 @@ console.log(editData, "edit dataa")
 
     saleForm.validateFields();
     const saleData = saleForm.getFieldValue();
-    console.log(saleData, 'hongololtiin dun');
     const res = await callGet('/division/salesplit');
-    console.log(res, 'ressss');
     if (res && res.saleSplit) {
       res.saleSplit.map((c , i) => {
         
@@ -899,10 +864,7 @@ console.log(editData, "edit dataa")
    
    
     const res5 = await callPost('/parkingspace/sale', mainData5);
-    console.log(res5, 'res5-iin hariu');
-
-    
-    console.log(mainData5, 'mainDataaa 5');
+  
 
     setDiscountValue(false);
     setLoadingDiscount(false);

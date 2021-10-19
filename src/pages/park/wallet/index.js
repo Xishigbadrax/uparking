@@ -59,7 +59,6 @@ const Wallet = () => {
          setComeValue(comeVal);
          setExpenseData(expeD);
          setExpenseValue(expeVal);
-         console.log(comeD,comeVal,expeD,expeVal,'yaaaaaaaaaaaaaaaaaaaaaaaaaaaaaayyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
        },[incomeData,expenceData]);
   let outcome;
   let income;

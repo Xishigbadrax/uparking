@@ -368,7 +368,6 @@ const Datatable = ({
 
   const onSelectChange = (selectedRowKeys) => {
     setselectedRowKeys(selectedRowKeys);
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
   };
   const rowSelection = {
     columnWidth: '5%',

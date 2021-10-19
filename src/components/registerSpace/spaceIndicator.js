@@ -40,21 +40,16 @@ const spaceIndicator = (props) => {
     //   setIndicatorData({ ...IndicatorData, floorNumber: floor1.value });
   };
   const onChangeIsNumber = (e) => {
-    // console.log(e);
     // const numbering = parkingData.find((item) => item.label === e);
     // setIndicatorData({ ...IndicatorData, isNumbering: numbering.value });
   };
   const onChangeSpaceSize = (e) => {
-    // console.log(e);
     // const spaceSizee = spaceSizeData.find((item) => item.label === e);
     // setIndicatorData({ ...IndicatorData, capacityId: spaceSizee.value });
-    // console.log(IndicatorData);
   };
   const onChangeCheckBox = (e) => {
     // const checked = routeData.find((item) => item.label === e[0]);
-    // console.log(checked);
     // setIndicatorData({ ...IndicatorData, returnRoutes: checked.value });
-    // console.log(IndicatorData);
   };
   const onChangeType = (e) => {
     // const type = spaceTypeData.find((item) => item.label === e);

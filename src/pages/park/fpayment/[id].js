@@ -68,7 +68,6 @@ const Payment = ( ) => {
   const {id, bookingId} = router.query;
   // const {startDate}=router.query;
   // const orderId = id;
-  console.log(router.query, 'query ene bna');
   // eslint-disable-next-line no-unused-vars
   const [formData, setformData] = useState({
     amount: null,
@@ -104,7 +103,6 @@ const Payment = ( ) => {
   };
   const dateCellRender = (value) => {
     const listData = getListData(value);
-    console.log(listData);
     return (
       <ul className="events">
         {listData.map((item) => (
@@ -127,7 +125,6 @@ const Payment = ( ) => {
     }
   };
   // const onChangeBla = (e) => {
-  //   console.log(dayOfWeek);
   //   props.setRentData(dayOfWeek);
   //   setsundayMorning(e), setChecked(2);
   // };
@@ -186,7 +183,6 @@ const Payment = ( ) => {
     });
     const res = await callGet(`/booking/id/test?id=${bookingId}&asWho=1`);
     setBookingData(res);
-    console.log(res, 'zahialgiin medeelel');
   }, [id, bookingId]);
   useEffect(() => {
     fetchData();
@@ -209,7 +205,6 @@ const Payment = ( ) => {
   //   fetchData4();
   // }, [id]);
 
-  // console.log(orderData, 'orderiin medeelel');
   const fetchData2 = async () => {
     if (amount != 0) {
       const formData2 = {
@@ -300,7 +295,6 @@ const Payment = ( ) => {
   //     });
 
   const onPaymentByWallet = async ()=>{
-    console.log(bookingId);
     // const res = await callPost()
   };
   const handleClickBankLogo = (activekey) => {

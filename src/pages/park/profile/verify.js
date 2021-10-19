@@ -32,14 +32,12 @@ const Verify = () => {
       workAddressLongitude: 0
     }
     const res = await callPost(apiList.userUpdate, formData);
-    console.log('success->>>', res);
-    console.log(values, "valueee")
+
   
   };
 
   // const onFilled = () => {
   //   const res = callGet(apiList., values.user);
-  //   console.log("success", values.user);
   // };
 
   const layout = {
@@ -63,7 +61,6 @@ const Verify = () => {
   useEffect( async () => {
     setUserRealData(userdata)
     setUser(userdata.phoneNumber)
-    console.log(userdata, "dataa")
   }, []);
 
   useEffect(async () => {

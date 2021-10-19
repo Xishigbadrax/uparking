@@ -97,7 +97,6 @@ const Payment = ( ) => {
   const {id} = router.query;
   // const {startDate}=router.query;
   // const orderId = id;
-  console.log(router.query, 'query ene bna');
   // eslint-disable-next-line no-unused-vars
   const [formData, setformData] = useState({
     amount: null,
@@ -111,14 +110,11 @@ const Payment = ( ) => {
   useEffect(async () => {
     setStartDateTime(router.query.startDateTime);
     ctx.setIsLoading(true);
-    console.log(id, 'id shuu');
     await callGet(`/parkingspace?parkingSpaceId=${id}`).then((res) => {
-      console.log(res, 'resresres');
       if (!res || res === undefined) {
         showMessage(messageType.FAILED.type, defaultMsg.dataError);
       } else {
         res && setOrderData(res);
-        console.log(orderData, 'orderDatagiin medeelel');
         setImages([]);
         if (!Helper.isNullOrEmpty(res.imageFromGate)) {
           setImages((images) => [...images, {id: 4, path: res.imageFromGate}]);
@@ -149,7 +145,6 @@ const Payment = ( ) => {
           ]);
         }
       }
-      console.log(images, 'zurguuud');
       ctx.setIsLoading(false);
     });
   }, [id]);
@@ -161,7 +156,6 @@ const Payment = ( ) => {
   const fetchData = async () => {
     await callGet(`/payment/bankinfo?bankName=${type}`).then((res) => {
       setBankData(res);
-      console.log(res, 'banknii res');
     });
   };
 
@@ -175,7 +169,6 @@ const Payment = ( ) => {
   //   fetchData4();
   // }, [id]);
 
-  // console.log(orderData, 'orderiin medeelel');
   const fetchData2 = async () => {
     if (amount != 0) {
       const formData2 = {

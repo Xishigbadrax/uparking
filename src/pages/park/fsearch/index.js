@@ -132,7 +132,6 @@ const fsearch = () => {
   const [searchedData, setSearchedData] = useState([]);
 
   const onFinish = async (values) => {
-    console.log(values, 'values');
     let url = '';
     if (values.tuneType === 'Бүтэн өдөр') {
       url = `/search/test/input?latitude=${position.latitude}&longitude=${
@@ -175,7 +174,6 @@ const fsearch = () => {
     }
   };
   const onFinishFailed = (values) => {
-    console.log(values, 'onFinishFailed');
   };
   const handleStartDateChange = (value, dateString) => {
     if (dateString) {
@@ -189,18 +187,14 @@ const fsearch = () => {
     }
   };
   const onChangeType = (e) => {
-    console.log(e);
     setType(e);
-    console.log(startDate, endDate, type);
   };
   const onMapClick = async (e) => {
-    console.log(e);
     setSelectLate(e.lat);
     setSelectLng(e.lng);
     const locationsData = await callGet(
       `/search/location/test?latitude=${e.lat}&longitude=${e.lng}`,
     );
-    console.log(locationsData);
     setSpacedata(locationsData);
   };
   const loadData = (res) => {

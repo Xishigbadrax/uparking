@@ -7,7 +7,6 @@ import {Legend} from 'chart.js';
 import {callGet, callPost} from '@api/api';
 
 const WalletChart = (props) => {
-  console.log(props);
   const {TabPane} = Tabs;
   const [comeData,setComeData]=useState([]);
   const [expenseData,setExpenseData]=useState([]);
@@ -30,7 +29,6 @@ const WalletChart = (props) => {
       // setComeValue(comeVal);
       // setExpenseData(expeD);
       // setExpenseValue(expeVal);
-      // console.log(comeD,comeVal,expeD,expeVal,'yaaaaaaaaaaaaaaaaaaaaaaaaaaaaaayyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
     },[props]);
   let outcome;
   let income;

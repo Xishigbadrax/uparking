@@ -43,7 +43,6 @@ const ProfileInfo = ({filter}) => {
     },
   };
 
-  // useEffect(() => console.log(filter));
 
   useEffect(() => {
     if (filter !== undefined) {

@@ -16,10 +16,8 @@ const NewsId = () => {
   const fetchData = async () => {
     // setisLoading(true);
     await callGet(`/news/id/test?newsId=${id}`, null).then((res) => {
-      // console.log(res);
       if (res != 'undefined') {
         setdata(res);
-        console.log(res, 'bnuuuuu');
       } else {
         alert('data hoosn');
       }
@@ -32,7 +30,6 @@ const NewsId = () => {
     fetchData();
   }, [id]);
 
-  data != null ? console.log(data, 'dataaa') : null;
 
   return (
     <div style={{position: 'relative'}}>

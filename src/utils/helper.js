@@ -53,11 +53,9 @@ const formatOrderDatetime = (input) => {
 const date = (input) => {
   if (input) {
     input = input.split(' ');
-    //   console.log(input);
     const t = new Date(input[0]);
     //   var t = new Date(input);
     //   var t = Date.parse(input);
-    //   console.log(t);
     const month = ('00' + (t.getMonth() + 1)).slice(-2);
     const day = ('00' + t.getDate()).slice(-2);
     return `${month}-р сарын ${day}`;
@@ -70,7 +68,6 @@ const notTimeDate =(input)=>{
     const t = new Date(input[0]);
     //   var t = new Date(input);
     //   var t = Date.parse(input);
-    //   console.log(t);
     const year = '0000' + (t.getFullYear()+1).slice(-2);
     const month = ('00' + (t.getMonth() + 1)).slice(-2);
     const day = ('00' + t.getDate()).slice(-2);
@@ -369,93 +366,7 @@ const removeArray = (datas) => {
     }
   }
 };
-// const validateShowMessage =(fields, vue, reg)=> {
-//   let message =
-//     '<p style="line-height: 20px; margin-left: -5px;">Дараах алдааг арилгана уу.</p><ul style="margin:0px;-webkit-margin-before: 0px;-webkit-margin-after: 0px;-webkit-margin-start: 15px; -webkit-margin-end: 0px; -webkit-padding-start: 0px; list-style-type: circle;">';
-//   for (const field in fields) {
-//     for (const data of fields[field]) {
-//       console.log(data, 'data');
-//       message =
-//         message +
-//         '<li style="line-height: 20px;">' +
-//         (!isNull(reg) ?
-//           '<strong>' + reg + '.' + data.field + ' </strong>' :
-//           '') +
-//         data.message +
-//         '</li>';
-//     }
-//   }
-//   message = message + '</ul>';
-//   Message({
-//     dangerouslyUseHTMLString: true,
-//     type: 'warning',
-//     message,
-//     duration: 5000,
-//     showClose: true,
-//   });
-// };
-// function checkValidSub(tempList, formName, vue, reg) {
-//   let isValidSub = true;
-//   if (isNullOrEmpty(tempList)) {
-//     return true;
-//   }
-//   for (let i = 0; i < tempList.length; i++) {
-//     vue.$refs[formName + i].validate((valid, fields) => {
-//       if (!valid) {
-//         isValidSub = false;
-//         validateShowMessage(fields, vue, reg);
-//       } else {
-//         tempList[i].editMode = false;
-//       }
-//     });
-//   }
-//   return isValidSub;
-// }
-// function isEqualsData(newData, oldData, ignoreAtts) {
-//   const ignoreAttributes = ['createdOrganizationId', 'createdBy', 'createdAt', 'modifiedOrganizationId', 'modifiedBy', 'modifiedAt', '__v', '_id', 'editMode', 'isChanged'];
-//   let ignoreCustomAtts = [];
-//   if (!isNull(ignoreAtts)) {
-//     ignoreCustomAtts = ignoreAtts;
-//   } else {
-//     ignoreCustomAtts = [];
-//   }
-//   console.log(ignoreCustomAtts, ' ignoreCustomAtts');
-//   if (Array.isArray(newData)) {
-//     // console.log('array', newData, oldData)
-//     return isEqualsArray(newData, oldData);
-//   } else if (isObject(newData)) {
-//     // console.log('object', newData, oldData)
-//     return isEqualsObject(newData, oldData);
-//   } else {
-//     // console.log('is equals DATA', newData, oldData)
-//     return isEqualsValue(newData, oldData);
-//   }
-// }
-// function isEqualsObject(newData, oldData) {
-//   for (const data in newData) {
-//     if (ignoreAttributes.includes(data) || ignoreCustomAtts.includes(data)) {
-//       continue;
-//     }
-//     if (Array.isArray(newData[data])) {
-//       if (!Array.isArray(oldData[data])) {
-//         return false;
-//       }
-//       if (!isEqualsArray(newData[data], oldData[data])) {
-//         return false;
-//       }
-//     } else if (isObject(newData[data])) {
-//       if (!isObject(oldData[data])) {
-//         return false;
-//       }
-//       if (!isEqualsObject(newData[data], oldData[data])) {
-//         return false;
-//       }
-//     } else if (!isEqualsValue(newData[data], oldData[data])) {
-//       return false;
-//     }
-//   }
-//   return true;
-// }
+
 const isEqualsArray = (newData, oldData) => {
   if (newData === oldData) {
     return true;
@@ -487,38 +398,7 @@ const isEqualsArray = (newData, oldData) => {
   }
   return true;
 };
-// function isEqualsValue(newVal, oldVal) {
-//   // console.log(oldVal === newVal, oldVal, newVal)
-//   return oldVal === newVal;
-// }
-// function checkValidSubArray(
-//   tempList,
-//   formName,
-//   tempSubAttribute,
-//   vue,
-//   reg,
-// ) {
-//   let isValidSub = true;
-//   for (let i = 0; i < tempList.length; i++) {
-//     for (const key in tempList[i]) {
-//       if (key === tempSubAttribute) {
-//         const tempSubList = tempList[i][key];
-//         for (let k = 0; k < tempSubList.length; k++) {
-//           vue.$refs[formName + i + 'r' + k].validate((valid, fields) => {
-//             if (!valid) {
-//               isValidSub = false;
-//               validateShowMessage(fields, vue, reg);
-//             } else if (!isNull(tempSubList[i])) {
-//               tempSubList[i].editMode = false;
-//             }
-//           });
-//         }
-//         break;
-//       }
-//     }
-//   }
-//   return isValidSub;
-// }
+
 
 export const regs = [
   // { value: null, label: "Сонгоно уу" },

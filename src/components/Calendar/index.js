@@ -21,7 +21,6 @@ const calendar = (props) => {
       calendarData.push({date: date});
     }
     setCurr(props.tabskey);
-    console.log(curr);
     if (curr === 1) {
       props.setDayOfNumber(calendarData.length);
     } else if (curr === 2) {

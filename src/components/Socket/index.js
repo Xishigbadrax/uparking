@@ -18,7 +18,6 @@ const WebSocket = () => {
 
   const handleClickChangeSocketUrl = () => {
     if (socketUrlTmp) {
-      console.log(socketUrlTmp);
       setSocketUrl(socketUrlTmp);
       setSocketUrlTmp(null);
     }
