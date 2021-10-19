@@ -43,7 +43,6 @@ const {TabPane} = Tabs;
 const callback = (key) =>{
 };
 const tofit = ({data, lat, lng,currentSpaceId,setDefaultCenter,setCurrentSpaceId}) => {
-  console.log(currentSpaceId);
 
   // const [PickTimevisible, setPickTimeVisible] = useState(false);
   const [detailVisible, setDetailsVisible] = useState(false);
@@ -164,7 +163,6 @@ const tofit = ({data, lat, lng,currentSpaceId,setDefaultCenter,setCurrentSpaceId
       const dayArray=[];
       const nightArray=[];
       const fullDayArray=[];
-      console.log(space.dayOfWeek);
       space.dayOfWeek.find((item)=>{
         if (item.timeSplitDescription =='Өдөр') {
           dayArray.push(item);
@@ -189,7 +187,6 @@ const tofit = ({data, lat, lng,currentSpaceId,setDefaultCenter,setCurrentSpaceId
   };
   const seeFreeTime = async(id)=>{
     ctx.setIsLoading(true);
-    console.log(id,'ggggg');
     const space = await callGet(
       `/search/parkingspace/test?parkingSpaceId=${id}`,
     );
@@ -197,7 +194,6 @@ const tofit = ({data, lat, lng,currentSpaceId,setDefaultCenter,setCurrentSpaceId
       const dayArray=[];
       const nightArray=[];
       const fullDayArray=[];
-      console.log(space.dayOfWeek);
       space.dayOfWeek.find((item)=>{
         if (item.timeSplitDescription =='Өдөр') {
           dayArray.push(item);

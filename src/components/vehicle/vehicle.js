@@ -14,7 +14,6 @@ const vehicle = (props) => {
     setColor(color);
   }, []);
   const onChangeUildver = async (e) => {
-    console.log('i am here-->', e);
     const uildver = uildwer.find((item) => item.value === e);
     const model = await callGet(`/user/vehicle/model?maker=${uildver.label}`);
     setZagwar(model);

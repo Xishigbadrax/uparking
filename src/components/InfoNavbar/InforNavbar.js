@@ -13,7 +13,6 @@ const navbar = [
 const InforNavbar = (props, {onClick2}) =>{
   // eslint-disable-next-line no-unused-vars
   const [filterType, setFilterType] = useState('newInfo');
-  console.log(filterType, 'filtertypee');
   const submit = (value) =>{
     setFilterType(value);
     // eslint-disable-next-line react/prop-types

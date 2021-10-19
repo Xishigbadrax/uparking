@@ -23,17 +23,6 @@ const priceInfo = (props) => {
   useEffect(async () => {
     ctx.setIsLoading(true);
     const bigData = await callGet('/parkingspace/timesplit');
-    console.log(bigData, "yun bigdata we");
-    console.log(props.priceArray, "pricearray");
-   
-    props.priceArray.map((item, index) => {
-      if( index == 0){
-        summerPrice = item;
-      } else if(index == 1){
-        winterPrice = item;
-      }
-    });
-    console.log(summerPrice, "real dataaaa");
     setPriceData(bigData);
     const total = bigData.timeSet1.price / bigData.timeSet1.value;
     summerPrice && setdayWinterValue(summerPrice.priceForRenter2);

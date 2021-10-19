@@ -71,7 +71,6 @@ const FormWrapper = ({el, children, formCode, isMulti, style, valuePropName='val
           valuePropName={valuePropName}
           onChange={(e) => {
             if (el.type === 'base64') {
-              console.log('base64');
               setTimeout(() => {
                 convertImageToBase64(form.getFieldValue(el.name).file).then((res) => {
                   form.setFieldsValue({[el.name]: res.split(';base64,')[1]});

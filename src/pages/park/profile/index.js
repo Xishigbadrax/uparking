@@ -100,7 +100,7 @@ const Profile = () => {
   const [selectedColor, setSelectedColor] = useState({});
   const [vehicles, setVehicles] = useState([]);
   // const [editId, setEditId] = useState();
-  const [current, setCurrent] = useState(6);
+  const [current, setCurrent] = useState(0);
   const [dayOfWeek, setRentData] = useState([]);
   const [isProfileNotEdit, setIsProfileNotEdit] = useState(true);
   const [isVehileVisible, setIsVehileVisible] = useState(false);
@@ -150,6 +150,7 @@ const Profile = () => {
   const [sendSpacePhotos,setSendSpacePhotos]= useState(false);
   const [sendSale,setSendSale] = useState(false);
   // const [parkingSpaceData, setParkingSpaceData] = useState({});
+  //хэрэглэгчийн мэдээлэл авах
   useEffect(async () => {
     if (typeof userdata.firstName != 'undefined') {
       setRealData(userdata);
@@ -172,18 +173,18 @@ const Profile = () => {
       color: null,
     });
   };
+  //зогсоолын мэдээлэл засах
   const onChangeisSpaceEditVisible = async (a)=>{
     setEditId(a);
     setLoading(true);
-    // const editDa
     const spaceEdit = await callGet(`/parkingspace?parkingSpaceId=${a}`);
     const res = await callGet(`parkingspace/update/1?parkingSpaceId=${a}`);
     setSpaceEditData(spaceEdit);
-    console.log(spaceEdit, "spaceeditiin data");
     spaceEdit && setDeleteData({...deleteData, parkingSpaceId: spaceEdit.id});
    
     setLoading(false);
   };
+  //Авто машины мэдээлэл засахад тухайн засах машины мэдээлэл авах
   const onChangeisVehicleEditVisible = async (a) => {
     ctx.setIsLoading(true);
     const vehicleData = await callGet(`/user/vehicle?vehicleId=${a}`);
@@ -197,15 +198,14 @@ const Profile = () => {
     ctx.setIsLoading(false);
 
   };
+   // Бүх зогсоолын мэдээллүүдийг машины мэдээллүүдийг авах
   useEffect(async () => {
     ctx.setIsLoading(true);
     const park =  await callGet(`parkingspace/list`);
     if(park){
-      console.log(park.parkingSpace);
       // const parkSpaceList = await callGet(`/parkingspace/list/user?id=${userdata.id}`);
       setSpace(park.parkingSpace);
     }
-   
     //get mashinii medeell awah
     const data = await callGet('/user/vehicle/list');
     setVehicles(data);
@@ -247,8 +247,7 @@ const Profile = () => {
   
   const submitData = async () => {
     const res = await callPost('/parkingspace/delete', deleteData);
-    console.log(res, "ustgah res");
-    console.log(deleteData, "delete dataa");
+    
   };
 
   const onDeleteParkingSpace = () => {
@@ -358,6 +357,7 @@ const Profile = () => {
   };
   const onFinishSale = (values) => {
   };
+  //Зогсоол бүртгүүлэхэд оруулсан зургууд амжилттай болсон тохиолдолд ажиллах useEffect
   useEffect(async ()=>{
     ctx.setIsLoading(true);
     if(sendSpacePhotos){
@@ -379,6 +379,7 @@ const Profile = () => {
       // }
     }
   },[sendSpacePhotos && imageFromGate && imageSpaceNumber]);
+  //Зогсоол бүртгүүлэхэд оруулсан зургууд амжилттай болсон тохиолдолд ажиллах useEffect
   useEffect(async ()=>{
     ctx.setIsLoading(true);
     if(sendPhotos){
@@ -401,6 +402,7 @@ const Profile = () => {
     }
 
   },[sendPhotos&&imageParkingOverall&&imageParkingGate]);
+  //Хөнгөлөлтийн хувийн мэдээлэл бүртгэх 
   useEffect(async ()=>{
     if (weekSale && monthSale &&weekId && monthId) {
       const ress = await callPost('/parkingspace/sale', {
@@ -438,7 +440,6 @@ const Profile = () => {
       await form.isFieldsValidating();
       ctx.setIsLoading(true);
       if (mainData) {
-        console.log(mainData);
         if(mainData.latitude && mainData.longitude){
         const res = await callPost('/parkingfirst', mainData);
         setResidenceBlockId(mainData.residenceBlockId);
@@ -452,6 +453,7 @@ const Profile = () => {
       showMessage(messageType.WARNING.type,'Байршилын мэдээллээ оруулна уу?');
     }     
   } 
+  //Зогсоолын мэдээлэл бүртгүүллэх 
     } else if (current === 1) {
       ctx.setIsLoading(true);
       //Zogsoolin medeelel nemeh
@@ -482,6 +484,7 @@ const Profile = () => {
         ctx.setIsLoading(false);
         showMessage(messageType.FAILED.type,'Мэдээллээ бүрэн оруулна уу?');
       }
+  //Үндсэн зургийн мэдээлэл
     } else if (current === 2) {
       // Үндсэн зургийн мэдээллийг өгөгдлийн санруу бичих
       if (componentData) {
@@ -507,6 +510,7 @@ const Profile = () => {
         });
       setSendSpacePhotos(true);
       }
+    //үнийн дүнгийн мэдээлэл хадгалах
     } else if (current === 4) {
       ctx.setIsLoading(true);
       const data = await callGet('/parkingspace/timesplit');
@@ -554,6 +558,7 @@ const Profile = () => {
         setCurrent(current + 1);
         ctx.setIsLoading(false)
       }
+      // Хөнгөлөлтийн хувийн мэдээлэл хадгалах
     } else if (current === 5) {
       ctx.setIsLoading(true);
       const saleData = form.getFieldsValue();
@@ -573,35 +578,9 @@ const Profile = () => {
         });
       }
       setSendSale(true);
-      // if (weekSale && monthSale &&weekId && monthId) {
-      //   const ress = await callPost('/parkingspace/sale', {
-      //     parkingSpaceId: parkingSpaceId,
-      //     parkingSpaceSale: [
-      //       {
-      //         salePercent: weekSale,
-      //         saleSplitId: weekId,
-      //         saleSplitDescription: weekDescription,
-      //       },
-      //       {
-      //         salePercent: monthSale,
-      //         saleSplitId: monthId,
-      //         saleSplitDescription: monthDescription,
-      //       },
-      //     ],
-      //   });
-
-      //   if (!ress || ress === undefined) {
-      //     showMessage(messageType.FAILED.type, ress.error);
-      //     ctx.setIsLoading(false);
-      //     return true;
-      //   } else {
-      //     setCurrent(current + 1);
-      //     ctx.setIsLoading(false);
-      //   }
-      // }
+  //7 хоногийн түрээслэх өдрүүдийн мэдээлэл хадгалах
     } else if (current === 6) {
       ctx.setIsLoading(true);
-      console.log(dayOfWeek,'awdawdw');
       const newGeneralScheduleDto = {
         parkingSpaceId: parkingSpaceId,
         dayOfWeek,
@@ -617,6 +596,7 @@ const Profile = () => {
         setIsParkVisible(false);}
     }
   };
+  //буцах
   const goBack = () => {
     setCurrent(current - 1);
   };
@@ -629,6 +609,7 @@ const Profile = () => {
       <Spin tip="Уншиж байна..." spinning={loading}>
         <Row style={{marginLeft: '65px'}} className={'profileIndex'}>
           <Col span={12}>
+          {/*Хувийн мэдээллийн хэсэг*/}
             <Card>
               <Row className="header">
                 <Col span={3}>
@@ -721,6 +702,7 @@ const Profile = () => {
             </Card>
           </Col>
           <Col span={12} style={{paddingLeft: '25px'}}>
+            {/*Тээврийн хэрэгсэл*/}
             <Card>
               <Row className="header">
                 <Col span={3}></Col>
@@ -773,6 +755,7 @@ const Profile = () => {
                 </Button>
               </Row>
             </Card>
+            {/*Авто зогсоол */}
             <Card style={{marginTop: '25px'}}>
               <Row className="header">
                 <Col span={3}></Col>
@@ -820,6 +803,7 @@ const Profile = () => {
             </Card>
           </Col>
         </Row>
+        {/*Тээврийн хэрэгсэл бүртгүүлэх*/}
         <Modal
           className="fullModal "
           title="Тээврийн хэрэгсэл бүртгүүлэх"
@@ -1095,6 +1079,7 @@ const Profile = () => {
             <Col span={2}></Col>
           </Row>
         </Modal>
+        {/*Авто зогсоол бүртгүүлэх */}
         <Modal
           className="fullModal"
           title="Авто зогсоол"
@@ -1175,9 +1160,7 @@ const Profile = () => {
       <Modal
         visible={visibleParkingSpaceEdit}
         width={1200}
-        
         onCancel={()=>setVisibleParkingSpaceEdit(false)}
-    
         footer={[
           status != "PENDING" ? (
             <>
@@ -1193,7 +1176,6 @@ const Profile = () => {
 
         ]}
       >
-
         <Edit  data={spaceEditData} />
       </Modal>}
 

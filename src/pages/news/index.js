@@ -44,7 +44,6 @@ const News = () => {
     ctx.setIsLoading(true);
     await callGet('/news/list/app/test', null).then((res) => {
       if (res && res.length > 0) {
-        console.log(res, 'news iin res');
         setData1(res[0]);
         setData2(res[1]);
         // setData3(res[2]);
@@ -55,7 +54,6 @@ const News = () => {
       ctx.setIsLoading(false);
     });
   };
-  // console.log(data, "dataa");
 
   const newsDetails = (id) => {
     id &&
@@ -66,13 +64,7 @@ const News = () => {
         },
       });
   };
-
-  // useEffect(() => {
-  //   console.log('sss');
-  //   console.log(data2);
-  // }, [data2]);
   useEffect(() => {
-    console.log('hewlelee');
     fetchData();
   }, []);
 

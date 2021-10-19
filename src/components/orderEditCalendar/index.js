@@ -19,7 +19,6 @@ export const AcademicYearEnd = moment(today)
   .date(18);
 
 const CustomCalendar = (props) => {
-  console.log(props,'yay');
   const [fromDate, setFromDate] = useState([]);
   const [selectedDate, setselectedDate] = useState([]);
   // eslint-disable-next-line no-unused-vars
@@ -54,9 +53,7 @@ const CustomCalendar = (props) => {
     props.getSelectedDate(selectedDate);
   }, [selectedDate]);
   useEffect(()=>{
-    console.log('ugluu');
     setFromDate(props.fromDate);
-    console.log(props.fromDate, 'gggggggggggggggggggggggg');
   }, [props.fromDate]);
 
   const onPanelChange = (value, mode) => {
@@ -75,7 +72,6 @@ const CustomCalendar = (props) => {
       if (fromDate) {
         fromDate.map((item)=>{
           const x = test(item.startDate, item.endDate, day2);
-          // console.log(x, 'ijilhe bnaa ged bna SDA');
           if (x === 1) {
             onclickclass = 'onclickeddate';
           }
@@ -91,7 +87,6 @@ const CustomCalendar = (props) => {
     if (fromDate.find((item) =>(test(item.startDate, item.endDate, day2) === 1 ) && item.time === 'DAY')) {
     //   onclickclass = 'onDoubleClickDate';
       props.getSelectedDate(moment(day2).format('YYYY-MM-DD')+' '+'09:00:00');
-      console.log('niceeeeeeeeee');
     } else if (fromDate.find((item) =>(test(item.startDate, item.endDate, day2) === 1 ) && item.time === 'NIGHT')) {
       //   onclickclass = 'onDoubleClickDate';
       props.getSelectedDate(moment(day2).format('YYYY-MM-DD')+' '+'18:30:00');
@@ -117,7 +112,6 @@ const CustomCalendar = (props) => {
                   <LeftOutlined
                     onClick={()=>{
                       setCurrent(current-1);
-                      console.log(current, 'ene harachde ');
                       if (current === 1 ) {
                         setCurrent(12);
                         const newValue = value.clone();
@@ -139,7 +133,6 @@ const CustomCalendar = (props) => {
                   span={1}
                   onClick={()=>{
                     setCurrent(current+1);
-                    console.log(current, 'ene harachde ');
                     if (current === 12) {
                       setCurrent(1);
                       const newValue = value.clone();

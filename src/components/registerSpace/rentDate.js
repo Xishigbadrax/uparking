@@ -290,7 +290,6 @@ const rentDate = (props) => {
     const data = await callGet('/parkingspace/timesplit');
     setDaySplitId(data.daySplit.id);
     setNightSplit(data.nightSplit.id);
-    console.log(data.daySplit.id, data.nightSplit.id, 'id nuud chn ene ba');
   }, []);
   return (
     <div>
@@ -389,7 +388,6 @@ const rentDate = (props) => {
               <Select
                 onChange={(e) => {
                   props.setRentData(dayWeek);
-                  // console.log(weekData);
                   setsundayNight(e), setChecked(2);
                 }}
                 value={sundayNight}
@@ -745,8 +743,7 @@ const rentDate = (props) => {
                             <LeftOutlined
                               onClick={()=>{
                                 setCurrent(current-1);
-                               
-                                console.log(current, 'ene harachde ');
+                
                                 if (current === 1 ) {
                                   setCurrent(12);
                                   const newValue = value.clone();
@@ -768,7 +765,6 @@ const rentDate = (props) => {
                             span={1}
                             onClick={()=>{
                               setCurrent(current+1);
-                              console.log(current, 'ene harachde ');
                               if (current === 12) {
                                 setCurrent(1);
                                 const newValue = value.clone();

@@ -68,7 +68,6 @@ const Edit = () => {
 
   // useEffect = async () => {
   //   const data = await callGet(`/parkingspace/update/${id}`);
-  //   console.log(data);
   // };
   const changeMainValue = (e) => {
     setMainImageValue(true);
@@ -95,7 +94,6 @@ const Edit = () => {
     setMainImageValue(false);
   };
   const onFinish = (e) => {
-    console.log('xaaxaa');
   };
   return (
     <div>

@@ -10,7 +10,6 @@ import {Tabs} from 'antd';
 import {showMessage} from '@utils/message';
 import {messageType} from '@constants/constants';
 const callback = (key) =>{
-  console.log(key);
 };
 const {TabPane} = Tabs;
 
@@ -19,10 +18,8 @@ const IMG_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
 
 // eslint-disable-next-line react/prop-types
 const Search = ({data, startDate, endDate, tunetype,currentSpaceId,setDefaultCenter,setCurrentSpaceId})=>{
-  console.log(startDate, endDate, data);
   const {userdata} = useContext(Context);
   const router = useRouter();
-  // console.log(Number(Number(endDate)-Number(startDate)));
   const [spaceData, setSpaceData] = useState();
   const [timeSplit, settimeSplit] = useState(null);
   const [userRealData, setUserRealData] = useState(null);
@@ -143,7 +140,6 @@ const Search = ({data, startDate, endDate, tunetype,currentSpaceId,setDefaultCen
     setDetailsVisible(true);
     // eslint-disable-next-line react/prop-types
     const a = data.find((item) => item.park.parkingSpaceId === id);
-    console.log(a,'koreeeeeeeeeeeeeeeeeeeeeeeeeee');
     setResidenceDrawerItem(a.residence);
     setSpaceStatus(a.park.spaceStatus);
     setTotalPrice(a.park.price);

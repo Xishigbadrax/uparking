@@ -104,7 +104,6 @@ const discount = (props) => {
                 style={{marginTop: '20px', width: '295px', height: '44px'}}
                 // onChange={(e) => {
                 //   setmonthSale(e.target.value);
-                //   console.log(e.target.value);
                 // }}
               />
             </Form.Item>

@@ -90,26 +90,22 @@ const Nemelt = () => {
     setFormdata({...formData, vehicleNumber: dugar});
   };
   const onChangeUildver = async (e) => {
-    console.log('i am here-->', e);
     const uildver = uildwer.find((item) => item.value === e);
     const model = await callGet(`/user/vehicle/model?maker=${uildver.label}`);
     setZagwar(model);
     setFormdata({...formData, maker: uildver.value});
   };
   const onChangeZagwar = (e) => {
-    console.log(e);
     const selectZagwar = zagwar.find((item) => item.value === e);
 
     setFormdata({...formData, model: selectZagwar.value});
   };
   const onChangeColor = (e) => {
-    console.log(e);
     const selectColor = colors.find((item) => item.label === e);
     // setSelectedColor(selectColor);
     setFormdata({...formData, color: selectColor});
   };
   const onFinishSale = () => {
-    console.log('sale Data--->');
   };
   const onchangeNewVehicle = () => {
     vehicleForm.setFieldsValue({
@@ -125,7 +121,6 @@ const Nemelt = () => {
     reader.readAsDataURL(img);
   };
   const handleOk = async (values) => {
-    console.log(vehicleForm.validateFields());
     if (vehicleForm.validateFields()) {
       const a = vehicleForm.getFieldsValue();
       const res = await callPost('/user/vehicle', {
@@ -134,14 +129,12 @@ const Nemelt = () => {
         color: a.color,
         model: a.model,
       });
-      console.log(res);
       setIsVehileVisible(false);
     } else {
     }
     // setIsVehileVisible(false);
   };
   const onClickContinue = async () => {
-    console.log('ajkhawdh');
     form.validateFields();
     const componentData = form.getFieldsValue();
     // Үндсэн мэдээллийн өгөгдлийг өгөгдлийн санруу
@@ -156,7 +149,6 @@ const Nemelt = () => {
         `/parkingsecond?parkingFloorId=${componentData.floorNumber}&residenceBlockId=${mainData.residenceBlockId}`,
       );
       setParkId(second.parkingId);
-      console.log(second);
       setParkingSpaceId(mainData.parkingSpaceId);
       const res = await callPost('/parkingspace', {
         entranceLock: componentData.entranceLock,
@@ -181,7 +173,7 @@ const Nemelt = () => {
       getBase64(
         componentData.imageParkingOverall.file.originFileObj,
         (image2) => {
-          setImageParkingOverall(image2), console.log(image2);
+          setImageParkingOverall(image2);
         },
       );
       const res = await callPost('/parkingspace/parkingimage', {
@@ -189,7 +181,6 @@ const Nemelt = () => {
         imageParkingGate: imageParkingGate,
         parkingSpaceId: 522,
       });
-      console.log(res);
       if (res.status === 'success') {
         setCurrent(current + 1);
       }
@@ -198,8 +189,7 @@ const Nemelt = () => {
         setImageFromGate(image2.substring(24));
       });
       getBase64(componentData.imageSpaceNumber.file.originFileObj, (image2) => {
-        setImageSpaceNUmbe(image2.substring(24)),
-        console.log(image2.substring(24));
+        setImageSpaceNUmbe(image2.substring(24));
       });
       const res = await callPost('/parkingspace/detail', {
         imageFromGate: imageFromGate,
@@ -211,8 +201,7 @@ const Nemelt = () => {
       }
     } else if (current === 4) {
       const data = await callGet('/parkingspace/timesplit');
-      console.log(data, 'awsan dataaa');
-      console.log(componentData, 'ywah dataaa');
+   
       const array = [
         {
           dateSplitId: data.daySplit,
@@ -250,15 +239,11 @@ const Nemelt = () => {
         parkingSpaceId: 522,
         parkingSpacePriceInstance: array,
       };
-      console.log(formData, 'awhdgawdgawiudg');
       const res = await callPost('/parkingspace/price', formData);
-      console.log(res);
       setCurrent(current + 1);
     } else if (current === 5) {
       const saleData = form.getFieldsValue();
-      console.log(saleData);
       const res = await callGet('/division/salesplit');
-      console.log(res);
       if (res && res.saleSplit) {
         res.saleSplit.forEach((c) => {
           if (c.code == 'WEEKLY_SALE') {
@@ -288,26 +273,20 @@ const Nemelt = () => {
           },
         ],
       });
-      console.log(ress);
       if (!ress || ress === undefined) {
         showMessage(messageType.FAILED.type, ress.error);
         return true;
       } else {
-        console.log(ress, 'res11111111111111');
         setCurrent(current + 1);
       }
     } else if (current === 6) {
-      console.log(rentData);
     }
   };
   const onFinish123 = (values) => {};
   const goBack = () => {
-    console.log('Bye');
     setCurrent(current - 1);
   };
   const onFinishSPace = (values) => {
-    console.log(values);
-    console.log(form.getFieldsValue());
   };
 
   useEffect(async () => {

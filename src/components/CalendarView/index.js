@@ -96,7 +96,6 @@ const CustomCalendar = (props) => {
       const a = dayOfWeek.find((item)=>
         item.day == ofDay && item.spaceStatusDescription === 'UN',
       );
-      console.log(type, 'xaxa');
       if (type === 'Өдөр') {
         const day2 = bookedDateOfDay.find((item)=>item.startDate === moment(current).format('YYYY-MM-DD'));
         // const b = bookedDate.find((item)=>item.startDate === moment(current).format('YYYY-MM-DD'));
@@ -164,9 +163,7 @@ const CustomCalendar = (props) => {
     return ( current < moment().endOf('day')) || a || b;
   };
   const onSelect = (value) => {
-    // console.log(value, 'adwd');
     // let array = [];
-    // console.log(selectedDate, 'eniig l check');
     // if (selectType === 'multi') {
     //   array=[];
     //   if (selectedDate.find((dDate) => isSameDay(dDate.toDate(), value.toDate()))) {

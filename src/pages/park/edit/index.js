@@ -51,6 +51,10 @@ const timeSplit = [
 ];
 // eslint-disable-next-line react/prop-types
 const Edit = ({data}) => {
+<<<<<<< HEAD
+=======
+ 
+>>>>>>> 48eac416b6ca1ab7b595b8c8e8be3dcafb1801a9
   const GOOGLE_API = process.env.NEXT_GOOGLE_API;
   const [Mainvalue, setValue] = useState(false);
   const [spaceValue, setSpaceValue] = useState(false);
@@ -234,7 +238,10 @@ const Edit = ({data}) => {
     parkingSpaceSale: null,
   };
   
+<<<<<<< HEAD
 
+=======
+>>>>>>> 48eac416b6ca1ab7b595b8c8e8be3dcafb1801a9
 
 
   useEffect(async ()=>{
@@ -332,7 +339,6 @@ const Edit = ({data}) => {
     setSelectedAimag(value.value);
     setSelectedAimagName(value.label);
     setPersonalInfo(true);
-    console.log(selectedAimag, 'songogdson aimg');
     setMainData({...mainData, provinceId: value.value});
   };
   const onChangeSum = async (e)=>{
@@ -343,8 +349,6 @@ const Edit = ({data}) => {
     setSelectedSum(selectSum.value);
     setSelectedSumName(selectSum.label);
     setPersonalInfo(true);
-    console.log(selectSum.label, 'maybe sumiin medeelel');
-    // console.log(section, 'khoroonii medeele');
   };
   const onChangeSection = async (e)=>{
     setSelectedSection(e);
@@ -357,7 +361,6 @@ const Edit = ({data}) => {
   };
   const onChangeResidence = async (e)=>{
     setSelectedBuilding(e);
-    console.log(e, 'songoson bair');
     setPersonalInfo(true);
     setSelectedResidence(e);
     const residenceBlock = await callGet(`/address/residenceblock?residenceId=${e}`);
@@ -383,12 +386,10 @@ const Edit = ({data}) => {
   };
   const onchangeInputResidenceName=(e)=>{
     setMainData({...mainData, residenceName: e.target.value});
-    console.log(e.target.value, 'bairnii dugaara');
     setPersonalInfo(true);
   };
   const onChangeInputResidenceNumber =(e)=>{
     setMainData({...mainData, residenceBlockNumber: e.target.value});
-    console.log(e.target.value), 'bairnii dugaaraaa';
     setPersonalInfo(true);
   };
   const onChangeParkingGateNumber =(e)=>{
@@ -444,17 +445,24 @@ const Edit = ({data}) => {
     if(personalInfo == true){
       // Зосгоолын үндсэн мэдээллийг өөрчлөх API. Энэ API явсан тохиолдолд зогсоол PENDING төлөвт орно.
       const res1 = await callPost('/parkingspace/update/1', mainData);
+<<<<<<< HEAD
       console.log(res1, 'res1-iin hariu');
       console.log(mainData, 'main dataaa');
       setAfterEdit(true);
+=======
+      setTest(true);
+>>>>>>> 48eac416b6ca1ab7b595b8c8e8be3dcafb1801a9
     setValue(false);
     } else{
     setAfterEdit(true);
     setValue(false);
-    console.log(personalInfo, "peeeeeee");
     }
     
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 48eac416b6ca1ab7b595b8c8e8be3dcafb1801a9
     
     setAfterEdit(true);
     setValue(false);
@@ -462,8 +470,12 @@ const Edit = ({data}) => {
   // Зогсоолын үндсэн үзүүлэлт хадгалах функц
   const spaceDataSave = async (e) => {
     if(spaceInfo == true){
+<<<<<<< HEAD
       // Зогсоолын мэдээллийг явуулах API
       const res = await callPost('/parkingspace', mainData7);
+=======
+      const res7 = await callPost('/parkingspace', mainData7);
+>>>>>>> 48eac416b6ca1ab7b595b8c8e8be3dcafb1801a9
     setSpaceValue(false);
     } else{
       setSpaceValue(false);
@@ -488,7 +500,6 @@ const Edit = ({data}) => {
         setEntranceLockLabel(el.label)
       }
     });
-    console.log(e);
     setMainData7({...mainData7, entranceLock: +e});
   };
   const onChangeisNumbering = (e)=>{
@@ -498,7 +509,6 @@ const Edit = ({data}) => {
         setIsNumberingLabel(el.label)
       }
     });
-    console.log(e);
     setMainData7({...mainData7, isNumbering: +e});
   };
   const onChangeCapacityId = (e)=>{
@@ -508,7 +518,6 @@ const Edit = ({data}) => {
         setCapacityLabel(el.label)
       }
     });
-    console.log(e);
     setMainData7({...mainData7, capacityId: +e});
   };
   const onChangeTypeId = (e)=>{
@@ -518,7 +527,6 @@ const Edit = ({data}) => {
         setTypeLabel(el.label)
       }
     });
-    console.log(e);
     setMainData7({...mainData7, typeId: +e});
   };
   const onChangeReturnRoutes = (e)=>{
@@ -528,13 +536,11 @@ const Edit = ({data}) => {
         setReturnRoutesLabel(el.label)
       }
     });
-    console.log(e);
     setMainData7({...mainData7, returnRoutes: +e});
   };
   const onChangeTypeOther = (e)=>{
     setSpaceInfo(true);
     setTypeOther(e.target.value);
-    console.log(e.target.value);
     setMainData7({...mainData7, typeOther: e.target.value});
   };
 
@@ -542,9 +548,6 @@ const Edit = ({data}) => {
   const onsaveMainImage = async () => {
     // Зогсоолын үндсэн зургийг явуулах API
     const res2 = await callPost('/parkingspace/parkingimage', mainData2);
-    console.log(res2, 'res2-iin hariu');
-    
-    console.log(mainData2, 'main dataa 2');
     setMainImageValue(false);
   };
   {/* Хотхоны ой орчмын зураг оруулах хэсэг*/}
@@ -665,10 +668,8 @@ const Edit = ({data}) => {
   const onSaveSpaceImage = async ()=>{
     // Зогсоолын зураг явуулах API
     const res3 = await callPost('/parkingspace/detail', mainData3);
-     console.log(res3, 'res3-iin hariu');
 
     
-    console.log(mainData3, 'mainDataa 3');
     setSpaceImage(false);
   };
   const onChangeRent = ()=>{
@@ -761,8 +762,7 @@ const Edit = ({data}) => {
     };
     // Долоо хоногийн боломжтой боломжгүйг явуулах API
     const res6 = await callPost('/schedule/general', maindata6);
-    console.log(res6, 'res6-iin hariu');
-    console.log(maindata6, 'mainDataa 6');
+ 
     
     setRentDay(false );
     setCalendarValue(false)
@@ -814,12 +814,10 @@ const Edit = ({data}) => {
     mainData4.hourlyPrice = data2.hourlyPrice;
     mainData4.parkingSpacePriceInstance = array;
 
-    console.log(mainData4, ' data 4444444');
     
     
     // Зогсоолын үнэ өөрчлөх API
     const res4 = await callPost('/parkingspace/price', mainData4);
-    console.log(res4, 'res4-iin hariu');
     setPriceValue(false);
     // setLoading(false);
   };
@@ -851,10 +849,12 @@ const Edit = ({data}) => {
 
     saleForm.validateFields();
     const saleData = saleForm.getFieldValue();
+<<<<<<< HEAD
     console.log(saleData, 'hongololtiin dun');
     // Зогсоолын хөнгөлөлтын мэдээлэл хүлээж авах API
+=======
+>>>>>>> 48eac416b6ca1ab7b595b8c8e8be3dcafb1801a9
     const res = await callGet('/division/salesplit');
-    console.log(res, 'ressss');
     if (res && res.saleSplit) {
       res.saleSplit.map((c , i) => {
         
@@ -874,8 +874,12 @@ const Edit = ({data}) => {
     }
     // Зогсоолын хөнгөлөлтийн мэдээлэл явуулах API
     const res5 = await callPost('/parkingspace/sale', mainData5);
+<<<<<<< HEAD
     console.log(res5, 'res5-iin hariu');
     console.log(mainData5, 'mainDataaa 5');
+=======
+  
+>>>>>>> 48eac416b6ca1ab7b595b8c8e8be3dcafb1801a9
 
     setDiscountValue(false);
     setLoadingDiscount(false);
@@ -1366,7 +1370,6 @@ const Edit = ({data}) => {
               <Col style={{marginTop: '30px'}} offset={3}>
                 {/* ЗОгсоолын зураг харагдах хэсэг*/}
                 <Carousel autoplay>
-                  {console.log(data,'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')}
                   {data && data.imageParkingGate ?
                     <div>
                       <div>
