@@ -4,7 +4,7 @@ import _ from 'lodash';
 // import CustomCalendar from '@components/CustomCalendar/index';
 import {Row, Col, Card, Calendar, Tag, Menu, Dropdown, DatePicker, Button} from 'antd';
 import {Radar} from 'react-chartjs-2';
-// import Bar from '@components/BarChart';
+import Bar from '@components/BarChart';
 import {callGet, callPost} from '@api/api';
 import {useContext, useState, useEffect} from 'react';
 import Context from '@context/Context';
@@ -581,7 +581,7 @@ const Dashboard = () => {
               <Col span={10} offset={2} className='BarChart'>
                 <Row style={{color: '#35446D', fontWeight: 'bold', fontSize: '14px', lineHeight: '24px'}}>Таны зогсоолын хандалт</Row>
                 <Card style={{borderRadius: '20px', marginTop: '10px'}}>
-                  {/* <Bar /> */}
+                  <Bar />
                 </Card>
               </Col>
             </Row>

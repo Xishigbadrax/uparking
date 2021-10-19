@@ -14,7 +14,6 @@ const WalletChart = (props) => {
   const [comeValue,setComeValue]=useState([]);
   const [expenseValue,setExpenseValue]=useState([]);
   useEffect(()=>{
-
  const comeD=[];
     const expeD = [];
     const comeVal=[];

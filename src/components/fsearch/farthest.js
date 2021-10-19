@@ -19,11 +19,9 @@ import Calendar from '@components/CustomCalendar/index';
 const {TabPane} = Tabs;
 const IMG_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
 const callback = (key) => {
-  console.log(key);
 };
 
 const farthest = ({data}) => {
-  console.log(data, 'hamgiin oir ymdaaaa');
   const [detailVisible, setDetailsVisible] = useState(false);
   const [selectItem, setSelected] = useState();
   const [drawerItem, setDrawerItem] = useState({});
@@ -44,10 +42,8 @@ const farthest = ({data}) => {
   useEffect(async ()=>{
     const time = await callGet('/config/timesplit');
     settimeSplit(time);
-    console.log(time, '<-------------------------------');
   }, []);
   const DetailsDrawerOpen = async (id) => {
-    console.log(id);
     setDetailsVisible(true);
 
     // eslint-disable-next-line react/prop-types
@@ -59,19 +55,15 @@ const farthest = ({data}) => {
     setSpaceData(space);
     const vehicle = await callGet('/user/vehicle/list');
     setVehiclesData(vehicle);
-    // console.log(spaceData, '<------------------spaceData ');
   };
   const showTimePickDrawer = async (id) => {
     // setSelected(id);
     // setPickTimeVisible(true);
     // const selectDataa = data.find((item) => item.id == id);
-    // console.log(selectDataa);
     // setDrawerItem(selectDataa);
     // const spaceData = await callGet(`parkingspace/price?parkingSpaceId =${id}`);
-    // console.log(spaceData);
   };
   const onChangeChooseVehicle = (e) => {
-    console.log(e.target.value);
   };
   const onClosePickTime = () => {
     setChooseTimeVisible(false);
@@ -85,11 +77,8 @@ const farthest = ({data}) => {
   const onChange = () => {};
 
   const getSelectedDate = async (data) => {
-    console.log(data, 'dataaaaaaaa');
     const alength = data.length;
     await setDayofNumber(alength);
-    // console.log(selectedDayTab, "selectedDayTab");
-    // console.log(data, "selected data");
   };
 
   const handleClickDayTab = (key) => {

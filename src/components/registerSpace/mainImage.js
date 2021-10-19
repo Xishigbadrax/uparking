@@ -79,7 +79,6 @@ const mainImage = (props) => {
       getBase64(
         info.file.originFileObj,
         (image3) => (
-          console.log(image3),
           setLoadingPosition(false),
           setSelectedResidenceSideImage(image3)
         ),

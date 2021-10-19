@@ -14,7 +14,6 @@ const spaceIndicator = (props) => {
   // const [spaceSizeData, setSpaceSizeData] = useState([]);
 
   useEffect(async () => {
-    console.log(props);
 
     const spaceSize = await callGet('/reference/list/test?type=SPACE_TYPE');
     setSpaceSizeData(spaceSize);

@@ -4,10 +4,12 @@ import WalletLayout from '@components/layouts/WalletLayout';
 import WalletCard from '../../../components/WalletCard';
 import {calendarLocale} from '@constants/constants.js';
 import Helper from '@utils/helper';
-import WalletChart from '@components/WalletChart';
+import {Line} from 'react-chartjs-2';
+
+// import WalletChart from '@components/WalletChart';
 import moment from 'moment';
 import {callGet,callPost} from '@api/api';
-import {Calendar, Tag, Image,Row,Col, Card, Button, Modal} from 'antd';
+import {Calendar, Tag, Image,Row,Col, Card, Button, Modal,Tabs} from 'antd';
 import Context from '@context/Context';
 import {LeftOutlined, RightOutlined,CalendarOutlined} from '@ant-design/icons';
 import { showMessage } from '@utils/message';
@@ -18,6 +20,8 @@ moment.updateLocale('mn', {
 moment.updateLocale('mn', {
   months: ['Нэгдүгээр сар', 'Хоёрдугаар сар', 'Гуравдугаар сар', 'Дөрөвдүгээр сар', 'Тавдугаар сар', 'Зургаадугаар сар', 'Долоодугаар сар', 'Наймдугаар сар', 'Есдүгээр сар', 'Аравдугаар сар', 'Арван нэгдүгээр сар', 'Арван хоёрдугаар сар'],
 });
+const {TabPane} = Tabs;
+
 const Wallet = () => {
   const [calendarData, setCalendarData] = useState([]);
   const [current, setCurrent]= useState(parseInt(moment().format('M')));
@@ -26,15 +30,79 @@ const Wallet = () => {
   const [visibleOfPendingModal,setVisibleOfPendingModal] = useState(false);
   const [visiblePayPending,setVisiblePayPending] = useState(false);
   const [selectedPending,setSelectPending]=useState();
-  const [incomeData,setIncomeData]= useState();
+  const [incomeData,setIncomeData]= useState([]);
   const [currMonth, setCurrMonth] = useState();
-  const [expenceData,setExpenceData]=useState();
+  const [comeData,setComeData]=useState([]);
+  const [expenseData,setExpenseData]=useState([]);
+  const [comeValue,setComeValue]=useState([]);
+  const [expenseValue,setExpenseValue]=useState([]);
+  const [expenceData,setExpenceData]=useState([]);
   const ctx = useContext(Context);
  
   useEffect(() => {
     fetchData();
   }, []);
-  
+  useEffect(()=>{
+    const comeD=[];
+       const expeD = [];
+       const comeVal=[];
+       const expeVal = [];
+         incomeData.forEach((item)=>{
+           comeD.push(item.amount);
+           comeVal.push(item.date);
+         });
+         expenceData.forEach((item)=>{
+           expeD.push(item.amount);
+           expeVal.push(item.date);
+         });
+         setComeData(comeD);
+         setComeValue(comeVal);
+         setExpenseData(expeD);
+         setExpenseValue(expeVal);
+         console.log(comeD,comeVal,expeD,expeVal,'yaaaaaaaaaaaaaaaaaaaaaaaaaaaaaayyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
+       },[incomeData,expenceData]);
+  let outcome;
+  let income;
+    income = {
+      labels: comeValue,
+      datasets: [
+        {
+          data: comeData,
+          fill: false,
+          backgroundColor: '#00F9B8',
+          borderColor: '#35446D',
+        },
+      ],
+    };
+    outcome = {
+      labels: expenseValue,
+      datasets: [
+        {
+          label: 'null',
+          data: expenseData,
+          fill: false,
+          backgroundColor: '#00F9B8',
+          borderColor: '#35446D',
+        },
+      ],
+    };
+    const options = {
+      plugins: {
+        legend: {
+          display: false,
+        },
+      },
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true,
+            },
+          },
+        ],
+      },
+      height: 10,
+    };
   const fetchData = async () => {
     ctx.setIsLoading(true);
     await callGet('/wallet/user', null).then((res) => {
@@ -153,9 +221,23 @@ const Wallet = () => {
           </Row>
         </Col>
           <Col span={14} >
-          <Card style={{width:'100%',height:'300px'}}>
-            {/* <WalletChart  style={{paddingBottom:'10px'}} incomeData={incomeData} expenceData={expenceData}/>
-             */}
+          <Card style={{width:'100%',height:'350px'}}>
+          <div
+      className=" w-[529px] h-[180px]"
+    >
+      <Tabs defaultActiveKey="1" style={{marginTop:'-10px'}}>
+        <TabPane tab="Орлого" key="1">
+          <div>
+            <Line data={income} options={options} />
+          </div>
+        </TabPane>
+        <TabPane tab="Зарлага" key="2">
+          <div>
+            <Line data={outcome} options={options}/>
+          </div>
+        </TabPane>
+      </Tabs>
+    </div>
           </Card>
          </Col>
       </Row>

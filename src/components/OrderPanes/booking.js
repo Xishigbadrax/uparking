@@ -49,13 +49,11 @@ const booking = (props)=>{
     if (history) {
       const res = await callGet(`/booking/id/history?id=${props.orderId}&asWho=2`);
       setBookingId(props.orderId);
-      console.log(res, 'gg');
       setOrderData(res);
     } else {
       setBookingId(props.orderId);
       const res = await callGet(`/booking/id/test?id=${props.orderId}&asWho=2`);
       setOrderData(res);
-      console.log(res);
       if (res) {
         setRequestedData(res.requestedBookingDetail);
       }
@@ -64,7 +62,6 @@ const booking = (props)=>{
   const handleOkCancelOrder = async ()=>{
   };
   const setRequestedState = (date, value) =>{
-    console.log(date, value);
   };
   const handleOkCancelOrderConfirm = ()=> {
   };
@@ -73,7 +70,6 @@ const booking = (props)=>{
   };
   const onClickSeeCanceledBooking=async (id)=>{
     const res = await callGet(`/booking/detail?id=${bookingId}&walletId=${id}&asWho=2`);
-    console.log(res);
     setModalData(res);
     setSeeCanceledBooking(true);
   };
@@ -98,7 +94,6 @@ const booking = (props)=>{
     const res = await callPost('/booking/cancelanybooking', formData);
     if (res && res.status === 'success') {
       router.push('/park/profile/order');
-      console.log(res, 'gg yu');
     };
   };
   const handleCancelCancelOrderConfirm = ()=>{
@@ -110,7 +105,6 @@ const booking = (props)=>{
   const onFinishPolicy = async (value)=>{
     ctx.setIsLoading(true);
     const res = await callPost(`/booking/cancelpolicy?isAccept=${value.agreement}`);
-    console.log(res);
     if (res && res.status) {
       const data =
       {
@@ -119,7 +113,6 @@ const booking = (props)=>{
         returnAmount: cancelData ? cancelData.returnAmount :null,
       };
       const res2 = await callPost('/booking/cancel', data);
-      console.log(res2);
       setIsModalVisibleCancelOrderConfirm(false);
       ctx.setIsLoading(false);
     } else {
@@ -129,12 +122,10 @@ const booking = (props)=>{
     setIsConfirmVisible(true);
   };
   const getSelectedDate = (data) =>{
-    console.log(data, 'datadatadata');
     setFromSelectedDate(data);
   };
   const getListData = (value) => {
     const listData = [];
-    // console.log(orderData, 'gg');
     if (orderData != null) {
       const currentMoment = moment(orderData.startDateTime, 'YYYY/MM/DD');
       const endMoment = moment(orderData.endDateTime, 'YYYY/MM/DD').add(1, 'day');
@@ -151,8 +142,6 @@ const booking = (props)=>{
     const month = moment(value).format('YYYY-MM');
     if (month === currMonth) {
     // const listData = getListData(value);
-      console.log(value,'gggggggggggggg');
-       console.log();
     // return (
     //   <ul className="events" style={{marginTop: '10px'}}>
     //     {listData && listData.map((item) => (
@@ -233,7 +222,6 @@ const booking = (props)=>{
                       <LeftOutlined
                         onClick={()=>{
                           setCurrent(current-1);
-                          console.log(current, 'ene harachde ');
                           if (current === 1 ) {
                             setCurrent(12);
                             const newValue = value.clone();
@@ -706,10 +694,8 @@ const booking = (props)=>{
                 <Checkbox style={{color: '#141A29', fontWeight: '400', fontSize: '16px'}} value={true} onClick={(e)=>{
                   if (checkValue === false) {
                     setChechValue(true);
-                    console.log(checkValue);
                   } else {
                     setChechValue(false);
-                    console.log(checkValue);
                   }
                 }}>
                     Цуцлалтын бодлого зөвшөөрөх

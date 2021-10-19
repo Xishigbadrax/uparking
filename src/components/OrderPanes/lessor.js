@@ -48,7 +48,6 @@ const Lessor = () =>{
       // setUserId(userdata.id);
       const parkSpaceList = await callGet(`/parkingspace/list/user?id=${userdata.id}`);
       setSpaceList(parkSpaceList)
-      console.log(parkSpaceList);
     }
   }, [userdata]);
   //Түрээслүүлэгч талын хүсэлт tab-ын API дуудаж CalendarData-д утгыг оноох
@@ -134,20 +133,16 @@ const Lessor = () =>{
   const onChangeDropDown= ()=>{
   };
   // const onChangeOrderDate = (e)=> {
-  //   console.log(calendarData,'eniiig');
   //   const array = [];
   //   const a = calendarData.find((item)=>moment(item.startDateTime).format('MM') === moment(e).format('MM'));
   //   // array.push(a);
-  //   console.log(a,'aaaaaaaaaaaaaaaaaaaaaaauuuuuuuuuuuuuuuuuuuuu');
   //   setCurrent(Number(moment(e).format('MM')));
-  //   // console.log(moment(e).format('MM'));
   //   // setSelectDate(moment(e).format('YYYY-MM'));
   //   // CalendarData
   // };
   //Түрээслүүлэгч өөрийн бүртгүүлсэн зогсоол бүр дээр ямар хүсэлт болон ямар захиалга баталгаажсан байна вэ мөн ямар түүхүүд байна вэ гэдгийг харж болно.
   const handleSpace = async (value)=>{
     setSelectedSpace(value.key);
-    console.log(value.key);
     // ctx.setIsLoading(true);
     if(Number(calendarStatus)===1){
       if(value.key === null){
@@ -169,7 +164,6 @@ const Lessor = () =>{
       }
     }else if(Number(calendarStatus)=== 2){
       ctx.setIsLoading(true);
-      console.log(value.key,'aa');
       // setIsConfirmed(true);
       if(value.key === 'null'){
           const res = await callGet(`booking?asWho=2&isConfirmed=true`);
@@ -184,7 +178,6 @@ const Lessor = () =>{
       if (!res || res === undefined) {
         showMessage(messageType.FAILED.type,defaultMsg.dataError);
       } else {
-        console.log(res);
         setCalendarData(res);
         ctx.setIsLoading(false);
     }
@@ -355,7 +348,6 @@ const Lessor = () =>{
                           <LeftOutlined
                             onClick={()=>{
                               setCurrent(current-1);
-                              console.log(current, 'ene harachde ');
                               if (current === 1 ) {
                                 setCurrent(12);
                                 const newValue = value.clone();
@@ -377,7 +369,6 @@ const Lessor = () =>{
                           span={1}
                           onClick={()=>{
                             setCurrent(current+1);
-                            console.log(current, 'ene harachde ');
                             if (current === 12) {
                               setCurrent(1);
                               const newValue = value.clone();
@@ -561,7 +552,6 @@ const Lessor = () =>{
                           <LeftOutlined
                             onClick={()=>{
                               setCurrent(current-1);
-                              console.log(current, 'ene harachde ');
                               if (current === 1 ) {
                                 setCurrent(12);
                                 const newValue = value.clone();
@@ -583,7 +573,6 @@ const Lessor = () =>{
                           span={1}
                           onClick={()=>{
                             setCurrent(current+1);
-                            console.log(current, 'ene harachde ');
                             if (current === 12) {
                               setCurrent(1);
                               const newValue = value.clone();
@@ -782,7 +771,6 @@ const Lessor = () =>{
                           <LeftOutlined
                             onClick={()=>{
                               setCurrent(current-1);
-                              console.log(current, 'ene harachde ');
                               if (current === 1 ) {
                                 setCurrent(12);
                                 const newValue = value.clone();
@@ -804,7 +792,6 @@ const Lessor = () =>{
                           span={1}
                           onClick={()=>{
                             setCurrent(current+1);
-                            console.log(current, 'ene harachde ');
                             if (current === 12) {
                               setCurrent(1);
                               const newValue = value.clone();

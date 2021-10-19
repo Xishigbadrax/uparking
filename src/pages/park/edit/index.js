@@ -1246,7 +1246,6 @@ const Edit = ({data, main, main2, main3, main4, main5, main6, main7}) => {
               <Col style={{marginTop: '30px'}} offset={3}>
                 {/* ЗОгсоолын зураг харагдах хэсэг*/}
                 <Carousel autoplay>
-                  {console.log(data,'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')}
                   {data && data.imageParkingGate ?
                     <div>
                       <div>

@@ -17,7 +17,6 @@ const priceInfo = (props) => {
 
   useEffect(async () => {
     const bigData = await callGet('/parkingspace/timesplit');
-    console.log(bigData);
     setPriceData(bigData);
     const total = bigData.timeSet1.price / bigData.timeSet1.value;
     setdayWinterValue(bigData.daySplit.winterPrice);

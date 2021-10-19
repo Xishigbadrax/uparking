@@ -22,7 +22,6 @@ const beforeUpload = (file) => {
   return isJpgOrPng && isLt2M;
 };
 const spaceImage = (props) => {
-  console.log(props);
   const LoadIcon = <LoadingOutlined />;
   const [selectedPositionImage, setSelectedPositionImage] = useState();
   const [selectedDirectionImage, setSelectedDirectionImage] = useState();
