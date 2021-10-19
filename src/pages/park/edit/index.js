@@ -51,12 +51,7 @@ const timeSplit = [
 ];
 // eslint-disable-next-line react/prop-types
 const Edit = ({data}) => {
-  // console.log(props, 'pppppppppppppppp');
-  // console.log(data, 'dataaaaaaaaa');
   const GOOGLE_API = process.env.NEXT_GOOGLE_API;
-  // const router = useRouter();
-  // const [current, setCurrent] = useState(0);
-  // const {id} = router.query;
   const [Mainvalue, setValue] = useState(false);
   const [spaceValue, setSpaceValue] = useState(false);
   const [editData, setEditData] = useState({});
@@ -70,7 +65,8 @@ const Edit = ({data}) => {
   const [saleForm]= Form.useForm();
   const [lat, setLatitude]=useState();
   const [lng, setLongitude]=useState();
-  const [test, setTest]=useState(false);
+  // засвар хийсний дараах харагдац
+  const [afterEdit, setAfterEdit]=useState(false);
   // eslint-disable-next-line no-unused-vars
   const [loading, setLoading]=useState(false);
   const [mainLoading, setMainLoading]= useState(false);
@@ -119,14 +115,10 @@ const Edit = ({data}) => {
   const [typeLabel, setTypeLabel]= useState(data.typeLabel);
   const [returnRoutesLabel, setReturnRoutesLabel]= useState(data.returnRoutesLabel);
   const [typeOther, setTypeOther]= useState(data.typeOther);
- 
+ //Зогсоолыг үндсэн мэдээлэл өөрчлөгдсөн үгүйг хадгалах state. Өөрчлөлт ороогүй үед хадгалах дархад API явахгүй
   const [personalInfo, setPersonalInfo]= useState(false);
+   //Зогсоолыг мэдээлэл өөрчлөгдсөн үгүйг хадгалах state. Өөрчлөлт ороогүй үед хадгалах дархад API явахгүй
   const [spaceInfo, setSpaceInfo]= useState(false);
-  const [firstImage, setFirstImage]= useState(false);
-  const [secondImage, setSecondImage]= useState(false);
-  const [priceInfo, setPriceInfo]= useState(false);
-  const [saleInfo, setSaleInfo]= useState(false);
-  const [calInfo, setCalInfo]= useState(false);
 
   const [weekSale, setweekSale] = useState(null);
   const [weekId, setweekId] = useState(null);
@@ -177,6 +169,7 @@ const Edit = ({data}) => {
   const [sundayNight, setsundayNight] = useState('Боломжтой');
   const [daySplitId, setDaySplitId] = useState(null);
   const [nightSplitId, setNightSplitId] = useState(null);
+  // Зогсоолын үндсэн мэдээлэл хадгалах state
   const [mainData, setMainData] = useState({
     provinceId: data && data.provinceId,
     districtId: data && data.districtId,
@@ -198,6 +191,7 @@ const Edit = ({data}) => {
     typeId: data && data.typeId,
     typeOther: data && data.typeOther,
   });
+  // Зогсоолын мэдээлэл хадгалах функц
   const [mainData7, setMainData7] = useState({
 
     capacityId: 0,
@@ -211,13 +205,14 @@ const Edit = ({data}) => {
     typeId: 0,
     typeOther: '',
   });
-
+// Зогсоолын үндсэн зураг хадгалах state 
   const [mainData2, setMainData2] = useState({
     imageParkingOverall: data && data.imageParkingOverall,
     imageResidenceGate: data && data.imageResidenceGate,
     parkingSpaceId: data && data.id,
 
   });
+  // Зогсоолын зураг хадгалах state
   const [mainData3, setMainData3] = useState({
     imageFromGate: data && data.imageFromGate,
     imageSpaceNumber: data && data.imageSpaceNumber,
@@ -226,33 +221,24 @@ const Edit = ({data}) => {
   });
 
 
-  // const [mainData4, setMainData4] = useState({
-  //   hourlyPrice: data &&  data.hourlyPrice,
-  //   parkingSpaceId: data &&  data.id,
-  //   parkingSpacePriceInstance: null,
-  // });
-
+ 
+// Зогсоолын үнэ хадгалах state
   var mainData4 = {
     hourlyPrice: data &&  data.hourlyPrice,
     parkingSpaceId: data &&  data.id,
     parkingSpacePriceInstance: null,
   };
-
+// Зогсоолын хөнгөлөлт хадгалах state
   var mainData5 = {
     parkingSpaceId: data &&  data.id,
     parkingSpaceSale: null,
   };
-  // setMainData6(dayOfWeek.)
-
-
-
   
-console.log(editData, "edit dataa")
+
 
 
   useEffect(async ()=>{
     const aimags=await callGet('/address/aimag');
-    console.log(data, "data n irjinuu")
     setAimag(aimags);
 
     const splitdata = await callGet('/parkingspace/timesplit');
@@ -453,35 +439,31 @@ console.log(editData, "edit dataa")
     setSpaceValue(true);
     // setSpaceLoading(false);
   };
-
+// Үндсэн мэдээлэл хадгалах Функц
   const OnSaveAddressData = async (e) => {
     if(personalInfo == true){
+      // Зосгоолын үндсэн мэдээллийг өөрчлөх API. Энэ API явсан тохиолдолд зогсоол PENDING төлөвт орно.
       const res1 = await callPost('/parkingspace/update/1', mainData);
       console.log(res1, 'res1-iin hariu');
       console.log(mainData, 'main dataaa');
-      setTest(true);
+      setAfterEdit(true);
     setValue(false);
     } else{
-      setTest(true);
+    setAfterEdit(true);
     setValue(false);
     console.log(personalInfo, "peeeeeee");
     }
     
-    // console.log(addressForm.getFieldsValue());
-    // console.log(mainData, 'main dataa');
-    // const res = await callPost('/parkingspace/update/1', mainData);
-    // console.log(res, 'update res');
-    // const gg = await callGet(`parkingspace/update/1?parkingSpaceId=${data.id}`);
-    // console.log(gg, 'gg iin utga');
+
     
-    setTest(true);
+    setAfterEdit(true);
     setValue(false);
   };
+  // Зогсоолын үндсэн үзүүлэлт хадгалах функц
   const spaceDataSave = async (e) => {
     if(spaceInfo == true){
-      const res7 = await callPost('/parkingspace', mainData7);
-      console.log(res7, 'res7-iin hariu');
-    console.log(mainData7, 'main7 dataaa');
+      // Зогсоолын мэдээллийг явуулах API
+      const res = await callPost('/parkingspace', mainData7);
     setSpaceValue(false);
     } else{
       setSpaceValue(false);
@@ -556,8 +538,9 @@ console.log(editData, "edit dataa")
     setMainData7({...mainData7, typeOther: e.target.value});
   };
 
-  {/* Үндсэн зургийн мэдээлэлтэй холбоотой STATE*/}
+  {/* Үндсэн зургийн мэдээлэл хадгалах функц*/}
   const onsaveMainImage = async () => {
+    // Зогсоолын үндсэн зургийг явуулах API
     const res2 = await callPost('/parkingspace/parkingimage', mainData2);
     console.log(res2, 'res2-iin hariu');
     
@@ -598,6 +581,7 @@ console.log(editData, "edit dataa")
   };
   {/* Зогсоолын хаалганы ,орох гарах хэсгийн зураг*/}
   const onChangeDoorExitImage =(info)=>{
+    
     if (info.file.status === 'uploading') {
       setLoadingExitImage(true);
       return;
@@ -677,7 +661,9 @@ console.log(editData, "edit dataa")
       );
     }
   };
+  // Зогсоолын зураг хадгалах функц
   const onSaveSpaceImage = async ()=>{
+    // Зогсоолын зураг явуулах API
     const res3 = await callPost('/parkingspace/detail', mainData3);
      console.log(res3, 'res3-iin hariu');
 
@@ -767,12 +753,13 @@ console.log(editData, "edit dataa")
 
     ];
 
-
+// Зогсоолын долоо хоногийн боломжтой боломжгүйг хадгалах state
     var maindata6 = {
       dayOfWeek,
       holiday,
       parkingSpaceId: data.id,
     };
+    // Долоо хоногийн боломжтой боломжгүйг явуулах API
     const res6 = await callPost('/schedule/general', maindata6);
     console.log(res6, 'res6-iin hariu');
     console.log(maindata6, 'mainDataa 6');
@@ -786,6 +773,7 @@ console.log(editData, "edit dataa")
     setPriceValue(true);
     setLoadingSale(false);
   };
+  //Зогсоолын үнэ хадгалах функц
   const onSavePriceData = async ()=>{
     const data2 = priceForm.getFieldsValue();
 
@@ -822,14 +810,14 @@ console.log(editData, "edit dataa")
         timeSplitId: splitData.fullDaySplit.id,
       },
     ];
-    // setMainData4({...mainData4, hourlyPrice: data2.hourlyPrice, parkingSpacePriceInstance: array});
+
     mainData4.hourlyPrice = data2.hourlyPrice;
     mainData4.parkingSpacePriceInstance = array;
 
     console.log(mainData4, ' data 4444444');
     
-    // setFormData(priceForm.getFieldsValue());
-    // setLoading(true);
+    
+    // Зогсоолын үнэ өөрчлөх API
     const res4 = await callPost('/parkingspace/price', mainData4);
     console.log(res4, 'res4-iin hariu');
     setPriceValue(false);
@@ -841,6 +829,7 @@ console.log(editData, "edit dataa")
     const discountValue = await callGet(`/parkingspace/update/6?parkingSpaceId=${data.parkingId}`);
     setLoading(false);
   };
+  // Зогсоолын хөнгөлөлт хадгалах функц
   const onSaveDiscountData = async (e)=> {
     
     setLoadingDiscount(true);
@@ -863,6 +852,7 @@ console.log(editData, "edit dataa")
     saleForm.validateFields();
     const saleData = saleForm.getFieldValue();
     console.log(saleData, 'hongololtiin dun');
+    // Зогсоолын хөнгөлөлтын мэдээлэл хүлээж авах API
     const res = await callGet('/division/salesplit');
     console.log(res, 'ressss');
     if (res && res.saleSplit) {
@@ -873,35 +863,18 @@ console.log(editData, "edit dataa")
            mainData5.parkingSpaceSale [i].salePercent = +saleData.WeekSale;
            mainData5.parkingSpaceSale [i].saleSplitCode = c.code;
            mainData5.parkingSpaceSale [i].saleSplitDescription = c.description;
-          // setweekId(c.id);
-          // setweekSale(+saleData.WeekSale);
-          // setweekDescription(c.description);
-          // setWeekSaleSplitCode(c.code);
         }
         if (c.code == 'MONTHLY_SALE') {
            mainData5.parkingSpaceSale [i].saleSplitId = c.id;
            mainData5.parkingSpaceSale [i].salePercent = +saleData.monthSale;
            mainData5.parkingSpaceSale [i].saleSplitCode = c.code;
            mainData5.parkingSpaceSale [i].saleSplitDescription = c.description;
-
-          // setmonthId(c.id);
-          // setmonthSale(+saleData.monthSale);
-          // setMonthDescription(c.description);
-          // setMonthSaleSplitCode(c.code);
         }
       });
-      // setMainData5({...mainData5, parkingSpaceSale: array});
     }
-    
-    
-  
-    
-   
-   
+    // Зогсоолын хөнгөлөлтийн мэдээлэл явуулах API
     const res5 = await callPost('/parkingspace/sale', mainData5);
     console.log(res5, 'res5-iin hariu');
-
-    
     console.log(mainData5, 'mainDataaa 5');
 
     setDiscountValue(false);
@@ -915,9 +888,7 @@ console.log(editData, "edit dataa")
   };
   return (
     <div>
-      <Row
-
-      >
+      <Row>
         <Col span={10} offset={1} style={{
           fontSize: '20px',
           color: '#35446D',
@@ -1101,7 +1072,7 @@ console.log(editData, "edit dataa")
                 <p>Зогсоолын дугаар *</p>
               </Col>
               <Col style={{lineHeight: '40px', color: '#647189'}} span={5}>
-                {test? (
+                {afterEdit ? (
                   <>
                     <p>{selectedAimagName}</p>
                     <p>{selectedSumName}</p>
@@ -1123,14 +1094,6 @@ console.log(editData, "edit dataa")
                   </>
                 )
                 }
-
-                {/* // <p>{editData.provinceLabel !==null ? <p>{editData.provinceLabel}</p> :<p>{selectedAimagName}</p>}</p>
-                // <p>{editData.districtLabel ? <p>{data.districtLabel}</p> :<p>{selectedSumName}</p> }</p>
-                // <p>{editData.sectionLabel ?editData.sectionLabel :<p>{sectionName}</p>}</p>
-                // <p>{editData.residenceName ? editData.residenceName :<p>{selectedBairName}</p>}</p>
-                // <p>{editData.residenceBlockNumber ? editData.residenceBLockList : <p>{bairniiDugaar}</p>}</p>
-                // <p>{editData.parkingGateNumber ? editData.parkingGateNumber : <p>{selectedGateNumber}</p>}</p>
-                // <p>{editData.uparkingNumber}</p> */}
 
 
               </Col>
@@ -2143,7 +2106,7 @@ console.log(editData, "edit dataa")
                 {rentDay ? <Select
 
                   onChange={(e) => {
-                    // props.setRentData(weekData);
+                 
                     setsundayMorning(e), setChecked(2);
                   }}
                   value={sundayMorning}
@@ -2160,7 +2123,7 @@ console.log(editData, "edit dataa")
                 </Select> : <Select
                   disabled
                   onChange={(e) => {
-                    // props.setRentData(weekData);
+                  
                     setsundayMorning(e), setChecked(2);
                   }}
                   value={sundayMorning}
@@ -2179,7 +2142,7 @@ console.log(editData, "edit dataa")
               <Row>
                 {rentDay ? <Select
                   onChange={(e) => {
-                  // props.setRentData(weekData);
+        
                     setsundayNight(e), setChecked(2);
                   }}
                   value={sundayNight}
@@ -2195,7 +2158,7 @@ console.log(editData, "edit dataa")
                 </Select> : <Select
                   disabled
                   onChange={(e) => {
-                  // props.setRentData(weekData);
+                
                     setsundayNight(e), setChecked(2);
                   }}
                   value={sundayNight}
@@ -2217,7 +2180,7 @@ console.log(editData, "edit dataa")
               <Row>
                 {rentDay ? <Select
                   onChange={(e) => {
-                  // props.setRentData(weekData);
+
                     setmondayMorning(e), setChecked(2);
                   }}
                   value={mondayMorning}
@@ -2233,7 +2196,7 @@ console.log(editData, "edit dataa")
                 </Select> : <Select
                   disabled
                   onChange={(e) => {
-                  // props.setRentData(weekData);
+          
                     setmondayMorning(e), setChecked(2);
                   }}
                   value={mondayMorning}
@@ -2252,7 +2215,7 @@ console.log(editData, "edit dataa")
               <Row>
                 {rentDay ? <Select
                   onChange={(e) => {
-                  // props.setRentData(weekData);
+                
                     setmondayNight(e), setChecked(2);
                   }}
                   value={mondayNight}
@@ -2268,7 +2231,7 @@ console.log(editData, "edit dataa")
                 </Select> : <Select
                   disabled
                   onChange={(e) => {
-                  // props.setRentData(weekData);
+                
                     setmondayNight(e), setChecked(2);
                   }}
                   value={mondayNight}
@@ -2289,7 +2252,7 @@ console.log(editData, "edit dataa")
               <Row>
                 {rentDay ? <Select
                   onChange={(e) => {
-                  // props.setRentData(weekData);
+              
                     settuesdayMorning(e), setChecked(2);
                   }}
                   value={tuesdayMorning}
@@ -2305,7 +2268,7 @@ console.log(editData, "edit dataa")
                 </Select> : <Select
                   disabled
                   onChange={(e) => {
-                  // props.setRentData(weekData);
+            
                     settuesdayMorning(e), setChecked(2);
                   }}
                   value={tuesdayMorning}
@@ -2323,7 +2286,7 @@ console.log(editData, "edit dataa")
               <Row>
                 {rentDay ? <Select
                   onChange={(e) => {
-                  // props.setRentData(weekData);
+           
                     settuesdayNight(e), setChecked(2);
                   }}
                   value={tuesdayNight}
@@ -2339,7 +2302,7 @@ console.log(editData, "edit dataa")
                 </Select> : <Select
                   disabled
                   onChange={(e) => {
-                  // props.setRentData(weekData);
+           
                     settuesdayNight(e), setChecked(2);
                   }}
                   value={tuesdayNight}
@@ -2360,7 +2323,7 @@ console.log(editData, "edit dataa")
               <Row>
                 {rentDay ? <Select
                   onChange={(e) => {
-                  // props.setRentData(weekData);
+             
                     setwednesdayMorning(e), setChecked(2);
                   }}
                   value={wednesdayMorning}
@@ -2376,7 +2339,7 @@ console.log(editData, "edit dataa")
                 </Select> : <Select
                   disabled
                   onChange={(e) => {
-                  // props.setRentData(weekData);
+            
                     setwednesdayMorning(e), setChecked(2);
                   }}
                   value={wednesdayMorning}
@@ -2394,7 +2357,7 @@ console.log(editData, "edit dataa")
               <Row >
                 {rentDay ? <Select
                   onChange={(e) => {
-                  // props.setRentData(weekData);
+                
                     setwednesdayNight(e), setChecked(2);
                   }}
                   value={wednesdayNight}
@@ -2410,7 +2373,7 @@ console.log(editData, "edit dataa")
                 </Select> : <Select
                   disabled
                   onChange={(e) => {
-                  // props.setRentData(weekData);
+               
                     setwednesdayNight(e), setChecked(2);
                   }}
                   value={wednesdayNight}
@@ -2431,7 +2394,7 @@ console.log(editData, "edit dataa")
               <Row>
                 {rentDay ? <Select
                   onChange={(e) => {
-                  // props.setRentData(weekData);
+                 
                     setthursdayMorning(e), setChecked(2);
                   }}
                   value={thursdayMorning}
@@ -2447,7 +2410,7 @@ console.log(editData, "edit dataa")
                 </Select> : <Select
                   disabled
                   onChange={(e) => {
-                  // props.setRentData(weekData);
+            
                     setthursdayMorning(e), setChecked(2);
                   }}
                   value={thursdayMorning}
@@ -2465,7 +2428,7 @@ console.log(editData, "edit dataa")
               <Row>
                 {rentDay ? <Select
                   onChange={(e) => {
-                  // props.setRentData(weekData);
+                  
                     setthursdayNight(e), setChecked(2);
                   }}
                   value={thursdayNight}
@@ -2481,7 +2444,7 @@ console.log(editData, "edit dataa")
                 </Select> : <Select
                   disabled
                   onChange={(e) => {
-                  // props.setRentData(weekData);
+                 
                     setthursdayNight(e), setChecked(2);
                   }}
                   value={thursdayNight}
@@ -2639,7 +2602,6 @@ console.log(editData, "edit dataa")
                 </Select>}
               </Row>
             </Col>
-            
                 { calendarValue ? <Button onClick={onChangeRentDay} type="primary" >Хадгалах</Button> :null}
           </Row>
         </div>
